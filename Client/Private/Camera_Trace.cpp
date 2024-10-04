@@ -1,0 +1,85 @@
+#include "stdafx.h"
+#include "Camera_Trace.h"
+
+CCamera_Trace::CCamera_Trace(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+	: CCamera(pDevice, pContext)
+{
+}
+
+CCamera_Trace::CCamera_Trace(const CCamera_Trace& Prototype)
+	: CCamera(Prototype)
+{
+}
+
+HRESULT CCamera_Trace::Initialize_Prototype()
+{
+	return S_OK;
+}
+
+HRESULT CCamera_Trace::Initialize(void* pArg)
+{
+	if (nullptr == pArg)
+		return E_FAIL;
+
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+
+	TRACECAMERA_DESC* pDesc = static_cast<TRACECAMERA_DESC*>(pArg);
+	m_vArm = pDesc->vArm;
+
+	return S_OK;
+}
+
+void CCamera_Trace::Priority_Update(_float fTimeDelta)
+{
+
+}
+
+void CCamera_Trace::Update(_float fTimeDelta)
+{
+
+}
+
+void CCamera_Trace::Late_Update(_float fTimeDelta)
+{
+	_vector vAt = m_pTarget->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+	_vector vEye = vAt + XMLoadFloat3(&m_vArm);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(vEye, 1.f));
+	m_pTransformCom->LookAt(XMVectorSetW(vAt,1));
+	__super::Compute_PipeLineMatrices();
+
+}
+
+
+
+CCamera_Trace* CCamera_Trace::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+{
+	CCamera_Trace* pInstance = new CCamera_Trace(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		MSG_BOX("Failed to Create : CCamera_Trace");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+CGameObject* CCamera_Trace::Clone(void* pArg)
+{
+	CCamera_Trace* pInstance = new CCamera_Trace(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX("Failed to Clone : CCamera_Trace");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+void CCamera_Trace::Free()
+{
+	__super::Free();
+}

@@ -31,4 +31,9 @@
 *.out
 *.app
 
+# Too Big
+Female_Wizard.fbx
+female_normal.fbx
+
 .vs/
+

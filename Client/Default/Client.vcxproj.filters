@@ -37,6 +37,12 @@
     <Filter Include="02.GameObjects\Terrain">
       <UniqueIdentifier>{e6a4b0c2-ccf7-402c-b8d4-f9df611c51e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Camera">
+      <UniqueIdentifier>{00e45712-9edf-464f-82ec-3640f71c11c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\UI">
+      <UniqueIdentifier>{5728882f-9567-45f8-a69f-da4578fc21ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -76,10 +82,21 @@
       <Filter>02.GameObjects\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Camera_Free.h">
+      <Filter>02.GameObjects\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Camera_Trace.h">
+      <Filter>02.GameObjects\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Home.h">
+      <Filter>01.Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player.h">
       <Filter>02.GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Camera_Trace.h" />
-    <ClInclude Include="..\Public\Player.h" />
+    <ClInclude Include="..\Public\UIPanel.h">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Canvas.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -110,10 +127,21 @@
       <Filter>02.GameObjects\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Camera_Free.cpp">
+      <Filter>02.GameObjects\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera_Trace.cpp">
+      <Filter>02.GameObjects\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Home.cpp">
+      <Filter>01.Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player.cpp">
       <Filter>02.GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Camera_Trace.cpp" />
-    <ClCompile Include="..\Private\Player.cpp" />
+    <ClCompile Include="..\Private\UIPanel.cpp">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Canvas.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

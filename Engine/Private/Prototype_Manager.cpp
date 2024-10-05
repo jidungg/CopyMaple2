@@ -54,6 +54,34 @@ CBase * CPrototype_Manager::Clone_Prototype(Engine::PROTOTYPE eType, _uint iLeve
 	return pCopyObject;	
 }
 
+CBase* CPrototype_Manager::Clone_Stock_Proto_Object(const _wstring& strPrototypeTag, void* pArg)
+{
+	CBase* pPrototype = Find_Prototype(0, strPrototypeTag);
+	if (nullptr == pPrototype)
+		return nullptr;
+
+	CBase* pCopyObject = { nullptr };
+	pCopyObject = dynamic_cast<CGameObject*>(pPrototype)->Clone(pArg);
+	if (nullptr == pCopyObject)
+		return nullptr;
+
+	return pCopyObject;
+}
+
+CBase* CPrototype_Manager::Clone_Stock_Proto_Component(const _wstring& strPrototypeTag, void* pArg)
+{
+	CBase* pPrototype = Find_Prototype(0, strPrototypeTag);
+	if (nullptr == pPrototype)
+		return nullptr;
+
+	CBase* pCopyObject = { nullptr };
+	pCopyObject = dynamic_cast<CComponent*>(pPrototype)->Clone(pArg);
+	if (nullptr == pCopyObject)
+		return nullptr;
+
+	return pCopyObject;
+}
+
 void CPrototype_Manager::Clear(_uint iLevelIndex)
 {
 	if (iLevelIndex >= m_iNumLevels)

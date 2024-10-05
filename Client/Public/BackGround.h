@@ -1,21 +1,15 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "UIObject.h"
-
-BEGIN(Engine)
-class CShader;
-class CTexture;
-class CVIBuffer_Rect;
-END
+#include "UIPanel.h"
 
 
 BEGIN(Client)
 
-class CBackGround final : public CUIObject
+class CBackGround final : public CUIPanel
 {
 public:
-	typedef struct : public CUIObject::UIOBJECT_DESC
+	typedef struct : public CUIPanel::PANEL_DESC
 	{
 
 	}BACKGROUND_DESC;
@@ -27,19 +21,6 @@ private:
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual void Priority_Update(_float fTimeDelta) override;
-	virtual HRESULT Render_Self() override;
-
-private:
-	CShader*				m_pShaderCom = { nullptr };
-	CTexture*				m_pTextureCom = { nullptr };
-	CVIBuffer_Rect*			m_pVIBufferCom = { nullptr };
-
-
-
-private:
-	HRESULT Ready_Components();
-	HRESULT Bind_ShaderResources();
 
 
 public:

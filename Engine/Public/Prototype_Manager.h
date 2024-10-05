@@ -22,6 +22,8 @@ public:
 	HRESULT Initialize(_uint iNumLevels);
 	HRESULT Add_Prototype(_uint iLevelIndex, const _wstring& strPrototypeTag, class CBase* pPrototype);
 	class CBase* Clone_Prototype(Engine::PROTOTYPE eType, _uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg);
+	class CBase* Clone_Stock_Proto_Object(const _wstring& strPrototypeTag, void* pArg);
+	class CBase* Clone_Stock_Proto_Component(const _wstring& strPrototypeTag, void* pArg);
 	void Clear(_uint iLevelIndex);
 private:	
 	_uint										m_iNumLevels = { 0 };

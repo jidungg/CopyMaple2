@@ -4,7 +4,7 @@
 #include "GameInstance.h"
 
 #include "Level_Loading.h"
-
+#include "Loader.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance { CGameInstance::GetInstance() }

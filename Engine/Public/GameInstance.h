@@ -39,6 +39,8 @@ public: /* for.Level_Manager */
 public: /* For.Prototype_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const _wstring& strPrototypeTag, class CBase* pPrototype);
 	class CBase* Clone_Prototype(Engine::PROTOTYPE eType, _uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg = nullptr);
+	class CBase* Clone_Stock_Proto_Object(const _wstring& strPrototypeTag, void* pArg = nullptr);
+	class CBase* Clone_Stock_Proto_Component(const _wstring& strPrototypeTag, void* pArg = nullptr);
 
 public: /* For.Object_Manager */
 	HRESULT Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLevelIndex, const _wstring& strLayerTag, void* pArg = nullptr);

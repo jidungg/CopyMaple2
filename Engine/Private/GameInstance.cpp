@@ -48,7 +48,6 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pTimer_Manager)
 		return E_FAIL;
 
-
 	return S_OK;
 }
 
@@ -93,7 +92,6 @@ void CGameInstance::Clear(_int iLevelID)
 	m_pObject_Manager->Clear(iLevelID);
 
 	m_pPrototype_Manager->Clear(iLevelID);
-
 }
 
 _float CGameInstance::Get_TimeDelta(const _wstring & strTimerTag)
@@ -150,6 +148,22 @@ CBase * CGameInstance::Clone_Prototype(Engine::PROTOTYPE eType, _uint iLevelInde
 		return nullptr;
 
 	return m_pPrototype_Manager->Clone_Prototype(eType, iLevelIndex, strPrototypeTag, pArg);
+}
+
+CBase* CGameInstance::Clone_Stock_Proto_Object(const _wstring& strPrototypeTag, void* pArg)
+{
+	if (nullptr == m_pPrototype_Manager)
+		return nullptr;
+
+	return m_pPrototype_Manager->Clone_Stock_Proto_Object(strPrototypeTag, pArg);
+}
+
+CBase* CGameInstance::Clone_Stock_Proto_Component(const _wstring& strPrototypeTag, void* pArg)
+{
+	if (nullptr == m_pPrototype_Manager)
+		return nullptr;
+
+	return m_pPrototype_Manager->Clone_Stock_Proto_Component(strPrototypeTag, pArg);
 }
 
 HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring & strPrototypeTag, _uint iLevelIndex, const _wstring & strLayerTag, void * pArg)

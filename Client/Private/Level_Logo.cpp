@@ -14,6 +14,8 @@ CLevel_Logo::CLevel_Logo(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 
 HRESULT CLevel_Logo::Initialize()
 {
+
+
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;	
 
@@ -41,12 +43,14 @@ HRESULT CLevel_Logo::Render()
 HRESULT CLevel_Logo::Ready_Layer_BackGround(const _wstring & strLayerTag)
 {
 	CBackGround::BACKGROUND_DESC		Desc{};
+	Desc.fXOffset = 0;
+	Desc.fYOffset = 0;
+	Desc.fSizeX = g_iWinSizeX;
+	Desc.fSizeY = g_iWinSizeY;
+	Desc.eLevelID = LEVEL_LOGO;
+	Desc.szTextureTag = TEXT("Prototype_Component_Texture_Logo");
 
-	Desc.iData = 10;
-	Desc.fSpeedPerSec = 5.f;
-	Desc.fRotationPerSec = XMConvertToRadians(90.f);
-
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, TEXT("Prototype_GameObject_BackGround"),
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOADING, TEXT("Prototype_GameObject_UIPanel"),
 		LEVEL_LOGO, strLayerTag, &Desc)))
 		return E_FAIL;
 

@@ -85,7 +85,7 @@ namespace Engine
 		LAST, // 끝을 알리는.
 	};
 
-	enum class PIVOT_TYPE
+	enum class CORNOR_TYPE
 	{
 		LEFT_TOP,
 		TOP,

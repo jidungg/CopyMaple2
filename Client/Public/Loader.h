@@ -44,8 +44,10 @@ private:
 	_tchar					m_szLoadingText[MAX_PATH] = {};	
 
 private:
+	HRESULT Loading_Level_Static();
 	HRESULT Loading_Level_Logo();
 	HRESULT Loading_Level_GamePlay();
+	HRESULT Loading_Level_MyHome();
 
 public:
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eNextLevelID);

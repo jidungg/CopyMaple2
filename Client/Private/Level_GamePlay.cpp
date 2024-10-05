@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Camera_Trace.h"
 #include "Camera_Free.h"
+#include "Level_Loading.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel { pDevice, pContext }
@@ -24,6 +25,8 @@ HRESULT CLevel_GamePlay::Initialize()
 
 void CLevel_GamePlay::Update(_float fTimeDelta)
 {
+	if (m_pGameInstance->GetKeyState(KEY::T) == KEY_STATE::UP)
+		m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HOME));
 }
 
 HRESULT CLevel_GamePlay::Render()
@@ -50,7 +53,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _wstring& strLayerTag)
 	PlayerDesc.fSpeedPerSec = 5.f;
 	PlayerDesc.fRotationPerSec = XMConvertToRadians(90.f);
 
-	CPlayer* pPlayer = static_cast<CPlayer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Player"), &PlayerDesc));
+	CPlayer* pPlayer = static_cast<CPlayer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_Player"), &PlayerDesc));
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, strLayerTag, pPlayer)))
 		return E_FAIL;
 
@@ -67,7 +70,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _wstring& strLayerTag)
 	CamDesc.vArm = _float3(0.f, 10.f, -7.f);
 	CamDesc.pTarget = pPlayer;
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Camera_Trace"),
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOADING, TEXT("Prototype_GameObject_Camera_Trace"),
 	LEVEL_GAMEPLAY, strLayerTag, &CamDesc)))
 	return E_FAIL;
 	//CCamera_Free::CAMERA_FREE_DESC		Desc{};

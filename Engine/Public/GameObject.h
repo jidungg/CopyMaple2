@@ -49,6 +49,7 @@ protected:
 
 protected:
 	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, const _wstring& strComponentTag, CComponent** ppOut, void* pArg = nullptr);
+	HRESULT Add_Component(CComponent* pComponent, const _wstring& strComponentTag,void* pArg = nullptr);
 
 protected:
 	_uint						m_iData = {};

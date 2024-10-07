@@ -27,32 +27,14 @@ HRESULT CUIPanel::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Components(pDesc->eLevelID,pDesc->szTextureTag)))
+	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
 
 	return S_OK;
 }
 
-void CUIPanel::Priority_Update(_float fTimeDelta)
-{
-}
-
-HRESULT CUIPanel::Render_Self()
-{
-	if (FAILED(Bind_ShaderResources()))
-		return E_FAIL;
-
-	m_pShaderCom->Begin(0);
-
-	m_pVIBufferCom->Bind_BufferDesc();
-
-	m_pVIBufferCom->Render();
-
-	return S_OK;
-}
-
-HRESULT CUIPanel::Ready_Components(LEVELID eLevelID,const _tchar* szTextureTag)
+HRESULT CUIPanel::Ready_Components()
 {
 	/* Com_Shader */
 	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxPosTex"),
@@ -65,27 +47,15 @@ HRESULT CUIPanel::Ready_Components(LEVELID eLevelID,const _tchar* szTextureTag)
 		return E_FAIL;
 
 	/* Com_Texture */
-	if (FAILED(Add_Component(eLevelID, szTextureTag,
-		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
-		return E_FAIL;
+	if(m_pTextureCom)
+		if (FAILED(Add_Component(m_pTextureCom,TEXT("Com_Texture"))))
+			return E_FAIL;
 
 	return S_OK;
 }
-
-HRESULT CUIPanel::Bind_ShaderResources()
+void CUIPanel::Priority_Update(_float fTimeDelta)
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-		return E_FAIL;
-
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
-		return E_FAIL;
-
-	return S_OK;
+	__super::Priority_Update(fTimeDelta);
 }
 
 CUIPanel* CUIPanel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

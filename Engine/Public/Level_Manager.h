@@ -21,6 +21,7 @@ public:
 	void Update(_float fTimeDelta);
 	HRESULT Render();
 
+	_int Get_CurrentLevelID() const { return m_iCurrentLevelID; }
 private:
 	_int					m_iCurrentLevelID = { -1 };
 	class CLevel*			m_pCurrentLevel = { nullptr };

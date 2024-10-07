@@ -20,6 +20,7 @@ protected:
 	ID3D11DeviceContext*		m_pContext = { nullptr };
 	class CGameInstance*		m_pGameInstance = { nullptr };
 
+	_int						m_iLevelID = {-1};
 public:
 	virtual void Free() override;
 };

@@ -13,9 +13,9 @@ BEGIN(Engine)
 class CPipeLine final : public CBase
 {
 public:
-	enum D3DTRANSFORMSTATE { D3DTS_VIEW, D3DTS_PROJ, D3DTS_END };
+	enum D3DTRANSFORMSTATE { D3DTS_VIEW, D3DTS_PROJ,D3DTS_UI_VIEW, D3DTS_UI_PROJ, D3DTS_END };
 private:
-	CPipeLine();
+	CPipeLine(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual ~CPipeLine() = default;
 
 public:
@@ -36,13 +36,16 @@ public:
 	void Update();
 
 private:
+	ID3D11Device* m_pDevice = { nullptr };
+	ID3D11DeviceContext* m_pContext = { nullptr };
+
 	_float4x4				m_TransformMatrices[D3DTS_END];
 	_float4x4				m_TransformInverseMatrices[D3DTS_END];
 
 	_float4					m_vCamPosition = {};
 
 public:
-	static CPipeLine* Create();
+	static CPipeLine* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void Free() override;
 };
 

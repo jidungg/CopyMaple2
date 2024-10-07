@@ -96,7 +96,10 @@
     <ClInclude Include="..\Public\UIPanel.h">
       <Filter>02.GameObjects\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Canvas.h" />
+    <ClInclude Include="..\Public\Canvas.h">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\HomeDialog.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -141,7 +144,10 @@
     <ClCompile Include="..\Private\UIPanel.cpp">
       <Filter>02.GameObjects\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Canvas.cpp" />
+    <ClCompile Include="..\Private\Canvas.cpp">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\HomeDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

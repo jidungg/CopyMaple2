@@ -7,20 +7,17 @@
 
 BEGIN(Engine)
 
-END
-
-BEGIN(Engine)
 class CShader;
 class CTexture;
 class CVIBuffer_Rect;
-class ENGINE_DLL CUIObject abstract : public CGameObject
+class ENGINE_DLL CUIObject  : public CGameObject
 {
 public:
-	typedef struct : CGameObject::GAMEOBJECT_DESC
+	typedef struct : public CRect_Transform::RECTTRANSFORM_DESC
 	{
-		_float		fXOffset, fYOffset, fSizeX, fSizeY;
-		CORNOR_TYPE ePivotType = CORNOR_TYPE::CENTER;
-		CORNOR_TYPE eAnchorType = CORNOR_TYPE::CENTER;
+		CGameObject* pParent = { nullptr };
+		CGameObject* pTarget = { nullptr };
+		CTexture* pTextureCom = { nullptr };
 	}UIOBJECT_DESC;
 protected:
 	CUIObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -28,59 +25,53 @@ protected:
 	virtual ~CUIObject() = default;
 
 public:
-	virtual HRESULT Initialize_Prototype();
-	virtual HRESULT Initialize(void* pArg);
+	virtual HRESULT Initialize_Prototype()override;
+	virtual HRESULT Initialize(void* pArg)override;
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
-	HRESULT Render() final;
-	virtual HRESULT Render_Self()abstract;
+	virtual HRESULT Render()override;
 
+
+	virtual void Add_Child(CGameObject* pChild) override;
+	void Increase_Priority();
+
+	_uint Get_Priority() { return m_iPriority; }
 public:
-	void Add_ChildUI(CUIObject* pChildUI);
-	void On_MouseEnter(const DIMOUSESTATE& tMouseState);
-	void On_MouseOver(const DIMOUSESTATE& tMouseState);
-	void On_MouseExit(const DIMOUSESTATE& tMouseState);
-	bool Check_MouseOver(LONG lX, LONG lY);
 
-	void Set_Offset(_float fX, _float fY);
-	void Set_Size(_float fSizeX, _float fSizeY);
-	void Set_PivotType(CORNOR_TYPE ePivotType) { m_ePivotType = ePivotType; }
-	void Set_AnchorType(CORNOR_TYPE eAnchorType) { m_eAnchorType = eAnchorType; }
-	_float2 Get_Position() { return _float2(m_fXPosition, m_fYPosition); }
-	_float2 Get_Offset() { return _float2(m_fXOffset, m_fYOffset); }
-	_float2 Get_ScreenSize() { return _float2(m_fSizeX, m_fSizeY); }
-	_float2 Get_PivotOffset(CORNOR_TYPE ePivotType);
-	_float2 Get_PivotPoint(CORNOR_TYPE ePivotType);
-	_float2 Get_AnchorPoint(CORNOR_TYPE eAnchorType);
+	virtual void On_MouseEnter();
+	virtual void On_MouseOver();
+	virtual void On_MouseExit();
+	virtual bool Consume_MouseLButtonDown();
+	virtual bool Consume_MouseLButtonUp();
+	virtual bool Consume_MouseRButtonDown();
+	virtual bool Consume_MouseRButtonUp();
+	virtual bool Consume_MouseClick();
+	bool Check_MouseOver(POINT fPos);
 
-	static _float2 Get_CornorRatio(CORNOR_TYPE ePivotType);
+	CUIObject* Find_FocusedUI(POINT fPos);
 protected:
-	_float4x4				m_ViewMatrix{}, m_ProjMatrix{};
+	virtual HRESULT Bind_ShaderResources();
 
-	_float					m_fSizeX, m_fSizeY;
-	//부모 Anchor 기준 Pivot의 위치
-	_float					m_fXOffset, m_fYOffset;
-	//Screen 기준 중앙 위치
-	_float					m_fXPosition{ 0 }, m_fYPosition{ 0 };
-
-	_float					m_iViewportWidth = {};
-	_float					m_iViewportHeight = {};
-
-	_uint					m_iDepth = {};
-
-	list<CUIObject*>		m_pChildUIs;
-	CUIObject*				m_pParentUI = nullptr;
+protected:
+	static _uint			m_iStaticPriority;
+	_uint					m_iPriority = {};
 
 	CShader* m_pShaderCom = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 
-	CORNOR_TYPE m_ePivotType = CORNOR_TYPE::CENTER;
-	CORNOR_TYPE m_eAnchorType = CORNOR_TYPE::CENTER;
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;
 };
 
+class UIPriorityCompare
+{
+public:
+	bool operator()(CUIObject* pSrc, CUIObject* pDst)
+	{
+		return pSrc->Get_Priority() > pDst->Get_Priority();
+	}
+};
 END

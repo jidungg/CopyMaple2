@@ -22,6 +22,9 @@ private:
 	ID3D11Device*						m_pDevice = { nullptr };
 	ID3D11DeviceContext*				m_pContext = { nullptr };
 	list<class CGameObject*>			m_RenderObjects[RG_END];
+	ID3D11DepthStencilState*			m_pUIDSState= { nullptr };
+	ID3D11DepthStencilState*			m_pNonUIDSState= { nullptr };
+	
 
 private:
 	HRESULT Render_Priority();

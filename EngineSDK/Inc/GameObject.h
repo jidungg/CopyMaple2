@@ -1,6 +1,5 @@
 #pragma once
-
-#include "Transform.h"
+#include "Rect_Transform.h"
 
 BEGIN(Engine)
 
@@ -9,7 +8,6 @@ class ENGINE_DLL CGameObject abstract : public CBase
 public:
 	typedef struct : public CTransform::TRANSFORM_DESC
 	{
-		_uint			iData;
 		CGameObject* pTarget = { nullptr };
 	}GAMEOBJECT_DESC;
 protected:
@@ -28,10 +26,14 @@ public:
 	virtual void Late_Update(_float fTimeDelta);
 	virtual HRESULT Render();
 public:
+	virtual void Add_Child(CGameObject* pChild);
 	class CComponent* Find_Component(const _wstring& strComponentTag);
 	bool Is_Active() { return m_bActive; }
 	void Set_Target(CGameObject* pTaraget) { m_pTarget = pTaraget; Safe_AddRef(m_pTarget); }
 	class CTransform* Get_Transform() { return m_pTransformCom; }
+protected:
+	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, const _wstring& strComponentTag, CComponent** ppOut, void* pArg = nullptr);
+	HRESULT Add_Component(CComponent* pComponent, const _wstring& strComponentTag, void* pArg = nullptr);
 
 protected:
 	ID3D11Device*				m_pDevice = { nullptr };
@@ -39,7 +41,8 @@ protected:
 	class CGameInstance*		m_pGameInstance = { nullptr };
 	class CTransform*			m_pTransformCom = { nullptr };
 	CGameObject*				m_pTarget = { nullptr };
-
+	CGameObject*				m_pParent = { nullptr };
+	list<CGameObject*>			m_pChilds;
 
 	_uint						m_iObjID = {};
 	static _uint				m_iObjCount;
@@ -47,9 +50,6 @@ protected:
 protected:
 	map<const _wstring, class CComponent*>		m_Components;
 
-protected:
-	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, const _wstring& strComponentTag, CComponent** ppOut, void* pArg = nullptr);
-	HRESULT Add_Component(CComponent* pComponent, const _wstring& strComponentTag,void* pArg = nullptr);
 
 protected:
 	_uint						m_iData = {};

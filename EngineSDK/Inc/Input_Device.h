@@ -31,9 +31,9 @@ public:
 	{
 		return *(((_long*)&m_tMouseState) + (int)eMouseMove);
 	}
-	pair<LONG, LONG> Get_MousePos()
+	POINT Get_MousePos()
 	{
-		return { m_lMouseX, m_lMouseY };
+		return m_tMousePos;
 	}
 private:
 
@@ -48,8 +48,10 @@ private:
 	
 	tKeyInfo				m_arrMouseKey[(int)MOUSE_KEY::LAST];
 	DIMOUSESTATE			m_tMouseState;
-	LONG					m_lMouseX = 0;
-	LONG					m_lMouseY = 0;
+	POINT					m_tMousePos;
+
+	HINSTANCE m_hInst;
+	HWND m_hWnd;
 public:
 	static CInput_Device* Create(HINSTANCE hInst, HWND hWnd);
 	virtual void Free(void) override;

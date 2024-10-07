@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "GameObject.h"
 #include "Layer.h"
+#include "UIObject.h"
 
 CObject_Manager::CObject_Manager()
 	: m_pGameInstance { CGameInstance::GetInstance() }
@@ -48,6 +49,10 @@ HRESULT CObject_Manager::Add_GameObject_ToLayer(_uint iLevelIndex, const _wstrin
 	}
 	else
 		pLayer->Add_GameObject(pObj);
+
+	CUIObject* pUI = dynamic_cast<CUIObject*>(pObj);
+	if(pUI)
+		m_pGameInstance->Register_UIObject(pUI);
 
 	return S_OK;
 }

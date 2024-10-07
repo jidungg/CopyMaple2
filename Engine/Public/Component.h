@@ -14,12 +14,17 @@ protected:
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
+	virtual void Priority_Update(_float fTimeDelta) {};
+	virtual void Update(_float fTimeDelta) {};
+	virtual void Late_Update(_float fTimeDelta) {};
 
+	bool Is_Active() { return m_bActive; }
 protected:
 	ID3D11Device*					m_pDevice = { nullptr };
 	ID3D11DeviceContext*			m_pContext = { nullptr };
 	class CGameInstance*			m_pGameInstance = { nullptr };
-
+	class CGameObject*				m_pOwner = { nullptr };
+	bool m_bActive = true;
 public:	
 	virtual CComponent* Clone(void* pArg) = 0;
 	virtual void Free() override;

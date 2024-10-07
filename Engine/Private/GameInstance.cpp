@@ -7,6 +7,8 @@
 #include "Object_Manager.h"
 #include "Prototype_Manager.h"
 #include "Input_Device.h"
+#include "Controller.h"
+#include "UIManager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -24,7 +26,14 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pInput_Device)
 		return E_FAIL;
 
-	m_pPipeLine = CPipeLine::Create();
+	m_pUIManager = CUIManager::Create();
+	if (nullptr == m_pUIManager)
+		return E_FAIL;
+	m_pController = CController::Create(m_pInput_Device, m_pUIManager);
+	if (nullptr == m_pController)
+		return E_FAIL;
+
+	m_pPipeLine = CPipeLine::Create(*ppDevice, *ppContext);
 	if (nullptr == m_pPipeLine)
 		return E_FAIL;
 
@@ -48,12 +57,16 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pTimer_Manager)
 		return E_FAIL;
 
+
+
 	return S_OK;
 }
 
 void CGameInstance::Update_Engine(_float fTimeDelta)
 {
 	m_pInput_Device->Update_InputDev();
+	m_pUIManager->Update();
+	m_pController->Update();
 
 	m_pObject_Manager->Priority_Update(fTimeDelta);
 	m_pObject_Manager->Update(fTimeDelta);
@@ -92,6 +105,7 @@ void CGameInstance::Clear(_int iLevelID)
 	m_pObject_Manager->Clear(iLevelID);
 
 	m_pPrototype_Manager->Clear(iLevelID);
+	m_pUIManager->Clear();
 }
 
 _float CGameInstance::Get_TimeDelta(const _wstring & strTimerTag)
@@ -150,20 +164,37 @@ CBase * CGameInstance::Clone_Prototype(Engine::PROTOTYPE eType, _uint iLevelInde
 	return m_pPrototype_Manager->Clone_Prototype(eType, iLevelIndex, strPrototypeTag, pArg);
 }
 
-CBase* CGameInstance::Clone_Stock_Proto_Object(const _wstring& strPrototypeTag, void* pArg)
+CBase* CGameInstance::Clone_Proto_Object_Stock(const _wstring& strPrototypeTag, void* pArg)
 {
 	if (nullptr == m_pPrototype_Manager)
 		return nullptr;
 
-	return m_pPrototype_Manager->Clone_Stock_Proto_Object(strPrototypeTag, pArg);
+	return m_pPrototype_Manager->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, 0, strPrototypeTag, pArg);
 }
 
-CBase* CGameInstance::Clone_Stock_Proto_Component(const _wstring& strPrototypeTag, void* pArg)
+CBase* CGameInstance::Clone_Proto_Component_Stock(const _wstring& strPrototypeTag, void* pArg)
 {
 	if (nullptr == m_pPrototype_Manager)
 		return nullptr;
 
-	return m_pPrototype_Manager->Clone_Stock_Proto_Component(strPrototypeTag, pArg);
+	return m_pPrototype_Manager->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, 0, strPrototypeTag, pArg);
+}
+
+CBase* CGameInstance::Clone_Proto_Object_Current(const _wstring& strPrototypeTag, void* pArg)
+{
+	if (nullptr == m_pPrototype_Manager)
+		return nullptr;
+
+	return m_pPrototype_Manager->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ,m_pLevel_Manager->Get_CurrentLevelID(), strPrototypeTag, pArg);
+}
+
+CBase* CGameInstance::Clone_Proto_Component_Current(const _wstring& strPrototypeTag, void* pArg)
+{
+	if (nullptr == m_pPrototype_Manager)
+		return nullptr;
+
+	return m_pPrototype_Manager->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, m_pLevel_Manager->Get_CurrentLevelID(), strPrototypeTag, pArg);
+
 }
 
 HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring & strPrototypeTag, _uint iLevelIndex, const _wstring & strLayerTag, void * pArg)
@@ -222,6 +253,16 @@ _long CGameInstance::Get_DIMouseMove(MOUSE_MOVE eMouseMove)
 	return m_pInput_Device->Get_DIMouseMove(eMouseMove);
 }
 
+POINT CGameInstance::Get_MousePos()
+{
+	return m_pInput_Device->Get_MousePos();
+}
+
+void CGameInstance::Register_UIObject(CUIObject* pUIObject)
+{
+	m_pUIManager->Register_UIObject(pUIObject);
+}
+
 
 
 
@@ -244,4 +285,6 @@ void CGameInstance::Free()
 	Safe_Release(m_pLevel_Manager);
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pGraphic_Device);
+	Safe_Release(m_pController);
+	Safe_Release(m_pUIManager);
 }

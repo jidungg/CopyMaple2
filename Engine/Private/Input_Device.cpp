@@ -64,6 +64,9 @@ CInput_Device::~CInput_Device() { Free(); }
 
 HRESULT CInput_Device::Initialize(HINSTANCE hInst, HWND hWnd)
 {
+	m_hInst = hInst;
+	m_hWnd = hWnd;
+
     // DInput 컴객체를 생성하는 함수
     if(FAILED( DirectInput8Create(hInst, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_pInputSDK, NULL)))
 		return E_FAIL;
@@ -112,8 +115,9 @@ void CInput_Device::Update_InputDev()
     // Direct Input StateCheck
     m_pKeyBoard->GetDeviceState(256, m_byKeyState);
     m_pMouse->GetDeviceState(sizeof(m_tMouseState), &m_tMouseState);
-	m_lMouseX += m_tMouseState.lX;
-	m_lMouseY += m_tMouseState.lY;
+    GetCursorPos(&m_tMousePos);
+    ScreenToClient(m_hWnd, &m_tMousePos);
+
 
     HWND hWnd = GetFocus(); // 현재 포커싱 중인 윈도우핸들값을 알려준다 >> 포커싱 된 윈도우가 없으면, 0이 나온다 id(0)
 

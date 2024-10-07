@@ -5,11 +5,14 @@
 #include "GameInstance.h"
 #include "Player.h"
 #include "Camera_Trace.h"
+#include "HomeDialog.h"
 
 
 CLevel_Home::CLevel_Home(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel(pDevice, pContext)
 {
+	m_iLevelID = LEVEL_HOME;
+
 }
 
 
@@ -45,20 +48,33 @@ HRESULT CLevel_Home::Ready_Layer_BackGround(const _wstring& strLayerTag)
 
 HRESULT CLevel_Home::Ready_Layer_UI(const _wstring& strLayerTag)
 {
-	CUIPanel::PANEL_DESC PanelDesc{};
+	CHomeDialog::HOMEDIALOG_DESC PanelDesc{};
 	PanelDesc.eAnchorType = CORNOR_TYPE::LEFT;
 	PanelDesc.ePivotType = CORNOR_TYPE::LEFT;
 	PanelDesc.fXOffset = 100;
 	PanelDesc.fYOffset = 0;
 	PanelDesc.fSizeX = g_iWinSizeX/2;
 	PanelDesc.fSizeY = g_iWinSizeY/4;
-	PanelDesc.eLevelID = LEVEL_HOME;
-	PanelDesc.szTextureTag = TEXT("UI_Texture_HomeDialog");
+	PanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, m_iLevelID, TEXT("UI_Texture_HomeDialog"), nullptr));
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOADING, TEXT("Prototype_GameObject_UIPanel"),
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialog"),
 		LEVEL_HOME, strLayerTag, &PanelDesc)))
 		return E_FAIL;
-	return S_OK;
+	
+
+	PanelDesc.eAnchorType = CORNOR_TYPE::LEFT;
+	PanelDesc.ePivotType = CORNOR_TYPE::LEFT;
+	PanelDesc.fXOffset = 200;
+	PanelDesc.fYOffset = 0;
+	PanelDesc.fSizeX = g_iWinSizeX / 2;
+	PanelDesc.fSizeY = g_iWinSizeY / 4;
+	PanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, m_iLevelID, TEXT("UI_Texture_HomeDialog"), nullptr));
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialog"),
+		LEVEL_HOME, strLayerTag, &PanelDesc)))
+		return E_FAIL;
+
+	return S_OK; 
 }
 
 HRESULT CLevel_Home::Ready_Layer_Player(const _wstring& strLayerTag)

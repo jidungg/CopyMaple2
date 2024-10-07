@@ -1,6 +1,8 @@
-#include "..\Public\UIObject.h"
+#include "UIObject.h"
 
 #include "GameInstance.h"
+
+_uint CUIObject::m_iStaticPriority = 0;
 
 CUIObject::CUIObject(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject { pDevice, pContext }
@@ -9,13 +11,14 @@ CUIObject::CUIObject(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 
 CUIObject::CUIObject(const CUIObject & Prototype)
 	: CGameObject{ Prototype },
-	m_fSizeX{ Prototype.m_fSizeX },
-	m_fSizeY{ Prototype.m_fSizeY },
-	m_fXOffset{ Prototype.m_fXOffset },
-	m_fYOffset{ Prototype.m_fYOffset },
-	m_eAnchorType{ Prototype.m_eAnchorType },
-	m_ePivotType{ Prototype.m_ePivotType }	
+	m_pTextureCom{ Prototype.m_pTextureCom },
+	m_pVIBufferCom{ Prototype.m_pVIBufferCom },
+	m_pShaderCom{ Prototype.m_pShaderCom }
 {
+	Safe_AddRef(m_pTextureCom);
+	Safe_AddRef(m_pVIBufferCom);
+	Safe_AddRef(m_pShaderCom);
+	Increase_Priority();
 }
 
 HRESULT CUIObject::Initialize_Prototype()
@@ -26,37 +29,20 @@ HRESULT CUIObject::Initialize_Prototype()
 
 HRESULT CUIObject::Initialize(void * pArg)
 {
-	if (nullptr == pArg)
-		return E_FAIL;
-	
 	UIOBJECT_DESC*	pDesc = static_cast<UIOBJECT_DESC*>(pArg);
+	if (nullptr != pDesc)
+	{
+		m_pTarget = pDesc->pTarget;
+		Safe_AddRef(m_pTarget);
+		m_pTextureCom = pDesc->pTextureCom;
+	}
 
-	m_fSizeX = pDesc->fSizeX;
-	m_fSizeY = pDesc->fSizeY;
-	m_fXOffset = pDesc->fXOffset;
-	m_fYOffset = pDesc->fYOffset;
-	m_eAnchorType = pDesc->eAnchorType;
-	m_ePivotType = pDesc->ePivotType;
 
-	m_fXPosition = 0;
-	m_fYPosition = 0;
-
-	_uint		iNumViewports = { 1 };
-	D3D11_VIEWPORT		ViewportDesc{};
-
-	m_pContext->RSGetViewports(&iNumViewports, &ViewportDesc);
-	m_iViewportWidth = (ViewportDesc.Width);
-	m_iViewportHeight = (ViewportDesc.Height);
-
-	/* 직교튀영을 위한 뷰ㅡ, 투영행르을 만들었다. */
-	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
-	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(m_iViewportWidth, m_iViewportHeight, 0.f, 1.f));
-
-	if (FAILED(__super::Initialize(pArg)))
+	m_pTransformCom = CRect_Transform::Create(m_pDevice, m_pContext);
+	if (nullptr == m_pTransformCom)
 		return E_FAIL;
-
-	/* 던져준 fX, fY,  fSizeX, fSizeY로 그려질 수 있도록 월드행렬의 상태를 제어해둔다. */
-	Update(0);
+	if (FAILED(m_pTransformCom->Initialize(pArg)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -64,23 +50,9 @@ HRESULT CUIObject::Initialize(void * pArg)
 //부모의 Position과 자신의 Pivot을 이용하여 자신의 위치를 계산한다.
 void CUIObject::Update(_float fTimeDelta)
 {
-	if (false == m_bActive) return;
+	__super::Update(fTimeDelta);
 
-	_float2 fParentAnchor = Get_AnchorPoint(m_eAnchorType);
-	_float2 fPivot;
-	fPivot.x = fParentAnchor.x + m_fXOffset;
-	fPivot.y = fParentAnchor.y + m_fYOffset;
-	_float2 fPivotOffset = Get_PivotOffset(m_ePivotType);
-	m_fXPosition = fPivot.x - fPivotOffset.x;
-	m_fYPosition = fPivot.y - fPivotOffset.y;
 
-	m_pTransformCom->Scaling(m_fSizeX, m_fSizeY, 1.f);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(m_fXPosition - m_iViewportWidth*0.5, -m_fYPosition + m_iViewportHeight * 0.5, 0.f, 1.f));
-
-	for (auto& child: m_pChildUIs)
-	{
-		child->Update(fTimeDelta);
-	}
 }
 
 void CUIObject::Late_Update(_float fTimeDelta)
@@ -93,129 +65,117 @@ void CUIObject::Late_Update(_float fTimeDelta)
 
 HRESULT CUIObject::Render()
 {
-	Render_Self();
-	for (auto& child : m_pChildUIs)
-		child->Render_Self();
+	if (false == m_bActive) return S_OK;
+
+	if (FAILED(Bind_ShaderResources()))
+		return E_FAIL;
+	if (m_pShaderCom)
+		m_pShaderCom->Begin(0);
+	if (m_pVIBufferCom)
+	{
+		m_pVIBufferCom->Bind_BufferDesc();
+		m_pVIBufferCom->Render();
+	}
+
+	for (auto& child : m_pChilds)
+		child->Render();
 
 	return S_OK;
 }
 
-void CUIObject::Add_ChildUI(CUIObject* pChildUI)
+void CUIObject::Add_Child(CGameObject* pChild)
 {
-	if (pChildUI == nullptr)
-		return;
-	m_pChildUIs.push_back(pChildUI);
-	pChildUI->m_pParentUI = this;
-	Safe_AddRef(pChildUI);
-	
+	__super::Add_Child(pChild);
+	static_cast<CRect_Transform*>(pChild->Get_Transform())->Compute_Matrix();
 }
 
-void CUIObject::On_MouseEnter(const DIMOUSESTATE& tMouseState)
+void CUIObject::Increase_Priority()
+{
+	if(m_pParent == nullptr)
+		m_iPriority = m_iStaticPriority++;
+	else
+		static_cast<CUIObject*>(m_pParent)->Increase_Priority();
+}
+
+
+HRESULT CUIObject::Bind_ShaderResources()
+{
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	if (m_pShaderCom)
+	{
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_UI_VIEW))))
+			return E_FAIL;
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_UI_PROJ))))
+			return E_FAIL;
+	}
+	if(m_pTextureCom)
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
+			return E_FAIL;
+
+	return S_OK;
+}
+
+
+void CUIObject::On_MouseEnter()
 {
 }
 
-void CUIObject::On_MouseOver(const DIMOUSESTATE& tMouseState)
+void CUIObject::On_MouseOver()
 {
 }
 
-void CUIObject::On_MouseExit(const DIMOUSESTATE& tMouseState)
+void CUIObject::On_MouseExit()
 {
 }
 
-bool CUIObject::Check_MouseOver(LONG lX, LONG lY)
+bool CUIObject::Consume_MouseLButtonDown()
 {
-
 	return false;
 }
 
-void CUIObject::Set_Offset(_float fX, _float fY)
+bool CUIObject::Consume_MouseLButtonUp()
 {
-	m_fXOffset = fX;
-	m_fYOffset = fY;
+	return false;
 }
 
-void CUIObject::Set_Size(_float fSizeX, _float fSizeY)
+bool CUIObject::Consume_MouseRButtonDown()
 {
-	m_fSizeX = fSizeX;
-	m_fSizeY = fSizeY;
+	return false;
 }
 
-_float2 CUIObject::Get_CornorRatio(CORNOR_TYPE ePivotType)
+bool CUIObject::Consume_MouseRButtonUp()
 {
-	_float2		fPivotOffset{};
+	return false;
+}
 
-	switch (ePivotType)
+bool CUIObject::Consume_MouseClick()
+{
+	return false;
+}
+
+bool CUIObject::Check_MouseOver(POINT fPos)
+{
+	return static_cast<CRect_Transform*>( m_pTransformCom)->Is_InRect(_float2(fPos.x, fPos.y));
+}
+
+CUIObject* CUIObject::Find_FocusedUI(POINT fPos)
+{
+
+	if (false == Check_MouseOver(fPos))return nullptr;
+
+	for (auto& child : m_pChilds)
 	{
-	case Engine::CORNOR_TYPE::LEFT_TOP:
-		fPivotOffset = _float2(-0.5f, -0.5f);
-		break;
-	case Engine::CORNOR_TYPE::TOP:
-		fPivotOffset = _float2(0.f, -0.5f);
-		break;
-	case Engine::CORNOR_TYPE::RIGHT_TOP:
-		fPivotOffset = _float2(0.5f, -0.5f);
-		break;
-	case Engine::CORNOR_TYPE::LEFT:
-		fPivotOffset = _float2(-0.5f, 0.f);
-		break;
-	case Engine::CORNOR_TYPE::CENTER:
-		fPivotOffset = _float2(0.f, 0.f);
-		break;
-	case Engine::CORNOR_TYPE::RIGHT:
-		fPivotOffset = _float2(0.5f, 0.0f);
-		break;
-	case Engine::CORNOR_TYPE::LEFT_BOT:
-		fPivotOffset = _float2(-0.5f, 0.5f);
-		break;
-	case Engine::CORNOR_TYPE::BOT:
-		fPivotOffset = _float2(0.f, 0.5f);
-		break;
-	case Engine::CORNOR_TYPE::RIGHT_BOT:
-		fPivotOffset = _float2(0.5f, 0.5f);
-		break;
-	case Engine::CORNOR_TYPE::LAST:
-		fPivotOffset = _float2(-1.f, -1.f);
-		break;
-	default:
-		break;
-	}
-	return fPivotOffset;
-}
-//Pivot의 자신 중앙 기준 Offset
-_float2 CUIObject::Get_PivotOffset(CORNOR_TYPE ePivotType)
-{
-	_float2		fPivotOffset{0,0};
-	_float2		fAdditional { 0,0 };
-	fAdditional = Get_CornorRatio(ePivotType);
+		if (false == child->Is_Active()) continue;
 
-	fPivotOffset.x = m_fSizeX * fAdditional.x;
-	fPivotOffset.y = m_fSizeY * fAdditional.y;
-	return fPivotOffset;
-}
-//Pivot의 Screen 좌표 = 자신의 Position  + PivotOffset
-_float2 CUIObject::Get_PivotPoint(CORNOR_TYPE ePivotType)
-{
-	_float2		fPivotPoint = Get_PivotOffset(ePivotType);
-	fPivotPoint.x += m_fXPosition;
-	fPivotPoint.y += m_fYPosition;
-	
-	return fPivotPoint;
-}
-//Anchor의 Screen 기준 좌표 = 부모의 코너의 Position
-_float2 CUIObject::Get_AnchorPoint(CORNOR_TYPE eAnchorType)
-{
-	_float2		fAnchorPoint;
-	if (m_pParentUI == nullptr)
-	{
-		_float2 fRatio = Get_CornorRatio(eAnchorType);
-		fAnchorPoint = _float2(m_iViewportWidth*0.5 + m_iViewportWidth * fRatio.x, m_iViewportHeight*0.5 + m_iViewportHeight * fRatio.y);
-	}
-	else
-	{
-		fAnchorPoint = m_pParentUI->Get_PivotPoint(eAnchorType);
+		CUIObject* pChildUI = static_cast<CUIObject*>(child);
+		CUIObject* pFocusedUI = pChildUI->Find_FocusedUI(fPos);
+		if (pFocusedUI != nullptr)
+			return pFocusedUI;
 	}
 
-	return fAnchorPoint;
+	return this;
 }
 
 
@@ -223,13 +183,9 @@ _float2 CUIObject::Get_AnchorPoint(CORNOR_TYPE eAnchorType)
 void CUIObject::Free()
 {
 	__super::Free();
-	for (auto& i : m_pChildUIs)
-	{
-		Safe_Release(i);
-	}
-	m_pChildUIs.clear();
+
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
+  	Safe_Release(m_pVIBufferCom);
 }

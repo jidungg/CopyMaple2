@@ -21,10 +21,11 @@ HRESULT CCanvas::Initialize(void* pArg)
 	return __super::Initialize(pArg);
 }
 
-HRESULT CCanvas::Render_Self()
+HRESULT CCanvas::Render()
 {
 	return S_OK;
 }
+
 
 CCanvas* CCanvas::Create()
 {

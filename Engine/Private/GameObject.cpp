@@ -24,7 +24,6 @@ CGameObject::CGameObject(const CGameObject & Prototype)
 	Safe_AddRef(m_pDevice);
 	Safe_AddRef(m_pContext);
 
-
 	m_iObjID = m_iObjCount++;
 }
 
@@ -39,8 +38,8 @@ HRESULT CGameObject::Initialize(void * pArg)
 	if (nullptr != pArg)
 	{
 		GAMEOBJECT_DESC*		pDesc = static_cast<GAMEOBJECT_DESC*>(pArg);
-		m_iData = pDesc->iData;
 		m_pTarget = pDesc->pTarget;
+		Safe_AddRef(m_pTarget);
 	}	
 
 	m_pTransformCom = CTransform::Create(m_pDevice, m_pContext);
@@ -55,19 +54,63 @@ HRESULT CGameObject::Initialize(void * pArg)
 
 void CGameObject::Priority_Update(_float fTimeDelta)
 {
+	if (false == m_bActive) return;
+	for (auto& c : m_Components)
+	{
+		if (c.second->Is_Active())
+			c.second->Priority_Update(fTimeDelta);
+	}
+	for (auto& child : m_pChilds)
+	{
+		if (child->Is_Active())
+			child->Priority_Update(fTimeDelta);
+	}
 }
 
 void CGameObject::Update(_float fTimeDelta)
 {
-}
+	if (false == m_bActive) return;
+	for (auto& c : m_Components)
+	{
+		if (c.second->Is_Active())
+			c.second->Update(fTimeDelta);
+	}
+	for (auto& child : m_pChilds)
+	{
+		if (child->Is_Active())
+			child->Update(fTimeDelta);
+	}
+}	
 
 void CGameObject::Late_Update(_float fTimeDelta)
 {
+	if (false == m_bActive) return;
+	for (auto& c : m_Components)
+	{
+		if (c.second->Is_Active())
+			c.second->Late_Update(fTimeDelta);
+	}
+	for (auto& child : m_pChilds)
+	{
+		if (child->Is_Active())
+			child->Late_Update(fTimeDelta);
+	}
 }
 
 HRESULT CGameObject::Render()
 {
+	if (false == m_bActive) return S_OK;
 	return S_OK;
+}
+
+void CGameObject::Add_Child(CGameObject* pChild)
+{
+	if (pChild == nullptr)
+		return;
+	m_pChilds.push_back(pChild);
+
+	pChild->m_pParent = this;
+	pChild->Get_Transform()->Set_Parent(m_pTransformCom);
 }
 
 CComponent * CGameObject::Find_Component(const _wstring & strComponentTag)
@@ -113,6 +156,12 @@ void CGameObject::Free()
 	for (auto& Pair : m_Components)
 		Safe_Release(Pair.second);
 	m_Components.clear();
+
+	for (auto& i : m_pChilds)
+	{
+		Safe_Release(i);
+	}
+	m_pChilds.clear();
 
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pGameInstance);

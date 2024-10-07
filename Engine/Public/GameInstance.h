@@ -39,8 +39,10 @@ public: /* for.Level_Manager */
 public: /* For.Prototype_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const _wstring& strPrototypeTag, class CBase* pPrototype);
 	class CBase* Clone_Prototype(Engine::PROTOTYPE eType, _uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg = nullptr);
-	class CBase* Clone_Stock_Proto_Object(const _wstring& strPrototypeTag, void* pArg = nullptr);
-	class CBase* Clone_Stock_Proto_Component(const _wstring& strPrototypeTag, void* pArg = nullptr);
+	class CBase* Clone_Proto_Object_Stock(const _wstring& strPrototypeTag, void* pArg = nullptr);
+	class CBase* Clone_Proto_Component_Stock(const _wstring& strPrototypeTag, void* pArg = nullptr);
+	class CBase* Clone_Proto_Object_Current(const _wstring& strPrototypeTag, void* pArg);
+	class CBase* Clone_Proto_Component_Current(const _wstring& strPrototypeTag, void* pArg);
 
 public: /* For.Object_Manager */
 	HRESULT Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLevelIndex, const _wstring& strLayerTag, void* pArg = nullptr);
@@ -56,6 +58,10 @@ public: //For Key Manager
 	const KEY_STATE& GetKeyState(KEY _eKEY);
 	const KEY_STATE& GetMouseKeyState(MOUSE_KEY _eMouse);
 	_long	Get_DIMouseMove(MOUSE_MOVE eMouseMove);
+	POINT Get_MousePos();
+
+public://For UI Manager
+	void Register_UIObject(class CUIObject* pUIObject);
 
 private:
 	class CGraphic_Device*				m_pGraphic_Device = { nullptr };
@@ -64,8 +70,10 @@ private:
 	class CLevel_Manager*				m_pLevel_Manager = { nullptr };
 	class CPrototype_Manager*			m_pPrototype_Manager = { nullptr };
 	class CObject_Manager*				m_pObject_Manager = { nullptr };
-	class CPipeLine* m_pPipeLine = { nullptr };
+	class CPipeLine*					m_pPipeLine = { nullptr };
 	class CRenderer*					m_pRenderer = { nullptr };
+	class CController*					m_pController = { nullptr };
+	class CUIManager*					m_pUIManager = { nullptr };
 public:
 	static void Release_Engine();
 

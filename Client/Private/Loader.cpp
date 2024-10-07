@@ -9,6 +9,7 @@
 #include "Terrain.h"
 #include "Player.h"
 
+#include "HomeDialog.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -204,7 +205,7 @@ HRESULT CLoader::Loading_Level_GamePlay()
 HRESULT CLoader::Loading_Level_MyHome()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Magnifier_Normal"),
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_Magnifier_Normal"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Magnifier_Normal.dds"), 1))))
 		return E_FAIL;
 
@@ -221,7 +222,10 @@ HRESULT CLoader::Loading_Level_MyHome()
 	
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형(을)를 로딩중입니다."));
-
+	/* For.Prototype_GameObject_HomeDialog */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialog"),
+		CHomeDialog::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 

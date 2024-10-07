@@ -11,7 +11,7 @@
 CLevel_Loading::CLevel_Loading(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel { pDevice, pContext }
 {
-
+	m_iLevelID = LEVEL_LOADING;
 }
 
 HRESULT CLevel_Loading::Initialize(LEVELID eNextLevelID)

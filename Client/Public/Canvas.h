@@ -19,7 +19,7 @@ private:
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual HRESULT Render_Self() override;
+	virtual HRESULT Render() override;
 
 public:
 	static CCanvas* Create();

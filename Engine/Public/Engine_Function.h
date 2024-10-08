@@ -52,6 +52,8 @@ namespace Engine
 
 		return iRefCnt;
 	}
+
+
 }
 
 #endif // Engine_Function_h__

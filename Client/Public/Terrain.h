@@ -15,7 +15,7 @@ BEGIN(Client)
 class CTerrain final : public CGameObject
 {
 private:
-	CTerrain(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CTerrain(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* szMapFileName);
 	CTerrain(const CTerrain& Prototype);
 	virtual ~CTerrain() = default;
 
@@ -28,19 +28,14 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	CShader*				m_pShaderCom = { nullptr };
-	CTexture*				m_pTextureCom = { nullptr };
-	CVIBuffer_Rect*			m_pVIBufferCom = { nullptr };
-
+	wstring m_strMapName;
 
 
 private:
-	HRESULT Ready_Components();
-	HRESULT Bind_ShaderResources();
-
+	HRESULT Ready_Cells();
 
 public:
-	static CTerrain* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CTerrain* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* szMapFileName);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 

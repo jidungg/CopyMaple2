@@ -20,12 +20,12 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 	virtual void On_MouseEnter();
-	virtual void On_MouseOver();
+	virtual void MouseOver();
 	virtual void On_MouseExit();
 	virtual bool Consume_MouseLButtonDown();
-	virtual bool Consume_MouseLButtonUp();
+	virtual void On_MouseLButtonUp();
 	virtual bool Consume_MouseRButtonDown();
-	virtual bool Consume_MouseRButtonUp();
+	virtual void On_MouseRButtonUp();
 	virtual bool Consume_MouseClick();
 private:
 	HRESULT Ready_Childs();

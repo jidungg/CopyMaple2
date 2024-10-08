@@ -11,6 +11,7 @@
 
 #include "HomeDialog.h"
 
+
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
 	, m_pContext { pContext }
@@ -176,6 +177,8 @@ HRESULT CLoader::Loading_Level_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/resources/Textures/Terrain/Tile0.jpg"), 1))))
 		return E_FAIL;
 
+	if (FAILED(Load_Dirctory(TEXT("../Bin/resources/FBXs/MAP/Cube/"),TEXT(".dds"))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("사운드를 로딩중입니다."));
 		
@@ -191,7 +194,7 @@ HRESULT CLoader::Loading_Level_GamePlay()
 
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Terrain"),
-		CTerrain::Create(m_pDevice, m_pContext))))
+		CTerrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Json/house_base.json")))))
 		return E_FAIL;
 	
 
@@ -205,12 +208,19 @@ HRESULT CLoader::Loading_Level_GamePlay()
 HRESULT CLoader::Loading_Level_MyHome()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_Magnifier_Normal"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Magnifier_Normal.dds"), 1))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_Magnifier"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Magnifier_%d.dds"), 4))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_HomeDialog"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Box_Normal.dds"), 1))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_HighlightBorder"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Mat_HighlightBorder.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_SelectedYellow"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Mat_SelectedYellow.dds"), 1))))
 		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("사운드를 로딩중입니다."));
 
@@ -232,6 +242,44 @@ HRESULT CLoader::Loading_Level_MyHome()
 	m_isFinished = true;
 
 	return S_OK;
+}
+
+HRESULT CLoader::Load_Dirctory(const _tchar* szDirPath, const _tchar* szExtension)
+{
+	WIN32_FIND_DATA		FindFileData = {};
+	HANDLE				hFind = INVALID_HANDLE_VALUE;
+
+	_tchar				szFilePath[MAX_PATH] = TEXT("");
+	_tchar				szFullPath[MAX_PATH] = TEXT("");
+	_tchar				szProtoTag[MAX_PATH] = TEXT("");
+
+	lstrcpy(szFilePath, szDirPath);
+	lstrcat(szFilePath, TEXT("*"));
+	lstrcat(szFilePath, szExtension);
+
+	hFind = FindFirstFile(szFilePath, &FindFileData);
+
+	if (INVALID_HANDLE_VALUE == hFind)
+		return E_FAIL;
+
+	do
+	{
+		if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+			continue;
+
+		lstrcpy(szFullPath, szDirPath);
+		lstrcat(szFullPath, FindFileData.cFileName);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, FindFileData.cFileName,
+			CTexture::Create(m_pDevice, m_pContext, szFullPath, 1))))
+			return E_FAIL;
+
+	} while (FindNextFile(hFind, &FindFileData));
+
+	FindClose(hFind);
+
+	return S_OK;
+		
 }
 
 CLoader * CLoader::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, LEVELID eNextLevelID)

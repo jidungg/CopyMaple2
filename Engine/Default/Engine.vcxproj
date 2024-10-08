@@ -159,7 +159,6 @@ call UpdateLib.bat</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Base.h" />
-    <ClInclude Include="..\Public\Button_Component.h" />
     <ClInclude Include="..\Public\Camera.h" />
     <ClInclude Include="..\Public\Camera_UI.h" />
     <ClInclude Include="..\public\Component.h" />
@@ -173,9 +172,13 @@ call UpdateLib.bat</Command>
     <ClInclude Include="..\public\GameObject.h" />
     <ClInclude Include="..\Public\Graphic_Device.h" />
     <ClInclude Include="..\Public\Input_Device.h" />
+    <ClInclude Include="..\Public\json.hpp" />
+    <ClInclude Include="..\Public\JsonParser.h" />
     <ClInclude Include="..\public\Layer.h" />
     <ClInclude Include="..\public\Level.h" />
     <ClInclude Include="..\public\Level_Manager.h" />
+    <ClInclude Include="..\Public\Light.h" />
+    <ClInclude Include="..\Public\Light_Manager.h" />
     <ClInclude Include="..\public\Object_Manager.h" />
     <ClInclude Include="..\Public\PipeLine.h" />
     <ClInclude Include="..\public\Prototype_Manager.h" />
@@ -194,7 +197,6 @@ call UpdateLib.bat</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp" />
-    <ClCompile Include="..\Private\Button_Component.cpp" />
     <ClCompile Include="..\Private\Camera.cpp" />
     <ClCompile Include="..\Private\Camera_UI.cpp" />
     <ClCompile Include="..\private\Component.cpp" />
@@ -206,6 +208,8 @@ call UpdateLib.bat</Command>
     <ClCompile Include="..\private\Layer.cpp" />
     <ClCompile Include="..\private\Level.cpp" />
     <ClCompile Include="..\private\Level_Manager.cpp" />
+    <ClCompile Include="..\Private\Light.cpp" />
+    <ClCompile Include="..\Private\Light_Manager.cpp" />
     <ClCompile Include="..\private\Object_Manager.cpp" />
     <ClCompile Include="..\Private\PipeLine.cpp" />
     <ClCompile Include="..\private\Prototype_Manager.cpp" />

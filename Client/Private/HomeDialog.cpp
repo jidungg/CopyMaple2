@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "HomeDialog.h"
 #include "GameInstance.h"
+#include "UIButton.h"
 
 CHomeDialog::CHomeDialog(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPanel(pDevice, pContext)
@@ -34,7 +35,7 @@ void CHomeDialog::On_MouseEnter()
 {
 }
 
-void CHomeDialog::On_MouseOver()
+void CHomeDialog::MouseOver()
 {
 	int a = 0;
 }
@@ -48,9 +49,9 @@ bool CHomeDialog::Consume_MouseLButtonDown()
 	return false;
 }
 
-bool CHomeDialog::Consume_MouseLButtonUp()
+void CHomeDialog::On_MouseLButtonUp()
 {
-	return false;
+	return ;
 }
 
 bool CHomeDialog::Consume_MouseRButtonDown()
@@ -58,9 +59,9 @@ bool CHomeDialog::Consume_MouseRButtonDown()
 	return false;
 }
 
-bool CHomeDialog::Consume_MouseRButtonUp()
+void CHomeDialog::On_MouseRButtonUp()
 {
-	return false;
+	return ;
 }
 
 bool CHomeDialog::Consume_MouseClick()
@@ -70,19 +71,19 @@ bool CHomeDialog::Consume_MouseClick()
 
 HRESULT CHomeDialog::Ready_Childs()
 {
-	CUIPanel::PANEL_DESC PanelDesc{};
-	PanelDesc.eAnchorType = CORNOR_TYPE::RIGHT_TOP;
-	PanelDesc.ePivotType = CORNOR_TYPE::RIGHT_TOP;
-	PanelDesc.fXOffset = -50;
-	PanelDesc.fYOffset = 0;
-	PanelDesc.fSizeX = 50;
-	PanelDesc.fSizeY =50;
-	PanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_HOME, TEXT("UI_Texture_Magnifier_Normal"), nullptr));
+	CUIButton::BUTTON_DESC ButtonDesc{};
+	ButtonDesc.eAnchorType = CORNOR_TYPE::RIGHT_TOP;
+	ButtonDesc.ePivotType = CORNOR_TYPE::RIGHT_TOP;
+	ButtonDesc.fXOffset = -50;
+	ButtonDesc.fYOffset = 0;
+	ButtonDesc.fSizeX = 50;
+	ButtonDesc.fSizeY =50;
+	ButtonDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_HOME, TEXT("UI_Texture_Magnifier"), nullptr));
 
-	CUIObject* pPanel = CUIPanel::Create(m_pDevice,m_pContext);
-	if (FAILED(pPanel->Initialize(&PanelDesc)))
+	CUIObject* pButton = CUIButton::Create(m_pDevice,m_pContext);
+	if (FAILED(pButton->Initialize(&ButtonDesc)))
 		return E_FAIL;
-	Add_Child(pPanel);
+	Add_Child(pButton);
 
 	return S_OK;
 }

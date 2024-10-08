@@ -42,7 +42,7 @@ protected:
 	class CTransform*			m_pTransformCom = { nullptr };
 	CGameObject*				m_pTarget = { nullptr };
 	CGameObject*				m_pParent = { nullptr };
-	list<CGameObject*>			m_pChilds;
+	vector<CGameObject*>			m_pChilds;
 
 	_uint						m_iObjID = {};
 	static _uint				m_iObjCount;

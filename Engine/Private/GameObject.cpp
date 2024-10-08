@@ -57,12 +57,12 @@ void CGameObject::Priority_Update(_float fTimeDelta)
 	if (false == m_bActive) return;
 	for (auto& c : m_Components)
 	{
-		if (c.second->Is_Active())
+		if (c.second != nullptr && c.second->Is_Active())
 			c.second->Priority_Update(fTimeDelta);
 	}
 	for (auto& child : m_pChilds)
 	{
-		if (child->Is_Active())
+		if (child != nullptr && child->Is_Active())
 			child->Priority_Update(fTimeDelta);
 	}
 }
@@ -72,12 +72,12 @@ void CGameObject::Update(_float fTimeDelta)
 	if (false == m_bActive) return;
 	for (auto& c : m_Components)
 	{
-		if (c.second->Is_Active())
+		if (c.second != nullptr && c.second->Is_Active())
 			c.second->Update(fTimeDelta);
 	}
 	for (auto& child : m_pChilds)
 	{
-		if (child->Is_Active())
+		if (child != nullptr && child->Is_Active())
 			child->Update(fTimeDelta);
 	}
 }	
@@ -87,12 +87,12 @@ void CGameObject::Late_Update(_float fTimeDelta)
 	if (false == m_bActive) return;
 	for (auto& c : m_Components)
 	{
-		if (c.second->Is_Active())
+		if (c.second != nullptr && c.second->Is_Active())
 			c.second->Late_Update(fTimeDelta);
 	}
 	for (auto& child : m_pChilds)
 	{
-		if (child->Is_Active())
+		if (child != nullptr && child->Is_Active())
 			child->Late_Update(fTimeDelta);
 	}
 }

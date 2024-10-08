@@ -7,6 +7,7 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #include <DirectXMath.h>
+
 using namespace DirectX;
 
 #include "Effects11\d3dx11effect.h"
@@ -107,6 +108,8 @@ namespace Engine
 #include <queue>
 #include <unordered_map>
 #include <algorithm>
+#include <fstream>
+#include <iostream>
 using namespace std;
 
 #include "Engine_Typedef.h"
@@ -115,7 +118,8 @@ using namespace std;
 #include "Engine_Function.h"
 
 
-
+#include "json.hpp"
+using json = nlohmann::json;
 using namespace Engine;
 
 #ifdef _DEBUG

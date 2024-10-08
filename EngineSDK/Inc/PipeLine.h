@@ -31,6 +31,7 @@ public:
 		return m_TransformMatrices[eState];
 	}
 
+	const _float4* Get_CamPosition() {return &m_vCamPosition;}
 public:
 	HRESULT Initialize();
 	void Update();

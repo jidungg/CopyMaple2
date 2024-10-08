@@ -52,7 +52,6 @@ void CUIObject::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
 
-
 }
 
 void CUIObject::Late_Update(_float fTimeDelta)
@@ -111,16 +110,34 @@ HRESULT CUIObject::Bind_ShaderResources()
 			return E_FAIL;
 	}
 	if(m_pTextureCom)
-		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iSRVIndex)))
 			return E_FAIL;
 
 	return S_OK;
 }
 
 
+void CUIObject::MouseOver()
+{
+	if (m_bMouseOver == false)
+		On_MouseEnter();
+	else
+		On_MouseOver();
+	m_bMouseOver = true;
+
+}
+void CUIObject::MouseNotOver()
+{
+	if (m_bMouseOver == true)
+	{
+		On_MouseExit();
+	}
+	m_bMouseOver = false;
+}
 void CUIObject::On_MouseEnter()
 {
 }
+
 
 void CUIObject::On_MouseOver()
 {
@@ -135,9 +152,9 @@ bool CUIObject::Consume_MouseLButtonDown()
 	return false;
 }
 
-bool CUIObject::Consume_MouseLButtonUp()
+void CUIObject::On_MouseLButtonUp()
 {
-	return false;
+	return;
 }
 
 bool CUIObject::Consume_MouseRButtonDown()
@@ -145,12 +162,17 @@ bool CUIObject::Consume_MouseRButtonDown()
 	return false;
 }
 
-bool CUIObject::Consume_MouseRButtonUp()
+void CUIObject::On_MouseRButtonUp()
+{
+	return;
+}
+
+bool CUIObject::Consume_MouseClick()
 {
 	return false;
 }
 
-bool CUIObject::Consume_MouseClick()
+bool CUIObject::Consume_MouseRightClick()
 {
 	return false;
 }
@@ -163,7 +185,11 @@ bool CUIObject::Check_MouseOver(POINT fPos)
 CUIObject* CUIObject::Find_FocusedUI(POINT fPos)
 {
 
-	if (false == Check_MouseOver(fPos))return nullptr;
+	if (false == Check_MouseOver(fPos))
+	{
+		MouseNotOver();
+		return nullptr;
+	}
 
 	for (auto& child : m_pChilds)
 	{

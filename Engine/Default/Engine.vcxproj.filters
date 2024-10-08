@@ -76,6 +76,9 @@
     <Filter Include="01.Utility\03.Objects\Camera">
       <UniqueIdentifier>{95fceb76-6d25-4a28-b5a5-bad5119a77b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\Lights">
+      <UniqueIdentifier>{761b8508-3032-473b-a005-895ed422deca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -174,8 +177,17 @@
     <ClInclude Include="..\Public\Rect_Transform.h">
       <Filter>01.Utility\04.Components\Transform</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Button_Component.h">
-      <Filter>01.Utility\04.Components</Filter>
+    <ClInclude Include="..\Public\json.hpp">
+      <Filter>00.System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\JsonParser.h">
+      <Filter>00.System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Light_Manager.h">
+      <Filter>01.Utility\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Light.h">
+      <Filter>01.Utility\Lights</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -263,8 +275,11 @@
     <ClCompile Include="..\Private\Rect_Transform.cpp">
       <Filter>01.Utility\04.Components\Transform</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Button_Component.cpp">
-      <Filter>01.Utility\04.Components</Filter>
+    <ClCompile Include="..\Private\Light_Manager.cpp">
+      <Filter>01.Utility\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Light.cpp">
+      <Filter>01.Utility\Lights</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

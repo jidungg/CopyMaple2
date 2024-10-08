@@ -15,6 +15,9 @@ CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * p
 
 HRESULT CLevel_GamePlay::Initialize()
 {
+	if (FAILED(Ready_Lights()))
+		return E_FAIL;
+
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
@@ -23,22 +26,25 @@ HRESULT CLevel_GamePlay::Initialize()
 	return S_OK;
 }
 
-void CLevel_GamePlay::Update(_float fTimeDelta)
+HRESULT CLevel_GamePlay::Ready_Lights()
 {
-	if (m_pGameInstance->GetKeyState(KEY::T) == KEY_STATE::UP)
-		m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HOME));
-}
+	LIGHT_DESC			LightDesc{};
 
-HRESULT CLevel_GamePlay::Render()
-{
-#ifdef _DEBUG
-	SetWindowText(g_hWnd, TEXT("게임플레이레벨입니다."));
-#endif
+	ZeroMemory(&LightDesc, sizeof LightDesc);
+
+	LightDesc.eType = LIGHT_DESC::TYPE_DIRECTOINAL;
+	LightDesc.vDirection = _float4(-1.f, -1.f, -1.f, 0.f);
+	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _wstring & strLayerTag)
+HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Terrain"), LEVEL_GAMEPLAY, strLayerTag, nullptr)))
 		return E_FAIL;
@@ -71,26 +77,26 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _wstring& strLayerTag)
 	CamDesc.pTarget = pPlayer;
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOADING, TEXT("Prototype_GameObject_Camera_Trace"),
-	LEVEL_GAMEPLAY, strLayerTag, &CamDesc)))
-	return E_FAIL;
-	//CCamera_Free::CAMERA_FREE_DESC		Desc{};
-
-	//Desc.fSpeedPerSec = 10.f;
-	//Desc.fRotationPerSec = XMConvertToRadians(180.f);
-	//Desc.fMouseSensor = 0.1f;
-	//Desc.fFovY = XMConvertToRadians(60.f);
-	//Desc.fAspect = static_cast<_float>(g_iWinSizeX) / g_iWinSizeY;
-	//Desc.fNear = 0.1f;
-	//Desc.fFar = 1000.f;
-	//Desc.vEye = _float3(0.f, 10.f, -7.f);
-	//Desc.vAt = _float3(0.f, 0.f, 0.f);
-	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Camera_Free"),
-	//	LEVEL_GAMEPLAY, strLayerTag, &Desc)))
-	//	return E_FAIL;
-
+		LEVEL_GAMEPLAY, strLayerTag, &CamDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
+void CLevel_GamePlay::Update(_float fTimeDelta)
+{
+	if (m_pGameInstance->GetKeyState(KEY::T) == KEY_STATE::UP)
+		m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HOME));
+}
+
+HRESULT CLevel_GamePlay::Render()
+{
+#ifdef _DEBUG
+	SetWindowText(g_hWnd, TEXT("게임플레이레벨입니다."));
+#endif
+
+	return S_OK;
+}
+
 
 CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {

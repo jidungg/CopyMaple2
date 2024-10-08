@@ -26,6 +26,8 @@ void CUIManager::Update()
             else
 				pTopUI = pUIObject->Get_Priority() > pTopUI->Get_Priority() ? pUIObject : pTopUI;
         }
+        else
+			pUIObject->MouseNotOver();
     }
     if (pTopUI == nullptr)
     {
@@ -34,7 +36,7 @@ void CUIManager::Update()
     }
     m_pFocusedUI = pTopUI->Find_FocusedUI(tPosition);
 	if (m_pFocusedUI != nullptr)
-        m_pFocusedUI->On_MouseOver();
+        m_pFocusedUI->MouseOver();
 }
 void CUIManager::Register_UIObject(CUIObject* pUIObject)
 {
@@ -65,11 +67,15 @@ bool CUIManager::Consume_MouseLButtonDown()
 bool CUIManager::Consume_MouseLButtonUp()
 {
 	bool bConsume = false;
-    if (m_pFocusedUI != nullptr)
+
+    if (m_pPressedUI == m_pFocusedUI&& m_pFocusedUI != nullptr)
+        bConsume = bConsume || m_pPressedUI->Consume_MouseClick();
+	else if (m_pPressedUI != nullptr)
+		m_pPressedUI->On_MouseLButtonUp();
+    for (auto& pUI : m_UIObjectList)
     {
-        bConsume = bConsume || m_pFocusedUI->Consume_MouseLButtonUp();
-        if (m_pPressedUI == m_pFocusedUI)
-            bConsume = bConsume || m_pPressedUI->Consume_MouseClick();
+		if (pUI == m_pPressedUI) continue;
+        pUI->On_MouseLButtonUp();
     }
 	m_pPressedUI = nullptr;
     return bConsume;
@@ -78,15 +84,33 @@ bool CUIManager::Consume_MouseLButtonUp()
 bool CUIManager::Consume_MouseRButtonDown()
 {
     if (m_pFocusedUI != nullptr)
-        return m_pFocusedUI->Consume_MouseRButtonDown();
-    return false;
+    {
+        m_pRightPressedUI = m_pFocusedUI;
+        m_pRightPressedUI->Increase_Priority();
+        return m_pRightPressedUI->Consume_MouseRButtonDown();
+    }
+    else
+    {
+        m_pRightPressedUI = nullptr;
+        return false;
+    }
 }
 
 bool CUIManager::Consume_MouseRButtonUp()
 {
+    bool bConsume = false;
     if (m_pFocusedUI != nullptr)
-        return m_pFocusedUI->Consume_MouseRButtonUp();
-    return false;
+    {
+        if (m_pRightPressedUI == m_pFocusedUI)
+            bConsume = bConsume || m_pRightPressedUI->Consume_MouseRightClick();
+    }
+    for (auto& pUI : m_UIObjectList)
+    {
+        if (pUI == m_pRightPressedUI) continue;
+        pUI->On_MouseRButtonUp();
+    }
+    m_pRightPressedUI = nullptr;
+    return bConsume;
 }
 
 
@@ -107,5 +131,4 @@ void CUIManager::Free(void)
 {
 	__super::Free();
     Clear();
-	Safe_Release(m_pGameInstance);
 }

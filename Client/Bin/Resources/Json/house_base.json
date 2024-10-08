@@ -1,0 +1,17 @@
+{
+    "size": [ 10, 10, 10 ],
+    "cells": [
+        {
+            "model": "he_ground_grass_a01",
+            "position": [ 0, 0, 0 ],
+            "rotation": [ 0, 0, 0 ],
+            "iteration": 3
+        },
+        {
+            "model": "he_ground_grass_b01",
+            "position": [ 0, 0, 1 ],
+            "rotation": [ 0, 0, 0 ],
+            "iteration": 10
+        }
+    ]
+}

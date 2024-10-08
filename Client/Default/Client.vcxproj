@@ -171,6 +171,9 @@
     <ClInclude Include="..\Public\Canvas.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\HomeDialog.h" />
+    <ClInclude Include="..\Public\Item.h" />
+    <ClInclude Include="..\Public\RenderObject.h" />
+    <ClInclude Include="..\Public\UIItemIndicator.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Home.h" />
     <ClInclude Include="..\public\Level_Loading.h" />
@@ -179,6 +182,7 @@
     <ClInclude Include="..\public\MainApp.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\Terrain.h" />
+    <ClInclude Include="..\Public\UIButton.h" />
     <ClInclude Include="..\Public\UIPanel.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
@@ -191,6 +195,7 @@
     <ClCompile Include="..\Private\Camera_Trace.cpp" />
     <ClCompile Include="..\Private\Canvas.cpp" />
     <ClCompile Include="..\Private\HomeDialog.cpp" />
+    <ClCompile Include="..\Private\Item.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Home.cpp" />
     <ClCompile Include="..\private\Level_Loading.cpp" />
@@ -199,7 +204,10 @@
     <ClCompile Include="..\private\MainApp.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
+    <ClCompile Include="..\Private\RenderObject.cpp" />
+    <ClCompile Include="..\Private\UIButton.cpp" />
     <ClCompile Include="..\Private\UIPanel.cpp" />
+    <ClCompile Include="..\Public\UIItemIndicator.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

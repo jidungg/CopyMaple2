@@ -1,5 +1,4 @@
 D:\Workbench\Portfolio\CopyMaple2\Engine\private\Base.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Base.obj
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Button_Component.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Button_Component.obj
 D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Camera.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Camera.obj
 D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Camera_UI.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Camera_UI.obj
 D:\Workbench\Portfolio\CopyMaple2\Engine\private\Component.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Component.obj
@@ -11,6 +10,8 @@ D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Input_Device.cpp;D:\Workbench\P
 D:\Workbench\Portfolio\CopyMaple2\Engine\private\Layer.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Layer.obj
 D:\Workbench\Portfolio\CopyMaple2\Engine\private\Level.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Level.obj
 D:\Workbench\Portfolio\CopyMaple2\Engine\private\Level_Manager.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Level_Manager.obj
+D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Light.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Light.obj
+D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Light_Manager.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Light_Manager.obj
 D:\Workbench\Portfolio\CopyMaple2\Engine\private\Object_Manager.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Object_Manager.obj
 D:\Workbench\Portfolio\CopyMaple2\Engine\Private\PipeLine.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\PipeLine.obj
 D:\Workbench\Portfolio\CopyMaple2\Engine\private\Prototype_Manager.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Prototype_Manager.obj

@@ -2,20 +2,25 @@
 #include "..\Public\Terrain.h"
 
 #include "GameInstance.h"
+#include "JsonParser.h"
 
 
-CTerrain::CTerrain(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CTerrain::CTerrain(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar* szMapFileName)
 	: CGameObject { pDevice, pContext }
 {
+	m_strMapName = szMapFileName;
 }
 
 CTerrain::CTerrain(const CTerrain & Prototype)
-	: CGameObject { Prototype }
+	: CGameObject { Prototype },
+	m_strMapName{ Prototype.m_strMapName }
 {
 }
 
 HRESULT CTerrain::Initialize_Prototype()
 {
+	if (FAILED(__super::Initialize_Prototype()))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -23,12 +28,8 @@ HRESULT CTerrain::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(nullptr)))
 		return E_FAIL;
-
-	if (FAILED(Ready_Components()))
+	if (FAILED(Ready_Cells()))
 		return E_FAIL;
-
-	
-
 	return S_OK;
 }
 
@@ -49,57 +50,42 @@ void CTerrain::Late_Update(_float fTimeDelta)
 
 HRESULT CTerrain::Render()
 {
-	if (FAILED(Bind_ShaderResources()))
-		return E_FAIL;
+	for (auto& child : m_pChilds)
+	{
+		if (child != nullptr)
+			child->Render();
+	}
+	return S_OK;
+}
 
-	m_pShaderCom->Begin(0);
+HRESULT CTerrain::Ready_Cells()
+{
+	std::string str(m_strMapName.begin(), m_strMapName.end());
+	json j;
+	CJsonParser::ReadJsonFile(str.c_str(),&j );
+	_float3 Size = { j["size"][0],j["size"][1],j["size"][2] };
+	m_pChilds.resize(Size.x * Size.y * Size.z, nullptr);
 
-	m_pVIBufferCom->Bind_BufferDesc();
+	for (const auto& item : j["cells"]) {
+		string modleName = item["model"];
+		_float3 Pos = { item["position"][0],item["position"][1],item["position"][2] };
+		_float3 Rot = { item["rotation"][0],item["rotation"][1],item["rotation"][2] };
+		size_t iteration = item["iteration"];
 
-	m_pVIBufferCom->Render();
+		int index = Pos.x + Pos.z * Size.x + Pos.y * Size.x * Size.z;
+		//for (size_t i = 0; i < iteration; i++)
+		//	m_pChilds[index + i] = m_pGameInstance->Clone_Prototype();
+	}
 
 	return S_OK;
 }
 
-HRESULT CTerrain::Ready_Components()
+
+
+
+CTerrain * CTerrain::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar* szMapFileName)
 {
-	/* Com_Shader */
-	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxNorTex"),
-		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-		return E_FAIL;
-
-	/* Com_VIBuffer */
-	if (FAILED(Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
-		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
-		return E_FAIL;
-
-	/* Com_Texture */
-	if (FAILED(Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"),
-		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CTerrain::Bind_ShaderResources()
-{
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
-		return E_FAIL;
-
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-CTerrain * CTerrain::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
-{
-	CTerrain*	pInstance = new CTerrain(pDevice, pContext);
+	CTerrain*	pInstance = new CTerrain(pDevice, pContext, szMapFileName);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
@@ -126,9 +112,4 @@ CGameObject * CTerrain::Clone(void * pArg)
 void CTerrain::Free()
 {
 	__super::Free();
-
-	
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
 }

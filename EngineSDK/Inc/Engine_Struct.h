@@ -21,6 +21,28 @@ namespace Engine
 		KEY_STATE   eState; // 키의 상태값
 		bool		bPrevPush;	// 이전 프레임에서 눌렸는지 여부.
 	};
+
+	typedef struct
+	{
+		enum TYPE { TYPE_POINT, TYPE_DIRECTOINAL, TYPE_END };
+		TYPE			eType;
+		XMFLOAT4		vDirection;
+		XMFLOAT4		vPosition;
+		float			fRange;
+
+		XMFLOAT4		vDiffuse;
+		XMFLOAT4		vAmbient;
+		XMFLOAT4		vSpecular;
+	}LIGHT_DESC;
+
+	typedef struct
+	{
+		XMFLOAT4		vDiffuse;
+		XMFLOAT4		vAmbient;
+		XMFLOAT4		vSpecular;
+	}MATERIAL_DESC;
+
+
 	typedef struct ENGINE_DLL
 	{
 		XMFLOAT3		vPosition;

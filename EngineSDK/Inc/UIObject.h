@@ -38,14 +38,17 @@ public:
 	_uint Get_Priority() { return m_iPriority; }
 public:
 
-	virtual void On_MouseEnter();
+	void MouseOver();
+	void MouseNotOver();
 	virtual void On_MouseOver();
+	virtual void On_MouseEnter();
 	virtual void On_MouseExit();
 	virtual bool Consume_MouseLButtonDown();
-	virtual bool Consume_MouseLButtonUp();
+	virtual void On_MouseLButtonUp();
 	virtual bool Consume_MouseRButtonDown();
-	virtual bool Consume_MouseRButtonUp();
+	virtual void On_MouseRButtonUp();
 	virtual bool Consume_MouseClick();
+	virtual bool Consume_MouseRightClick();
 	bool Check_MouseOver(POINT fPos);
 
 	CUIObject* Find_FocusedUI(POINT fPos);
@@ -55,12 +58,14 @@ protected:
 protected:
 	static _uint			m_iStaticPriority;
 	_uint					m_iPriority = {};
+	_uint					m_iSRVIndex= 0;		
 
 	CShader* m_pShaderCom = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 
-
+private:
+	bool m_bMouseOver = false;
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;

@@ -9,6 +9,8 @@
 #include "Input_Device.h"
 #include "Controller.h"
 #include "UIManager.h"
+#include "JsonParser.h"
+#include "Light_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -20,6 +22,9 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 {
 	m_pGraphic_Device = CGraphic_Device::Create(EngineDesc.hWnd, EngineDesc.isWindowed, EngineDesc.iViewportWidth, EngineDesc.iViewportHeight, ppDevice, ppContext);
 	if (nullptr == m_pGraphic_Device)
+		return E_FAIL;
+	m_pLight_Manager = CLight_Manager::Create(*ppDevice, *ppContext);
+	if (nullptr == m_pLight_Manager)
 		return E_FAIL;
 
 	m_pInput_Device = CInput_Device::Create(EngineDesc.hInstance, EngineDesc.hWnd);
@@ -238,6 +243,12 @@ _float4x4 CGameInstance::Get_TransformFloat4x4(CPipeLine::D3DTRANSFORMSTATE eSta
 	return m_pPipeLine->Get_TransformFloat4x4(eState);
 }
 
+const _float4* CGameInstance::Get_CamPosition()
+{
+	return m_pPipeLine->Get_CamPosition();
+}
+
+
 const KEY_STATE& CGameInstance::GetKeyState(KEY _eKEY)
 {
 	return m_pInput_Device->GetKeyState(_eKEY);
@@ -264,6 +275,21 @@ void CGameInstance::Register_UIObject(CUIObject* pUIObject)
 }
 
 
+HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc)
+{
+	if (nullptr == m_pLight_Manager)
+		return E_FAIL;
+
+	return m_pLight_Manager->Add_Light(LightDesc);
+}
+
+const LIGHT_DESC* CGameInstance::Get_LightDesc(_uint iIndex) const
+{
+	if (nullptr == m_pLight_Manager)
+		return nullptr;
+
+	return m_pLight_Manager->Get_LightDesc(iIndex);
+}
 
 
 void CGameInstance::Release_Engine()
@@ -287,4 +313,5 @@ void CGameInstance::Free()
 	Safe_Release(m_pGraphic_Device);
 	Safe_Release(m_pController);
 	Safe_Release(m_pUIManager);
+	Safe_Release(m_pLight_Manager);
 }

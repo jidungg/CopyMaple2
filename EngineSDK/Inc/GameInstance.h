@@ -53,6 +53,7 @@ public: /* For.PipeLine */
 	void Set_Transform(CPipeLine::D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix);
 	_matrix Get_TransformMatrix(CPipeLine::D3DTRANSFORMSTATE eState);
 	_float4x4 Get_TransformFloat4x4(CPipeLine::D3DTRANSFORMSTATE eState);
+	const _float4* Get_CamPosition();
 
 public: //For Key Manager
 	const KEY_STATE& GetKeyState(KEY _eKEY);
@@ -63,6 +64,9 @@ public: //For Key Manager
 public://For UI Manager
 	void Register_UIObject(class CUIObject* pUIObject);
 
+public: /* Light_Manager */
+	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
+	const LIGHT_DESC* Get_LightDesc(_uint iIndex) const;
 private:
 	class CGraphic_Device*				m_pGraphic_Device = { nullptr };
 	class CInput_Device*				m_pInput_Device = { nullptr };
@@ -74,6 +78,8 @@ private:
 	class CRenderer*					m_pRenderer = { nullptr };
 	class CController*					m_pController = { nullptr };
 	class CUIManager*					m_pUIManager = { nullptr };
+	class CLight_Manager*				m_pLight_Manager = { nullptr };
+
 public:
 	static void Release_Engine();
 

@@ -26,6 +26,14 @@ HRESULT CLevel::Render()
 	return S_OK;
 }
 
+void CLevel::On_Start()
+{
+}
+
+void CLevel::On_End()
+{
+}
+
 void CLevel::Free()
 {
 	__super::Free();

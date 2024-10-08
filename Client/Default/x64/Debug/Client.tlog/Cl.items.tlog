@@ -3,6 +3,7 @@ D:\Workbench\Portfolio\CopyMaple2\Client\Private\Camera_Free.cpp;D:\Workbench\Po
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Camera_Trace.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Camera_Trace.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Canvas.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Canvas.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\HomeDialog.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\HomeDialog.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Item.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Item.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Level_GamePlay.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Level_GamePlay.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Level_Home.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Level_Home.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\private\Level_Loading.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Level_Loading.obj
@@ -11,6 +12,9 @@ D:\Workbench\Portfolio\CopyMaple2\Client\private\Loader.cpp;D:\Workbench\Portfol
 D:\Workbench\Portfolio\CopyMaple2\Client\private\MainApp.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\MainApp.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Player.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Terrain.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Terrain.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\RenderObject.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\RenderObject.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIButton.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\UIButton.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIPanel.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\UIPanel.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Public\UIItemIndicator.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\UIItemIndicator.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Default\Client.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Client.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Default\stdafx.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\stdafx.obj

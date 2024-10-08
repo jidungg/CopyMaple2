@@ -99,7 +99,17 @@
     <ClInclude Include="..\Public\Canvas.h">
       <Filter>02.GameObjects\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\HomeDialog.h" />
+    <ClInclude Include="..\Public\Item.h" />
+    <ClInclude Include="..\Public\RenderObject.h" />
+    <ClInclude Include="..\Public\UIButton.h">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIItemIndicator.h">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\HomeDialog.h">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -147,7 +157,17 @@
     <ClCompile Include="..\Private\Canvas.cpp">
       <Filter>02.GameObjects\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\HomeDialog.cpp" />
+    <ClCompile Include="..\Private\Item.cpp" />
+    <ClCompile Include="..\Private\RenderObject.cpp" />
+    <ClCompile Include="..\Private\UIButton.cpp">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Public\UIItemIndicator.cpp">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\HomeDialog.cpp">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

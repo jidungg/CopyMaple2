@@ -31,6 +31,7 @@ private:
 	CGameInstance* m_pGameInstance = nullptr;
 	CUIObject* m_pFocusedUI = nullptr;
 	CUIObject* m_pPressedUI = nullptr;
+	CUIObject* m_pRightPressedUI = nullptr;
 public:
 	static CUIManager* Create();
 	virtual void Free(void) override;

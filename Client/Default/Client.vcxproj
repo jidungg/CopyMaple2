@@ -173,6 +173,7 @@
     <ClInclude Include="..\Public\HomeDialog.h" />
     <ClInclude Include="..\Public\Item.h" />
     <ClInclude Include="..\Public\RenderObject.h" />
+    <ClInclude Include="..\Public\TerrainObject.h" />
     <ClInclude Include="..\Public\UIItemIndicator.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Home.h" />
@@ -205,6 +206,7 @@
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\RenderObject.cpp" />
+    <ClCompile Include="..\Private\TerrainObject.cpp" />
     <ClCompile Include="..\Private\UIButton.cpp" />
     <ClCompile Include="..\Private\UIPanel.cpp" />
     <ClCompile Include="..\Public\UIItemIndicator.cpp" />

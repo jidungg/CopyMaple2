@@ -1,4 +1,41 @@
-﻿  Terrain.cpp
+﻿  Loader.cpp
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Engine_Struct.h(47,2): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Engine_Struct.h(56,2): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Transform.h(17,2): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Rect_Transform.h(9,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\GameObject.h(9,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Camera.h(10,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Public\Camera_Free.h(11,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Public\Camera_Trace.h(10,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\UIObject.h(16,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Public\UIPanel.h(10,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Public\Player.h(17,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Public\HomeDialog.h(9,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+  
+  Terrain.cpp
 D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Engine_Struct.h(47,2): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
   (소스 파일 '/Private/Terrain.cpp'을(를) 컴파일하는 중)
   
@@ -56,4 +93,56 @@ C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.3412
               _SizeTy=unsigned __int64
           ]
   
+  TerrainObject.cpp
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Engine_Struct.h(47,2): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/TerrainObject.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Engine_Struct.h(56,2): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/TerrainObject.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Transform.h(17,2): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/TerrainObject.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Rect_Transform.h(9,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/TerrainObject.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\GameObject.h(9,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/TerrainObject.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Public\TerrainObject.h(10,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/TerrainObject.cpp'을(를) 컴파일하는 중)
+  
+  UIButton.cpp
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Engine_Struct.h(47,2): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/UIButton.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Engine_Struct.h(56,2): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/UIButton.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Transform.h(17,2): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/UIButton.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Rect_Transform.h(9,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/UIButton.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\GameObject.h(9,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/UIButton.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\UIObject.h(16,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/UIButton.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Public\UIPanel.h(10,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/UIButton.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Public\UIButton.h(13,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/UIButton.cpp'을(를) 컴파일하는 중)
+  
+  Client.cpp
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Engine_Struct.h(47,2): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Client.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Engine_Struct.h(56,2): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Client.cpp'을(를) 컴파일하는 중)
+  
+  코드를 생성하고 있습니다...
   Client.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Client.exe

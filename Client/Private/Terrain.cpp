@@ -73,6 +73,7 @@ HRESULT CTerrain::Ready_Cells()
 		size_t iteration = item["iteration"];
 
 		int index = Pos.x + Pos.z * Size.x + Pos.y * Size.x * Size.z;
+		//TODO : 읽어온 위치, 회전값을	이용하여 셀에 오브젝트를 생성한다.
 		//for (size_t i = 0; i < iteration; i++)
 		//	m_pChilds[index + i] = m_pGameInstance->Clone_Prototype();
 	}

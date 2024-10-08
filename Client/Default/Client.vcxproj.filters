@@ -110,6 +110,7 @@
     <ClInclude Include="..\Public\HomeDialog.h">
       <Filter>02.GameObjects\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\TerrainObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -168,6 +169,7 @@
     <ClCompile Include="..\Private\HomeDialog.cpp">
       <Filter>02.GameObjects\UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\TerrainObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

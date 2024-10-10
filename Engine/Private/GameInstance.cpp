@@ -9,7 +9,6 @@
 #include "Input_Device.h"
 #include "Controller.h"
 #include "UIManager.h"
-#include "JsonParser.h"
 #include "Light_Manager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -202,7 +201,7 @@ CBase* CGameInstance::Clone_Proto_Component_Current(const _wstring& strPrototype
 
 }
 
-HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring & strPrototypeTag, _uint iLevelIndex, const _wstring & strLayerTag, void * pArg)
+HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring & strPrototypeTag, _uint iLevelIndex, const _wstring & strLayerTag, void * pArg,  CGameObject** pOut )
 {
 	
 	if (nullptr == m_pObject_Manager)

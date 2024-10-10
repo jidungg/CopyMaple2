@@ -179,7 +179,7 @@ bool CUIObject::Consume_MouseRightClick()
 
 bool CUIObject::Check_MouseOver(POINT fPos)
 {
-	return static_cast<CRect_Transform*>( m_pTransformCom)->Is_InRect(_float2(fPos.x, fPos.y));
+	return static_cast<CRect_Transform*>( m_pTransformCom)->Is_InRect(_float2((float)fPos.x, (float)fPos.y));
 }
 
 CUIObject* CUIObject::Find_FocusedUI(POINT fPos)

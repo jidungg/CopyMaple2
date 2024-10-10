@@ -6,7 +6,7 @@ BEGIN(Engine)
 class ENGINE_DLL CGameObject abstract : public CBase
 {
 public:
-	typedef struct : public CTransform::TRANSFORM_DESC
+	typedef struct GameObjectDesc: public CTransform::TRANSFORM_DESC
 	{
 		CGameObject* pTarget = { nullptr };
 	}GAMEOBJECT_DESC;

@@ -43,6 +43,9 @@ HRESULT CLevel_Home::Render()
 
 HRESULT CLevel_Home::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, TEXT("Prototype_GameObject_Terrain"), LEVEL_HOME, strLayerTag, nullptr)))
+		return E_FAIL;
+
 	return S_OK;
 }
 

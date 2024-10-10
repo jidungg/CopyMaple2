@@ -180,15 +180,14 @@
     <ClInclude Include="..\Public\json.hpp">
       <Filter>00.System</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\JsonParser.h">
-      <Filter>00.System</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Light_Manager.h">
       <Filter>01.Utility\Lights</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Light.h">
       <Filter>01.Utility\Lights</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Model.h" />
+    <ClInclude Include="..\Public\Mesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -281,5 +280,7 @@
     <ClCompile Include="..\Private\Light.cpp">
       <Filter>01.Utility\Lights</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Model.cpp" />
+    <ClCompile Include="..\Private\Mesh.cpp" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,45 @@
+﻿  Base.cpp
+  Camera.cpp
+  Camera_UI.cpp
+  Component.cpp
+  Controller.cpp
+  GameInstance.cpp
+  GameObject.cpp
+  Graphic_Device.cpp
+  Input_Device.cpp
+  Layer.cpp
+  Level.cpp
+  Level_Manager.cpp
+  Light.cpp
+  Light_Manager.cpp
+  Object_Manager.cpp
+  PipeLine.cpp
+  Prototype_Manager.cpp
+  Rect_Transform.cpp
+D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Rect_Transform.cpp(75,105): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Rect_Transform.cpp(75,65): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Rect_Transform.cpp(169,104): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Rect_Transform.cpp(169,49): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Renderer.cpp
+  Shader.cpp
+D:\Workbench\Portfolio\CopyMaple2\Engine\private\Shader.cpp(47,58): warning C4267: '인수': 'size_t'에서 'uint32_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  컴파일하고 있습니다...
+  Texture.cpp
+  Timer.cpp
+  Timer_Manager.cpp
+  Transform.cpp
+  UIManager.cpp
+  UIObject.cpp
+  VIBuffer.cpp
+  VIBuffer_Rect.cpp
+  VIBuffer_Terrain.cpp
+D:\Workbench\Portfolio\CopyMaple2\Engine\private\VIBuffer_Terrain.cpp(53,18): warning C4267: '초기화 중': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Workbench\Portfolio\CopyMaple2\Engine\private\VIBuffer_Terrain.cpp(55,84): warning C4244: '인수': 'size_t'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Workbench\Portfolio\CopyMaple2\Engine\private\VIBuffer_Terrain.cpp(55,42): warning C4244: '인수': 'size_t'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Workbench\Portfolio\CopyMaple2\Engine\private\VIBuffer_Terrain.cpp(72,18): warning C4267: '초기화 중': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Engine_Struct.cpp
+     ../Bin/Engine.lib 라이브러리 및 ../Bin/Engine.exp 개체를 생성하고 있습니다.
+Input_Device.obj : error LNK2001: 확인할 수 없는 외부 기호 c_dfDIKeyboard
+Input_Device.obj : error LNK2001: 확인할 수 없는 외부 기호 c_dfDIMouse
+Input_Device.obj : error LNK2001: 확인할 수 없는 외부 기호 DirectInput8Create
+..\Bin\Engine.dll : fatal error LNK1120: 3개의 확인할 수 없는 외부 참조입니다.

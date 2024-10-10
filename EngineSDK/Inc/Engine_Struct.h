@@ -5,7 +5,7 @@
 
 namespace Engine
 {
-	typedef struct
+	typedef struct EngineDesc
 	{
 		HINSTANCE		hInstance;
 		HWND			hWnd;
@@ -22,7 +22,7 @@ namespace Engine
 		bool		bPrevPush;	// 이전 프레임에서 눌렸는지 여부.
 	};
 
-	typedef struct
+	typedef struct LightDesc
 	{
 		enum TYPE { TYPE_POINT, TYPE_DIRECTOINAL, TYPE_END };
 		TYPE			eType;
@@ -35,7 +35,7 @@ namespace Engine
 		XMFLOAT4		vSpecular;
 	}LIGHT_DESC;
 
-	typedef struct
+	typedef struct MaterialDesc
 	{
 		XMFLOAT4		vDiffuse;
 		XMFLOAT4		vAmbient;
@@ -43,7 +43,7 @@ namespace Engine
 	}MATERIAL_DESC;
 
 
-	typedef struct ENGINE_DLL
+	typedef struct  ENGINE_DLL VertexPositionTexture
 	{
 		XMFLOAT3		vPosition;
 		XMFLOAT2		vTexcoord;
@@ -52,7 +52,7 @@ namespace Engine
 		static const D3D11_INPUT_ELEMENT_DESC		Elements[2];
 	}VTXPOSTEX;
 
-	typedef struct ENGINE_DLL
+	typedef struct ENGINE_DLL VertexPositionNormal
 	{
 		XMFLOAT3		vPosition;
 		XMFLOAT3		vNormal;
@@ -61,6 +61,17 @@ namespace Engine
 		static const unsigned int					iNumElements = { 3 };
 		static const D3D11_INPUT_ELEMENT_DESC		Elements[iNumElements];
 	}VTXNORTEX;
+
+	typedef struct  ENGINE_DLL VertexMesh
+	{
+		XMFLOAT3		vPosition;
+		XMFLOAT3		vNormal;
+		XMFLOAT2		vTexcoord;
+		XMFLOAT3		vTangent;
+
+		static const unsigned int					iNumElements = { 4 };
+		static const D3D11_INPUT_ELEMENT_DESC		Elements[iNumElements];
+	}VTXMESH;
 
 	//typedef struct
 	//{

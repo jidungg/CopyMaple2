@@ -7,7 +7,7 @@ BEGIN(Engine)
 class ENGINE_DLL CCamera abstract : public CGameObject
 {
 public:
-	typedef struct : public CGameObject::GAMEOBJECT_DESC
+	typedef struct CameraDesc: public CGameObject::GAMEOBJECT_DESC
 	{
 		_float3			vEye = {};
 		_float3			vAt = {};

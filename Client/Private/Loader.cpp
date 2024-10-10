@@ -6,11 +6,13 @@
 #include "Camera_Free.h"
 #include "Camera_Trace.h"
 #include "UIPanel.h"
-#include "Terrain.h"
+#include "CubeTerrain.h"
+#include "TerrainObject.h"
 #include "Player.h"
-
+#include "RenderObject.h"
 #include "HomeDialog.h"
-
+#include "Model.h"
+#include "Terrain.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -119,6 +121,8 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_Logo"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_henesys_a.dds"), 2))))
 		return E_FAIL;
+	if (FAILED(Load_Dirctory(TEXT("../Bin/resources/FBXs/MAP/Cube/"), TEXT(".dds"))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("사운드를 로딩중입니다."));
 	
@@ -133,6 +137,10 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxNorTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_VtxNorTex.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
 		return E_FAIL;
+	/* For.Prototype_Component_Shader_VtxMesh*/
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxMesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_VtxMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("모델(을)를 로딩중입니다."));
 
@@ -140,7 +148,10 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_VIBuffer_Rect"),
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	
+	///* For.Prototype_Component_CMesh*/
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_CubeMesh"),
+	//	CModel::Create(m_pDevice, m_pContext,"../Bin/Resources/FBXs/MAP/Cube/he_ground_grass_a01.fbx"))))
+	//	return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형(을)를 로딩중입니다."));
 	/* For.Prototype_GameObject_BackGround */
@@ -162,6 +173,11 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_GameObject_Camera_Free"),
 		CCamera_Free::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, 
+		TEXT("Prototype_GameObject_TempTerrainObj"),
+		CTerrainObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
 	m_isFinished = true;
@@ -177,8 +193,6 @@ HRESULT CLoader::Loading_Level_GamePlay()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/resources/Textures/Terrain/Tile0.jpg"), 1))))
 		return E_FAIL;
 
-	if (FAILED(Load_Dirctory(TEXT("../Bin/resources/FBXs/MAP/Cube/"),TEXT(".dds"))))
-		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("사운드를 로딩중입니다."));
 		
@@ -190,11 +204,18 @@ HRESULT CLoader::Loading_Level_GamePlay()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/resources/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("객체원형(을)를 로딩중입니다."));
+	/* For.Prototype_GameObject_Terrain */
+  	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, 
+		TEXT("Prototype_GameObject_Terrain"),
+		CTerrain::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 	/* For.Prototype_GameObject_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Terrain"),
-		CTerrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Json/house_base.json")))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_CubeTerrain"),
+		CCubeTerrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Json/house_base.json")))))
 		return E_FAIL;
 	
 
@@ -236,6 +257,9 @@ HRESULT CLoader::Loading_Level_MyHome()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialog"),
 		CHomeDialog::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_Terrain"),
+		CCubeTerrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Json/house_base.json")))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
@@ -270,8 +294,17 @@ HRESULT CLoader::Load_Dirctory(const _tchar* szDirPath, const _tchar* szExtensio
 		lstrcpy(szFullPath, szDirPath);
 		lstrcat(szFullPath, FindFileData.cFileName);
 
-		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, FindFileData.cFileName,
-			CTexture::Create(m_pDevice, m_pContext, szFullPath, 1))))
+		if (lstrcmp(szExtension, TEXT(".dds")) == 0)
+		{
+			if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, FindFileData.cFileName,
+				CTexture::Create(m_pDevice, m_pContext, szFullPath, 1))))
+				return E_FAIL;
+		}
+		else if (lstrcmp(szExtension, TEXT(".fbx")) == 0)
+		{
+			//TODO: FBX 로드
+		}
+		else
 			return E_FAIL;
 
 	} while (FindNextFile(hFind, &FindFileData));

@@ -13,7 +13,7 @@ class CVIBuffer_Rect;
 class ENGINE_DLL CUIObject  : public CGameObject
 {
 public:
-	typedef struct : public CRect_Transform::RECTTRANSFORM_DESC
+	typedef struct UIObjectDesc: public CRect_Transform::RECTTRANSFORM_DESC
 	{
 		CGameObject* pParent = { nullptr };
 		CGameObject* pTarget = { nullptr };

@@ -13,7 +13,7 @@ class ENGINE_DLL CTransform : public CComponent
 public:
 	enum STATE { STATE_RIGHT, STATE_UP, STATE_LOOK, STATE_POSITION, STATE_END };
 
-	typedef struct
+	typedef struct TransformDesc
 	{
 		_float		fSpeedPerSec{};
 		_float		fRotationPerSec{};
@@ -53,15 +53,15 @@ public:
 	virtual void Go_Backward(_float fTimeDelta);
 	virtual void Go_Left(_float fTimeDelta);
 	virtual void Go_Right(_float fTimeDelta);
-	virtual void Go_Direction(_fvector vDirection, _float fTimeDelta);
+	virtual void Go_Direction(const _fvector& vDirection, _float fTimeDelta);
 
-	void LookAt(_fvector vAt);
+	void LookAt(const _fvector& vAt);
 
 	/* 기존 회전을 기준으로 추가로 정해진 속도로 회전한다. */
-	void Turn(_fvector vAxis, _float fTimeDelta);
+	void Turn(const _fvector& vAxis, _float fTimeDelta);
 	/* 항등상태를 기준으로 지정한 각도로 회전한다. */
-	void Rotation(_fvector vAxis, _float fRadian);
-
+	void Rotation(const _fvector& vAxis, _float fRadian);
+	void Rotation(const _float3& vRotation);
 public:
 	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName);
 

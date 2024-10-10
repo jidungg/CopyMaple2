@@ -13,6 +13,9 @@ using namespace DirectX;
 #include "Effects11\d3dx11effect.h"
 #include "DirectXTK\DDSTextureLoader.h"
 #include "DirectXTK\WICTextureLoader.h"
+#include "assimp\scene.h"
+#include "assimp\Importer.hpp"
+#include "assimp\postprocess.h"
 
 #include <d3dcompiler.h>
 

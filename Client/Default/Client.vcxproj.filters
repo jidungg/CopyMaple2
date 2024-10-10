@@ -78,7 +78,7 @@
     <ClInclude Include="..\public\BackGround.h">
       <Filter>02.GameObjects\BackGround</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Terrain.h">
+    <ClInclude Include="..\Public\CubeTerrain.h">
       <Filter>02.GameObjects\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Camera_Free.h">
@@ -100,7 +100,6 @@
       <Filter>02.GameObjects\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Item.h" />
-    <ClInclude Include="..\Public\RenderObject.h" />
     <ClInclude Include="..\Public\UIButton.h">
       <Filter>02.GameObjects\UI</Filter>
     </ClInclude>
@@ -110,7 +109,14 @@
     <ClInclude Include="..\Public\HomeDialog.h">
       <Filter>02.GameObjects\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\RenderObject.h">
+      <Filter>02.GameObjects</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\TerrainObject.h" />
+    <ClInclude Include="..\Public\JsonParser.h">
+      <Filter>02.GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Terrain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -137,7 +143,7 @@
     <ClCompile Include="..\private\BackGround.cpp">
       <Filter>02.GameObjects\BackGround</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Terrain.cpp">
+    <ClCompile Include="..\Private\CubeTerrain.cpp">
       <Filter>02.GameObjects\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Camera_Free.cpp">
@@ -159,7 +165,6 @@
       <Filter>02.GameObjects\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Item.cpp" />
-    <ClCompile Include="..\Private\RenderObject.cpp" />
     <ClCompile Include="..\Private\UIButton.cpp">
       <Filter>02.GameObjects\UI</Filter>
     </ClCompile>
@@ -169,7 +174,12 @@
     <ClCompile Include="..\Private\HomeDialog.cpp">
       <Filter>02.GameObjects\UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\RenderObject.cpp">
+      <Filter>02.GameObjects</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\TerrainObject.cpp" />
+    <ClCompile Include="JsonParser.cpp" />
+    <ClCompile Include="..\Private\Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -194,6 +204,9 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

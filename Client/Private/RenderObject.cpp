@@ -2,7 +2,7 @@
 #include "RenderObject.h"
 
 #include "Texture.h"
-#include "VIBuffer.h"
+#include "Model.h"
 #include "Shader.h"
 #include "GameInstance.h"
 
@@ -37,17 +37,15 @@ HRESULT CRenderObject::Initialize(void* pArg)
 HRESULT CRenderObject::Ready_Components()
 {
 	/* Com_Shader */
-	if (FAILED(Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxNorTex"),
+	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxMesh"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
 	/* Com_VIBuffer */
-	if (FAILED(Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
-		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
-		return E_FAIL;
+	m_pVIBufferCom = CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/FBXs/MAP/Cube/he_ground_grass_a01.fbx");
 
 	/* Com_Texture */
-	if (FAILED(Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"),
+	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("he_ground_grass_a01.dds"),
 		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 		return E_FAIL;
 
@@ -60,60 +58,37 @@ HRESULT CRenderObject::Bind_ShaderResources()
 
 	if (m_pShaderCom)
 	{
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_UI_VIEW))))
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
 			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_UI_PROJ))))
-			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_CamPosition(), sizeof(_float4))))
-			return E_FAIL;
-
-		const LIGHT_DESC* pLightDesc = m_pGameInstance->Get_LightDesc(0);
-
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
-			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
-			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
-			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
-			return E_FAIL;
-
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_CamPosition(), sizeof(_float4))))
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
 			return E_FAIL;
 	}
-
 	if (m_pTextureCom)
-		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iSRVIndex)))
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 			return E_FAIL;
-
 
 
 
 	return S_OK;
 }
-void CRenderObject::Priority_Update(_float fTimeDelta)
-{
-}
 
-void CRenderObject::Update(_float fTimeDelta)
-{
-}
 
 void CRenderObject::Late_Update(_float fTimeDelta)
 {
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-
 }
 
 HRESULT CRenderObject::Render()
 {
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
-	m_pShaderCom->Begin(0);
+	if (m_pShaderCom)
+		m_pShaderCom->Begin(0);
+	if (m_pVIBufferCom)
+		m_pVIBufferCom->Render();
 
-	m_pVIBufferCom->Bind_BufferDesc();
-
-	m_pVIBufferCom->Render();
+	for (auto& child : m_pChilds)
+		child->Render();
 
 	return S_OK;
 }

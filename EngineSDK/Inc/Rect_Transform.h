@@ -6,7 +6,7 @@ class ENGINE_DLL CRect_Transform :
     public CTransform
 {
 public:
-	typedef struct : public CTransform::TRANSFORM_DESC
+	typedef struct RectTranformDesc: public CTransform::TRANSFORM_DESC
 	{
 		_float		fXOffset, fYOffset, fSizeX, fSizeY;
 		CORNOR_TYPE ePivotType = CORNOR_TYPE::CENTER;

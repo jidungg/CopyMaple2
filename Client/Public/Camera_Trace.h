@@ -7,7 +7,7 @@ class CCamera_Trace :
     public CCamera
 {
 public:
-	typedef struct : public CCamera::CAMERA_DESC
+	typedef struct TraceCamDesc: public CCamera::CAMERA_DESC
 	{
 		_float3			vArm = {};
 	}TRACECAMERA_DESC;

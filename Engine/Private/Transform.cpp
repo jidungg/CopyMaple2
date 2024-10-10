@@ -86,7 +86,7 @@ void CTransform::Go_Right(_float fTimeDelta)
 
 	Set_State(STATE_POSITION, vPosition);
 }
-void CTransform::Go_Direction(_fvector vDirection, _float fTimeDelta)
+void CTransform::Go_Direction(const _fvector& vDirection, _float fTimeDelta)
 {
 	_vector		vPosition = Get_State(STATE_POSITION);
 
@@ -94,7 +94,7 @@ void CTransform::Go_Direction(_fvector vDirection, _float fTimeDelta)
 
 	Set_State(STATE_POSITION, vPosition);
 }
-void CTransform::LookAt(_fvector vAt)
+void CTransform::LookAt(const _fvector& vAt)
 {
 	_float3		vScale = Compute_Scaled();
 
@@ -108,7 +108,7 @@ void CTransform::LookAt(_fvector vAt)
 	Set_State(STATE_LOOK, XMVector3Normalize(vLook) * vScale.z);
 }
 
-void CTransform::Turn(_fvector vAxis, _float fTimeDelta)
+void CTransform::Turn(const _fvector& vAxis, _float fTimeDelta)
 {
 	_vector		vRight = Get_State(STATE_RIGHT);
 	_vector		vUp = Get_State(STATE_UP);
@@ -121,7 +121,7 @@ void CTransform::Turn(_fvector vAxis, _float fTimeDelta)
 	Set_State(STATE_LOOK, XMVector3TransformNormal(vLook, RotationMatrix));
 }
 
-void CTransform::Rotation(_fvector vAxis, _float fRadian)
+void CTransform::Rotation(const _fvector& vAxis, _float fRadian)
 {
 	_float3		vScale = Compute_Scaled();
 
@@ -130,6 +130,22 @@ void CTransform::Rotation(_fvector vAxis, _float fRadian)
 	_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * vScale.z;
 
 	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, fRadian);
+
+	Set_State(STATE_RIGHT, XMVector3TransformNormal(vRight, RotationMatrix));
+	Set_State(STATE_UP, XMVector3TransformNormal(vUp, RotationMatrix));
+	Set_State(STATE_LOOK, XMVector3TransformNormal(vLook, RotationMatrix));
+}
+
+void CTransform::Rotation(const _float3& vRotation)
+{
+	_float3		vScale = Compute_Scaled();
+
+	_vector		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f) * vScale.x;
+	_vector		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f) * vScale.y;
+	_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * vScale.z;
+
+	XMVECTOR quaternion = XMQuaternionRotationRollPitchYaw(XMConvertToRadians(vRotation.x), XMConvertToRadians(vRotation.y), XMConvertToRadians(vRotation.z));
+	XMMATRIX RotationMatrix = XMMatrixRotationQuaternion(quaternion);
 
 	Set_State(STATE_RIGHT, XMVector3TransformNormal(vRight, RotationMatrix));
 	Set_State(STATE_UP, XMVector3TransformNormal(vUp, RotationMatrix));

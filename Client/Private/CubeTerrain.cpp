@@ -33,8 +33,6 @@ HRESULT CCubeTerrain::Initialize(void * pArg)
 
 	if (FAILED(Load_From_Json(m_strJsonFilePath)))
 		return E_FAIL;
-	if (FAILED(Save_To_Json(m_strJsonFilePath)))
-		return E_FAIL;
 	return S_OK;
 }
 
@@ -66,33 +64,29 @@ HRESULT CCubeTerrain::Load_From_Json(wstring strJsonFilePath)
 		return E_FAIL;
 
 	m_vSize = { j["size"][0],j["size"][1],j["size"][2] };
-	m_pChilds.resize(m_vSize.x * m_vSize.y * m_vSize.z, nullptr);
+	m_vecCells.resize(m_vSize.x * m_vSize.y * m_vSize.z, nullptr);
 
-	json pos, rot, scale;
+	CTerrainObject::TERRAINOBJ_DESC desc;
 	for (const auto& item : j["cells"]) {
-		pos = item["position"];
-		rot = item["rotation"];
-		TERRAIN_OBJ_TYPE eType = item["type"];
-
-		int index;
-		size_t iteration = item["iteration"];
-		CTerrainObject::TERRAINOBJ_DESC desc;
-
-
-		desc.eType = eType;
-		desc.modleName = item["model"];
-		desc.Pos = { pos[0],pos[1],pos[2] };
-		desc.Rot = { rot[0],rot[1],rot[2] };
+		desc.eType = item["type"];
+		string str = item["model"];
+		wstring wstr(str.begin(), str.end());
+		desc.modleName = wstr;
+		_uint terrIdx = item["index"];
+		desc.direction = item["direction"];
 		desc.data = item["data"];
-		index = desc.Pos.x + desc.Pos.z * m_vSize.x + desc.Pos.y * m_vSize.x * m_vSize.z;
-		for (size_t i = 0; i < iteration; i++)
-		{
-			if (m_pChilds[index + i] != nullptr)
-				continue;
-			wstring wstr(desc.modleName.begin(), desc.modleName.end());
-			CGameObject* pGameObject = static_cast<CGameObject*>(m_pGameInstance->Clone_Proto_Object_Stock(TEXT("Prototype_GameObject_TempTerrainObj"), &desc));
+		size_t iteration = item["iteration"];
 
-			m_pChilds[index + i] = pGameObject;
+		for (int i = 0 ; i < iteration; i++)
+		{
+			if (m_vecCells[terrIdx +i] != nullptr)
+				continue;
+			
+			desc.index = terrIdx + i;
+			desc.pos = TerrainIndexToPos(desc.index);
+			CTerrainObject* pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(TEXT("Prototype_GameObject_TempTerrainObj"), &desc));
+			Add_Child(pGameObject);
+			m_vecCells[desc.index] = pGameObject;
 		}
 	}
 
@@ -116,6 +110,15 @@ HRESULT CCubeTerrain::Save_To_Json(wstring strNewFilepath)
 	std::string str(strNewFilepath.begin(), strNewFilepath.end());
 	CJsonParser::SaveJsonFile(str.c_str(),j);
 	return S_OK;
+}
+
+_float3 CCubeTerrain::TerrainIndexToPos(_uint Index)
+{
+	_float3 pos;
+	pos.x = Index % (_uint)m_vSize.x;
+	pos.z = Index / (_uint)m_vSize.x % (_uint)m_vSize.z;
+	pos.y = Index / ((_uint)m_vSize.x * (_uint)m_vSize.z);
+	return pos;
 }
 
 

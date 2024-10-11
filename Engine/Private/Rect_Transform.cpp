@@ -166,7 +166,7 @@ _float2 CRect_Transform::Get_AnchorPosition(CORNOR_TYPE eAnchorType)
 	if (pParent == nullptr)
 	{
 		_float2 fRatio = Get_CornorRatio(eAnchorType);
-		fAnchorPoint = _float2(m_iViewportWidth * 0.5 + m_iViewportWidth * fRatio.x, m_iViewportHeight * 0.5 + m_iViewportHeight * fRatio.y);
+		fAnchorPoint = _float2(float(m_iViewportWidth * 0.5 + m_iViewportWidth * fRatio.x), float(m_iViewportHeight * 0.5 + m_iViewportHeight * fRatio.y));
 	}
 	else
 	{

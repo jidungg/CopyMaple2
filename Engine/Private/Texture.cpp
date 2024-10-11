@@ -59,6 +59,45 @@ HRESULT CTexture::Initialize_Prototype(const _tchar * pTextureFilePath, _uint iN
 	return S_OK;
 }
 
+HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, aiMaterial* pAIMaterial, aiTextureType eTexType)
+{
+	m_iNumSRVs = pAIMaterial->GetTextureCount(aiTextureType(eTexType));
+	for (size_t texIdx = 0; texIdx < m_iNumSRVs; texIdx++)
+	{
+		aiString		strTexturePath;
+
+		if (FAILED(pAIMaterial->GetTexture(aiTextureType(eTexType), texIdx, &strTexturePath)))
+			break;
+
+		_char		szFileName[MAX_PATH] = "";
+		_char		szExt[MAX_PATH] = "";
+
+		_char		szFullPath[MAX_PATH] = "";
+
+		_splitpath_s(strTexturePath.data, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		strcat_s(szFullPath, szDirPath);
+		strcat_s(szFullPath, szFileName);
+		strcat_s(szFullPath, szExt);
+
+		_tchar		szPerfectPath[MAX_PATH] = TEXT("");
+		MultiByteToWideChar(CP_ACP, 0, szFullPath, strlen(szFullPath), szPerfectPath, MAX_PATH);
+
+		ID3D11ShaderResourceView* pSRV = { nullptr };
+		HRESULT		hr = {};
+		if (false == strcmp(szExt, ".dds"))
+			hr = CreateDDSTextureFromFile(m_pDevice, szPerfectPath, nullptr, &pSRV);
+		else if (false == strcmp(szExt, ".tga"))
+			return E_FAIL;
+		else
+			hr = CreateWICTextureFromFile(m_pDevice, szPerfectPath, nullptr, &pSRV);
+		if (FAILED(hr))
+			return E_FAIL;
+		m_SRVs.push_back(pSRV);
+	}
+	return S_OK;
+}
+
 HRESULT CTexture::Initialize(void * pArg)
 {
 	return S_OK;
@@ -72,11 +111,34 @@ HRESULT CTexture::Bind_ShaderResource(CShader * pShader, const _char * pConstant
 	return pShader->Bind_SRV(pConstantName, m_SRVs[iSRVIndex]);	
 }
 
+HRESULT CTexture::Push_Texture(ID3D11ShaderResourceView* pSRV)
+{
+	if (nullptr == pSRV)
+		return E_FAIL;
+
+	m_SRVs.push_back(pSRV);
+
+	++m_iNumSRVs;
+
+	return S_OK;
+}
+
 CTexture * CTexture::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar * pTextureFilePath, _uint iNumTextures)
 {
 	CTexture*	pInstance = new CTexture(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype(pTextureFilePath, iNumTextures)))
+	{
+		MSG_BOX("Failed to Created : CTexture");
+		Safe_Release(pInstance);
+	}
+	return pInstance;
+}
+CTexture* CTexture::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath, aiMaterial* pAIMaterial, aiTextureType eTexType)
+{
+	CTexture* pInstance = new CTexture(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype(szDirPath,pAIMaterial, eTexType)))
 	{
 		MSG_BOX("Failed to Created : CTexture");
 		Safe_Release(pInstance);

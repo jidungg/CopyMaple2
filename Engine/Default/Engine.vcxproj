@@ -161,6 +161,7 @@ call UpdateLib.bat</Command>
     <ClInclude Include="..\public\Base.h" />
     <ClInclude Include="..\Public\Camera.h" />
     <ClInclude Include="..\Public\Camera_UI.h" />
+    <ClInclude Include="..\Public\Collider.h" />
     <ClInclude Include="..\public\Component.h" />
     <ClInclude Include="..\Public\Controller.h" />
     <ClInclude Include="..\Public\Engine_Defines.h" />
@@ -178,9 +179,11 @@ call UpdateLib.bat</Command>
     <ClInclude Include="..\public\Level_Manager.h" />
     <ClInclude Include="..\Public\Light.h" />
     <ClInclude Include="..\Public\Light_Manager.h" />
+    <ClInclude Include="..\Public\Material.h" />
     <ClInclude Include="..\Public\Mesh.h" />
     <ClInclude Include="..\Public\Model.h" />
     <ClInclude Include="..\public\Object_Manager.h" />
+    <ClInclude Include="..\Public\Physics.h" />
     <ClInclude Include="..\Public\PipeLine.h" />
     <ClInclude Include="..\public\Prototype_Manager.h" />
     <ClInclude Include="..\Public\Rect_Transform.h" />
@@ -195,11 +198,13 @@ call UpdateLib.bat</Command>
     <ClInclude Include="..\public\VIBuffer.h" />
     <ClInclude Include="..\public\VIBuffer_Rect.h" />
     <ClInclude Include="..\public\VIBuffer_Terrain.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp" />
     <ClCompile Include="..\Private\Camera.cpp" />
     <ClCompile Include="..\Private\Camera_UI.cpp" />
+    <ClCompile Include="..\Private\Collider.cpp" />
     <ClCompile Include="..\private\Component.cpp" />
     <ClCompile Include="..\Private\Controller.cpp" />
     <ClCompile Include="..\private\GameInstance.cpp" />
@@ -214,6 +219,7 @@ call UpdateLib.bat</Command>
     <ClCompile Include="..\Private\Mesh.cpp" />
     <ClCompile Include="..\Private\Model.cpp" />
     <ClCompile Include="..\private\Object_Manager.cpp" />
+    <ClCompile Include="..\Private\Physics.cpp" />
     <ClCompile Include="..\Private\PipeLine.cpp" />
     <ClCompile Include="..\private\Prototype_Manager.cpp" />
     <ClCompile Include="..\Private\Rect_Transform.cpp" />
@@ -229,6 +235,10 @@ call UpdateLib.bat</Command>
     <ClCompile Include="..\private\VIBuffer_Rect.cpp" />
     <ClCompile Include="..\private\VIBuffer_Terrain.cpp" />
     <ClCompile Include="..\Public\Engine_Struct.cpp" />
+    <ClCompile Include="..\Public\Material.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Engine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

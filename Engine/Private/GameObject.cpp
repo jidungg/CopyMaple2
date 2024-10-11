@@ -128,6 +128,7 @@ HRESULT CGameObject::Add_Component(_uint iPrototypeLevelIndex, const _wstring & 
 	if (nullptr != Find_Component(strComponentTag))
 		return E_FAIL;
 
+
 	CComponent*		pComponent = static_cast<CComponent*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, iPrototypeLevelIndex, strPrototypeTag, pArg));
 
 	*ppOut = pComponent;
@@ -143,6 +144,7 @@ HRESULT CGameObject::Add_Component(CComponent* pComponent, const _wstring& strCo
 		return E_FAIL;
 
 	m_Components.emplace(strComponentTag, pComponent);
+	pComponent->Set_Owner(this);
 
 	Safe_AddRef(pComponent);
 

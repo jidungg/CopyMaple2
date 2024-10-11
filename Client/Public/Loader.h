@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Base.h"
+#include "Model.h"
 
 /* 서브 스레드를 생성한다.  */
 /* 다음 레벨에 필요한 자원을 로드하는 역활 */
@@ -49,7 +50,7 @@ private:
 	HRESULT Loading_Level_GamePlay();
 	HRESULT Loading_Level_MyHome();
 
-	HRESULT Load_Dirctory(const _tchar* szDirPath, const _tchar* szExtension);
+	HRESULT Load_Dirctory_Models(LEVELID eLevId, CModel::TYPE eModelType, const _tchar* szDirPath);
 
 public:
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eNextLevelID);

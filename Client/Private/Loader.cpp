@@ -11,7 +11,6 @@
 #include "Player.h"
 #include "RenderObject.h"
 #include "HomeDialog.h"
-#include "Model.h"
 #include "Terrain.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -121,8 +120,6 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_Logo"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_henesys_a.dds"), 2))))
 		return E_FAIL;
-	if (FAILED(Load_Dirctory(TEXT("../Bin/resources/FBXs/MAP/Cube/"), TEXT(".dds"))))
-		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("사운드를 로딩중입니다."));
 	
@@ -148,10 +145,11 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_VIBuffer_Rect"),
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	///* For.Prototype_Component_CMesh*/
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_CubeMesh"),
-	//	CModel::Create(m_pDevice, m_pContext,"../Bin/Resources/FBXs/MAP/Cube/he_ground_grass_a01.fbx"))))
-	//	return E_FAIL;
+	///* For.Prototype_Component_CModel*/
+	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING, CModel::TYPE_NONANIM,
+		TEXT("../Bin/resources/FBXs/MAP/Cube/"))))
+		return E_FAIL;
+
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형(을)를 로딩중입니다."));
 	/* For.Prototype_GameObject_BackGround */
@@ -268,7 +266,7 @@ HRESULT CLoader::Loading_Level_MyHome()
 	return S_OK;
 }
 
-HRESULT CLoader::Load_Dirctory(const _tchar* szDirPath, const _tchar* szExtension)
+HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId, CModel::TYPE eModelType, const _tchar* szDirPath)
 {
 	WIN32_FIND_DATA		FindFileData = {};
 	HANDLE				hFind = INVALID_HANDLE_VALUE;
@@ -276,6 +274,7 @@ HRESULT CLoader::Load_Dirctory(const _tchar* szDirPath, const _tchar* szExtensio
 	_tchar				szFilePath[MAX_PATH] = TEXT("");
 	_tchar				szFullPath[MAX_PATH] = TEXT("");
 	_tchar				szProtoTag[MAX_PATH] = TEXT("");
+	_tchar				szExtension[MAX_PATH] = TEXT(".fbx");
 
 	lstrcpy(szFilePath, szDirPath);
 	lstrcat(szFilePath, TEXT("*"));
@@ -294,18 +293,24 @@ HRESULT CLoader::Load_Dirctory(const _tchar* szDirPath, const _tchar* szExtensio
 		lstrcpy(szFullPath, szDirPath);
 		lstrcat(szFullPath, FindFileData.cFileName);
 
-		if (lstrcmp(szExtension, TEXT(".dds")) == 0)
-		{
-			if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, FindFileData.cFileName,
-				CTexture::Create(m_pDevice, m_pContext, szFullPath, 1))))
-				return E_FAIL;
-		}
-		else if (lstrcmp(szExtension, TEXT(".fbx")) == 0)
-		{
-			//TODO: FBX 로드
-		}
-		else
+		wstring wstr = szFullPath;
+		string str{ wstr.begin(), wstr.end() };
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, FindFileData.cFileName,
+			CModel::Create(m_pDevice, m_pContext, eModelType, str.c_str()))))
 			return E_FAIL;
+
+		//if (lstrcmp(szExtension, TEXT(".dds")) == 0)
+		//{
+		//	if (FAILED(m_pGameInstance->Add_Prototype(eLevId, FindFileData.cFileName,
+		//		CTexture::Create(m_pDevice, m_pContext, szFullPath, 1))))
+		//		return E_FAIL;
+		//}
+		//else if (lstrcmp(szExtension, TEXT(".fbx")) == 0)
+		//{
+
+		//}
+		//else
+		//	return E_FAIL;
 
 	} while (FindNextFile(hFind, &FindFileData));
 

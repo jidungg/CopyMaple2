@@ -75,7 +75,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _wstring& strLayerTag)
 	CamDesc.fFar = 1000.f;
 	CamDesc.vEye = _float3(0.f, 3.f, -3.f);
 	CamDesc.vAt = _float3(0.f, 0.f, 0.f);
-	CamDesc.vArm = _float3(0.f, 300.f, -150.f);
+	CamDesc.vArm = _float3(0.f, 10.f, -7.f);
 	CamDesc.pTarget = pPlayer;
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOADING, TEXT("Prototype_GameObject_Camera_Trace"),

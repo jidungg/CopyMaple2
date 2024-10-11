@@ -173,7 +173,6 @@
     <ClInclude Include="..\Public\HomeDialog.h" />
     <ClInclude Include="..\Public\Item.h" />
     <ClInclude Include="..\Public\JsonParser.h" />
-    <ClInclude Include="..\Public\RenderObject.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\TerrainObject.h" />
     <ClInclude Include="..\Public\UIItemIndicator.h" />
@@ -207,7 +206,6 @@
     <ClCompile Include="..\private\MainApp.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\CubeTerrain.cpp" />
-    <ClCompile Include="..\Private\RenderObject.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\TerrainObject.cpp" />
     <ClCompile Include="..\Private\UIButton.cpp" />

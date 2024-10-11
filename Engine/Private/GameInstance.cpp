@@ -29,17 +29,18 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	m_pInput_Device = CInput_Device::Create(EngineDesc.hInstance, EngineDesc.hWnd);
 	if (nullptr == m_pInput_Device)
 		return E_FAIL;
+	m_pPipeLine = CPipeLine::Create(*ppDevice, *ppContext);
+	if (nullptr == m_pPipeLine)
+		return E_FAIL;
 
 	m_pUIManager = CUIManager::Create();
 	if (nullptr == m_pUIManager)
 		return E_FAIL;
-	m_pController = CController::Create(m_pInput_Device, m_pUIManager);
+	m_pController = CController::Create(m_pInput_Device, m_pUIManager,
+		EngineDesc.iViewportWidth,EngineDesc.iViewportHeight,m_pPipeLine);
 	if (nullptr == m_pController)
 		return E_FAIL;
 
-	m_pPipeLine = CPipeLine::Create(*ppDevice, *ppContext);
-	if (nullptr == m_pPipeLine)
-		return E_FAIL;
 
 	m_pRenderer = CRenderer::Create(*ppDevice, *ppContext);
 	if (nullptr == m_pRenderer)

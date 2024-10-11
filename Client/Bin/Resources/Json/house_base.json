@@ -1,20 +1,20 @@
 {
     "cells": [
         {
-            "data": 0,
-            "iteration": 1,
+            "type": 0,
             "model": "he_ground_grass_a01",
-            "position": [
-                0,
-                0,
-                0
-            ],
-            "rotation": [
-                0,
-                0,
-                0
-            ],
-            "type": 0
+            "index": 0,
+            "direction": 0,
+            "data": 0,
+            "iteration": 100
+        },
+        {
+            "type": 0,
+            "model": "he_ground_grass_a02",
+            "index": 100,
+            "direction": 0,
+            "data": 0,
+            "iteration": 2
         }
     ],
     "size": [

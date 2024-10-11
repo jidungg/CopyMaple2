@@ -1,5 +1,7 @@
 #include "..\Public\Model.h"
 #include "Mesh.h"
+#include "Shader.h"
+#include "Material.h"
 
 CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CComponent{ pDevice, pContext }
@@ -8,12 +10,24 @@ CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 CModel::CModel(const CModel& Prototype)
 	: CComponent{ Prototype }
+	, m_pAIScene{ Prototype.m_pAIScene }
+	, m_iNumMeshes{ Prototype.m_iNumMeshes }
+	, m_Meshes{ Prototype.m_Meshes }
+	, m_iNumMaterials{ Prototype.m_iNumMaterials }
+	, m_Materials{ Prototype.m_Materials }
 {
+	for (auto& pMesh : m_Meshes)
+		Safe_AddRef(pMesh);
+	for (auto& mat : m_Materials)
+		Safe_AddRef(mat);
 }
 
-HRESULT CModel::Initialize_Prototype(const _char* pModelFilePath)
+HRESULT CModel::Initialize_Prototype(TYPE eModelType, const _char* pModelFilePath)
 {
 	_uint		iFlag = { aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast };
+
+	if (eModelType == TYPE_NONANIM)
+		iFlag |= aiProcess_PreTransformVertices;
 
 	m_pAIScene = m_Importer.ReadFile(pModelFilePath, iFlag);
 
@@ -23,12 +37,31 @@ HRESULT CModel::Initialize_Prototype(const _char* pModelFilePath)
 	if (FAILED(Ready_Meshes()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Materials(pModelFilePath)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 HRESULT CModel::Initialize(void* pArg)
 {
 	return S_OK;
+}
+
+HRESULT CModel::Render(_uint iMeshIndex)
+{
+	if (iMeshIndex >= m_iNumMeshes)
+		return E_FAIL;
+
+	m_Meshes[iMeshIndex]->Bind_BufferDesc();
+	m_Meshes[iMeshIndex]->Render();
+
+	return S_OK;
+}
+
+HRESULT CModel::Bind_Material(CShader* pShader, const _char* pConstantName, _uint iMeshIndex, aiTextureType eType, _uint iTextureIndex)
+{
+	return m_Materials[m_Meshes[iMeshIndex]->Get_MaterialIndex()]->Bind_Texture(pShader, pConstantName, eType, iTextureIndex);
 }
 
 HRESULT CModel::Render()
@@ -59,11 +92,31 @@ HRESULT CModel::Ready_Meshes()
 	return S_OK;
 }
 
-CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* pModelFilePath)
+HRESULT CModel::Ready_Materials(const _char* pModelFilePath)
+{
+
+	m_iNumMaterials = m_pAIScene->mNumMaterials;
+
+	m_Materials.resize(m_iNumMaterials);
+	_char		szDrive[MAX_PATH] = "";
+	_char		szDirectory[MAX_PATH] = "";
+	_splitpath_s(pModelFilePath, szDrive, MAX_PATH, szDirectory, MAX_PATH, nullptr, 0, nullptr, 0);
+	strcat_s(szDrive, szDirectory);
+	for (size_t i = 0; i < m_iNumMaterials; i++)
+	{
+		CMaterial* pMaterial = CMaterial::Create(m_pDevice, m_pContext, szDrive,m_pAIScene->mMaterials[i]);
+		m_Materials[i] = pMaterial;
+	}
+
+	return S_OK;
+}
+
+
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eModelType, const _char* pModelFilePath)
 {
 	CModel* pInstance = new CModel(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(pModelFilePath)))
+	if (FAILED(pInstance->Initialize_Prototype(eModelType, pModelFilePath)))
 	{
 		MSG_BOX("Failed to Created : CModel");
 		Safe_Release(pInstance);
@@ -86,8 +139,13 @@ CComponent* CModel::Clone(void* pArg)
 void CModel::Free()
 {
 	__super::Free();
-	for (auto& mesh : m_Meshes)
-	{
-		Safe_Release(mesh);
-	}
+
+	for (auto& mat : m_Materials)
+		Safe_Release(mat);
+	m_Materials.clear();
+	for (auto& pMesh : m_Meshes)
+		Safe_Release(pMesh);
+	m_Meshes.clear();
+
+	m_Importer.FreeScene();
 }

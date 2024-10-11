@@ -109,14 +109,15 @@
     <ClInclude Include="..\Public\HomeDialog.h">
       <Filter>02.GameObjects\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\RenderObject.h">
-      <Filter>02.GameObjects</Filter>
+    <ClInclude Include="..\Public\TerrainObject.h">
+      <Filter>02.GameObjects\Terrain</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\TerrainObject.h" />
+    <ClInclude Include="..\Public\Terrain.h">
+      <Filter>02.GameObjects\Terrain</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\JsonParser.h">
-      <Filter>02.GameObjects</Filter>
+      <Filter>00.MainApp</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Terrain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -174,12 +175,15 @@
     <ClCompile Include="..\Private\HomeDialog.cpp">
       <Filter>02.GameObjects\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\RenderObject.cpp">
-      <Filter>02.GameObjects</Filter>
+    <ClCompile Include="..\Private\TerrainObject.cpp">
+      <Filter>02.GameObjects\Terrain</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\TerrainObject.cpp" />
-    <ClCompile Include="JsonParser.cpp" />
-    <ClCompile Include="..\Private\Terrain.cpp" />
+    <ClCompile Include="..\Private\Terrain.cpp">
+      <Filter>02.GameObjects\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonParser.cpp">
+      <Filter>00.MainApp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

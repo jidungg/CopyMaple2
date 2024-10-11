@@ -11,11 +11,17 @@ private:
 	virtual ~CMesh() = default;
 
 public:
+	_uint Get_MaterialIndex() const {
+		return m_iMaterialIndex;
+	}
+
+public:
 	virtual HRESULT Initialize_Prototype(const aiMesh* pAIMesh);
 	virtual HRESULT Initialize(void* pArg);
 
 private:
 	_char						m_szName[MAX_PATH] = "";
+	_uint						m_iMaterialIndex = {};
 
 
 public:

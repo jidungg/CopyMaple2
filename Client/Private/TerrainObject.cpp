@@ -13,11 +13,11 @@ CTerrainObject::CTerrainObject(ID3D11Device* pDevice, ID3D11DeviceContext* pCont
 CTerrainObject::CTerrainObject(const CTerrainObject& Prototype)
 	: CGameObject(Prototype),
 	m_pTextureCom{ Prototype.m_pTextureCom },
-	m_pVIBufferCom{ Prototype.m_pVIBufferCom },
+	m_pModelCom{ Prototype.m_pModelCom },
 	m_pShaderCom{ Prototype.m_pShaderCom }
 {
 	Safe_AddRef(m_pTextureCom);
-	Safe_AddRef(m_pVIBufferCom);
+	Safe_AddRef(m_pModelCom);
 	Safe_AddRef(m_pShaderCom);
 }
 
@@ -38,10 +38,11 @@ HRESULT CTerrainObject::Initialize(void* pArg)
 	pDesc->fSpeedPerSec = 1.f;
 	m_modleName = pDesc->modleName;
 	m_eTerrObjType = pDesc->eType;
-	
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(pDesc->Pos.x, pDesc->Pos.y, pDesc->Pos.z,1));
-	m_pTransformCom->Rotation(pDesc->Rot);
-	m_pTransformCom->Scaling(1, 1, 1);
+	m_eTerrainDir = pDesc->direction;
+	m_iIndex = pDesc->index;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(pDesc->pos.x, pDesc->pos.y, pDesc->pos.z,1));
+	Rotate(m_eTerrainDir);
+	m_pTransformCom->Scaling(1/(float)150, 1 / (float)150, 1 / (float)150);
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -56,16 +57,26 @@ void CTerrainObject::Update(_float fTimeDelta)
 
 
 
+
 json CTerrainObject::ToJson()
 {
 	json j;
 	j["type"] = m_eTerrObjType;
-	j["model"] = m_modleName.c_str();
+	string str{ m_modleName.begin(), m_modleName.end() };
+	j["model"] = str.c_str();
 	j["data"] = 0;
 	j["rotation"] = { 0,0,0 };
 	j["position"] = { 0,0,0 };
 	j["iteration"] = 1;
 	return j;
+}
+
+void CTerrainObject::Turn(DIRECTION eDir)
+{
+}
+
+void CTerrainObject::Rotate(DIRECTION eDir)
+{
 }
 
 HRESULT CTerrainObject::Ready_Components()
@@ -76,26 +87,33 @@ HRESULT CTerrainObject::Ready_Components()
 		return E_FAIL;
 
 	/* Com_VIBuffer */
-	m_pVIBufferCom = CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/FBXs/MAP/Cube/he_ground_grass_a01.fbx");
-	Add_Component(m_pVIBufferCom, TEXT("Com_Buffer"));
-
-	/* Com_Texture */
-	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("he_ground_grass_a01.dds"),
-		TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+	wstring wstr = m_modleName;
+	wstr += L".fbx";
+	if (FAILED(Add_Component(LEVEL_LOADING, wstr,
+		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
-
-
-	return S_OK;
+	return S_OK; 
 }
 HRESULT CTerrainObject::Render()
 {
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
 
-	if (m_pShaderCom)
+	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	//밖에서 반복하나ㅡㄴ 이유?
+	for (size_t i = 0; i < iNumMeshes; i++)
+	{
+
+		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", i, aiTextureType_DIFFUSE, 0)))
+			return E_FAIL;
+		//패스 적용, 입력 레이아웃 Set
 		m_pShaderCom->Begin(0);
-	if (m_pVIBufferCom)
-		m_pVIBufferCom->Render();
+		//정점,인덱스 버퍼 전달
+		//그리기
+		m_pModelCom->Render(i);
+	}
+
 
 	for (auto& child : m_pChilds)
 		child->Render();
@@ -104,14 +122,30 @@ HRESULT CTerrainObject::Render()
 }
 HRESULT CTerrainObject::Bind_ShaderResources()
 {
+
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
-	if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
+
+	const LIGHT_DESC* pLightDesc = m_pGameInstance->Get_LightDesc(0);
+
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
 		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_CamPosition(), sizeof(_float4))))
+		return E_FAIL;
+
+
 
 	return S_OK;
 }
@@ -148,5 +182,5 @@ void CTerrainObject::Free()
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pModelCom);
 }

@@ -1,37 +1,40 @@
-﻿  Base.cpp
-  Camera.cpp
+﻿  Camera.cpp
   Camera_UI.cpp
-  Component.cpp
+  Collider.cpp
   Controller.cpp
-  GameInstance.cpp
-  GameObject.cpp
   Graphic_Device.cpp
   Input_Device.cpp
-  Layer.cpp
-  Level.cpp
-  Level_Manager.cpp
   Light.cpp
   Light_Manager.cpp
   Mesh.cpp
   Model.cpp
-  Object_Manager.cpp
+  Physics.cpp
   PipeLine.cpp
-  Prototype_Manager.cpp
   Rect_Transform.cpp
 D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Rect_Transform.cpp(75,105): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Rect_Transform.cpp(75,65): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Rect_Transform.cpp(169,104): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Rect_Transform.cpp(169,49): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  Renderer.cpp
-  Shader.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\Shader.cpp(47,58): warning C4267: '인수': 'size_t'에서 'uint32_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Texture.cpp
   Timer.cpp
   Timer_Manager.cpp
-  Transform.cpp
   UIManager.cpp
+  Engine_Struct.cpp
+  Material.cpp
+  Base.cpp
+  Component.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  GameInstance.cpp
+  GameObject.cpp
+  Layer.cpp
+  Level.cpp
+  Level_Manager.cpp
+  Object_Manager.cpp
+  Prototype_Manager.cpp
+  Renderer.cpp
+  Shader.cpp
+  Texture.cpp
+D:\Workbench\Portfolio\CopyMaple2\Engine\private\Texture.cpp(69,7): warning C4267: '인수': 'size_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Workbench\Portfolio\CopyMaple2\Engine\private\Texture.cpp(84,52): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Transform.cpp
   UIObject.cpp
   VIBuffer.cpp
   VIBuffer_Rect.cpp
@@ -40,7 +43,6 @@ D:\Workbench\Portfolio\CopyMaple2\Engine\private\VIBuffer_Terrain.cpp(53,18): wa
 D:\Workbench\Portfolio\CopyMaple2\Engine\private\VIBuffer_Terrain.cpp(55,84): warning C4244: '인수': 'size_t'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 D:\Workbench\Portfolio\CopyMaple2\Engine\private\VIBuffer_Terrain.cpp(55,42): warning C4244: '인수': 'size_t'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 D:\Workbench\Portfolio\CopyMaple2\Engine\private\VIBuffer_Terrain.cpp(72,18): warning C4267: '초기화 중': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Engine_Struct.cpp
   코드를 생성하고 있습니다...
 DirectXTKd.lib(DDSTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(DDSTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTKd.lib(WICTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(WICTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
@@ -57,6 +59,7 @@ DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' �
   .\Engine\Public\Button_Component.h
   .\Engine\Public\Camera.h
   .\Engine\Public\Camera_UI.h
+  .\Engine\Public\Collider.h
   .\Engine\Public\Component.h
   .\Engine\Public\Controller.h
   .\Engine\Public\Engine_Defines.h
@@ -75,9 +78,12 @@ DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' �
   .\Engine\Public\Level_Manager.h
   .\Engine\Public\Light.h
   .\Engine\Public\Light_Manager.h
+  .\Engine\Public\Material.cpp
+  .\Engine\Public\Material.h
   .\Engine\Public\Mesh.h
   .\Engine\Public\Model.h
   .\Engine\Public\Object_Manager.h
+  .\Engine\Public\Physics.h
   .\Engine\Public\PipeLine.h
   .\Engine\Public\Prototype_Manager.h
   .\Engine\Public\Rect_Transform.h
@@ -211,4 +217,4 @@ DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' �
   .\Engine\Public\DirectXTK\XboxDDSTextureLoader.h
   .\Engine\Public\Effects11\d3dx11effect.h
   .\Engine\Public\Effects11\d3dxGlobal.h
-  158개 파일이 복사되었습니다.
+  162개 파일이 복사되었습니다.

@@ -12,7 +12,7 @@ END
 
 
 BEGIN(Client)
-
+class CTerrainObject;
 class CCubeTerrain final : public CGameObject
 {
 private:
@@ -30,10 +30,11 @@ private:
 	wstring m_strJsonFilePath;
 	_float3 m_vSize = { 1.f, 1.f, 1.f };
 
+	vector<CTerrainObject*> m_vecCells;
 private:
 	HRESULT Load_From_Json(wstring strJsonFilePath);
 	HRESULT Save_To_Json(wstring strNewFilepath);
-
+	_float3 TerrainIndexToPos(_uint Index);
 public:
 	static CCubeTerrain* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* szMapFileName);
 	virtual CGameObject* Clone(void* pArg);

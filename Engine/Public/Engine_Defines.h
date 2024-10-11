@@ -7,6 +7,7 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #include <DirectXMath.h>
+#include <directxcollision.h>
 
 using namespace DirectX;
 

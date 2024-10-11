@@ -73,14 +73,37 @@ namespace Engine
 		static const D3D11_INPUT_ELEMENT_DESC		Elements[iNumElements];
 	}VTXMESH;
 
-	//typedef struct
-	//{
-	//	XMFLOAT3		vPosition;
-	//	XMFLOAT2		vTexcoord0;
-	//	XMFLOAT2		vTexcoord1;
-	//}VTXPOSTEX;
+	typedef struct ENGINE_DLL Ray
+	{
+		Ray(const XMFLOAT4& vOrigin, const XMFLOAT4& vDirection)
+			: vOrigin(vOrigin), vDirection(vDirection) {}
+		Ray(const POINT& tScreenOrigin, const POINT& tScreenDest,  _uint  iWinX, _uint iWinY,  const XMFLOAT4X4& matView, const XMFLOAT4X4& matProj)
+			: vOrigin{ 0,0,0,1 }
+			,vDirection { 0,0,0,0 }
+		{
+			float ndcX = tScreenDest.x/ (_float)iWinX *2 -1;
+			float ndcY = -tScreenDest.y / (_float)iWinY * 2 + 1;
+			XMVECTOR vNear = XMVectorSet(ndcX, ndcY, 0.f, 1.f);
+			XMVECTOR vFar = XMVectorSet(ndcX, ndcY, 1.f, 1.f);
 
+			XMMATRIX vInvView = XMMatrixInverse(nullptr, XMLoadFloat4x4(&matView));
+			XMMATRIX vInvViewProj = XMMatrixMultiply(vInvView, XMMatrixInverse(nullptr,XMLoadFloat4x4(&matProj)));
 
+			XMStoreFloat4(&vOrigin, XMVector4Transform( XMLoadFloat4( &vOrigin), vInvView));
+			XMVECTOR vNearWorld =  XMVector4Transform(vNear, vInvViewProj);
+			XMVECTOR vFarWorld = XMVector4Transform(vFar, vInvViewProj);
+
+			XMStoreFloat4( &vDirection,
+				XMVector4Normalize(
+					vNearWorld
+					- vFarWorld
+				)
+			);
+		}
+
+		XMFLOAT4		vOrigin;
+		XMFLOAT4		vDirection;
+	}RAY;
 
 }
 

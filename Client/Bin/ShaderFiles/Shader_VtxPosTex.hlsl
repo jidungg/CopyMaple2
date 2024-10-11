@@ -85,7 +85,8 @@ PS_OUT PS_MAIN(PS_IN In)
 
 	/*Out.vColor = g_Texture.Sample(어떻게얻어올래?, In.vTexcoord);*/
 	Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord);
-
+    if (Out.vColor.a < 0.3f)
+        discard;
 	return Out;
 }
 

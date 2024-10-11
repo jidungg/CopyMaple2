@@ -186,8 +186,20 @@
     <ClInclude Include="..\Public\Light.h">
       <Filter>01.Utility\Lights</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Model.h" />
-    <ClInclude Include="..\Public\Mesh.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="..\Public\Model.h">
+      <Filter>01.Utility\04.Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Mesh.h">
+      <Filter>01.Utility\04.Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Material.h">
+      <Filter>01.Utility\04.Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Collider.h">
+      <Filter>01.Utility\04.Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Physics.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -280,7 +292,21 @@
     <ClCompile Include="..\Private\Light.cpp">
       <Filter>01.Utility\Lights</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Model.cpp" />
-    <ClCompile Include="..\Private\Mesh.cpp" />
+    <ClCompile Include="..\Private\Model.cpp">
+      <Filter>01.Utility\04.Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Mesh.cpp">
+      <Filter>01.Utility\04.Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Public\Material.cpp">
+      <Filter>01.Utility\04.Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Collider.cpp">
+      <Filter>01.Utility\04.Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Physics.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Engine.rc" />
   </ItemGroup>
 </Project>

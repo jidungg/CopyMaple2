@@ -7,7 +7,7 @@ class CUIPanel :
     public CUIObject
 {
 public:
-	typedef struct : public CUIObject::UIOBJECT_DESC
+	typedef struct PanelDesc: public CUIObject::UIOBJECT_DESC
 	{
 
 	}PANEL_DESC;

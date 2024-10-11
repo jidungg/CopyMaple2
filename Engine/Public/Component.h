@@ -17,6 +17,7 @@ public:
 	virtual void Priority_Update(_float fTimeDelta) {};
 	virtual void Update(_float fTimeDelta) {};
 	virtual void Late_Update(_float fTimeDelta) {};
+	void Set_Owner(class CGameObject* pOwner) { m_pOwner = pOwner; }
 
 	bool Is_Active() { return m_bActive; }
 protected:

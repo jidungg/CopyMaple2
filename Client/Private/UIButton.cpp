@@ -54,10 +54,10 @@ void CUIButton::On_MouseExit()
 		m_iSRVIndex = BS_NORMAL;
 }
 
-bool CUIButton::Consume_MouseLButtonDown()
+void CUIButton::On_MouseLButtonDown()
 {
 	m_iSRVIndex = BS_PRESSED;
-	return true;
+	return ;
 }
 
 void CUIButton::On_MouseLButtonUp()
@@ -65,11 +65,11 @@ void CUIButton::On_MouseLButtonUp()
 	m_iSRVIndex = BS_NORMAL;
 }
 
-bool CUIButton::Consume_MouseClick()
+void CUIButton::On_MouseClick()
 {
 	m_iSRVIndex = BS_HIGHLIGHTED;
 
-	return true;
+	return ;
 }
 
 CUIButton* CUIButton::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

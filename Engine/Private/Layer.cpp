@@ -1,5 +1,6 @@
 #include "..\Public\Layer.h"
 #include "GameObject.h"
+#include "Collider.h"
 
 CLayer::CLayer()
 {
@@ -32,6 +33,17 @@ void CLayer::Late_Update(_float fTimeDelta)
 {
 	for (auto& pGameObject : m_GameObjects)
 		pGameObject->Late_Update(fTimeDelta);
+}
+
+bool CLayer::Check_Collision(const Ray& tRay, RaycastHit* pOut)
+{
+	for (auto& pGameObject : m_GameObjects)
+	{
+		if (pGameObject->Is_Active() == false || pGameObject->Is_Dead())
+			continue;
+		return	pGameObject->Check_Collision(tRay, pOut);
+	}
+	return false;
 }
 
 CLayer * CLayer::Create()

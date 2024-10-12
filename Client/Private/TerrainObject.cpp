@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Mesh.h"
 #include "Model.h"
+#include "MeshCollider.h"
 
 CTerrainObject::CTerrainObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject(pDevice, pContext)
@@ -14,11 +15,13 @@ CTerrainObject::CTerrainObject(const CTerrainObject& Prototype)
 	: CGameObject(Prototype),
 	m_pTextureCom{ Prototype.m_pTextureCom },
 	m_pModelCom{ Prototype.m_pModelCom },
-	m_pShaderCom{ Prototype.m_pShaderCom }
+	m_pShaderCom{ Prototype.m_pShaderCom },
+	m_pColliderCom{ Prototype.m_pColliderCom }
 {
 	Safe_AddRef(m_pTextureCom);
 	Safe_AddRef(m_pModelCom);
 	Safe_AddRef(m_pShaderCom);
+	Safe_AddRef(m_pColliderCom);
 }
 
 HRESULT CTerrainObject::Initialize_Prototype()
@@ -42,7 +45,6 @@ HRESULT CTerrainObject::Initialize(void* pArg)
 	m_iIndex = pDesc->index;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(pDesc->pos.x, pDesc->pos.y, pDesc->pos.z,1));
 	Rotate(m_eTerrainDir);
-	m_pTransformCom->Scaling(1/(float)150, 1 / (float)150, 1 / (float)150);
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -91,6 +93,13 @@ HRESULT CTerrainObject::Ready_Components()
 	wstr += L".fbx";
 	if (FAILED(Add_Component(LEVEL_LOADING, wstr,
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		return E_FAIL;
+
+	//Com_Collider
+	CMeshCollider::MESH_COLLIDER_DESC desc{};
+	desc.pMesh = m_pModelCom->Get_Mesh(0);
+	if (FAILED(Add_Component(LEVEL_LOADING, CMeshCollider::m_szProtoTag,
+		CCollider::m_szCompTag, reinterpret_cast<CComponent**>(&m_pColliderCom), & desc)))
 		return E_FAIL;
 	return S_OK; 
 }
@@ -178,9 +187,10 @@ CGameObject* CTerrainObject::Clone(void* pArg)
 
 void CTerrainObject::Free()
 {
-	__super::Free();
+ 	__super::Free();
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pModelCom);
+	Safe_Release(m_pColliderCom);
 }

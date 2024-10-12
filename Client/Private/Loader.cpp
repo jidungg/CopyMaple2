@@ -12,6 +12,9 @@
 #include "RenderObject.h"
 #include "HomeDialog.h"
 #include "Terrain.h"
+#include "MeshCollider.h"
+#include "Builder.h"
+#include "ModelObject.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -149,11 +152,17 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING, CModel::TYPE_NONANIM,
 		TEXT("../Bin/resources/FBXs/MAP/Cube/"))))
 		return E_FAIL;
-
-
+ 
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CMeshCollider::m_szProtoTag,
+		CMeshCollider::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("객체원형(을)를 로딩중입니다."));
+	//ModelObject
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CModelObject::m_szProtoTag,
+		CModelObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_BackGround */
-	
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_GameObject_UIPanel"),
 		CUIPanel::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -248,8 +257,9 @@ HRESULT CLoader::Loading_Level_MyHome()
 
 
 	lstrcpy(m_szLoadingText, TEXT("모델(을)를 로딩중입니다."));
-	
-
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_Model_ChocoDuckyBall"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/FBXs/DuckyBall/60100001_chocoduckyball.fbx"))))
+		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("객체원형(을)를 로딩중입니다."));
 	/* For.Prototype_GameObject_HomeDialog */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialog"),
@@ -257,6 +267,10 @@ HRESULT CLoader::Loading_Level_MyHome()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_Terrain"),
 		CCubeTerrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Json/house_base.json")))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, CBuilder::m_szProtoTag,
+		CBuilder::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));

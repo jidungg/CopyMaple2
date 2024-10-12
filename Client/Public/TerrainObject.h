@@ -8,6 +8,7 @@ class CShader;
 class CTexture;
 class CModel;
 class CVIBuffer_Rect;
+class CCollider;
 END
 BEGIN(Client)
 class CTerrainObject :
@@ -55,6 +56,7 @@ private:
 	CShader* m_pShaderCom = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
+	CCollider* m_pColliderCom = {nullptr};
 
 public:
 	static CTerrainObject* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

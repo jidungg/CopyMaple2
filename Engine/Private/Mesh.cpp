@@ -1,4 +1,5 @@
 #include "..\Public\Mesh.h"
+#include "GameInstance.h"
 
 CMesh::CMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CVIBuffer{ pDevice, pContext }
@@ -42,6 +43,15 @@ HRESULT CMesh::Initialize_Prototype(const aiMesh* pAIMesh)
 		memcpy(&pVertices[i].vNormal, &pAIMesh->mNormals[i], sizeof(_float3));
 		memcpy(&pVertices[i].vTexcoord, &pAIMesh->mTextureCoords[0][i], sizeof(_float2));
 		memcpy(&pVertices[i].vTangent, &pAIMesh->mTangents[i], sizeof(_float3));
+	}
+	XMMATRIX mat = m_pGameInstance->Get_TransformMatrix(CPipeLine::D3DTS_GLOBAL);
+	for (size_t i = 0; i < m_iNumVertices; i++)
+	{
+		XMVECTOR vPos = XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), mat);
+		XMVECTOR vNormal = XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vPosition), mat);
+
+		XMStoreFloat3(&pVertices[i].vPosition, vPos);
+		XMStoreFloat3(&pVertices[i].vNormal, XMVector3Normalize( vNormal));
 	}
 
 	ZeroMemory(&m_SubResourceDesc, sizeof m_SubResourceDesc);

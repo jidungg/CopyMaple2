@@ -118,6 +118,8 @@
     <ClInclude Include="..\Public\JsonParser.h">
       <Filter>00.MainApp</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Builder.h" />
+    <ClInclude Include="..\Public\ModelObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -184,6 +186,8 @@
     <ClCompile Include="JsonParser.cpp">
       <Filter>00.MainApp</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Builder.cpp" />
+    <ClCompile Include="..\Private\ModelObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

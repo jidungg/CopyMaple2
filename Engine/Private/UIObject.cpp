@@ -147,9 +147,9 @@ void CUIObject::On_MouseExit()
 {
 }
 
-bool CUIObject::Consume_MouseLButtonDown()
+void CUIObject::On_MouseLButtonDown()
 {
-	return false;
+	return ;
 }
 
 void CUIObject::On_MouseLButtonUp()
@@ -157,9 +157,9 @@ void CUIObject::On_MouseLButtonUp()
 	return;
 }
 
-bool CUIObject::Consume_MouseRButtonDown()
+void CUIObject::On_MouseRButtonDown()
 {
-	return false;
+	return ;
 }
 
 void CUIObject::On_MouseRButtonUp()
@@ -167,14 +167,14 @@ void CUIObject::On_MouseRButtonUp()
 	return;
 }
 
-bool CUIObject::Consume_MouseClick()
+void CUIObject::On_MouseClick()
 {
-	return false;
+	return ;
 }
 
-bool CUIObject::Consume_MouseRightClick()
+void CUIObject::On_MouseRightClick()
 {
-	return false;
+	return ;
 }
 
 bool CUIObject::Check_MouseOver(POINT fPos)

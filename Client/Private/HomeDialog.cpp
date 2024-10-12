@@ -44,9 +44,9 @@ void CHomeDialog::On_MouseExit()
 {
 }
 
-bool CHomeDialog::Consume_MouseLButtonDown()
+void CHomeDialog::On_MouseLButtonDown()
 {
-	return false;
+	return ;
 }
 
 void CHomeDialog::On_MouseLButtonUp()
@@ -54,9 +54,9 @@ void CHomeDialog::On_MouseLButtonUp()
 	return ;
 }
 
-bool CHomeDialog::Consume_MouseRButtonDown()
+void CHomeDialog::On_MouseRButtonDown()
 {
-	return false;
+	return ;
 }
 
 void CHomeDialog::On_MouseRButtonUp()
@@ -64,9 +64,9 @@ void CHomeDialog::On_MouseRButtonUp()
 	return ;
 }
 
-bool CHomeDialog::Consume_MouseClick()
+void CHomeDialog::On_MouseClick()
 {
-	return false;
+	return ;
 }
 
 HRESULT CHomeDialog::Ready_Childs()

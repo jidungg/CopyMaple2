@@ -21,6 +21,8 @@ public:
 	void Update(_float fTimeDelta);
 	void Late_Update(_float fTimeDelta);
 	void Clear(_uint iLevelIndex);
+	bool RayCast(const _wstring& strLayerTag, const Ray& tRay, RaycastHit* pOut);
+	bool RayCast(const Ray& tRay, RaycastHit* pOut);
 
 private:
 	_uint										m_iNumLevels = { 0 };

@@ -43,12 +43,12 @@ public:
 	virtual void On_MouseOver();
 	virtual void On_MouseEnter();
 	virtual void On_MouseExit();
-	virtual bool Consume_MouseLButtonDown();
+	virtual void On_MouseLButtonDown();
 	virtual void On_MouseLButtonUp();
-	virtual bool Consume_MouseRButtonDown();
+	virtual void On_MouseRButtonDown();
 	virtual void On_MouseRButtonUp();
-	virtual bool Consume_MouseClick();
-	virtual bool Consume_MouseRightClick();
+	virtual void On_MouseClick();
+	virtual void On_MouseRightClick();
 	bool Check_MouseOver(POINT fPos);
 
 	CUIObject* Find_FocusedUI(POINT fPos);

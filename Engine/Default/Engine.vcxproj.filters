@@ -200,6 +200,7 @@
       <Filter>01.Utility\04.Components</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Physics.h" />
+    <ClInclude Include="..\Public\MeshCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -305,6 +306,7 @@
       <Filter>01.Utility\04.Components</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Physics.cpp" />
+    <ClCompile Include="..\Private\MeshCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc" />

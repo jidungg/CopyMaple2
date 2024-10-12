@@ -10,7 +10,7 @@ class CUIButton :
 public:
 	enum BUTTON_STATE { BS_NORMAL, BS_HIGHLIGHTED, BS_PRESSED, BS_DISABLED };
 public:
-	typedef struct : public CUIPanel::PANEL_DESC
+	typedef struct ButtonDesc: public CUIPanel::PANEL_DESC
 	{
 
 	}BUTTON_DESC;
@@ -30,9 +30,9 @@ public:
 	virtual void On_MouseOver();
 	virtual void On_MouseEnter();
 	virtual void On_MouseExit();
-	virtual bool Consume_MouseLButtonDown();
+	virtual void On_MouseLButtonDown();
 	virtual void On_MouseLButtonUp();
-	virtual bool Consume_MouseClick();
+	virtual void On_MouseClick();
 
 protected:
 

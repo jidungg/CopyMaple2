@@ -99,6 +99,19 @@ void CObject_Manager::Clear(_uint iLevelIndex)
 	m_pLayers[iLevelIndex].clear();
 }
 
+bool CObject_Manager::RayCast(const _wstring& strLayerTag, const Ray& tRay, RaycastHit* pOut)
+{
+	return m_pLayers[m_pGameInstance->Get_CurrentLevelID()][strLayerTag]->Check_Collision(tRay, pOut);
+}
+
+bool CObject_Manager::RayCast(const Ray& tRay, RaycastHit* pOut)
+{
+	for (auto& Pair : m_pLayers[m_pGameInstance->Get_CurrentLevelID()])
+		if (Pair.second->Check_Collision(tRay, pOut))
+			return true;
+	return false;
+}
+
 CLayer * CObject_Manager::Find_Layer(_uint iLevelIndex, const _wstring & strLayerTag)
 {
 	if (iLevelIndex >= m_iNumLevels)

@@ -4,6 +4,7 @@
 
 BEGIN(Engine)
 class CMaterial;
+class CMesh;
 class ENGINE_DLL CModel final : public CComponent
 {
 public:
@@ -25,12 +26,13 @@ public:
 
 public:
 	_uint Get_NumMeshes() const {return m_iNumMeshes;}
+	CMesh* Get_Mesh(_uint iMeshIndex) const { return m_Meshes[iMeshIndex]; }
 private:
 	Assimp::Importer			m_Importer;
 	const aiScene* m_pAIScene = { nullptr };
 
 	_uint										m_iNumMeshes = { 0 };
-	vector<class CMesh*>		m_Meshes;
+	vector<CMesh*>		m_Meshes;
 
 	_uint												m_iNumMaterials = {};
 	vector<CMaterial*>						m_Materials;

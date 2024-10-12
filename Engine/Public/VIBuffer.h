@@ -21,7 +21,10 @@ public:
 
 public:
 	HRESULT Bind_BufferDesc();
-
+	ID3D11Buffer* Get_VertexBuffer() const { return m_pVB; }
+	ID3D11Buffer* Get_IndexBuffer() const { return m_pIB; }
+	_uint Get_VertexCount() const { return m_iNumVertices; }
+	_uint Get_IndexCount() const { return m_iNumIndices; }
 protected:
 	ID3D11Buffer*						m_pVB = { nullptr };	
 	ID3D11Buffer*						m_pIB = { nullptr };

@@ -55,7 +55,8 @@ bool CUIManager::Consume_MouseLButtonDown()
     {
 		m_pPressedUI = m_pFocusedUI;
         m_pPressedUI->Increase_Priority();
-        return m_pPressedUI->Consume_MouseLButtonDown();
+        m_pPressedUI->On_MouseLButtonDown();
+        return true;
     }
     else
     {
@@ -69,7 +70,10 @@ bool CUIManager::Consume_MouseLButtonUp()
 	bool bConsume = false;
 
     if (m_pPressedUI == m_pFocusedUI&& m_pFocusedUI != nullptr)
-        bConsume = bConsume || m_pPressedUI->Consume_MouseClick();
+    {
+        m_pPressedUI->On_MouseClick();
+        bConsume = true;
+    }
 	else if (m_pPressedUI != nullptr)
 		m_pPressedUI->On_MouseLButtonUp();
     for (auto& pUI : m_UIObjectList)
@@ -87,7 +91,8 @@ bool CUIManager::Consume_MouseRButtonDown()
     {
         m_pRightPressedUI = m_pFocusedUI;
         m_pRightPressedUI->Increase_Priority();
-        return m_pRightPressedUI->Consume_MouseRButtonDown();
+        m_pRightPressedUI->On_MouseRButtonDown();
+        return true;
     }
     else
     {
@@ -102,7 +107,10 @@ bool CUIManager::Consume_MouseRButtonUp()
     if (m_pFocusedUI != nullptr)
     {
         if (m_pRightPressedUI == m_pFocusedUI)
-            bConsume = bConsume || m_pRightPressedUI->Consume_MouseRightClick();
+        {
+            m_pRightPressedUI->On_MouseRightClick();
+            bConsume = true;
+        }
     }
     for (auto& pUI : m_UIObjectList)
     {

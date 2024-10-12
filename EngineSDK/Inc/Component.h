@@ -17,9 +17,10 @@ public:
 	virtual void Priority_Update(_float fTimeDelta) {};
 	virtual void Update(_float fTimeDelta) {};
 	virtual void Late_Update(_float fTimeDelta) {};
-	void Set_Owner(class CGameObject* pOwner) { m_pOwner = pOwner; }
 
 	bool Is_Active() { return m_bActive; }
+	void Set_Active(bool bValue) { m_bActive = bValue; }
+	void Set_Owner(class CGameObject* pOwner) { m_pOwner = pOwner; }
 protected:
 	ID3D11Device*					m_pDevice = { nullptr };
 	ID3D11DeviceContext*			m_pContext = { nullptr };

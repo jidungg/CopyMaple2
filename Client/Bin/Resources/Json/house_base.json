@@ -7,14 +7,6 @@
             "direction": 0,
             "data": 0,
             "iteration": 100
-        },
-        {
-            "type": 0,
-            "model": "he_ground_grass_a02",
-            "index": 100,
-            "direction": 0,
-            "data": 0,
-            "iteration": 2
         }
     ],
     "size": [

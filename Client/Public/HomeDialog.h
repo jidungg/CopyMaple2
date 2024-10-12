@@ -22,11 +22,11 @@ public:
 	virtual void On_MouseEnter();
 	virtual void MouseOver();
 	virtual void On_MouseExit();
-	virtual bool Consume_MouseLButtonDown();
+	virtual void On_MouseLButtonDown();
 	virtual void On_MouseLButtonUp();
-	virtual bool Consume_MouseRButtonDown();
+	virtual void On_MouseRButtonDown();
 	virtual void On_MouseRButtonUp();
-	virtual bool Consume_MouseClick();
+	virtual void On_MouseClick();
 private:
 	HRESULT Ready_Childs();
 

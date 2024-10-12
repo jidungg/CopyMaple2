@@ -10,6 +10,7 @@
 /* 4. 엔진에서 갱신이 필요한 모든 객체를 한곳에 모아서 갱신해 준다. */
 
 BEGIN(Engine)
+class CCollider;
 class ENGINE_DLL CGameInstance final : public CBase
 {
 	DECLARE_SINGLETON(CGameInstance)
@@ -35,7 +36,7 @@ public: /* For.Renderer */
 
 public: /* for.Level_Manager */
 	HRESULT Open_Level(_int iLevelIndex, class CLevel* pNewLevel);
-
+	_int Get_CurrentLevelID()const;
 public: /* For.Prototype_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const _wstring& strPrototypeTag, class CBase* pPrototype);
 	class CBase* Clone_Prototype(Engine::PROTOTYPE eType, _uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg = nullptr);
@@ -47,7 +48,8 @@ public: /* For.Prototype_Manager */
 public: /* For.Object_Manager */
 	HRESULT Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLevelIndex, const _wstring& strLayerTag, void* pArg = nullptr, CGameObject** pOut = nullptr);
 	HRESULT Add_GameObject_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, CGameObject* pObj);
-
+	bool RayCast(const _wstring& strLayerTag, const Ray& tRay, RaycastHit* pOut);
+	bool RayCast(const Ray& tRay, RaycastHit* pOut);
 
 public: /* For.PipeLine */
 	void Set_Transform(CPipeLine::D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix);
@@ -67,6 +69,10 @@ public://For UI Manager
 public: /* Light_Manager */
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
 	const LIGHT_DESC* Get_LightDesc(_uint iIndex) const;
+
+public://For Physics
+
+
 private:
 	class CGraphic_Device*				m_pGraphic_Device = { nullptr };
 	class CInput_Device*				m_pInput_Device = { nullptr };
@@ -79,7 +85,7 @@ private:
 	class CController*					m_pController = { nullptr };
 	class CUIManager*					m_pUIManager = { nullptr };
 	class CLight_Manager*				m_pLight_Manager = { nullptr };
-
+	class CPhysics*						m_pPhysics = { nullptr };
 public:
 	static void Release_Engine();
 

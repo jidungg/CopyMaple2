@@ -75,36 +75,41 @@ namespace Engine
 
 	typedef struct ENGINE_DLL Ray
 	{
-		Ray(const XMFLOAT4& vOrigin, const XMFLOAT4& vDirection)
-			: vOrigin(vOrigin), vDirection(vDirection) {}
-		Ray(const POINT& tScreenOrigin, const POINT& tScreenDest,  _uint  iWinX, _uint iWinY,  const XMFLOAT4X4& matView, const XMFLOAT4X4& matProj)
+		Ray(const XMFLOAT4& vOrigin, const XMFLOAT4& vDirection, _float fDist = 1)
+			: vOrigin(vOrigin), vDirection(vDirection), fDist(fDist) {}
+		Ray(const POINT& tScreenDest,  _uint  iWinX, _uint iWinY,  const XMFLOAT4X4& matView, const XMFLOAT4X4& matProj)
 			: vOrigin{ 0,0,0,1 }
 			,vDirection { 0,0,0,0 }
+			, fDist(-1)
 		{
 			float ndcX = tScreenDest.x/ (_float)iWinX *2 -1;
 			float ndcY = -tScreenDest.y / (_float)iWinY * 2 + 1;
 			XMVECTOR vNear = XMVectorSet(ndcX, ndcY, 0.f, 1.f);
 			XMVECTOR vFar = XMVectorSet(ndcX, ndcY, 1.f, 1.f);
 
-			XMMATRIX vInvView = XMMatrixInverse(nullptr, XMLoadFloat4x4(&matView));
-			XMMATRIX vInvViewProj = XMMatrixMultiply(vInvView, XMMatrixInverse(nullptr,XMLoadFloat4x4(&matProj)));
+			XMMATRIX invProjMatrix = XMMatrixInverse(nullptr, XMLoadFloat4x4( &matProj));
+			XMMATRIX invViewMatrix = XMMatrixInverse(nullptr, XMLoadFloat4x4(&matView));
+			vNear = XMVector3TransformCoord(vNear, invProjMatrix);
+			vFar = XMVector3TransformCoord(vFar, invProjMatrix);
+			vNear = XMVector3TransformCoord(vNear, invViewMatrix);
+			vFar = XMVector3TransformCoord(vFar, invViewMatrix);
 
-			XMStoreFloat4(&vOrigin, XMVector4Transform( XMLoadFloat4( &vOrigin), vInvView));
-			XMVECTOR vNearWorld =  XMVector4Transform(vNear, vInvViewProj);
-			XMVECTOR vFarWorld = XMVector4Transform(vFar, vInvViewProj);
-
-			XMStoreFloat4( &vDirection,
-				XMVector4Normalize(
-					vNearWorld
-					- vFarWorld
-				)
-			);
+			XMStoreFloat4(&vOrigin, vNear);
+			XMStoreFloat4(&vDirection, XMVector3Normalize( vFar-vNear));
 		}
 
 		XMFLOAT4		vOrigin;
 		XMFLOAT4		vDirection;
+		_float				fDist =1;
 	}RAY;
 
+	typedef struct ENGINE_DLL RaycastHit
+	{
+		XMFLOAT4		vPoint;
+		XMFLOAT4		vNormal;
+		class CCollider* pCollider = nullptr;
+
+	}RAYCASTHIT;
 }
 
 

@@ -10,6 +10,7 @@
 #include "Controller.h"
 #include "UIManager.h"
 #include "Light_Manager.h"
+#include "Physics.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -36,8 +37,7 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	m_pUIManager = CUIManager::Create();
 	if (nullptr == m_pUIManager)
 		return E_FAIL;
-	m_pController = CController::Create(m_pInput_Device, m_pUIManager,
-		EngineDesc.iViewportWidth,EngineDesc.iViewportHeight,m_pPipeLine);
+	m_pController = CController::Create(m_pInput_Device, m_pUIManager);
 	if (nullptr == m_pController)
 		return E_FAIL;
 
@@ -62,7 +62,9 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pTimer_Manager)
 		return E_FAIL;
 
-
+	m_pPhysics = CPhysics::Create(this, EngineDesc.iViewportWidth, EngineDesc.iViewportHeight);
+	if (nullptr == m_pPhysics)
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -153,6 +155,14 @@ HRESULT CGameInstance::Open_Level(_int iLevelIndex, CLevel * pNewLevel)
 	return m_pLevel_Manager->Open_Level(iLevelIndex, pNewLevel);
 }
 
+_int CGameInstance::Get_CurrentLevelID() const
+{
+	if (nullptr == m_pLevel_Manager)
+		return -1;
+
+	return m_pLevel_Manager->Get_CurrentLevelID();
+}
+
 HRESULT CGameInstance::Add_Prototype(_uint iLevelIndex, const _wstring & strPrototypeTag, CBase * pPrototype)
 {
 	if (nullptr == m_pPrototype_Manager)
@@ -217,6 +227,22 @@ HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iLevelIndex, const _wstring&
 		return E_FAIL;
 
 	return m_pObject_Manager->Add_GameObject_ToLayer(iLevelIndex, strLayerTag, pObj);
+}
+
+bool CGameInstance::RayCast(const _wstring& strLayerTag, const Ray& tRay, RaycastHit* pOut)
+{
+	if (nullptr == m_pObject_Manager)
+		return false;
+
+	return m_pObject_Manager->RayCast(strLayerTag, tRay, pOut);
+}
+
+bool CGameInstance::RayCast(const Ray& tRay, RaycastHit* pOut)
+{
+	if (nullptr == m_pObject_Manager)
+		return false;
+
+	return m_pObject_Manager->RayCast(tRay, pOut);
 }
 
 void CGameInstance::Set_Transform(CPipeLine::D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix)

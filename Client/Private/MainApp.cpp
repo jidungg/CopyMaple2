@@ -27,7 +27,9 @@ HRESULT CMainApp::Initialize()
 
 	if (FAILED(m_pGameInstance->Initialize_Engine(EngineDesc, &m_pDevice, &m_pContext)))
 		return E_FAIL;
-
+	XMMATRIX matGlobal = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
+	matGlobal = matGlobal * XMMatrixRotationY(XMConvertToRadians(180.f));
+	m_pGameInstance->Set_Transform(CPipeLine::D3DTS_GLOBAL, matGlobal);
 	if (FAILED(SetUp_StartLevel(LEVEL_LOGO)))
 		return E_FAIL;
 

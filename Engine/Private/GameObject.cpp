@@ -1,7 +1,7 @@
 #include "..\Public\GameObject.h"
 #include "GameInstance.h"
 #include "Transform.h"
-
+#include "Collider.h"
 _uint CGameObject::m_iObjCount = 0;
 CGameObject::CGameObject(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -121,6 +121,26 @@ CComponent * CGameObject::Find_Component(const _wstring & strComponentTag)
 		return nullptr;
 
 	return iter->second;
+}
+
+bool CGameObject::Check_Collision(const Ray& tRay, RaycastHit* pOut)
+{
+	CCollider* pCollider = nullptr;
+	pCollider = static_cast<CCollider*>(Find_Component(CCollider::m_szCompTag));
+	if (pCollider != nullptr && pCollider->Is_Active())
+	{
+		if (true == pCollider->Check_Collision(tRay, pOut))
+			return true;
+	}
+
+	for (auto& child : m_pChilds)
+	{
+		if (child->Is_Active() == false || child->Is_Dead())
+			continue;
+		if (child->Check_Collision(tRay, pOut))
+			return true;
+	}
+	return false;
 }
 
 HRESULT CGameObject::Add_Component(_uint iPrototypeLevelIndex, const _wstring & strPrototypeTag, const _wstring & strComponentTag, CComponent** ppOut, void * pArg)

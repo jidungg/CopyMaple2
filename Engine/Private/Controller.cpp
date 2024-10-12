@@ -4,12 +4,9 @@
 #include "Physics.h"
 #include "PipeLine.h"
 
-CController::CController(CInput_Device* pInput, CUIManager* pUIManager, _uint iWinSizeX, _uint iWinSizeY, CPipeLine* pPipeLine)
+CController::CController(CInput_Device* pInput, CUIManager* pUIManager)
 	: m_pInput_Device(pInput)
 	, m_pUIManager(pUIManager)
-	,m_iWinSizeX(iWinSizeX),
-	m_iWinSizeY(iWinSizeY)
-	, m_pPipeLine(pPipeLine)
 {
 	Safe_AddRef(m_pInput_Device);
 	//Safe_AddRef(m_pUIManager);
@@ -31,11 +28,7 @@ void CController::Update()
 	{
 		if (false == m_pUIManager->Consume_MouseLButtonUp())
 		{
-			//TODO : Ray 만들어서  
-			Ray ray{ POINT{0,0}, tPosition, m_iWinSizeX, m_iWinSizeY, 
-				m_pPipeLine->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW),
-				m_pPipeLine->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ)};
- 			_float fDist = 0.f;
+			//TODO: UI에서 처리되지 않은 입력 처리
 		}
 	}
 
@@ -47,9 +40,9 @@ void CController::Update()
 }
 
 
-CController* CController::Create(CInput_Device* pInput, CUIManager* pUIManager, _uint iWinSizeX, _uint iWInSizeY, CPipeLine* pPipeLine)
+CController* CController::Create(CInput_Device* pInput, CUIManager* pUIManager)
 {
-	CController* pInstance = new CController(pInput, pUIManager, iWinSizeX, iWInSizeY,pPipeLine);
+	CController* pInstance = new CController(pInput, pUIManager);
 
 	if (FAILED(pInstance->Initialize()))
 	{

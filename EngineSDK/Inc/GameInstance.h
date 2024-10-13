@@ -11,6 +11,7 @@
 
 BEGIN(Engine)
 class CCollider;
+class CPawn;
 class ENGINE_DLL CGameInstance final : public CBase
 {
 	DECLARE_SINGLETON(CGameInstance)
@@ -70,8 +71,8 @@ public: /* Light_Manager */
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
 	const LIGHT_DESC* Get_LightDesc(_uint iIndex) const;
 
-public://For Physics
-
+public://For Controller
+	void Possess(CPawn* pPawn);
 
 private:
 	class CGraphic_Device*				m_pGraphic_Device = { nullptr };

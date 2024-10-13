@@ -1,6 +1,6 @@
 #pragma once
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "Pawn.h"
 
 
 BEGIN(Engine)
@@ -14,10 +14,18 @@ END
 
 BEGIN(Client)
 class CModelObject;
+class CItem;
+class CCubeTerrain;
 class CBuilder :
-    public CGameObject
+    public CPawn
 {
 public:
+	typedef struct tagBuilderDesc : public CPawn::GAMEOBJECT_DESC
+	{
+		CCubeTerrain* pCubeTerrain = nullptr;
+
+	}BUILDER_DESC;
+
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_Builder";
 protected:
 	explicit CBuilder(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -28,11 +36,25 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(_float fTimeDelta) override;
+	virtual void Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta)  override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render();
 
+	void Set_BuildItem(const _tchar* szModelTag);
+	void Move_To(const _vector& vPos);
+
 private:
-	CModelObject* m_pBird = nullptr;
+	CCubeTerrain* m_pCubeTerrain = { nullptr };
+
+	CModelObject* m_pBird = { nullptr };
+	XMVECTOR m_vBirdOffset = XMVectorSet(0, 1, 0, 0);
+
+	CModelObject* m_pPreview = { nullptr };
+	XMVECTOR m_vPreviewOffset = XMVectorSet(0, 0.5f, 0, 0);
+	_tchar m_szBuildItemTag[MAX_PATH] = L"";
+	DIRECTION m_eBuildItemDir = DIR_WS;
+	int m_iBuildData = 0;
+	XMVECTOR m_vMoveDir = XMVectorSet(0, 0, 0, 0);
 public:
 	static CBuilder* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

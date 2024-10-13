@@ -1,9 +1,15 @@
-﻿  Builder.cpp
+﻿  ModelObject.cpp
 D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\MeshCollider.h(7,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CMeshCollider'의 기본으로 사용되었습니다.
-  (소스 파일 '/Private/Builder.cpp'을(를) 컴파일하는 중)
+  (소스 파일 '/Private/ModelObject.cpp'을(를) 컴파일하는 중)
       D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider.h(4,7):
       'Engine::CCollider' 선언을 참조하십시오.
       D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\MeshCollider.h(6,18):
       'Engine::CMeshCollider' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\ModelObject.cpp(73,13): warning C4267: '인수': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Private/ModelObject.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\ModelObject.cpp(76,29): warning C4267: '인수': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Private/ModelObject.cpp'을(를) 컴파일하는 중)
   
   Client.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Client.exe

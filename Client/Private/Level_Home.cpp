@@ -11,6 +11,8 @@
 #include "CubeTerrain.h"
 #include "Camera_Trace.h"
 #include "Player.h"
+#include "Collider.h"
+#include "TerrainObject.h"
 
 CLevel_Home::CLevel_Home(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel(pDevice, pContext)
@@ -22,6 +24,9 @@ CLevel_Home::CLevel_Home(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 HRESULT CLevel_Home::Initialize()
 {
+	//if(FAILED(Ready_Lights()))
+	//	return E_FAIL;
+
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
@@ -29,15 +34,17 @@ HRESULT CLevel_Home::Initialize()
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
-	CGameObject::GameObjectDesc BuilderDesc{};
+	CBuilder::BUILDER_DESC BuilderDesc{};
 	BuilderDesc.fRotationPerSec = 10;
-	BuilderDesc.fSpeedPerSec = 0.5;
+	BuilderDesc.fSpeedPerSec = 4;
+	BuilderDesc.pCubeTerrain = m_pCubeTerrain;
 	m_pBuilder = static_cast<CBuilder*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_HOME, CBuilder::m_szProtoTag, &BuilderDesc));
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, TEXT("Layer_Builder"), m_pBuilder)))
 		return E_FAIL;
 	m_pBuilder->Set_Active(false);
+	m_pBuilder->Set_BuildItem(L"he_ground_grass_a01.fbx");
 
-	return S_OK;
+return S_OK;
 }
 
 void CLevel_Home::Update(_float fTimeDelta)
@@ -49,9 +56,19 @@ void CLevel_Home::Update(_float fTimeDelta)
 		m_bBuildMode = !m_bBuildMode;
 		m_pBuilder->Set_Active(m_bBuildMode);
 		if(m_bBuildMode)
+		{
 			m_pCamera->Set_Target(m_pBuilder);
+			m_pGameInstance->Possess(m_pBuilder);
+			XMVECTOR vPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+			_float4 fPos;
+			XMStoreFloat4(&fPos, vPos);
+			m_pBuilder->Set_Position(XMLoadFloat4(&m_pCubeTerrain->IndexToPos(m_pCubeTerrain->PosToIndex(fPos))));
+		}
 		else
+		{
 			m_pCamera->Set_Target(m_pPlayer);
+			m_pGameInstance->Possess(m_pPlayer);
+		}
 	}
 	if (m_bBuildMode)
 	{
@@ -66,10 +83,22 @@ void CLevel_Home::Update(_float fTimeDelta)
 			bool bHit = m_pGameInstance->RayCast(tRay, &tHitInfo);
 			if (bHit)
 			{
+				CTerrainObject* pObj = dynamic_cast<CTerrainObject*>( tHitInfo.pCollider->Get_Owner());
+				if (pObj == nullptr)
+					return;
+				_uint iIndex = pObj->Get_Index();
+				XMUINT3 iSize = m_pCubeTerrain->Get_Size();
+				iIndex += iSize.x * iSize.z;
 
+				m_pBuilder->Set_Position(XMLoadFloat4( &m_pCubeTerrain->IndexToPos(iIndex)));
 			}
 
 		}
+
+	}
+	else
+	{
+
 	}
 
 }
@@ -122,6 +151,8 @@ HRESULT CLevel_Home::Ready_Layer_Player(const _wstring& strLayerTag)
 	m_pPlayer = static_cast<CPlayer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_Player"), &PlayerDesc));
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, strLayerTag, m_pPlayer)))
 		return E_FAIL;
+	m_pGameInstance->Possess(m_pPlayer);
+	m_pPlayer->Set_Position(XMLoadFloat4(&m_pCubeTerrain->IndexToPos(100)));
 
 	CCamera_Trace::TRACECAMERA_DESC		CamDesc{};
 
@@ -139,6 +170,23 @@ HRESULT CLevel_Home::Ready_Layer_Player(const _wstring& strLayerTag)
 	m_pCamera = static_cast<CCamera_Trace*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_Camera_Trace"), &CamDesc));
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, strLayerTag, m_pCamera)))
 		return E_FAIL;
+	return S_OK;
+}
+HRESULT CLevel_Home::Ready_Lights()
+{
+	LIGHT_DESC			LightDesc{};
+
+	ZeroMemory(&LightDesc, sizeof LightDesc);
+
+	LightDesc.eType = LIGHT_DESC::TYPE_DIRECTOINAL;
+	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
+	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
+
 	return S_OK;
 }
 

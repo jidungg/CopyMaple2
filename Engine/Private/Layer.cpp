@@ -19,20 +19,23 @@ HRESULT CLayer::Add_GameObject(CGameObject * pGameObject)
 void CLayer::Priority_Update(_float fTimeDelta)
 {
 	for (auto& pGameObject : m_GameObjects)
-		pGameObject->Priority_Update(fTimeDelta);
+		if (pGameObject->Is_Active())
+			pGameObject->Priority_Update(fTimeDelta);
 
 }
 
 void CLayer::Update(_float fTimeDelta)
 {
 	for (auto& pGameObject : m_GameObjects)
-		pGameObject->Update(fTimeDelta);
+		if (pGameObject->Is_Active())
+			pGameObject->Update(fTimeDelta);
 }
 
 void CLayer::Late_Update(_float fTimeDelta)
 {
 	for (auto& pGameObject : m_GameObjects)
-		pGameObject->Late_Update(fTimeDelta);
+		if (pGameObject->Is_Active())
+			pGameObject->Late_Update(fTimeDelta);
 }
 
 bool CLayer::Check_Collision(const Ray& tRay, RaycastHit* pOut)

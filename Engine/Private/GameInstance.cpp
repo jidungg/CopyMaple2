@@ -73,7 +73,7 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 {
 	m_pInput_Device->Update_InputDev();
 	m_pUIManager->Update();
-	m_pController->Update();
+	m_pController->Update(fTimeDelta);
 
 	m_pObject_Manager->Priority_Update(fTimeDelta);
 	m_pObject_Manager->Update(fTimeDelta);
@@ -113,6 +113,7 @@ void CGameInstance::Clear(_int iLevelID)
 
 	m_pPrototype_Manager->Clear(iLevelID);
 	m_pUIManager->Clear();
+	//m_pLight_Manager->Clear();
 }
 
 _float CGameInstance::Get_TimeDelta(const _wstring & strTimerTag)
@@ -315,6 +316,14 @@ const LIGHT_DESC* CGameInstance::Get_LightDesc(_uint iIndex) const
 		return nullptr;
 
 	return m_pLight_Manager->Get_LightDesc(iIndex);
+}
+
+void CGameInstance::Possess(CPawn* pPawn)
+{
+	if (nullptr == m_pController)
+		return;
+
+	m_pController->Possess(pPawn);
 }
 
 

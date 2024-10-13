@@ -201,6 +201,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Physics.h" />
     <ClInclude Include="..\Public\MeshCollider.h" />
+    <ClInclude Include="..\Public\Pawn.h">
+      <Filter>01.Utility\03.Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -307,6 +310,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Physics.cpp" />
     <ClCompile Include="..\Private\MeshCollider.cpp" />
+    <ClCompile Include="..\Private\Pawn.cpp">
+      <Filter>01.Utility\03.Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc" />

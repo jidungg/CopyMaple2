@@ -77,12 +77,11 @@ bool CMeshCollider::Check_Collision(const Ray& tRay, RaycastHit* pOut)
 	XMMATRIX matWorld =m_pOwner->Get_Transform()->Get_WorldMatrix();
 	for (size_t indexCount = 0; indexCount < m_iNumIndexes; )
 	{
-		XMVECTOR v0 = XMVector4Transform(XMLoadFloat3(&vertices[indices[indexCount++]].vPosition),matWorld);
-		XMVECTOR v1 = XMVector4Transform(XMLoadFloat3(&vertices[indices[indexCount++]].vPosition),matWorld);
-		XMVECTOR v2 = XMVector4Transform(XMLoadFloat3(&vertices[indices[indexCount++]].vPosition),matWorld);
+		XMVECTOR v0 = XMVector3TransformCoord(XMLoadFloat3(&vertices[indices[indexCount++]].vPosition),matWorld);
+		XMVECTOR v1 = XMVector3TransformCoord(XMLoadFloat3(&vertices[indices[indexCount++]].vPosition),matWorld);
+		XMVECTOR v2 = XMVector3TransformCoord(XMLoadFloat3(&vertices[indices[indexCount++]].vPosition),matWorld);
 		if(TriangleTests::Intersects(XMLoadFloat4(&tRay.vOrigin),XMLoadFloat4(&tRay.vDirection),v0, v1, v2, fDist))
 		{
-
 			if (fDist < (tRay.fDist < 0 ? 9999 : tRay.fDist))
 			{
 				pOut->pCollider = this;

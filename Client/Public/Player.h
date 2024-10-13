@@ -1,6 +1,6 @@
 #pragma once
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "Pawn.h"
 
 BEGIN(Engine)
 class CCamera_Trace;
@@ -11,7 +11,7 @@ END
 
 BEGIN(Client)
 class CPlayer :
-	public CGameObject
+	public CPawn
 {
 public:
 	typedef struct : public CGameObject::GAMEOBJECT_DESC
@@ -29,7 +29,7 @@ public:
 	virtual HRESULT Initialize(void* pArg);
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
-
+	virtual void Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta) override;
 private:
 
 

@@ -177,6 +177,7 @@
     <ClInclude Include="..\Public\HomeDialog.h" />
     <ClInclude Include="..\Public\Item.h" />
     <ClInclude Include="..\Public\JsonParser.h" />
+    <ClInclude Include="..\Public\MyTransform.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\TerrainObject.h" />
     <ClInclude Include="..\Public\UIItemIndicator.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="..\Public\CubeTerrain.h" />
     <ClInclude Include="..\Public\UIButton.h" />
     <ClInclude Include="..\Public\UIPanel.h" />
+    <ClInclude Include="Client_Utility.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -210,6 +212,7 @@
     <ClCompile Include="..\Private\Level_Logo.cpp" />
     <ClCompile Include="..\private\Loader.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
+    <ClCompile Include="..\Private\MyTransform.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\CubeTerrain.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
@@ -218,6 +221,7 @@
     <ClCompile Include="..\Private\UIPanel.cpp" />
     <ClCompile Include="..\Public\UIItemIndicator.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Client_Utility.cpp" />
     <ClCompile Include="JsonParser.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

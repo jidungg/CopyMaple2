@@ -6,14 +6,17 @@
 #include "Model.h"
 #include "MeshCollider.h"
 #include "ModelObject.h"
+#include "Client_Utility.h"
+#include "CubeTerrain.h"
+#include "TerrainObject.h"
 
 CBuilder::CBuilder(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject(pDevice, pContext)
+	: CPawn(pDevice, pContext)
 {
 }
 
 CBuilder::CBuilder(const CBuilder& Prototype)
-	: CGameObject(Prototype)
+	: CPawn(Prototype)
 {
 
 }
@@ -28,27 +31,100 @@ HRESULT CBuilder::Initialize(void* pArg)
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
+	BUILDER_DESC* pBulderDesc = static_cast<BUILDER_DESC*>(pArg);
+	m_pCubeTerrain = pBulderDesc->pCubeTerrain;
 
-	CModelObject::MODELOBJ_DESC pDesc;
-	pDesc.eModelProtoLevelID = LEVEL_HOME;
-	pDesc.wstrModelProtoName = L"Prototype_Model_ChocoDuckyBall";
-	pDesc.eShaderProtoLevelID = LEVEL_LOADING;
-	pDesc.wstrShaderProtoName = L"Prototype_Component_Shader_VtxMesh";
-	m_pBird = static_cast<CModelObject*>( m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &pDesc));
+	//DuckyBall
+	CModelObject::MODELOBJ_DESC pModelDesc;
+	pModelDesc.eModelProtoLevelID = LEVEL_HOME;
+	lstrcpy(pModelDesc.wstrModelProtoName , L"Prototype_Model_ChocoDuckyBall");
+	pModelDesc.eShaderProtoLevelID = LEVEL_LOADING;
+	lstrcpy(pModelDesc.wstrShaderProtoName , L"Prototype_Component_Shader_VtxMesh");
+	m_pBird = static_cast<CModelObject*>( m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &pModelDesc));
 	Add_Child(m_pBird);
-	m_pBird->Get_Transform()->Set_State(CTransform::STATE_POSITION, XMVectorSet(0,2,0,1));
+
+	lstrcpy(pModelDesc.wstrModelProtoName , L"Prototype_Model_EmptyModel");
+	m_pPreview = static_cast<CModelObject*>( m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &pModelDesc));
+	Add_Child(m_pPreview);
+	m_pPreview->Get_Transform()->Scaling(0.5f,0.5f,0.5f);
+
 	return S_OK;
 }
 
 void CBuilder::Update(_float fTimeDelta)
 {
-	
+	XMVECTOR vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	XMVECTOR vBirdPos =  vPos + m_vBirdOffset;
+	m_pBird->Get_Transform()->Set_State(CTransform::STATE_POSITION, vBirdPos);
+
+	XMVECTOR vPreviewPos = vPos + m_vPreviewOffset;
+	m_pPreview->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPreviewPos);
+	__super::Update(fTimeDelta);
+}
+
+void CBuilder::Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta)
+{
+
+	if (eKey == KEY::RIGHT && eKeyState == KEY_STATE::PRESSING)
+		m_vMoveDir += Get_Direction_Vector(DIR_E);
+	if (eKey == KEY::UP && eKeyState == KEY_STATE::PRESSING)
+		m_vMoveDir += Get_Direction_Vector(DIR_N);
+	if (eKey == KEY::DOWN && eKeyState == KEY_STATE::PRESSING)
+		m_vMoveDir += Get_Direction_Vector(DIR_S);
+	if (eKey == KEY::LEFT && eKeyState == KEY_STATE::PRESSING)
+		m_vMoveDir += Get_Direction_Vector(DIR_W);
+	if (eKey == KEY::W && eKeyState == KEY_STATE::PRESSING)
+		m_vMoveDir += Get_Direction_Vector(DIR_U);
+	if (eKey == KEY::S && eKeyState == KEY_STATE::PRESSING)
+		m_vMoveDir += Get_Direction_Vector(DIR_D);
+
+
+
+
+	if (eKey == KEY::R && eKeyState == KEY_STATE::DOWN)//회전
+	{
+		_float4 pos;
+		XMStoreFloat4(&pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		_uint index = m_pCubeTerrain->PosToIndex(pos);
+		CTerrainObject* pTerrObj  = m_pCubeTerrain->Get_TerrainObject(index);
+		if (pTerrObj)
+			pTerrObj->Rotate();
+		else
+			m_pPreview->Rotate();
+	}
+	if (eKey == KEY::E && eKeyState == KEY_STATE::DOWN) // 회수
+	{
+	}
+	if (eKey == KEY::SPACE && eKeyState == KEY_STATE::DOWN) // 설치
+	{
+		CTerrainObject::TERRAINOBJ_DESC desc;
+		desc.eType = TERRAIN_OBJ_TYPE::BLOCK;
+		lstrcpy( desc.wstrModelProtoName , m_szBuildItemTag);
+		desc.eModelProtoLevelID = LEVEL_LOADING;
+		lstrcpy(desc.wstrShaderProtoName, TEXT("Prototype_Component_Shader_VtxMesh"));
+		desc.eShaderProtoLevelID = LEVEL_LOADING;
+		desc.direction = m_eBuildItemDir;
+		desc.data = m_iBuildData;
+		_float4 pos;
+		XMStoreFloat4(&pos,m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		desc.index = m_pCubeTerrain->PosToIndex(pos);
+		desc.pos = m_pCubeTerrain->IndexToPos(desc.index);
+		 
+		m_pCubeTerrain->Add_TerrainObject(desc);
+	}
 }
 
 void CBuilder::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	if (false == XMVector4Equal(m_vMoveDir, XMVectorSet(0, 0, 0, 0)))
+	{
+		m_pTransformCom->Go_Direction(m_vMoveDir, fTimeDelta);
+
+		m_pBird->Get_Transform()->LookToward(XMVectorSetY( m_vMoveDir,0));
+	}
+	m_vMoveDir = XMVectorSet(0, 0, 0, 0);
 }
 
 HRESULT CBuilder::Render()
@@ -60,6 +136,19 @@ HRESULT CBuilder::Render()
 	}
 	return S_OK;
 }
+
+void CBuilder::Set_BuildItem(const _tchar* szModelTag)
+{
+	lstrcpy(m_szBuildItemTag, szModelTag);
+	CModel* pModel = static_cast<CModel*>( m_pGameInstance->Clone_Proto_Component_Stock(szModelTag));
+	m_pPreview->ReplaceModel(pModel);
+}
+
+void CBuilder::Move_To(const _vector& vPos)
+{
+}
+
+
 
 
 CBuilder* CBuilder::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

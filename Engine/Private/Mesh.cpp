@@ -48,7 +48,7 @@ HRESULT CMesh::Initialize_Prototype(const aiMesh* pAIMesh)
 	for (size_t i = 0; i < m_iNumVertices; i++)
 	{
 		XMVECTOR vPos = XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), mat);
-		XMVECTOR vNormal = XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vPosition), mat);
+		XMVECTOR vNormal = XMVector3TransformNormal(XMLoadFloat3(&pVertices[i].vNormal), mat);
 
 		XMStoreFloat3(&pVertices[i].vPosition, vPos);
 		XMStoreFloat3(&pVertices[i].vNormal, XMVector3Normalize( vNormal));

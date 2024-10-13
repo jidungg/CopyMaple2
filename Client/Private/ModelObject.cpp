@@ -5,6 +5,7 @@
 #include "Mesh.h"
 #include "Model.h"
 #include "MeshCollider.h"
+#include "Client_Utility.h"
 
 CModelObject::CModelObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject(pDevice, pContext)
@@ -30,14 +31,21 @@ HRESULT CModelObject::Initialize(void* pArg)
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
-    if (FAILED(Ready_Components((MODELOBJ_DESC*)pArg)))
+    if (FAILED(Ready_Components(pArg)))
         return E_FAIL;
 
     return S_OK;
 }
 
-HRESULT CModelObject::Ready_Components(MODELOBJ_DESC* pDesc)
+void CModelObject::Update(_float fTimeDelta)
 {
+    m_pTransformCom->TurnToward(Get_Direction_Vector(m_eDestDirection), fTimeDelta);
+	__super::Update(fTimeDelta);
+}
+
+HRESULT CModelObject::Ready_Components(void* pArg)
+{
+    MODELOBJ_DESC* pDesc = (MODELOBJ_DESC*)pArg;
     /* Com_Shader */
     if (FAILED(Add_Component(pDesc->eShaderProtoLevelID, pDesc->wstrShaderProtoName,
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
@@ -73,6 +81,19 @@ HRESULT CModelObject::Render()
         child->Render();
 
     return S_OK;
+}
+
+void CModelObject::ReplaceModel(CModel* pModel)
+{
+	Safe_Release(m_pModelCom);
+	m_pModelCom = pModel;
+	Safe_AddRef(m_pModelCom);
+}
+
+void CModelObject::Rotate()
+{
+	m_eDestDirection = (DIRECTION)(((_uint)m_eDestDirection + 1) % (_uint)DIRECTION::XMZP);
+
 }
 
 

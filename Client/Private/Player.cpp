@@ -1,13 +1,14 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "Client_Utility.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject(pDevice, pContext)
+	: CPawn(pDevice, pContext)
 {
 }
 
 CPlayer::CPlayer(const CPlayer& Prototype)
-	: CGameObject(Prototype)
+	: CPawn(Prototype)
 {
 }
 
@@ -32,20 +33,29 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 void CPlayer::Update(_float fTimeDelta)
 {
-	if (GetKeyState(VK_RIGHT) & 0x8000)
-		m_pTransformCom->Go_Direction(XMVectorSet(1.f, 0.f, 0.f, 0.f), fTimeDelta);
-	if (GetKeyState(VK_LEFT) & 0x8000)
-		m_pTransformCom->Go_Direction(XMVectorSet(-1.f, 0.f, 0.f, 0.f), fTimeDelta);
-	if (GetKeyState(VK_UP) & 0x8000)
-		m_pTransformCom->Go_Direction(XMVectorSet(0.f, 0.f, 1.f, 0.f), fTimeDelta);
-	if (GetKeyState(VK_DOWN) & 0x8000)
-		m_pTransformCom->Go_Direction(XMVectorSet(0.f, 0.f, -1.f, 0.f), fTimeDelta);
+
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 }
+
+void CPlayer::Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta)
+{
+	XMVECTOR vDir = XMVectorSet(0, 0, 0, 0);
+
+	if (eKey == KEY::RIGHT && eKeyState == KEY_STATE::PRESSING)
+		vDir += Get_Direction_Vector(DIR_E);
+	if (eKey == KEY::UP && eKeyState == KEY_STATE::PRESSING)
+		vDir += Get_Direction_Vector(DIR_N);
+	if (eKey == KEY::DOWN && eKeyState == KEY_STATE::PRESSING)
+		vDir += Get_Direction_Vector(DIR_S);
+	if (eKey == KEY::LEFT && eKeyState == KEY_STATE::PRESSING)
+		vDir += Get_Direction_Vector(DIR_W);
+	m_pTransformCom->Go_Direction(vDir, fTimeDelta);
+}
+
 
 
 CPlayer* CPlayer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

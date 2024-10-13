@@ -14,7 +14,7 @@ public:
 public:
 	HRESULT Initialize();
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
-
+	void Clear();
 private:
 	ID3D11Device* m_pDevice = { nullptr };
 	ID3D11DeviceContext* m_pContext = { nullptr };

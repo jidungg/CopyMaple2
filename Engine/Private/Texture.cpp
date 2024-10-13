@@ -82,7 +82,7 @@ HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, aiMaterial* pAIMa
 
 		_tchar		szPerfectPath[MAX_PATH] = TEXT("");
 		MultiByteToWideChar(CP_ACP, 0, szFullPath, strlen(szFullPath), szPerfectPath, MAX_PATH);
-
+		
 		ID3D11ShaderResourceView* pSRV = { nullptr };
 		HRESULT		hr = {};
 		if (false == strcmp(szExt, ".dds"))

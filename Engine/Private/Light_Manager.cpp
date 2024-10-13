@@ -13,6 +13,8 @@ CLight_Manager::CLight_Manager(ID3D11Device* pDevice, ID3D11DeviceContext* pCont
 
 const LIGHT_DESC* CLight_Manager::Get_LightDesc(_uint iIndex) const
 {
+	if (iIndex >= m_Lights.size())
+		return nullptr;
 	auto	iter = m_Lights.begin();
 
 	for (size_t i = 0; i < iIndex; i++)
@@ -38,6 +40,14 @@ HRESULT CLight_Manager::Add_Light(const LIGHT_DESC& LightDesc)
 	return S_OK;
 }
 
+void CLight_Manager::Clear()
+{
+	for (auto& pLight : m_Lights)
+		Safe_Release(pLight);
+
+	m_Lights.clear();
+}
+
 CLight_Manager* CLight_Manager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CLight_Manager* pInstance = new CLight_Manager(pDevice, pContext);
@@ -56,10 +66,7 @@ void CLight_Manager::Free()
 {
 	__super::Free();
 
-	for (auto& pLight : m_Lights)
-		Safe_Release(pLight);
-
-	m_Lights.clear();
+	Clear();
 
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);

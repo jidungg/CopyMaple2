@@ -3,7 +3,7 @@
 
 #include "GameInstance.h"
 #include "JsonParser.h"
-#include "TerrainObject.h"
+
 
 CCubeTerrain::CCubeTerrain(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar* szMapFileName)
 	: CGameObject { pDevice, pContext }
@@ -68,25 +68,24 @@ HRESULT CCubeTerrain::Load_From_Json(wstring strJsonFilePath)
 
 	CTerrainObject::TERRAINOBJ_DESC desc;
 	for (const auto& item : j["cells"]) {
+
+		string str= item["model"];
+		MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, desc.wstrModelProtoName, MAX_PATH);
+		desc.eModelProtoLevelID = LEVEL_LOADING;
+		lstrcpy( desc.wstrShaderProtoName ,TEXT("Prototype_Component_Shader_VtxMesh"));
+		desc.eShaderProtoLevelID = LEVEL_LOADING;
 		desc.eType = item["type"];
-		string str = item["model"];
-		wstring wstr(str.begin(), str.end());
-		desc.modleName = wstr;
-		_uint terrIdx = item["index"];
 		desc.direction = item["direction"];
 		desc.data = item["data"];
 		size_t iteration = item["iteration"];
+		_uint terrIdx = item["index"];
 
 		for (int i = 0 ; i < iteration; i++)
 		{
-			if (m_vecCells[terrIdx +i] != nullptr)
-				continue;
-			
 			desc.index = terrIdx + i;
-			desc.pos = TerrainIndexToPos(desc.index);
-			CTerrainObject* pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(TEXT("Prototype_GameObject_TempTerrainObj"), &desc));
-			Add_Child(pGameObject);
-			m_vecCells[desc.index] = pGameObject;
+			desc.pos = IndexToPos(desc.index);
+			if(FAILED(Add_TerrainObject(desc)))
+				return E_FAIL;
 		}
 	}
 
@@ -112,13 +111,40 @@ HRESULT CCubeTerrain::Save_To_Json(wstring strNewFilepath)
 	return S_OK;
 }
 
-_float3 CCubeTerrain::TerrainIndexToPos(_uint Index)
+_float4 CCubeTerrain::IndexToPos(_uint Index)
 {
-	_float3 pos;
-	pos.x = Index % (_uint)m_vSize.x;
-	pos.z = Index / (_uint)m_vSize.x % (_uint)m_vSize.z;
-	pos.y = Index / ((_uint)m_vSize.x * (_uint)m_vSize.z);
+	_float4 pos;
+	pos.x = Index % m_vSize.x;
+	pos.z = Index / m_vSize.x % m_vSize.z;
+	pos.y = Index / (m_vSize.x * m_vSize.z);
+	pos.w = 1;
 	return pos;
+}
+
+_uint CCubeTerrain::PosToIndex(const _float4& Pos)
+{
+	_uint x = static_cast<_uint>(roundf( Pos.x));
+	_uint y = static_cast<_uint>(floorf(Pos.y)); // 0~1 = 0
+	_uint z = static_cast<_uint>(roundf(Pos.z));
+
+	return x + m_vSize.x * z + m_vSize.x * m_vSize.z * y;
+}
+
+HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
+{
+	if (m_vecCells[tDesc.index] != nullptr)
+		return E_FAIL;
+	CTerrainObject* pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(TEXT("Prototype_GameObject_TempTerrainObj"), &tDesc));
+	Add_Child(pGameObject);
+	m_vecCells[tDesc.index] = pGameObject;
+
+	return S_OK;
+}
+
+CTerrainObject* CCubeTerrain::Get_TerrainObject(_uint Index)
+{
+	if (Index < m_vecCells.size())
+		return m_vecCells[Index];
 }
 
 

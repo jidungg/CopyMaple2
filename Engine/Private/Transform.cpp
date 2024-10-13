@@ -108,6 +108,47 @@ void CTransform::LookAt(const _fvector& vAt)
 	Set_State(STATE_LOOK, XMVector3Normalize(vLook) * vScale.z);
 }
 
+void CTransform::LookToward(const _fvector& vDir)
+{
+	_float3		vScale = Compute_Scaled();
+
+	_vector		vLook = vDir;
+	_vector		vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+	_vector		vUp = XMVector3Cross(vLook, vRight);
+
+	Set_State(STATE_RIGHT, XMVector3Normalize(vRight) * vScale.x);
+	Set_State(STATE_UP, XMVector3Normalize(vUp) * vScale.y);
+	Set_State(STATE_LOOK, XMVector3Normalize(vLook) * vScale.z);
+}
+void CTransform::TurnToward(const _fvector& vDestLook, _float fTimeDelta)
+{
+	_vector vPos = Get_State(STATE_POSITION);
+	_vector vLook = Get_State(STATE_LOOK);
+	_vector vDest =  XMVector4Normalize(vDestLook);
+	vLook = XMVector4Normalize(vLook);
+
+	if (XMVector4Equal(vLook, vDest))
+		return;
+
+	 _vector vAxis = XMVector4Cross(vPos + vLook, vPos + vDest, vPos);
+
+	 _matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, m_fRotationPerSec * fTimeDelta);
+	 _vector vResultLook = XMVector3TransformNormal(vLook, RotationMatrix);
+
+	 _float4 vLookDiff, vResultDiff;
+	XMStoreFloat4(&vLookDiff, vDest - vLook);
+	XMStoreFloat4(&vResultDiff, vDest - vResultLook);
+	 if (vLookDiff.x <= 0 != vResultDiff.x <=0 ||
+		 vLookDiff.y <= 0 != vResultDiff.y <= 0 ||
+		 vLookDiff.z<= 0 != vResultDiff.z <= 0)// �Ѿ
+	 {
+		 LookToward(vDest);
+	 }
+	 else
+	 {
+		 LookToward(vResultLook);
+	 }
+}
 void CTransform::Turn(const _fvector& vAxis, _float fTimeDelta)
 {
 	_vector		vRight = Get_State(STATE_RIGHT);
@@ -136,7 +177,7 @@ void CTransform::Rotation(const _fvector& vAxis, _float fRadian)
 	Set_State(STATE_LOOK, XMVector3TransformNormal(vLook, RotationMatrix));
 }
 
-void CTransform::Rotation(const _float3& vRotation)
+void CTransform::Rotation(const _float3& vDgree)
 {
 	_float3		vScale = Compute_Scaled();
 
@@ -144,13 +185,15 @@ void CTransform::Rotation(const _float3& vRotation)
 	_vector		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f) * vScale.y;
 	_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * vScale.z;
 
-	XMVECTOR quaternion = XMQuaternionRotationRollPitchYaw(XMConvertToRadians(vRotation.x), XMConvertToRadians(vRotation.y), XMConvertToRadians(vRotation.z));
+	XMVECTOR quaternion = XMQuaternionRotationRollPitchYaw(XMConvertToRadians(vDgree.x), XMConvertToRadians(vDgree.y), XMConvertToRadians(vDgree.z));
 	XMMATRIX RotationMatrix = XMMatrixRotationQuaternion(quaternion);
 
 	Set_State(STATE_RIGHT, XMVector3TransformNormal(vRight, RotationMatrix));
 	Set_State(STATE_UP, XMVector3TransformNormal(vUp, RotationMatrix));
 	Set_State(STATE_LOOK, XMVector3TransformNormal(vLook, RotationMatrix));
 }
+
+
 
 HRESULT CTransform::Bind_ShaderResource(CShader * pShader, const _char * pConstantName)
 {

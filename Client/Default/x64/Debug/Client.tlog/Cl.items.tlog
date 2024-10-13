@@ -12,6 +12,7 @@ D:\Workbench\Portfolio\CopyMaple2\Client\private\Level_Loading.cpp;D:\Workbench\
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Level_Logo.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Level_Logo.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\private\Loader.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Loader.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\private\MainApp.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\MainApp.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\MyTransform.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\MyTransform.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Player.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\CubeTerrain.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\CubeTerrain.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Terrain.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Terrain.obj
@@ -20,5 +21,6 @@ D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIButton.cpp;D:\Workbench\Portf
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIPanel.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\UIPanel.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Public\UIItemIndicator.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\UIItemIndicator.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Default\Client.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Client.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Default\Client_Utility.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Client_Utility.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Default\JsonParser.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\JsonParser.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Default\stdafx.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\stdafx.obj

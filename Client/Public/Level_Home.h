@@ -23,6 +23,8 @@ private:
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_UI(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_Player(const _wstring& strLayerTag);
+	HRESULT Ready_Lights();
+
 
 private:
 	CCubeTerrain* m_pCubeTerrain = { nullptr };

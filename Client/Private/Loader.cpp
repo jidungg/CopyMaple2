@@ -143,7 +143,10 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("모델(을)를 로딩중입니다."));
-
+	//EmptyModel
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_Model_EmptyModel"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/FBXs/EmptyModel.fbx"))))
+		return E_FAIL;
 	/* For.Prototype_Component_VIBuffer_Rect */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_VIBuffer_Rect"),
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
@@ -309,22 +312,9 @@ HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId, CModel::TYPE eModelType, c
 
 		wstring wstr = szFullPath;
 		string str{ wstr.begin(), wstr.end() };
-		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, FindFileData.cFileName,
+		if (FAILED(m_pGameInstance->Add_Prototype(eLevId, FindFileData.cFileName,
 			CModel::Create(m_pDevice, m_pContext, eModelType, str.c_str()))))
 			return E_FAIL;
-
-		//if (lstrcmp(szExtension, TEXT(".dds")) == 0)
-		//{
-		//	if (FAILED(m_pGameInstance->Add_Prototype(eLevId, FindFileData.cFileName,
-		//		CTexture::Create(m_pDevice, m_pContext, szFullPath, 1))))
-		//		return E_FAIL;
-		//}
-		//else if (lstrcmp(szExtension, TEXT(".fbx")) == 0)
-		//{
-
-		//}
-		//else
-		//	return E_FAIL;
 
 	} while (FindNextFile(hFind, &FindFileData));
 

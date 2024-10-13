@@ -3,6 +3,7 @@
 #include "Input_Device.h"
 #include "Physics.h"
 #include "PipeLine.h"
+#include "Pawn.h"
 
 CController::CController(CInput_Device* pInput, CUIManager* pUIManager)
 	: m_pInput_Device(pInput)
@@ -18,7 +19,7 @@ HRESULT CController::Initialize()
 	return S_OK;
 }
 
-void CController::Update()
+void CController::Update(_float fTimeDelta)
 {
 	POINT tPosition = m_pInput_Device->Get_MousePos();
 
@@ -36,6 +37,16 @@ void CController::Update()
 		m_pUIManager->Consume_MouseRButtonDown();
 	else if (m_pInput_Device->GetMouseKeyState(MOUSE_KEY::RB) == KEY_STATE::UP)
 		m_pUIManager->Consume_MouseRButtonUp();
+
+	if (m_pCurrentPawn)
+	{
+		for (_uint key = 0; key < (_uint)KEY::LAST; key++)
+		{
+			KEY_STATE ekeyState = m_pInput_Device->GetKeyState((KEY)key);
+			if (ekeyState != KEY_STATE::NONE)
+				m_pCurrentPawn->Receive_KeyInput((KEY)key, ekeyState, fTimeDelta);
+		}
+	}
 
 }
 

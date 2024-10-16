@@ -108,7 +108,7 @@ HRESULT CGameInstance::Render_End()
 
 void CGameInstance::Clear(_int iLevelID)
 {
-	/* Æ¯Á¤ ·¹º§¿ë °´Ã¼µéÀ» Áö¿î´Ù. */
+	/* Æ¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½. */
 	m_pObject_Manager->Clear(iLevelID);
 
 	m_pPrototype_Manager->Clear(iLevelID);

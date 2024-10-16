@@ -25,10 +25,8 @@ HRESULT CTexture::Initialize_Prototype(const _tchar * pTextureFilePath, _uint iN
 	{
 		wsprintf(szTextureFilePath, pTextureFilePath, i);
 
-		/* 드라이브경로, 디렉토리경로, 파일네임, 파일확장자. */
 		_tchar		szEXT[MAX_PATH] = TEXT("");
 
-		/* D:\정의훈\147\3d\Framework\Client\Bin\Resources\Textures\Default.jpg */
 		_wsplitpath_s(szTextureFilePath, nullptr, 0, nullptr, 0, nullptr, 0, szEXT, MAX_PATH);
 
 		HRESULT		hr = {};
@@ -59,22 +57,27 @@ HRESULT CTexture::Initialize_Prototype(const _tchar * pTextureFilePath, _uint iN
 	return S_OK;
 }
 
-HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, aiMaterial* pAIMaterial, aiTextureType eTexType)
+HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle, TEXTURE_TYPE eTexType)
 {
-	m_iNumSRVs = pAIMaterial->GetTextureCount(aiTextureType(eTexType));
+	inFIle.read(reinterpret_cast<char*>(&m_iNumSRVs), sizeof(_uint));
+	cout << m_iNumSRVs << endl;
 	for (size_t texIdx = 0; texIdx < m_iNumSRVs; texIdx++)
 	{
-		aiString		strTexturePath;
+		_uint strLen;
+		inFIle.read(reinterpret_cast<char*>(&strLen), sizeof(_uint));
+		cout << strLen << endl;
+		_char* strTexturePath = new _char[strLen + 1];
+		inFIle.read(strTexturePath, sizeof(_char) * strLen);
+		strTexturePath[strLen] = '\0';
+		cout << strTexturePath << endl;
 
-		if (FAILED(pAIMaterial->GetTexture(aiTextureType(eTexType), texIdx, &strTexturePath)))
-			break;
 
 		_char		szFileName[MAX_PATH] = "";
 		_char		szExt[MAX_PATH] = "";
 
 		_char		szFullPath[MAX_PATH] = "";
 
-		_splitpath_s(strTexturePath.data, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+		_splitpath_s(strTexturePath, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
 
 		strcat_s(szFullPath, szDirPath);
 		strcat_s(szFullPath, szFileName);
@@ -92,7 +95,9 @@ HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, aiMaterial* pAIMa
 		else
 			hr = CreateWICTextureFromFile(m_pDevice, szPerfectPath, nullptr, &pSRV);
 		if (FAILED(hr))
-			return E_FAIL;
+		{
+			CreateDDSTextureFromFile(m_pDevice, TEXT("../Bin/Resources/Textures/Default.dds"), nullptr, &pSRV);
+		}
 		m_SRVs.push_back(pSRV);
 	}
 	return S_OK;
@@ -134,11 +139,11 @@ CTexture * CTexture::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pConte
 	}
 	return pInstance;
 }
-CTexture* CTexture::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath, aiMaterial* pAIMaterial, aiTextureType eTexType)
+CTexture* CTexture::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath, ifstream& inFIle, TEXTURE_TYPE eTexType)
 {
 	CTexture* pInstance = new CTexture(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(szDirPath,pAIMaterial, eTexType)))
+	if (FAILED(pInstance->Initialize_Prototype(szDirPath, inFIle, eTexType)))
 	{
 		MSG_BOX("Failed to Created : CTexture");
 		Safe_Release(pInstance);

@@ -35,16 +35,26 @@ HRESULT CBuilder::Initialize(void* pArg)
 	m_pCubeTerrain = pBulderDesc->pCubeTerrain;
 
 	//DuckyBall
-	CModelObject::MODELOBJ_DESC pModelDesc;
-	pModelDesc.eModelProtoLevelID = LEVEL_HOME;
-	lstrcpy(pModelDesc.wstrModelProtoName , L"Prototype_Model_ChocoDuckyBall");
-	pModelDesc.eShaderProtoLevelID = LEVEL_LOADING;
-	lstrcpy(pModelDesc.wstrShaderProtoName , L"Prototype_Component_Shader_VtxMesh");
-	m_pBird = static_cast<CModelObject*>( m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &pModelDesc));
+	CModelObject::MODELOBJ_DESC tModelDesc;
+	tModelDesc.fRotationPerSec = 5.f;
+	tModelDesc.fSpeedPerSec = 1.f;
+	tModelDesc.eModelProtoLevelID = LEVEL_HOME;
+	lstrcpy(tModelDesc.wstrModelProtoName , L"Prototype_Model_ChocoDuckyBall");
+	tModelDesc.eShaderProtoLevelID = LEVEL_LOADING;
+	lstrcpy(tModelDesc.wstrShaderProtoName , L"Prototype_Component_Shader_VtxMesh");
+	m_pBird = static_cast<CModelObject*>( m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
 	Add_Child(m_pBird);
 
-	lstrcpy(pModelDesc.wstrModelProtoName , L"Prototype_Model_EmptyModel");
-	m_pPreview = static_cast<CModelObject*>( m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &pModelDesc));
+	CTerrainObject::TERRAINOBJ_DESC tTerrObjDesc;
+	tTerrObjDesc.fRotationPerSec = 5.f;
+	tTerrObjDesc.fSpeedPerSec = 1.f;
+	tTerrObjDesc.eModelProtoLevelID = LEVEL_HOME;
+	lstrcpy(tTerrObjDesc.wstrModelProtoName , L"Prototype_Model_EmptyModel");
+	tTerrObjDesc.eShaderProtoLevelID = LEVEL_LOADING;
+	lstrcpy(tTerrObjDesc.wstrShaderProtoName, L"Prototype_Component_Shader_VtxMesh");
+	XMStoreFloat4(&tTerrObjDesc.pos ,m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_vPreviewOffset);
+
+	m_pPreview = static_cast<CTerrainObject*>( m_pGameInstance->Clone_Proto_Object_Stock(CTerrainObject::m_szProtoTag, &tTerrObjDesc));
 	Add_Child(m_pPreview);
 	m_pPreview->Get_Transform()->Scaling(0.5f,0.5f,0.5f);
 
@@ -81,7 +91,7 @@ void CBuilder::Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta
 
 
 
-	if (eKey == KEY::R && eKeyState == KEY_STATE::DOWN)//È¸Àü
+	if (eKey == KEY::R && eKeyState == KEY_STATE::DOWN)//È¸ï¿½ï¿½
 	{
 		_float4 pos;
 		XMStoreFloat4(&pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
@@ -92,12 +102,14 @@ void CBuilder::Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta
 		else
 			m_pPreview->Rotate();
 	}
-	if (eKey == KEY::E && eKeyState == KEY_STATE::DOWN) // È¸¼ö
+	if (eKey == KEY::E && eKeyState == KEY_STATE::DOWN) // È¸ï¿½ï¿½
 	{
 	}
-	if (eKey == KEY::SPACE && eKeyState == KEY_STATE::DOWN) // ¼³Ä¡
+	if (eKey == KEY::SPACE && eKeyState == KEY_STATE::DOWN) // ï¿½ï¿½Ä¡
 	{
 		CTerrainObject::TERRAINOBJ_DESC desc;
+		desc.fRotationPerSec = 5.f;
+		desc.fSpeedPerSec = 1.f;
 		desc.eType = TERRAIN_OBJ_TYPE::BLOCK;
 		lstrcpy( desc.wstrModelProtoName , m_szBuildItemTag);
 		desc.eModelProtoLevelID = LEVEL_LOADING;

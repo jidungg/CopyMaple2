@@ -2,8 +2,6 @@
 
 #include "Component.h"
 
-/* 여러 메시(사각형, 지형, 큐브 ) 을 그려내기위한 컴포넌트의 부모 클래스 */
-/* 메시를 구성하기위해서는 정점, 인덱스가필요하고 저장한다.*/
 
 BEGIN(Engine)
 
@@ -34,8 +32,8 @@ protected:
 	D3D11_SUBRESOURCE_DATA				m_SubResourceDesc;
 
 protected:
-	_uint								m_iVertexStride = {};
-	_uint								m_iNumVertices = {};
+	_uint								m_iVertexStride;
+	_uint								m_iNumVertices;
 	_uint								m_iNumVertexBuffers = {};
 		
 	_uint								m_iIndexStride = {};

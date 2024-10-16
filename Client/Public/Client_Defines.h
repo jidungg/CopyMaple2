@@ -23,6 +23,9 @@ namespace Client
 #define DIR_D DIRECTION::YM
 #define DIR_U DIRECTION::YP
 	
+	enum class ITEM_TYPE { EQUIP, CONSUMABLE, BUILD, ETC, ITEM_TYPE_END };
+
+
 }
 
 extern HINSTANCE g_hInst;

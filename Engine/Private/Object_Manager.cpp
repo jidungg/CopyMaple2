@@ -106,10 +106,21 @@ bool CObject_Manager::RayCast(const _wstring& strLayerTag, const Ray& tRay, Rayc
 
 bool CObject_Manager::RayCast(const Ray& tRay, RaycastHit* pOut)
 {
+	bool bIsHit = false;
+	RaycastHit tMinHit;
+	tMinHit.fDist = 9999;
 	for (auto& Pair : m_pLayers[m_pGameInstance->Get_CurrentLevelID()])
+	{
 		if (Pair.second->Check_Collision(tRay, pOut))
-			return true;
-	return false;
+		{
+			bIsHit = true;
+			if (pOut->fDist < tMinHit.fDist)
+				tMinHit = *pOut;
+		}
+	}
+	if (bIsHit)
+		*pOut = tMinHit;
+	return bIsHit;
 }
 
 CLayer * CObject_Manager::Find_Layer(_uint iLevelIndex, const _wstring & strLayerTag)

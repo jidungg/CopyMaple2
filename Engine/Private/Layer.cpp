@@ -40,13 +40,24 @@ void CLayer::Late_Update(_float fTimeDelta)
 
 bool CLayer::Check_Collision(const Ray& tRay, RaycastHit* pOut)
 {
+	bool bIsHit = false;
+	RaycastHit tMinHit;
+	tMinHit.fDist = 9999;
 	for (auto& pGameObject : m_GameObjects)
 	{
 		if (pGameObject->Is_Active() == false || pGameObject->Is_Dead())
 			continue;
-		return	pGameObject->Check_Collision(tRay, pOut);
+
+		if (pGameObject->Check_Collision(tRay, pOut))
+		{
+			bIsHit = true;
+			if (pOut->fDist < tMinHit.fDist)
+				tMinHit = *pOut;
+		}
 	}
-	return false;
+	if (bIsHit)
+		*pOut = tMinHit;
+	return bIsHit;
 }
 
 CLayer * CLayer::Create()

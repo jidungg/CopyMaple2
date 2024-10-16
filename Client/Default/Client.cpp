@@ -1,4 +1,4 @@
-// Client.cpp : юю©К га╥н╠в╥╔©║ ╢Кгя аЬюта║ю╩ а╓юггу╢о╢ы.
+// Client.cpp : О©╫О©╫О©╫О©╫ О©╫О©╫О©╫н╠в╥О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫у╢о╢О©╫.
 //
 
 #include "stdafx.h"
@@ -9,13 +9,13 @@
 
 #define MAX_LOADSTRING 100
 
-// юЭ©╙ ╨╞╪Ж:
-HINSTANCE g_hInst;                                // гЖюГ юн╫╨ео╫╨ют╢о╢ы.
+// О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫:
+HINSTANCE g_hInst;                                // О©╫О©╫О©╫О©╫ О©╫н╫О©╫О©╫о╫О©╫О©╫т╢о╢О©╫.
 HWND g_hWnd;
-WCHAR szTitle[MAX_LOADSTRING];                  // а╕╦Я г╔╫цаы еь╫╨ф╝ют╢о╢ы.
-WCHAR szWindowClass[MAX_LOADSTRING];            // ╠Б╨╩ ц╒ е╛╥║╫╨ юл╦╖ют╢о╢ы.
+WCHAR szTitle[MAX_LOADSTRING];                  // О©╫О©╫О©╫О©╫ г╔О©╫О©╫О©╫О©╫ О©╫ь╫О©╫ф╝О©╫т╢о╢О©╫.
+WCHAR szWindowClass[MAX_LOADSTRING];            // О©╫Б╨╩ ц╒ е╛О©╫О©╫О©╫О©╫ О©╫л╦О©╫О©╫т╢о╢О©╫.
 
-// юл дз╣Е ╦П╣Б©║ ╣И╬Н юж╢б гт╪Жюг а╓╧ФгБ ╪╠╬Пют╢о╢ы.
+// О©╫О©╫ О©╫з╣О©╫ О©╫О©╫Б©║ О©╫О©╫О©╫ О©╫ж╢О©╫ О©╫т╪О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫т╢о╢О©╫.
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -28,20 +28,24 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 {
 #ifdef _DEBUG
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    AllocConsole();
+    FILE* file;
+    freopen_s(&file, "CONOUT$", "w", stdout);  // stdoutЛ²└ Л╫≤Л├■Л≈░ Л≈╟Й╡╟
+    freopen_s(&file, "CONOUT$", "w", stderr);  // stderrЛ²└ Л╫≤Л├■Л≈░ Л≈╟Й╡╟
+    freopen_s(&file, "CONIN$", "r", stdin);    // stdinЛ²└ Л╫≤Л├■Л≈░ Л≈╟Й╡╟
+
+
 #endif
 
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // TODO: ©╘╠Б©║ дз╣Е╦╕ ют╥бгу╢о╢ы.
 	CMainApp*		pMainApp = { nullptr };
 
-    // юЭ©╙ ╧╝юз©╜ю╩ цй╠Бх╜гу╢о╢ы.
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_CLIENT, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
-    // юю©К га╥н╠в╥╔ цй╠Бх╜╦╕ ╪ЖгЮгу╢о╢ы.
     if (!InitInstance (hInstance, nCmdShow))
     {
         return FALSE;
@@ -107,9 +111,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
 //
-//  гт╪Ж: MyRegisterClass()
+//  О©╫т╪О©╫: MyRegisterClass()
 //
-//  ╦ЯюШ: ц╒ е╛╥║╫╨╦╕ ╣Н╥огу╢о╢ы.
+//  О©╫О©╫О©╫О©╫: ц╒ е╛О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫у╢о╢О©╫.
 //
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
@@ -133,18 +137,18 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 }
 
 //
-//   гт╪Ж: InitInstance(HINSTANCE, int)
+//   О©╫т╪О©╫: InitInstance(HINSTANCE, int)
 //
-//   ╦ЯюШ: юн╫╨ео╫╨ гз╣Ию╩ юЗюЕго╟М аж ц╒ю╩ ╦╦╣Л╢о╢ы.
+//   О©╫О©╫О©╫О©╫: О©╫н╫О©╫О©╫о╫О©╫ О©╫з╣О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫о╟О©╫ О©╫О©╫ ц╒О©╫О©╫ О©╫О©╫О©╫О©╫о╢О©╫.
 //
-//   ╪Ё╦М:
+//   О©╫О©╫О©╫О©╫:
 //
-//        юл гт╪Ж╦╕ еКгь юн╫╨ео╫╨ гз╣Ию╩ юЭ©╙ ╨╞╪Ж©║ юЗюЕго╟М
-//        аж га╥н╠в╥╔ ц╒ю╩ ╦╦╣Г ╢ыю╫ г╔╫цгу╢о╢ы.
+//        О©╫О©╫ О©╫т╪О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫н╫О©╫О©╫о╫О©╫ О©╫з╣О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫о╟О©╫
+//        О©╫О©╫ О©╫О©╫О©╫н╠в╥О©╫ ц╒О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ г╔О©╫О©╫О©╫у╢о╢О©╫.
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   g_hInst = hInstance; // юн╫╨ео╫╨ гз╣Ию╩ юЭ©╙ ╨╞╪Ж©║ юЗюЕгу╢о╢ы.
+   g_hInst = hInstance; // О©╫н╫О©╫О©╫о╫О©╫ О©╫з╣О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫у╢о╢О©╫.
 
    RECT		rcWindowed = { 0, 0, g_iWinSizeX, g_iWinSizeY };
    AdjustWindowRect(&rcWindowed, WS_OVERLAPPEDWINDOW, TRUE);
@@ -166,13 +170,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 }
 
 //
-//  гт╪Ж: WndProc(HWND, UINT, WPARAM, LPARAM)
+//  О©╫т╪О©╫: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
-//  ╦ЯюШ:  аж ц╒юг ╦ч╫цаЖ╦╕ цЁ╦╝гу╢о╢ы.
+//  О©╫О©╫О©╫О©╫:  О©╫О©╫ ц╒О©╫О©╫ О©╫ч╫О©╫О©╫О©╫О©╫О©╫ цЁО©╫О©╫О©╫у╢о╢О©╫.
 //
-//  WM_COMMAND  - юю©К га╥н╠в╥╔ ╦ч╢╨╦╕ цЁ╦╝гу╢о╢ы.
-//  WM_PAINT    - аж ц╒ю╩ ╠в╦Ё╢о╢ы.
-//  WM_DESTROY  - а╬╥А ╦ч╫цаЖ╦╕ ╟т╫цго╟М ╧щх╞гу╢о╢ы.
+//  WM_COMMAND  - О©╫О©╫О©╫О©╫ О©╫О©╫О©╫н╠в╥О©╫ О©╫ч╢О©╫О©╫О©╫ цЁО©╫О©╫О©╫у╢о╢О©╫.
+//  WM_PAINT    - О©╫О©╫ ц╒О©╫О©╫ О©╫в╦О©╫О©╫о╢О©╫.
+//  WM_DESTROY  - О©╫О©╫О©╫О©╫ О©╫ч╫О©╫О©╫О©╫О©╫О©╫ О©╫т╫О©╫О©╫о╟О©╫ О©╫О©╫х╞О©╫у╢о╢О©╫.
 //
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -182,7 +186,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);
-            // ╦ч╢╨ ╪╠ецю╩ ╠╦╧╝ ╨п╪╝гу╢о╢ы.
+            // О©╫ч╢О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫п╪О©╫О©╫у╢о╢О©╫.
             switch (wmId)
             {
             case IDM_ABOUT:
@@ -200,7 +204,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: ©╘╠Б©║ hdc╦╕ ╩Г©Кго╢б ╠в╦╝╠Б дз╣Е╦╕ цъ╟║гу╢о╢ы.
+            // TODO: О©╫О©╫О©╫Б©║ hdcО©╫О©╫ О©╫О©╫О©╫О©╫о╢О©╫ О©╫в╦О©╫О©╫О©╫ О©╫з╣Е╦╕ О©╫ъ╟О©╫О©╫у╢о╢О©╫.
             EndPaint(hWnd, &ps);
         }
         break;
@@ -213,7 +217,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-// а╓╨╦ ╢Кх╜ ╩Сюзюг ╦ч╫цаЖ цЁ╦╝╠Бют╢о╢ы.
+// О©╫О©╫О©╫О©╫ О©╫О©╫х╜ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ч╫О©╫О©╫О©╫ цЁО©╫О©╫О©╫О©╫О©╫т╢о╢О©╫.
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     UNREFERENCED_PARAMETER(lParam);

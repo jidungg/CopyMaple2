@@ -29,7 +29,7 @@ void CController::Update(_float fTimeDelta)
 	{
 		if (false == m_pUIManager->Consume_MouseLButtonUp())
 		{
-			//TODO: UI¿¡¼­ Ã³¸®µÇÁö ¾ÊÀº ÀÔ·Â Ã³¸®
+			//TODO: UIï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ Ã³ï¿½ï¿½
 		}
 	}
 

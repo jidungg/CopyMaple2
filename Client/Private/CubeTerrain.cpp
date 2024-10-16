@@ -3,7 +3,7 @@
 
 #include "GameInstance.h"
 #include "JsonParser.h"
-
+#include "ItemDataBase.h"
 
 CCubeTerrain::CCubeTerrain(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar* szMapFileName)
 	: CGameObject { pDevice, pContext }
@@ -67,10 +67,15 @@ HRESULT CCubeTerrain::Load_From_Json(wstring strJsonFilePath)
 	m_vecCells.resize(m_vSize.x * m_vSize.y * m_vSize.z, nullptr);
 
 	CTerrainObject::TERRAINOBJ_DESC desc;
+	desc.fRotationPerSec = 5.f;
+	desc.fSpeedPerSec = 1.f;
 	for (const auto& item : j["cells"]) {
 
 		string str= item["model"];
 		MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, desc.wstrModelProtoName, MAX_PATH);
+		CItemDataBase* pDB = ITEMDB;
+		ITEM_DESC* itemdesc = pDB->GetItemDesc(ITEM_TYPE::BUILD,desc.wstrModelProtoName);
+		lstrcpy(desc.wstrModelProtoName, itemdesc->wstrModelTag);
 		desc.eModelProtoLevelID = LEVEL_LOADING;
 		lstrcpy( desc.wstrShaderProtoName ,TEXT("Prototype_Component_Shader_VtxMesh"));
 		desc.eShaderProtoLevelID = LEVEL_LOADING;
@@ -134,7 +139,7 @@ HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 {
 	if (m_vecCells[tDesc.index] != nullptr)
 		return E_FAIL;
-	CTerrainObject* pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(TEXT("Prototype_GameObject_TempTerrainObj"), &tDesc));
+	CTerrainObject* pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CTerrainObject::m_szProtoTag, &tDesc));
 	Add_Child(pGameObject);
 	m_vecCells[tDesc.index] = pGameObject;
 

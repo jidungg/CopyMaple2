@@ -47,7 +47,7 @@ HRESULT CMeshCollider::Initialize(void* pArg)
 
 bool CMeshCollider::Check_Collision(CCollider* pOther, RaycastHit* pOut)
 {
-	//TODO: ±¸ÇöÀÌ ¾î·Æ´Ù..
+	//TODO: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ´ï¿½..
 	return false;
 }
 
@@ -62,41 +62,53 @@ bool CMeshCollider::Check_Collision(const Ray& tRay, RaycastHit* pOut)
 		return false;
 	}
 	D3D11_MAPPED_SUBRESOURCE IB;
-	// ¸ÊÇÎÀ» ÅëÇØ ¹öÆÛ¿¡ ´ëÇÑ Á¢±Ù ±ÇÇÑ È¹µæ
 	hr = m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &IB);
 	if (FAILED(hr))
 	{
 		std::cerr << "Failed to map Index buffer." << std::endl;
 		return false;
 	}
-	// ¹öÆÛ µ¥ÀÌÅÍ¿¡ Á¢±Ù (ÀÌ °æ¿ì float3 Æ÷¸ËÀ¸·Î °¡Á¤)
 	VTXMESH* vertices = static_cast<VTXMESH*>(VB.pData);
 	_uint* indices = static_cast<_uint*>(IB.pData);
 
-	float fDist = -1;
-	XMMATRIX matWorld =m_pOwner->Get_Transform()->Get_WorldMatrix();
+	float fMinDist = 9999;
+	bool bIsHit = false;
+	XMMATRIX matWorld = m_pOwner->Get_Transform()->Get_WorldMatrix();
+	XMMATRIX matInverseWorld = XMMatrixInverse(nullptr, matWorld);
+	XMVECTOR vLocalOrigin = XMVector4Transform(XMLoadFloat4(&tRay.vOrigin), matInverseWorld);
+	XMVECTOR vLocalDirection = XMVector4Transform(XMLoadFloat4(&tRay.vDirection), matInverseWorld);
 	for (size_t indexCount = 0; indexCount < m_iNumIndexes; )
 	{
-		XMVECTOR v0 = XMVector3TransformCoord(XMLoadFloat3(&vertices[indices[indexCount++]].vPosition),matWorld);
-		XMVECTOR v1 = XMVector3TransformCoord(XMLoadFloat3(&vertices[indices[indexCount++]].vPosition),matWorld);
-		XMVECTOR v2 = XMVector3TransformCoord(XMLoadFloat3(&vertices[indices[indexCount++]].vPosition),matWorld);
-		if(TriangleTests::Intersects(XMLoadFloat4(&tRay.vOrigin),XMLoadFloat4(&tRay.vDirection),v0, v1, v2, fDist))
+		XMVECTOR v0 =XMLoadFloat3(&vertices[indices[indexCount++]].vPosition);
+		XMVECTOR v1 = XMLoadFloat3(&vertices[indices[indexCount++]].vPosition);
+		XMVECTOR v2 =XMLoadFloat3(&vertices[indices[indexCount++]].vPosition);
+		float fDist;
+		if(TriangleTests::Intersects(vLocalOrigin, vLocalDirection,v0, v1, v2, fDist))
 		{
+
 			if (fDist < (tRay.fDist < 0 ? 9999 : tRay.fDist))
 			{
-				pOut->pCollider = this;
-				XMStoreFloat4(&(pOut->vPoint) , XMLoadFloat4(&(tRay.vOrigin))+ XMVector3Normalize(XMLoadFloat4(&(tRay.vDirection))) * fDist);
-				return true;
+				bIsHit = true;
+				if (fDist < fMinDist)
+				{
+					fMinDist = fDist;
+
+				}
 			}
 		}
 	}
 
-
-	// ¸ÊÇÎ ÇØÁ¦
+	if (bIsHit)
+	{
+		pOut->pCollider = this;
+		pOut->fDist = fMinDist;
+		XMStoreFloat4(&(pOut->vPoint), XMLoadFloat4(&(tRay.vOrigin)) + XMVector3Normalize(XMLoadFloat4(&(tRay.vDirection))) * fMinDist);
+	}
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	m_pContext->Unmap(m_pStagingVB, 0);
 	m_pContext->Unmap(m_pStagingIB, 0);
 
-	return false;
+	return bIsHit;
 }
 CMeshCollider* CMeshCollider::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

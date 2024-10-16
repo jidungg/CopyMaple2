@@ -124,6 +124,7 @@
     <ClInclude Include="Client_Utility.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\ItemDataBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -196,6 +197,7 @@
     <ClCompile Include="Client_Utility.cpp">
       <Filter>99.Defines</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\ItemDataBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

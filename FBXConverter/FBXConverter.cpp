@@ -1,0 +1,30 @@
+﻿// FBXConverter.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
+//
+#include "pch.h"
+
+#include "CModel.h"
+
+
+
+
+int main(int argc, char* argv[])
+{
+	CModelConverter modelConverter;
+	fs::path path;
+	if (argc < 2)
+	{
+		path = fs::current_path();
+	}
+	else
+		path = fs::path(argv[1]);
+
+    for (const auto& entry : recursive_directory_iterator(path)) {
+        if (entry.path().extension() == ".fbx") {
+            //cout << entry.path().string() << endl;
+			modelConverter.FbxToBianry( entry.path().string());
+        }
+    }
+		
+
+    return 0;
+}

@@ -28,10 +28,10 @@ int g_ArrDK[(int)KEY::LAST] = {
     DIK_T,
     DIK_Y,
     DIK_U, // 
-    DIK_H, // 추가
-    DIK_J, // 추가
-    DIK_K, // 추가
-    DIK_M, // 추가
+    DIK_H, // 占쌩곤옙
+    DIK_J, // 占쌩곤옙
+    DIK_K, // 占쌩곤옙
+    DIK_M, // 占쌩곤옙
     DIK_I,
     DIK_O,
     DIK_P,
@@ -54,7 +54,6 @@ int g_ArrDK[(int)KEY::LAST] = {
     DIK_TAB       // TAB,
 
 
-    // LAST // 끝을 알리는.
 };
 
 
@@ -67,37 +66,27 @@ HRESULT CInput_Device::Initialize(HINSTANCE hInst, HWND hWnd)
 	m_hInst = hInst;
 	m_hWnd = hWnd;
 
-    // DInput 컴객체를 생성하는 함수
     if(FAILED( DirectInput8Create(hInst, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_pInputSDK, NULL)))
 		return E_FAIL;
     
 
-    // 키보드 객체 생성
 	if (FAILED(m_pInputSDK->CreateDevice(GUID_SysKeyboard, &m_pKeyBoard, nullptr)))
 		return E_FAIL;
-    // 생성된 키보드 객체의 대한 정보를 컴 객체에게 전달하는 함수
     m_pKeyBoard->SetDataFormat(&c_dfDIKeyboard);
 
-    // 장치에 대한 독점권을 설정해주는 함수, (클라이언트가 떠있는 상태에서 키 입력을 받을지 말지를 결정하는 함수)
     m_pKeyBoard->SetCooperativeLevel(hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
 
-    // 장치에 대한 access 버전을 받아오는 함수
     m_pKeyBoard->Acquire();
 
-    // 마우스 객체 생성
 	if (FAILED(m_pInputSDK->CreateDevice(GUID_SysMouse, &m_pMouse, nullptr)))
 		return E_FAIL;
 
-    // 생성된 마우스 객체의 대한 정보를 컴 객체에게 전달하는 함수
     m_pMouse->SetDataFormat(&c_dfDIMouse);
 
-    // 장치에 대한 독점권을 설정해주는 함수, 클라이언트가 떠있는 상태에서 키 입력을 받을지 말지를 결정하는 함수
     m_pMouse->SetCooperativeLevel(hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
 
-    // 장치에 대한 access 버전을 받아오는 함수
     m_pMouse->Acquire();
 
-    // 키의 상태값을 저장하는 배열 초기화
     for (int i = 0; i < (int)KEY::LAST; ++i)
     {
         m_vecKey.push_back(tKeyInfo{ KEY_STATE::NONE, false });
@@ -119,39 +108,33 @@ void CInput_Device::Update_InputDev()
     ScreenToClient(m_hWnd, &m_tMousePos);
 
 
-    HWND hWnd = GetFocus(); // 현재 포커싱 중인 윈도우핸들값을 알려준다 >> 포커싱 된 윈도우가 없으면, 0이 나온다 id(0)
+    HWND hWnd = GetFocus(); 
 
-    if (nullptr != hWnd) // 윈도우가 포커싱 중일 때
+    if (nullptr != hWnd) 
     {
         for (int i = 0; i < (int)KEY::LAST; ++i)
         {
-            // 현재 키가 눌려있다.
+          
             if (m_byKeyState[g_ArrDK[i]] & 0x80)
             {
                 if (m_vecKey[i].bPrevPush)
                 {
-                    // 이전에도 눌려있었다.
                     m_vecKey[i].eState = KEY_STATE::PRESSING;
                 }
                 else
                 {
-                    // 이전에는 눌려있지 않았다.
                     m_vecKey[i].eState = KEY_STATE::DOWN;
                 }
-                // 프리브푸쉬를 트루로 바꿔줘야지. 다음 프레임때 상태를 체크 가능.
                 m_vecKey[i].bPrevPush = true;
             }
-            // 키가 안눌려있다.
             else
             {
                 if (m_vecKey[i].bPrevPush)
                 {
-                    // 이전에 눌려있었다.
                     m_vecKey[i].eState = KEY_STATE::UP;
                 }
                 else
                 {
-                    // 이전에도 안눌려있었다.
                     m_vecKey[i].eState = KEY_STATE::NONE;
                 }
                 m_vecKey[i].bPrevPush = false;
@@ -161,25 +144,25 @@ void CInput_Device::Update_InputDev()
         // Mouse
         for (int i = 0; i < (int)MOUSE_KEY::LAST; ++i)
         {
-            if (m_tMouseState.rgbButtons[i]) // 마우스가 현재 눌려있다.(클릭체크)
+            if (m_tMouseState.rgbButtons[i]) 
             {
-                if (m_arrMouseKey[i].bPrevPush) // 이전에도 눌려있었다.
+                if (m_arrMouseKey[i].bPrevPush)
                 {
                     m_arrMouseKey[i].eState = KEY_STATE::PRESSING;
                 }
-                else // 이전에는 눌려있지 않았다.
+                else 
                 {
                     m_arrMouseKey[i].eState = KEY_STATE::DOWN;
                 }
                 m_arrMouseKey[i].bPrevPush = true;
             }
-            else // 마우스가 현재 눌려있지 않다.
+            else 
             {
-                if (m_arrMouseKey[i].bPrevPush) // 이전에는 눌려있었다.
+                if (m_arrMouseKey[i].bPrevPush)
                 {
                     m_arrMouseKey[i].eState = KEY_STATE::UP;
                 }
-                else // 이전에도 눌려있지 않았다.
+                else 
                 {
                     m_arrMouseKey[i].eState = KEY_STATE::NONE;
                 }
@@ -189,9 +172,8 @@ void CInput_Device::Update_InputDev()
 
 
     }
-    else // 윈도우 포커싱 해제상태
+    else 
     {
-        // 키보드
         for (int i = 0; i < (int)KEY::LAST; ++i)
         {
             m_vecKey[i].bPrevPush = false;
@@ -206,7 +188,6 @@ void CInput_Device::Update_InputDev()
             }
         }
 
-        // 마우스 +
         for (int i = 0; i < (int)MOUSE_KEY::LAST; ++i)
         {
             m_arrMouseKey[i].bPrevPush = false;

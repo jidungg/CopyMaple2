@@ -1,6 +1,7 @@
 #pragma once
 #include "Client_Defines.h"
 #include "Level.h"
+#include "ItemDataBase.h"
 
 BEGIN(Client)
 class CBuilder;
@@ -32,6 +33,8 @@ private:
 	CCamera_Trace* m_pCamera = { nullptr };
 	CPlayer* m_pPlayer = { nullptr };
 
+	map<wstring,  ITEM_DESC*>* m_pItemData = nullptr;
+	map<wstring,  ITEM_DESC*>::iterator m_pItemIter = {};
 	bool m_bBuildMode = false;
 public:
 	static CLevel_Home* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

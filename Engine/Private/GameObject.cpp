@@ -32,7 +32,7 @@ HRESULT CGameObject::Initialize_Prototype()
 	return S_OK;
 }
 
-/* °ÔÀÓ³»¿¡¼­ Á÷Á¢ »ç¿ëµÇ±â À§ÇÑ »çº» °´Ã¼°¡ »ý¼ºµÇ³®. */
+/* ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ç±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½çº» ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç³ï¿½. */
 HRESULT CGameObject::Initialize(void * pArg)
 {
 	if (nullptr != pArg)
@@ -127,10 +127,19 @@ bool CGameObject::Check_Collision(const Ray& tRay, RaycastHit* pOut)
 {
 	CCollider* pCollider = nullptr;
 	pCollider = static_cast<CCollider*>(Find_Component(CCollider::m_szCompTag));
+	bool bIsHit = false;
+	RaycastHit tMinHit;
+	tMinHit.fDist = 9999;
 	if (pCollider != nullptr && pCollider->Is_Active())
 	{
 		if (true == pCollider->Check_Collision(tRay, pOut))
-			return true;
+		{
+			bIsHit = true;
+			if (pOut->fDist < tMinHit.fDist)
+			{
+				tMinHit = *pOut;
+			}
+		}
 	}
 
 	for (auto& child : m_pChilds)
@@ -138,9 +147,19 @@ bool CGameObject::Check_Collision(const Ray& tRay, RaycastHit* pOut)
 		if (child->Is_Active() == false || child->Is_Dead())
 			continue;
 		if (child->Check_Collision(tRay, pOut))
-			return true;
+		{
+			bIsHit = true;
+			if (pOut->fDist < tMinHit.fDist)
+			{
+				tMinHit = *pOut;
+			}
+		}
 	}
-	return false;
+	if (bIsHit)
+	{
+		*pOut  = tMinHit;
+	}
+	return bIsHit;
 }
 
 HRESULT CGameObject::Add_Component(_uint iPrototypeLevelIndex, const _wstring & strPrototypeTag, const _wstring & strComponentTag, CComponent** ppOut, void * pArg)

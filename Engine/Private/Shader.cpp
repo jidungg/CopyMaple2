@@ -77,7 +77,7 @@ HRESULT CShader::Begin(_uint iPassIndex)
 
 	pPass->Apply(0, m_pContext);
 
-	/* ¹öÆÛ¸¦ µå·Î¿ìÇÏ±âÀü¿¡ ¹Ýµå½Ã È£ÃâµÇ¾î¾ßÇÏ´Â ÇÔ¼ö´Ù. */
+	/* ï¿½ï¿½ï¿½Û¸ï¿½ ï¿½ï¿½Î¿ï¿½ï¿½Ï±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ýµï¿½ï¿½ È£ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½. */
 	m_pContext->IASetInputLayout(m_InputLayouts[iPassIndex]);
 
 	return S_OK;

@@ -11,13 +11,13 @@ protected:
 	virtual ~CMaterial() = default;
 
 public:
-	virtual HRESULT Initialize_Prototype(const _char* szDirPath, aiMaterial* pMaterial);
+	virtual HRESULT Initialize_Prototype(const _char* szDirPath, ifstream& inFile);
 
-	HRESULT Bind_Texture(class CShader* pShader, const _char* pConstantName, aiTextureType eType, _uint iTextureIndex = 0);
+	HRESULT Bind_Texture(class CShader* pShader, const _char* pConstantName, TEXTURE_TYPE eType, _uint iTextureIndex = 0);
 private:
 	vector < CTexture* > m_vecTexture;
 public:
-	static CMaterial* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath, aiMaterial* pMaterial);
+	static CMaterial* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath, ifstream& inFile);
 	CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

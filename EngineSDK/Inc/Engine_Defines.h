@@ -14,9 +14,6 @@ using namespace DirectX;
 #include "Effects11\d3dx11effect.h"
 #include "DirectXTK\DDSTextureLoader.h"
 #include "DirectXTK\WICTextureLoader.h"
-#include "assimp\scene.h"
-#include "assimp\Importer.hpp"
-#include "assimp\postprocess.h"
 
 #include <d3dcompiler.h>
 
@@ -26,16 +23,16 @@ namespace Engine
 
 	enum class KEY_STATE
 	{
-		NONE,// ÀÌÀü¿¡µµ ´­¸®Áö ¾Ê¾Ò°í, ÇöÀçµµ ´­¸®Áö ¾ÊÀº.
-		DOWN, // ¸· ´©¸¥ ½ÃÁ¡.
-		PRESSING, // ´©¸£°í ÀÖ´Â.
-		UP, // ¸· ¶¾ ½ÃÁ¡.
+		NONE,
+		DOWN,
+		PRESSING,
+		UP, 
 	};
 
 	enum class MOUSE_KEY { LB, RB, MB, LAST, };
 	enum class MOUSE_MOVE { X, Y, Z, LAST, };
 
-	enum class KEY // ÀÚÃ¼ÀûÀ¸·Î Áö¿ø ÇÒ Å° Á¾·ù
+	enum class KEY
 	{
 		LEFT,
 		RIGHT,
@@ -87,7 +84,7 @@ namespace Engine
 		ENTER,
 		ESC,
 		TAB,
-		LAST, // ³¡À» ¾Ë¸®´Â.
+		LAST, // ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¸ï¿½ï¿½ï¿½.
 	};
 
 	enum class CORNOR_TYPE
@@ -103,6 +100,40 @@ namespace Engine
 		RIGHT_BOT,
 		LAST
 	};
+
+	enum class TEXTURE_TYPE
+	{
+        NONE = 0,
+        DIFFUSE = 1,
+        SPECULAR = 2,
+        AMBIENT = 3,
+        EMISSIVE = 4,
+        HEIGHT = 5,
+        NORMALS = 6,
+        SHININESS = 7,
+        OPACITY = 8,
+        DISPLACEMENT = 9,
+        LIGHTMAP = 10,
+        REFLECTION = 11,
+        BASE_COLOR = 12,
+        NORMAL_CAMERA = 13,
+        EMISSION_COLOR = 14,
+        METALNESS = 15,
+        DIFFUSE_ROUGHNESS = 16,
+        AMBIENT_OCCLUSION = 17,
+        UNKNOWN = 18,
+
+        SHEEN = 19,
+
+        CLEARCOAT = 20,
+
+        TRANSMISSION = 21,
+        MAYA_BASE = 22,
+        MAYA_SPECULAR = 23,
+        MAYA_SPECULAR_COLOR = 24,
+        MAYA_SPECULAR_ROUGHNESS = 25,
+	};
+#define TEXTURE_TYPE_MAX (_uint)TEXTURE_TYPE::MAYA_SPECULAR_ROUGHNESS
 }
 
 #include <string>

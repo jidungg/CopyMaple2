@@ -1,4 +1,7 @@
 D:\Workbench\Portfolio\CopyMaple2\Client\private\BackGround.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\BackGround.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Builder.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\Builder.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\ItemDataBase.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\ItemDataBase.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\ModelObject.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\ModelObject.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Camera_Free.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\Camera_Free.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Camera_Trace.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\Camera_Trace.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Canvas.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\Canvas.obj
@@ -10,13 +13,15 @@ D:\Workbench\Portfolio\CopyMaple2\Client\private\Level_Loading.cpp;D:\Workbench\
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Level_Logo.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\Level_Logo.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\private\Loader.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\Loader.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\private\MainApp.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\MainApp.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\MyTransform.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\MyTransform.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\Player.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\CubeTerrain.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\CubeTerrain.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Terrain.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\Terrain.obj
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\RenderObject.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\RenderObject.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\TerrainObject.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\TerrainObject.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIButton.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\UIButton.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIPanel.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\UIPanel.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Public\UIItemIndicator.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\UIItemIndicator.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Default\Client.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\Client.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Default\Client_Utility.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\Client_Utility.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Default\JsonParser.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\JsonParser.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Default\stdafx.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Release\stdafx.obj

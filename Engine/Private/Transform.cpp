@@ -127,10 +127,12 @@ void CTransform::TurnToward(const _fvector& vDestLook, _float fTimeDelta)
 	_vector vDest =  XMVector4Normalize(vDestLook);
 	vLook = XMVector4Normalize(vLook);
 
-	if (XMVector4Equal(vLook, vDest))
+	if (XMVector4Equal(vLook, vDest) )
 		return;
 
-	 _vector vAxis = XMVector4Cross(vPos + vLook, vPos + vDest, vPos);
+	 _vector vAxis = XMVector3Cross(vLook,vDest);
+	 if (XMVector4Equal(vAxis, XMVectorZero()))
+		 vAxis = Get_State(STATE_LOOK);
 
 	 _matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, m_fRotationPerSec * fTimeDelta);
 	 _vector vResultLook = XMVector3TransformNormal(vLook, RotationMatrix);

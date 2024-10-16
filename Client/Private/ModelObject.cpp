@@ -39,7 +39,7 @@ HRESULT CModelObject::Initialize(void* pArg)
 
 void CModelObject::Update(_float fTimeDelta)
 {
-    m_pTransformCom->TurnToward(Get_Direction_Vector(m_eDestDirection), fTimeDelta);
+    
 	__super::Update(fTimeDelta);
 }
 
@@ -57,6 +57,7 @@ HRESULT CModelObject::Ready_Components(void* pArg)
         return E_FAIL;
 
 
+    m_pTransformCom->LookToward(Get_Direction_Vector(pDesc->direction));
     return S_OK;
 }
 
@@ -70,7 +71,7 @@ HRESULT CModelObject::Render()
 
     for (size_t i = 0; i < iNumMeshes; i++)
     {
-        if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", i, aiTextureType_DIFFUSE, 0)))
+        if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", i, TEXTURE_TYPE::DIFFUSE, 0)))
             return E_FAIL;
         m_pShaderCom->Begin(0);
         m_pModelCom->Render(i);
@@ -90,11 +91,6 @@ void CModelObject::ReplaceModel(CModel* pModel)
 	Safe_AddRef(m_pModelCom);
 }
 
-void CModelObject::Rotate()
-{
-	m_eDestDirection = (DIRECTION)(((_uint)m_eDestDirection + 1) % (_uint)DIRECTION::XMZP);
-
-}
 
 
 HRESULT CModelObject::Bind_ShaderResources()

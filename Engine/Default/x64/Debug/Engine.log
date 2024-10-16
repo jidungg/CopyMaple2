@@ -1,12 +1,22 @@
-﻿  Transform.cpp
+﻿  Bone.cpp
+D:\Workbench\Portfolio\CopyMaple2\Engine\Public\Engine_Struct.h(76,2): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '../Private/Bone.cpp'을(를) 컴파일하는 중)
+  
+  Model.cpp
+D:\Workbench\Portfolio\CopyMaple2\Engine\Public\Engine_Struct.h(76,2): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '../Private/Model.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Model.cpp(100,36): warning C4267: '=': 'size_t'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
   Engine.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Engine\Bin\Engine.dll
-  '//'은(는) 내부 또는 외부 명령, 실행할 수 있는 프로그램, 또는
-  배치 파일이 아닙니다.
+  '//' is not recognized as an internal or external command,
+  operable program or batch file.
   .\Engine\Bin\Engine.dll
-  1개 파일이 복사되었습니다.
+  1 File(s) copied
   .\Engine\Bin\Engine.lib
-  1개 파일이 복사되었습니다.
+  1 File(s) copied
   .\Engine\Public\Base.h
+  .\Engine\Public\Bone.h
   .\Engine\Public\Button_Component.h
   .\Engine\Public\Camera.h
   .\Engine\Public\Camera_UI.h
@@ -51,102 +61,6 @@
   .\Engine\Public\VIBuffer.h
   .\Engine\Public\VIBuffer_Rect.h
   .\Engine\Public\VIBuffer_Terrain.h
-  .\Engine\Public\assimp\.editorconfig
-  .\Engine\Public\assimp\aabb.h
-  .\Engine\Public\assimp\ai_assert.h
-  .\Engine\Public\assimp\anim.h
-  .\Engine\Public\assimp\AssertHandler.h
-  .\Engine\Public\assimp\Base64.hpp
-  .\Engine\Public\assimp\BaseImporter.h
-  .\Engine\Public\assimp\Bitmap.h
-  .\Engine\Public\assimp\BlobIOSystem.h
-  .\Engine\Public\assimp\ByteSwapper.h
-  .\Engine\Public\assimp\camera.h
-  .\Engine\Public\assimp\cexport.h
-  .\Engine\Public\assimp\cfileio.h
-  .\Engine\Public\assimp\cimport.h
-  .\Engine\Public\assimp\ColladaMetaData.h
-  .\Engine\Public\assimp\color4.h
-  .\Engine\Public\assimp\color4.inl
-  .\Engine\Public\assimp\commonMetaData.h
-  .\Engine\Public\assimp\config.h
-  .\Engine\Public\assimp\config.h.in
-  .\Engine\Public\assimp\CreateAnimMesh.h
-  .\Engine\Public\assimp\DefaultIOStream.h
-  .\Engine\Public\assimp\DefaultIOSystem.h
-  .\Engine\Public\assimp\DefaultLogger.hpp
-  .\Engine\Public\assimp\defs.h
-  .\Engine\Public\assimp\Exceptional.h
-  .\Engine\Public\assimp\Exporter.hpp
-  .\Engine\Public\assimp\fast_atof.h
-  .\Engine\Public\assimp\GenericProperty.h
-  .\Engine\Public\assimp\GltfMaterial.h
-  .\Engine\Public\assimp\Hash.h
-  .\Engine\Public\assimp\Importer.hpp
-  .\Engine\Public\assimp\importerdesc.h
-  .\Engine\Public\assimp\IOStream.hpp
-  .\Engine\Public\assimp\IOStreamBuffer.h
-  .\Engine\Public\assimp\IOSystem.hpp
-  .\Engine\Public\assimp\light.h
-  .\Engine\Public\assimp\LineSplitter.h
-  .\Engine\Public\assimp\LogAux.h
-  .\Engine\Public\assimp\Logger.hpp
-  .\Engine\Public\assimp\LogStream.hpp
-  .\Engine\Public\assimp\material.h
-  .\Engine\Public\assimp\material.inl
-  .\Engine\Public\assimp\MathFunctions.h
-  .\Engine\Public\assimp\matrix3x3.h
-  .\Engine\Public\assimp\matrix3x3.inl
-  .\Engine\Public\assimp\matrix4x4.h
-  .\Engine\Public\assimp\matrix4x4.inl
-  .\Engine\Public\assimp\MemoryIOWrapper.h
-  .\Engine\Public\assimp\mesh.h
-  .\Engine\Public\assimp\metadata.h
-  .\Engine\Public\assimp\module.modulemap
-  .\Engine\Public\assimp\NullLogger.hpp
-  .\Engine\Public\assimp\ObjMaterial.h
-  .\Engine\Public\assimp\ParsingUtils.h
-  .\Engine\Public\assimp\pbrmaterial.h
-  .\Engine\Public\assimp\postprocess.h
-  .\Engine\Public\assimp\Profiler.h
-  .\Engine\Public\assimp\ProgressHandler.hpp
-  .\Engine\Public\assimp\qnan.h
-  .\Engine\Public\assimp\quaternion.h
-  .\Engine\Public\assimp\quaternion.inl
-  .\Engine\Public\assimp\RemoveComments.h
-  .\Engine\Public\assimp\revision.h
-  .\Engine\Public\assimp\revision.h.in
-  .\Engine\Public\assimp\scene.h
-  .\Engine\Public\assimp\SceneCombiner.h
-  .\Engine\Public\assimp\SGSpatialSort.h
-  .\Engine\Public\assimp\SkeletonMeshBuilder.h
-  .\Engine\Public\assimp\SmallVector.h
-  .\Engine\Public\assimp\SmoothingGroups.h
-  .\Engine\Public\assimp\SmoothingGroups.inl
-  .\Engine\Public\assimp\SpatialSort.h
-  .\Engine\Public\assimp\StandardShapes.h
-  .\Engine\Public\assimp\StreamReader.h
-  .\Engine\Public\assimp\StreamWriter.h
-  .\Engine\Public\assimp\StringComparison.h
-  .\Engine\Public\assimp\StringUtils.h
-  .\Engine\Public\assimp\Subdivision.h
-  .\Engine\Public\assimp\texture.h
-  .\Engine\Public\assimp\TinyFormatter.h
-  .\Engine\Public\assimp\types.h
-  .\Engine\Public\assimp\vector2.h
-  .\Engine\Public\assimp\vector2.inl
-  .\Engine\Public\assimp\vector3.h
-  .\Engine\Public\assimp\vector3.inl
-  .\Engine\Public\assimp\version.h
-  .\Engine\Public\assimp\Vertex.h
-  .\Engine\Public\assimp\XmlParser.h
-  .\Engine\Public\assimp\XMLTools.h
-  .\Engine\Public\assimp\ZipArchiveIOSystem.h
-  .\Engine\Public\assimp\Compiler\poppack1.h
-  .\Engine\Public\assimp\Compiler\pstdint.h
-  .\Engine\Public\assimp\Compiler\pushpack1.h
-  .\Engine\Public\assimp\port\AndroidJNI\AndroidJNIIOSystem.h
-  .\Engine\Public\assimp\port\AndroidJNI\BundledAssetIOSystem.h
   .\Engine\Public\DirectXTK\Audio.h
   .\Engine\Public\DirectXTK\CommonStates.h
   .\Engine\Public\DirectXTK\DDSTextureLoader.h
@@ -170,4 +84,4 @@
   .\Engine\Public\DirectXTK\XboxDDSTextureLoader.h
   .\Engine\Public\Effects11\d3dx11effect.h
   .\Engine\Public\Effects11\d3dxGlobal.h
-  164개 파일이 복사되었습니다.
+  69 File(s) copied

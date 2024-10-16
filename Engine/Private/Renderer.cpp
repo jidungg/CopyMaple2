@@ -15,7 +15,7 @@ HRESULT CRenderer::Initialize()
 
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
-	depthStencilDesc.DepthEnable = FALSE; // ±íÀÌ Å×½ºÆ® ºñÈ°¼ºÈ­
+	depthStencilDesc.DepthEnable = FALSE; // ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ® ï¿½ï¿½È°ï¿½ï¿½È­
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
 	depthStencilDesc.StencilEnable = FALSE;
@@ -23,7 +23,7 @@ HRESULT CRenderer::Initialize()
 	m_pDevice->CreateDepthStencilState(&depthStencilDesc, &m_pUIDSState);
 
 	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
-	depthStencilDesc.DepthEnable = TRUE; // ±íÀÌ Å×½ºÆ® È°¼ºÈ­
+	depthStencilDesc.DepthEnable = TRUE; // ï¿½ï¿½ï¿½ï¿½ ï¿½×½ï¿½Æ® È°ï¿½ï¿½È­
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
 	depthStencilDesc.StencilEnable = FALSE;

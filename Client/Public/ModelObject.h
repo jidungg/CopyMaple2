@@ -38,8 +38,8 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-	void ReplaceModel(CModel* pModel);
-	void Rotate();
+	virtual void ReplaceModel(CModel* pModel);
+
 protected:
 	virtual HRESULT Ready_Components(void* pArg);
 
@@ -49,8 +49,7 @@ private:
 protected:
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
-	DIRECTION m_eDirection = DIRECTION::XM;
-	DIRECTION m_eDestDirection = DIRECTION::XM;
+	
 public:
 	static CModelObject* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

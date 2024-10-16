@@ -15,6 +15,9 @@
 #include "MeshCollider.h"
 #include "Builder.h"
 #include "ModelObject.h"
+#include "ItemDataBase.h"
+#include "ItemDataBase.h"
+#include "ItemDataBase.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -44,8 +47,8 @@ HRESULT CLoader::Initialize(LEVELID eNextLevelID)
 
 	InitializeCriticalSection(&m_Critical_Section);
 
-	/* ³» ÄÚµå¸¦ ÀÐ¾î³ª°¥¼ö ÀÖ´Â ÇÏ³ªÀÇ ½º·¹µå¸¦ »ý¼ºÇÑ´Ù. */
-	/* »ý¼ºÇÑ ½º·¹µå°¡ È£ÃâÇØ¾ßÇÒ ÁøÀÔÁ¡ÇÔ¼ö¸¦ ÁöÁ¤ÇØÁØ´Ù. */
+	/* ï¿½ï¿½ ï¿½Úµå¸¦ ï¿½Ð¾î³ªï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½. */
+	/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½å°¡ È£ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½. */
 	m_hThread = (HANDLE)_beginthreadex(nullptr, 0, LoadingMain, this, 0, nullptr);
 	if (0 == m_hThread)
 		return E_FAIL;
@@ -93,41 +96,20 @@ void CLoader::Show_Debug()
 
 #endif
 
-HRESULT CLoader::Loading_Level_Static()
-{
-	lstrcpy(m_szLoadingText, TEXT("ÅØ½ºÃÄ¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
-
-
-
-	lstrcpy(m_szLoadingText, TEXT("»ç¿îµå¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
-
-
-	lstrcpy(m_szLoadingText, TEXT("½¦ÀÌ´õ¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
-
-
-	lstrcpy(m_szLoadingText, TEXT("¸ðµ¨(À»)¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
-
-
-	lstrcpy(m_szLoadingText, TEXT("°´Ã¼¿øÇü(À»)¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
-
-
-	m_isFinished = true;
-	return S_OK;
-}
 
 HRESULT CLoader::Loading_Level_Logo()
 {
-	lstrcpy(m_szLoadingText, TEXT("ÅØ½ºÃÄ¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
+		if (FAILED(ITEMDB->LoadFromJson()))
+		return E_FAIL;
+	lstrcpy(m_szLoadingText, TEXT("í…ìŠ¤ì²˜ ë¡œë“œ."));
 	/* For.Prototype_Component_Texture_Logo */
    
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_Logo"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_henesys_a.dds"), 2))))
 		return E_FAIL;
-
-	lstrcpy(m_szLoadingText, TEXT("»ç¿îµå¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
 	
 
-	lstrcpy(m_szLoadingText, TEXT("½¦ÀÌ´õ¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
+	lstrcpy(m_szLoadingText, TEXT("ì…°ì´ë” ë¡œë“œ."));
 	/* For.Prototype_Component_Shader_VtxPosTex */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxPosTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPosTex.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
@@ -142,24 +124,28 @@ HRESULT CLoader::Loading_Level_Logo()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_VtxMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
 		return E_FAIL;
 
-	lstrcpy(m_szLoadingText, TEXT("¸ðµ¨(À»)¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
+	lstrcpy(m_szLoadingText, TEXT("ëª¨ë¸ ë¡œë“œ."));
 	//EmptyModel
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_Model_EmptyModel"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/FBXs/EmptyModel.fbx"))))
+		CModel::Create(m_pDevice, m_pContext,  "../Bin/Resources/FBXs/EmptyModel.model"))))
 		return E_FAIL;
+
 	/* For.Prototype_Component_VIBuffer_Rect */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_VIBuffer_Rect"),
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	///* For.Prototype_Component_CModel*/
-	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING, CModel::TYPE_NONANIM,
+	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/MAP/Cube/"))))
 		return E_FAIL;
- 
+	//if (FAILED(Load_Dirctory_Models(LEVEL_LOADING, CModel::TYPE_NONANIM,
+	//	TEXT("../Bin/resources/FBXs/MAP/Field/"))))
+	//	return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CMeshCollider::m_szProtoTag,
 		CMeshCollider::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	lstrcpy(m_szLoadingText, TEXT("°´Ã¼¿øÇü(À»)¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
+	lstrcpy(m_szLoadingText, TEXT("ê°ì²´ ë¡œë“œ."));
 	//ModelObject
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CModelObject::m_szProtoTag,
 		CModelObject::Create(m_pDevice, m_pContext))))
@@ -185,10 +171,12 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, 
-		TEXT("Prototype_GameObject_TempTerrainObj"),
+		CTerrainObject::m_szProtoTag,
 		CTerrainObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	lstrcpy(m_szLoadingText, TEXT("·ÎµùÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù."));
+
+
+	lstrcpy(m_szLoadingText, TEXT("ë¡œë“œ ì™„ë£Œ."));
 
 	m_isFinished = true;
 
@@ -197,25 +185,20 @@ HRESULT CLoader::Loading_Level_Logo()
 
 HRESULT CLoader::Loading_Level_GamePlay()
 {
-	lstrcpy(m_szLoadingText, TEXT("ÅØ½ºÃÄ¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
+	lstrcpy(m_szLoadingText, TEXT("í…ìŠ¤ì²˜."));
 	/* For.Prototype_Component_Texture_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/resources/Textures/Terrain/Tile0.jpg"), 1))))
 		return E_FAIL;
 
 
-	lstrcpy(m_szLoadingText, TEXT("»ç¿îµå¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
-		
-
-	lstrcpy(m_szLoadingText, TEXT("½¦ÀÌ´õ¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
-
-	lstrcpy(m_szLoadingText, TEXT("¸ðµ¨(À»)¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
+	lstrcpy(m_szLoadingText, TEXT("ëª¨ë¸ ë¡œë“œ"));
 	/* For.Prototype_Component_VIBuffer_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/resources/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
 
-	lstrcpy(m_szLoadingText, TEXT("°´Ã¼¿øÇü(À»)¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
+	lstrcpy(m_szLoadingText, TEXT("ê°ì²´ ë¡œë“œ"));
 	/* For.Prototype_GameObject_Terrain */
   	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, 
 		TEXT("Prototype_GameObject_Terrain"),
@@ -229,7 +212,7 @@ HRESULT CLoader::Loading_Level_GamePlay()
 		return E_FAIL;
 	
 
-	lstrcpy(m_szLoadingText, TEXT("·ÎµùÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù."));
+	lstrcpy(m_szLoadingText, TEXT("ë¡œë”© ì™„ë£Œ"));
 
 	m_isFinished = true;
 
@@ -238,7 +221,7 @@ HRESULT CLoader::Loading_Level_GamePlay()
 
 HRESULT CLoader::Loading_Level_MyHome()
 {
-	lstrcpy(m_szLoadingText, TEXT("ÅØ½ºÃÄ¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
+	lstrcpy(m_szLoadingText, TEXT("í…ìŠ¤ì²˜ ë¡œë“œ"));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_Magnifier"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Magnifier_%d.dds"), 4))))
 		return E_FAIL;
@@ -253,17 +236,14 @@ HRESULT CLoader::Loading_Level_MyHome()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_SelectedYellow"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Mat_SelectedYellow.dds"), 1))))
 		return E_FAIL;
-	lstrcpy(m_szLoadingText, TEXT("»ç¿îµå¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
 
 
-	lstrcpy(m_szLoadingText, TEXT("½¦ÀÌ´õ¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
 
-
-	lstrcpy(m_szLoadingText, TEXT("¸ðµ¨(À»)¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
+	lstrcpy(m_szLoadingText, TEXT("ëª¨ë¸ ë¡œë“œ."));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_Model_ChocoDuckyBall"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/FBXs/DuckyBall/60100001_chocoduckyball.fbx"))))
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/FBXs/DuckyBall/60100001_chocoduckyball.model"))))
 		return E_FAIL;
-	lstrcpy(m_szLoadingText, TEXT("°´Ã¼¿øÇü(À»)¸¦ ·ÎµùÁßÀÔ´Ï´Ù."));
+	lstrcpy(m_szLoadingText, TEXT("ê°ì²´ ë¡œë“œ."));
 	/* For.Prototype_GameObject_HomeDialog */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialog"),
 		CHomeDialog::Create(m_pDevice, m_pContext))))
@@ -276,14 +256,14 @@ HRESULT CLoader::Loading_Level_MyHome()
 		CBuilder::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	lstrcpy(m_szLoadingText, TEXT("·ÎµùÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù."));
+	lstrcpy(m_szLoadingText, TEXT("ë¡œë“œ ì™„ë£Œ."));
 
 	m_isFinished = true;
 
 	return S_OK;
 }
 
-HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId, CModel::TYPE eModelType, const _tchar* szDirPath)
+HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId,  const _tchar* szDirPath)
 {
 	WIN32_FIND_DATA		FindFileData = {};
 	HANDLE				hFind = INVALID_HANDLE_VALUE;
@@ -291,7 +271,7 @@ HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId, CModel::TYPE eModelType, c
 	_tchar				szFilePath[MAX_PATH] = TEXT("");
 	_tchar				szFullPath[MAX_PATH] = TEXT("");
 	_tchar				szProtoTag[MAX_PATH] = TEXT("");
-	_tchar				szExtension[MAX_PATH] = TEXT(".fbx");
+	_tchar				szExtension[MAX_PATH] = TEXT(".model");
 
 	lstrcpy(szFilePath, szDirPath);
 	lstrcat(szFilePath, TEXT("*"));
@@ -313,7 +293,7 @@ HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId, CModel::TYPE eModelType, c
 		wstring wstr = szFullPath;
 		string str{ wstr.begin(), wstr.end() };
 		if (FAILED(m_pGameInstance->Add_Prototype(eLevId, FindFileData.cFileName,
-			CModel::Create(m_pDevice, m_pContext, eModelType, str.c_str()))))
+			CModel::Create(m_pDevice, m_pContext, str.c_str()))))
 			return E_FAIL;
 
 	} while (FindNextFile(hFind, &FindFileData));

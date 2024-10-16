@@ -3,9 +3,8 @@
 #include "Client_Defines.h"
 #include "Base.h"
 #include "Model.h"
-
-/* ¼­ºê ½º·¹µå¸¦ »ý¼ºÇÑ´Ù.  */
-/* ´ÙÀ½ ·¹º§¿¡ ÇÊ¿äÇÑ ÀÚ¿øÀ» ·ÎµåÇÏ´Â ¿ªÈ° */
+/* ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.  */
+/* ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½Ï´ï¿½ ï¿½ï¿½È° */
 BEGIN(Engine)
 class CGameInstance;
 END
@@ -45,12 +44,11 @@ private:
 	_tchar					m_szLoadingText[MAX_PATH] = {};	
 
 private:
-	HRESULT Loading_Level_Static();
 	HRESULT Loading_Level_Logo();
 	HRESULT Loading_Level_GamePlay();
 	HRESULT Loading_Level_MyHome();
 
-	HRESULT Load_Dirctory_Models(LEVELID eLevId, CModel::TYPE eModelType, const _tchar* szDirPath);
+	HRESULT Load_Dirctory_Models(LEVELID eLevId, const _tchar* szDirPath);
 
 public:
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eNextLevelID);

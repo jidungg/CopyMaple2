@@ -14,6 +14,7 @@
 #include "Collider.h"
 #include "TerrainObject.h"
 
+
 CLevel_Home::CLevel_Home(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel(pDevice, pContext)
 {
@@ -42,7 +43,10 @@ HRESULT CLevel_Home::Initialize()
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, TEXT("Layer_Builder"), m_pBuilder)))
 		return E_FAIL;
 	m_pBuilder->Set_Active(false);
-	m_pBuilder->Set_BuildItem(L"he_ground_grass_a01.fbx");
+
+	m_pItemData = ITEMDB->GetItemMap(ITEM_TYPE::BUILD);
+	m_pItemIter = m_pItemData->begin();
+	m_pBuilder->Set_BuildItem(m_pItemIter->second->wstrModelTag);
 
 return S_OK;
 }
@@ -94,7 +98,15 @@ void CLevel_Home::Update(_float fTimeDelta)
 			}
 
 		}
-
+		//ë‹¤ìŒ ì•„ì´í…œ ì„ íƒ
+		if (m_pGameInstance->GetKeyState(KEY::F) == KEY_STATE::DOWN)
+		{
+			m_pItemIter++;
+			if (m_pItemIter == m_pItemData->end())
+				m_pItemIter = m_pItemData->begin();
+			m_pBuilder->Set_BuildItem(m_pItemIter->second->wstrModelTag);
+	
+		}
 	}
 	else
 	{
@@ -106,7 +118,7 @@ void CLevel_Home::Update(_float fTimeDelta)
 HRESULT CLevel_Home::Render()
 {
 #ifdef _DEBUG
-	SetWindowText(g_hWnd, TEXT("¸¶ÀÌÈ¨ ·¹º§ÀÔ´Ï´Ù."));
+	SetWindowText(g_hWnd, TEXT("ï¿½ï¿½ï¿½ï¿½È¨ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½."));
 #endif
 
 	return S_OK;

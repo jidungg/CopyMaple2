@@ -16,6 +16,7 @@ BEGIN(Client)
 class CModelObject;
 class CItem;
 class CCubeTerrain;
+class CTerrainObject;
 class CBuilder :
     public CPawn
 {
@@ -49,7 +50,7 @@ private:
 	CModelObject* m_pBird = { nullptr };
 	XMVECTOR m_vBirdOffset = XMVectorSet(0, 1, 0, 0);
 
-	CModelObject* m_pPreview = { nullptr };
+	CTerrainObject* m_pPreview = { nullptr };
 	XMVECTOR m_vPreviewOffset = XMVectorSet(0, 0.5f, 0, 0);
 	_tchar m_szBuildItemTag[MAX_PATH] = L"";
 	DIRECTION m_eBuildItemDir = DIR_WS;

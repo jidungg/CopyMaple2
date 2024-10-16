@@ -169,6 +169,7 @@
   <ItemGroup>
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\Builder.h" />
+    <ClInclude Include="..\Public\ItemDataBase.h" />
     <ClInclude Include="..\Public\ModelObject.h" />
     <ClInclude Include="..\Public\Camera_Free.h" />
     <ClInclude Include="..\Public\Camera_Trace.h" />
@@ -200,6 +201,7 @@
   <ItemGroup>
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\Builder.cpp" />
+    <ClCompile Include="..\Private\ItemDataBase.cpp" />
     <ClCompile Include="..\Private\ModelObject.cpp" />
     <ClCompile Include="..\Private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_Trace.cpp" />

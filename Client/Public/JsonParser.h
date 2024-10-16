@@ -18,10 +18,10 @@ public:
 			// Handle error
 			return E_FAIL;
 		}
-		// JSON °´Ã¼·Î º¯È¯
+		// JSON ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½È¯
 		input_file >> *pOut;
 
-		// ÆÄÀÏ ´Ý±â
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½Ý±ï¿½
 		input_file.close();
 		return S_OK;
 	}
@@ -31,7 +31,7 @@ public:
 
 		std::ofstream file(strJsonFilePath);
 		if (file.is_open()) {
-			file << pJson.dump(4);  // µé¿©¾²±â¸¦ 4Ä­À¸·Î ¼³Á¤
+			file << pJson.dump(4);  // ï¿½é¿©ï¿½ï¿½ï¿½â¸¦ 4Ä­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			file.close();
 
 		}

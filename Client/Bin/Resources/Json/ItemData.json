@@ -1,0 +1,21 @@
+{
+    "items": [
+        {
+            "type": 2,
+            "name": "풀 블록1",
+            "desc": "풀이 돋아난 블록.",
+            "price": 10,
+            "iconimg": "he_ground_grass_a01.dds",
+            "model": "he_ground_grass_a01.model"
+        },
+        {
+            "type": 2,
+            "name": "돌 블록1",
+            "desc": "단단한 돌 블록.",
+            "price": 10,
+            "iconimg": "he_ground_rock_a01.dds",
+            "model": "he_ground_rock_a01.model"
+        }
+
+    ]
+}

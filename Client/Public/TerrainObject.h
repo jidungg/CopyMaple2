@@ -15,10 +15,11 @@ public:
 		TERRAIN_OBJ_TYPE eType = TERRAIN_OBJ_TYPE::TERRAIN_OBJ_END;
 		_float4 pos = {0,0,0,1};
 
-		int data = 0;//MonsterSpawner È¤Àº Portal¿ë
+		int data = 0;//MonsterSpawner È¤ï¿½ï¿½ Portalï¿½ï¿½
 		_uint index = 0;
 	}TERRAINOBJ_DESC;
-
+public:
+	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_TerrainObject";
 protected:
 	explicit CTerrainObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	explicit CTerrainObject(const CTerrainObject& Prototype);
@@ -33,8 +34,7 @@ public:
 	_uint Get_Index() { return m_iIndex; }
 
 	virtual json ToJson();
-	void Turn(DIRECTION eDir);
-
+	void Rotate();
 private:
 	HRESULT Ready_Components(TERRAINOBJ_DESC* pDesc);
 

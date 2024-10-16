@@ -7,28 +7,28 @@ CMaterial::CMaterial(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 }
 
 
-HRESULT CMaterial::Initialize_Prototype(const _char* szDirPath, aiMaterial* pAIMaterial)
+HRESULT CMaterial::Initialize_Prototype(const _char* szDirPath, ifstream& inFile)
 {
-	m_vecTexture.resize(AI_TEXTURE_TYPE_MAX);
+	m_vecTexture.resize(TEXTURE_TYPE_MAX);
 
-	for (size_t texTypeIdx = 1; texTypeIdx < AI_TEXTURE_TYPE_MAX; texTypeIdx++)
+	for (size_t texTypeIdx = 1; texTypeIdx < TEXTURE_TYPE_MAX; texTypeIdx++)
 	{
-		CTexture* pTexture = CTexture::Create(m_pDevice, m_pContext, szDirPath,pAIMaterial, aiTextureType(texTypeIdx));
+		CTexture* pTexture = CTexture::Create(m_pDevice, m_pContext, szDirPath, inFile, TEXTURE_TYPE(texTypeIdx));
 		m_vecTexture[texTypeIdx] = (pTexture);
 	}
 	return S_OK;
 }
 
-HRESULT CMaterial::Bind_Texture(CShader* pShader, const _char* pConstantName, aiTextureType eType, _uint iTextureIndex)
+HRESULT CMaterial::Bind_Texture(CShader* pShader, const _char* pConstantName, TEXTURE_TYPE eType, _uint iTextureIndex)
 {
-	return m_vecTexture[eType]->Bind_ShaderResource(pShader, pConstantName, iTextureIndex);
+	return m_vecTexture[(_uint)eType]->Bind_ShaderResource(pShader, pConstantName, iTextureIndex);
 }
 
-CMaterial* CMaterial::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath, aiMaterial* pMaterial)
+CMaterial* CMaterial::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath, ifstream& inFile)
 {
 	CMaterial* pInstance = new CMaterial(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(szDirPath,pMaterial)))
+	if (FAILED(pInstance->Initialize_Prototype(szDirPath,inFile)))
 	{
 		MSG_BOX("Failed to Created : CModel");
 		Safe_Release(pInstance);

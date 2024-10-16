@@ -5,6 +5,7 @@
 
 #include "Level_Loading.h"
 #include "Loader.h"
+#include "ItemDataBase.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance { CGameInstance::GetInstance() }
@@ -83,15 +84,14 @@ CMainApp * CMainApp::Create()
 void CMainApp::Free()
 {
 
-	/* ºÎ¸ð ¸â¹ö¸¦ Á¤¸®ÇÑ´Ù. */
+	/* ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½. */
 	__super::Free();
 
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
+	CItemDataBase::DestroyInstance();
 	Safe_Release(m_pGameInstance);
-
 	CGameInstance::Release_Engine();
-
 
 }
 

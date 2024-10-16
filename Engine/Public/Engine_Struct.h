@@ -15,11 +15,11 @@ namespace Engine
 		unsigned int	iViewportHeight;
 
 	}ENGINE_DESC;
-	// Å° Á¤º¸¸¦ ´ãÀ» ±¸Á¶Ã¼
+	// Å° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¼
 	struct ENGINE_DLL tKeyInfo
 	{
-		KEY_STATE   eState; // Å°ÀÇ »óÅÂ°ª
-		bool		bPrevPush;	// ÀÌÀü ÇÁ·¹ÀÓ¿¡¼­ ´­·È´ÂÁö ¿©ºÎ.
+		KEY_STATE   eState; // Å°ï¿½ï¿½ ï¿½ï¿½ï¿½Â°ï¿½
+		bool		bPrevPush;	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½È´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 	};
 
 	typedef struct LightDesc
@@ -72,6 +72,17 @@ namespace Engine
 		static const unsigned int					iNumElements = { 4 };
 		static const D3D11_INPUT_ELEMENT_DESC		Elements[iNumElements];
 	}VTXMESH;
+	typedef struct ENGINE_DLL
+	{
+		XMFLOAT3		vPosition;
+		XMFLOAT3		vNormal;
+		XMFLOAT2		vTexcoord;
+		XMFLOAT3		vTangent;
+		XMUINT4			vBlendIndices;
+		XMFLOAT4		vBlendWeights;
+		static const unsigned int					iNumElements = { 6 };
+		static const D3D11_INPUT_ELEMENT_DESC		Elements[iNumElements];
+	}VTXANIMMESH;
 
 	typedef struct ENGINE_DLL Ray
 	{
@@ -107,6 +118,7 @@ namespace Engine
 	{
 		XMFLOAT4		vPoint;
 		XMFLOAT4		vNormal;
+		float fDist;
 		class CCollider* pCollider = nullptr;
 
 	}RAYCASTHIT;

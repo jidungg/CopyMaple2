@@ -5,6 +5,7 @@
 #include "Mesh.h"
 #include "Model.h"
 #include "MeshCollider.h"
+#include "Client_Utility.h"
 
 CTerrainObject::CTerrainObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CModelObject(pDevice, pContext)
@@ -39,7 +40,7 @@ HRESULT CTerrainObject::Initialize(void* pArg)
 	m_eTerrainDir = pDesc->direction;
 	m_iIndex = pDesc->index;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(pDesc->pos.x, pDesc->pos.y, pDesc->pos.z,1));
-
+	
 	if (FAILED(Ready_Components(pDesc)))
 		return E_FAIL;
 
@@ -48,6 +49,7 @@ HRESULT CTerrainObject::Initialize(void* pArg)
 
 void CTerrainObject::Update(_float fTimeDelta)
 {
+	m_pTransformCom->TurnToward(Get_Direction_Vector(m_eTerrainDir), fTimeDelta);
 	__super::Update(fTimeDelta);
 }
 
@@ -67,10 +69,12 @@ json CTerrainObject::ToJson()
 	return j;
 }
 
-void CTerrainObject::Turn(DIRECTION eDir)
+void CTerrainObject::Rotate()
 {
-	//TODO
+	m_eTerrainDir = (DIRECTION)(((_uint)m_eTerrainDir + 1) % (_uint)DIRECTION::XMZP);
+
 }
+
 
 
 
@@ -79,11 +83,17 @@ HRESULT CTerrainObject::Ready_Components(TERRAINOBJ_DESC* pDesc)
 	CModelObject::Ready_Components(pDesc);
 
 	//Com_Collider
-	CMeshCollider::MESH_COLLIDER_DESC desc{};
-	desc.pMesh = m_pModelCom->Get_Mesh(0);
-	if (FAILED(Add_Component(LEVEL_LOADING, CMeshCollider::m_szProtoTag,
-		CCollider::m_szCompTag, reinterpret_cast<CComponent**>(&m_pColliderCom), & desc)))
-		return E_FAIL;
+	if (m_pModelCom->Get_NumMeshes() <= 0)
+		m_pColliderCom = nullptr;
+	else
+	{
+		CMeshCollider::MESH_COLLIDER_DESC desc{};
+		desc.pMesh = m_pModelCom->Get_Mesh(0);
+		if (FAILED(Add_Component(LEVEL_LOADING, CMeshCollider::m_szProtoTag,
+			CCollider::m_szCompTag, reinterpret_cast<CComponent**>(&m_pColliderCom), &desc)))
+			return E_FAIL;
+	}
+
 	return S_OK; 
 }
 

@@ -46,7 +46,7 @@ HRESULT CLevel_GamePlay::Ready_Lights()
 
 HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_CubeTerrain"), LEVEL_GAMEPLAY, strLayerTag, nullptr)))
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Henesys"), LEVEL_GAMEPLAY, strLayerTag, nullptr)))
 		return E_FAIL;
 	/*if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Terrain"), LEVEL_GAMEPLAY, strLayerTag, nullptr)))
 		return E_FAIL;*/
@@ -93,7 +93,7 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 HRESULT CLevel_GamePlay::Render()
 {
 #ifdef _DEBUG
-	SetWindowText(g_hWnd, TEXT("°ÔÀÓÇÃ·¹ÀÌ·¹º§ÀÔ´Ï´Ù."));
+	SetWindowText(g_hWnd, TEXT("í—¤ë„¤ì‹œìŠ¤"));
 #endif
 
 	return S_OK;

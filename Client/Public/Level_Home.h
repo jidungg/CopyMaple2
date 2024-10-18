@@ -3,11 +3,13 @@
 #include "Level.h"
 #include "ItemDataBase.h"
 
+
 BEGIN(Client)
 class CBuilder;
 class CCubeTerrain;
 class CCamera_Trace;
 class CPlayer;
+class CUIHomeDialog;
 class CLevel_Home final:
     public CLevel
 {
@@ -33,9 +35,11 @@ private:
 	CCamera_Trace* m_pCamera = { nullptr };
 	CPlayer* m_pPlayer = { nullptr };
 
-	map<wstring,  ITEM_DESC*>* m_pItemData = nullptr;
-	map<wstring,  ITEM_DESC*>::iterator m_pItemIter = {};
+	map<string,  ITEM_DESC*>* m_pItemData = nullptr;
+	map<string,  ITEM_DESC*>::iterator m_pItemIter = {};
 	bool m_bBuildMode = false;
+
+	CUIHomeDialog* m_pHomeDialog = { nullptr };
 public:
 	static CLevel_Home* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void Free() override;

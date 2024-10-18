@@ -21,6 +21,13 @@ public:
 	HRESULT Initialize(ifstream& inFile, _int iParentBoneIndex);
 	void Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix PreTransformMatrix);
 
+	_matrix Get_CombinedTransformationMatrix() const {
+		return XMLoadFloat4x4(&m_CombindTransformationMatrix);
+	}
+	void Set_TransformationMatrix(_fmatrix TransformationMatrix) {
+		XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix);
+	}
+
 private:
 	_char				m_szName[MAX_PATH] = {};
 
@@ -33,6 +40,7 @@ private:
 
 public:
 	static CBone* Create(ifstream& inFile, _int iParentBoneIndex);
+	virtual CBone* Clone();
 	virtual void Free() override;
 };
 

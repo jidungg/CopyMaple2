@@ -35,7 +35,7 @@ HRESULT CTerrainObject::Initialize(void* pArg)
 
 	pDesc->fRotationPerSec = 5.f;
 	pDesc->fSpeedPerSec = 1.f;
-	m_modleName = pDesc->wstrModelProtoName;
+	m_strItemName = pDesc->strItemName;
 	m_eTerrObjType = pDesc->eType;
 	m_eTerrainDir = pDesc->direction;
 	m_iIndex = pDesc->index;
@@ -49,7 +49,7 @@ HRESULT CTerrainObject::Initialize(void* pArg)
 
 void CTerrainObject::Update(_float fTimeDelta)
 {
-	m_pTransformCom->TurnToward(Get_Direction_Vector(m_eTerrainDir), fTimeDelta);
+	//m_pTransformCom->TurnToward(Get_Direction_Vector(m_eTerrainDir), fTimeDelta);
 	__super::Update(fTimeDelta);
 }
 
@@ -60,12 +60,14 @@ json CTerrainObject::ToJson()
 {
 	json j;
 	j["type"] = m_eTerrObjType;
-	string str{ m_modleName.begin(), m_modleName.end() };
-	j["model"] = str.c_str();
+	j["model"] = m_strItemName;
 	j["data"] = 0;
 	j["rotation"] = { 0,0,0 };
 	j["position"] = { 0,0,0 };
 	j["iteration"] = 1;
+	j["direction"] = m_eTerrainDir;
+	j["index"] = m_iIndex;
+	cout << j;
 	return j;
 }
 

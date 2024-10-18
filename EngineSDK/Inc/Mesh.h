@@ -17,11 +17,15 @@ public:
 	}
 
 public:
-	virtual HRESULT Initialize_Prototype(CModel::TYPE eModelType, CModel* pModel, ifstream& inFile);
+	virtual HRESULT Initialize_Prototype(CModel::TYPE eModelType, CModel* pModel, ifstream& inFile, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize(void* pArg);
 
 public:
-	HRESULT Ready_VertexBuffer_For_NonAnim(ifstream& inFile);
+	//셰이더에 본 행렬을 바인딩
+	HRESULT Bind_BoneMatrices(class CShader* pShader, const _char* pConstantName, const vector<CBone*>& Bones);
+
+public:
+	HRESULT Ready_VertexBuffer_For_NonAnim(ifstream& inFile, _fmatrix PreTransformMatrix);
 	HRESULT Ready_VertexBuffer_For_Anim(ifstream& inFile, class CModel* pModel);
 
 
@@ -31,9 +35,10 @@ private:
 	_uint						m_iNumBones = {};
 
 	vector<_uint>				m_BoneIndices;
-
+	vector<_float4x4>			m_BoneOffsetMatrices;
+	_float4x4					m_BoneMatrices[512];
 public:
-	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CModel::TYPE eModelType,  CModel* pModel, ifstream& inFile);
+	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CModel::TYPE eModelType,  CModel* pModel, ifstream& inFile, _fmatrix PreTransformMatrix);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 

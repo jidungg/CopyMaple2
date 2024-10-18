@@ -14,10 +14,10 @@ private:
 
 public:
 	HRESULT LoadFromJson();
-	ITEM_DESC* GetItemDesc(ITEM_TYPE eType, wstring pKey) { return m_mapItem[(_uint)eType][pKey]; }
-	map<wstring, ITEM_DESC*>* GetItemMap(ITEM_TYPE eType) { return &m_mapItem[(_uint)eType]; }
+	ITEM_DESC* GetItemDesc(ITEM_TYPE eType, string pKey) { return m_mapItem[(_uint)eType][pKey]; }
+	map<string, ITEM_DESC*>* GetItemMap(ITEM_TYPE eType) { return &m_mapItem[(_uint)eType]; }
 private:
-	map<wstring , ITEM_DESC*> m_mapItem[(_uint)ITEM_TYPE::ITEM_TYPE_END];
+	map<string , ITEM_DESC*> m_mapItem[(_uint)ITEM_TYPE::ITEM_TYPE_END];
 public:
 	void Free();
 };

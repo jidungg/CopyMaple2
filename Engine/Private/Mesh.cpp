@@ -1,13 +1,14 @@
 #include "..\Public\Mesh.h"
 #include "Model.h"
 #include "GameInstance.h"
+#include "Bone.h"
 
 CMesh::CMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CVIBuffer{ pDevice, pContext }
 {
 }
 
-HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, CModel* pModel, ifstream& inFile )
+HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, CModel* pModel, ifstream& inFile, _fmatrix PreTransformMatrix)
 {
 	inFile.read(reinterpret_cast<char*>(&m_iMaterialIndex), sizeof(_uint));
 
@@ -28,7 +29,7 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, CModel* pModel, ifs
 
 #pragma region VERTEX_BUFFER	
 
-	HRESULT hr = CModel::TYPE_NONANIM == eModelType ? Ready_VertexBuffer_For_NonAnim(inFile) : Ready_VertexBuffer_For_Anim(inFile, pModel);
+	HRESULT hr = CModel::TYPE_NONANIM == eModelType ? Ready_VertexBuffer_For_NonAnim(inFile, PreTransformMatrix) : Ready_VertexBuffer_For_Anim(inFile, pModel);
 
 	if (FAILED(hr))
 		return E_FAIL;
@@ -77,7 +78,24 @@ HRESULT CMesh::Initialize(void* pArg)
 	return S_OK;
 }
 
-HRESULT CMesh::Ready_VertexBuffer_For_NonAnim(ifstream& inFile)
+HRESULT CMesh::Bind_BoneMatrices(CShader* pShader, const _char* pConstantName, const vector<CBone*>& Bones)
+{
+	ZeroMemory(m_BoneMatrices, sizeof(_float4x4) * 512);
+
+	_uint		iNumBones = { 0 };
+
+
+	for (auto& iBoneIndex : m_BoneIndices)
+	{
+		XMStoreFloat4x4(&m_BoneMatrices[iNumBones], XMLoadFloat4x4(&m_BoneOffsetMatrices[iNumBones]) * Bones[iBoneIndex]->Get_CombinedTransformationMatrix());
+		++iNumBones;
+	}
+
+	return pShader->Bind_Matrices(pConstantName, m_BoneMatrices, 512);
+
+}
+
+HRESULT CMesh::Ready_VertexBuffer_For_NonAnim(ifstream& inFile, _fmatrix PreTransformMatrix)
 {
 
 	m_iVertexStride = sizeof(VTXMESH);
@@ -95,7 +113,6 @@ HRESULT CMesh::Ready_VertexBuffer_For_NonAnim(ifstream& inFile)
 
 	VTXMESH* pVertices = new VTXMESH[m_iNumVertices];
 	ZeroMemory(pVertices, sizeof(VTXMESH) * m_iNumVertices);
-	XMMATRIX PreTransformMatrix = m_pGameInstance->Get_TransformMatrix(CPipeLine::D3DTS_GLOBAL);
 	for (size_t i = 0; i < m_iNumVertices; i++)
 	{
 		inFile.read(reinterpret_cast<char*>(&pVertices[i].vPosition), sizeof(_float3));
@@ -160,6 +177,11 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(ifstream& inFile, CModel* pModel)
 
 		m_BoneIndices.push_back(pModel->Get_BoneIndex(szName));
 
+		_float4x4	OffsetMatrix = {};
+		inFile.read(reinterpret_cast<char*>(&OffsetMatrix), sizeof(_float4x4));
+		XMStoreFloat4x4(&OffsetMatrix, XMMatrixTranspose(XMLoadFloat4x4(&OffsetMatrix)));
+		m_BoneOffsetMatrices.push_back(OffsetMatrix);
+
 		_uint iNumVertices;
 		inFile.read(reinterpret_cast<char*>(&iNumVertices), sizeof(_uint));
 		for (size_t curBoneVertex = 0; curBoneVertex < iNumVertices; curBoneVertex++)
@@ -192,6 +214,18 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(ifstream& inFile, CModel* pModel)
 		}
 	}
 
+	if (0 == m_iNumBones)
+	{
+		m_iNumBones = 1;
+
+		m_BoneIndices.push_back(pModel->Get_BoneIndex(m_szName));
+
+		_float4x4		OffsetMatrix;
+		XMStoreFloat4x4(&OffsetMatrix, XMMatrixIdentity());
+
+		m_BoneOffsetMatrices.push_back(OffsetMatrix);
+
+	}
 	ZeroMemory(&m_SubResourceDesc, sizeof m_SubResourceDesc);
 	m_SubResourceDesc.pSysMem = pVertices;
 
@@ -206,12 +240,12 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(ifstream& inFile, CModel* pModel)
 
 
 
-CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CModel::TYPE eModelType, CModel* pModel, ifstream& inFile)
+CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CModel::TYPE eModelType, CModel* pModel, ifstream& inFile, _fmatrix PreTransformMatrix)
 {
 
 	CMesh* pInstance = new CMesh(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(eModelType, pModel, inFile)))
+	if (FAILED(pInstance->Initialize_Prototype(eModelType, pModel, inFile, PreTransformMatrix)))
 	{
 		MSG_BOX("Failed to Created : CMesh");
 		Safe_Release(pInstance);

@@ -7,12 +7,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CModel.cpp" />
+    <ClCompile Include="FBXToBinary.cpp" />
     <ClCompile Include="FBXConverter.cpp" />
     <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CModel.h" />
+    <ClInclude Include="FBXToBinary.h" />
     <ClInclude Include="Defines.h" />
   </ItemGroup>
 </Project>

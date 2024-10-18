@@ -122,18 +122,8 @@ namespace Engine
         DIFFUSE_ROUGHNESS = 16,
         AMBIENT_OCCLUSION = 17,
         UNKNOWN = 18,
-
-        SHEEN = 19,
-
-        CLEARCOAT = 20,
-
-        TRANSMISSION = 21,
-        MAYA_BASE = 22,
-        MAYA_SPECULAR = 23,
-        MAYA_SPECULAR_COLOR = 24,
-        MAYA_SPECULAR_ROUGHNESS = 25,
 	};
-#define TEXTURE_TYPE_MAX (_uint)TEXTURE_TYPE::MAYA_SPECULAR_ROUGHNESS
+#define TEXTURE_TYPE_MAX (_uint)TEXTURE_TYPE::UNKNOWN
 }
 
 #include <string>

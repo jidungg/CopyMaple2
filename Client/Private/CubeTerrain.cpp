@@ -5,7 +5,7 @@
 #include "JsonParser.h"
 #include "ItemDataBase.h"
 
-CCubeTerrain::CCubeTerrain(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar* szMapFileName)
+CCubeTerrain::CCubeTerrain(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const char* szMapFileName)
 	: CGameObject { pDevice, pContext }
 {
 	m_strJsonFilePath = szMapFileName;
@@ -56,11 +56,10 @@ HRESULT CCubeTerrain::Render()
 
 
 
-HRESULT CCubeTerrain::Load_From_Json(wstring strJsonFilePath)
+HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 {
-	std::string str(strJsonFilePath.begin(), strJsonFilePath.end());
 	json j;
-	if (FAILED(CJsonParser::ReadJsonFile(str.c_str(), &j)))
+	if (FAILED(CJsonParser::ReadJsonFile(strJsonFilePath.c_str(), &j)))
 		return E_FAIL;
 
 	m_vSize = { j["size"][0],j["size"][1],j["size"][2] };
@@ -72,12 +71,13 @@ HRESULT CCubeTerrain::Load_From_Json(wstring strJsonFilePath)
 	for (const auto& item : j["cells"]) {
 
 		string str= item["model"];
-		MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, desc.wstrModelProtoName, MAX_PATH);
+		strncpy_s(desc.strItemName, str.c_str(), sizeof(desc.strItemName));
+		desc.strItemName[sizeof(desc.strItemName) - 1] = '\0';
 		CItemDataBase* pDB = ITEMDB;
-		ITEM_DESC* itemdesc = pDB->GetItemDesc(ITEM_TYPE::BUILD,desc.wstrModelProtoName);
-		lstrcpy(desc.wstrModelProtoName, itemdesc->wstrModelTag);
+		ITEM_DESC* itemdesc = pDB->GetItemDesc(ITEM_TYPE::BUILD,desc.strItemName);
+		strcpy_s(desc.strModelProtoName, itemdesc->strModelTag);
 		desc.eModelProtoLevelID = LEVEL_LOADING;
-		lstrcpy( desc.wstrShaderProtoName ,TEXT("Prototype_Component_Shader_VtxMesh"));
+		strcpy_s( desc.strShaderProtoName ,("Prototype_Component_Shader_VtxMesh"));
 		desc.eShaderProtoLevelID = LEVEL_LOADING;
 		desc.eType = item["type"];
 		desc.direction = item["direction"];
@@ -97,22 +97,32 @@ HRESULT CCubeTerrain::Load_From_Json(wstring strJsonFilePath)
 	return S_OK;
 }
 
-HRESULT CCubeTerrain::Save_To_Json(wstring strNewFilepath)
+HRESULT CCubeTerrain::Save_To_Json(string strNewFilepath)
 {
 	json j;
 	j["cells"] = json::array();
 	json& jCells = j["cells"];
+	string strCurrentModel=("");
 	for (auto& cell : m_pChilds)
 	{
 		if (cell == nullptr) continue;
 		CTerrainObject* pTerrainObj = static_cast<CTerrainObject*>(cell);
-		jCells.push_back(pTerrainObj->ToJson());
+		
+		if (strCurrentModel.compare(pTerrainObj->Get_ModelName()) == 0)
+		{
+			jCells.back()["iteration"] = jCells.back()["iteration"] + 1;
+		}
+		else
+		{
+			jCells.push_back(pTerrainObj->ToJson());
+			strCurrentModel = pTerrainObj->Get_ModelName();
+
+		}
 
 	}
 	j["size"] = { m_vSize.x,m_vSize.y,m_vSize.z };
 
-	std::string str(strNewFilepath.begin(), strNewFilepath.end());
-	CJsonParser::SaveJsonFile(str.c_str(),j);
+	CJsonParser::SaveJsonFile(strNewFilepath.c_str(),j);
 	return S_OK;
 }
 
@@ -153,7 +163,7 @@ CTerrainObject* CCubeTerrain::Get_TerrainObject(_uint Index)
 }
 
 
-CCubeTerrain * CCubeTerrain::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar* szMapFileName)
+CCubeTerrain * CCubeTerrain::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const char* szMapFileName)
 {
 	CCubeTerrain*	pInstance = new CCubeTerrain(pDevice, pContext, szMapFileName);
 

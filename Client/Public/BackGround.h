@@ -9,7 +9,7 @@ BEGIN(Client)
 class CBackGround final : public CUIPanel
 {
 public:
-	typedef struct : public CUIPanel::PANEL_DESC
+	typedef struct BackgroundDesc: public CUIPanel::PANEL_DESC
 	{
 
 	}BACKGROUND_DESC;

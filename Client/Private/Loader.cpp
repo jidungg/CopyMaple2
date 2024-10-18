@@ -10,14 +10,14 @@
 #include "TerrainObject.h"
 #include "Player.h"
 #include "RenderObject.h"
-#include "HomeDialog.h"
+#include "UIHomeDialog.h"
 #include "Terrain.h"
 #include "MeshCollider.h"
 #include "Builder.h"
 #include "ModelObject.h"
 #include "ItemDataBase.h"
-#include "ItemDataBase.h"
-#include "ItemDataBase.h"
+#include "UIItemIndicator.h"
+#include "UIList.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -47,8 +47,6 @@ HRESULT CLoader::Initialize(LEVELID eNextLevelID)
 
 	InitializeCriticalSection(&m_Critical_Section);
 
-	/* �� �ڵ带 �о���� �ִ� �ϳ��� �����带 �����Ѵ�. */
-	/* ������ �����尡 ȣ���ؾ��� �������Լ��� �������ش�. */
 	m_hThread = (HANDLE)_beginthreadex(nullptr, 0, LoadingMain, this, 0, nullptr);
 	if (0 == m_hThread)
 		return E_FAIL;
@@ -99,15 +97,17 @@ void CLoader::Show_Debug()
 
 HRESULT CLoader::Loading_Level_Logo()
 {
-		if (FAILED(ITEMDB->LoadFromJson()))
-		return E_FAIL;
+	if (FAILED(ITEMDB->LoadFromJson()))
+	return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드."));
 	/* For.Prototype_Component_Texture_Logo */
    
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_Logo"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_henesys_a.dds"), 2))))
 		return E_FAIL;
-	
+	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
+		TEXT("../Bin/resources/FBXs/MAP/Cube/"))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더 로드."));
 	/* For.Prototype_Component_Shader_VtxPosTex */
@@ -124,12 +124,20 @@ HRESULT CLoader::Loading_Level_Logo()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_VtxMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Shader_VtxAnimMesh*/
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_VtxAnimMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
+		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("모델 로드."));
 	//EmptyModel
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_Model_EmptyModel"),
-		CModel::Create(m_pDevice, m_pContext,  "../Bin/Resources/FBXs/EmptyModel.model"))))
+	XMMATRIX matGlobal = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
+	matGlobal = matGlobal * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Model_EmptyModel"),
+		CModel::Create(m_pDevice, m_pContext,  "../Bin/Resources/FBXs/EmptyModel.model", matGlobal))))
 		return E_FAIL;
-
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Model_Player"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/FBXs/Player/Female_Wizard.model", matGlobal))))
+		return E_FAIL;
 	/* For.Prototype_Component_VIBuffer_Rect */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_VIBuffer_Rect"),
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
@@ -152,7 +160,7 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_BackGround */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_GameObject_UIPanel"),
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIPanel::m_szProtoTag, 
 		CUIPanel::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
@@ -199,16 +207,10 @@ HRESULT CLoader::Loading_Level_GamePlay()
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("객체 로드"));
-	/* For.Prototype_GameObject_Terrain */
-  	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, 
-		TEXT("Prototype_GameObject_Terrain"),
-		CTerrain::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
 
 	/* For.Prototype_GameObject_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_CubeTerrain"),
-		CCubeTerrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Json/house_base.json")))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Henesys"),
+		CCubeTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/Henesys.json")))))
 		return E_FAIL;
 	
 
@@ -229,6 +231,9 @@ HRESULT CLoader::Loading_Level_MyHome()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_HomeDialog"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Box_Normal.dds"), 1))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_ItemListBack"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_ItemListBack.dds"), 1))))
+		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_HighlightBorder"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Mat_HighlightBorder.dds"), 1))))
@@ -240,20 +245,31 @@ HRESULT CLoader::Loading_Level_MyHome()
 
 
 	lstrcpy(m_szLoadingText, TEXT("모델 로드."));
+	XMMATRIX matGlobal = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
+	matGlobal = matGlobal * XMMatrixRotationY(XMConvertToRadians(180.f));
+	//XMMATRIX matGlobal = XMMatrixRotationY(XMConvertToRadians(180.f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_Model_ChocoDuckyBall"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/FBXs/DuckyBall/60100001_chocoduckyball.model"))))
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/FBXs/DuckyBall/60100001_chocoduckyball.model", matGlobal))))
 		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("객체 로드."));
 	/* For.Prototype_GameObject_HomeDialog */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialog"),
-		CHomeDialog::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_Terrain"),
-		CCubeTerrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Json/house_base.json")))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, CUIHomeDialog::m_szProtoTag,
+		CUIHomeDialog::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_MyHome"),
+		CCubeTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/MyHome.json")))))
+		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, CBuilder::m_szProtoTag,
 		CBuilder::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialogBuildItemIndicator"),
+		CUIItemIndicator::Create(m_pDevice, m_pContext,LEVEL_HOME, TEXT("UI_Texture_HomeDialog")))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialogBuildItemList"),
+		CUIList::Create(m_pDevice, m_pContext, LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialogBuildItemIndicator")))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로드 완료."));
@@ -292,8 +308,11 @@ HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId,  const _tchar* szDirPath)
 
 		wstring wstr = szFullPath;
 		string str{ wstr.begin(), wstr.end() };
+		XMMATRIX matGlobal = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
+		matGlobal = matGlobal * XMMatrixRotationY(XMConvertToRadians(180.f));
+
 		if (FAILED(m_pGameInstance->Add_Prototype(eLevId, FindFileData.cFileName,
-			CModel::Create(m_pDevice, m_pContext, str.c_str()))))
+			CModel::Create(m_pDevice, m_pContext, str.c_str(), matGlobal))))
 			return E_FAIL;
 
 	} while (FindNextFile(hFind, &FindFileData));
@@ -302,6 +321,49 @@ HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId,  const _tchar* szDirPath)
 
 	return S_OK;
 		
+}
+
+HRESULT CLoader::Load_Dirctory_Textures(LEVELID eLevId, const _tchar* szDirPath)
+{
+	WIN32_FIND_DATA		FindFileData = {};
+	HANDLE				hFind = INVALID_HANDLE_VALUE;
+
+	_tchar				szFilePath[MAX_PATH] = TEXT("");
+	_tchar				szFullPath[MAX_PATH] = TEXT("");
+	_tchar				szProtoTag[MAX_PATH] = TEXT("");
+	_tchar				szExtension[MAX_PATH] = TEXT(".dds");
+
+	lstrcpy(szFilePath, szDirPath);
+	lstrcat(szFilePath, TEXT("*"));
+	lstrcat(szFilePath, szExtension);
+
+	hFind = FindFirstFile(szFilePath, &FindFileData);
+
+	if (INVALID_HANDLE_VALUE == hFind)
+		return E_FAIL;
+
+	do
+	{
+		if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+			continue;
+
+		lstrcpy(szFullPath, szDirPath);
+		lstrcat(szFullPath, FindFileData.cFileName);
+
+		wstring wstr = szFullPath;
+
+		XMMATRIX matGlobal = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
+		matGlobal = matGlobal * XMMatrixRotationY(XMConvertToRadians(180.f));
+
+		if (FAILED(m_pGameInstance->Add_Prototype(eLevId, FindFileData.cFileName,
+			CTexture::Create(m_pDevice, m_pContext, wstr.c_str(), 1))))
+			return E_FAIL;
+
+	} while (FindNextFile(hFind, &FindFileData));
+
+	FindClose(hFind);
+
+	return S_OK;
 }
 
 CLoader * CLoader::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, LEVELID eNextLevelID)

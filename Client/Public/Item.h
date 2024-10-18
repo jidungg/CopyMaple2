@@ -3,27 +3,27 @@
 
 
 BEGIN(Client)
-typedef struct ItemDesc
+typedef struct ItemDesc : public UIListItemData
 {
 	ItemDesc() = default;
 	ItemDesc(json& js)
 	{
 		eType = ITEM_TYPE(js["type"]);
 		string str = js["name"];
-		MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, wstrItemName, MAX_PATH);
+		std::copy(str.begin(), str.end(), strItemName);
 		str = js["desc"];
-		MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, wstrItemDesc, MAX_PATH);
+		std::copy(str.begin(), str.end(), strItemDesc);
 		str = js["iconimg"];
-		MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, wstrIconImageTag, MAX_PATH);
+		std::copy(str.begin(), str.end(), strIconImageTag);
 		str = js["model"];
-		MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, wstrModelTag, MAX_PATH);
+		std::copy(str.begin(), str.end(), strModelTag);
 		iPrice = js["price"];
 	}
 	ITEM_TYPE eType = ITEM_TYPE::ITEM_TYPE_END;
-	_tchar wstrItemName[MAX_PATH] = TEXT("");
-	_tchar wstrItemDesc[MAX_PATH] = TEXT("");
-	_tchar wstrIconImageTag[MAX_PATH] = TEXT("");
-	_tchar wstrModelTag[MAX_PATH] = TEXT("");
+	_char strItemName[MAX_PATH] = ("");
+	_char strItemDesc[MAX_PATH] = ("");
+	_char strIconImageTag[MAX_PATH] = ("");
+	_char strModelTag[MAX_PATH] = ("");
 	_uint iPrice = 0;
 
 }ITEM_DESC;

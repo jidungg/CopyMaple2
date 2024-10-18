@@ -3,8 +3,7 @@
 #include "Client_Defines.h"
 #include "Base.h"
 #include "Model.h"
-/* ���� �����带 �����Ѵ�.  */
-/* ���� ������ �ʿ��� �ڿ��� �ε��ϴ� ��Ȱ */
+
 BEGIN(Engine)
 class CGameInstance;
 END
@@ -49,6 +48,7 @@ private:
 	HRESULT Loading_Level_MyHome();
 
 	HRESULT Load_Dirctory_Models(LEVELID eLevId, const _tchar* szDirPath);
+	HRESULT Load_Dirctory_Textures(LEVELID eLevId, const _tchar* szDirPath);
 
 public:
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eNextLevelID);

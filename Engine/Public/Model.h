@@ -16,20 +16,22 @@ private:
 
 
 public:
-	virtual HRESULT Initialize_Prototype(const _char* pModelFilePath);
+	virtual HRESULT Initialize_Prototype(const _char* pModelFilePath, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render(_uint iMeshIndex);
 	virtual HRESULT Render();
-
 public:
 	HRESULT Bind_Material(class CShader* pShader, const _char* pConstantName, _uint iMeshIndex, TEXTURE_TYPE eType, _uint iTextureIndex = 0);
-	void Play_Animation(_float fTimeDelta);
+	HRESULT Bind_BoneMatrices(class CShader* pShader, const _char* pConstantName, _uint iMeshIndex);
 
+	//애니메이션 종료되면 true 반환
+	bool Play_Animation(_float fTimeDelta);
 
-public:
 	_uint Get_NumMeshes() const {return m_iNumMeshes;}
 	CMesh* Get_Mesh(_uint iMeshIndex) const { return m_Meshes[iMeshIndex]; }
-	_uint Get_BoneIndex(const _char* pBoneName);
+	_uint Get_BoneIndex(const _char* pBoneName) const ;
+
+	void Set_AnimationLoop(_uint iIdx, _bool bIsLoop);
 
 private:
 	TYPE						m_eModelType = { TYPE_END };
@@ -42,14 +44,20 @@ private:
 
 	vector<class CBone*>		m_Bones;
 	_float4x4					m_PreTransformMatrix = {};
+
+		_uint						m_iCurrentAnimIndex = {};
+	_uint						m_iNumAnimations = {};
+	vector<class CAnimation*>	m_Animations;
+	
+
 private:
+	HRESULT Ready_Bones(ifstream& inFile, _int iParentBoneIndex);
 	HRESULT Ready_Meshes(ifstream& inFile);
 	HRESULT Ready_Materials(ifstream& inFile, const _char* pModelFilePath);
-	HRESULT Ready_Bones(ifstream& inFile, _int iParentBoneIndex);
-
+	HRESULT Ready_Animations(ifstream& inFile);
 
 public:
-	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext,const _char* pModelFilePath);
+	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext,const _char* pModelFilePath, _fmatrix PreTransformMatrix);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

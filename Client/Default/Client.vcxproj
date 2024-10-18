@@ -175,12 +175,13 @@
     <ClInclude Include="..\Public\Camera_Trace.h" />
     <ClInclude Include="..\Public\Canvas.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
-    <ClInclude Include="..\Public\HomeDialog.h" />
+    <ClInclude Include="..\Public\UIHomeDialog.h" />
     <ClInclude Include="..\Public\Item.h" />
     <ClInclude Include="..\Public\JsonParser.h" />
     <ClInclude Include="..\Public\MyTransform.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\TerrainObject.h" />
+    <ClInclude Include="..\Public\UIList.h" />
     <ClInclude Include="..\Public\UIItemIndicator.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Home.h" />
@@ -191,6 +192,7 @@
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\CubeTerrain.h" />
     <ClInclude Include="..\Public\UIButton.h" />
+    <ClInclude Include="..\Public\UIListItemEntry.h" />
     <ClInclude Include="..\Public\UIPanel.h" />
     <ClInclude Include="Client_Utility.h" />
     <ClInclude Include="Client.h" />
@@ -206,7 +208,7 @@
     <ClCompile Include="..\Private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_Trace.cpp" />
     <ClCompile Include="..\Private\Canvas.cpp" />
-    <ClCompile Include="..\Private\HomeDialog.cpp" />
+    <ClCompile Include="..\Private\UIHomeDialog.cpp" />
     <ClCompile Include="..\Private\Item.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Home.cpp" />
@@ -220,6 +222,8 @@
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\TerrainObject.cpp" />
     <ClCompile Include="..\Private\UIButton.cpp" />
+    <ClCompile Include="..\Private\UIList.cpp" />
+    <ClCompile Include="..\Private\UIListItemEntry.cpp" />
     <ClCompile Include="..\Private\UIPanel.cpp" />
     <ClCompile Include="..\Public\UIItemIndicator.cpp" />
     <ClCompile Include="Client.cpp" />
@@ -240,6 +244,7 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl">

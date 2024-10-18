@@ -9,6 +9,7 @@
 #include "Client_Utility.h"
 #include "CubeTerrain.h"
 #include "TerrainObject.h"
+#include "ItemDataBase.h"
 
 CBuilder::CBuilder(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPawn(pDevice, pContext)
@@ -28,7 +29,6 @@ HRESULT CBuilder::Initialize_Prototype()
 
 HRESULT CBuilder::Initialize(void* pArg)
 {
-
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 	BUILDER_DESC* pBulderDesc = static_cast<BUILDER_DESC*>(pArg);
@@ -38,26 +38,32 @@ HRESULT CBuilder::Initialize(void* pArg)
 	CModelObject::MODELOBJ_DESC tModelDesc;
 	tModelDesc.fRotationPerSec = 5.f;
 	tModelDesc.fSpeedPerSec = 1.f;
+	tModelDesc.eModelType = CModel::TYPE_ANIM;
 	tModelDesc.eModelProtoLevelID = LEVEL_HOME;
-	lstrcpy(tModelDesc.wstrModelProtoName , L"Prototype_Model_ChocoDuckyBall");
+	strcpy_s(tModelDesc.strModelProtoName , "Prototype_Model_ChocoDuckyBall");
 	tModelDesc.eShaderProtoLevelID = LEVEL_LOADING;
-	lstrcpy(tModelDesc.wstrShaderProtoName , L"Prototype_Component_Shader_VtxMesh");
+	strcpy_s(tModelDesc.strShaderProtoName , "Prototype_Component_Shader_VtxAnimMesh");
 	m_pBird = static_cast<CModelObject*>( m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
 	Add_Child(m_pBird);
-
+	m_pBird->Set_AnimationLoop(0,true);
+	if (FAILED(Ready_Preview("Prototype_Model_EmptyModel")))
+		return E_FAIL;
+	return S_OK;
+}
+HREFTYPE CBuilder::Ready_Preview(const _char* szModelTag)
+{
 	CTerrainObject::TERRAINOBJ_DESC tTerrObjDesc;
 	tTerrObjDesc.fRotationPerSec = 5.f;
 	tTerrObjDesc.fSpeedPerSec = 1.f;
-	tTerrObjDesc.eModelProtoLevelID = LEVEL_HOME;
-	lstrcpy(tTerrObjDesc.wstrModelProtoName , L"Prototype_Model_EmptyModel");
+	tTerrObjDesc.eModelProtoLevelID = LEVEL_LOADING;
+	strcpy_s(tTerrObjDesc.strModelProtoName, szModelTag);
 	tTerrObjDesc.eShaderProtoLevelID = LEVEL_LOADING;
-	lstrcpy(tTerrObjDesc.wstrShaderProtoName, L"Prototype_Component_Shader_VtxMesh");
-	XMStoreFloat4(&tTerrObjDesc.pos ,m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_vPreviewOffset);
+	strcpy_s(tTerrObjDesc.strShaderProtoName, "Prototype_Component_Shader_VtxMesh");
+	XMStoreFloat4(&tTerrObjDesc.pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_vPreviewOffset);
 
-	m_pPreview = static_cast<CTerrainObject*>( m_pGameInstance->Clone_Proto_Object_Stock(CTerrainObject::m_szProtoTag, &tTerrObjDesc));
+	m_pPreview = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CTerrainObject::m_szProtoTag, &tTerrObjDesc));
 	Add_Child(m_pPreview);
-	m_pPreview->Get_Transform()->Scaling(0.5f,0.5f,0.5f);
-
+	m_pPreview->Get_Transform()->Scaling(0.5f, 0.5f, 0.5f);
 	return S_OK;
 }
 
@@ -69,6 +75,7 @@ void CBuilder::Update(_float fTimeDelta)
 
 	XMVECTOR vPreviewPos = vPos + m_vPreviewOffset;
 	m_pPreview->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPreviewPos);
+
 	__super::Update(fTimeDelta);
 }
 
@@ -111,9 +118,11 @@ void CBuilder::Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta
 		desc.fRotationPerSec = 5.f;
 		desc.fSpeedPerSec = 1.f;
 		desc.eType = TERRAIN_OBJ_TYPE::BLOCK;
-		lstrcpy( desc.wstrModelProtoName , m_szBuildItemTag);
+		strcpy_s( desc.strItemName,m_szItemName);
+		ITEM_DESC* itemdesc = ITEMDB->GetItemDesc(ITEM_TYPE::BUILD, desc.strItemName);
+		strcpy_s(desc.strModelProtoName, itemdesc->strModelTag);
 		desc.eModelProtoLevelID = LEVEL_LOADING;
-		lstrcpy(desc.wstrShaderProtoName, TEXT("Prototype_Component_Shader_VtxMesh"));
+		strcpy_s(desc.strShaderProtoName, ("Prototype_Component_Shader_VtxMesh"));
 		desc.eShaderProtoLevelID = LEVEL_LOADING;
 		desc.direction = m_eBuildItemDir;
 		desc.data = m_iBuildData;
@@ -149,16 +158,18 @@ HRESULT CBuilder::Render()
 	return S_OK;
 }
 
-void CBuilder::Set_BuildItem(const _tchar* szModelTag)
+void CBuilder::Set_BuildItem(ITEM_DESC* tItemDesc)
 {
-	lstrcpy(m_szBuildItemTag, szModelTag);
-	CModel* pModel = static_cast<CModel*>( m_pGameInstance->Clone_Proto_Component_Stock(szModelTag));
-	m_pPreview->ReplaceModel(pModel);
+	strcpy_s(m_szItemName, tItemDesc->strItemName);
+	Remove_Child(m_pPreview);
+	Safe_Release(m_pPreview);
+	Ready_Preview(tItemDesc->strModelTag);
 }
 
 void CBuilder::Move_To(const _vector& vPos)
 {
 }
+
 
 
 

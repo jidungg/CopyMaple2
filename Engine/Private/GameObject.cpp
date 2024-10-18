@@ -113,6 +113,16 @@ void CGameObject::Add_Child(CGameObject* pChild)
 	pChild->Get_Transform()->Set_Parent(m_pTransformCom);
 }
 
+void CGameObject::Remove_Child(CGameObject* pChild)
+{
+	if (pChild == nullptr)
+		return;
+
+	m_pChilds.remove(pChild);
+	pChild->m_pParent = nullptr;
+	pChild->Get_Transform()->Set_Parent(nullptr);
+}
+
 CComponent * CGameObject::Find_Component(const _wstring & strComponentTag)
 {
 	auto	iter = m_Components.find(strComponentTag);
@@ -192,8 +202,6 @@ HRESULT CGameObject::Add_Component(CComponent* pComponent, const _wstring& strCo
 
 void CGameObject::Free()
 {
-	__super::Free();
-
 	for (auto& Pair : m_Components)
 		Safe_Release(Pair.second);
 	m_Components.clear();
@@ -202,7 +210,7 @@ void CGameObject::Free()
 	{
 		Safe_Release(i);
 	}
-	m_pChilds.clear();
+ 	m_pChilds.clear();
 
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pGameInstance);

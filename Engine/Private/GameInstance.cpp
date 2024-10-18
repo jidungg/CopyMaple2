@@ -349,4 +349,5 @@ void CGameInstance::Free()
 	Safe_Release(m_pController);
 	Safe_Release(m_pUIManager);
 	Safe_Release(m_pLight_Manager);
+	Safe_Release(m_pPhysics);
 }

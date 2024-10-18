@@ -72,7 +72,7 @@ namespace Engine
 		static const unsigned int					iNumElements = { 4 };
 		static const D3D11_INPUT_ELEMENT_DESC		Elements[iNumElements];
 	}VTXMESH;
-	typedef struct ENGINE_DLL
+	typedef struct ENGINE_DLL VertexAnimMesh
 	{
 		XMFLOAT3		vPosition;
 		XMFLOAT3		vNormal;
@@ -122,6 +122,14 @@ namespace Engine
 		class CCollider* pCollider = nullptr;
 
 	}RAYCASTHIT;
+
+	typedef struct
+	{
+		XMFLOAT3		vScale;
+		XMFLOAT4		vRotation;
+		XMFLOAT3		vPosition;
+		float			fKeyFramePosition;
+	}KEYFRAME;
 }
 
 

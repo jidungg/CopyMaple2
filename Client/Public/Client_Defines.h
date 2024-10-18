@@ -25,7 +25,10 @@ namespace Client
 	
 	enum class ITEM_TYPE { EQUIP, CONSUMABLE, BUILD, ETC, ITEM_TYPE_END };
 
+	typedef struct UIListItemData
+	{
 
+	}UIITEMDATA;
 }
 
 extern HINSTANCE g_hInst;

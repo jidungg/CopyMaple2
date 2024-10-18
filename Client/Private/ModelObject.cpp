@@ -8,12 +8,12 @@
 #include "Client_Utility.h"
 
 CModelObject::CModelObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject(pDevice, pContext)
+	: CPawn(pDevice, pContext)
 {
 }
 
 CModelObject::CModelObject(const CModelObject& Prototype)
-	: CGameObject(Prototype),
+	: CPawn(Prototype),
     m_pModelCom{ Prototype.m_pModelCom },
     m_pShaderCom{ Prototype.m_pShaderCom }
 {
@@ -39,25 +39,32 @@ HRESULT CModelObject::Initialize(void* pArg)
 
 void CModelObject::Update(_float fTimeDelta)
 {
-    
+	if (m_eModelType == CModel::TYPE::TYPE_ANIM)
+        m_pModelCom->Play_Animation(fTimeDelta);
 	__super::Update(fTimeDelta);
 }
 
 HRESULT CModelObject::Ready_Components(void* pArg)
 {
     MODELOBJ_DESC* pDesc = (MODELOBJ_DESC*)pArg;
+	m_eModelType = pDesc->eModelType;
     /* Com_Shader */
-    if (FAILED(Add_Component(pDesc->eShaderProtoLevelID, pDesc->wstrShaderProtoName,
+	string tmp = pDesc->strShaderProtoName;
+	wstring wtmp = wstring(tmp.begin(), tmp.end());
+
+    if (FAILED(Add_Component(pDesc->eShaderProtoLevelID, wtmp,
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
 
     /* Com_VIBuffer */
-    if (FAILED(Add_Component(pDesc->eModelProtoLevelID, pDesc->wstrModelProtoName,
+    tmp = pDesc->strModelProtoName;
+    wtmp = wstring(tmp.begin(), tmp.end());
+    if (FAILED(Add_Component(pDesc->eModelProtoLevelID, wtmp,
         TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
         return E_FAIL;
 
 
-    m_pTransformCom->LookToward(Get_Direction_Vector(pDesc->direction));
+    //m_pTransformCom->LookToward(Get_Direction_Vector(pDesc->direction));
     return S_OK;
 }
 
@@ -69,10 +76,14 @@ HRESULT CModelObject::Render()
 
     _uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-    for (size_t i = 0; i < iNumMeshes; i++)
+    for (_uint i = 0; i < iNumMeshes; i++)
     {
         if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", i, TEXTURE_TYPE::DIFFUSE, 0)))
             return E_FAIL;
+		if (m_eModelType == CModel::TYPE::TYPE_ANIM)
+            if (FAILED(m_pModelCom->Bind_BoneMatrices(m_pShaderCom, "g_BoneMatrices", i)))
+                return E_FAIL;
+
         m_pShaderCom->Begin(0);
         m_pModelCom->Render(i);
     }
@@ -84,11 +95,9 @@ HRESULT CModelObject::Render()
     return S_OK;
 }
 
-void CModelObject::ReplaceModel(CModel* pModel)
+void CModelObject::Set_AnimationLoop(_uint iIdx, _bool bIsLoop)
 {
-	Safe_Release(m_pModelCom);
-	m_pModelCom = pModel;
-	Safe_AddRef(m_pModelCom);
+	m_pModelCom->Set_AnimationLoop(iIdx, bIsLoop);
 }
 
 

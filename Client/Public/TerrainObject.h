@@ -14,8 +14,8 @@ public:
 	{
 		TERRAIN_OBJ_TYPE eType = TERRAIN_OBJ_TYPE::TERRAIN_OBJ_END;
 		_float4 pos = {0,0,0,1};
-
-		int data = 0;//MonsterSpawner Ȥ�� Portal��
+		_char  strItemName[MAX_PATH];
+		int data = 0;//MonsterSpawner 
 		_uint index = 0;
 	}TERRAINOBJ_DESC;
 public:
@@ -32,6 +32,7 @@ public:
 
 	void Set_TerrainDir(DIRECTION eDir) { m_eTerrainDir = eDir; }
 	_uint Get_Index() { return m_iIndex; }
+	string Get_ModelName() { return m_strItemName; }
 
 	virtual json ToJson();
 	void Rotate();
@@ -40,7 +41,7 @@ private:
 
 private:
 	TERRAIN_OBJ_TYPE m_eTerrObjType = TERRAIN_OBJ_TYPE::TERRAIN_OBJ_END;
-	wstring m_modleName;
+	string m_strItemName;
 	_uint m_iIndex = 0;
 	DIRECTION m_eTerrainDir = DIRECTION::DIR_END;
 	CCollider* m_pColliderCom = {nullptr};

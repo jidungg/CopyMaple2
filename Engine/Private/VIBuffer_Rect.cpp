@@ -25,7 +25,7 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
 #pragma region VERTEX_BUFFER	
 	ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
 
-	/* Á¤Á¡¹öÆÛ¸¦ ¸î ¹ÙÀÌÆ® ÇÒ´çÇÒ±î¿ä? */
+	/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ò´ï¿½ï¿½Ò±ï¿½ï¿½? */
 	m_BufferDesc.ByteWidth = m_iVertexStride * m_iNumVertices;
 	m_BufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	m_BufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -62,7 +62,7 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
 #pragma region INDEX_BUFFER
 	ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
 
-	/* Á¤Á¡¹öÆÛ¸¦ ¸î ¹ÙÀÌÆ® ÇÒ´çÇÒ±î¿ä? */
+	/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ò´ï¿½ï¿½Ò±ï¿½ï¿½? */
 	m_BufferDesc.ByteWidth = m_iIndexStride * m_iNumIndices;
 	m_BufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	m_BufferDesc.Usage = D3D11_USAGE_DEFAULT;

@@ -7,6 +7,8 @@ class CUIPanel :
     public CUIObject
 {
 public:
+	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_Panel";
+public:
 	typedef struct PanelDesc: public CUIObject::UIOBJECT_DESC
 	{
 

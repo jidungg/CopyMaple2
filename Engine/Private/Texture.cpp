@@ -60,16 +60,16 @@ HRESULT CTexture::Initialize_Prototype(const _tchar * pTextureFilePath, _uint iN
 HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle, TEXTURE_TYPE eTexType)
 {
 	inFIle.read(reinterpret_cast<char*>(&m_iNumSRVs), sizeof(_uint));
-	cout << m_iNumSRVs << endl;
+	//cout << m_iNumSRVs << endl;
 	for (size_t texIdx = 0; texIdx < m_iNumSRVs; texIdx++)
 	{
 		_uint strLen;
 		inFIle.read(reinterpret_cast<char*>(&strLen), sizeof(_uint));
-		cout << strLen << endl;
+		//cout << strLen << endl;
 		_char* strTexturePath = new _char[strLen + 1];
 		inFIle.read(strTexturePath, sizeof(_char) * strLen);
 		strTexturePath[strLen] = '\0';
-		cout << strTexturePath << endl;
+		//cout << strTexturePath << endl;
 
 
 		_char		szFileName[MAX_PATH] = "";
@@ -99,6 +99,7 @@ HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle,
 			CreateDDSTextureFromFile(m_pDevice, TEXT("../Bin/Resources/Textures/Default.dds"), nullptr, &pSRV);
 		}
 		m_SRVs.push_back(pSRV);
+		delete[] strTexturePath;
 	}
 	return S_OK;
 }
@@ -152,6 +153,7 @@ CTexture* CTexture::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext,
 }
 CComponent * CTexture::Clone(void * pArg)
 {
+
 	CTexture*	pInstance = new CTexture(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))

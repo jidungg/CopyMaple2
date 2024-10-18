@@ -34,7 +34,8 @@ HRESULT CUIObject::Initialize(void * pArg)
 	{
 		m_pTarget = pDesc->pTarget;
 		Safe_AddRef(m_pTarget);
-		m_pTextureCom = pDesc->pTextureCom;
+		if(pDesc->pTextureCom)
+			m_pTextureCom = pDesc->pTextureCom;
 	}
 
 
@@ -47,7 +48,7 @@ HRESULT CUIObject::Initialize(void * pArg)
 	return S_OK;
 }
 
-//ºÎ¸ðÀÇ Position°ú ÀÚ½ÅÀÇ PivotÀ» ÀÌ¿ëÇÏ¿© ÀÚ½ÅÀÇ À§Ä¡¸¦ °è»êÇÑ´Ù.
+//ï¿½Î¸ï¿½ï¿½ï¿½ Positionï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ Pivotï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½Ï¿ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 void CUIObject::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);

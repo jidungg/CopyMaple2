@@ -1,7 +1,7 @@
 #pragma once
 #include "Client_Defines.h"
 #include "Pawn.h"
-
+#include "Item.h"
 
 BEGIN(Engine)
 
@@ -20,6 +20,11 @@ class CTerrainObject;
 class CBuilder :
     public CPawn
 {
+	public:
+		enum class ANIM_STATE {
+			IDLE,
+			LAST
+		};
 public:
 	typedef struct tagBuilderDesc : public CPawn::GAMEOBJECT_DESC
 	{
@@ -41,9 +46,11 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render();
 
-	void Set_BuildItem(const _tchar* szModelTag);
+	void Set_BuildItem(ITEM_DESC* tItemDesc);
 	void Move_To(const _vector& vPos);
 
+private:
+	HREFTYPE Ready_Preview(const _char* szModelTag);
 private:
 	CCubeTerrain* m_pCubeTerrain = { nullptr };
 
@@ -52,7 +59,8 @@ private:
 
 	CTerrainObject* m_pPreview = { nullptr };
 	XMVECTOR m_vPreviewOffset = XMVectorSet(0, 0.5f, 0, 0);
-	_tchar m_szBuildItemTag[MAX_PATH] = L"";
+	_char m_szItemName[MAX_PATH] = "";
+	_char m_szBuildItemTag[MAX_PATH] = "";
 	DIRECTION m_eBuildItemDir = DIR_WS;
 	int m_iBuildData = 0;
 	XMVECTOR m_vMoveDir = XMVectorSet(0, 0, 0, 0);

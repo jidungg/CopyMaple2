@@ -15,7 +15,7 @@ HRESULT CItemDataBase::LoadFromJson()
 	for (auto& item : j["items"])
 	{
 		ITEM_DESC* pItemDesc = new ITEM_DESC(item);
-		m_mapItem[(_uint)pItemDesc->eType].insert({pItemDesc->wstrItemName,pItemDesc});
+		m_mapItem[(_uint)pItemDesc->eType].insert({pItemDesc->strItemName,pItemDesc});
 	}
  	return S_OK;
 }

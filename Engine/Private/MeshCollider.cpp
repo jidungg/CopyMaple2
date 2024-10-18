@@ -76,17 +76,17 @@ bool CMeshCollider::Check_Collision(const Ray& tRay, RaycastHit* pOut)
 	XMMATRIX matWorld = m_pOwner->Get_Transform()->Get_WorldMatrix();
 	XMMATRIX matInverseWorld = XMMatrixInverse(nullptr, matWorld);
 	XMVECTOR vLocalOrigin = XMVector4Transform(XMLoadFloat4(&tRay.vOrigin), matInverseWorld);
-	XMVECTOR vLocalDirection = XMVector4Transform(XMLoadFloat4(&tRay.vDirection), matInverseWorld);
+	XMVECTOR vLocalDirection = XMVector4Normalize( XMVector4Transform(XMLoadFloat4(&tRay.vDirection), matInverseWorld));
 	for (size_t indexCount = 0; indexCount < m_iNumIndexes; )
 	{
 		XMVECTOR v0 =XMLoadFloat3(&vertices[indices[indexCount++]].vPosition);
 		XMVECTOR v1 = XMLoadFloat3(&vertices[indices[indexCount++]].vPosition);
 		XMVECTOR v2 =XMLoadFloat3(&vertices[indices[indexCount++]].vPosition);
-		float fDist;
+		float fDist ;
 		if(TriangleTests::Intersects(vLocalOrigin, vLocalDirection,v0, v1, v2, fDist))
 		{
 
-			if (fDist < (tRay.fDist < 0 ? 9999 : tRay.fDist))
+			if (fDist <= (tRay.fDist < 0 ? 9999 : tRay.fDist))
 			{
 				bIsHit = true;
 				if (fDist < fMinDist)

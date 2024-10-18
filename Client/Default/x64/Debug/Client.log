@@ -1,14 +1,8 @@
 ﻿  Loader.cpp
-D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Engine_Struct.h(76,2): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+D:\Workbench\Portfolio\CopyMaple2\Client\Public\Player.h(153,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
   (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
   
-D:\Workbench\Portfolio\CopyMaple2\Client\Public\Camera_Free.h(11,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
-  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
-  
-D:\Workbench\Portfolio\CopyMaple2\Client\Public\Player.h(17,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
-  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
-  
-D:\Workbench\Portfolio\CopyMaple2\Client\Public\HomeDialog.h(9,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+D:\Workbench\Portfolio\CopyMaple2\Client\Public\UIHomeDialog.h(13,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
   (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
   
 D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\MeshCollider.h(7,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CMeshCollider'의 기본으로 사용되었습니다.
@@ -22,7 +16,7 @@ C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.3412
   (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
       C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\xutility(4689,18):
       템플릿 인스턴스화 컨텍스트(가장 오래된 인스턴스화 컨텍스트)가
-          D:\Workbench\Portfolio\CopyMaple2\Client\private\Loader.cpp(294,13):
+          D:\Workbench\Portfolio\CopyMaple2\Client\private\Loader.cpp(310,13):
           컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)'에 대한 참조를 확인하세요.
           with
           [
@@ -30,7 +24,7 @@ C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.3412
               _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
               _Alloc=std::allocator<char>
           ]
-              D:\Workbench\Portfolio\CopyMaple2\Client\private\Loader.cpp(294,13):
+              D:\Workbench\Portfolio\CopyMaple2\Client\private\Loader.cpp(310,13):
               'Client::CLoader::Load_Dirctory_Models'에서 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string'에 대한 첫 번째 참조를 확인하세요.
           C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\xstring(793,17):
           컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct_from_iter<wchar_t*,wchar_t*,_Size_type>(_Iter,const _Sent,_Size)'에 대한 참조를 확인하세요.

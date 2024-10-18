@@ -19,6 +19,7 @@ HRESULT CUIPanel::Initialize_Prototype()
 	return S_OK;
 }
 
+
 HRESULT CUIPanel::Initialize(void* pArg)
 {
 	PANEL_DESC* pDesc = static_cast<PANEL_DESC*>(pArg);
@@ -70,6 +71,7 @@ CUIPanel* CUIPanel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 	return pInstance;
 }
+
 
 CGameObject* CUIPanel::Clone(void* pArg)
 {

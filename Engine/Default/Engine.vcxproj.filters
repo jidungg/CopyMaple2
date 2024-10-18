@@ -205,6 +205,8 @@
       <Filter>01.Utility\03.Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Bone.h" />
+    <ClInclude Include="..\Public\Animation.h" />
+    <ClInclude Include="..\Public\Channel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -315,6 +317,8 @@
       <Filter>01.Utility\03.Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Bone.cpp" />
+    <ClCompile Include="..\Private\Animation.cpp" />
+    <ClCompile Include="..\Private\Channel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc" />

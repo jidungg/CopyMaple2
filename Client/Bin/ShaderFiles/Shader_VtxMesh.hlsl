@@ -36,7 +36,7 @@ struct VS_OUT
 	float4		vWorldPos : TEXCOORD1;
 };
 
-/* 1. Á¤Á¡À§Ä¡¿¡ ´ëÇÑ ±âÃÊÀûÀÎ º¯È¯°úÁ¤À» ¼öÇàÇÑ´Ù.(¿ùµåº¯È¯, ºäº¯È¯, ) */
+/* 1. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.(ï¿½ï¿½ï¿½åº¯È¯, ï¿½äº¯È¯, ) */
 
 VS_OUT VS_MAIN(VS_IN In)
 {
@@ -77,18 +77,18 @@ PS_OUT PS_MAIN(PS_IN In)
 	if (vMtrlDiffuse.a < 0.1f)
 		discard;
 
-	/* ¸í¾Ï */
+	/* ï¿½ï¿½ï¿½ */
 	float4			vShade = saturate(max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
 	
 	/* 0.f ~ 1.f */
-	/* ºûÀÌ µé¾î¿Í¼­ ¸Â°í Æ¨±ä ¹Ý»çº¤ÅÍ¿Í ÀÌ ÇÈ¼¿À» ¹Ù¶óº¸´Â ½Ã¼±º¤ÅÍ°¡ ÀÌ·ç´Â °¢ÀÌ 180µµ ÀÏ¶§ ÃÖ´ë */
+	/* ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í¼ï¿½ ï¿½Â°ï¿½ Æ¨ï¿½ï¿½ ï¿½Ý»çº¤ï¿½Í¿ï¿½ ï¿½ï¿½ ï¿½È¼ï¿½ï¿½ï¿½ ï¿½Ù¶óº¸´ï¿½ ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½Ì·ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 180ï¿½ï¿½ ï¿½Ï¶ï¿½ ï¿½Ö´ï¿½ */
 	float4			vReflect = reflect(normalize(g_vLightDir), normalize(In.vNormal));
 	float4			vLook = In.vWorldPos - g_vCamPosition;
 
 	float			fSpecular = pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f);
 
-	/* (g_vLightDiffuse * vMtrlDiffuse) : ºûÀ» ¹ÞÀº ÇÈ¼¿ÀÌ ¹Ý»çÇÏ´Â »ö»ó.  */
-	/* (g_vLightSpecular * vMtrlSpecular) : ºûÀ» ¹ÞÀº ÇÈ¼¿ÀÌ ¹Ý»çÇÏ´Â »ö»ó.  */
+	/* (g_vLightDiffuse * vMtrlDiffuse) : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½È¼ï¿½ï¿½ï¿½ ï¿½Ý»ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½.  */
+	/* (g_vLightSpecular * vMtrlSpecular) : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½È¼ï¿½ï¿½ï¿½ ï¿½Ý»ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½.  */
 	Out.vColor = (g_vLightDiffuse * vMtrlDiffuse) * vShade + (g_vLightSpecular * g_vMtrlSpecular) * fSpecular;
 
 	return Out;

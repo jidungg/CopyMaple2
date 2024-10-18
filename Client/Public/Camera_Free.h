@@ -8,7 +8,7 @@ BEGIN(Client)
 class CCamera_Free final : public CCamera
 {
 public:
-	typedef struct : public CCamera::CAMERA_DESC
+	typedef struct FreeCameraDesc : public CCamera::CAMERA_DESC
 	{
 		_float			fMouseSensor = {};
 	}CAMERA_FREE_DESC;

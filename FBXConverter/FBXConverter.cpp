@@ -2,7 +2,7 @@
 //
 #include "pch.h"
 
-#include "CModel.h"
+#include "FBXToBinary.h"
 
 
 
@@ -11,12 +11,8 @@ int main(int argc, char* argv[])
 {
 	CModelConverter modelConverter;
 	fs::path path;
-	if (argc < 2)
-	{
-		path = fs::current_path();
-	}
-	else
-		path = fs::path(argv[1]);
+	path = fs::current_path();
+	cin >> path;
 
     for (const auto& entry : recursive_directory_iterator(path)) {
         if (entry.path().extension() == ".fbx") {

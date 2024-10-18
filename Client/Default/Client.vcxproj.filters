@@ -106,7 +106,7 @@
     <ClInclude Include="..\Public\UIItemIndicator.h">
       <Filter>02.GameObjects\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\HomeDialog.h">
+    <ClInclude Include="..\Public\UIHomeDialog.h">
       <Filter>02.GameObjects\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\TerrainObject.h">
@@ -125,6 +125,8 @@
       <Filter>99.Defines</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ItemDataBase.h" />
+    <ClInclude Include="..\Public\UIList.h" />
+    <ClInclude Include="..\Public\UIListItemEntry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -179,7 +181,7 @@
     <ClCompile Include="..\Public\UIItemIndicator.cpp">
       <Filter>02.GameObjects\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\HomeDialog.cpp">
+    <ClCompile Include="..\Private\UIHomeDialog.cpp">
       <Filter>02.GameObjects\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TerrainObject.cpp">
@@ -198,6 +200,8 @@
       <Filter>99.Defines</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ItemDataBase.cpp" />
+    <ClCompile Include="..\Private\UIList.cpp" />
+    <ClCompile Include="..\Private\UIListItemEntry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -225,6 +229,9 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimMesh.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

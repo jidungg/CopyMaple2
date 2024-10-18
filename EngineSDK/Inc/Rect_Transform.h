@@ -50,9 +50,9 @@ public:
 protected:
 
 	_float					m_fSizeX, m_fSizeY;
-	//ºÎ¸ð Anchor ±âÁØ PivotÀÇ À§Ä¡
+	//ï¿½Î¸ï¿½ Anchor ï¿½ï¿½ï¿½ï¿½ Pivotï¿½ï¿½ ï¿½ï¿½Ä¡
 	_float					m_fXOffset, m_fYOffset;
-	//Screen ±âÁØ Áß¾Ó À§Ä¡
+	//Screen ï¿½ï¿½ï¿½ï¿½ ï¿½ß¾ï¿½ ï¿½ï¿½Ä¡
 	_float					m_fXPosition{ 0 }, m_fYPosition{ 0 };
 
 	_float					m_iViewportWidth = {};

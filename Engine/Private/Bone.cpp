@@ -6,20 +6,21 @@ CBone::CBone()
 {
 }
 
+
 HRESULT CBone::Initialize(ifstream& inFile, _int iParentBoneIndex)
 {
 	_uint iNameLength = 0;
 	inFile.read((char*)&iNameLength, sizeof(_uint));
-	cout << iNameLength << endl;
+	//cout << iNameLength << endl;
 	inFile.read((char*)&m_szName, iNameLength);
 	m_szName[iNameLength] = '\0';
-	cout << m_szName << endl;
+	//cout << m_szName << endl;
 
 	inFile.read(reinterpret_cast<char*>(&m_TransformationMatrix), sizeof(_float4x4));
-	cout << m_TransformationMatrix._11 << m_TransformationMatrix._12 << m_TransformationMatrix._13 << m_TransformationMatrix._14 << endl;	
-	cout << m_TransformationMatrix._21 << m_TransformationMatrix._22 << m_TransformationMatrix._23 << m_TransformationMatrix._24 << endl;
-	cout << m_TransformationMatrix._31 << m_TransformationMatrix._32 << m_TransformationMatrix._33 << m_TransformationMatrix._34 << endl;
-	cout << m_TransformationMatrix._41 << m_TransformationMatrix._42 << m_TransformationMatrix._43 << m_TransformationMatrix._44 << endl;
+	//cout << m_TransformationMatrix._11 << m_TransformationMatrix._12 << m_TransformationMatrix._13 << m_TransformationMatrix._14 << endl;	
+	//cout << m_TransformationMatrix._21 << m_TransformationMatrix._22 << m_TransformationMatrix._23 << m_TransformationMatrix._24 << endl;
+	//cout << m_TransformationMatrix._31 << m_TransformationMatrix._32 << m_TransformationMatrix._33 << m_TransformationMatrix._34 << endl;
+	//cout << m_TransformationMatrix._41 << m_TransformationMatrix._42 << m_TransformationMatrix._43 << m_TransformationMatrix._44 << endl;
 
 	XMStoreFloat4x4(&m_TransformationMatrix, XMMatrixTranspose(XMLoadFloat4x4(&m_TransformationMatrix)));
 	XMStoreFloat4x4(&m_CombindTransformationMatrix, XMMatrixIdentity());
@@ -31,11 +32,17 @@ HRESULT CBone::Initialize(ifstream& inFile, _int iParentBoneIndex)
 
 void CBone::Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix PreTransformMatrix)
 {
+	//루트 본 인 경우
 	if (-1 == m_iParentBoneIndex)
-		XMStoreFloat4x4(&m_CombindTransformationMatrix, XMLoadFloat4x4(&m_TransformationMatrix) * PreTransformMatrix);
-
-	XMStoreFloat4x4(&m_CombindTransformationMatrix, XMLoadFloat4x4(&m_TransformationMatrix) *
-		XMLoadFloat4x4(&Bones[m_iParentBoneIndex]->m_CombindTransformationMatrix));
+	{
+		XMStoreFloat4x4(&m_CombindTransformationMatrix, XMLoadFloat4x4(&m_TransformationMatrix) * PreTransformMatrix );
+	}
+	//루트가 아닌 경우
+	else
+	{
+		XMStoreFloat4x4(&m_CombindTransformationMatrix, XMLoadFloat4x4(&m_TransformationMatrix) *
+			XMLoadFloat4x4(&Bones[m_iParentBoneIndex]->m_CombindTransformationMatrix));
+	}
 }
 
 CBone* CBone::Create(ifstream& inFile, _int iParentBoneIndex)
@@ -50,9 +57,13 @@ CBone* CBone::Create(ifstream& inFile, _int iParentBoneIndex)
 	return pInstance;
 }
 
+CBone* CBone::Clone()
+{
+	return new CBone(*this);
+}
+
+
 void CBone::Free()
 {
 	__super::Free();
-
-
 }

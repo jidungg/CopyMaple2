@@ -18,20 +18,18 @@ public:
 			// Handle error
 			return E_FAIL;
 		}
-		// JSON ��ü�� ��ȯ
+		// JSON 
 		input_file >> *pOut;
 
-		// ���� �ݱ�
+		// 
 		input_file.close();
 		return S_OK;
 	}
 	static HRESULT SaveJsonFile(const _char* strJsonFilePath, const json& pJson)
 	{
-
-
 		std::ofstream file(strJsonFilePath);
 		if (file.is_open()) {
-			file << pJson.dump(4);  // �鿩���⸦ 4ĭ���� ����
+			file << pJson.dump(4); 
 			file.close();
 
 		}

@@ -5,7 +5,7 @@
 #include "GameInstance.h"
 #include "Player.h"
 #include "Camera_Trace.h"
-#include "HomeDialog.h"
+#include "UIHomeDialog.h"
 #include "Physics.h"
 #include "Builder.h"
 #include "CubeTerrain.h"
@@ -13,6 +13,7 @@
 #include "Player.h"
 #include "Collider.h"
 #include "TerrainObject.h"
+#include "ItemDataBase.h"
 
 
 CLevel_Home::CLevel_Home(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -46,7 +47,7 @@ HRESULT CLevel_Home::Initialize()
 
 	m_pItemData = ITEMDB->GetItemMap(ITEM_TYPE::BUILD);
 	m_pItemIter = m_pItemData->begin();
-	m_pBuilder->Set_BuildItem(m_pItemIter->second->wstrModelTag);
+	m_pBuilder->Set_BuildItem(m_pItemIter->second);
 
 return S_OK;
 }
@@ -76,6 +77,7 @@ void CLevel_Home::Update(_float fTimeDelta)
 	}
 	if (m_bBuildMode)
 	{
+		//터레인 피킹해서 해당 위치로 이동
 		if (m_pGameInstance->GetMouseKeyState(MOUSE_KEY::LB) == KEY_STATE::UP)
 		{
 			POINT tPosition = m_pGameInstance->Get_MousePos();
@@ -104,8 +106,13 @@ void CLevel_Home::Update(_float fTimeDelta)
 			m_pItemIter++;
 			if (m_pItemIter == m_pItemData->end())
 				m_pItemIter = m_pItemData->begin();
-			m_pBuilder->Set_BuildItem(m_pItemIter->second->wstrModelTag);
+			m_pBuilder->Set_BuildItem((*m_pItemIter).second);
 	
+		}
+		//맵 저장
+		if (m_pGameInstance->GetKeyState(KEY::H) == KEY_STATE::DOWN)
+		{
+			m_pCubeTerrain->Save_To_Json("../Bin/Resources/Json/MyHome.json");
 		}
 	}
 	else
@@ -118,7 +125,7 @@ void CLevel_Home::Update(_float fTimeDelta)
 HRESULT CLevel_Home::Render()
 {
 #ifdef _DEBUG
-	SetWindowText(g_hWnd, TEXT("����Ȩ �����Դϴ�."));
+	SetWindowText(g_hWnd, TEXT("집."));
 #endif
 
 	return S_OK;
@@ -126,7 +133,8 @@ HRESULT CLevel_Home::Render()
 
 HRESULT CLevel_Home::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
-	m_pCubeTerrain = static_cast<CCubeTerrain*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_HOME, TEXT("Prototype_GameObject_Terrain"), nullptr));
+	m_pCubeTerrain = static_cast<CCubeTerrain*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_HOME, 
+		TEXT("Prototype_GameObject_MyHome"), nullptr));
 	if (nullptr == m_pCubeTerrain)
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, strLayerTag, m_pCubeTerrain)))
@@ -137,7 +145,7 @@ HRESULT CLevel_Home::Ready_Layer_BackGround(const _wstring& strLayerTag)
 
 HRESULT CLevel_Home::Ready_Layer_UI(const _wstring& strLayerTag)
 {
-	CHomeDialog::HOMEDIALOG_DESC PanelDesc{};
+	CUIHomeDialog::HOMEDIALOG_DESC PanelDesc{};
 	PanelDesc.eAnchorType = CORNOR_TYPE::RIGHT_BOT;
 	PanelDesc.ePivotType = CORNOR_TYPE::RIGHT_BOT;
 	PanelDesc.fXOffset = 0;

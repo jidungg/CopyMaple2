@@ -9,13 +9,11 @@
 
 #define MAX_LOADSTRING 100
 
-// ���� ����:
 HINSTANCE g_hInst;                                // ���� �ν��Ͻ��Դϴ�.
 HWND g_hWnd;
 WCHAR szTitle[MAX_LOADSTRING];                  // ���� ǥ���� �ؽ�Ʈ�Դϴ�.
 WCHAR szWindowClass[MAX_LOADSTRING];            // �⺻ â Ŭ���� �̸��Դϴ�.
 
-// �� �ڵ� ��⿡ ��� �ִ� �Լ��� ������ �����Դϴ�.
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);

@@ -18,7 +18,8 @@ private:
 public:
 	HRESULT Initialize();
 	void Update(_float fTimeDelta);
-	void Possess(CPawn* pPawn) { m_pCurrentPawn = pPawn; }
+	void Possess(CPawn* pPawn);
+	void Clear();
 private:
 	CInput_Device*	m_pInput_Device = nullptr;
 	CUIManager*		m_pUIManager = nullptr;

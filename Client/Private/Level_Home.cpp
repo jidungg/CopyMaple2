@@ -28,6 +28,8 @@ HRESULT CLevel_Home::Initialize()
 {
 	//if(FAILED(Ready_Lights()))
 	//	return E_FAIL;
+	m_pItemData = ITEMDB->GetItemMap(ITEM_TYPE::BUILD);
+	m_pItemIter = m_pItemData->begin();
 
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
@@ -45,9 +47,8 @@ HRESULT CLevel_Home::Initialize()
 		return E_FAIL;
 	m_pBuilder->Set_Active(false);
 
-	m_pItemData = ITEMDB->GetItemMap(ITEM_TYPE::BUILD);
-	m_pItemIter = m_pItemData->begin();
-	m_pBuilder->Set_BuildItem(m_pItemIter->second);
+
+	Set_BuildItem(m_pItemIter->second);
 
 return S_OK;
 }
@@ -60,6 +61,7 @@ void CLevel_Home::Update(_float fTimeDelta)
 	{
 		m_bBuildMode = !m_bBuildMode;
 		m_pBuilder->Set_Active(m_bBuildMode);
+		m_pHomeDialog->Set_Active(m_bBuildMode);
 		if(m_bBuildMode)
 		{
 			m_pCamera->Set_Target(m_pBuilder);
@@ -131,6 +133,18 @@ HRESULT CLevel_Home::Render()
 	return S_OK;
 }
 
+void CLevel_Home::On_BuildItemSelected(void* pArg)
+{
+	Set_BuildItem(reinterpret_cast<CUIItemIndicator*>(pArg)->Get_ItemDesc());
+	
+}
+
+void CLevel_Home::Set_BuildItem(const ITEM_DESC* pItemDesc)
+{
+	m_pBuilder->Set_BuildItem(pItemDesc);
+
+}
+
 HRESULT CLevel_Home::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
 	m_pCubeTerrain = static_cast<CCubeTerrain*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_HOME, 
@@ -153,11 +167,17 @@ HRESULT CLevel_Home::Ready_Layer_UI(const _wstring& strLayerTag)
 	PanelDesc.fSizeX = g_iWinSizeX/2;
 	PanelDesc.fSizeY = g_iWinSizeY/4;
 	PanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, m_iLevelID, TEXT("UI_Texture_HomeDialog"), nullptr));
+	list<UIListItemData*> listData;
+	for (auto& i : *m_pItemData)
+		listData.push_back(i.second);
+	PanelDesc.listData = &listData;
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialog"),
-		LEVEL_HOME, strLayerTag, &PanelDesc)))
+	m_pHomeDialog = static_cast<CUIHomeDialog*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialog"), &PanelDesc));
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVELID::LEVEL_HOME, strLayerTag, m_pHomeDialog)))
 		return E_FAIL;
-
+	function<void(void*)> f = bind(&CLevel_Home::On_BuildItemSelected, this, placeholders::_1);
+	m_pHomeDialog->Register_OnClickCallback(f);
+	m_pHomeDialog->Set_Active(false);
 	return S_OK; 
 }
 

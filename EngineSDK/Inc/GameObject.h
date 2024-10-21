@@ -24,6 +24,7 @@ public:
 	virtual void Priority_Update(_float fTimeDelta);
 	virtual void Update(_float fTimeDelta);
 	virtual void Late_Update(_float fTimeDelta);
+	void Final_Update();
 	virtual HRESULT Render();
 public:
 

@@ -43,16 +43,6 @@ void CCubeTerrain::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
-HRESULT CCubeTerrain::Render()
-{
-
-	for (auto& child : m_pChilds)
-	{
-		if (child != nullptr && child->Is_Active())
-			child->Render();
-	}
-	return S_OK;
-}
 
 
 
@@ -102,20 +92,34 @@ HRESULT CCubeTerrain::Save_To_Json(string strNewFilepath)
 	json j;
 	j["cells"] = json::array();
 	json& jCells = j["cells"];
-	string strCurrentModel=("");
+	json jCurObj;
+	bool bFirst = true;
 	for (auto& cell : m_pChilds)
 	{
 		if (cell == nullptr) continue;
 		CTerrainObject* pTerrainObj = static_cast<CTerrainObject*>(cell);
-		
-		if (strCurrentModel.compare(pTerrainObj->Get_ModelName()) == 0)
+		if (bFirst)
+		{
+			jCurObj = pTerrainObj->ToJson();
+			jCells.push_back(jCurObj);
+			bFirst = false;
+			continue;
+		}
+		json jTemp = pTerrainObj->ToJson();
+		int curIdx = jCurObj["index"];
+		int curIter = jCurObj["iteration"];
+		if ( jCurObj["type"] == jTemp["type"]
+			&& jCurObj["model"] == jTemp["model"]
+			&& jCurObj["data"] == jTemp["data"]
+			&& jCurObj["direction"] == jCurObj["direction"]
+			&& (curIdx +curIter) == jTemp["index"])
 		{
 			jCells.back()["iteration"] = jCells.back()["iteration"] + 1;
 		}
 		else
 		{
-			jCells.push_back(pTerrainObj->ToJson());
-			strCurrentModel = pTerrainObj->Get_ModelName();
+			jCells.push_back(jTemp);
+			jCurObj = jTemp;
 
 		}
 
@@ -152,6 +156,18 @@ HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 	CTerrainObject* pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CTerrainObject::m_szProtoTag, &tDesc));
 	Add_Child(pGameObject);
 	m_vecCells[tDesc.index] = pGameObject;
+
+	return S_OK;
+}
+
+HRESULT CCubeTerrain::Remove_TerrainObject(_uint Index)
+{
+	if (Index >= m_vecCells.size())
+		return E_FAIL;
+	if (m_vecCells[Index] == nullptr)
+		return E_FAIL;
+	m_vecCells[Index]->Set_Dead();
+	m_vecCells[Index] = nullptr;
 
 	return S_OK;
 }

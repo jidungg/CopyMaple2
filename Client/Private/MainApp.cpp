@@ -22,7 +22,7 @@ HRESULT CMainApp::Initialize()
 	EngineDesc.hInstance =  g_hInst;
 	EngineDesc.hWnd = g_hWnd;
 	EngineDesc.isWindowed = true;
-	EngineDesc.iNumLevels = LEVEL_END;
+	EngineDesc.iNumLevels = LAST;
 	EngineDesc.iViewportWidth = g_iWinSizeX;
 	EngineDesc.iViewportHeight = g_iWinSizeY;
 

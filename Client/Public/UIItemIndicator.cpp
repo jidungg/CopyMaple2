@@ -5,12 +5,12 @@
 
 
 CUIItemIndicator::CUIItemIndicator(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CUIPanel(pDevice, pContext)
+	: CUIButton(pDevice, pContext)
 {
 }
 
 CUIItemIndicator::CUIItemIndicator(const CUIItemIndicator& Prototype)
-	: CUIPanel(Prototype), m_pItemDesc(Prototype.m_pItemDesc), m_pItemIcon(Prototype.m_pItemIcon)
+	: CUIButton(Prototype), m_pItemDesc(Prototype.m_pItemDesc), m_pItemIcon(Prototype.m_pItemIcon)
 {
 }
 
@@ -47,7 +47,9 @@ HRESULT CUIItemIndicator::Initialize(void* pArg)
 HRESULT CUIItemIndicator::Render()
 {
 
-	__super::Render();
+	if(FAILED(__super::Render()))
+		return E_FAIL;
+	m_pItemIcon->Render();
 	return S_OK;
 }
 
@@ -62,18 +64,25 @@ HRESULT CUIItemIndicator::On_ListItemDataSet(const UIListItemData* data)
 	panelDesc.ePivotType = CORNOR_TYPE::CENTER;
 	panelDesc.fXOffset = 0;
 	panelDesc.fYOffset = 0;
-	panelDesc.fSizeX = 70;
-	panelDesc.fSizeY = 70;
+	_float3 fSize = m_pTransformCom->Compute_Scaled();
+	panelDesc.fSizeX = fSize.x - 12;
+	panelDesc.fSizeY = fSize.y - 12;
 	string strProtoItemIconTag = m_pItemDesc->strIconImageTag;
 	wstring wstrItemIconTag(strProtoItemIconTag.begin(), strProtoItemIconTag.end());
 	panelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, wstrItemIconTag, nullptr));
 
 	m_pItemIcon =static_cast<CUIPanel*>( m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &panelDesc));
-	if (FAILED(m_pItemIcon->Initialize(&panelDesc)))
-		return E_FAIL;
-	Add_Child(m_pItemIcon);
 
+	Add_FakeChild(m_pItemIcon);
 }
+
+
+
+void CUIItemIndicator::Call_Callback(const ButtonCallback& fCallback)
+{
+	fCallback(this);
+}
+
 
 
 
@@ -107,4 +116,5 @@ CGameObject* CUIItemIndicator::Clone(void* pArg)
 void CUIItemIndicator::Free()
 {
 	__super::Free();
+	Safe_Release(m_pItemIcon);
 }

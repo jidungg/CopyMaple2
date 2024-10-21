@@ -39,6 +39,8 @@ HRESULT CUIButton::Ready_Components()
 	return S_OK;
 }
 
+
+
 void CUIButton::On_MouseOver()
 {
 }
@@ -50,8 +52,8 @@ void CUIButton::On_MouseEnter()
 
 void CUIButton::On_MouseExit()
 {
-	if (m_iSRVIndex != BS_PRESSED)
-		m_iSRVIndex = BS_NORMAL;
+	m_iSRVIndex = BS_NORMAL;
+		
 }
 
 void CUIButton::On_MouseLButtonDown()
@@ -69,7 +71,16 @@ void CUIButton::On_MouseClick()
 {
 	m_iSRVIndex = BS_HIGHLIGHTED;
 
+	for (auto& func : m_listCallback)
+	{
+		Call_Callback(func);
+	}
 	return ;
+}
+
+void CUIButton::Call_Callback(const function<void(void*)>& fCallback)
+{
+	fCallback(this);
 }
 
 CUIButton* CUIButton::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

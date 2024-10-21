@@ -96,8 +96,6 @@ void CBuilder::Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta
 		m_vMoveDir += Get_Direction_Vector(DIR_D);
 
 
-
-
 	if (eKey == KEY::R && eKeyState == KEY_STATE::DOWN)//ȸ��
 	{
 		_float4 pos;
@@ -111,6 +109,11 @@ void CBuilder::Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta
 	}
 	if (eKey == KEY::E && eKeyState == KEY_STATE::DOWN) // ȸ��
 	{
+		_float4 pos;
+		XMStoreFloat4(&pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		_uint index = m_pCubeTerrain->PosToIndex(pos);
+		m_pCubeTerrain->Remove_TerrainObject(index);
+
 	}
 	if (eKey == KEY::SPACE && eKeyState == KEY_STATE::DOWN) // ��ġ
 	{
@@ -124,7 +127,7 @@ void CBuilder::Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta
 		desc.eModelProtoLevelID = LEVEL_LOADING;
 		strcpy_s(desc.strShaderProtoName, ("Prototype_Component_Shader_VtxMesh"));
 		desc.eShaderProtoLevelID = LEVEL_LOADING;
-		desc.direction = m_eBuildItemDir;
+		desc.direction = m_pPreview->Get_Direction();
 		desc.data = m_iBuildData;
 		_float4 pos;
 		XMStoreFloat4(&pos,m_pTransformCom->Get_State(CTransform::STATE_POSITION));
@@ -148,17 +151,9 @@ void CBuilder::Late_Update(_float fTimeDelta)
 	m_vMoveDir = XMVectorSet(0, 0, 0, 0);
 }
 
-HRESULT CBuilder::Render()
-{
-	for (auto& child : m_pChilds)
-	{
-		if (child->Is_Active() && child->Is_Dead() == false)
-			child->Render();
-	}
-	return S_OK;
-}
 
-void CBuilder::Set_BuildItem(ITEM_DESC* tItemDesc)
+
+void CBuilder::Set_BuildItem(const ITEM_DESC* tItemDesc)
 {
 	strcpy_s(m_szItemName, tItemDesc->strItemName);
 	Remove_Child(m_pPreview);

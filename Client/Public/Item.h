@@ -19,7 +19,7 @@ typedef struct ItemDesc : public UIListItemData
 		std::copy(str.begin(), str.end(), strModelTag);
 		iPrice = js["price"];
 	}
-	ITEM_TYPE eType = ITEM_TYPE::ITEM_TYPE_END;
+	ITEM_TYPE eType = ITEM_TYPE::LAST;
 	_char strItemName[MAX_PATH] = ("");
 	_char strItemDesc[MAX_PATH] = ("");
 	_char strIconImageTag[MAX_PATH] = ("");

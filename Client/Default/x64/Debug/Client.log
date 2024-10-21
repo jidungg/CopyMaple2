@@ -1,48 +1,16 @@
-﻿  Loader.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Public\Player.h(153,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
-  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+﻿  Player.cpp
+D:\Workbench\Portfolio\CopyMaple2\Client\Public\Player.h(162,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
   
-D:\Workbench\Portfolio\CopyMaple2\Client\Public\UIHomeDialog.h(13,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
-  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\StateMachine.h(7,7): warning C4099: 'Engine::CTransition': 처음에는 'struct'을(를) 사용하여 형식 이름을 표시했는데 이제는 'class'을(를) 사용하여 표시합니다.
+  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Transition.h(6,19):
+      'Engine::CTransition' 선언을 참조하십시오.
   
-D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\MeshCollider.h(7,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CMeshCollider'의 기본으로 사용되었습니다.
-  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
-      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider.h(4,7):
-      'Engine::CCollider' 선언을 참조하십시오.
-      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\MeshCollider.h(6,18):
-      'Engine::CMeshCollider' 선언을 참조하십시오.
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp(65,55): warning C4101: 'pCondition' :참조되지 않은 지역 변수입니다.
+  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
   
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\xutility(4689,18): warning C4244: '=': 'wchar_t'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
-      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\xutility(4689,18):
-      템플릿 인스턴스화 컨텍스트(가장 오래된 인스턴스화 컨텍스트)가
-          D:\Workbench\Portfolio\CopyMaple2\Client\private\Loader.cpp(310,13):
-          컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Elem=wchar_t,
-              _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
-              _Alloc=std::allocator<char>
-          ]
-              D:\Workbench\Portfolio\CopyMaple2\Client\private\Loader.cpp(310,13):
-              'Client::CLoader::Load_Dirctory_Models'에서 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string'에 대한 첫 번째 참조를 확인하세요.
-          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\xstring(793,17):
-          컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct_from_iter<wchar_t*,wchar_t*,_Size_type>(_Iter,const _Sent,_Size)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Size_type=unsigned __int64,
-              _Iter=wchar_t *,
-              _Sent=wchar_t *,
-              _Size=unsigned __int64
-          ]
-          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\xstring(949,18):
-          컴파일되는 함수 템플릿 인스턴스화 '_OutIt *std::_Copy_n_unchecked4<wchar_t*,_Size,char*>(_InIt,_SizeTy,_OutIt)'에 대한 참조를 확인하세요.
-          with
-          [
-              _OutIt=char *,
-              _Size=unsigned __int64,
-              _InIt=wchar_t *,
-              _SizeTy=unsigned __int64
-          ]
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp(65,10): warning C4101: 'pState' :참조되지 않은 지역 변수입니다.
+  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
   
   Client.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Client.exe

@@ -18,4 +18,5 @@
 #include <tchar.h>
 
 #include "Client_Defines.h"
+
 // TODO: ���α׷��� �ʿ��� �߰� ����� ���⿡�� �����մϴ�.

@@ -50,6 +50,18 @@ void CController::Update(_float fTimeDelta)
 
 }
 
+void CController::Possess(CPawn* pPawn)
+{
+	Safe_Release(m_pCurrentPawn);
+	m_pCurrentPawn = pPawn;
+	Safe_AddRef(m_pCurrentPawn);
+}
+
+void CController::Clear()
+{
+
+}
+
 
 CController* CController::Create(CInput_Device* pInput, CUIManager* pUIManager)
 {
@@ -67,5 +79,5 @@ CController* CController::Create(CInput_Device* pInput, CUIManager* pUIManager)
 void CController::Free(void)
 {
 	__super::Free();
-
+	Safe_Release(m_pCurrentPawn);
 }

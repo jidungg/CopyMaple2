@@ -36,7 +36,7 @@ DirectX::XMVECTOR Client::Get_Direction_Vector(DIRECTION eDirection)
 	case DIRECTION::YM:
 		vDirection = DirectX::XMVectorSet(0.f, -1.f, 0.f, 0.f);
 		break;
-	case DIRECTION::DIR_END:
+	case DIRECTION::LAST:
 	default:
 		vDirection = DirectX::XMVectorZero();
 		break;

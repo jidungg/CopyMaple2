@@ -7,23 +7,17 @@ CItemDataBase::CItemDataBase()
 {
 }
 
-HRESULT CItemDataBase::LoadFromJson()
+
+void CItemDataBase::Insert_Data(ITEM_DESC* pData)
 {
-	json j;
-	if (FAILED(CJsonParser::ReadJsonFile("../Bin/Resources/Json/ItemData.json", &j)))
-		return E_FAIL;
-	for (auto& item : j["items"])
-	{
-		ITEM_DESC* pItemDesc = new ITEM_DESC(item);
-		m_mapItem[(_uint)pItemDesc->eType].insert({pItemDesc->strItemName,pItemDesc});
-	}
- 	return S_OK;
+	m_mapItem[(_uint)pData->eType].insert({ pData->strItemName,pData });
+
 }
 
 
 void CItemDataBase::Free()
 {
-	for (_uint i = 0; i < (_uint)ITEM_TYPE::ITEM_TYPE_END; ++i)
+	for (_uint i = 0; i < (_uint)ITEM_TYPE::LAST; ++i)
 	{
 		for (auto& item : m_mapItem[i])
 		{

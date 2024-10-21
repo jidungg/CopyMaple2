@@ -54,52 +54,72 @@ HRESULT CGameObject::Initialize(void * pArg)
 
 void CGameObject::Priority_Update(_float fTimeDelta)
 {
-	if (false == m_bActive) return;
 	for (auto& c : m_Components)
 	{
-		if (c.second != nullptr && c.second->Is_Active())
+		if (c.second->Is_Active())
 			c.second->Priority_Update(fTimeDelta);
 	}
 	for (auto& child : m_pChilds)
 	{
-		if (child != nullptr && child->Is_Active())
+		if (child->Is_Active())
 			child->Priority_Update(fTimeDelta);
 	}
 }
 
 void CGameObject::Update(_float fTimeDelta)
 {
-	if (false == m_bActive) return;
 	for (auto& c : m_Components)
 	{
-		if (c.second != nullptr && c.second->Is_Active())
+		if (c.second->Is_Active())
 			c.second->Update(fTimeDelta);
 	}
 	for (auto& child : m_pChilds)
 	{
-		if (child != nullptr && child->Is_Active())
+		if ( child->Is_Active())
 			child->Update(fTimeDelta);
 	}
 }	
 
 void CGameObject::Late_Update(_float fTimeDelta)
 {
-	if (false == m_bActive) return;
 	for (auto& c : m_Components)
 	{
-		if (c.second != nullptr && c.second->Is_Active())
+		if (c.second->Is_Active())
 			c.second->Late_Update(fTimeDelta);
 	}
 	for (auto& child : m_pChilds)
 	{
-		if (child != nullptr && child->Is_Active())
+		if (child->Is_Active())
 			child->Late_Update(fTimeDelta);
+	}
+}
+
+void CGameObject::Final_Update()
+{
+	for (auto& m_pChilds_iter = m_pChilds.begin(); m_pChilds_iter != m_pChilds.end();)
+	{
+		if ((*m_pChilds_iter)->Is_Dead())
+		{
+			Safe_Release(*m_pChilds_iter);
+			m_pChilds_iter = m_pChilds.erase(m_pChilds_iter);
+		}
+		else
+		{
+			(*m_pChilds_iter)->Final_Update();
+			++m_pChilds_iter;
+		}
 	}
 }
 
 HRESULT CGameObject::Render()
 {
 	if (false == m_bActive) return S_OK;
+	for (auto& child : m_pChilds)
+	{
+
+		if (child->Is_Active())
+			child->Render();
+	}
 	return S_OK;
 }
 

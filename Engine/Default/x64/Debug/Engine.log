@@ -1,71 +1,9 @@
-﻿  Animation.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Animation.cpp(36,16): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Animation.cpp(38,21): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Bone.cpp
-  Camera.cpp
-  Camera_UI.cpp
-  Channel.cpp
-  Collider.cpp
-  Controller.cpp
-  Graphic_Device.cpp
-  Input_Device.cpp
-  Light.cpp
-  Light_Manager.cpp
-  Mesh.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Mesh.cpp(196,45): warning C4267: '=': 'size_t'에서 'uint32_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Mesh.cpp(201,45): warning C4267: '=': 'size_t'에서 'uint32_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Mesh.cpp(206,45): warning C4267: '=': 'size_t'에서 'uint32_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Mesh.cpp(211,45): warning C4267: '=': 'size_t'에서 'uint32_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  MeshCollider.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\Public\MeshCollider.h(7,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CMeshCollider'의 기본으로 사용되었습니다.
-  (소스 파일 '../Private/MeshCollider.cpp'을(를) 컴파일하는 중)
-      D:\Workbench\Portfolio\CopyMaple2\Engine\Public\Collider.h(4,7):
-      'Engine::CCollider' 선언을 참조하십시오.
-      D:\Workbench\Portfolio\CopyMaple2\Engine\Public\MeshCollider.h(6,18):
-      'Engine::CMeshCollider' 선언을 참조하십시오.
+﻿  StateMachine.cpp
+D:\Workbench\Portfolio\CopyMaple2\Engine\Public\StateMachine.h(7,7): warning C4099: 'Engine::CTransition': 처음에는 'struct'을(를) 사용하여 형식 이름을 표시했는데 이제는 'class'을(를) 사용하여 표시합니다.
+  (소스 파일 '../Private/StateMachine.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Engine\Public\Transition.h(6,19):
+      'Engine::CTransition' 선언을 참조하십시오.
   
-  Model.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Model.cpp(76,36): warning C4267: '=': 'size_t'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Pawn.cpp
-  Physics.cpp
-  PipeLine.cpp
-  Rect_Transform.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Rect_Transform.cpp(75,105): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Rect_Transform.cpp(75,65): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Timer.cpp
-  Timer_Manager.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  UIManager.cpp
-  Engine_Struct.cpp
-  Material.cpp
-  Base.cpp
-  Component.cpp
-  GameInstance.cpp
-  GameObject.cpp
-  Layer.cpp
-  Level.cpp
-  Level_Manager.cpp
-  Object_Manager.cpp
-  Prototype_Manager.cpp
-  Renderer.cpp
-  Shader.cpp
-  Texture.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\Texture.cpp(87,52): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Transform.cpp
-  UIObject.cpp
-  VIBuffer.cpp
-  VIBuffer_Rect.cpp
-  VIBuffer_Terrain.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\VIBuffer_Terrain.cpp(53,18): warning C4267: '초기화 중': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\VIBuffer_Terrain.cpp(55,84): warning C4244: '인수': 'size_t'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\VIBuffer_Terrain.cpp(55,42): warning C4244: '인수': 'size_t'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\VIBuffer_Terrain.cpp(72,18): warning C4267: '초기화 중': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  코드를 생성하고 있습니다...
-DirectXTKd.lib(DDSTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(DDSTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTKd.lib(WICTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(WICTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-     ../Bin/Engine.lib 라이브러리 및 ../Bin/Engine.exp 개체를 생성하고 있습니다.
   Engine.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Engine\Bin\Engine.dll
   '//' is not recognized as an internal or external command,
   operable program or batch file.
@@ -82,6 +20,7 @@ DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' �
   .\Engine\Public\Channel.h
   .\Engine\Public\Collider.h
   .\Engine\Public\Component.h
+  .\Engine\Public\Condition.h
   .\Engine\Public\Controller.h
   .\Engine\Public\Engine_Defines.h
   .\Engine\Public\Engine_Function.h
@@ -89,11 +28,16 @@ DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' �
   .\Engine\Public\Engine_Struct.cpp
   .\Engine\Public\Engine_Struct.h
   .\Engine\Public\Engine_Typedef.h
+  .\Engine\Public\Event.h
+  .\Engine\Public\EventHandlerWrapper.h
+  .\Engine\Public\EventHandlerWrapperInterface.h
+  .\Engine\Public\EventManager.h
   .\Engine\Public\GameInstance.h
   .\Engine\Public\GameObject.h
   .\Engine\Public\Graphic_Device.h
   .\Engine\Public\Input_Device.h
   .\Engine\Public\json.hpp
+  .\Engine\Public\JsonParser.h
   .\Engine\Public\Layer.h
   .\Engine\Public\Level.h
   .\Engine\Public\Level_Manager.h
@@ -112,10 +56,13 @@ DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' �
   .\Engine\Public\Rect_Transform.h
   .\Engine\Public\Renderer.h
   .\Engine\Public\Shader.h
+  .\Engine\Public\State.h
+  .\Engine\Public\StateMachine.h
   .\Engine\Public\Texture.h
   .\Engine\Public\Timer.h
   .\Engine\Public\Timer_Manager.h
   .\Engine\Public\Transform.h
+  .\Engine\Public\Transition.h
   .\Engine\Public\UIManager.h
   .\Engine\Public\UIObject.h
   .\Engine\Public\VIBuffer.h
@@ -144,4 +91,4 @@ DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' �
   .\Engine\Public\DirectXTK\XboxDDSTextureLoader.h
   .\Engine\Public\Effects11\d3dx11effect.h
   .\Engine\Public\Effects11\d3dxGlobal.h
-  71 File(s) copied
+  80 File(s) copied

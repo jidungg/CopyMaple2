@@ -43,6 +43,12 @@
     <Filter Include="02.GameObjects\UI">
       <UniqueIdentifier>{5728882f-9567-45f8-a69f-da4578fc21ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{90c1c120-5850-469e-8728-6b703058719f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Event">
+      <UniqueIdentifier>{7af1fd5a-45f7-432e-827a-8321b10ab56b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -115,18 +121,39 @@
     <ClInclude Include="..\Public\Terrain.h">
       <Filter>02.GameObjects\Terrain</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\JsonParser.h">
-      <Filter>00.MainApp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Builder.h" />
-    <ClInclude Include="..\Public\ModelObject.h" />
-    <ClInclude Include="..\Public\MyTransform.h" />
     <ClInclude Include="Client_Utility.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\ItemDataBase.h" />
-    <ClInclude Include="..\Public\UIList.h" />
-    <ClInclude Include="..\Public\UIListItemEntry.h" />
+    <ClInclude Include="..\Public\UIListItemEntry.h">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIList.h">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CUIListSelector.h">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Builder.h">
+      <Filter>02.GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ModelObject.h">
+      <Filter>02.GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MyTransform.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CreateObjEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\DeadObjEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ItemDataBase.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\LevelChangeEvent.h">
+      <Filter>Event</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -190,18 +217,39 @@
     <ClCompile Include="..\Private\Terrain.cpp">
       <Filter>02.GameObjects\Terrain</Filter>
     </ClCompile>
-    <ClCompile Include="JsonParser.cpp">
-      <Filter>00.MainApp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Builder.cpp" />
-    <ClCompile Include="..\Private\ModelObject.cpp" />
-    <ClCompile Include="..\Private\MyTransform.cpp" />
     <ClCompile Include="Client_Utility.cpp">
       <Filter>99.Defines</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\ItemDataBase.cpp" />
-    <ClCompile Include="..\Private\UIList.cpp" />
-    <ClCompile Include="..\Private\UIListItemEntry.cpp" />
+    <ClCompile Include="..\Private\UIListItemEntry.cpp">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIList.cpp">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CUIListSelector.cpp">
+      <Filter>02.GameObjects\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Builder.cpp">
+      <Filter>02.GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ModelObject.cpp">
+      <Filter>02.GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MyTransform.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CreateObjEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\DeadObjEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ItemDataBase.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LevelChangeEvent.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

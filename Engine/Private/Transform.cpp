@@ -110,6 +110,8 @@ void CTransform::LookAt(const _fvector& vAt)
 
 void CTransform::LookToward(const _fvector& vDir)
 {
+	if (XMVector4Equal(vDir, XMVectorZero()))
+		return;
 	_float3		vScale = Compute_Scaled();
 
 	_vector		vLook = vDir;
@@ -142,7 +144,7 @@ void CTransform::TurnToward(const _fvector& vDestLook, _float fTimeDelta)
 	XMStoreFloat4(&vResultDiff, vDest - vResultLook);
 	 if (vLookDiff.x <= 0 != vResultDiff.x <=0 ||
 		 vLookDiff.y <= 0 != vResultDiff.y <= 0 ||
-		 vLookDiff.z<= 0 != vResultDiff.z <= 0)// �Ѿ
+		 vLookDiff.z<= 0 != vResultDiff.z <= 0)//
 	 {
 		 LookToward(vDest);
 	 }

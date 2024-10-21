@@ -40,7 +40,7 @@ HRESULT CModelObject::Initialize(void* pArg)
 void CModelObject::Update(_float fTimeDelta)
 {
 	if (m_eModelType == CModel::TYPE::TYPE_ANIM)
-        m_pModelCom->Play_Animation(fTimeDelta);
+        m_bAnimationEnd =m_pModelCom->Play_Animation(fTimeDelta);
 	__super::Update(fTimeDelta);
 }
 
@@ -98,6 +98,11 @@ HRESULT CModelObject::Render()
 void CModelObject::Set_AnimationLoop(_uint iIdx, _bool bIsLoop)
 {
 	m_pModelCom->Set_AnimationLoop(iIdx, bIsLoop);
+}
+
+void CModelObject::Switch_Animation(_uint iIdx)
+{
+	m_pModelCom->Switch_Animation(iIdx);
 }
 
 

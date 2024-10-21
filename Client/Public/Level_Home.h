@@ -22,6 +22,8 @@ public:
 	virtual void Update(_float fTimeDelta)override;
 	virtual HRESULT Render()override;
 
+	void On_BuildItemSelected(void*);
+	void Set_BuildItem(const ITEM_DESC* pItemDesc);
 private:
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_UI(const _wstring& strLayerTag);

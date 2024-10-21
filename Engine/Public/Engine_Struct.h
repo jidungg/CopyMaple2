@@ -128,7 +128,7 @@ namespace Engine
 		XMFLOAT3		vScale;
 		XMFLOAT4		vRotation;
 		XMFLOAT3		vPosition;
-		float			fKeyFramePosition;
+		float			fTrackPosition;
 	}KEYFRAME;
 }
 

@@ -33,13 +33,14 @@ public:
 
 
 	virtual void Add_Child(CGameObject* pChild) override;
+	void Add_FakeChild(CUIObject* pUIobj);
 	void Increase_Priority();
 
 	_uint Get_Priority() { return m_iPriority; }
 public:
 
 	void MouseOver();
-	void MouseNotOver();
+	void MouseNotOver(CUIObject* pExcept = nullptr);
 	virtual void On_MouseOver();
 	virtual void On_MouseEnter();
 	virtual void On_MouseExit();

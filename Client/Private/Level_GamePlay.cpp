@@ -46,10 +46,9 @@ HRESULT CLevel_GamePlay::Ready_Lights()
 
 HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Henesys"), LEVEL_GAMEPLAY, strLayerTag, nullptr)))
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Henesys"), LEVEL_GAMEPLAY, strLayerTag, (void*)nullptr)))
 		return E_FAIL;
-	/*if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Terrain"), LEVEL_GAMEPLAY, strLayerTag, nullptr)))
-		return E_FAIL;*/
+
 
 	return S_OK;
 }
@@ -64,7 +63,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _wstring& strLayerTag)
 	CPlayer* pPlayer = static_cast<CPlayer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_Player"), &PlayerDesc));
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, strLayerTag, pPlayer)))
 		return E_FAIL;
-
+	m_pGameInstance->Possess(pPlayer);
 	CCamera_Trace::TRACECAMERA_DESC		CamDesc{};
 
 	CamDesc.fSpeedPerSec = 5.f;

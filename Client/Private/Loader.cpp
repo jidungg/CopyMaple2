@@ -2,6 +2,7 @@
 #include "..\Public\Loader.h"
 
 #include "GameInstance.h"
+#include "JsonParser.h"
 
 #include "Camera_Free.h"
 #include "Camera_Trace.h"
@@ -18,6 +19,7 @@
 #include "ItemDataBase.h"
 #include "UIItemIndicator.h"
 #include "UIList.h"
+#include "StateMachine.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -97,8 +99,11 @@ void CLoader::Show_Debug()
 
 HRESULT CLoader::Loading_Level_Logo()
 {
-	if (FAILED(ITEMDB->LoadFromJson()))
-	return E_FAIL;
+	if (FAILED(Load_ItemData()))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_GameObject_StateMachine"),
+		CStateMachine::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드."));
 	/* For.Prototype_Component_Texture_Logo */
    
@@ -108,8 +113,11 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/MAP/Cube/"))))
 		return E_FAIL;
-
+	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
+		TEXT("../Bin/resources/FBXs/MAP/Field/"))))
+		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("셰이더 로드."));
+#pragma region Shader
 	/* For.Prototype_Component_Shader_VtxPosTex */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxPosTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPosTex.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
@@ -128,44 +136,59 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_VtxAnimMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
 		return E_FAIL;
+#pragma endregion
+
 	lstrcpy(m_szLoadingText, TEXT("모델 로드."));
-	//EmptyModel
-	XMMATRIX matGlobal = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
-	matGlobal = matGlobal * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Model_EmptyModel"),
-		CModel::Create(m_pDevice, m_pContext,  "../Bin/Resources/FBXs/EmptyModel.model", matGlobal))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/FBXs/Player/Female_Wizard.model", matGlobal))))
-		return E_FAIL;
+#pragma region Model
 	/* For.Prototype_Component_VIBuffer_Rect */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_VIBuffer_Rect"),
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	//EmptyModel
+	XMMATRIX matGlobal = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
+	matGlobal = matGlobal * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Model_EmptyModel"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/FBXs/EmptyModel.model", matGlobal))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Model_Player"),
+		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/FBXs/Player/Female_Wizard.model", matGlobal))))
+		return E_FAIL;
+
 	///* For.Prototype_Component_CModel*/
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/MAP/Cube/"))))
 		return E_FAIL;
-	//if (FAILED(Load_Dirctory_Models(LEVEL_LOADING, CModel::TYPE_NONANIM,
-	//	TEXT("../Bin/resources/FBXs/MAP/Field/"))))
-	//	return E_FAIL;
+	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
+		TEXT("../Bin/resources/FBXs/MAP/Field/"))))
+		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CMeshCollider::m_szProtoTag,
 		CMeshCollider::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+
+
+
+#pragma endregion
 	lstrcpy(m_szLoadingText, TEXT("객체 로드."));
+#pragma region Object
 	//ModelObject
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CModelObject::m_szProtoTag,
 		CModelObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
-	/* For.Prototype_GameObject_BackGround */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIPanel::m_szProtoTag, 
-		CUIPanel::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_GameObject_Player"),
 		CPlayer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING,
+		CTerrainObject::m_szProtoTag,
+		CTerrainObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For.Prototype_GameObject_BackGround */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIPanel::m_szProtoTag,
+		CUIPanel::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_GameObject_UIList"),
+		CUIListSelector::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Camera_Trace */
@@ -178,10 +201,10 @@ HRESULT CLoader::Loading_Level_Logo()
 		CCamera_Free::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, 
-		CTerrainObject::m_szProtoTag,
-		CTerrainObject::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+#pragma endregion
+
+
+
 
 
 	lstrcpy(m_szLoadingText, TEXT("로드 완료."));
@@ -229,7 +252,7 @@ HRESULT CLoader::Loading_Level_MyHome()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_HomeDialog"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Box_Normal.dds"), 1))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Box_%d.dds"), 4))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_ItemListBack"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_ItemListBack.dds"), 1))))
@@ -268,14 +291,25 @@ HRESULT CLoader::Loading_Level_MyHome()
 		CUIItemIndicator::Create(m_pDevice, m_pContext,LEVEL_HOME, TEXT("UI_Texture_HomeDialog")))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialogBuildItemList"),
-		CUIList::Create(m_pDevice, m_pContext, LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialogBuildItemIndicator")))))
-		return E_FAIL;
+
 
 	lstrcpy(m_szLoadingText, TEXT("로드 완료."));
 
 	m_isFinished = true;
 
+	return S_OK;
+}
+
+HRESULT CLoader::Load_ItemData()
+{
+	json j;
+	if (FAILED(CJsonParser::ReadJsonFile("../Bin/Resources/Json/ItemData.json", &j)))
+		return E_FAIL;
+	for (auto& item : j["items"])
+	{
+		ITEM_DESC* pItemDesc = new ITEM_DESC(item);
+		ITEMDB->Insert_Data(pItemDesc);
+	}
 	return S_OK;
 }
 

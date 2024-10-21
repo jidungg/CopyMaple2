@@ -44,9 +44,8 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta)  override;
 	virtual void Late_Update(_float fTimeDelta) override;
-	virtual HRESULT Render();
 
-	void Set_BuildItem(ITEM_DESC* tItemDesc);
+	void Set_BuildItem(const ITEM_DESC* tItemDesc);
 	void Move_To(const _vector& vPos);
 
 private:
@@ -61,7 +60,6 @@ private:
 	XMVECTOR m_vPreviewOffset = XMVectorSet(0, 0.5f, 0, 0);
 	_char m_szItemName[MAX_PATH] = "";
 	_char m_szBuildItemTag[MAX_PATH] = "";
-	DIRECTION m_eBuildItemDir = DIR_WS;
 	int m_iBuildData = 0;
 	XMVECTOR m_vMoveDir = XMVectorSet(0, 0, 0, 0);
 public:

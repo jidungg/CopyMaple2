@@ -3,14 +3,12 @@
 #include "Renderer.h"
 #include "Prototype_Manager.h"
 #include "PipeLine.h"
-/* 1. 클라이언트 개발자가 사용할 만한 엔진에서 제공해주는 기능들을 보여준다 .*/
-/* 2. 엔진의 기능을 원활하게 사용할 수 있도록 엔진을 초기화한다.Initialize_Engine */
-/* 3. 사용 종료시에 엔진 기능 구현을 위해서 할당했던 모든 데이터를 삭제한다. Release_Engine*/
-/* 4. 엔진에서 갱신이 필요한 모든 객체를 한곳에 모아서 갱신해 준다. */
 
 BEGIN(Engine)
 class CCollider;
 class CPawn;
+class CEvent;
+class IEventHandlerWrapperInterface;
 class ENGINE_DLL CGameInstance final : public CBase
 {
 	DECLARE_SINGLETON(CGameInstance)
@@ -46,7 +44,7 @@ public: /* For.Prototype_Manager */
 	class CBase* Clone_Proto_Component_Current(const _wstring& strPrototypeTag, void* pArg);
 
 public: /* For.Object_Manager */
-	HRESULT Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLevelIndex, const _wstring& strLayerTag, void* pArg = nullptr, CGameObject** pOut = nullptr);
+	HRESULT Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLevelIndex, const _wstring& strLayerTag,  void* pArg = nullptr);
 	HRESULT Add_GameObject_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, CGameObject* pObj);
 	bool RayCast(const _wstring& strLayerTag, const Ray& tRay, RaycastHit* pOut);
 	bool RayCast(const Ray& tRay, RaycastHit* pOut);
@@ -73,6 +71,15 @@ public: /* Light_Manager */
 public://For Controller
 	void Possess(CPawn* pPawn);
 
+public://For EventManager
+	void Push_Event(CEvent* _event);
+	void Register_PreEventCallback(_uint _eventType, IEventHandlerWrapperInterface* _handler);
+	void UnRegister_PreEventCallback(_uint _eventType, const void* _handlerAddress);
+	void Register_PostEventCallback(_uint _eventType, IEventHandlerWrapperInterface* _handler);
+	void UnRegister_PostEventCallback(_uint _eventType, const void* _handlerAddress);
+	void Trigger_Event(CEvent* _event);
+	void Dispatch_Event();
+
 private:
 	class CGraphic_Device*				m_pGraphic_Device = { nullptr };
 	class CInput_Device*				m_pInput_Device = { nullptr };
@@ -86,6 +93,7 @@ private:
 	class CUIManager*					m_pUIManager = { nullptr };
 	class CLight_Manager*				m_pLight_Manager = { nullptr };
 	class CPhysics*						m_pPhysics = { nullptr };
+	class CEventManager*			m_pEventManager = { nullptr };
 public:
 	static void Release_Engine();
 

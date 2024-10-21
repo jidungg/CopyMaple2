@@ -166,7 +166,12 @@ HRESULT CModel::Bind_BoneMatrices(CShader* pShader, const _char* pConstantName, 
 bool CModel::Play_Animation(_float fTimeDelta)
 {
 	//뼈들의 변환행렬을 갱신
-	bool bAnimEnd = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, fTimeDelta);
+	bool bAnimEnd = false;
+	bAnimEnd = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, fTimeDelta);
+	//if(m_iNextAnimIndex == m_iCurrentAnimIndex)//애니메이션 재생
+	//{
+	//}
+
 
 	//뼈들의 합성변환행렬을 갱신
 	for (auto& pBone : m_Bones)
@@ -196,9 +201,21 @@ _uint CModel::Get_BoneIndex(const _char* pBoneName) const
 	return iBoneIndex;
 }
 
+float CModel::Get_AnimTime()
+{
+	return m_Animations[m_iCurrentAnimIndex]->Get_AnimTime();
+}
+
 void CModel::Set_AnimationLoop(_uint iIdx, _bool bIsLoop)
 {
 	m_Animations[iIdx]->Set_Loop(bIsLoop); 
+}
+
+void CModel::Switch_Animation(_uint iIdx)
+{
+	m_iCurrentAnimIndex = iIdx; m_iNextAnimIndex = iIdx;
+	m_Animations[m_iCurrentAnimIndex]->Reset_CurrentTrackPosition();
+
 }
 
 HRESULT CModel::Render()

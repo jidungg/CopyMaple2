@@ -1,11 +1,11 @@
 #pragma once
-#include "UIPanel.h"
+#include "UIButton.h"
 #include "Item.h"
 #include "UIListItemEntry.h"
 
 BEGIN(Client)
 class CUIItemIndicator :
-	public CUIPanel, public IUIListItemEntry
+	public CUIButton, public IUIListItemEntry
 {
 protected:
 	CUIItemIndicator(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -18,9 +18,9 @@ public:
 	virtual HRESULT Render()override;
 
 	HRESULT On_ListItemDataSet(const UIListItemData* data) override;
-
-
+	const ITEM_DESC* Get_ItemDesc() { return(m_pItemDesc); }
 protected:
+	virtual void Call_Callback(const ButtonCallback& fCallback) override;
 	const ITEM_DESC* m_pItemDesc = nullptr;
 	CUIPanel* m_pItemIcon = nullptr;
 

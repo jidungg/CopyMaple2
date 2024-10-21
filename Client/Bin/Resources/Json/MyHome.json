@@ -6,34 +6,190 @@
             "index": 0,
             "iteration": 1,
             "model": "풀 블록1",
-            "position": [
-                0,
-                0,
-                0
-            ],
-            "rotation": [
-                0,
-                0,
-                0
-            ],
             "type": 0
         },
         {
             "data": 0,
             "direction": 0,
             "index": 100,
+            "iteration": 2,
+            "model": "돌 블록1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 0,
+            "index": 102,
+            "iteration": 2,
+            "model": "돌 블록1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 0,
+            "index": 104,
+            "iteration": 2,
+            "model": "돌 블록1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 0,
+            "index": 106,
+            "iteration": 2,
+            "model": "돌 블록1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 0,
+            "index": 108,
             "iteration": 1,
             "model": "돌 블록1",
-            "position": [
-                0,
-                0,
-                0
-            ],
-            "rotation": [
-                0,
-                0,
-                0
-            ],
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 0,
+            "index": 121,
+            "iteration": 1,
+            "model": "돌 블록1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 0,
+            "index": 123,
+            "iteration": 1,
+            "model": "돌 블록1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 2,
+            "index": 126,
+            "iteration": 1,
+            "model": "돌 블록1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 2,
+            "index": 125,
+            "iteration": 1,
+            "model": "돌 블록1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 1,
+            "index": 142,
+            "iteration": 1,
+            "model": "돌 블록1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 2,
+            "index": 147,
+            "iteration": 2,
+            "model": "돌 블록1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 2,
+            "index": 149,
+            "iteration": 1,
+            "model": "돌 블록1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 1,
+            "index": 204,
+            "iteration": 1,
+            "model": "꽃 1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 0,
+            "index": 205,
+            "iteration": 2,
+            "model": "부쉬 1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 0,
+            "index": 208,
+            "iteration": 1,
+            "model": "부쉬 1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 0,
+            "index": 226,
+            "iteration": 1,
+            "model": "부쉬 1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 0,
+            "index": 237,
+            "iteration": 1,
+            "model": "부쉬 1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 0,
+            "index": 245,
+            "iteration": 1,
+            "model": "부쉬 1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 1,
+            "index": 223,
+            "iteration": 1,
+            "model": "풀 블록1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 1,
+            "index": 222,
+            "iteration": 1,
+            "model": "풀 블록1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 0,
+            "index": 221,
+            "iteration": 1,
+            "model": "풀 블록1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 2,
+            "index": 242,
+            "iteration": 1,
+            "model": "풀 블록1",
+            "type": 0
+        },
+        {
+            "data": 0,
+            "direction": 3,
+            "index": 322,
+            "iteration": 1,
+            "model": "꽃 1",
             "type": 0
         }
     ],

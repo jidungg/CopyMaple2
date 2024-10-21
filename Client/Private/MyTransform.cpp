@@ -40,7 +40,7 @@ void CMyTransform::Go_Direction(DIRECTION eDirection, _float fTimeDelta)
 	case Client::DIRECTION::XPZM:
 		vDirection = XMVectorSet(1.f, 0.f, -1.f, 0.f);
 		break;
-	case Client::DIRECTION::DIR_END:
+	case Client::DIRECTION::LAST:
 	default:
 		break;
 	}

@@ -33,7 +33,7 @@ public:
 private:
 	ID3D11Device*			m_pDevice = { nullptr };
 	ID3D11DeviceContext*	m_pContext = { nullptr };
-	LEVELID					m_eNextLevelID = { LEVEL_END };
+	LEVELID					m_eNextLevelID = { LAST };
 	HANDLE					m_hThread = {};
 	CRITICAL_SECTION		m_Critical_Section = { nullptr };
 	CGameInstance*			m_pGameInstance = { nullptr };
@@ -47,6 +47,7 @@ private:
 	HRESULT Loading_Level_GamePlay();
 	HRESULT Loading_Level_MyHome();
 
+	HRESULT Load_ItemData();
 	HRESULT Load_Dirctory_Models(LEVELID eLevId, const _tchar* szDirPath);
 	HRESULT Load_Dirctory_Textures(LEVELID eLevId, const _tchar* szDirPath);
 

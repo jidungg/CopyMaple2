@@ -2,9 +2,6 @@
 
 #include "Base.h"
 
-/* 0. �� ���� �Ҽӵ� �ִϸ��̼��� ǥ���ϱ����ؼ� ���� � ����(KeyFrame)(���)���� �����°�?! �� ���� ������ ������. */
-/* 1. ���� ����ð��� �´� ���� ��������� ������.  */
-/* 2. ���� �̸��� ���� ä���� �ټ� ������ �� �ִ�?! */
 
 BEGIN(Engine)
 
@@ -18,6 +15,7 @@ public:
 	HRESULT Initialize(ifstream& inFile, const class CModel* pModel);
 	void Update_TransformationMatrix(_float fCurrentTrackPosition, _uint* pKeyFrameIndex, const vector<class CBone*>& Bones);
 
+	pair<_uint, KEYFRAME> Get_KeyFrame(_float fTrackPos) const;
 private:
 	_char						m_szName[MAX_PATH] = {};
 	_uint						m_iNumKeyFrames = {};

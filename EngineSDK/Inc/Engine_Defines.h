@@ -124,6 +124,26 @@ namespace Engine
         UNKNOWN = 18,
 	};
 #define TEXTURE_TYPE_MAX (_uint)TEXTURE_TYPE::UNKNOWN
+
+
+	enum class  CONDITION_TYPE
+	{
+		CT_EQUAL,
+		CT_NOT_EQUAL,
+		CT_GREATER,
+		CT_LESS,
+		CT_EQUAL_GREATER,
+		CT_EQUAL_LESS,
+		LAST
+	};
+	enum class  CONDITION_VAR_TYPE
+	{
+		CVT_INT,
+		CVT_FLOAT,
+		CVT_BOOL,
+		CVT_TRIGGER,
+		CVT_LAST
+	};
 }
 
 #include <string>

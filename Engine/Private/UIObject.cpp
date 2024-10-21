@@ -89,6 +89,14 @@ void CUIObject::Add_Child(CGameObject* pChild)
 	static_cast<CRect_Transform*>(pChild->Get_Transform())->Compute_Matrix();
 }
 
+void CUIObject::Add_FakeChild(CUIObject* pChild)
+{
+	if (pChild == nullptr)
+		return;
+	pChild->Get_Transform()->Set_Parent(m_pTransformCom);
+	static_cast<CRect_Transform*>(pChild->Get_Transform())->Compute_Matrix();
+}
+
 void CUIObject::Increase_Priority()
 {
 	if(m_pParent == nullptr)
@@ -127,13 +135,18 @@ void CUIObject::MouseOver()
 	m_bMouseOver = true;
 
 }
-void CUIObject::MouseNotOver()
+void CUIObject::MouseNotOver(CUIObject* pExcept)
 {
 	if (m_bMouseOver == true)
 	{
 		On_MouseExit();
 	}
 	m_bMouseOver = false;
+	for (auto& i : m_pChilds)
+	{
+		if (i != pExcept) 
+			static_cast<CUIObject*>( i)->MouseNotOver(pExcept);
+	}
 }
 void CUIObject::On_MouseEnter()
 {
@@ -191,13 +204,13 @@ CUIObject* CUIObject::Find_FocusedUI(POINT fPos)
 		MouseNotOver();
 		return nullptr;
 	}
-
+	MouseOver();
+	CUIObject* pFocusedUI = nullptr;
 	for (auto& child : m_pChilds)
 	{
 		if (false == child->Is_Active()) continue;
-
 		CUIObject* pChildUI = static_cast<CUIObject*>(child);
-		CUIObject* pFocusedUI = pChildUI->Find_FocusedUI(fPos);
+		pFocusedUI = pChildUI->Find_FocusedUI(fPos);
 		if (pFocusedUI != nullptr)
 			return pFocusedUI;
 	}

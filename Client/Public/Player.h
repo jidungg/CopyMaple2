@@ -7,6 +7,7 @@ class CCamera_Trace;
 class CShader;
 class CTexture;
 class CVIBuffer_Rect;
+class CStateMachine;
 END
 
 BEGIN(Client)
@@ -149,6 +150,14 @@ public:
 		,wizard_bore_a
 		,LAST
 	};
+	enum class ANIM_CONDITION
+	{
+		AC_ATTACK,
+		AC_ANIMEND,
+		AC_UPFORCE,
+		AC_HEIGHT,
+		LAST
+	};
 public:
 	typedef struct : public CGameObject::GAMEOBJECT_DESC
 	{
@@ -165,10 +174,21 @@ public:
 	virtual HRESULT Initialize(void* pArg);
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
+	virtual HRESULT Render() override;
+
+public:
+	HRESULT Ready_Body();
+	HRESULT Ready_AnimStateMachine();
+
 	virtual void Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta) override;
+	void On_StateChange(_uint iState);
 private:
-
-
+	class CModelObject* m_pBody = { nullptr };
+	CStateMachine* m_pAnimStateMachine = { nullptr };
+	_float m_fJumpPower = { 5.f };
+	//ConditionVar
+	_float m_fUpForce = { 0.f };
+	_float m_fHeight = { 1.f };
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

@@ -22,13 +22,13 @@ HRESULT CUIHomeDialog::Initialize_Prototype()
 
 HRESULT CUIHomeDialog::Initialize(void* pArg)
 {
-	PANEL_DESC* pDesc = static_cast<PANEL_DESC*>(pArg);
+	HOMEDIALOG_DESC* pDesc = static_cast<HOMEDIALOG_DESC*>(pArg);
 
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Childs()))
+	if (FAILED(Ready_Childs( pDesc)))
 		return E_FAIL;
 	return S_OK;
 }
@@ -71,7 +71,9 @@ void CUIHomeDialog::On_MouseClick()
 	return ;
 }
 
-HRESULT CUIHomeDialog::Ready_Childs()
+
+
+HRESULT CUIHomeDialog::Ready_Childs(HOMEDIALOG_DESC* pDesc)
 {
 	CUIButton::BUTTON_DESC ButtonDesc{};
 	ButtonDesc.eAnchorType = CORNOR_TYPE::RIGHT_TOP;
@@ -87,7 +89,7 @@ HRESULT CUIHomeDialog::Ready_Childs()
 		return E_FAIL;
 	Add_Child(pButton);
 
-	CUIList::UILIST_DESC ListDesc{};
+	CUIListSelector::UILISTSELECTOR_DESC ListDesc{};
 	ListDesc.eAnchorType = CORNOR_TYPE::RIGHT_BOT;
 	ListDesc.ePivotType = CORNOR_TYPE::RIGHT_BOT;
 	ListDesc.fXOffset = -10;
@@ -96,16 +98,21 @@ HRESULT CUIHomeDialog::Ready_Childs()
 	ListDesc.fSizeX = fSize.x - 50;
 	ListDesc.fSizeY = fSize.y - 50;
 	ListDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_HOME, TEXT("UI_Texture_ItemListBack"), nullptr));;
+	ListDesc.fItemHeight = 50;
+	ListDesc.fItemWidth = 50;
+	ListDesc.fItemMarginX = 10;
+	ListDesc.fItemMarginY = 10;
+	ListDesc.eBackTexProtoLev = LEVEL_HOME;
+	ListDesc.szBackTexProtoTag = TEXT("Prototype_GameObject_HomeDialogBuildItemIndicator");
+	ListDesc.eHighlighterTexProtoLev = LEVEL_HOME;
+	ListDesc.szHighlighterTexProtoTag = TEXT("UI_Texture_HighlightBorder");
+	ListDesc.listData = pDesc->listData;
 
-	m_pItemList = static_cast<CUIList*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_HOME,
-		TEXT("Prototype_GameObject_HomeDialogBuildItemList"), &ListDesc));
-	auto m = ITEMDB->GetItemMap(ITEM_TYPE::BUILD);
-	list<UIListItemData*> listItemDesc;
-	for (auto& i : *m)
-		listItemDesc.push_back(i.second);
 	
-	m_pItemList->Set_Data(listItemDesc);
+
+	m_pItemList = static_cast<CUIListSelector*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_UIList"), &ListDesc));
 	Add_Child(m_pItemList);
+
 
 	return S_OK;
 }

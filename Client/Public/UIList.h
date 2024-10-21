@@ -10,17 +10,25 @@ class CUIList :
 public:
 	typedef struct UIListDesc: public CUIPanel::PANEL_DESC
 	{
+		float fItemHeight = 70;
+		float fItemWidth = 70;
+		float fItemMarginX = 5;
+		float fItemMarginY = 5;
+
+		LEVELID eBackTexProtoLev;
+		const _tchar* szBackTexProtoTag;
+		list<UIListItemData*>* listData;
 	}UILIST_DESC;
 
 protected:
 
-	CUIList(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eBackTexProtoLev, const _tchar* szBackTexProtoTag);
+	CUIList(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CUIList(const CUIList& Prototype);
 	virtual ~CUIList() = default;
 
 public:
-	HRESULT Set_Data(list<UIListItemData*>& listData);
-
+	virtual HRESULT Initialize(void* pArg) override;
+	_float2 Get_ItemPos(_int iIndex);
 private:
 	float m_fItemHeight = 70;
 	float m_fItemWidth = 70;
@@ -31,9 +39,9 @@ private:
 	const _tchar* m_szBackTexProtoTag;
 
 public:
-	static CUIList* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eBackTexProtoLev, const _tchar* szBackTexProtoTag)
+	static CUIList* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	{
-		CUIList* pInstance = new CUIList(pDevice, pContext, eBackTexProtoLev, szBackTexProtoTag);
+		CUIList* pInstance = new CUIList(pDevice, pContext);
 
 		if (FAILED(pInstance->Initialize_Prototype()))
 		{

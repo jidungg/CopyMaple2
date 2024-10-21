@@ -54,23 +54,35 @@ HRESULT CAnimation::Initialize(ifstream& inFile, const CModel* pModel)
 
 bool CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones, _float fTimeDelta)
 {
-	m_fCurrentTrackPosition += m_fTickPerSecond * fTimeDelta;
 
-	if (true == m_bLoop && m_fCurrentTrackPosition >= m_fDuration)
+	if (m_fCurrentTrackPosition >= m_fDuration)
 	{
-		m_fCurrentTrackPosition = 0.f;
+		if (true == m_bLoop)
+			m_fCurrentTrackPosition = 0.f;
+		else
+			return true;
 	}
 
-	else if (m_fCurrentTrackPosition >= m_fDuration)
-		return true;
 
 	for (size_t i = 0; i < m_iNumChannels; i++)
 	{
 		m_Channels[i]->Update_TransformationMatrix(m_fCurrentTrackPosition, &m_CurrentKeyFrameIndices[i], Bones);
 	}
 
+	m_fCurrentTrackPosition += m_fTickPerSecond * fTimeDelta;
 	return false;
 }
+
+bool CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones, _float fTimeDelta, CAnimation* pNextAnim)
+{
+	//다으ㅏㅁ 애니메이션 채널B과 같은 자신의 채널 A 을 찾는다
+	//A의 LastFrame과 B의 m_fAnimTransitionTime애해당하는 Frame을 보간한다.
+	//
+	return false;
+}
+
+
+
 
 CAnimation* CAnimation::Create(ifstream& inFile, const CModel* pModel)
 {

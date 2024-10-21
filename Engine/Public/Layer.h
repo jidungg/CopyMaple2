@@ -2,7 +2,7 @@
 
 #include "Base.h"
 
-/* °´Ã¼µéÀ» ·¹ÀÌ¾î º°·Î ¹­¾î¼­ ´Ù¼ö º¸°üÇÑ´Ù. */
+/* ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½î¼­ ï¿½Ù¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½. */
 
 BEGIN(Engine)
 class CCollider;
@@ -15,8 +15,12 @@ private:
 public:
 	HRESULT Add_GameObject(class CGameObject* pGameObject);
 	void Priority_Update(_float fTimeDelta);
+	//ê²Œì„ ë¡œì§
 	void Update(_float fTimeDelta);
+	//ì¶©ëŒì²˜ë¦¬
 	void Late_Update(_float fTimeDelta);
+	//ì£½ì€ ì˜¤ë¸Œì íŠ¸ ì²˜ë¦¬
+	void Final_Update();
 	bool Check_Collision(const Ray& tRay, RaycastHit* pOut);
 private:
 	list<class CGameObject*>			m_GameObjects;

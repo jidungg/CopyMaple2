@@ -1,9 +1,10 @@
 #pragma once
 #include "Client_Defines.h"
-#include "UIList.h"
+#include "CUIListSelector.h"
 #include "UIItemIndicator.h"
 
 BEGIN(Client)
+
 class CUIHomeDialog :
     public CUIPanel
 {
@@ -12,6 +13,7 @@ public:
 public:
 	typedef struct : public CUIPanel::PANEL_DESC
 	{
+		list<UIListItemData*>* listData;
 	}HOMEDIALOG_DESC;
 
 protected:
@@ -31,9 +33,12 @@ public:
 	virtual void On_MouseRButtonDown();
 	virtual void On_MouseRButtonUp();
 	virtual void On_MouseClick();
+
+	void Register_OnClickCallback(const ButtonCallback& fCallback){m_pItemList->Register_OnClickCallback(fCallback);}
+
 private:
-	HRESULT Ready_Childs();
-	CUIList* m_pItemList = nullptr;
+	HRESULT Ready_Childs(HOMEDIALOG_DESC* pDesc);
+	CUIListSelector* m_pItemList = nullptr;
 public:
 	static CUIHomeDialog* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

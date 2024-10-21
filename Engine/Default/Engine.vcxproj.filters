@@ -79,6 +79,21 @@
     <Filter Include="01.Utility\Lights">
       <UniqueIdentifier>{761b8508-3032-473b-a005-895ed422deca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\StateMachine">
+      <UniqueIdentifier>{23afa59e-9677-4054-912a-b3918113744a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\Animation">
+      <UniqueIdentifier>{bfa42bcd-47c5-4f3d-a3d2-d0d9f48942e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\Event">
+      <UniqueIdentifier>{bdd67f0e-28c5-4b59-847e-49680dcd5e40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\04.Components\VIBuffer\Model">
+      <UniqueIdentifier>{e2d059aa-c4d7-446d-82aa-54d5e43dd1b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\04.Components\Collider">
+      <UniqueIdentifier>{c04c831b-d986-49d9-bacb-0b51894e2d0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -187,26 +202,63 @@
       <Filter>01.Utility\Lights</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="..\Public\Model.h">
-      <Filter>01.Utility\04.Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Mesh.h">
-      <Filter>01.Utility\04.Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Material.h">
-      <Filter>01.Utility\04.Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Collider.h">
-      <Filter>01.Utility\04.Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Physics.h" />
-    <ClInclude Include="..\Public\MeshCollider.h" />
     <ClInclude Include="..\Public\Pawn.h">
       <Filter>01.Utility\03.Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Bone.h" />
-    <ClInclude Include="..\Public\Animation.h" />
-    <ClInclude Include="..\Public\Channel.h" />
+    <ClInclude Include="..\Public\Transition.h">
+      <Filter>01.Utility\StateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\StateMachine.h">
+      <Filter>01.Utility\StateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State.h">
+      <Filter>01.Utility\StateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Animation.h">
+      <Filter>01.Utility\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Bone.h">
+      <Filter>01.Utility\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Channel.h">
+      <Filter>01.Utility\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Condition.h">
+      <Filter>01.Utility\StateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Event.h">
+      <Filter>01.Utility\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EventHandlerWrapper.h">
+      <Filter>01.Utility\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EventHandlerWrapperInterface.h">
+      <Filter>01.Utility\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EventManager.h">
+      <Filter>01.Utility\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Mesh.h">
+      <Filter>01.Utility\04.Components\VIBuffer\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Material.h">
+      <Filter>01.Utility\04.Components\VIBuffer\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Model.h">
+      <Filter>01.Utility\04.Components\VIBuffer\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MeshCollider.h">
+      <Filter>01.Utility\04.Components\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Collider.h">
+      <Filter>01.Utility\04.Components\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\JsonParser.h">
+      <Filter>01.Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Physics.h">
+      <Filter>01.Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -299,26 +351,60 @@
     <ClCompile Include="..\Private\Light.cpp">
       <Filter>01.Utility\Lights</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Model.cpp">
-      <Filter>01.Utility\04.Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Mesh.cpp">
-      <Filter>01.Utility\04.Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Public\Material.cpp">
-      <Filter>01.Utility\04.Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Collider.cpp">
-      <Filter>01.Utility\04.Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Physics.cpp" />
-    <ClCompile Include="..\Private\MeshCollider.cpp" />
     <ClCompile Include="..\Private\Pawn.cpp">
       <Filter>01.Utility\03.Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Bone.cpp" />
-    <ClCompile Include="..\Private\Animation.cpp" />
-    <ClCompile Include="..\Private\Channel.cpp" />
+    <ClCompile Include="..\Private\Transition.cpp">
+      <Filter>01.Utility\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StateMachine.cpp">
+      <Filter>01.Utility\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State.cpp">
+      <Filter>01.Utility\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Animation.cpp">
+      <Filter>01.Utility\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Bone.cpp">
+      <Filter>01.Utility\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Channel.cpp">
+      <Filter>01.Utility\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Condition.cpp">
+      <Filter>01.Utility\StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Event.cpp">
+      <Filter>01.Utility\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EventHandlerWrapperInterface.cpp">
+      <Filter>01.Utility\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EventManager.cpp">
+      <Filter>01.Utility\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Mesh.cpp">
+      <Filter>01.Utility\04.Components\VIBuffer\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Public\Material.cpp">
+      <Filter>01.Utility\04.Components\VIBuffer\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Model.cpp">
+      <Filter>01.Utility\04.Components\VIBuffer\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MeshCollider.cpp">
+      <Filter>01.Utility\04.Components\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Collider.cpp">
+      <Filter>01.Utility\04.Components\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\JsonParser.cpp">
+      <Filter>01.Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Physics.cpp">
+      <Filter>01.Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc" />

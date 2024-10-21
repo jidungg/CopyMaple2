@@ -19,7 +19,7 @@ HRESULT CLayer::Add_GameObject(CGameObject * pGameObject)
 void CLayer::Priority_Update(_float fTimeDelta)
 {
 	for (auto& pGameObject : m_GameObjects)
-		if (pGameObject->Is_Active())
+		if (pGameObject->Is_Dead() == false && pGameObject->Is_Active())
 			pGameObject->Priority_Update(fTimeDelta);
 
 }
@@ -27,15 +27,33 @@ void CLayer::Priority_Update(_float fTimeDelta)
 void CLayer::Update(_float fTimeDelta)
 {
 	for (auto& pGameObject : m_GameObjects)
-		if (pGameObject->Is_Active())
+		if (pGameObject->Is_Dead() == false && pGameObject->Is_Active())
 			pGameObject->Update(fTimeDelta);
 }
 
 void CLayer::Late_Update(_float fTimeDelta)
 {
 	for (auto& pGameObject : m_GameObjects)
-		if (pGameObject->Is_Active())
+		if (pGameObject->Is_Dead() == false && pGameObject->Is_Active())
 			pGameObject->Late_Update(fTimeDelta);
+}
+
+void CLayer::Final_Update()
+{
+	for (auto& m_GameObjects_iter = m_GameObjects.begin(); m_GameObjects_iter != m_GameObjects.end();)
+	{
+		if ((*m_GameObjects_iter)->Is_Dead())
+		{
+			Safe_Release(*m_GameObjects_iter);
+			m_GameObjects_iter = m_GameObjects.erase(m_GameObjects_iter);
+		}
+		else
+		{
+			(*m_GameObjects_iter)->Final_Update();
+			++m_GameObjects_iter;
+		}
+	}
+
 }
 
 bool CLayer::Check_Collision(const Ray& tRay, RaycastHit* pOut)

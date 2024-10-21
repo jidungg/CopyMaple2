@@ -11,6 +11,7 @@
 #include "UIManager.h"
 #include "Light_Manager.h"
 #include "Physics.h"
+#include "EventManager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -78,6 +79,7 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 	m_pObject_Manager->Priority_Update(fTimeDelta);
 	m_pObject_Manager->Update(fTimeDelta);
 	m_pObject_Manager->Late_Update(fTimeDelta);
+	m_pObject_Manager->Final_Update();
 
 	m_pPipeLine->Update();
 
@@ -213,15 +215,14 @@ CBase* CGameInstance::Clone_Proto_Component_Current(const _wstring& strPrototype
 
 }
 
-HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring & strPrototypeTag, _uint iLevelIndex, const _wstring & strLayerTag, void * pArg,  CGameObject** pOut )
+
+HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLevelIndex, const _wstring& strLayerTag, void* pArg)
 {
-	
 	if (nullptr == m_pObject_Manager)
 		return E_FAIL;
 
 	return m_pObject_Manager->Add_GameObject_ToLayer(iPrototypeLevelIndex, strPrototypeTag, iLevelIndex, strLayerTag, pArg);
 }
-
 HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, CGameObject* pObj)
 {
 	if (nullptr == m_pObject_Manager)
@@ -324,6 +325,56 @@ void CGameInstance::Possess(CPawn* pPawn)
 		return;
 
 	m_pController->Possess(pPawn);
+}
+
+void CGameInstance::Push_Event(CEvent* _event)
+{
+	if (nullptr == m_pEventManager)
+		return;
+	m_pEventManager->PushEvent(_event);
+}
+
+void CGameInstance::Register_PreEventCallback(_uint _eventType, IEventHandlerWrapperInterface* _handler)
+{
+	if (nullptr == m_pEventManager)
+		return;
+	m_pEventManager->RegisterPreEventCallback(_eventType, _handler);
+}
+
+void CGameInstance::UnRegister_PreEventCallback(_uint _eventType, const void* _handlerAddress)
+{
+	if (nullptr == m_pEventManager)
+		return;
+	m_pEventManager->UnRegisterPreEventCallback(_eventType, _handlerAddress);
+}
+
+void CGameInstance::Register_PostEventCallback(_uint _eventType, IEventHandlerWrapperInterface* _handler)
+{
+	if (nullptr == m_pEventManager)
+		return;
+	m_pEventManager->RegisterPostEventCallback(_eventType, _handler);
+
+}
+
+void CGameInstance::UnRegister_PostEventCallback(_uint _eventType, const void* _handlerAddress)
+{
+	if (nullptr == m_pEventManager)
+		return;
+	m_pEventManager->UnRegisterPostEventCallback(_eventType, _handlerAddress);
+}
+
+void CGameInstance::Trigger_Event(CEvent* _event)
+{
+	if (nullptr == m_pEventManager)
+		return;
+	m_pEventManager->TriggerEvent(_event);
+}
+
+void CGameInstance::Dispatch_Event()
+{
+	if (nullptr == m_pEventManager)
+		return;
+	m_pEventManager->DispatchEvent();
 }
 
 

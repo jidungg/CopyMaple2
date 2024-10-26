@@ -14,7 +14,7 @@ END
 
 BEGIN(Client)
 class CModelObject :
-    public CPawn
+    public CGameObject
 {
 public:
 	typedef struct ModelObjDesc : public CGameObject::GAMEOBJECT_DESC
@@ -39,15 +39,19 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-	void Set_AnimationLoop(_uint iIdx, _bool bIsLoop);
-	void Switch_Animation(_uint iIdx);
-
 	float Get_AnimTime() { return m_pModelCom->Get_AnimTime(); }
+	const _float4x4* Get_BoneMatrix(const _char* pBoneName) const;
+	const CModel* Get_ModelCom() const { return m_pModelCom; }
+
 	bool Is_AnimEnd() { return m_bAnimationEnd; }
+	bool Is_AnimPostDelayEnd();
+
+	void Set_AnimationLoop(_uint iIdx, _bool bIsLoop);
+	void Set_Animation(_uint iIdx);
+	void Set_AnimPostDelayPercent(_uint iIdx, _float fPercent);
+	void Switch_Animation(_uint iIdx);
 protected:
 	virtual HRESULT Ready_Components(void* pArg);
-
-private:
 	HRESULT Bind_ShaderResources();
 
 protected:

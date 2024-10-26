@@ -6,6 +6,9 @@
 #include "Camera_Trace.h"
 #include "Camera_Free.h"
 #include "Level_Loading.h"
+#include "UIQuickSlot.h"
+#include "SkillManager.h"
+#include "ModelObject.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel { pDevice, pContext }
@@ -21,6 +24,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+		return E_FAIL;
+	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
 	return S_OK;
@@ -60,10 +65,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _wstring& strLayerTag)
 	PlayerDesc.fSpeedPerSec = 5.f;
 	PlayerDesc.fRotationPerSec = XMConvertToRadians(90.f);
 
-	CPlayer* pPlayer = static_cast<CPlayer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_Player"), &PlayerDesc));
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, strLayerTag, pPlayer)))
+	m_pPlayer = static_cast<CPlayer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_Player"), &PlayerDesc));
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, strLayerTag, m_pPlayer)))
 		return E_FAIL;
-	m_pGameInstance->Possess(pPlayer);
+	m_pGameInstance->Possess(m_pPlayer);
 	CCamera_Trace::TRACECAMERA_DESC		CamDesc{};
 
 	CamDesc.fSpeedPerSec = 5.f;
@@ -74,19 +79,69 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _wstring& strLayerTag)
 	CamDesc.fFar = 1000.f;
 	CamDesc.vEye = _float3(0.f, 3.f, 3.f);
 	CamDesc.vAt = _float3(0.f, 0.f, 0.f);
-	CamDesc.vArm = _float3(0.f, 10.f, -10.f);
-	CamDesc.pTarget = pPlayer;
+	CamDesc.vArm = _float3(-3.f, 5.f, -3.f);
+	CamDesc.pTarget = m_pPlayer;
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOADING, TEXT("Prototype_GameObject_Camera_Trace"),
 		LEVEL_GAMEPLAY, strLayerTag, &CamDesc)))
 		return E_FAIL;
 
+#pragma region Test
+
+	//Body
+	//CModelObject::MODELOBJ_DESC tModelDesc;
+	//tModelDesc.fRotationPerSec = 5.f;
+	//tModelDesc.fSpeedPerSec = 1.f;
+	//tModelDesc.eModelType = CModel::TYPE_NONANIM;
+	//tModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+	//strcpy_s(tModelDesc.strModelProtoName, "Prototype_Model_Player");
+	//tModelDesc.eShaderProtoLevelID = LEVEL_LOADING;
+	//strcpy_s(tModelDesc.strShaderProtoName, "Prototype_Component_Shader_VtxMesh");
+	//m_pModel = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
+	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, strLayerTag, m_pModel)))
+	//	return E_FAIL;
+	//m_pModel->Get_Transform()->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 1.f, 0.f, 1.f));
+
+	//
+
+	//tModelDesc.fRotationPerSec = 5.f;
+	//tModelDesc.fSpeedPerSec = 1.f;
+	//tModelDesc.eModelType = CModel::TYPE_NONANIM;
+	//tModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+	//strcpy_s(tModelDesc.strModelProtoName, "00200007_f_jujuwave_p_a.model");
+	//tModelDesc.eShaderProtoLevelID = LEVEL_LOADING;
+	//strcpy_s(tModelDesc.strShaderProtoName, "Prototype_Component_Shader_VtxMesh");
+	//m_pHair = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
+	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, strLayerTag, m_pHair)))
+	//	return E_FAIL;
+	//m_pHair->Get_Transform()->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 1.f, 0.f,1.f));
+
+#pragma endregion
+	return S_OK;
+}
+HRESULT CLevel_GamePlay::Ready_Layer_UI(const _wstring& strLayerTag)
+{
+	CUIQuickSlot::QUICKLSLOT_DESC quickSlotDesc;
+	quickSlotDesc.eAnchorType = CORNOR_TYPE::LEFT_TOP;
+	quickSlotDesc.ePivotType = CORNOR_TYPE::LEFT_TOP;
+	quickSlotDesc.fSizeX = 60;
+	quickSlotDesc.fSizeY = 60;
+	quickSlotDesc.fXOffset = 100;
+	quickSlotDesc.fYOffset = 100;
+	quickSlotDesc.eHotKey = KEY::Q;
+
+	m_pQuickSlot = static_cast<CUIQuickSlot*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIQuickSlot::m_szProtoTag, &quickSlotDesc));
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, strLayerTag, m_pQuickSlot)))
+		return E_FAIL;
+	m_pQuickSlot->Set_QuickItem(m_pPlayer->Get_Skill(SKILL_ID::MAGIC_CLAW));
 	return S_OK;
 }
 void CLevel_GamePlay::Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->GetKeyState(KEY::T) == KEY_STATE::UP)
 		m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HOME));
+	//m_pGameInstance->Add_RenderObject(CRenderer::RENDERGROUP::RG_NONBLEND, m_pHair);
+	//m_pGameInstance->Add_RenderObject(CRenderer::RENDERGROUP::RG_NONBLEND, m_pModel);
 }
 
 HRESULT CLevel_GamePlay::Render()

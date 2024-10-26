@@ -32,7 +32,6 @@ HRESULT CGameObject::Initialize_Prototype()
 	return S_OK;
 }
 
-/* ���ӳ����� ���� ���Ǳ� ���� �纻 ��ü�� �����ǳ�. */
 HRESULT CGameObject::Initialize(void * pArg)
 {
 	if (nullptr != pArg)
@@ -73,12 +72,23 @@ void CGameObject::Update(_float fTimeDelta)
 		if (c.second->Is_Active())
 			c.second->Update(fTimeDelta);
 	}
+	Compute_Matrix();
 	for (auto& child : m_pChilds)
 	{
 		if ( child->Is_Active())
 			child->Update(fTimeDelta);
 	}
-}	
+}
+void CGameObject::Compute_Matrix()
+{
+
+	if (m_pParentMatrix != nullptr)
+		XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * XMLoadFloat4x4(m_pParentMatrix));
+	else
+		XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix());
+
+}
+
 
 void CGameObject::Late_Update(_float fTimeDelta)
 {
@@ -128,8 +138,7 @@ void CGameObject::Add_Child(CGameObject* pChild)
 	if (pChild == nullptr)
 		return;
 	m_pChilds.push_back(pChild);
-
-	pChild->m_pParent = this;
+	pChild->m_pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
 	pChild->Get_Transform()->Set_Parent(m_pTransformCom);
 }
 
@@ -139,7 +148,7 @@ void CGameObject::Remove_Child(CGameObject* pChild)
 		return;
 
 	m_pChilds.remove(pChild);
-	pChild->m_pParent = nullptr;
+	pChild->m_pParentMatrix = nullptr;
 	pChild->Get_Transform()->Set_Parent(nullptr);
 }
 
@@ -218,6 +227,23 @@ HRESULT CGameObject::Add_Component(CComponent* pComponent, const _wstring& strCo
 	Safe_AddRef(pComponent);
 
 	return S_OK;
+}
+
+HRESULT CGameObject::Remove_Component(CComponent* pComponent)
+{
+	if (nullptr == pComponent)
+		return E_FAIL;
+	pComponent->Set_Owner(nullptr);
+	for (auto& comp : m_Components)
+	{
+		if (comp.second == pComponent)
+		{
+			Safe_Release(comp.second);
+			m_Components.erase(comp.first);
+			return S_OK;
+		}
+	}
+	return E_FAIL;
 }
 
 void CGameObject::Free()

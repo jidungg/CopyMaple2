@@ -40,12 +40,7 @@ void CController::Update(_float fTimeDelta)
 
 	if (m_pCurrentPawn)
 	{
-		for (_uint key = 0; key < (_uint)KEY::LAST; key++)
-		{
-			KEY_STATE ekeyState = m_pInput_Device->GetKeyState((KEY)key);
-			if (ekeyState != KEY_STATE::NONE)
-				m_pCurrentPawn->Receive_KeyInput((KEY)key, ekeyState, fTimeDelta);
-		}
+		m_pCurrentPawn->Receive_KeyInput(fTimeDelta);
 	}
 
 }

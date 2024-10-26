@@ -39,7 +39,7 @@ HRESULT CCubeTerrain::Initialize(void * pArg)
 
 void CCubeTerrain::Late_Update(_float fTimeDelta)
 {
-	__super::Late_Update(fTimeDelta);
+	//__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 

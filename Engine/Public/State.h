@@ -13,13 +13,15 @@ protected:
 	virtual ~CState() = default;
 public:
 
-	bool CheckTransition(_uint* pOutNextState);
+	bool Check_Transition(_uint* pOutNextState);
+	_uint Check_SubTransition();
 
 	void Add_Transition(CTransition* pTransition){m_vecTransition.push_back(pTransition);}
+	void Add_SubTransition(CTransition* pTransition) { m_vecSubTransition.push_back(pTransition); }
 private:
 	_uint m_iStateID;
 	vector<CTransition*> m_vecTransition;
-
+	vector<CTransition*> m_vecSubTransition;
 public:
 	static CState* Create(_uint iStateID);
 	virtual CBase* Clone();

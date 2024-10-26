@@ -130,9 +130,6 @@
     <ClInclude Include="..\Public\UIList.h">
       <Filter>02.GameObjects\UI</Filter>
     </ClInclude>
-    <ClInclude Include="CUIListSelector.h">
-      <Filter>02.GameObjects\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Builder.h">
       <Filter>02.GameObjects</Filter>
     </ClInclude>
@@ -154,6 +151,17 @@
     <ClInclude Include="..\Public\LevelChangeEvent.h">
       <Filter>Event</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIInventory.h" />
+    <ClInclude Include="..\Public\Skill.h" />
+    <ClInclude Include="..\Public\SkillManager.h" />
+    <ClInclude Include="..\Public\MagicClaw.h" />
+    <ClInclude Include="..\Public\UIQuickSlot.h" />
+    <ClInclude Include="..\Public\UIListSelector.h" />
+    <ClInclude Include="..\Public\Character.h" />
+    <ClInclude Include="..\Public\BuildPreview.h" />
+    <ClInclude Include="..\Public\BoneModelObject.h" />
+    <ClInclude Include="..\Public\Weapon.h" />
+    <ClInclude Include="..\Public\MimicBoneModelObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -226,9 +234,6 @@
     <ClCompile Include="..\Private\UIList.cpp">
       <Filter>02.GameObjects\UI</Filter>
     </ClCompile>
-    <ClCompile Include="CUIListSelector.cpp">
-      <Filter>02.GameObjects\UI</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Builder.cpp">
       <Filter>02.GameObjects</Filter>
     </ClCompile>
@@ -250,6 +255,17 @@
     <ClCompile Include="..\Private\LevelChangeEvent.cpp">
       <Filter>Event</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\UIInventory.cpp" />
+    <ClCompile Include="..\Private\Skill.cpp" />
+    <ClCompile Include="..\Private\SkillManager.cpp" />
+    <ClCompile Include="..\Private\MagicClaw.cpp" />
+    <ClCompile Include="..\Private\UIQuickSlot.cpp" />
+    <ClCompile Include="..\Private\UIListSelector.cpp" />
+    <ClCompile Include="..\Private\Character.cpp" />
+    <ClCompile Include="..\Private\BuildPreview.cpp" />
+    <ClCompile Include="..\Private\BoneModelObject.cpp" />
+    <ClCompile Include="..\Private\Weapon.cpp" />
+    <ClCompile Include="..\Private\MimicBoneModelObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

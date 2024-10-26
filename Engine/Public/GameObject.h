@@ -23,6 +23,7 @@ public:
 	virtual HRESULT Initialize(void* pArg);
 	virtual void Priority_Update(_float fTimeDelta);
 	virtual void Update(_float fTimeDelta);
+	virtual void Compute_Matrix();
 	virtual void Late_Update(_float fTimeDelta);
 	void Final_Update();
 	virtual HRESULT Render();
@@ -38,31 +39,33 @@ public:
 	bool Is_Dead() { return m_bDead; }
 	void Set_Dead() { m_bDead = true; }
 	void Set_Target(CGameObject* pTaraget) { Safe_Release(m_pTarget); m_pTarget = pTaraget; Safe_AddRef(m_pTarget); }
+
 	class CTransform* Get_Transform() { return m_pTransformCom; }
 	virtual bool Check_Collision(const Ray& tRay, RaycastHit* pOut);
 protected:
 	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, const _wstring& strComponentTag, CComponent** ppOut, void* pArg = nullptr);
 	HRESULT Add_Component(CComponent* pComponent, const _wstring& strComponentTag, void* pArg = nullptr);
-
+	HRESULT Remove_Component(CComponent* pComponent);
 protected:
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
 	class CGameInstance*		m_pGameInstance = { nullptr };
+
 	class CTransform*			m_pTransformCom = { nullptr };
 	CGameObject*				m_pTarget = { nullptr };
-	CGameObject*				m_pParent = { nullptr };
-	list<CGameObject*>			m_pChilds;
 
+	list<CGameObject*>			m_pChilds;
+	map<const _wstring, class CComponent*>		m_Components;
+	const _float4x4* m_pParentMatrix = {};
+	_float4x4				m_WorldMatrix = {};
+
+	bool						m_bActive = { true };
+	bool						m_bDead = { false };
+	
+
+protected:
 	_uint						m_iObjID = {};
 	static _uint				m_iObjCount;
-	bool						m_bActive = true;
-	bool						m_bDead = false;
-protected:
-	map<const _wstring, class CComponent*>		m_Components;
-
-
-protected:
-	_uint						m_iData = {};
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;

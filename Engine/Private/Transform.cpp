@@ -12,6 +12,8 @@ CTransform::CTransform(const CTransform & Prototype)
 {
 }
 
+
+
 _float3 CTransform::Compute_Scaled()
 {
 	return _float3(XMVectorGetX(XMVector3Length(Get_State(STATE_RIGHT))), 

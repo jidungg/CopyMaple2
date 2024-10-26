@@ -97,8 +97,8 @@ PS_OUT PS_MAIN(PS_IN In)
     float4 vReflect = reflect(normalize(g_vLightDir), normalize(In.vNormal));
     float4 vLook = In.vWorldPos - g_vCamPosition;
 
-    float fSpecular = pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f);
-
+   // float fSpecular = pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f);
+    float fSpecular = 0;
     Out.vColor = (g_vLightDiffuse * vMtrlDiffuse) * vShade + (g_vLightSpecular * g_vMtrlSpecular) * fSpecular;
 
     return Out;

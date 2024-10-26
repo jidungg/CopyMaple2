@@ -6,6 +6,7 @@
 #include "Level_Loading.h"
 #include "Loader.h"
 #include "ItemDataBase.h"
+#include "SkillManager.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance { CGameInstance::GetInstance() }
@@ -87,6 +88,7 @@ void CMainApp::Free()
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
 	CItemDataBase::DestroyInstance();
+	CSkillManager::DestroyInstance();
 	Safe_Release(m_pGameInstance);
 	CGameInstance::Release_Engine();
 

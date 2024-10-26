@@ -15,7 +15,11 @@ public:
 	HRESULT Initialize(ifstream& inFile, const class CModel* pModel);
 	void Update_TransformationMatrix(_float fCurrentTrackPosition, _uint* pKeyFrameIndex, const vector<class CBone*>& Bones);
 
-	pair<_uint, KEYFRAME> Get_KeyFrame(_float fTrackPos) const;
+	void Get_Frame(_float fTrackPos, map<_uint, KEYFRAME>* pOutKeyFrames) const;
+	KEYFRAME Get_Frame(_float fTrackPos, _uint* pOutCurrentKeyFrameIdx) const;
+	_uint Get_KeyFrameIndex(_float fTrackPos, _uint iStartKeyFrameIdx = 0) const;
+	_uint Get_BoneIndex() const {return m_iBoneIndex;}
+	KEYFRAME Get_KeyFrame(_uint iKeyFrameIndex) { return m_KeyFrames[iKeyFrameIndex]; }
 private:
 	_char						m_szName[MAX_PATH] = {};
 	_uint						m_iNumKeyFrames = {};

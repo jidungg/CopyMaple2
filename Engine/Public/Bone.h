@@ -6,9 +6,9 @@
 
 BEGIN(Engine)
 
-class CBone final : public CBase
+class CBone : public CBase
 {
-private:
+protected:
 	CBone();
 	virtual ~CBone() = default;
 
@@ -19,16 +19,19 @@ public:
 
 public:
 	HRESULT Initialize(ifstream& inFile, _int iParentBoneIndex);
-	void Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix PreTransformMatrix);
+	virtual void Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix PreTransformMatrix);
 
-	_matrix Get_CombinedTransformationMatrix() const {
+	virtual _matrix Get_CombinedTransformationMatrix() const {
 		return XMLoadFloat4x4(&m_CombindTransformationMatrix);
+	}
+	virtual const _float4x4* Get_CombinedTransformationFloat4x4() const {
+		return &m_CombindTransformationMatrix;
 	}
 	void Set_TransformationMatrix(_fmatrix TransformationMatrix) {
 		XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix);
 	}
 
-private:
+protected:
 	_char				m_szName[MAX_PATH] = {};
 
 	_float4x4			m_TransformationMatrix = {};

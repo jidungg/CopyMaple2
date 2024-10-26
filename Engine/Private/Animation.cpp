@@ -1,8 +1,8 @@
 #include "..\Public\Animation.h"
 
 #include "Channel.h"
-
-
+#include "Engine_Utility.h"
+#include "Bone.h"
 
 CAnimation::CAnimation()
 {
@@ -10,13 +10,13 @@ CAnimation::CAnimation()
 
 CAnimation::CAnimation(const CAnimation& Prototype)
 	: m_iNumChannels{ Prototype.m_iNumChannels }
-	, m_Channels{ Prototype.m_Channels }
+	, m_vecChannel{ Prototype.m_vecChannel }
 	, m_fDuration{ Prototype.m_fDuration }
 	, m_fTickPerSecond{ Prototype.m_fTickPerSecond }
 	, m_fCurrentTrackPosition{ Prototype.m_fCurrentTrackPosition }
 	, m_CurrentKeyFrameIndices{ Prototype.m_CurrentKeyFrameIndices }
 {
-	for (auto& pChannel : m_Channels)
+	for (auto& pChannel : m_vecChannel)
 		Safe_AddRef(pChannel);
 
 	strcpy_s(m_szName, Prototype.m_szName);
@@ -28,14 +28,14 @@ HRESULT CAnimation::Initialize(ifstream& inFile, const CModel* pModel)
 	inFile.read(reinterpret_cast<char*>(&iNameLength), sizeof(_uint));
 	inFile.read(m_szName, iNameLength);
 	m_szName[iNameLength] = '\0';
-	cout << m_szName << endl;
+	//cout << m_szName << endl;
 
 
 	double dValue = 0.0;
 	inFile.read(reinterpret_cast<char*>(&dValue), sizeof(double));
-	m_fDuration = dValue;
+	m_fDuration = (_float)dValue;
 	inFile.read(reinterpret_cast<char*>(&dValue), sizeof(double));
-	m_fTickPerSecond = dValue;
+	m_fTickPerSecond = (_float)dValue;
 
 	inFile.read(reinterpret_cast<char*>(&m_iNumChannels), sizeof(_uint));
 
@@ -47,7 +47,7 @@ HRESULT CAnimation::Initialize(ifstream& inFile, const CModel* pModel)
 		if (nullptr == pChannel)
 			return E_FAIL;
 
-		m_Channels.push_back(pChannel);
+		m_vecChannel.push_back(pChannel);
 	}
 	return S_OK;
 }
@@ -66,23 +66,63 @@ bool CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones
 
 	for (size_t i = 0; i < m_iNumChannels; i++)
 	{
-		m_Channels[i]->Update_TransformationMatrix(m_fCurrentTrackPosition, &m_CurrentKeyFrameIndices[i], Bones);
+		m_vecChannel[i]->Update_TransformationMatrix(m_fCurrentTrackPosition, &m_CurrentKeyFrameIndices[i], Bones);
 	}
 
 	m_fCurrentTrackPosition += m_fTickPerSecond * fTimeDelta;
 	return false;
 }
 
-bool CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones, _float fTimeDelta, CAnimation* pNextAnim)
+bool CAnimation::Update_AnimTransition(const vector<class CBone*>& Bones, _float fTimeDelta, const map<_uint, KEYFRAME>& mapAnimTransLeftFrame)
 {
-	//다으ㅏㅁ 애니메이션 채널B과 같은 자신의 채널 A 을 찾는다
-	//A의 LastFrame과 B의 m_fAnimTransitionTime애해당하는 Frame을 보간한다.
-	//
+	float _fAnimTransitionTrackPos = m_fAnimTransitionTime * m_fTickPerSecond;
+	if (m_fCurrentTrackPosition >= _fAnimTransitionTrackPos)
+	{
+		Reset_CurrentTrackPosition();
+		return true;
+	}
+
+	_float			fRatio = m_fCurrentTrackPosition  / _fAnimTransitionTrackPos;
+	KEYFRAME tFrame ;
+	for (_uint channel = 0; channel < m_iNumChannels; channel++)
+	{
+		_uint iBoneIdx = m_vecChannel[channel]->Get_BoneIndex();
+		tFrame = CEngineUtility::Lerp_Frame(mapAnimTransLeftFrame.at(iBoneIdx), m_vecChannel[channel]->Get_KeyFrame(0), fRatio);
+		Bones[iBoneIdx]->Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&tFrame.vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMLoadFloat4(&tFrame.vRotation), XMVectorSetW(XMLoadFloat3(&tFrame.vPosition), 1.f)));
+	}
+
+	m_fCurrentTrackPosition += m_fTickPerSecond* fTimeDelta;
 	return false;
 }
 
+void CAnimation::Reset_CurrentTrackPosition()
+{
+	m_fCurrentTrackPosition = 0.f; 
+	ZeroMemory(m_CurrentKeyFrameIndices.data(), 0);
+}
+
+void CAnimation::Get_CurrentFrame(map<_uint, KEYFRAME>* pOutKeyFrames) const
+{
+	for (auto& channel : m_vecChannel)
+		channel->Get_Frame(m_fCurrentTrackPosition, pOutKeyFrames);
+}
+
+bool CAnimation::Is_AnimChangeable()
+{
+	return m_fDuration * m_fPostDelayPercentage <= m_fCurrentTrackPosition;
+}
+
+void CAnimation::Get_Frame(_float fTrackPos, map<_uint, KEYFRAME>* pOutKeyFrames) const
+{
+	for (auto& channel : m_vecChannel)
+		channel->Get_Frame(fTrackPos, pOutKeyFrames);
+}
 
 
+void CAnimation::Ready_AnimTransition()
+{
+	Reset_CurrentTrackPosition();
+}
 
 CAnimation* CAnimation::Create(ifstream& inFile, const CModel* pModel)
 {
@@ -105,9 +145,8 @@ void CAnimation::Free()
 {
 	__super::Free();
 
-	for (auto& pChannel : m_Channels)
+	for (auto& pChannel : m_vecChannel)
 		Safe_Release(pChannel);
 
-	m_Channels.clear();
+	m_vecChannel.clear();
 }
-

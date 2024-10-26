@@ -87,12 +87,23 @@ HRESULT CMesh::Bind_BoneMatrices(CShader* pShader, const _char* pConstantName, c
 
 	for (auto& iBoneIndex : m_BoneIndices)
 	{
-		XMStoreFloat4x4(&m_BoneMatrices[iNumBones], XMLoadFloat4x4(&m_BoneOffsetMatrices[iNumBones]) * Bones[iBoneIndex]->Get_CombinedTransformationMatrix());
+		auto a = XMLoadFloat4x4(&m_BoneOffsetMatrices[iNumBones]);
+		auto b = Bones[iBoneIndex]->Get_CombinedTransformationMatrix();
+		auto s =  a * b;
+		XMStoreFloat4x4(&m_BoneMatrices[iNumBones], s);
 		++iNumBones;
 	}
 
 	return pShader->Bind_Matrices(pConstantName, m_BoneMatrices, 512);
 
+}
+
+void CMesh::ReSet_OffsetMarix()
+{
+	for (auto& i : m_BoneOffsetMatrices)
+	{
+		XMStoreFloat4x4(&i, XMMatrixIdentity());
+	}
 }
 
 HRESULT CMesh::Ready_VertexBuffer_For_NonAnim(ifstream& inFile, _fmatrix PreTransformMatrix)
@@ -167,7 +178,7 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(ifstream& inFile, CModel* pModel)
 	}
 	inFile.read(reinterpret_cast<char*>(&m_iNumBones), sizeof(_uint));
 
-	for (size_t curMeshBoneIdx = 0; curMeshBoneIdx < m_iNumBones; curMeshBoneIdx++)
+	for (_uint curMeshBoneIdx = 0; curMeshBoneIdx < m_iNumBones; curMeshBoneIdx++)
 	{
 		_uint iNameLength = 0;
 		inFile.read(reinterpret_cast<char*>(&iNameLength), sizeof(_uint));
@@ -179,12 +190,16 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(ifstream& inFile, CModel* pModel)
 
 		_float4x4	OffsetMatrix = {};
 		inFile.read(reinterpret_cast<char*>(&OffsetMatrix), sizeof(_float4x4));
+		//cout << OffsetMatrix._11 << " " << OffsetMatrix._12 << " " << OffsetMatrix._13 << " " << OffsetMatrix._14 << endl;
+		//cout << OffsetMatrix._21 << " " << OffsetMatrix._22 << " " << OffsetMatrix._23 << " " << OffsetMatrix._24 << endl;
+		//cout << OffsetMatrix._31 << " " << OffsetMatrix._32 << " " << OffsetMatrix._33 << " " << OffsetMatrix._34 << endl;
+		//cout << OffsetMatrix._41 << " " << OffsetMatrix._42 << " " << OffsetMatrix._43 << " " << OffsetMatrix._44 << endl;
 		XMStoreFloat4x4(&OffsetMatrix, XMMatrixTranspose(XMLoadFloat4x4(&OffsetMatrix)));
 		m_BoneOffsetMatrices.push_back(OffsetMatrix);
 
 		_uint iNumVertices;
 		inFile.read(reinterpret_cast<char*>(&iNumVertices), sizeof(_uint));
-		for (size_t curBoneVertex = 0; curBoneVertex < iNumVertices; curBoneVertex++)
+		for (_uint curBoneVertex = 0; curBoneVertex < iNumVertices; curBoneVertex++)
 		{
 			//
 			_uint iVertexIdx = 0;

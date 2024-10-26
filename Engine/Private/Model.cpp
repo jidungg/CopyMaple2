@@ -11,6 +11,7 @@ CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 }
 
+
 CModel::CModel(const CModel& Prototype)
 	: CComponent{ Prototype }
 	, m_eModelType{Prototype.m_eModelType }
@@ -64,7 +65,39 @@ HRESULT CModel::Initialize_Prototype(const _char* pModelFilePath, _fmatrix PreTr
 	inFile.close();
 	return S_OK;
 }
-HRESULT CModel::Ready_Bones(ifstream& inFile, _int iParentBoneIndex)
+
+HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
+{
+	XMStoreFloat4x4(&m_PreTransformMatrix, PreTransformMatrix);
+
+	std::ifstream inFile(pModelFilePath, std::ios::binary);
+	if (!inFile) {
+		string str = "파일을 열 수 없습니다.";
+		str += pModelFilePath;
+		MessageBoxA(NULL, str.c_str(), "에러", MB_OK);
+		return E_FAIL;
+	}
+	bool bAnim;
+	inFile.read(reinterpret_cast<char*>(&bAnim), sizeof(bool));
+	m_eModelType = eType;
+
+
+	if (FAILED(Ready_Bones(inFile, -1)))
+		return E_FAIL;
+
+	if (FAILED(Ready_Meshes(inFile)))
+		return E_FAIL;
+
+	if (FAILED(Ready_Materials(inFile, pModelFilePath)))
+		return E_FAIL;
+
+	if (FAILED(Ready_Animations(inFile)))
+		return E_FAIL;
+	inFile.close();
+	return S_OK;
+}
+
+HRESULT CModel::Ready_Bones(ifstream& inFile, _uint iParentBoneIndex)
 {
 	CBone* pBone = CBone::Create(inFile, iParentBoneIndex);
 
@@ -124,9 +157,6 @@ HRESULT CModel::Ready_Animations(ifstream& inFile)
 
 	for (size_t i = 0; i < m_iNumAnimations; i++)
 	{
-
-		//m_strCurrentAnimName = m_szName;
-
 		CAnimation* pAnimation = CAnimation::Create(inFile, this);
 		if (nullptr == pAnimation)
 			return E_FAIL;
@@ -153,6 +183,7 @@ HRESULT CModel::Render(_uint iMeshIndex)
 	return S_OK;
 }
 
+
 HRESULT CModel::Bind_Material(CShader* pShader, const _char* pConstantName, _uint iMeshIndex, TEXTURE_TYPE eType, _uint iTextureIndex)
 {
 	return m_Materials[m_Meshes[iMeshIndex]->Get_MaterialIndex()]->Bind_Texture(pShader, pConstantName, eType, iTextureIndex);
@@ -167,11 +198,11 @@ bool CModel::Play_Animation(_float fTimeDelta)
 {
 	//뼈들의 변환행렬을 갱신
 	bool bAnimEnd = false;
-	bAnimEnd = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, fTimeDelta);
-	//if(m_iNextAnimIndex == m_iCurrentAnimIndex)//애니메이션 재생
-	//{
-	//}
-
+	if(m_iCurrentAnimIndex == m_iPrevAnimIndex)
+		bAnimEnd = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, fTimeDelta);
+	else
+		if(m_Animations[m_iCurrentAnimIndex]->Update_AnimTransition(m_Bones, fTimeDelta, m_mapAnimTransLeftFrame))
+			m_iPrevAnimIndex = m_iCurrentAnimIndex ;
 
 	//뼈들의 합성변환행렬을 갱신
 	for (auto& pBone : m_Bones)
@@ -206,29 +237,67 @@ float CModel::Get_AnimTime()
 	return m_Animations[m_iCurrentAnimIndex]->Get_AnimTime();
 }
 
+const _float4x4* CModel::Get_BoneMatrix(const _char* pBoneName) const
+{
+	auto	iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool
+		{
+			if (false == strcmp(pBone->Get_Name(), pBoneName))
+				return true;
+
+			return false;
+		});
+
+	if (iter == m_Bones.end())
+		return nullptr;
+
+	return (*iter)->Get_CombinedTransformationFloat4x4();
+}
+
+CBone* CModel::Get_Bone(const _char* pBoneName) const
+{
+	auto	iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool
+		{
+			if (false == strcmp(pBone->Get_Name(), pBoneName))
+				return true;
+
+			return false;
+		});
+
+	if (iter == m_Bones.end())
+		return nullptr;
+	return *iter;
+}
+
+bool CModel::Is_AnimChangeable()
+{
+	return m_Animations[m_iCurrentAnimIndex]->Is_AnimChangeable();
+}
+
 void CModel::Set_AnimationLoop(_uint iIdx, _bool bIsLoop)
 {
 	m_Animations[iIdx]->Set_Loop(bIsLoop); 
 }
 
+void CModel::Set_Animation(_uint iIdx)
+{
+	m_iCurrentAnimIndex = iIdx;
+	m_iPrevAnimIndex = iIdx;
+	m_Animations[m_iCurrentAnimIndex]->Reset_CurrentTrackPosition();
+}
+
+void CModel::Set_AnimPostDelayPercent(_uint iIdx, _float fPercent)
+{
+	m_Animations[iIdx]->Set_PostDealyPercent(fPercent);
+}
+
 void CModel::Switch_Animation(_uint iIdx)
 {
-	m_iCurrentAnimIndex = iIdx; m_iNextAnimIndex = iIdx;
+	m_iPrevAnimIndex = m_iCurrentAnimIndex;
+	m_iCurrentAnimIndex = iIdx;
+	m_mapAnimTransLeftFrame.clear();
 	m_Animations[m_iCurrentAnimIndex]->Reset_CurrentTrackPosition();
-
+	m_Animations[m_iPrevAnimIndex]->Get_CurrentFrame( &m_mapAnimTransLeftFrame);
 }
-
-HRESULT CModel::Render()
-{
-	for (auto& mesh : m_Meshes)
-	{
-		mesh->Bind_BufferDesc();
-		mesh->Render();
-	}
-
-	return S_OK;
-}
-
 
 
 
@@ -237,6 +306,17 @@ CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext,cons
 	CModel* pInstance = new CModel(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype(pModelFilePath, PreTransformMatrix)))
+	{
+		MSG_BOX("Failed to Created : CModel");
+		Safe_Release(pInstance);
+	}
+	return pInstance;
+}
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CModel::TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix)
+{
+	CModel* pInstance = new CModel(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype(eType,pModelFilePath, PreTransformMatrix)))
 	{
 		MSG_BOX("Failed to Created : CModel");
 		Safe_Release(pInstance);

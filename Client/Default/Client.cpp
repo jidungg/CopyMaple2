@@ -90,11 +90,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		if (fTimeAcc > 1.f / 60.0f)
 		{
-			fTimeAcc = 0.f;
 
 			pGameInstance->Update_TimeDelta(TEXT("Timer_60"));
 
-			pMainApp->Update(pGameInstance->Get_TimeDelta(TEXT("Timer_60")));
+			//pMainApp->Update(pGameInstance->Get_TimeDelta(TEXT("Timer_60")));
+			pMainApp->Update(1.f / 60.0f);
+			fTimeAcc = 0;
 			pMainApp->Render();
 		}
 	}

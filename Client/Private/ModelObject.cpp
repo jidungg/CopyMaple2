@@ -8,12 +8,12 @@
 #include "Client_Utility.h"
 
 CModelObject::CModelObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CPawn(pDevice, pContext)
+	: CGameObject(pDevice, pContext)
 {
 }
 
 CModelObject::CModelObject(const CModelObject& Prototype)
-	: CPawn(Prototype),
+	: CGameObject(Prototype),
     m_pModelCom{ Prototype.m_pModelCom },
     m_pShaderCom{ Prototype.m_pShaderCom }
 {
@@ -42,6 +42,11 @@ void CModelObject::Update(_float fTimeDelta)
 	if (m_eModelType == CModel::TYPE::TYPE_ANIM)
         m_bAnimationEnd =m_pModelCom->Play_Animation(fTimeDelta);
 	__super::Update(fTimeDelta);
+}
+
+bool CModelObject::Is_AnimPostDelayEnd()
+{
+    return m_pModelCom->Is_AnimChangeable(); 
 }
 
 HRESULT CModelObject::Ready_Components(void* pArg)
@@ -95,9 +100,24 @@ HRESULT CModelObject::Render()
     return S_OK;
 }
 
+const _float4x4* CModelObject::Get_BoneMatrix(const _char* pBoneName) const
+{
+    return m_pModelCom->Get_BoneMatrix(pBoneName);
+}
+
 void CModelObject::Set_AnimationLoop(_uint iIdx, _bool bIsLoop)
 {
 	m_pModelCom->Set_AnimationLoop(iIdx, bIsLoop);
+}
+
+void CModelObject::Set_Animation(_uint iIdx)
+{
+	m_pModelCom->Set_Animation(iIdx);
+}
+
+void CModelObject::Set_AnimPostDelayPercent(_uint iIdx, _float fPercent)
+{
+	m_pModelCom->Set_AnimPostDelayPercent(iIdx, fPercent);
 }
 
 void CModelObject::Switch_Animation(_uint iIdx)
@@ -111,6 +131,8 @@ HRESULT CModelObject::Bind_ShaderResources()
 {
 
     if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
         return E_FAIL;

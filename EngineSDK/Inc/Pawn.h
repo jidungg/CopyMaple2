@@ -12,7 +12,7 @@ protected:
 	virtual ~CPawn() = default;
 
 public:
-	virtual void Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta) {};
+	virtual void Receive_KeyInput(_float fTimeDelta) {};
 	void Set_Position(const _vector& vPos);
 public:
 

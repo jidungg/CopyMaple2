@@ -26,25 +26,6 @@ CPhysics* CPhysics::Create(CGameInstance* pGameInstance, _uint iWinSizeX, _uint 
 
 	return pInstance;
 }
-bool CPhysics::RayCast(const POINT& tScreenPos, CCollider* pCollider, RaycastHit* pOut)
-{
-	POINT tPosition = m_pGameInstance->Get_MousePos();
-	Ray ray{ tPosition ,m_iWinSizeX, m_iWinSizeY,
-		m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW),
-		m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW) };
-
-	return RayCast(ray, pCollider, pOut);
-}
-bool CPhysics::RayCast(const XMFLOAT4& vWorldOrigin, const XMFLOAT4& vWorldDir, CCollider* pCollider, RaycastHit* pOut)
-{
-	Ray ray{ vWorldOrigin, vWorldDir };
-
-	return RayCast(ray, pCollider,pOut);
-}
-bool CPhysics::RayCast(const Ray& tRay, CCollider* pCollider, RaycastHit* pOut)
-{
-	return false;
-}
 
 
 void CPhysics::Free()

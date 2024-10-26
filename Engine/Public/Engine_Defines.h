@@ -128,21 +128,21 @@ namespace Engine
 
 	enum class  CONDITION_TYPE
 	{
-		CT_EQUAL,
-		CT_NOT_EQUAL,
-		CT_GREATER,
-		CT_LESS,
-		CT_EQUAL_GREATER,
-		CT_EQUAL_LESS,
+		EQUAL,
+		NOT_EQUAL,
+		GREATER,
+		LESS,
+		EQUAL_GREATER,
+		EQUAL_LESS,
 		LAST
 	};
 	enum class  CONDITION_VAR_TYPE
 	{
-		CVT_INT,
-		CVT_FLOAT,
-		CVT_BOOL,
-		CVT_TRIGGER,
-		CVT_LAST
+		INT,
+		FLOAT,
+		BOOL,
+		TRIGGER,
+		LAST
 	};
 }
 

@@ -42,4 +42,5 @@ void CTransition::Free()
 	{
 		Safe_Release(cond);
 	}
+	m_vecConditions.clear();
 }

@@ -35,7 +35,7 @@ struct VS_OUT
     float4 vWorldPos : TEXCOORD1;
 };
 
-/* 1. Á¤Á¡À§Ä¡¿¡ ´ëÇÑ ±âÃÊÀûÀÎ º¯È¯°úÁ¤À» ¼öÇàÇÑ´Ù.(¿ùµåº¯È¯, ºäº¯È¯, ) */
+/* 1. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.(ï¿½ï¿½ï¿½åº¯È¯, ï¿½äº¯È¯, ) */
 
 VS_OUT VS_MAIN(VS_IN In)
 {
@@ -78,8 +78,8 @@ PS_OUT PS_MAIN(PS_IN In)
 
     float4 vReflect = reflect(normalize(g_vLightDir), normalize(In.vNormal));
     float4 vViewDir = normalize(In.vPosition - g_vCamPosition);
-    float fSpecularShade = pow(max(dot(normalize(vReflect) * -1.f, vViewDir), 0.f), 50.f);
-    
+    //float fSpecularShade = pow(max(dot(normalize(vReflect) * -1.f, vViewDir), 0.f), 50.f);
+    float fSpecularShade = 0;
     Out.vColor = (g_vLightDiffuse * vMtrlDiffuse) * vShade + (g_vLightSpecular * g_vMtrlSpecular)*fSpecularShade;
 
     return Out;

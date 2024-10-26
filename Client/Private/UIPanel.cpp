@@ -59,6 +59,16 @@ void CUIPanel::Priority_Update(_float fTimeDelta)
 	__super::Priority_Update(fTimeDelta);
 }
 
+void CUIPanel::Set_Texture(CTexture* pTexture)
+{
+	Remove_Component(m_pTextureCom);
+	m_pTextureCom = pTexture;
+	if (nullptr == pTexture)return;
+
+	if (FAILED(Add_Component(m_pTextureCom, TEXT("Com_Texture"))))
+		return ;
+}
+
 CUIPanel* CUIPanel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CUIPanel* pInstance = new CUIPanel(pDevice, pContext);

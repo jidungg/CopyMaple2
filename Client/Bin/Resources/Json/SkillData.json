@@ -1,0 +1,22 @@
+{
+    "skills": [
+        {
+            "id": "MAGIC_CLAW",
+            "type": "INSTANT",
+            "name": "매직 클로",
+            "desc": "마법의 발톱으로 할퀴기.",
+            "level": 1,
+            "maxlevel": 5,
+            "costtype" :  "NONE",
+            "cost": 0,
+            "cooltime": 0,
+            "iconimg": "MagicClaw.png",
+            "data": [ 77.0 ],
+            "levelupdata": [ 6.0 ],
+            "preceding": [
+                [ "MAGIC_CLAW", 0 ]
+            ]
+        }
+
+    ]
+}

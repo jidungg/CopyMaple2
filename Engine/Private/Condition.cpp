@@ -13,7 +13,7 @@ Condition::Condition(const Condition& Prototype)
 #pragma region Int
 //INT CONDITION
 IntCondition::IntCondition(CONDITION_TYPE eCondType, int iCompareValue, ConditionVariable* pConditionVar)
-	: Condition(eCondType, CONDITION_VAR_TYPE::CVT_INT, pConditionVar), m_iCompareValue(iCompareValue)
+	: Condition(eCondType, CONDITION_VAR_TYPE::INT, pConditionVar), m_iCompareValue(iCompareValue)
 {
 }
 
@@ -28,17 +28,17 @@ bool IntCondition::CheckCondition()
 
 	switch (eCondType)
 	{
-	case Engine::CONDITION_TYPE::CT_EQUAL:
+	case Engine::CONDITION_TYPE::EQUAL:
 		return *pIntConditionVar->pIntValue == m_iCompareValue;
-	case Engine::CONDITION_TYPE::CT_NOT_EQUAL:
+	case Engine::CONDITION_TYPE::NOT_EQUAL:
 		return *pIntConditionVar->pIntValue != m_iCompareValue;
-	case Engine::CONDITION_TYPE::CT_GREATER:
+	case Engine::CONDITION_TYPE::GREATER:
 		return *pIntConditionVar->pIntValue > m_iCompareValue;
-	case Engine::CONDITION_TYPE::CT_LESS:
+	case Engine::CONDITION_TYPE::LESS:
 		return *pIntConditionVar->pIntValue < m_iCompareValue;
-	case Engine::CONDITION_TYPE::CT_EQUAL_GREATER:
+	case Engine::CONDITION_TYPE::EQUAL_GREATER:
 		return *pIntConditionVar->pIntValue >= m_iCompareValue;
-	case Engine::CONDITION_TYPE::CT_EQUAL_LESS:
+	case Engine::CONDITION_TYPE::EQUAL_LESS:
 		return *pIntConditionVar->pIntValue <= m_iCompareValue;
 	case Engine::CONDITION_TYPE::LAST:
 	default:
@@ -62,7 +62,7 @@ CBase* IntCondition::Clone()
 
 //FLOAT CONDITION
 FloatCondition::FloatCondition(CONDITION_TYPE eCondType, float fCompareValue, ConditionVariable* pConditionVar)
-	: Condition(eCondType, CONDITION_VAR_TYPE::CVT_FLOAT, pConditionVar), m_fCompareValue(fCompareValue)
+	: Condition(eCondType, CONDITION_VAR_TYPE::FLOAT, pConditionVar), m_fCompareValue(fCompareValue)
 {
 }
 
@@ -77,17 +77,17 @@ bool FloatCondition::CheckCondition()
 
 	switch (eCondType)
 	{
-	case Engine::CONDITION_TYPE::CT_EQUAL:
+	case Engine::CONDITION_TYPE::EQUAL:
 		return *pFloatConditionVar->pFloatValue == m_fCompareValue;
-	case Engine::CONDITION_TYPE::CT_NOT_EQUAL:
+	case Engine::CONDITION_TYPE::NOT_EQUAL:
 		return *pFloatConditionVar->pFloatValue != m_fCompareValue;
-	case Engine::CONDITION_TYPE::CT_GREATER:
+	case Engine::CONDITION_TYPE::GREATER:
 		return *pFloatConditionVar->pFloatValue > m_fCompareValue;
-	case Engine::CONDITION_TYPE::CT_LESS:
+	case Engine::CONDITION_TYPE::LESS:
 		return *pFloatConditionVar->pFloatValue < m_fCompareValue;
-	case Engine::CONDITION_TYPE::CT_EQUAL_GREATER:
+	case Engine::CONDITION_TYPE::EQUAL_GREATER:
 		return *pFloatConditionVar->pFloatValue >= m_fCompareValue;
-	case Engine::CONDITION_TYPE::CT_EQUAL_LESS:
+	case Engine::CONDITION_TYPE::EQUAL_LESS:
 		return *pFloatConditionVar->pFloatValue <= m_fCompareValue;
 	case Engine::CONDITION_TYPE::LAST:
 	default:
@@ -111,7 +111,7 @@ CBase* FloatCondition::Clone()
 #pragma region Bool
 
 BoolCondition::BoolCondition(CONDITION_TYPE eCondType, bool bCompareValue, ConditionVariable* pConditionVar)
-	: Condition(eCondType, CONDITION_VAR_TYPE::CVT_BOOL, pConditionVar), m_bCompareValue(bCompareValue)
+	: Condition(eCondType, CONDITION_VAR_TYPE::BOOL, pConditionVar), m_bCompareValue(bCompareValue)
 {
 }
 
@@ -127,9 +127,9 @@ bool BoolCondition::CheckCondition()
 
 	switch (eCondType)
 	{
-	case Engine::CONDITION_TYPE::CT_EQUAL:
+	case Engine::CONDITION_TYPE::EQUAL:
 		return *pBoolConditionVar->pBoolValue == m_bCompareValue;
-	case Engine::CONDITION_TYPE::CT_NOT_EQUAL:
+	case Engine::CONDITION_TYPE::NOT_EQUAL:
 		return *pBoolConditionVar->pBoolValue != m_bCompareValue;
 	case Engine::CONDITION_TYPE::LAST:
 	default:
@@ -150,7 +150,7 @@ CBase* BoolCondition::Clone()
 #pragma endregion
 
 TriggerCondition::TriggerCondition(ConditionVariable* pConditionVar)
-	: Condition(CONDITION_TYPE::CT_EQUAL, CONDITION_VAR_TYPE::CVT_TRIGGER, pConditionVar)
+	: Condition(CONDITION_TYPE::EQUAL, CONDITION_VAR_TYPE::TRIGGER, pConditionVar)
 {
 }
 

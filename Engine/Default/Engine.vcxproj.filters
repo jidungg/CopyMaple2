@@ -259,6 +259,12 @@
     <ClInclude Include="..\Public\Physics.h">
       <Filter>01.Utility</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Engine_Utility.h">
+      <Filter>01.Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ContainerObject.h" />
+    <ClInclude Include="..\Public\MimicBoneModel.h" />
+    <ClInclude Include="..\Public\MimicBone.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -405,6 +411,12 @@
     <ClCompile Include="..\Private\Physics.cpp">
       <Filter>01.Utility</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Engine_Utility.cpp">
+      <Filter>01.Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ContainerObject.cpp" />
+    <ClCompile Include="..\Private\MimicBoneModel.cpp" />
+    <ClCompile Include="..\Private\MimicBone.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc" />

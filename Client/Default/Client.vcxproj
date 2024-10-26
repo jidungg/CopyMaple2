@@ -168,21 +168,31 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\BackGround.h" />
+    <ClInclude Include="..\Public\BoneModelObject.h" />
     <ClInclude Include="..\Public\Builder.h" />
+    <ClInclude Include="..\Public\BuildPreview.h" />
+    <ClInclude Include="..\Public\Character.h" />
     <ClInclude Include="..\Public\CreateObjEvent.h" />
     <ClInclude Include="..\Public\DeadObjEvent.h" />
     <ClInclude Include="..\Public\ItemDataBase.h" />
     <ClInclude Include="..\Public\LevelChangeEvent.h" />
+    <ClInclude Include="..\Public\MagicClaw.h" />
+    <ClInclude Include="..\Public\MimicBoneModelObject.h" />
     <ClInclude Include="..\Public\ModelObject.h" />
     <ClInclude Include="..\Public\Camera_Free.h" />
     <ClInclude Include="..\Public\Camera_Trace.h" />
     <ClInclude Include="..\Public\Canvas.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\Public\UIListSelector.h" />
+    <ClInclude Include="..\Public\UIQuickSlot.h" />
+    <ClInclude Include="..\Public\Skill.h" />
+    <ClInclude Include="..\Public\SkillManager.h" />
     <ClInclude Include="..\Public\UIHomeDialog.h" />
     <ClInclude Include="..\Public\Item.h" />
     <ClInclude Include="..\Public\MyTransform.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\TerrainObject.h" />
+    <ClInclude Include="..\Public\UIInventory.h" />
     <ClInclude Include="..\Public\UIList.h" />
     <ClInclude Include="..\Public\UIItemIndicator.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
@@ -196,24 +206,33 @@
     <ClInclude Include="..\Public\UIButton.h" />
     <ClInclude Include="..\Public\UIListItemEntry.h" />
     <ClInclude Include="..\Public\UIPanel.h" />
+    <ClInclude Include="..\Public\Weapon.h" />
     <ClInclude Include="Client_Utility.h" />
     <ClInclude Include="Client.h" />
-    <ClInclude Include="CUIListSelector.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\BackGround.cpp" />
+    <ClCompile Include="..\Private\BoneModelObject.cpp" />
     <ClCompile Include="..\Private\Builder.cpp" />
+    <ClCompile Include="..\Private\BuildPreview.cpp" />
+    <ClCompile Include="..\Private\Character.cpp" />
     <ClCompile Include="..\Private\CreateObjEvent.cpp" />
     <ClCompile Include="..\Private\DeadObjEvent.cpp" />
     <ClCompile Include="..\Private\ItemDataBase.cpp" />
     <ClCompile Include="..\Private\LevelChangeEvent.cpp" />
+    <ClCompile Include="..\Private\MagicClaw.cpp" />
+    <ClCompile Include="..\Private\MimicBoneModelObject.cpp" />
     <ClCompile Include="..\Private\ModelObject.cpp" />
     <ClCompile Include="..\Private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_Trace.cpp" />
     <ClCompile Include="..\Private\Canvas.cpp" />
+    <ClCompile Include="..\Private\UIListSelector.cpp" />
+    <ClCompile Include="..\Private\UIQuickSlot.cpp" />
+    <ClCompile Include="..\Private\Skill.cpp" />
+    <ClCompile Include="..\Private\SkillManager.cpp" />
     <ClCompile Include="..\Private\UIHomeDialog.cpp" />
     <ClCompile Include="..\Private\Item.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
@@ -228,13 +247,14 @@
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\TerrainObject.cpp" />
     <ClCompile Include="..\Private\UIButton.cpp" />
+    <ClCompile Include="..\Private\UIInventory.cpp" />
     <ClCompile Include="..\Private\UIList.cpp" />
     <ClCompile Include="..\Private\UIListItemEntry.cpp" />
     <ClCompile Include="..\Private\UIPanel.cpp" />
+    <ClCompile Include="..\Private\Weapon.cpp" />
     <ClCompile Include="..\Public\UIItemIndicator.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Client_Utility.cpp" />
-    <ClCompile Include="CUIListSelector.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

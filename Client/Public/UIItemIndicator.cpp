@@ -73,7 +73,7 @@ HRESULT CUIItemIndicator::On_ListItemDataSet(const UIListItemData* data)
 
 	m_pItemIcon =static_cast<CUIPanel*>( m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &panelDesc));
 
-	Add_FakeChild(m_pItemIcon);
+	Add_OnlyTransformChild(m_pItemIcon);
 }
 
 

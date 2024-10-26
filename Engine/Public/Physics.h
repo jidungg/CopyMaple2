@@ -12,10 +12,6 @@ private:
 	virtual ~CPhysics() = default;
 	HRESULT Initialize();
 public:
-	bool RayCast(const POINT& tScreenPos, CCollider* pCollider, RaycastHit* pOut);
-	bool RayCast(const XMFLOAT4& vWorldOrigin, const XMFLOAT4& vWorldDir, CCollider* pCollider, RaycastHit* pOut);
-	bool RayCast(const Ray& tRay, CCollider* pCollider, RaycastHit* pOut);
-
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };

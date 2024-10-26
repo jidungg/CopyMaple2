@@ -1,161 +1,167 @@
 #pragma once
 #include "Client_Defines.h"
-#include "Pawn.h"
+#include "Character.h"
 
-BEGIN(Engine)
-class CCamera_Trace;
-class CShader;
-class CTexture;
-class CVIBuffer_Rect;
-class CStateMachine;
-END
+
 
 BEGIN(Client)
+class CSkill;
+class CBoneModelObject;
+class CMimicBoneModelObject;
 class CPlayer :
-	public CPawn
+	public CCharacter
 {
 public:
 	enum class ANIM_STATE {
-		attack_01
-		,attack_idle
-		,bbqparty_1
-		,bbqparty_2
-		,bore_a
-		,bore_b
-		,bore_c
-		,climb_down_land
-		,climb_down_take
-		,climb_idle
-		,climb_l_down
-		,climb_l_up
-		,climb_left
-		,climb_r_down
-		,climb_r_up
-		,climb_right
-		,climb_up_land
-		,climb_up_take
-		,concentration
-		,damg_a
-		,damg_b
-		,damg_c
-		,dash_jump
-		,dead
-		,dead2
-		,down_idle_a
-		,down_idle_b
-		,down_idle_c
-		,down_idle_d
-		,equip_chanage_cap
-		,equip_change_body
-		,equip_change_glove
-		,equip_change_hair
-		,equip_change_head
-		,equip_change_idle
-		,equip_change_mantle
-		,equip_change_shoes
-		,fakemeteor_1
-		,fakemeteor_2
-		,firetornado
-		,fishing_bore_a
-		,fishing_bore_b
-		,fishing_end
-		,fishing_idle
-		,fishing_reel
-		,fishing_start
-		,flalmeburst
-		,flamewave
-		,fly_idle
-		,fly_run
-		,functobj_chair
-		,hold_idle
-		,idle
-		,jump_attack
-		,jump_damg
-		,jump_dash_down
-		,jump_dash_fall
-		,jump_dash_land
-		,jump_down_a
-		,jump_down_b
-		,jump_fall_a
-		,jump_fall_b
-		,jump_flydamg
-		,jump_land
-		,jump_up_a
-		,jump_up_b
-		,kindling_01
-		,kindling_02
-		,kindling_03_a
-		,kindling_03_b
-		,knock_back
-		,ladder_down_land
-		,ladder_down_take
-		,ladder_idle
-		,ladder_l_down
-		,ladder_l_up
-		,ladder_left
-		,ladder_r_down
-		,ladder_r_up
-		,ladder_right
-		,ladder_up_land
-		,ladder_up_take
-		,magicclaw
-		,object_react_a
-		,object_react_b
-		,object_react_c
-		,object_react_d
-		,object_react_e
-		,prostrate
-		,prostrate_crawl_a
-		,prostrate_crawl_b
-		,prostrate_idle
-		,push_a
-		,push_b
-		,resurrection
-		,run
-		,sit_chair
-		,sit_chair_bore_a
-		,sit_chair_bore_b
-		,sit_chair_idle
-		,sit_chair_talk
-		,sit_ground
-		,sit_ground_bore_a
-		,sit_ground_bore_b
-		,sit_ground_idle
-		,sit_ground_talk
-		,staff_attack
-		,staff_attack_idle
-		,staff_damg_a
-		,staff_damg_b
-		,staff_dead
-		,staff_jump_attack
-		,staff_jump_down_a
-		,staff_jump_down_b
-		,staff_jump_land
-		,staff_jump_up_a
-		,staff_jump_up_b
-		,staff_run
-		,stand_a
-		,stand_b
-		,stand_c
-		,stuck
-		,stun
-		,stun_frozen
-		,talk_a
-		,talk_b
-		,teleport
-		,trinityforce
-		,vomit
-		,walk
-		,wildfire_02
-		,wizard_bore_a
+		ATTACK_01
+		,ATTACK_IDLE
+		,BBQPARTY_1
+		,BBQPARTY_2
+		,BORE_A
+		,BORE_B
+		,BORE_C
+		,CLIMB_DOWN_LAND
+		,CLIMB_DOWN_TAKE
+		,CLIMB_IDLE
+		,CLIMB_L_DOWN
+		,CLIMB_L_UP
+		,CLIMB_LEFT
+		,CLIMB_R_DOWN
+		,CLIMB_R_UP
+		,CLIMB_RIGHT
+		,CLIMB_UP_LAND
+		,CLIMB_UP_TAKE
+		,CONCENTRATION
+		,DAMG_A
+		,DAMG_B
+		,DAMG_C
+		,DASH_JUMP
+		,DEAD
+		,DEAD2
+		,DOWN_IDLE_A
+		,DOWN_IDLE_B
+		,DOWN_IDLE_C
+		,DOWN_IDLE_D
+		,EQUIP_CHANAGE_CAP
+		,EQUIP_CHANGE_BODY
+		,EQUIP_CHANGE_GLOVE
+		,EQUIP_CHANGE_HAIR
+		,EQUIP_CHANGE_HEAD
+		,EQUIP_CHANGE_IDLE
+		,EQUIP_CHANGE_MANTLE
+		,EQUIP_CHANGE_SHOES
+		,FAKEMETEOR_1
+		,FAKEMETEOR_2
+		,FIRETORNADO
+		,FISHING_BORE_A
+		,FISHING_BORE_B
+		,FISHING_END
+		,FISHING_IDLE
+		,FISHING_REEL
+		,FISHING_START
+		,FLALMEBURST
+		,FLAMEWAVE
+		,FLY_IDLE
+		,FLY_RUN
+		,FUNCTOBJ_CHAIR
+		,HOLD_IDLE
+		,IDLE
+		,JUMP_ATTACK
+		,JUMP_DAMG
+		,JUMP_DASH_DOWN
+		,JUMP_DASH_FALL
+		,JUMP_DASH_LAND
+		,JUMP_DOWN_A
+		,JUMP_DOWN_B
+		,JUMP_FALL_A
+		,JUMP_FALL_B
+		,JUMP_FLYDAMG
+		,JUMP_LAND
+		,JUMP_UP_A
+		,JUMP_UP_B
+		,KINDLING_01
+		,KINDLING_02
+		,KINDLING_03_A
+		,KINDLING_03_B
+		,KNOCK_BACK
+		,LADDER_DOWN_LAND
+		,LADDER_DOWN_TAKE
+		,LADDER_IDLE
+		,LADDER_L_DOWN
+		,LADDER_L_UP
+		,LADDER_LEFT
+		,LADDER_R_DOWN
+		,LADDER_R_UP
+		,LADDER_RIGHT
+		,LADDER_UP_LAND
+		,LADDER_UP_TAKE
+		,MAGICCLAW
+		,OBJECT_REACT_A
+		,OBJECT_REACT_B
+		,OBJECT_REACT_C
+		,OBJECT_REACT_D
+		,OBJECT_REACT_E
+		,PROSTRATE
+		,PROSTRATE_CRAWL_A
+		,PROSTRATE_CRAWL_B
+		,PROSTRATE_IDLE
+		,PUSH_A
+		,PUSH_B
+		,RESURRECTION
+		,RUN
+		,SIT_CHAIR
+		,SIT_CHAIR_BORE_A
+		,SIT_CHAIR_BORE_B
+		,SIT_CHAIR_IDLE
+		,SIT_CHAIR_TALK
+		,SIT_GROUND
+		,SIT_GROUND_BORE_A
+		,SIT_GROUND_BORE_B
+		,SIT_GROUND_IDLE
+		,SIT_GROUND_TALK
+		,STAFF_ATTACK
+		,STAFF_ATTACK_IDLE
+		,STAFF_DAMG_A
+		,STAFF_DAMG_B
+		,STAFF_DEAD
+		,STAFF_JUMP_ATTACK
+		,STAFF_JUMP_DOWN_A
+		,STAFF_JUMP_DOWN_B
+		,STAFF_JUMP_LAND
+		,STAFF_JUMP_UP_A
+		,STAFF_JUMP_UP_B
+		,STAFF_RUN
+		,STAND_A
+		,STAND_B
+		,STAND_C
+		,STUCK
+		,STUN
+		,STUN_FROZEN
+		,TALK_A
+		,TALK_B
+		,TELEPORT
+		,TRINITYFORCE
+		,VOMIT
+		,WALK
+		,WILDFIRE_02
+		,WIZARD_BORE_A
 		,LAST
 	};
 	enum class ANIM_CONDITION
 	{
-		AC_ATTACK,
-		AC_ANIMEND,
-		AC_UPFORCE,
-		AC_HEIGHT,
+		ANIM_END_TRIGGER,
+		POSTDELAY_END,
+		UPFORCE,
+		HEIGHT,
+		RANDOM,
+		MOVE,
+		IDLETIME,
+		WALK,
+		BATTLE,
+		WEAPON,
+
+		ATTACK_TRIGGER,
+		SKILL_ID,
 		LAST
 	};
 public:
@@ -172,23 +178,46 @@ protected:
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
+	virtual void Receive_KeyInput(_float fTimeDelta) override;
+	virtual void Priority_Update(_float fTimeDelta) override;
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
 public:
-	HRESULT Ready_Body();
+	HRESULT Ready_Parts();
 	HRESULT Ready_AnimStateMachine();
+	HRESULT Ready_Skill();
 
-	virtual void Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta) override;
 	void On_StateChange(_uint iState);
-private:
-	class CModelObject* m_pBody = { nullptr };
-	CStateMachine* m_pAnimStateMachine = { nullptr };
-	_float m_fJumpPower = { 5.f };
+	void On_SubStateChange(_uint iSubState);
+
+	virtual void Use_Skill(CSkill* pSkill) override;
+
+	CSkill* Get_Skill(SKILL_ID eID) { return m_pSkill[(_uint)eID]; }
+	void Set_Battle(bool bBattle);
+protected:
+
+	CSkill* m_pSkill[(_uint)SKILL_ID::LAST];
+	class CWeapon* m_pWeapon = { nullptr };
+	CBoneModelObject* m_pHair = { nullptr };
+	CMimicBoneModelObject* m_pRobe = { nullptr };
+
+	unordered_map<SKILL_ID, ANIM_CONDITION> m_mapSkillTrigger;
+
+
 	//ConditionVar
-	_float m_fUpForce = { 0.f };
-	_float m_fHeight = { 1.f };
+	_int m_iRandomCondition { 0 };
+	_float m_fUpForce { 0.f };
+	_float m_fHeight { 1.f };
+	_float m_fIdleTime  { 0.f };
+	_float m_fBattleTime { 0.f };
+	_bool m_bWalk;
+	_bool m_bMove { false };
+	_bool m_bWeapon { false };
+	_bool m_bBattle  { false };
+	_bool m_bPostDelayEnd  { false };
+	_int m_iSkillID{ 0 };
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

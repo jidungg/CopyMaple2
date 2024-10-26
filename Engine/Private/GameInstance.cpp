@@ -74,8 +74,8 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 {
 	m_pInput_Device->Update_InputDev();
 	m_pUIManager->Update();
-	m_pController->Update(fTimeDelta);
 
+	m_pController->Update(fTimeDelta);
 	m_pObject_Manager->Priority_Update(fTimeDelta);
 	m_pObject_Manager->Update(fTimeDelta);
 	m_pObject_Manager->Late_Update(fTimeDelta);

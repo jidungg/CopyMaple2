@@ -23,7 +23,7 @@ public:
 public:
 	//셰이더에 본 행렬을 바인딩
 	HRESULT Bind_BoneMatrices(class CShader* pShader, const _char* pConstantName, const vector<CBone*>& Bones);
-
+	void ReSet_OffsetMarix();
 public:
 	HRESULT Ready_VertexBuffer_For_NonAnim(ifstream& inFile, _fmatrix PreTransformMatrix);
 	HRESULT Ready_VertexBuffer_For_Anim(ifstream& inFile, class CModel* pModel);

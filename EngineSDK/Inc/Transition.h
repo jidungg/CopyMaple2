@@ -11,6 +11,7 @@ protected:
 public:
 	bool CheckConditions();
 
+	_uint Get_ConditionCount() { return m_vecConditions.size(); }
 	_uint Get_NextState() { return m_iNextState; }
 	void Add_Condition(Condition* pCond){m_vecConditions.push_back(pCond);}
 private:

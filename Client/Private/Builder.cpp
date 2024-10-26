@@ -10,6 +10,7 @@
 #include "CubeTerrain.h"
 #include "TerrainObject.h"
 #include "ItemDataBase.h"
+#include "BuildPreview.h"
 
 CBuilder::CBuilder(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPawn(pDevice, pContext)
@@ -34,20 +35,28 @@ HRESULT CBuilder::Initialize(void* pArg)
 	BUILDER_DESC* pBulderDesc = static_cast<BUILDER_DESC*>(pArg);
 	m_pCubeTerrain = pBulderDesc->pCubeTerrain;
 
+	if (FAILED(Ready_Builder()))
+		return E_FAIL;
+	if (FAILED(Ready_Preview("Prototype_Model_EmptyModel")))
+		return E_FAIL;
+	return S_OK;
+}
+HREFTYPE CBuilder::Ready_Builder()
+{
 	//DuckyBall
 	CModelObject::MODELOBJ_DESC tModelDesc;
 	tModelDesc.fRotationPerSec = 5.f;
 	tModelDesc.fSpeedPerSec = 1.f;
 	tModelDesc.eModelType = CModel::TYPE_ANIM;
 	tModelDesc.eModelProtoLevelID = LEVEL_HOME;
-	strcpy_s(tModelDesc.strModelProtoName , "Prototype_Model_ChocoDuckyBall");
+	strcpy_s(tModelDesc.strModelProtoName, "Prototype_Model_ChocoDuckyBall");
 	tModelDesc.eShaderProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tModelDesc.strShaderProtoName , "Prototype_Component_Shader_VtxAnimMesh");
-	m_pBird = static_cast<CModelObject*>( m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
+	strcpy_s(tModelDesc.strShaderProtoName, "Prototype_Component_Shader_VtxAnimMesh");
+	m_pBird = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
 	Add_Child(m_pBird);
-	m_pBird->Set_AnimationLoop(0,true);
-	if (FAILED(Ready_Preview("Prototype_Model_EmptyModel")))
-		return E_FAIL;
+	m_pBird->Set_AnimationLoop(0, true);
+	m_pBird->Get_Transform()->Set_State(CTransform::STATE_POSITION, m_vBirdOffset);
+
 	return S_OK;
 }
 HREFTYPE CBuilder::Ready_Preview(const _char* szModelTag)
@@ -61,53 +70,41 @@ HREFTYPE CBuilder::Ready_Preview(const _char* szModelTag)
 	strcpy_s(tTerrObjDesc.strShaderProtoName, "Prototype_Component_Shader_VtxMesh");
 	XMStoreFloat4(&tTerrObjDesc.pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_vPreviewOffset);
 
-	m_pPreview = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CTerrainObject::m_szProtoTag, &tTerrObjDesc));
+	m_pPreview = static_cast<CBuildPreview*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ,LEVEL_HOME, CBuildPreview::m_szProtoTag, &tTerrObjDesc));
 	Add_Child(m_pPreview);
+	m_pPreview->Get_Transform()->Set_State(CTransform::STATE_POSITION, m_vPreviewOffset);
 	m_pPreview->Get_Transform()->Scaling(0.5f, 0.5f, 0.5f);
 	return S_OK;
 }
 
-void CBuilder::Update(_float fTimeDelta)
+void CBuilder::Receive_KeyInput(_float fTimeDelta)
 {
-	XMVECTOR vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	XMVECTOR vBirdPos =  vPos + m_vBirdOffset;
-	m_pBird->Get_Transform()->Set_State(CTransform::STATE_POSITION, vBirdPos);
-
-	XMVECTOR vPreviewPos = vPos + m_vPreviewOffset;
-	m_pPreview->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPreviewPos);
-
-	__super::Update(fTimeDelta);
-}
-
-void CBuilder::Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta)
-{
-
-	if (eKey == KEY::RIGHT && eKeyState == KEY_STATE::PRESSING)
+	if (m_pGameInstance->GetKeyState(KEY::RIGHT) == KEY_STATE::PRESSING)
 		m_vMoveDir += Get_Direction_Vector(DIR_E);
-	if (eKey == KEY::UP && eKeyState == KEY_STATE::PRESSING)
+	if (m_pGameInstance->GetKeyState(KEY::UP) == KEY_STATE::PRESSING)
 		m_vMoveDir += Get_Direction_Vector(DIR_N);
-	if (eKey == KEY::DOWN && eKeyState == KEY_STATE::PRESSING)
+	if (m_pGameInstance->GetKeyState(KEY::DOWN) == KEY_STATE::PRESSING)
 		m_vMoveDir += Get_Direction_Vector(DIR_S);
-	if (eKey == KEY::LEFT && eKeyState == KEY_STATE::PRESSING)
+	if (m_pGameInstance->GetKeyState(KEY::LEFT) == KEY_STATE::PRESSING)
 		m_vMoveDir += Get_Direction_Vector(DIR_W);
-	if (eKey == KEY::W && eKeyState == KEY_STATE::PRESSING)
+	if (m_pGameInstance->GetKeyState(KEY::W) == KEY_STATE::PRESSING)
 		m_vMoveDir += Get_Direction_Vector(DIR_U);
-	if (eKey == KEY::S && eKeyState == KEY_STATE::PRESSING)
+	if (m_pGameInstance->GetKeyState(KEY::S) == KEY_STATE::PRESSING)
 		m_vMoveDir += Get_Direction_Vector(DIR_D);
 
 
-	if (eKey == KEY::R && eKeyState == KEY_STATE::DOWN)//ȸ��
+	if (m_pGameInstance->GetKeyState(KEY::R) == KEY_STATE::DOWN)//ȸ��
 	{
 		_float4 pos;
 		XMStoreFloat4(&pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		_uint index = m_pCubeTerrain->PosToIndex(pos);
-		CTerrainObject* pTerrObj  = m_pCubeTerrain->Get_TerrainObject(index);
+		CTerrainObject* pTerrObj = m_pCubeTerrain->Get_TerrainObject(index);
 		if (pTerrObj)
 			pTerrObj->Rotate();
 		else
 			m_pPreview->Rotate();
 	}
-	if (eKey == KEY::E && eKeyState == KEY_STATE::DOWN) // ȸ��
+	if (m_pGameInstance->GetKeyState(KEY::E) == KEY_STATE::DOWN) // ȸ��
 	{
 		_float4 pos;
 		XMStoreFloat4(&pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
@@ -115,13 +112,13 @@ void CBuilder::Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta
 		m_pCubeTerrain->Remove_TerrainObject(index);
 
 	}
-	if (eKey == KEY::SPACE && eKeyState == KEY_STATE::DOWN) // ��ġ
+	if (m_pGameInstance->GetKeyState(KEY::SPACE) == KEY_STATE::DOWN) // ��ġ
 	{
 		CTerrainObject::TERRAINOBJ_DESC desc;
 		desc.fRotationPerSec = 5.f;
 		desc.fSpeedPerSec = 1.f;
 		desc.eType = TERRAIN_OBJ_TYPE::BLOCK;
-		strcpy_s( desc.strItemName,m_szItemName);
+		strcpy_s(desc.strItemName, m_szItemName);
 		ITEM_DESC* itemdesc = ITEMDB->GetItemDesc(ITEM_TYPE::BUILD, desc.strItemName);
 		strcpy_s(desc.strModelProtoName, itemdesc->strModelTag);
 		desc.eModelProtoLevelID = LEVEL_LOADING;
@@ -130,24 +127,37 @@ void CBuilder::Receive_KeyInput(KEY eKey, KEY_STATE eKeyState, _float fTimeDelta
 		desc.direction = m_pPreview->Get_Direction();
 		desc.data = m_iBuildData;
 		_float4 pos;
-		XMStoreFloat4(&pos,m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		XMStoreFloat4(&pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		desc.index = m_pCubeTerrain->PosToIndex(pos);
 		desc.pos = m_pCubeTerrain->IndexToPos(desc.index);
-		 
+
 		m_pCubeTerrain->Add_TerrainObject(desc);
 	}
+}
+
+void CBuilder::Update(_float fTimeDelta)
+{
+	XMVECTOR vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	XMVECTOR vBirdPos = vPos + m_vBirdOffset;
+	//m_pBird->Get_Transform()->Set_State(CTransform::STATE_POSITION, vBirdPos);
+
+	XMVECTOR vPreviewPos = vPos + m_vPreviewOffset;
+	//m_pPreview->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPreviewPos);
+	if (false == XMVector4Equal(m_vMoveDir, XMVectorSet(0, 0, 0, 0)))
+	{
+		m_pTransformCom->Go_Direction(m_vMoveDir, fTimeDelta);
+
+		//m_pBird->Get_Transform()->LookToward(XMVectorSetY( m_vMoveDir,0));
+		m_pTransformCom->LookToward(XMVectorSetY(m_vMoveDir, 0));
+	}
+	__super::Update(fTimeDelta);
 }
 
 void CBuilder::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-	if (false == XMVector4Equal(m_vMoveDir, XMVectorSet(0, 0, 0, 0)))
-	{
-		m_pTransformCom->Go_Direction(m_vMoveDir, fTimeDelta);
 
-		m_pBird->Get_Transform()->LookToward(XMVectorSetY( m_vMoveDir,0));
-	}
 	m_vMoveDir = XMVectorSet(0, 0, 0, 0);
 }
 

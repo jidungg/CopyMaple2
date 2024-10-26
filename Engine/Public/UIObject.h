@@ -33,7 +33,8 @@ public:
 
 
 	virtual void Add_Child(CGameObject* pChild) override;
-	void Add_FakeChild(CUIObject* pUIobj);
+	virtual void Remove_Child(CGameObject* pChild);
+	void Add_OnlyTransformChild(CUIObject* pUIobj);
 	void Increase_Priority();
 
 	_uint Get_Priority() { return m_iPriority; }
@@ -64,7 +65,7 @@ protected:
 	CShader* m_pShaderCom = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
-
+	CGameObject* m_pParent = { nullptr };
 private:
 	bool m_bMouseOver = false;
 public:

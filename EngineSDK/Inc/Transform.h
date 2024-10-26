@@ -37,16 +37,21 @@ public:
 	_matrix Get_WorldMatrix() {
 		return XMLoadFloat4x4(&m_WorldMatrix);
 	}
+
+	const _float4x4* Get_WorldFloat4x4_Ptr() {
+		return &m_WorldMatrix;
+	}
 	_matrix Get_WorldMatrix_Inverse() {
 		return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix));
 	}
 	_float3 Compute_Scaled();
 
-
+	void Set_WorldMatrix(_matrix& matWorld) {
+		XMStoreFloat4x4(&m_WorldMatrix, matWorld);
+	}
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
-
 public:
 	void Scaling(_float fX, _float fY, _float fZ);
 	virtual void Go_Straight(_float fTimeDelta);
@@ -58,14 +63,10 @@ public:
 	void LookAt(const _fvector& vAt);
 	void LookToward(const _fvector& vDir);
 
-	/* ���� ȸ���� �������� �߰��� ������ �ӵ��� ȸ���Ѵ�. */
 	void Turn(const _fvector& vAxis, _float fTimeDelta);
-	//���� ȸ���� �������� ������ ������ �ٶ󺸵��� ������ �ӵ��� ȸ��.
 	void TurnToward(const _fvector& vDestLook, _float fTimeDelta);
-	/* �׵���¸� �������� ������ ������ ȸ���Ѵ�. */
 	void Rotation(const _fvector& vAxis, _float fRadian);
 	void Rotation(const _float3& vDgree);
-	//Loook ������ Lerp
 public:
 	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName);
 
@@ -77,7 +78,9 @@ protected:
 	_float					m_fSpeedPerSec = {};
 	_float					m_fRotationPerSec = {};
 
+
 	CTransform*				m_pParentTransform = nullptr;
+
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CComponent* Clone(void* pArg);

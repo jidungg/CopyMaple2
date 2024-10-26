@@ -48,8 +48,9 @@ private:
 	HRESULT Loading_Level_MyHome();
 
 	HRESULT Load_ItemData();
+	HRESULT Load_SkillData();
 	HRESULT Load_Dirctory_Models(LEVELID eLevId, const _tchar* szDirPath);
-	HRESULT Load_Dirctory_Textures(LEVELID eLevId, const _tchar* szDirPath);
+	HRESULT Load_Dirctory_Textures(LEVELID eLevId, const _tchar* szDirPath, const _tchar* szExtention);
 
 public:
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eNextLevelID);

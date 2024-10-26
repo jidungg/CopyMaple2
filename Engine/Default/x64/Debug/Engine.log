@@ -1,9 +1,4 @@
-﻿  StateMachine.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\Public\StateMachine.h(7,7): warning C4099: 'Engine::CTransition': 처음에는 'struct'을(를) 사용하여 형식 이름을 표시했는데 이제는 'class'을(를) 사용하여 표시합니다.
-  (소스 파일 '../Private/StateMachine.cpp'을(를) 컴파일하는 중)
-      D:\Workbench\Portfolio\CopyMaple2\Engine\Public\Transition.h(6,19):
-      'Engine::CTransition' 선언을 참조하십시오.
-  
+﻿  MimicBone.cpp
   Engine.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Engine\Bin\Engine.dll
   '//' is not recognized as an internal or external command,
   operable program or batch file.
@@ -21,6 +16,7 @@ D:\Workbench\Portfolio\CopyMaple2\Engine\Public\StateMachine.h(7,7): warning C40
   .\Engine\Public\Collider.h
   .\Engine\Public\Component.h
   .\Engine\Public\Condition.h
+  .\Engine\Public\ContainerObject.h
   .\Engine\Public\Controller.h
   .\Engine\Public\Engine_Defines.h
   .\Engine\Public\Engine_Function.h
@@ -28,6 +24,7 @@ D:\Workbench\Portfolio\CopyMaple2\Engine\Public\StateMachine.h(7,7): warning C40
   .\Engine\Public\Engine_Struct.cpp
   .\Engine\Public\Engine_Struct.h
   .\Engine\Public\Engine_Typedef.h
+  .\Engine\Public\Engine_Utility.h
   .\Engine\Public\Event.h
   .\Engine\Public\EventHandlerWrapper.h
   .\Engine\Public\EventHandlerWrapperInterface.h
@@ -47,6 +44,8 @@ D:\Workbench\Portfolio\CopyMaple2\Engine\Public\StateMachine.h(7,7): warning C40
   .\Engine\Public\Material.h
   .\Engine\Public\Mesh.h
   .\Engine\Public\MeshCollider.h
+  .\Engine\Public\MimicBone.h
+  .\Engine\Public\MimicBoneModel.h
   .\Engine\Public\Model.h
   .\Engine\Public\Object_Manager.h
   .\Engine\Public\Pawn.h
@@ -91,4 +90,4 @@ D:\Workbench\Portfolio\CopyMaple2\Engine\Public\StateMachine.h(7,7): warning C40
   .\Engine\Public\DirectXTK\XboxDDSTextureLoader.h
   .\Engine\Public\Effects11\d3dx11effect.h
   .\Engine\Public\Effects11\d3dxGlobal.h
-  80 File(s) copied
+  84 File(s) copied

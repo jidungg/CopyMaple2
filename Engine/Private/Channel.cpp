@@ -2,6 +2,7 @@
 #include "..\Public\Channel.h"
 #include "Model.h"
 #include "Bone.h"
+#include "Engine_Utility.h"
 
 
 CChannel::CChannel()
@@ -18,74 +19,57 @@ HRESULT CChannel::Initialize(ifstream& inFile, const CModel* pModel)
 
 	inFile.read(reinterpret_cast<char*>(&m_iNumKeyFrames), sizeof(_uint));
 
-	for (size_t i = 0; i < m_iNumKeyFrames; i++)
+	for (_uint i = 0; i < m_iNumKeyFrames; i++)
 	{
-		KEYFRAME		KeyFrame = {};
+		KEYFRAME		tKeyFrame = {};
 
-		inFile.read(reinterpret_cast<char*>(&KeyFrame), sizeof(KEYFRAME));
+		inFile.read(reinterpret_cast<char*>(&tKeyFrame), sizeof(KEYFRAME));
 
-		m_KeyFrames.push_back(KeyFrame);
+		m_KeyFrames.push_back(tKeyFrame);
 	}
 	return S_OK;
 }
 
 void CChannel::Update_TransformationMatrix(_float fCurrentTrackPosition, _uint* pKeyFrameIndex, const vector<class CBone*>& Bones)
 {
-	KEYFRAME		LastKeyFrame = m_KeyFrames.back();
 
-	_float3			vScale;
-	_float4			vRotation;
-	_float3			vPosition;
+	if (0.f == fCurrentTrackPosition)
+		*pKeyFrameIndex = 0;
 
-	if (fCurrentTrackPosition >= LastKeyFrame.fTrackPosition)
-	{
-		vScale = LastKeyFrame.vScale;
-		vRotation = LastKeyFrame.vRotation;
-		vPosition = LastKeyFrame.vPosition;
-	}
-
-	else
-	{
-		if (fCurrentTrackPosition == 0)
-			*pKeyFrameIndex = 0;
-		else if (fCurrentTrackPosition >= m_KeyFrames[*pKeyFrameIndex + 1].fTrackPosition)
-			++*pKeyFrameIndex;
-		_float			fRatio = (fCurrentTrackPosition - m_KeyFrames[*pKeyFrameIndex].fTrackPosition) /
-			(m_KeyFrames[*pKeyFrameIndex + 1].fTrackPosition - m_KeyFrames[*pKeyFrameIndex].fTrackPosition);
-
-
-		_float3			vLeftScale, vRightScale;
-		_float4			vLeftRotation, vRightRotation;
-		_float3			vLeftPosition, vRightPosition;
-
-		vLeftScale = m_KeyFrames[*pKeyFrameIndex].vScale;
-		vLeftRotation = m_KeyFrames[*pKeyFrameIndex].vRotation;
-		vLeftPosition = m_KeyFrames[*pKeyFrameIndex].vPosition;
-
-		vRightScale = m_KeyFrames[*pKeyFrameIndex + 1].vScale;
-		vRightRotation = m_KeyFrames[*pKeyFrameIndex + 1].vRotation;
-		vRightPosition = m_KeyFrames[*pKeyFrameIndex + 1].vPosition;
-		 
-		XMStoreFloat3(&vScale, XMVectorLerp(XMLoadFloat3(&vLeftScale), XMLoadFloat3(&vRightScale), fRatio));
-		XMStoreFloat4(&vRotation, XMQuaternionSlerp(XMLoadFloat4(&vLeftRotation), XMLoadFloat4(&vRightRotation), fRatio));
-		XMStoreFloat3(&vPosition, XMVectorLerp(XMLoadFloat3(&vLeftPosition), XMLoadFloat3(&vRightPosition), fRatio));
-		
-	}
-
-	Bones[m_iBoneIndex]->Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMLoadFloat4(&vRotation), XMVectorSetW(XMLoadFloat3(&vPosition), 1.f)));
+	KEYFRAME& tKeyFrame = Get_Frame(fCurrentTrackPosition, pKeyFrameIndex);
+	Bones[m_iBoneIndex]->Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&tKeyFrame.vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMLoadFloat4(&tKeyFrame.vRotation), XMVectorSetW(XMLoadFloat3(&tKeyFrame.vPosition), 1.f)));
 }
 
-pair<_uint, KEYFRAME> CChannel::Get_KeyFrame(_float fTrackPos) const
+KEYFRAME CChannel::Get_Frame(_float fTrackPos, _uint* pOutCurrentKeyFrameIdx) const
 {
-	pair<_uint,KEYFRAME >	KeyFrame = {};
-	for (auto& key : m_KeyFrames)
-	{
-		if (fTrackPos > key.fTrackPosition)
-			break;
-		KeyFrame = make_pair( m_iBoneIndex, key );
 
-	}
-	return KeyFrame;
+	*pOutCurrentKeyFrameIdx = Get_KeyFrameIndex(fTrackPos, *pOutCurrentKeyFrameIdx);
+	if (fTrackPos >= m_KeyFrames.back().fTrackPosition)
+		return m_KeyFrames.back();
+
+	_float			fRatio = (fTrackPos - m_KeyFrames[*pOutCurrentKeyFrameIdx].fTrackPosition) /
+		(m_KeyFrames[*pOutCurrentKeyFrameIdx + 1].fTrackPosition - m_KeyFrames[*pOutCurrentKeyFrameIdx].fTrackPosition);
+
+	return CEngineUtility::Lerp_Frame(m_KeyFrames[*pOutCurrentKeyFrameIdx], m_KeyFrames[*pOutCurrentKeyFrameIdx], fRatio);;
+}
+
+_uint CChannel::Get_KeyFrameIndex(_float fTrackPos, _uint iStartKeyFrameIdx) const
+{
+	if (0.f == fTrackPos)
+		return 0;
+	if (fTrackPos >= m_KeyFrames.back().fTrackPosition)
+		return m_KeyFrames.size() - 1;
+
+	while (fTrackPos >= m_KeyFrames[iStartKeyFrameIdx + 1].fTrackPosition)
+		++iStartKeyFrameIdx;
+	return iStartKeyFrameIdx;
+}
+
+
+void CChannel::Get_Frame(_float fTrackPos, map<_uint, KEYFRAME>* pOutKeyFrames) const
+{
+	_uint iCurrentKeyFrameIdx = 0;
+	(*pOutKeyFrames)[m_iBoneIndex] = Get_Frame(fTrackPos, &iCurrentKeyFrameIdx);
 }
 
 CChannel* CChannel::Create(ifstream& inFile, const CModel* pModel)

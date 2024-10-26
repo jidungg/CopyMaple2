@@ -26,6 +26,7 @@ public:
 	void Add_TriggerConditionVariable(_uint iConditionVarID);
 	CState* Add_State(_uint iStateID);
 	CTransition* Add_Transition(_uint iStateID, _uint iNextState);
+	CTransition* Add_SubTransition(_uint iStateID, _uint iNextState);
 
 	void Bind_Condition(CTransition* pTransition, _uint iConditionVarID, CONDITION_TYPE eCondType, int iValue);
 	void Bind_Condition(CTransition* pTransition, _uint iConditionVarID, CONDITION_TYPE eCondTyp, float fValue);
@@ -36,17 +37,21 @@ public:
 	void Remove_Condition(_uint iConditionID);
 
 	void Register_OnStateChangeCallBack(const function<void(_uint)>& fCallback) { m_listStateChangeCallback.push_back(fCallback); }
+	void Register_OnSubStateChangeCallBack(const function<void(_uint)>& fCallback) { m_listSubStateChangeCallback.push_back(fCallback); }
 
 	_uint Get_CurrentState() { return m_iCurrentState; }
-	void Set_CurrentState(_uint iState){  m_iCurrentState = iState; }
+	_uint Get_CurrentSubState() { return m_iCurrentSubState; }
+	void Set_CurrentState(_uint iState);
 private:
 	_uint m_iCurrentState = { 0 };
+	_uint m_iCurrentSubState = { 0 };
 	map<_uint, CState*> m_mapStates;
 
 	map<_uint, ConditionVariable*> m_mapConditionVariable;
 	map<_uint, TriggerConditionVariable*> m_mapTriggerConditionVariable;
 
 	list<function<void(_uint)>> m_listStateChangeCallback;
+	list<function<void(_uint)>> m_listSubStateChangeCallback;
 public:
 	static CStateMachine* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	static CStateMachine* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* strJsonFilePath);

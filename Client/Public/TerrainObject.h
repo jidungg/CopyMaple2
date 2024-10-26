@@ -40,7 +40,7 @@ public:
 private:
 	HRESULT Ready_Components(TERRAINOBJ_DESC* pDesc);
 
-private:
+protected:
 	TERRAIN_OBJ_TYPE m_eTerrObjType = TERRAIN_OBJ_TYPE::LAST;
 	string m_strItemName;
 	_uint m_iIndex = 0;

@@ -18,13 +18,14 @@ HRESULT CModelConverter::FbxToBianry(const string& inFilePath)
 
 
 	m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
-	m_bAnim = m_pAIScene->HasAnimations();
-	if (m_bAnim == false)
-	{
-		iFlag |= aiProcess_PreTransformVertices;
+	m_bAnim = true;
+	//m_pAIScene->HasAnimations();
+	//if (m_bAnim == false)
+	//{
+	//	iFlag |= aiProcess_PreTransformVertices;
 
-		m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
-	}
+	//	m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
+	//}
 
 	if (0 == m_pAIScene)
 		return E_FAIL;
@@ -117,7 +118,10 @@ HRESULT CModelConverter::Write_Meshe(const aiMesh* pAIMesh, ofstream& outFile)
 			//cout << pAIBone->mName.data << endl;
 
 			outFile.write(reinterpret_cast<const char*>(&pAIBone->mOffsetMatrix), sizeof(_float4x4));
-			//cout << pAIBone->mOffsetMatrix.a1 << " " << pAIBone->mOffsetMatrix.a2 << " " << pAIBone->mOffsetMatrix.a3 << " " << pAIBone->mOffsetMatrix.a4 << endl;
+			cout << pAIBone->mOffsetMatrix.a1 << " " << pAIBone->mOffsetMatrix.a2 << " " << pAIBone->mOffsetMatrix.a3 << " " << pAIBone->mOffsetMatrix.a4 << endl;
+			cout << pAIBone->mOffsetMatrix.b1 << " " << pAIBone->mOffsetMatrix.b2 << " " << pAIBone->mOffsetMatrix.b3 << " " << pAIBone->mOffsetMatrix.b4 << endl;
+			cout << pAIBone->mOffsetMatrix.c1 << " " << pAIBone->mOffsetMatrix.c2 << " " << pAIBone->mOffsetMatrix.c3 << " " << pAIBone->mOffsetMatrix.c4 << endl;
+			cout << pAIBone->mOffsetMatrix.d1 << " " << pAIBone->mOffsetMatrix.d2 << " " << pAIBone->mOffsetMatrix.d3 << " " << pAIBone->mOffsetMatrix.d4 << endl;
 
 			outFile.write(reinterpret_cast<const char*>(&pAIBone->mNumWeights), sizeof(_uint));
 			//cout << pAIBone->mNumWeights << endl;

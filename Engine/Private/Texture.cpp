@@ -57,6 +57,7 @@ HRESULT CTexture::Initialize_Prototype(const _tchar * pTextureFilePath, _uint iN
 	return S_OK;
 }
 
+//그냐이 FBX 파일이 있던 디렉토리
 HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle, TEXTURE_TYPE eTexType)
 {
 	inFIle.read(reinterpret_cast<char*>(&m_iNumSRVs), sizeof(_uint));

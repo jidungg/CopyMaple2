@@ -65,7 +65,6 @@ void CUIObject::Late_Update(_float fTimeDelta)
 
 HRESULT CUIObject::Render()
 {
-	if (false == m_bActive) return S_OK;
 
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
@@ -78,7 +77,8 @@ HRESULT CUIObject::Render()
 	}
 
 	for (auto& child : m_pChilds)
-		child->Render();
+		if (child->Is_Active())
+			child->Render();
 
 	return S_OK;
 }
@@ -86,10 +86,19 @@ HRESULT CUIObject::Render()
 void CUIObject::Add_Child(CGameObject* pChild)
 {
 	__super::Add_Child(pChild);
+
+	static_cast<CUIObject*>(pChild)->m_pParent = this;
+
 	static_cast<CRect_Transform*>(pChild->Get_Transform())->Compute_Matrix();
 }
 
-void CUIObject::Add_FakeChild(CUIObject* pChild)
+void CUIObject::Remove_Child(CGameObject* pChild)
+{
+	__super::Remove_Child(pChild);
+	static_cast<CUIObject*>(pChild)->m_pParent = nullptr;
+}
+
+void CUIObject::Add_OnlyTransformChild(CUIObject* pChild)
 {
 	if (pChild == nullptr)
 		return;

@@ -1,16 +1,7 @@
-﻿  Player.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Public\Player.h(162,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
-  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
+﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
-D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\StateMachine.h(7,7): warning C4099: 'Engine::CTransition': 처음에는 'struct'을(를) 사용하여 형식 이름을 표시했는데 이제는 'class'을(를) 사용하여 표시합니다.
-  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
-      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Transition.h(6,19):
-      'Engine::CTransition' 선언을 참조하십시오.
+  compilation object save succeeded; see D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Shader_VtxAnimMesh.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp(65,55): warning C4101: 'pCondition' :참조되지 않은 지역 변수입니다.
-  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
-  
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp(65,10): warning C4101: 'pState' :참조되지 않은 지역 변수입니다.
-  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
-  
+  compilation object save succeeded; see D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Shader_VtxNorTex.cso
   Client.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Client.exe

@@ -20,8 +20,6 @@ d:\workbench\portfolio\copymaple2\engine\default\x64\debug\camera.obj
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\bone.obj
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\base.obj
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\animation.obj
-d:\workbench\portfolio\copymaple2\engine\default\x64\debug\timer.obj
-d:\workbench\portfolio\copymaple2\engine\default\x64\debug\texture.obj
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\statemachine.obj
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\state.obj
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\shader.obj
@@ -33,6 +31,8 @@ d:\workbench\portfolio\copymaple2\engine\default\x64\debug\physics.obj
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\pawn.obj
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\object_manager.obj
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\model.obj
+d:\workbench\portfolio\copymaple2\engine\default\x64\debug\mimicbonemodel.obj
+d:\workbench\portfolio\copymaple2\engine\default\x64\debug\mimicbone.obj
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\meshcollider.obj
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\mesh.obj
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\engine_utility.obj
@@ -50,13 +50,15 @@ d:\workbench\portfolio\copymaple2\engine\default\x64\debug\uimanager.obj
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\transform.obj
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\transition.obj
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\timer_manager.obj
+d:\workbench\portfolio\copymaple2\engine\default\x64\debug\timer.obj
+d:\workbench\portfolio\copymaple2\engine\default\x64\debug\texture.obj
 d:\workbench\portfolio\copymaple2\engine\bin\engine.dll
 d:\workbench\portfolio\copymaple2\engine\bin\engine.pdb
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\engine.res
 d:\workbench\portfolio\copymaple2\engine\bin\engine.lib
 d:\workbench\portfolio\copymaple2\engine\bin\engine.exp
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\engine.ilk
-d:\workbench\portfolio\copymaple2\engine\default\x64\debug\gameobject.obj.enc
+d:\workbench\portfolio\copymaple2\engine\default\x64\debug\mimicbone.obj.enc
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\engine.tlog\cl.command.1.tlog
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\engine.tlog\cl.items.tlog
 d:\workbench\portfolio\copymaple2\engine\default\x64\debug\engine.tlog\cl.read.1.tlog

@@ -25,6 +25,7 @@ d:\workbench\portfolio\copymaple2\client\default\x64\debug\background.obj
 d:\workbench\portfolio\copymaple2\client\default\x64\debug\client_utility.obj
 d:\workbench\portfolio\copymaple2\client\default\x64\debug\client.obj
 d:\workbench\portfolio\copymaple2\client\default\x64\debug\uiitemindicator.obj
+d:\workbench\portfolio\copymaple2\client\default\x64\debug\weapon.obj
 d:\workbench\portfolio\copymaple2\client\default\x64\debug\uipanel.obj
 d:\workbench\portfolio\copymaple2\client\default\x64\debug\uilistitementry.obj
 d:\workbench\portfolio\copymaple2\client\default\x64\debug\uilist.obj
@@ -41,15 +42,16 @@ d:\workbench\portfolio\copymaple2\client\default\x64\debug\level_logo.obj
 d:\workbench\portfolio\copymaple2\client\default\x64\debug\level_loading.obj
 d:\workbench\portfolio\copymaple2\client\default\x64\debug\level_home.obj
 d:\workbench\portfolio\copymaple2\client\default\x64\debug\level_gameplay.obj
-d:\workbench\portfolio\copymaple2\client\default\x64\debug\weapon.obj
-d:\workbench\portfolio\copymaple2\client\bin\shader_vtxanimmesh.cso
+d:\workbench\portfolio\copymaple2\client\default\x64\debug\mimicbonemodelobject.obj
 d:\workbench\portfolio\copymaple2\client\bin\shader_vtxmesh.cso
-d:\workbench\portfolio\copymaple2\client\bin\shader_vtxnortex.cso
 d:\workbench\portfolio\copymaple2\client\bin\shader_vtxpostex.cso
+d:\workbench\portfolio\copymaple2\client\bin\shader_vtxanimmesh.cso
+d:\workbench\portfolio\copymaple2\client\bin\shader_vtxnortex.cso
 d:\workbench\portfolio\copymaple2\client\bin\client.exe
 d:\workbench\portfolio\copymaple2\client\bin\client.pdb
 d:\workbench\portfolio\copymaple2\client\default\x64\debug\client.res
 d:\workbench\portfolio\copymaple2\client\default\x64\debug\client.ilk
+d:\workbench\portfolio\copymaple2\client\default\x64\debug\player.obj.enc
 d:\workbench\portfolio\copymaple2\client\default\x64\debug\client.tlog\cl.command.1.tlog
 d:\workbench\portfolio\copymaple2\client\default\x64\debug\client.tlog\cl.items.tlog
 d:\workbench\portfolio\copymaple2\client\default\x64\debug\client.tlog\cl.read.1.tlog

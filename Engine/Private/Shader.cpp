@@ -127,8 +127,8 @@ HRESULT CShader::Bind_Matrices(const _char* pConstantName, const _float4x4* pMat
 	ID3DX11EffectMatrixVariable* pMatrixVariable = pVariable->AsMatrix();
 	if (nullptr == pMatrixVariable)
 		return E_FAIL;
-	pMatrixVariable->SetMatrixArray(reinterpret_cast<const _float*>(pMatrix), 0, iNumMatrices);
-	return S_OK;
+	
+	return pMatrixVariable->SetMatrixArray(reinterpret_cast<const _float*>(pMatrix), 0, iNumMatrices);;
 
 }
 

@@ -6,6 +6,7 @@ class CShader;
 class CTexture;
 class CVIBuffer_Rect;
 class CStateMachine;
+class CHumanModelObject;
 END
 BEGIN(Client)
 class CSkill;

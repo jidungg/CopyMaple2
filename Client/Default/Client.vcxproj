@@ -106,6 +106,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -147,6 +148,7 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -174,6 +176,9 @@
     <ClInclude Include="..\Public\Character.h" />
     <ClInclude Include="..\Public\CreateObjEvent.h" />
     <ClInclude Include="..\Public\DeadObjEvent.h" />
+    <ClInclude Include="..\Public\Face.h" />
+    <ClInclude Include="..\Public\FaceTexture.h" />
+    <ClInclude Include="..\Public\HumanModelObject.h" />
     <ClInclude Include="..\Public\ItemDataBase.h" />
     <ClInclude Include="..\Public\LevelChangeEvent.h" />
     <ClInclude Include="..\Public\MagicClaw.h" />
@@ -221,6 +226,9 @@
     <ClCompile Include="..\Private\Character.cpp" />
     <ClCompile Include="..\Private\CreateObjEvent.cpp" />
     <ClCompile Include="..\Private\DeadObjEvent.cpp" />
+    <ClCompile Include="..\Private\Face.cpp" />
+    <ClCompile Include="..\Private\FaceTexture.cpp" />
+    <ClCompile Include="..\Private\HumanModelObject.cpp" />
     <ClCompile Include="..\Private\ItemDataBase.cpp" />
     <ClCompile Include="..\Private\LevelChangeEvent.cpp" />
     <ClCompile Include="..\Private\MagicClaw.cpp" />
@@ -271,6 +279,7 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimMesh.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxHumanAnimMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl">

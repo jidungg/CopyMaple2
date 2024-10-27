@@ -211,10 +211,10 @@ HRESULT CGameObject::Add_Component(_uint iPrototypeLevelIndex, const _wstring & 
 
 	*ppOut = pComponent;
 
-	return Add_Component(pComponent, strComponentTag, pArg);
+	return Add_Component(pComponent, strComponentTag);
 }
 
-HRESULT CGameObject::Add_Component(CComponent* pComponent, const _wstring& strComponentTag, void* pArg)
+HRESULT CGameObject::Add_Component(CComponent* pComponent, const _wstring& strComponentTag)
 {
 	if (nullptr == pComponent)
 		return E_FAIL;

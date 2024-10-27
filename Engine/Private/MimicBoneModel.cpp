@@ -24,21 +24,15 @@ HRESULT CMimicBoneModel::Initialize(void* pArg)
 	{
 		static_cast<CMimicBone*>( pBone)->Set_Target(pTarget->Get_BoneMatrix(pBone->Get_Name()));
 	}
-	//for (auto& mesh : m_Meshes)
-	//{
-	//	mesh->ReSet_OffsetMarix();
-	//}
 	return S_OK;
 }
 
 bool CMimicBoneModel::Play_Animation(_float fTimeDelta)
 {
-	//뼈들의 합성변환행렬을 갱신
-	for (auto& pBone : m_Bones)
-		pBone->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
-
 	return false;
 }
+
+
 
 HRESULT CMimicBoneModel::Ready_Bones(ifstream& inFile, _uint iParentBoneIndex)
 {

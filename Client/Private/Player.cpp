@@ -7,7 +7,8 @@
 #include "SkillManager.h"
 #include "Weapon.h"
 #include "MimicBoneModelObject.h"
-
+#include "Face.h"
+#include "HumanModelObject.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -67,6 +68,8 @@ HRESULT CPlayer::Initialize(void* pArg)
 		return E_FAIL;
 	if (FAILED(Ready_AnimStateMachine()))
 		return E_FAIL;
+	if (FAILED(Ready_FaceStateMachine()))
+		return E_FAIL;
 	if (FAILED(Ready_Skill()))
 		return E_FAIL;
 
@@ -76,25 +79,43 @@ HRESULT CPlayer::Initialize(void* pArg)
 HRESULT CPlayer::Ready_Parts()
 {
 	//Body
-	CModelObject::MODELOBJ_DESC tModelDesc = {};
-	tModelDesc.fRotationPerSec = 5.f;
-	tModelDesc.fSpeedPerSec = 1.f;
-	tModelDesc.eModelType = CModel::TYPE_ANIM;
-	tModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tModelDesc.strModelProtoName, "Prototype_Model_Player");
-	tModelDesc.eShaderProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tModelDesc.strShaderProtoName, "Prototype_Component_Shader_VtxAnimMesh");
-	m_pBody = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
+	CHumanModelObject::HUMANMODELOBJ_DESC tHumanModelDesc = {};
+
+	tHumanModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+	strcpy_s(tHumanModelDesc.strModelProtoName, "Female_Wizard.model");
+	tHumanModelDesc.szFaceProtoTag = TEXT("Face_Face1");
+	m_pBody = static_cast<CHumanModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CHumanModelObject::m_szProtoTag, &tHumanModelDesc));
 	Add_Child(m_pBody);
 	m_pBody->Set_Animation((_uint)ANIM_STATE::IDLE);
 
+	//Robe
+	CModelObject::MODELOBJ_DESC tModelDesc = {};
+	tModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+	strcpy_s(tModelDesc.strModelProtoName, "12200007_f_clpasuperiorcoat.model");
+	tModelDesc.pTarget = m_pBody->Get_ModelCom();
+	m_pRobe = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
+	if (nullptr == m_pRobe) return E_FAIL;
+	Add_Child(m_pRobe);
+
+	//Glove
+	tModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+	strcpy_s(tModelDesc.strModelProtoName, "11701261_f_shfireprism.model");
+	tModelDesc.pTarget = m_pBody->Get_ModelCom();
+	m_pShoes = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
+	if (nullptr == m_pShoes) return E_FAIL;
+	Add_Child(m_pShoes);
+
+	//Glove
+	tModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+	strcpy_s(tModelDesc.strModelProtoName, "11601166_f_glfireprism.model");
+	tModelDesc.pTarget = m_pBody->Get_ModelCom();
+	m_pGlove = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
+	if (nullptr == m_pGlove) return E_FAIL;
+	Add_Child(m_pGlove);
 	//Weapon
 	CWeapon::WEAPON_DESC WeaponDesc{};
-	WeaponDesc.eModelType = CModel::TYPE_NONANIM;
 	WeaponDesc.eModelProtoLevelID = LEVEL_LOADING;
 	strcpy_s(WeaponDesc.strModelProtoName, "15200025_evilwings.model");
-	WeaponDesc.eShaderProtoLevelID = LEVEL_LOADING;
-	strcpy_s(WeaponDesc.strShaderProtoName, "Prototype_Component_Shader_VtxMesh");
 	WeaponDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Weapon_Hand_R_Point");
 	WeaponDesc.pBackSocketMatrix = (m_pBody)->Get_BoneMatrix("Weapon_Back_B_Point");
 	m_pWeapon = static_cast<CWeapon*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CWeapon::m_szProtoTag, &WeaponDesc));
@@ -106,28 +127,43 @@ HRESULT CPlayer::Ready_Parts()
 
 	//Hair
 	CBoneModelObject::BONEMODELOBJ_DESC tBoneModelDesc = {};
-	tBoneModelDesc.eModelType = CModel::TYPE_NONANIM;
 	tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
 	strcpy_s(tBoneModelDesc.strModelProtoName, "00200007_f_jujuwave_p_a.model");
-	tBoneModelDesc.eShaderProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tBoneModelDesc.strShaderProtoName, "Prototype_Component_Shader_VtxMesh");
 	tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("HR");//Bip01 HeadNub_end
 	m_pHair = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
 	if (nullptr == m_pHair) return E_FAIL;
 	Add_Child(m_pHair);
 	m_pHair->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
 
-	//Robe
-	CMimicBoneModelObject::MIMICBONEOBJECT_DESC tMimicBoneModelDesc = {};
-	tMimicBoneModelDesc.eModelType = CModel::TYPE_ANIM;
-	tMimicBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tMimicBoneModelDesc.strModelProtoName, "Prototype_Model_BasicCoat");
-	tMimicBoneModelDesc.eShaderProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tMimicBoneModelDesc.strShaderProtoName, "Prototype_Component_Shader_VtxAnimMesh");
-	tMimicBoneModelDesc.pTarget = m_pBody->Get_ModelCom();
-	m_pRobe = static_cast<CMimicBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CMimicBoneModelObject::m_szProtoTag, &tMimicBoneModelDesc));
-	if (nullptr == m_pRobe) return E_FAIL;
-	Add_Child(m_pRobe);
+	//Hat
+	tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+	strcpy_s(tBoneModelDesc.strModelProtoName, "11300024_c_cpsuperiorhat_c.model");
+	tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Head");//Bip01 HeadNub_end
+	m_pHat = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
+	if (nullptr == m_pHat) return E_FAIL;
+	Add_Child(m_pHat);
+	m_pHat->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
+
+	//FaceDeco
+	//tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+	//strcpy_s(tBoneModelDesc.strModelProtoName, "01000001_c_lolipop.model");
+	//tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Head");//Bip01 HeadNub_end
+	//m_pFaceDeco = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
+	//if (nullptr == m_pFaceDeco) return E_FAIL;
+	//Add_Child(m_pFaceDeco);
+	//m_pFaceDeco->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
+
+	//Cape
+	tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+	strcpy_s(tBoneModelDesc.strModelProtoName, "11800149_c_mtfireprism_idle_a.model");
+	tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Spine1");
+	m_pCape = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
+	if (nullptr == m_pCape) return E_FAIL;
+	Add_Child(m_pCape);
+	m_pCape->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
+	m_pCape->Get_Transform()->Set_State(CTransform::STATE_POSITION, XMVectorSet(0,0.07,0,1));
+	m_pCape->Set_Animation(0);
+	m_pCape->Set_AnimationLoop(0, true);
 
 
 	return S_OK;
@@ -280,6 +316,51 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	return S_OK;
 }
 
+HRESULT CPlayer::Ready_FaceStateMachine()
+{
+	//AnimStateMachine
+	m_pFaceStateMachine = static_cast<CStateMachine*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("Prototype_GameObject_StateMachine")));
+	Add_Component(m_pFaceStateMachine, TEXT("Com_FaceStateMachine"));
+	m_pFaceStateMachine->Register_OnStateChangeCallBack(bind(&CPlayer::On_FaceStateChange, this, placeholders::_1));
+
+	m_pFaceStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::BATTLE), &m_bBattle);
+	m_pFaceStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::INTERACTION), &m_bInteraction);
+	m_pFaceStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::PAINTIME), &m_fPainTimeAcc);
+
+	//STATE ADD
+	for (_uint i = 0; i < (_uint)CFace::FACE_STATE::LAST; i++)
+		m_pFaceStateMachine->Add_State(i);
+
+	//IDLE
+	CTransition* pTransition = m_pFaceStateMachine->Add_Transition((_uint)CFace::FACE_STATE::IDLE, (_uint)CFace::FACE_STATE::ATTACK);
+	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::BATTLE, CONDITION_TYPE::EQUAL, true);
+	pTransition = m_pFaceStateMachine->Add_Transition((_uint)CFace::FACE_STATE::IDLE, (_uint)CFace::FACE_STATE::FOCUS);
+	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::INTERACTION, CONDITION_TYPE::EQUAL, true);
+	pTransition = m_pFaceStateMachine->Add_Transition((_uint)CFace::FACE_STATE::IDLE, (_uint)CFace::FACE_STATE::PAIN);
+	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::PAINTIME, CONDITION_TYPE::EQUAL_LESS, m_fPainTime);
+	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::PAINTIME, CONDITION_TYPE::GREATER, 0.0f);
+
+	//ATTACK
+	pTransition = m_pFaceStateMachine->Add_Transition((_uint)CFace::FACE_STATE::ATTACK, (_uint)CFace::FACE_STATE::IDLE);
+	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::BATTLE, CONDITION_TYPE::EQUAL, false);
+	pTransition = m_pFaceStateMachine->Add_Transition((_uint)CFace::FACE_STATE::ATTACK, (_uint)CFace::FACE_STATE::PAIN);
+	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::PAINTIME, CONDITION_TYPE::EQUAL_LESS, m_fPainTime);
+	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::PAINTIME, CONDITION_TYPE::GREATER, 0.0f);
+
+	//PAIN
+	pTransition = m_pFaceStateMachine->Add_Transition((_uint)CFace::FACE_STATE::PAIN, (_uint)CFace::FACE_STATE::ATTACK);
+	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::PAINTIME, CONDITION_TYPE::EQUAL_GREATER, m_fPainTime);
+
+	//FOCUS
+	pTransition = m_pFaceStateMachine->Add_Transition((_uint)CFace::FACE_STATE::FOCUS, (_uint)CFace::FACE_STATE::IDLE);
+	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::INTERACTION, CONDITION_TYPE::EQUAL, false);
+
+	m_pFaceStateMachine->Set_CurrentState((_uint)CFace::FACE_STATE::IDLE);
+	return S_OK;
+}
+
+
+
 HRESULT CPlayer::Ready_Skill()
 {
 	CSkillManager* pSkillManager = SKILLMAN;
@@ -364,19 +445,16 @@ void CPlayer::Update(_float fTimeDelta)
 		//m_pBody->Get_Transform()->LookToward(XMVectorSetY(m_vMoveDir, 0));
 		m_pTransformCom->LookToward(XMVectorSetY(m_vMoveDir, 0));
 	}
-
 	__super::Update(fTimeDelta);
 
 }
 void CPlayer::On_SubStateChange(_uint iSubState)
 {
 	m_pBody->Switch_Animation(iSubState);
-	if (iSubState == (_uint)ANIM_STATE::MAGICCLAW)
-		int a = 0;
-	if (iSubState == (_uint)ANIM_STATE::JUMP_ATTACK)
-		int a = 0;
-	if (iSubState == (_uint)ANIM_STATE::JUMP_DOWN_A)
-		int a = 0;
+}
+void CPlayer::On_FaceStateChange(_uint iState)
+{
+	static_cast<CHumanModelObject*>(m_pBody)->Set_FaceState((CFace::FACE_STATE)iState);
 }
 void CPlayer::Use_Skill(CSkill* pSkill)
 {
@@ -392,6 +470,7 @@ void CPlayer::Set_Battle(bool bBattle)
 	m_fBattleTime = 0.f;
 	m_bBattle = bBattle;
 	m_pWeapon->Set_Battle(bBattle);
+
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -416,7 +495,10 @@ HRESULT CPlayer::Render()
 void CPlayer::On_StateChange(_uint iState)
 {
 	if (iState == (_uint)ANIM_STATE::IDLE)
+	{
 		m_fIdleTime = 0.f;
+	}
+
 }
 
 

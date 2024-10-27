@@ -28,7 +28,9 @@ public:
 	HRESULT Ready_VertexBuffer_For_NonAnim(ifstream& inFile, _fmatrix PreTransformMatrix);
 	HRESULT Ready_VertexBuffer_For_Anim(ifstream& inFile, class CModel* pModel);
 
-
+	_char* Get_Name() {
+		return m_szName;
+	}
 private:
 	_char						m_szName[MAX_PATH] = "";
 	_uint						m_iMaterialIndex = {};

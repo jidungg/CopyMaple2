@@ -18,8 +18,6 @@ protected:
 	explicit CMimicBoneModelObject(const CMimicBoneModelObject& Prototype);
 	virtual ~CMimicBoneModelObject() = default;
 
-public:
-	virtual HRESULT Render() override;
 protected:
 		virtual HRESULT Ready_Components(void* pArg);
 

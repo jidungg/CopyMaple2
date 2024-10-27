@@ -37,7 +37,7 @@ HRESULT CBuilder::Initialize(void* pArg)
 
 	if (FAILED(Ready_Builder()))
 		return E_FAIL;
-	if (FAILED(Ready_Preview("Prototype_Model_EmptyModel")))
+	if (FAILED(Ready_Preview("EmptyModel.model")))
 		return E_FAIL;
 	return S_OK;
 }
@@ -47,11 +47,11 @@ HREFTYPE CBuilder::Ready_Builder()
 	CModelObject::MODELOBJ_DESC tModelDesc;
 	tModelDesc.fRotationPerSec = 5.f;
 	tModelDesc.fSpeedPerSec = 1.f;
-	tModelDesc.eModelType = CModel::TYPE_ANIM;
-	tModelDesc.eModelProtoLevelID = LEVEL_HOME;
-	strcpy_s(tModelDesc.strModelProtoName, "Prototype_Model_ChocoDuckyBall");
-	tModelDesc.eShaderProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tModelDesc.strShaderProtoName, "Prototype_Component_Shader_VtxAnimMesh");
+	//tModelDesc.eModelType = CModel::TYPE_ANIM;
+	tModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+	strcpy_s(tModelDesc.strModelProtoName, "60100001_chocoduckyball.model");
+	//tModelDesc.eShaderProtoLevelID = LEVEL_LOADING;
+	//strcpy_s(tModelDesc.strShaderProtoName, "Prototype_Component_Shader_VtxAnimMesh");
 	m_pBird = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
 	Add_Child(m_pBird);
 	m_pBird->Set_AnimationLoop(0, true);
@@ -66,8 +66,8 @@ HREFTYPE CBuilder::Ready_Preview(const _char* szModelTag)
 	tTerrObjDesc.fSpeedPerSec = 1.f;
 	tTerrObjDesc.eModelProtoLevelID = LEVEL_LOADING;
 	strcpy_s(tTerrObjDesc.strModelProtoName, szModelTag);
-	tTerrObjDesc.eShaderProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tTerrObjDesc.strShaderProtoName, "Prototype_Component_Shader_VtxMesh");
+	//tTerrObjDesc.eShaderProtoLevelID = LEVEL_LOADING;
+	//strcpy_s(tTerrObjDesc.strShaderProtoName, "Prototype_Component_Shader_VtxMesh");
 	XMStoreFloat4(&tTerrObjDesc.pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_vPreviewOffset);
 
 	m_pPreview = static_cast<CBuildPreview*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ,LEVEL_HOME, CBuildPreview::m_szProtoTag, &tTerrObjDesc));
@@ -122,8 +122,8 @@ void CBuilder::Receive_KeyInput(_float fTimeDelta)
 		ITEM_DESC* itemdesc = ITEMDB->GetItemDesc(ITEM_TYPE::BUILD, desc.strItemName);
 		strcpy_s(desc.strModelProtoName, itemdesc->strModelTag);
 		desc.eModelProtoLevelID = LEVEL_LOADING;
-		strcpy_s(desc.strShaderProtoName, ("Prototype_Component_Shader_VtxMesh"));
-		desc.eShaderProtoLevelID = LEVEL_LOADING;
+		//strcpy_s(desc.strShaderProtoName, ("Prototype_Component_Shader_VtxMesh"));
+		//desc.eShaderProtoLevelID = LEVEL_LOADING;
 		desc.direction = m_pPreview->Get_Direction();
 		desc.data = m_iBuildData;
 		_float4 pos;

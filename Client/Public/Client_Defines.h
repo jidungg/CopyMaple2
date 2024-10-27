@@ -30,14 +30,6 @@ namespace Client
 		ETC = 3, 
 		LAST = 4 };
 
-	enum class ITEM_ID
-	{
-		//건설
-		GRASS_A0 = (int)ITEM_TYPE::BUILD * 100,
-		ROCK_A0,
-
-		LAST
-	};
 	enum class EQUIP_TYPE
 	{
 		WEAPON ,

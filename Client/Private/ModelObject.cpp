@@ -52,23 +52,23 @@ bool CModelObject::Is_AnimPostDelayEnd()
 HRESULT CModelObject::Ready_Components(void* pArg)
 {
     MODELOBJ_DESC* pDesc = (MODELOBJ_DESC*)pArg;
-	m_eModelType = pDesc->eModelType;
-    /* Com_Shader */
-	string tmp = pDesc->strShaderProtoName;
-	wstring wtmp = wstring(tmp.begin(), tmp.end());
+    /* Com_VIBuffer */
+    string tmp = pDesc->strModelProtoName;
+    wstring wtmp = wstring(tmp.begin(), tmp.end());
+	CModel::ModelDesc modelDesc;
+	modelDesc.pTarget = pDesc->pTarget;
+    m_pModelCom = static_cast<CModel*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, pDesc->eModelProtoLevelID,wtmp,&modelDesc));
+    if (FAILED(Add_Component(m_pModelCom, TEXT("Com_Model"))))
+        return E_FAIL;
 
-    if (FAILED(Add_Component(pDesc->eShaderProtoLevelID, wtmp,
+	m_eModelType = m_pModelCom->Get_Type();
+
+    /* Com_Shader */
+    wtmp = m_eModelType == CModel::TYPE_NONANIM ? TEXT("Prototype_Component_Shader_VtxMesh") : TEXT("Prototype_Component_Shader_VtxAnimMesh");
+
+    if (FAILED(Add_Component(LEVEL_LOADING, wtmp,
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
-
-    /* Com_VIBuffer */
-    tmp = pDesc->strModelProtoName;
-    wtmp = wstring(tmp.begin(), tmp.end());
-    if (FAILED(Add_Component(pDesc->eModelProtoLevelID, wtmp,
-        TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
-        return E_FAIL;
-
-
     //m_pTransformCom->LookToward(Get_Direction_Vector(pDesc->direction));
     return S_OK;
 }
@@ -76,7 +76,7 @@ HRESULT CModelObject::Ready_Components(void* pArg)
 
 HRESULT CModelObject::Render()
 {
-    if (FAILED(Bind_ShaderResources()))
+    if (FAILED(Bind_ShaderResources(m_pShaderCom)))
         return E_FAIL;
 
     _uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
@@ -85,7 +85,7 @@ HRESULT CModelObject::Render()
     {
         if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", i, TEXTURE_TYPE::DIFFUSE, 0)))
             return E_FAIL;
-		if (m_eModelType == CModel::TYPE::TYPE_ANIM)
+		if (CModel::TYPE::TYPE_NONANIM != m_eModelType)
             if (FAILED(m_pModelCom->Bind_BoneMatrices(m_pShaderCom, "g_BoneMatrices", i)))
                 return E_FAIL;
 
@@ -127,31 +127,31 @@ void CModelObject::Switch_Animation(_uint iIdx)
 
 
 
-HRESULT CModelObject::Bind_ShaderResources()
+HRESULT CModelObject::Bind_ShaderResources(CShader* pShader)
 {
 
-    if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+    if (FAILED(m_pTransformCom->Bind_ShaderResource(pShader, "g_WorldMatrix")))
         return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+    if (FAILED(pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
         return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
+    if (FAILED(pShader->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))
         return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
+    if (FAILED(pShader->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
         return E_FAIL;
 
     const LIGHT_DESC* pLightDesc = m_pGameInstance->Get_LightDesc(0);
 
 
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
+    if (FAILED(pShader->Bind_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
         return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
+    if (FAILED(pShader->Bind_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
         return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
+    if (FAILED(pShader->Bind_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
         return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
+    if (FAILED(pShader->Bind_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
         return E_FAIL;
 
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_CamPosition(), sizeof(_float4))))
+    if (FAILED(pShader->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_CamPosition(), sizeof(_float4))))
         return E_FAIL;
 
 

@@ -92,6 +92,7 @@ HRESULT CMesh::Bind_BoneMatrices(CShader* pShader, const _char* pConstantName, c
 		auto s =  a * b;
 		XMStoreFloat4x4(&m_BoneMatrices[iNumBones], s);
 		++iNumBones;
+
 	}
 
 	return pShader->Bind_Matrices(pConstantName, m_BoneMatrices, 512);

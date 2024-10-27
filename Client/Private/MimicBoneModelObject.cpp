@@ -15,54 +15,29 @@ CMimicBoneModelObject::CMimicBoneModelObject(const CMimicBoneModelObject& Protot
 
 
 
-HRESULT CMimicBoneModelObject::Render()
-{
-    if (FAILED(Bind_ShaderResources()))
-        return E_FAIL;
 
-    _uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-    for (_uint i = 0; i < iNumMeshes; i++)
-    {
-        if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", i, TEXTURE_TYPE::DIFFUSE, 0)))
-            return E_FAIL;
-        if (FAILED(m_pModelCom->Bind_BoneMatrices(m_pShaderCom, "g_BoneMatrices", i)))
-            return E_FAIL;
-
-        m_pShaderCom->Begin(0);
-        m_pModelCom->Render(i);
-    }
-
-
-    for (auto& child : m_pChilds)
-        child->Render();
-
-    return S_OK;
-}
 
 HRESULT CMimicBoneModelObject::Ready_Components(void* pArg)
 {
-    MIMICBONEOBJECT_DESC* pDesc = (MIMICBONEOBJECT_DESC*)pArg;
-    m_eModelType = pDesc->eModelType;
-    /* Com_Shader */
-    string tmp = pDesc->strShaderProtoName;
-    wstring wtmp = wstring(tmp.begin(), tmp.end());
+ //   MIMICBONEOBJECT_DESC* pDesc = (MIMICBONEOBJECT_DESC*)pArg;
+ //   m_eModelType = pDesc->eModelType;
+ //   /* Com_Shader */
+ //   string tmp = pDesc->strShaderProtoName;
+ //   wstring wtmp = wstring(tmp.begin(), tmp.end());
 
-    if (FAILED(Add_Component(pDesc->eShaderProtoLevelID, wtmp,
-        TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-        return E_FAIL;
+ //   if (FAILED(Add_Component(pDesc->eShaderProtoLevelID, wtmp,
+ //       TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+ //       return E_FAIL;
 
-    /* Com_VIBuffer */
-    tmp = pDesc->strModelProtoName;
-    wtmp = wstring(tmp.begin(), tmp.end());
-	CMimicBoneModel::MIMICBONEMODEL_DESC desc;
-	desc.pTarget = pDesc->pTarget;
-    if (FAILED(Add_Component(pDesc->eModelProtoLevelID, wtmp,
-        TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom),&desc)))
-        return E_FAIL;
+ //   /* Com_VIBuffer */
+ //   tmp = pDesc->strModelProtoName;
+ //   wtmp = wstring(tmp.begin(), tmp.end());
+	//CModel::MODEL_DESC desc;
+	//desc.pTarget = pDesc->pTarget;
+ //   if (FAILED(Add_Component(pDesc->eModelProtoLevelID, wtmp,
+ //       TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom),&desc)))
+ //       return E_FAIL;
 
-
-    //m_pTransformCom->LookToward(Get_Direction_Vector(pDesc->direction));
     return S_OK;
 }
 

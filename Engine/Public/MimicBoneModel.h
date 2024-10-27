@@ -21,7 +21,8 @@ private:
 
 public:
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual bool Play_Animation(_float fTimeDelta) override;
+
+	virtual bool Play_Animation(_float fTimeDelta);
 protected:
 	HRESULT Ready_Bones(ifstream& inFile, _uint iParentBoneIndex);
 

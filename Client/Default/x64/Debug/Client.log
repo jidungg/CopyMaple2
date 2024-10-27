@@ -1,1 +1,14 @@
-﻿
+﻿  Player.cpp
+D:\Workbench\Portfolio\CopyMaple2\Client\Public\Player.h(171,17): warning C5208: typedef 이름에 사용되는 명명되지 않은 클래스가 비정적 데이터 멤버, 멤버 열거형 또는 멤버 클래스 이외의 멤버를 선언할 수 없습니다.
+  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp(164,80): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp(183,55): warning C4101: 'pCondition' :참조되지 않은 지역 변수입니다.
+  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp(183,10): warning C4101: 'pState' :참조되지 않은 지역 변수입니다.
+  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
+  
+  Client.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Client.exe

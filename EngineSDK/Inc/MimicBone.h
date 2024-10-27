@@ -11,17 +11,16 @@ private:
 	virtual ~CMimicBone() = default;
 
 public:
-	virtual void Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix PreTransformMatrix)override;
 
-	//virtual _matrix Get_CombinedTransformationMatrix() const override{
-	//	if (m_pCombindTransformationMatrix == nullptr)
-	//		return XMLoadFloat4x4(&m_CombindTransformationMatrix);
-	//	else
-	//		return XMLoadFloat4x4(m_pCombindTransformationMatrix);
-	//}
-	//virtual const _float4x4* Get_CombinedTransformationFloat4x4() const override {
-	//	return m_pCombindTransformationMatrix;
-	//}
+	virtual _matrix Get_CombinedTransformationMatrix() const override{
+		if (m_pCombindTransformationMatrix == nullptr)
+			return XMLoadFloat4x4(&m_CombindTransformationMatrix);
+		else
+			return XMLoadFloat4x4(m_pCombindTransformationMatrix);
+	}
+	virtual const _float4x4* Get_CombinedTransformationFloat4x4() const override {
+		return m_pCombindTransformationMatrix;
+	}
 
 	void Set_Target(const _float4x4* pBone);
 private:

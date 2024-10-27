@@ -8,7 +8,11 @@ class CMesh;
 class ENGINE_DLL CModel : public CComponent
 {
 public:
-	enum TYPE { TYPE_NONANIM, TYPE_ANIM, TYPE_END };
+	enum TYPE { TYPE_NONANIM, TYPE_ANIM, TYPE_MIMIC, TYPE_END };
+	typedef struct ModelDesc
+	{
+		const CModel* pTarget = { nullptr };
+	}MODEL_DESC;
 protected:
 	CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CModel(const CModel& Prototype);
@@ -25,15 +29,18 @@ public:
 	HRESULT Bind_BoneMatrices(class CShader* pShader, const _char* pConstantName, _uint iMeshIndex);
 
 	//애니메이션 종료되면 true 반환
-	virtual bool Play_Animation(_float fTimeDelta);
+	bool Play_Animation(_float fTimeDelta);
 
 	_uint Get_NumMeshes() const {return m_iNumMeshes;}
 	CMesh* Get_Mesh(_uint iMeshIndex) const { return m_Meshes[iMeshIndex]; }
+	_uint Get_MeshIndex(const _char* szName) const;
 	_uint Get_BoneIndex(const _char* pBoneName) const ;
 	float Get_AnimTime();
+	TYPE Get_Type() { return m_eModelType; }
 	const _float4x4* Get_BoneMatrix(const _char* pBoneName) const;
 	class CBone* Get_Bone(const _char* pBoneName) const;
 	bool Is_AnimChangeable();
+	bool Is_MeshActive(_uint iIdx);
 
 	void Set_AnimationLoop(_uint iIdx, _bool bIsLoop);
 	void Set_Animation(_uint iIdx);
@@ -59,7 +66,7 @@ protected:
 
 	map<_uint, KEYFRAME> m_mapAnimTransLeftFrame;
 protected:
-	virtual HRESULT Ready_Bones(ifstream& inFile, _uint iParentBoneIndex);
+	HRESULT Ready_Bones(ifstream& inFile, _uint iParentBoneIndex);
 	HRESULT Ready_Meshes(ifstream& inFile);
 	HRESULT Ready_Materials(ifstream& inFile, const _char* pModelFilePath);
 	HRESULT Ready_Animations(ifstream& inFile);

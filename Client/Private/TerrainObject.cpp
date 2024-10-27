@@ -83,7 +83,6 @@ void CTerrainObject::Rotate()
 
 HRESULT CTerrainObject::Ready_Components(TERRAINOBJ_DESC* pDesc)
 {
-	CModelObject::Ready_Components(pDesc);
 
 	//Com_Collider
 	if (m_pModelCom->Get_NumMeshes() <= 0)

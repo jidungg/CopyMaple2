@@ -2,7 +2,7 @@
 #include "Mesh.h"
 #include "Shader.h"
 #include "Material.h"
-#include "Bone.h"
+#include "MimicBone.h"
 #include "GameInstance.h"
 #include "Animation.h"
 
@@ -99,14 +99,18 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _f
 
 HRESULT CModel::Ready_Bones(ifstream& inFile, _uint iParentBoneIndex)
 {
-	CBone* pBone = CBone::Create(inFile, iParentBoneIndex);
+	CBone* pBone;
+	if(m_eModelType == TYPE::TYPE_MIMIC)
+		pBone = CMimicBone::Create(inFile, iParentBoneIndex);
+	else
+		pBone = CBone::Create(inFile, iParentBoneIndex);
 
 	if (nullptr == pBone)
 		return E_FAIL;
 
 	m_Bones.push_back(pBone);
 
-	iParentBoneIndex = m_Bones.size() - 1;
+	iParentBoneIndex = (_uint)m_Bones.size() - 1;
 	_uint iNumChildren = 0;
 	inFile.read(reinterpret_cast<char*>(&iNumChildren), sizeof(_uint));
 	//cout << iNumChildren << endl;
@@ -169,6 +173,16 @@ HRESULT CModel::Ready_Animations(ifstream& inFile)
 
 HRESULT CModel::Initialize(void* pArg)
 {
+	if(m_eModelType == TYPE::TYPE_MIMIC)
+	{
+		MODEL_DESC* pDesc = static_cast<MODEL_DESC*>(pArg);
+		const CModel* pTarget = pDesc->pTarget;
+
+		for (auto& pBone : m_Bones)
+		{
+			static_cast<CMimicBone*>(pBone)->Set_Target(pTarget->Get_BoneMatrix(pBone->Get_Name()));
+		}
+	}
 	return S_OK;
 }
 
@@ -196,6 +210,9 @@ HRESULT CModel::Bind_BoneMatrices(CShader* pShader, const _char* pConstantName, 
 
 bool CModel::Play_Animation(_float fTimeDelta)
 {
+	if (m_eModelType == TYPE::TYPE_MIMIC)
+		return false;
+
 	//뼈들의 변환행렬을 갱신
 	bool bAnimEnd = false;
 	if(m_iCurrentAnimIndex == m_iPrevAnimIndex)
@@ -209,6 +226,27 @@ bool CModel::Play_Animation(_float fTimeDelta)
 		pBone->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
 
 	return bAnimEnd;
+}
+
+_uint CModel::Get_MeshIndex(const _char* szName) const
+{
+	_uint	 iMeshIndex = { 0 };
+
+	auto	iter = find_if(m_Meshes.begin(), m_Meshes.end(), [&](CMesh* pMesh)->_bool
+		{
+			if (false == strcmp(pMesh->Get_Name(), szName))
+				return true;
+
+			++iMeshIndex;
+
+			return false;
+		});
+
+	if (iter == m_Meshes.end())
+		MSG_BOX("그런 메쉬가 없어");
+
+
+	return iMeshIndex;
 }
 
 _uint CModel::Get_BoneIndex(const _char* pBoneName) const
@@ -271,6 +309,11 @@ CBone* CModel::Get_Bone(const _char* pBoneName) const
 bool CModel::Is_AnimChangeable()
 {
 	return m_Animations[m_iCurrentAnimIndex]->Is_AnimChangeable();
+}
+
+bool CModel::Is_MeshActive(_uint iIdx)
+{
+	return m_Meshes[iIdx]->Is_Active();
 }
 
 void CModel::Set_AnimationLoop(_uint iIdx, _bool bIsLoop)

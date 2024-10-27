@@ -155,7 +155,10 @@ namespace Engine
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <filesystem>
 using namespace std;
+namespace fs = std::filesystem;
+using namespace fs;
 
 #include "Engine_Typedef.h"
 #include "Engine_Macro.h"

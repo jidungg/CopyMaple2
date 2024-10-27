@@ -10,6 +10,9 @@
       <FullPath>D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Shader_VtxAnimMesh.cso</FullPath>
     </ContentFile>
     <ContentFile>
+      <FullPath>D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Shader_VtxHumanAnimMesh.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Shader_VtxMesh.cso</FullPath>
     </ContentFile>
     <ContentFile>

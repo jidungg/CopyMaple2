@@ -29,6 +29,10 @@
 #include "Weapon.h"
 #include "MimicBoneModel.h"
 #include "MimicBoneModelObject.h"
+#include "Face.h"
+#include "HumanModelObject.h"
+
+#include "Engine_Defines.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -124,11 +128,14 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Texture_QuickSlot_Normal"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/QuickSlot_Normal.dds"), 1))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Face_Face1"),
+		CFace::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Face/00300011/")))))
+		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/Skill/"), TEXT(".png"))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
-		TEXT("../Bin/resources/FBXs/MAP/Cube/"), TEXT(".dds"))))
+		TEXT("../Bin/resources/FBXs/NonAnim/Cube/"), TEXT(".dds"))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/MAP/Field/"), TEXT(".dds"))))
@@ -153,6 +160,10 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxAnimMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_VtxAnimMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
 		return E_FAIL;
+	/* For.Prototype_Component_Shader_VtxHumanAnimMesh*/
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxHumanAnimMesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_VtxHumanAnimMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
+		return E_FAIL;
 #pragma endregion
 
 	lstrcpy(m_szLoadingText, TEXT("모델 로드."));
@@ -161,32 +172,26 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_VIBuffer_Rect"),
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	//EmptyModel
-	XMMATRIX matGlobal = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
-	matGlobal = matGlobal * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Model_EmptyModel"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/FBXs/EmptyModel.model", matGlobal))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/FBXs/Player/Female_Wizard.model", matGlobal))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Model_BasicCoat"),
-		CMimicBoneModel::Create(m_pDevice, m_pContext,CModel::TYPE_ANIM, "../Bin/Resources/FBXs/Equip/Basic/12200007_f_clpasuperiorcoat.model", matGlobal))))
-		return E_FAIL;
 
 	///* For.Prototype_Component_CModel*/
+	XMMATRIX matPretransform = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
-		TEXT("../Bin/resources/FBXs/MAP/Cube/"))))
+		TEXT("../Bin/resources/FBXs/NonAnim"), CModel::TYPE_NONANIM, matPretransform)))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
-		TEXT("../Bin/resources/FBXs/MAP/Field/"))))
+		TEXT("../Bin/resources/FBXs/Anim/Equip"), CModel::TYPE_ANIM, matPretransform)))
+		return E_FAIL;
+	matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
+		TEXT("../Bin/resources/FBXs/Anim/Player"),CModel::TYPE_ANIM,matPretransform)))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
-		TEXT("../Bin/resources/FBXs/Equip/Basic/"))))
+		TEXT("../Bin/resources/FBXs/Mimic"), CModel::TYPE_MIMIC, matPretransform)))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
-		TEXT("../Bin/resources/FBXs/Equip/Hair/"))))
+		TEXT("../Bin/resources/FBXs/MAP/Field/"), matPretransform)))
 		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CMeshCollider::m_szProtoTag,
 		CMeshCollider::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -227,7 +232,9 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CMimicBoneModelObject::m_szProtoTag,
 		CMimicBoneModelObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,
+		CHumanModelObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	/* For.Prototype_GameObject_Camera_Trace */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_GameObject_Camera_Trace"),
 		CCamera_Trace::Create(m_pDevice, m_pContext))))
@@ -305,11 +312,11 @@ HRESULT CLoader::Loading_Level_MyHome()
 
 
 	lstrcpy(m_szLoadingText, TEXT("모델 로드."));
-	XMMATRIX matGlobal = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
-	matGlobal = matGlobal * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_Model_ChocoDuckyBall"),
-		CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/FBXs/DuckyBall/60100001_chocoduckyball.model", matGlobal))))
-		return E_FAIL;
+	//XMMATRIX matGlobal = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
+	//matGlobal = matGlobal * XMMatrixRotationY(XMConvertToRadians(180.f));
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_Model_ChocoDuckyBall"),
+	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/FBXs/DuckyBall/60100001_chocoduckyball.model", matGlobal))))
+	//	return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("객체 로드."));
 	/* For.Prototype_GameObject_HomeDialog */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, CUIHomeDialog::m_szProtoTag,
@@ -363,7 +370,23 @@ HRESULT CLoader::Load_SkillData()
 	return S_OK;
 }
 
-HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId,  const _tchar* szDirPath)
+HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId,  const _tchar* szDirPath,CModel::TYPE eType ,_fmatrix PreTransformMatrix)
+{
+	fs::path path;
+	path = szDirPath;
+	for (const auto& entry : recursive_directory_iterator(path)) {
+		if (entry.path().extension() == ".model") {
+			//cout << entry.path().string() << endl;
+
+			if (FAILED(m_pGameInstance->Add_Prototype(eLevId, entry.path().filename(),
+				CModel::Create(m_pDevice, m_pContext, eType, entry.path().string().c_str(), PreTransformMatrix))))
+				return E_FAIL;
+		}
+	}
+	return S_OK;
+}
+
+HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId, const _tchar* szDirPath, _fmatrix PreTransformMatrix)
 {
 	WIN32_FIND_DATA		FindFileData = {};
 	HANDLE				hFind = INVALID_HANDLE_VALUE;
@@ -392,11 +415,9 @@ HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId,  const _tchar* szDirPath)
 
 		wstring wstr = szFullPath;
 		string str{ wstr.begin(), wstr.end() };
-		XMMATRIX matGlobal = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
-		//matGlobal = matGlobal * XMMatrixRotationY(XMConvertToRadians(180.f));
 
 		if (FAILED(m_pGameInstance->Add_Prototype(eLevId, FindFileData.cFileName,
-			CModel::Create(m_pDevice, m_pContext, str.c_str(), matGlobal))))
+			CModel::Create(m_pDevice, m_pContext, str.c_str(), PreTransformMatrix))))
 			return E_FAIL;
 
 	} while (FindNextFile(hFind, &FindFileData));
@@ -404,7 +425,6 @@ HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId,  const _tchar* szDirPath)
 	FindClose(hFind);
 
 	return S_OK;
-		
 }
 
 HRESULT CLoader::Load_Dirctory_Textures(LEVELID eLevId, const _tchar* szDirPath, const _tchar* szExtension)

@@ -49,7 +49,8 @@ private:
 
 	HRESULT Load_ItemData();
 	HRESULT Load_SkillData();
-	HRESULT Load_Dirctory_Models(LEVELID eLevId, const _tchar* szDirPath);
+	HRESULT Load_Dirctory_Models(LEVELID eLevId, const _tchar* szDirPath, CModel::TYPE eType, _fmatrix PreTransformMatrix);
+	HRESULT Load_Dirctory_Models(LEVELID eLevId, const _tchar* szDirPath, _fmatrix PreTransformMatrix);
 	HRESULT Load_Dirctory_Textures(LEVELID eLevId, const _tchar* szDirPath, const _tchar* szExtention);
 
 public:

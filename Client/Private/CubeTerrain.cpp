@@ -67,8 +67,8 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 		ITEM_DESC* itemdesc = pDB->GetItemDesc(ITEM_TYPE::BUILD,desc.strItemName);
 		strcpy_s(desc.strModelProtoName, itemdesc->strModelTag);
 		desc.eModelProtoLevelID = LEVEL_LOADING;
-		strcpy_s( desc.strShaderProtoName ,("Prototype_Component_Shader_VtxMesh"));
-		desc.eShaderProtoLevelID = LEVEL_LOADING;
+		//strcpy_s( desc.strShaderProtoName ,("Prototype_Component_Shader_VtxMesh"));
+		//desc.eShaderProtoLevelID = LEVEL_LOADING;
 		desc.eType = item["type"];
 		desc.direction = item["direction"];
 		desc.data = item["data"];

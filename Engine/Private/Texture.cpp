@@ -107,6 +107,7 @@ HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle,
 
 HRESULT CTexture::Initialize(void * pArg)
 {
+
 	return S_OK;
 }
 
@@ -116,6 +117,29 @@ HRESULT CTexture::Bind_ShaderResource(CShader * pShader, const _char * pConstant
 		return E_FAIL;
 
 	return pShader->Bind_SRV(pConstantName, m_SRVs[iSRVIndex]);	
+}
+
+HRESULT CTexture::Push_Texture(const _tchar* szPath)
+{
+
+	_tchar			szTextureFilePath[MAX_PATH] = TEXT("");
+	wsprintf(szTextureFilePath, szPath);
+
+	_tchar		szEXT[MAX_PATH] = TEXT("");
+
+	_wsplitpath_s(szTextureFilePath, nullptr, 0, nullptr, 0, nullptr, 0, szEXT, MAX_PATH);
+
+	HRESULT		hr = {};
+	ID3D11ShaderResourceView* pSRV = { nullptr };
+	if (false == lstrcmp(szEXT, L".dds"))
+		hr = CreateDDSTextureFromFile(m_pDevice, szTextureFilePath, nullptr, &pSRV);
+
+	if (FAILED(hr))
+		return E_FAIL;
+
+	m_SRVs.push_back(pSRV);
+	++m_iNumSRVs;
+	return S_OK;
 }
 
 HRESULT CTexture::Push_Texture(ID3D11ShaderResourceView* pSRV)

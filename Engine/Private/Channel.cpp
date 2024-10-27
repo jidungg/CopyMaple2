@@ -50,7 +50,7 @@ KEYFRAME CChannel::Get_Frame(_float fTrackPos, _uint* pOutCurrentKeyFrameIdx) co
 	_float			fRatio = (fTrackPos - m_KeyFrames[*pOutCurrentKeyFrameIdx].fTrackPosition) /
 		(m_KeyFrames[*pOutCurrentKeyFrameIdx + 1].fTrackPosition - m_KeyFrames[*pOutCurrentKeyFrameIdx].fTrackPosition);
 
-	return CEngineUtility::Lerp_Frame(m_KeyFrames[*pOutCurrentKeyFrameIdx], m_KeyFrames[*pOutCurrentKeyFrameIdx], fRatio);;
+	return CEngineUtility::Lerp_Frame(m_KeyFrames[*pOutCurrentKeyFrameIdx], m_KeyFrames[*pOutCurrentKeyFrameIdx+1], fRatio);;
 }
 
 _uint CChannel::Get_KeyFrameIndex(_float fTrackPos, _uint iStartKeyFrameIdx) const
@@ -58,7 +58,7 @@ _uint CChannel::Get_KeyFrameIndex(_float fTrackPos, _uint iStartKeyFrameIdx) con
 	if (0.f == fTrackPos)
 		return 0;
 	if (fTrackPos >= m_KeyFrames.back().fTrackPosition)
-		return m_KeyFrames.size() - 1;
+		return (_uint)m_KeyFrames.size() - 1;
 
 	while (fTrackPos >= m_KeyFrames[iStartKeyFrameIdx + 1].fTrackPosition)
 		++iStartKeyFrameIdx;

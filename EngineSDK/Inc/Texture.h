@@ -4,9 +4,9 @@
 
 BEGIN(Engine)
 
-class ENGINE_DLL CTexture final : public CComponent
+class ENGINE_DLL CTexture  : public CComponent
 {
-private:
+protected:
 	CTexture(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CTexture(const CTexture& Prototype);
 	virtual ~CTexture() = default;
@@ -18,6 +18,7 @@ public:
 
 public:
 	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName, _uint iSRVIndex = 0);
+	HRESULT Push_Texture(const _tchar* szPath);
 	HRESULT Push_Texture(ID3D11ShaderResourceView* pSRV);
 private:
 	_uint										m_iNumSRVs = { 0 };

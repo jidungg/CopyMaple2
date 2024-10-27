@@ -8,6 +8,7 @@ BEGIN(Client)
 class CSkill;
 class CBoneModelObject;
 class CMimicBoneModelObject;
+class CFace;
 class CPlayer :
 	public CCharacter
 {
@@ -159,6 +160,8 @@ public:
 		WALK,
 		BATTLE,
 		WEAPON,
+		PAINTIME,
+		INTERACTION,
 
 		ATTACK_TRIGGER,
 		SKILL_ID,
@@ -187,10 +190,12 @@ public:
 public:
 	HRESULT Ready_Parts();
 	HRESULT Ready_AnimStateMachine();
+	HRESULT Ready_FaceStateMachine();
 	HRESULT Ready_Skill();
 
 	void On_StateChange(_uint iState);
 	void On_SubStateChange(_uint iSubState);
+	void On_FaceStateChange(_uint iState);
 
 	virtual void Use_Skill(CSkill* pSkill) override;
 
@@ -201,11 +206,18 @@ protected:
 	CSkill* m_pSkill[(_uint)SKILL_ID::LAST];
 	class CWeapon* m_pWeapon = { nullptr };
 	CBoneModelObject* m_pHair = { nullptr };
-	CMimicBoneModelObject* m_pRobe = { nullptr };
+	CBoneModelObject* m_pHat = { nullptr };
+	CBoneModelObject* m_pFaceDeco= { nullptr };
+	CModelObject* m_pCape = { nullptr };
+	CModelObject* m_pRobe = { nullptr };
+	CModelObject* m_pGlove = { nullptr };
+	CModelObject* m_pShoes = { nullptr };
 
 	unordered_map<SKILL_ID, ANIM_CONDITION> m_mapSkillTrigger;
 
+	CStateMachine* m_pFaceStateMachine = { nullptr };
 
+	_float m_fPainTime = 0.f;
 	//ConditionVar
 	_int m_iRandomCondition { 0 };
 	_float m_fUpForce { 0.f };
@@ -217,6 +229,8 @@ protected:
 	_bool m_bWeapon { false };
 	_bool m_bBattle  { false };
 	_bool m_bPostDelayEnd  { false };
+	_bool m_bInteraction{ false };
+	_float m_fPainTimeAcc;
 	_int m_iSkillID{ 0 };
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

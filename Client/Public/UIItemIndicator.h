@@ -22,7 +22,8 @@ public:
 protected:
 	virtual void Call_Callback(const ButtonCallback& fCallback) override;
 	const ITEM_DESC* m_pItemDesc = nullptr;
-	CUIPanel* m_pItemIcon = nullptr;
+	CTexture* m_pIconTexure = nullptr;
+	CRect_Transform* m_pIconTransform = nullptr;
 
 public:
 	static CUIItemIndicator* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eBackTexProtoLev, const _tchar* szBackTexProtoTag);

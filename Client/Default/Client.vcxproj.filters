@@ -164,10 +164,17 @@
     <ClInclude Include="..\Public\BuildPreview.h" />
     <ClInclude Include="..\Public\BoneModelObject.h" />
     <ClInclude Include="..\Public\Weapon.h" />
-    <ClInclude Include="..\Public\MimicBoneModelObject.h" />
     <ClInclude Include="..\Public\Face.h" />
     <ClInclude Include="..\Public\FaceTexture.h" />
     <ClInclude Include="..\Public\HumanModelObject.h" />
+    <ClInclude Include="..\Public\Inventory.h" />
+    <ClInclude Include="..\Public\InvenSlot.h" />
+    <ClInclude Include="..\Public\UIInvenSlot.h" />
+    <ClInclude Include="..\Public\SlotItem.h" />
+    <ClInclude Include="..\Public\UISlot.h" />
+    <ClInclude Include="..\Public\InvenEquipSlot.h" />
+    <ClInclude Include="..\Public\PlayerInfo.h" />
+    <ClInclude Include="..\Public\PlayerEquipSlot.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -271,10 +278,17 @@
     <ClCompile Include="..\Private\BuildPreview.cpp" />
     <ClCompile Include="..\Private\BoneModelObject.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />
-    <ClCompile Include="..\Private\MimicBoneModelObject.cpp" />
     <ClCompile Include="..\Private\Face.cpp" />
     <ClCompile Include="..\Private\FaceTexture.cpp" />
     <ClCompile Include="..\Private\HumanModelObject.cpp" />
+    <ClCompile Include="..\Private\Inventory.cpp" />
+    <ClCompile Include="..\Private\InvenSlot.cpp" />
+    <ClCompile Include="..\Private\UIInvenSlot.cpp" />
+    <ClCompile Include="..\Private\SlotItem.cpp" />
+    <ClCompile Include="..\Private\UISlot.cpp" />
+    <ClCompile Include="..\Private\InvenEquipSlot.cpp" />
+    <ClCompile Include="..\Private\PlayerInfo.cpp" />
+    <ClCompile Include="..\Private\PlayerEquipSlot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

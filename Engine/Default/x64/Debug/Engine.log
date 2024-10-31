@@ -1,5 +1,21 @@
-﻿  Channel.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Channel.cpp(61,29): warning C4267: 'return': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+﻿  Animation.cpp
+  Bone.cpp
+  Camera.cpp
+  Camera_UI.cpp
+  Channel.cpp
+  Collider.cpp
+  Condition.cpp
+  ContainerObject.cpp
+  Controller.cpp
+  Engine_Utility.cpp
+  Event.cpp
+  EventHandlerWrapperInterface.cpp
+  EventManager.cpp
+  Graphic_Device.cpp
+  Input_Device.cpp
+  JsonParser.cpp
+  Light.cpp
+  Light_Manager.cpp
   Mesh.cpp
   MeshCollider.cpp
 D:\Workbench\Portfolio\CopyMaple2\Engine\Public\MeshCollider.h(7,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CMeshCollider'의 기본으로 사용되었습니다.
@@ -9,11 +25,40 @@ D:\Workbench\Portfolio\CopyMaple2\Engine\Public\MeshCollider.h(7,12): warning C4
       D:\Workbench\Portfolio\CopyMaple2\Engine\Public\MeshCollider.h(6,18):
       'Engine::CMeshCollider' 선언을 참조하십시오.
   
-  MimicBoneModel.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\MimicBoneModel.cpp(46,36): warning C4267: '=': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  MimicBone.cpp
   Model.cpp
+  Pawn.cpp
+  Physics.cpp
+  PipeLine.cpp
+  Rect_Transform.cpp
+  State.cpp
+  StateMachine.cpp
+  Timer.cpp
+  Timer_Manager.cpp
+  Transition.cpp
+  UIManager.cpp
+  Material.cpp
+  Base.cpp
+  Component.cpp
+  GameInstance.cpp
+  GameObject.cpp
+  Layer.cpp
+  Level.cpp
+  Level_Manager.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  Object_Manager.cpp
+  Prototype_Manager.cpp
+  Renderer.cpp
+  Shader.cpp
   Texture.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\Texture.cpp(88,52): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Transform.cpp
+  UIObject.cpp
+  VIBuffer.cpp
+  VIBuffer_Rect.cpp
+  VIBuffer_Terrain.cpp
   코드를 생성하고 있습니다...
 DirectXTKd.lib(DDSTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(DDSTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTKd.lib(WICTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(WICTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
@@ -65,7 +110,6 @@ DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' �
   .\Engine\Public\Mesh.h
   .\Engine\Public\MeshCollider.h
   .\Engine\Public\MimicBone.h
-  .\Engine\Public\MimicBoneModel.h
   .\Engine\Public\Model.h
   .\Engine\Public\Object_Manager.h
   .\Engine\Public\Pawn.h
@@ -110,4 +154,4 @@ DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' �
   .\Engine\Public\DirectXTK\XboxDDSTextureLoader.h
   .\Engine\Public\Effects11\d3dx11effect.h
   .\Engine\Public\Effects11\d3dxGlobal.h
-  84 File(s) copied
+  83 File(s) copied

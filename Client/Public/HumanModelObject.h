@@ -8,6 +8,20 @@ class CHumanModelObject :
     public CModelObject
 {
 public:
+	enum class MESH_PART_ID
+	{
+		BRA,
+		TOP,
+		FACE,
+		EAR,
+		HAIR,
+		PANTY,
+		BOTTOM,
+		GLOVE,
+		SHOES,
+		LAST
+	};
+public:
 	typedef struct HumanModelObjDesc : public CModelObject::MODELOBJ_DESC
 	{
 		const _tchar* szFaceProtoTag = { nullptr };
@@ -27,13 +41,14 @@ public:
 	virtual HRESULT Render() override;
 
 	void Set_FaceState(CFace::FACE_STATE eState) { m_pFaceCom->Set_State(eState); }
+	void Set_MeshActive(MESH_PART_ID eID, _bool bIsOn);
 private:
 	virtual HRESULT Ready_Components(void* pArg) override;
 
 private:
 	CFace* m_pFaceCom = { nullptr };
-	_uint m_iFaceMeshIdx = { 0 };
 	CShader* m_pFaceShaderCom = { nullptr };
+	unordered_map<MESH_PART_ID, _uint> m_mapMeshPartIdx;
 public:
 	static CHumanModelObject* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

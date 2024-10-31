@@ -11,12 +11,13 @@ CLevel_Manager::CLevel_Manager()
 
 HRESULT CLevel_Manager::Open_Level(_int iLevelIndex, CLevel * pNewLevel)
 {
-	/* ¿ÀºêÁ§Æ® ¸Å´ÏÁ®¿¡ Ãß°¡ ÇØ³õÀº ±âÁ¸ ·¹º§¿ë °´Ã¼µéÀ» »èÁ¦ÇÑ´Ù. */	
-	/* ÄÄÆ÷³ÍÆ® ¸Å´ÏÁ®¿¡ Ãß°¡ ÇØ³õÀº ±âÁ¸ ·¹º§¿ë °´Ã¼µéÀ» »èÁ¦ÇÑ´Ù. */
+	/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Å´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½Ø³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½. */	
+	/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Å´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½Ø³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½. */
 	if (nullptr != m_pCurrentLevel && m_iCurrentLevelID != 0)
 	{
 		m_pCurrentLevel->On_End();
 		m_pGameInstance->Clear(m_iCurrentLevelID);
+		m_pGameInstance->ObjectManager_On_OpenLevel(iLevelIndex);
 	}
 
 	Safe_Release(m_pCurrentLevel);

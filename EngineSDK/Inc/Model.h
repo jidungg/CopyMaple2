@@ -11,7 +11,7 @@ public:
 	enum TYPE { TYPE_NONANIM, TYPE_ANIM, TYPE_MIMIC, TYPE_END };
 	typedef struct ModelDesc
 	{
-		const CModel* pTarget = { nullptr };
+		const CModel* pMimicTarget = { nullptr };
 	}MODEL_DESC;
 protected:
 	CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -45,8 +45,10 @@ public:
 	void Set_AnimationLoop(_uint iIdx, _bool bIsLoop);
 	void Set_Animation(_uint iIdx);
 	void Set_AnimPostDelayPercent(_uint iIdx, _float fPercent);
+	void Set_MeshActive(_uint iIdx, _bool bIsOn);
 
 	void Switch_Animation(_uint iIdx);
+
 protected:
 	TYPE						m_eModelType = { TYPE_END };
 

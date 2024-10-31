@@ -11,7 +11,7 @@ public:
 public:
 	typedef struct PanelDesc: public CUIObject::UIOBJECT_DESC
 	{
-
+		CTexture* pTextureCom = { nullptr };
 	}PANEL_DESC;
 
 protected:
@@ -22,13 +22,20 @@ protected:
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
+	virtual HRESULT Render()override;
 	virtual void Priority_Update(_float fTimeDelta) override;
 
 	void Set_Texture(CTexture* pTexture);
+	bool Is_TextureNullptr() { return m_pTextureCom == nullptr; }
+protected:
+	virtual HRESULT Bind_ShaderResources();
 private:
 	HRESULT Ready_Components();
 
-
+protected:
+	CShader* m_pShaderCom = { nullptr };
+	CTexture* m_pTextureCom = { nullptr };
+	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 public:
 	static CUIPanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

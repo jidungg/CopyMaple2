@@ -20,10 +20,11 @@ HRESULT CLevel_GamePlay::Initialize()
 {
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
-
+	m_pPlayer = static_cast<CPlayer*>( m_pGameInstance->Get_FirstGameObject(LEVEL_LOADING, TEXT("Layer_Player")));
+	m_pGameInstance->Possess(m_pPlayer);
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
-	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+	if (FAILED(Ready_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
@@ -31,20 +32,10 @@ HRESULT CLevel_GamePlay::Initialize()
 	return S_OK;
 }
 
+
 HRESULT CLevel_GamePlay::Ready_Lights()
 {
-	LIGHT_DESC			LightDesc{};
 
-	ZeroMemory(&LightDesc, sizeof LightDesc);
-
-	LightDesc.eType = LIGHT_DESC::TYPE_DIRECTOINAL;
-	LightDesc.vDirection = _float4(1.f, -1.f, 0.f, 0.f);
-	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-
-	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
-		return E_FAIL;
 
 	return S_OK;
 }
@@ -58,17 +49,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _wstring& strLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Player(const _wstring& strLayerTag)
+HRESULT CLevel_GamePlay::Ready_Camera(const _wstring& strLayerTag)
 {
-	CPlayer::PLAYER_DESC		PlayerDesc{};
 
-	PlayerDesc.fSpeedPerSec = 5.f;
-	PlayerDesc.fRotationPerSec = XMConvertToRadians(90.f);
 
-	m_pPlayer = static_cast<CPlayer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_Player"), &PlayerDesc));
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, strLayerTag, m_pPlayer)))
-		return E_FAIL;
-	m_pGameInstance->Possess(m_pPlayer);
 	CCamera_Trace::TRACECAMERA_DESC		CamDesc{};
 
 	CamDesc.fSpeedPerSec = 5.f;
@@ -79,7 +63,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _wstring& strLayerTag)
 	CamDesc.fFar = 1000.f;
 	CamDesc.vEye = _float3(0.f, 3.f, 3.f);
 	CamDesc.vAt = _float3(0.f, 0.f, 0.f);
-	CamDesc.vArm = _float3(-1.f, 1.f, -1.f);
+	CamDesc.vArm = _float3(-2.f, 2.f, -2.f);
 	CamDesc.pTarget = m_pPlayer;
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOADING, TEXT("Prototype_GameObject_Camera_Trace"),

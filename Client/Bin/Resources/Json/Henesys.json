@@ -1,12 +1,11 @@
 {
     "cells": [
         {
-            "type": 0,
-            "model": "풀 블록1",
-            "index": 0,
-            "direction": 0,
-            "data": 0,
-            "iteration": 1
+            "ItemId": "GRASS_1",
+            "Index": 0,
+            "Direction": 0,
+            "Data": 0,
+            "Iteration": 1
         }
     ],
     "size": [

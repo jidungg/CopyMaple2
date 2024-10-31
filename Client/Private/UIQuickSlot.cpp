@@ -1,13 +1,15 @@
 #include "stdafx.h"
 #include "UIQuickSlot.h"
 #include "GameInstance.h"
+#include "SlotItem.h"
 CUIQuickSlot::CUIQuickSlot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CUIPanel(pDevice, pContext)
+	: CUISlot(pDevice, pContext)
 {
 }
 
 CUIQuickSlot::CUIQuickSlot(const CUIQuickSlot& Prototype)
-	: CUIPanel(Prototype )
+	: CUISlot(Prototype )
+	, m_pQuickItem(Prototype.m_pQuickItem)
 {
 }
 
@@ -20,21 +22,19 @@ HRESULT CUIQuickSlot::Initialize_Prototype()
 
 HRESULT CUIQuickSlot::Initialize(void* pArg)
 {
-	if (FAILED(__super::Initialize(pArg)))
-		return E_FAIL;
-
 	QUICKLSLOT_DESC* pDesc = static_cast<QUICKLSLOT_DESC*>(pArg);
 	m_eHotKey = pDesc->eHotKey;
 
-	CUIPanel::PANEL_DESC panelDesc;
-	panelDesc.eAnchorType = CORNOR_TYPE::LEFT_TOP;
-	panelDesc.ePivotType = CORNOR_TYPE::LEFT_TOP;
-	panelDesc.fSizeX = 60;
-	panelDesc.fSizeY = 60;
-	panelDesc.fXOffset = 0;
-	panelDesc.fYOffset = 0;
-	m_pItemIcon = static_cast<CUIPanel*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &panelDesc));
-	Add_OnlyTransformChild(m_pItemIcon);
+	pDesc->tIconDesc.eAnchorType = CORNOR_TYPE::CENTER;
+	pDesc->tIconDesc.ePivotType = CORNOR_TYPE::CENTER;
+	pDesc->tIconDesc.fSizeX = pDesc->fSizeX - 5;
+	pDesc->tIconDesc.fSizeY = pDesc->fSizeY - 5;
+	pDesc->tIconDesc.fXOffset = 0;
+	pDesc->tIconDesc.fYOffset = 0;
+
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -51,22 +51,6 @@ void CUIQuickSlot::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 }
 
-HRESULT CUIQuickSlot::Render()
-{
-	if (FAILED(Bind_ShaderResources()))
-		return E_FAIL;
-	if (m_pShaderCom)
-		m_pShaderCom->Begin(0);
-	if (m_pVIBufferCom)
-	{
-		m_pVIBufferCom->Bind_BufferDesc();
-		m_pVIBufferCom->Render();
-	}
-
-	if (m_pItemIcon)
-		m_pItemIcon->Render();
-	return S_OK;
-}
 
 void CUIQuickSlot::On_MouseClick()
 {
@@ -76,21 +60,22 @@ void CUIQuickSlot::On_MouseClick()
 
 void CUIQuickSlot::Set_QuickItem(IQuickItem* pItem)
 {
-	UnSet_QuickItem();
 	m_pQuickItem = pItem;
-	string str = m_pQuickItem->Get_IconTag();
-	wstring wstrIconTag(str.begin(), str.end());
-	CTexture* pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, wstrIconTag));
+	if (pItem == nullptr)
+	{
+		Set_IconTexture(nullptr);
+		
+	}
+	else
+	{
+		string str = m_pQuickItem->Get_IconTag();
+		wstring wstrIconTag(str.begin(), str.end());
+		CTexture* pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, wstrIconTag));
 
-	m_pItemIcon->Set_Texture(pTextureCom);
-
+		Set_IconTexture(pTextureCom);
+	}
 }
 
-void CUIQuickSlot::UnSet_QuickItem()
-{
-	m_pItemIcon->Set_Texture(nullptr);
-	m_pQuickItem = nullptr;
-}
 
 CUIQuickSlot* CUIQuickSlot::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
@@ -121,5 +106,10 @@ CGameObject* CUIQuickSlot::Clone(void* pArg)
 void CUIQuickSlot::Free()
 {
 	__super::Free();
-	Safe_Release(m_pItemIcon);
+
+}
+
+bool CUIQuickSlot::Has_Item()
+{
+	return m_pQuickItem != nullptr;
 }

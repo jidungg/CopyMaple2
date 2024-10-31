@@ -78,6 +78,20 @@ bool CLayer::Check_Collision(const Ray& tRay, RaycastHit* pOut)
 	return bIsHit;
 }
 
+void CLayer::Get_DontDestroyObjects(list<class CGameObject*>* pDontDestroyLayer)
+{
+	for (auto& pObject : m_GameObjects)
+	{
+		if (pObject->Is_DontDestroy())
+			pDontDestroyLayer->push_back(pObject);
+	}
+}
+
+CGameObject* CLayer::Get_FirstGameObject()
+{
+	return m_GameObjects.front();
+}
+
 CLayer * CLayer::Create()
 {
 	 return new CLayer();
@@ -89,7 +103,8 @@ void CLayer::Free()
 	__super::Free();
 
 	for (auto& pGameObject : m_GameObjects)
-		Safe_Release(pGameObject);
+		if (false == pGameObject->Is_DontDestroy())
+			Safe_Release(pGameObject);
 
 	m_GameObjects.clear();
 }

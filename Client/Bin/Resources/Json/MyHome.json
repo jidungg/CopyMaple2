@@ -1,14 +1,572 @@
 {
     "cells": [
         {
-            "data": 0,
-            "direction": 0,
-            "index": 0,
-            "iteration": 1,
-            "model": "풀 블록1",
-            "type": 0
+            "Data": 0,
+            "Direction": 0,
+            "Index": 0,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 2,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 4,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 6,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 8,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 10,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 12,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 14,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 16,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 18,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 20,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 22,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 24,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 26,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 28,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 30,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 32,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 34,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 36,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 38,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 40,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 42,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 44,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 46,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 48,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 50,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 52,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 54,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 56,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 58,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 60,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 62,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 64,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 66,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 68,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 70,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 72,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 74,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 76,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 78,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 80,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 82,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 84,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 86,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 88,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 90,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 92,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 94,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 96,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 98,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 122,
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 114,
+            "ItemId": "ROCK_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 116,
+            "ItemId": "ROCK_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 127,
+            "ItemId": "BUSH_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 137,
+            "ItemId": "BUSH_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 146,
+            "ItemId": "BUSH_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 2,
+            "Index": 155,
+            "ItemId": "BUSH_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 2,
+            "Index": 154,
+            "ItemId": "BUSH_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 1,
+            "Index": 144,
+            "ItemId": "FLOWER_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 1,
+            "Index": 143,
+            "ItemId": "FLOWER_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 2,
+            "Index": 152,
+            "ItemId": "FLOWER_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 2,
+            "Index": 163,
+            "ItemId": "FLOWER_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 2,
+            "Index": 165,
+            "ItemId": "FLOWER_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 2,
+            "Index": 167,
+            "ItemId": "FLOWER_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 2,
+            "Index": 157,
+            "ItemId": "FLOWER_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 2,
+            "Index": 148,
+            "ItemId": "FLOWER_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 2,
+            "Index": 138,
+            "ItemId": "FLOWER_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 2,
+            "Index": 128,
+            "ItemId": "FLOWER_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 110,
+            "ItemId": "GRASS_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 130,
+            "ItemId": "ROCK_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 150,
+            "ItemId": "BUSH_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 170,
+            "ItemId": "FLOWER_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 2,
+            "Index": 183,
+            "ItemId": "FLOWER_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 3,
+            "Index": 194,
+            "ItemId": "FLOWER_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 233,
+            "ItemId": "BUSH_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 134,
+            "ItemId": "BUSH_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 133,
+            "ItemId": "BUSH_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 113,
+            "ItemId": "GRASS_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 214,
+            "ItemId": "FLOWER_1",
+            "Iteration": 2
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 216,
+            "ItemId": "FLOWER_1",
+            "Iteration": 1
+        },
+        {
+            "Data": 0,
+            "Direction": 0,
+            "Index": 213,
+            "ItemId": "FLOWER_1",
+            "Iteration": 1
         }
-       
     ],
     "size": [
         10,

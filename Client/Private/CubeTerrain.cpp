@@ -48,6 +48,7 @@ void CCubeTerrain::Late_Update(_float fTimeDelta)
 
 HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 {
+	CItemDataBase* pDB = ITEMDB;
 	json j;
 	if (FAILED(CJsonParser::ReadJsonFile(strJsonFilePath.c_str(), &j)))
 		return E_FAIL;
@@ -59,21 +60,15 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 	desc.fRotationPerSec = 5.f;
 	desc.fSpeedPerSec = 1.f;
 	for (const auto& item : j["cells"]) {
-
-		string str= item["model"];
-		strncpy_s(desc.strItemName, str.c_str(), sizeof(desc.strItemName));
-		desc.strItemName[sizeof(desc.strItemName) - 1] = '\0';
-		CItemDataBase* pDB = ITEMDB;
-		ITEM_DESC* itemdesc = pDB->GetItemDesc(ITEM_TYPE::BUILD,desc.strItemName);
-		strcpy_s(desc.strModelProtoName, itemdesc->strModelTag);
+		BUILD_ITEM_ID eId =  item["ItemId"];
+		BUILD_ITEM_DESC* pBuildItemDesc = static_cast<BUILD_ITEM_DESC*>( pDB->Get_Data(ITEM_TYPE::BUILD,(_uint)eId));
+		strcpy_s(desc.strModelProtoName, pBuildItemDesc->strModelTag);
 		desc.eModelProtoLevelID = LEVEL_LOADING;
-		//strcpy_s( desc.strShaderProtoName ,("Prototype_Component_Shader_VtxMesh"));
-		//desc.eShaderProtoLevelID = LEVEL_LOADING;
-		desc.eType = item["type"];
-		desc.direction = item["direction"];
-		desc.data = item["data"];
-		size_t iteration = item["iteration"];
-		_uint terrIdx = item["index"];
+		desc.eID = item["ItemId"];
+		desc.direction = item["Direction"];
+		desc.data = item["Data"];
+		size_t iteration = item["Iteration"];
+		_uint terrIdx = item["Index"];
 
 		for (int i = 0 ; i < iteration; i++)
 		{
@@ -83,7 +78,6 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 				return E_FAIL;
 		}
 	}
-
 	return S_OK;
 }
 
@@ -106,15 +100,14 @@ HRESULT CCubeTerrain::Save_To_Json(string strNewFilepath)
 			continue;
 		}
 		json jTemp = pTerrainObj->ToJson();
-		int curIdx = jCurObj["index"];
-		int curIter = jCurObj["iteration"];
-		if ( jCurObj["type"] == jTemp["type"]
-			&& jCurObj["model"] == jTemp["model"]
-			&& jCurObj["data"] == jTemp["data"]
-			&& jCurObj["direction"] == jCurObj["direction"]
-			&& (curIdx +curIter) == jTemp["index"])
+		int curIdx = jCurObj["Index"];
+		int curIter = jCurObj["Iteration"];
+		if ( jCurObj["ItemId"] == jTemp["ItemId"]
+			&& jCurObj["Data"] == jTemp["Data"]
+			&& jCurObj["Direction"] == jCurObj["Direction"]
+			&& (curIdx +curIter) == jTemp["Index"])
 		{
-			jCells.back()["iteration"] = jCells.back()["iteration"] + 1;
+			jCells.back()["Iteration"] = jCells.back()["Iteration"] + 1;
 		}
 		else
 		{

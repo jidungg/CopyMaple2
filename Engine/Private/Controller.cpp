@@ -29,7 +29,12 @@ void CController::Update(_float fTimeDelta)
 	{
 		if (false == m_pUIManager->Consume_MouseLButtonUp())
 		{
-			//TODO: UI���� ó������ ���� �Է� ó��
+			int a = 0;
+		}
+		else
+		{
+			//TODO : 마우스 입력 막기
+			int a = 0;
 		}
 	}
 

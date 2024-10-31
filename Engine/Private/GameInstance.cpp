@@ -216,20 +216,38 @@ CBase* CGameInstance::Clone_Proto_Component_Current(const _wstring& strPrototype
 }
 
 
-HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLevelIndex, const _wstring& strLayerTag, void* pArg)
+HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLevelIndex, const _wstring& strLayerTag, void* pArg, bool bDontDestroy)
 {
 	if (nullptr == m_pObject_Manager)
 		return E_FAIL;
 
-	return m_pObject_Manager->Add_GameObject_ToLayer(iPrototypeLevelIndex, strPrototypeTag, iLevelIndex, strLayerTag, pArg);
+	return m_pObject_Manager->Add_GameObject_ToLayer(iPrototypeLevelIndex, strPrototypeTag, iLevelIndex, strLayerTag, pArg, bDontDestroy);
 }
-HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, CGameObject* pObj)
+HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, CGameObject* pObj, bool bDontDestroy)
 {
 	if (nullptr == m_pObject_Manager)
 		return E_FAIL;
 
-	return m_pObject_Manager->Add_GameObject_ToLayer(iLevelIndex, strLayerTag, pObj);
+	return m_pObject_Manager->Add_GameObject_ToLayer(iLevelIndex, strLayerTag, pObj, bDontDestroy);
 }
+
+CGameObject* CGameInstance::Get_FirstGameObject(_uint iLevelIdx, const _wstring& strLayerTag)
+{
+	if (nullptr == m_pObject_Manager)
+		return nullptr;
+
+	return m_pObject_Manager->Get_FirstGameObject(iLevelIdx, strLayerTag);
+}
+
+void CGameInstance::ObjectManager_On_OpenLevel(_uint iLevelIndex)
+{
+	if (nullptr == m_pObject_Manager)
+		return;
+
+	m_pObject_Manager->On_OpenLevel(iLevelIndex);
+}
+
+
 
 bool CGameInstance::RayCast(const _wstring& strLayerTag, const Ray& tRay, RaycastHit* pOut)
 {
@@ -300,6 +318,11 @@ POINT CGameInstance::Get_MousePos()
 void CGameInstance::Register_UIObject(CUIObject* pUIObject)
 {
 	m_pUIManager->Register_UIObject(pUIObject);
+}
+
+void CGameInstance::Register_DontDestroy_UIObject(CUIObject* pUIObject)
+{
+	m_pUIManager->Register_DeontDestroy_UIObject(pUIObject);
 }
 
 

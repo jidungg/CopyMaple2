@@ -199,7 +199,6 @@ call UpdateLib.bat</Command>
     <ClInclude Include="..\Public\Mesh.h" />
     <ClInclude Include="..\Public\MeshCollider.h" />
     <ClInclude Include="..\Public\MimicBone.h" />
-    <ClInclude Include="..\Public\MimicBoneModel.h" />
     <ClInclude Include="..\Public\Model.h" />
     <ClInclude Include="..\public\Object_Manager.h" />
     <ClInclude Include="..\Public\Pawn.h" />
@@ -252,7 +251,6 @@ call UpdateLib.bat</Command>
     <ClCompile Include="..\Private\Mesh.cpp" />
     <ClCompile Include="..\Private\MeshCollider.cpp" />
     <ClCompile Include="..\Private\MimicBone.cpp" />
-    <ClCompile Include="..\Private\MimicBoneModel.cpp" />
     <ClCompile Include="..\Private\Model.cpp" />
     <ClCompile Include="..\private\Object_Manager.cpp" />
     <ClCompile Include="..\Private\Pawn.cpp" />

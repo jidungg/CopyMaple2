@@ -8,10 +8,59 @@ CItemDataBase::CItemDataBase()
 }
 
 
+HRESULT CItemDataBase::Load_Data()
+{
+	json j;
+	ITEM_DESC* pItemDesc;
+	if (FAILED(CJsonParser::ReadJsonFile("../Bin/Resources/Json/BuildItemData.json", &j)))
+		return E_FAIL;
+	for (auto& item : j["items"])
+	{
+ 		pItemDesc = new BUILD_ITEM_DESC(item);
+		Insert_Data(pItemDesc);
+	}
+
+	j.clear();
+	if (FAILED(CJsonParser::ReadJsonFile("../Bin/Resources/Json/EquipItemData.json", &j)))
+		return E_FAIL;
+	for (auto& item : j["items"])
+	{
+		pItemDesc = new EQUIP_ITEM_DESC(item);
+		Insert_Data(pItemDesc);
+	}
+
+	//j.clear();
+	//if (FAILED(CJsonParser::ReadJsonFile("../Bin/Resources/Json/ConsumableItemData.json", &j)))
+	//	return E_FAIL;
+	//for (auto& item : j["items"])
+	//{
+	//	 pItemDesc = new EQUIP_ITEM_DESC(item);
+	//	Insert_Data( pItemDesc);
+	//}
+
+	//j.clear();
+	//if (FAILED(CJsonParser::ReadJsonFile("../Bin/Resources/Json/DecoItemData.json", &j)))
+	//	return E_FAIL;
+	//for (auto& item : j["items"])
+	//{
+	//	pItemDesc = new EQUIP_ITEM_DESC(item);
+	//	Insert_Data(pItemDesc);
+	//}
+
+	//j.clear();
+	//if (FAILED(CJsonParser::ReadJsonFile("../Bin/Resources/Json/ETCItemData.json", &j)))
+	//	return E_FAIL;
+	//for (auto& item : j["items"])
+	//{
+	//	pItemDesc = new EQUIP_ITEM_DESC(item);
+	//	Insert_Data(pItemDesc);
+	//}
+	return S_OK;
+}
+
 void CItemDataBase::Insert_Data(ITEM_DESC* pData)
 {
-	m_mapItem[(_uint)pData->eType].insert({ pData->strItemName,pData });
-
+	m_mapItem[(_uint)pData->eITemType].insert({ pData->iItemID ,pData });
 }
 
 

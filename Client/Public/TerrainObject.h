@@ -12,9 +12,8 @@ class CTerrainObject :
 public:
 	typedef struct TerrainObjDesc: public CModelObject::MODELOBJ_DESC
 	{
-		TERRAIN_OBJ_TYPE eType = TERRAIN_OBJ_TYPE::LAST;
+		BUILD_ITEM_ID eID = BUILD_ITEM_ID::LAST;
 		_float4 pos = {0,0,0,1};
-		_char  strItemName[MAX_PATH];
 		int data = 0;//MonsterSpawner 
 		_uint index = 0;
 	}TERRAINOBJ_DESC;
@@ -30,19 +29,20 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(_float fTimeDelta) override;
 
-	void Set_TerrainDir(DIRECTION eDir) { m_eTerrainDir = eDir; }
-	_uint Get_Index() { return m_iIndex; }
-	string Get_ModelName() { return m_strItemName; }
-	DIRECTION Get_Direction() { return m_eTerrainDir; }
-
 	virtual json ToJson();
 	void Rotate();
+
+
+	_uint Get_Index() { return m_iIndex; }
+	DIRECTION Get_Direction() { return m_eTerrainDir; }
+	BUILD_ITEM_ID Get_BuildItemID() { return m_eBuildItemID; }
+
+	void Set_TerrainDir(DIRECTION eDir) { m_eTerrainDir = eDir; }
 private:
 	HRESULT Ready_Components(TERRAINOBJ_DESC* pDesc);
 
 protected:
-	TERRAIN_OBJ_TYPE m_eTerrObjType = TERRAIN_OBJ_TYPE::LAST;
-	string m_strItemName;
+	BUILD_ITEM_ID m_eBuildItemID = BUILD_ITEM_ID::LAST;
 	_uint m_iIndex = 0;
 	DIRECTION m_eTerrainDir = DIRECTION::LAST;
 	CCollider* m_pColliderCom = {nullptr};

@@ -37,3 +37,6 @@ female_normal.fbx
 
 .vs/
 
+*.fbx
+*.pdb
+*.idb

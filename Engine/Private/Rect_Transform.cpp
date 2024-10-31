@@ -72,7 +72,7 @@ void CRect_Transform::Compute_Matrix()
 	m_fYPosition = fParentAnchor.y + m_fYOffset - fPivotOffset.y;
 
 	Scaling(m_fSizeX, m_fSizeY, 1.f);
-	Set_State(CTransform::STATE_POSITION, XMVectorSet(m_fXPosition - m_iViewportWidth * 0.5, -m_fYPosition + m_iViewportHeight * 0.5, 0.f, 1.f));
+	Set_State(CTransform::STATE_POSITION, XMVectorSet(m_fXPosition - (_float)(m_iViewportWidth * 0.5), -m_fYPosition + (_float)(m_iViewportHeight * 0.5), 0.f, 1.f));
 
 }
 

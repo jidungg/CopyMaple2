@@ -1,7 +1,7 @@
 #pragma once
 #include "Client_Defines.h"
 #include "Character.h"
-
+#include "Item.h"
 
 
 BEGIN(Client)
@@ -9,6 +9,8 @@ class CSkill;
 class CBoneModelObject;
 class CMimicBoneModelObject;
 class CFace;
+class CInventory;
+class CItemObjet;
 class CPlayer :
 	public CCharacter
 {
@@ -167,8 +169,9 @@ public:
 		SKILL_ID,
 		LAST
 	};
+	
 public:
-	typedef struct : public CGameObject::GAMEOBJECT_DESC
+	typedef struct PlayerDesc : public CGameObject::GAMEOBJECT_DESC
 	{
 
 	}PLAYER_DESC;
@@ -198,24 +201,28 @@ public:
 	void On_FaceStateChange(_uint iState);
 
 	virtual void Use_Skill(CSkill* pSkill) override;
+	HRESULT Gain_Item(CItemObjet* pItem);
+	HRESULT Gain_Item(ITEM_DESC* pItem, _uint iCount = 1);
 
 	CSkill* Get_Skill(SKILL_ID eID) { return m_pSkill[(_uint)eID]; }
-	void Set_Battle(bool bBattle);
+	void Set_Battle(bool bBattle); 
+	HRESULT Equip(EQUIP_ITEM_DESC* pItem);
+	HRESULT UnEquip(EQUIP_ITEM_TYPE eType);
+	HRESULT Set_Deco(struct DECO_ITEM_DESC* pItem);
+	HRESULT Set_Customize(struct CUSTOMIZE_DESC* pItem);
+	void Set_BodyMeshActive(EQUIP_ITEM_TYPE eType, bool bActive);
 protected:
 
-	CSkill* m_pSkill[(_uint)SKILL_ID::LAST];
-	class CWeapon* m_pWeapon = { nullptr };
-	CBoneModelObject* m_pHair = { nullptr };
-	CBoneModelObject* m_pHat = { nullptr };
-	CBoneModelObject* m_pFaceDeco= { nullptr };
-	CModelObject* m_pCape = { nullptr };
-	CModelObject* m_pRobe = { nullptr };
-	CModelObject* m_pGlove = { nullptr };
-	CModelObject* m_pShoes = { nullptr };
+	CSkill* m_pSkill[(_uint)SKILL_ID::LAST] = { nullptr, };
+	CModelObject* m_pEquipModels[(_uint)EQUIP_ITEM_TYPE::LAST] = { nullptr, };
+	CModelObject* m_pDecoModels[(_uint)DECO_TYPE::LAST] = { nullptr, };
+	CModelObject* m_pCustomizes[(_uint)CUSTOMIZE_PART::LAST] = { nullptr, };
 
 	unordered_map<SKILL_ID, ANIM_CONDITION> m_mapSkillTrigger;
 
 	CStateMachine* m_pFaceStateMachine = { nullptr };
+
+	CInventory* m_pInventory = { nullptr };
 
 	_float m_fPainTime = 0.f;
 	//ConditionVar
@@ -224,7 +231,7 @@ protected:
 	_float m_fHeight { 1.f };
 	_float m_fIdleTime  { 0.f };
 	_float m_fBattleTime { 0.f };
-	_bool m_bWalk;
+	_bool m_bWalk{ false };
 	_bool m_bMove { false };
 	_bool m_bWeapon { false };
 	_bool m_bBattle  { false };

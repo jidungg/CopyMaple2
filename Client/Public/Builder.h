@@ -14,7 +14,7 @@ END
 
 BEGIN(Client)
 class CModelObject;
-class CItem;
+
 class CCubeTerrain;
 class CTerrainObject;
 class CBuildPreview;
@@ -46,12 +46,12 @@ public:
 	virtual void Receive_KeyInput(_float fTimeDelta)  override;
 	virtual void Late_Update(_float fTimeDelta) override;
 
-	void Set_BuildItem(const ITEM_DESC* tItemDesc);
+	void Set_BuildItem(BUILD_ITEM_ID eID);
 	void Move_To(const _vector& vPos);
 
 private:
 	HREFTYPE Ready_Builder();
-	HREFTYPE Ready_Preview(const _char* szModelTag);
+	HREFTYPE Ready_Preview(BUILD_ITEM_DESC* pDesc);
 private:
 	CCubeTerrain* m_pCubeTerrain = { nullptr };
 
@@ -60,8 +60,6 @@ private:
 
 	CBuildPreview* m_pPreview = { nullptr };
 	XMVECTOR m_vPreviewOffset = XMVectorSet(0, 0.5f, 0, 1);
-	_char m_szItemName[MAX_PATH] = "";
-	_char m_szBuildItemTag[MAX_PATH] = "";
 	int m_iBuildData = 0;
 	XMVECTOR m_vMoveDir = XMVectorSet(0, 0, 0, 0);
 public:

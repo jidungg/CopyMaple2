@@ -85,7 +85,7 @@ HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle,
 		strcat_s(szFullPath, szExt);
 
 		_tchar		szPerfectPath[MAX_PATH] = TEXT("");
-		MultiByteToWideChar(CP_ACP, 0, szFullPath, strlen(szFullPath), szPerfectPath, MAX_PATH);
+		MultiByteToWideChar(CP_ACP, 0, szFullPath, (int)strlen(szFullPath), szPerfectPath, MAX_PATH);
 		
 		ID3D11ShaderResourceView* pSRV = { nullptr };
 		HRESULT		hr = {};

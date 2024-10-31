@@ -6,6 +6,7 @@
 CHumanModelObject::CHumanModelObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CModelObject(pDevice, pContext)
 {
+
 }
 
 CHumanModelObject::CHumanModelObject(const CHumanModelObject& Prototype)
@@ -24,8 +25,20 @@ HRESULT CHumanModelObject::Initialize(void* pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-	m_iFaceMeshIdx = m_pModelCom->Get_MeshIndex("FA_mesh0002");
+	m_mapMeshPartIdx[MESH_PART_ID::BRA] = m_pModelCom->Get_MeshIndex("CL_Bra_mesh0009");
+	m_mapMeshPartIdx[MESH_PART_ID::TOP] = m_pModelCom->Get_MeshIndex("CL_Skin_mesh0001");
+	m_mapMeshPartIdx[MESH_PART_ID::FACE] = m_pModelCom->Get_MeshIndex("FA_mesh0002");
+	m_mapMeshPartIdx[MESH_PART_ID::EAR] = m_pModelCom->Get_MeshIndex("FA_EA_mesh0004");
+	m_mapMeshPartIdx[MESH_PART_ID::HAIR] = m_pModelCom->Get_MeshIndex("HR_mesh0000");
+	m_mapMeshPartIdx[MESH_PART_ID::PANTY] = m_pModelCom->Get_MeshIndex("PA_Panty_mesh0008");
+	m_mapMeshPartIdx[MESH_PART_ID::BOTTOM] = m_pModelCom->Get_MeshIndex("PA_Skin_mesh0006");
+	m_mapMeshPartIdx[MESH_PART_ID::GLOVE] = m_pModelCom->Get_MeshIndex("GL_mesh0005");
+	m_mapMeshPartIdx[MESH_PART_ID::SHOES] = m_pModelCom->Get_MeshIndex("SH_mesh0007");
     return S_OK;
+}
+void CHumanModelObject::Set_MeshActive(MESH_PART_ID eID, _bool bIsOn)
+{
+	m_pModelCom->Set_MeshActive(m_mapMeshPartIdx[eID], bIsOn);
 }
 HRESULT CHumanModelObject::Ready_Components(void* pArg)
 {
@@ -55,10 +68,10 @@ HRESULT CHumanModelObject::Render()
 	m_pFaceCom->Bind_FaceShaderResource(m_pFaceShaderCom, "g_FaceTexture");
 	for (_uint i = 0; i < iNumMeshes; i++)
 	{
-		if(false == m_pModelCom->Is_Active())
+		if(false == m_pModelCom->Is_MeshActive(i))
 			continue;
 
-		if (i == m_iFaceMeshIdx)
+		if (i == m_mapMeshPartIdx[MESH_PART_ID::FACE])
 			pShader = m_pFaceShaderCom;
 		else
 			pShader = m_pShaderCom;

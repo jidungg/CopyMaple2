@@ -28,11 +28,11 @@
 #include "BoneModelObject.h"
 #include "Weapon.h"
 #include "MimicBoneModel.h"
-#include "MimicBoneModelObject.h"
 #include "Face.h"
 #include "HumanModelObject.h"
 
 #include "Engine_Defines.h"
+#include "UIInventory.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -112,7 +112,7 @@ void CLoader::Show_Debug()
 
 HRESULT CLoader::Loading_Level_Logo()
 {
-	if (FAILED(Load_ItemData()))
+	if (FAILED(ITEMDB->Load_Data()))
 		return E_FAIL;
 	if (FAILED(Load_SkillData()))
 		return E_FAIL;
@@ -128,6 +128,9 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Texture_QuickSlot_Normal"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/QuickSlot_Normal.dds"), 1))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Texture_InvenSlotBack"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/SlotBack/InvenSlot_%d.dds"), 5))))
+		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Face_Face1"),
 		CFace::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Face/00300011/")))))
 		return E_FAIL;
@@ -135,11 +138,18 @@ HRESULT CLoader::Loading_Level_Logo()
 		TEXT("../Bin/Resources/Textures/Skill/"), TEXT(".png"))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
+		TEXT("../Bin/Resources/Textures/Icon/"), TEXT(".png"))))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
+		TEXT("../Bin/Resources/Textures/UI/Inventory/"), TEXT(".dds"))))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/NonAnim/Cube/"), TEXT(".dds"))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/MAP/Field/"), TEXT(".dds"))))
 		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("셰이더 로드."));
 #pragma region Shader
 	/* For.Prototype_Component_Shader_VtxPosTex */
@@ -229,9 +239,14 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIQuickSlot::m_szProtoTag,
 		CUIQuickSlot::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CMimicBoneModelObject::m_szProtoTag,
-		CMimicBoneModelObject::Create(m_pDevice, m_pContext))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIInvenSlot::m_szProtoTag,
+		CUIInvenSlot::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIInventory::m_szProtoTag,
+		CUIInventory::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,
 		CHumanModelObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -292,31 +307,31 @@ HRESULT CLoader::Loading_Level_MyHome()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드"));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_Magnifier"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Magnifier_%d.dds"), 4))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_Magnifier_%d.dds"), 4))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_HomeDialog"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Box_%d.dds"), 4))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_Box_%d.dds"), 4))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_ItemListBack"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_ItemListBack.dds"), 1))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_ItemListBack.dds"), 1))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_HighlightBorder"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Mat_HighlightBorder.dds"), 1))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_Mat_HighlightBorder.dds"), 1))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_SelectedYellow"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home_Dialog_Mat_SelectedYellow.dds"), 1))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_Mat_SelectedYellow.dds"), 1))))
 		return E_FAIL;
 
 
 
 	lstrcpy(m_szLoadingText, TEXT("모델 로드."));
-	//XMMATRIX matGlobal = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
-	//matGlobal = matGlobal * XMMatrixRotationY(XMConvertToRadians(180.f));
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_Model_ChocoDuckyBall"),
-	//	CModel::Create(m_pDevice, m_pContext, "../Bin/Resources/FBXs/DuckyBall/60100001_chocoduckyball.model", matGlobal))))
-	//	return E_FAIL;
+	XMMATRIX matPretransform = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
+	matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(Load_Dirctory_Models(LEVEL_HOME,
+		TEXT("../Bin/resources/FBXs/Anim/DuckyBall"), CModel::TYPE_ANIM, matPretransform)))
+		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("객체 로드."));
 	/* For.Prototype_GameObject_HomeDialog */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, CUIHomeDialog::m_szProtoTag,
@@ -345,18 +360,6 @@ HRESULT CLoader::Loading_Level_MyHome()
 	return S_OK;
 }
 
-HRESULT CLoader::Load_ItemData()
-{
-	json j;
-	if (FAILED(CJsonParser::ReadJsonFile("../Bin/Resources/Json/ItemData.json", &j)))
-		return E_FAIL;
-	for (auto& item : j["items"])
-	{
-		ITEM_DESC* pItemDesc = new ITEM_DESC(item);
-		ITEMDB->Insert_Data(pItemDesc);
-	}
-	return S_OK;
-}
 
 HRESULT CLoader::Load_SkillData()
 {

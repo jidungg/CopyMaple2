@@ -1,6 +1,6 @@
 #pragma once
 #include "Base.h"
-
+#include "Model.h"
 
 BEGIN(Client)
 typedef struct ItemDesc : public UIListItemData
@@ -8,18 +8,21 @@ typedef struct ItemDesc : public UIListItemData
 	ItemDesc() = default;
 	ItemDesc(json& js)
 	{
-		eType = ITEM_TYPE(js["type"]);
-		string str = js["name"];
+
+		string str = js["Name"];
 		std::copy(str.begin(), str.end(), strItemName);
-		str = js["desc"];
+		str = js["Desc"];
 		std::copy(str.begin(), str.end(), strItemDesc);
-		str = js["iconimg"];
+		str = js["IconImg"];
 		std::copy(str.begin(), str.end(), strIconImageTag);
-		str = js["model"];
+		str = js["Model"];
 		std::copy(str.begin(), str.end(), strModelTag);
-		iPrice = js["price"];
+		iPrice = js["Price"];
+		eItemGrade = js["ItemGrade"];
 	}
-	ITEM_TYPE eType = ITEM_TYPE::LAST;
+	ITEM_TYPE eITemType = ITEM_TYPE::LAST;
+	ITEM_GRADE eItemGrade = ITEM_GRADE::LAST;
+	_uint iItemID = 0;
 	_char strItemName[MAX_PATH] = ("");
 	_char strItemDesc[MAX_PATH] = ("");
 	_char strIconImageTag[MAX_PATH] = ("");
@@ -27,5 +30,29 @@ typedef struct ItemDesc : public UIListItemData
 	_uint iPrice = 0;
 
 }ITEM_DESC;
+typedef struct BuildItemDesc : public ItemDesc
+{
+	BuildItemDesc() = default;
+	BuildItemDesc(json& js) : ItemDesc(js)
+	{
+		eITemType = ITEM_TYPE::BUILD;
+		eBuildType =js["BuildItemType"];
+		BUILD_ITEM_ID eId = js["ItemId"];
+		iItemID = (_uint)eId;
 
+	}
+	BUILD_ITEM_TYPE eBuildType;
+}BUILD_ITEM_DESC;
+typedef struct EquipItemDesc : public ItemDesc
+{
+	EquipItemDesc() = default;
+	EquipItemDesc(json& js) : ItemDesc(js)
+	{
+		eITemType = ITEM_TYPE::EQUIP;
+		eEquipType = js["EquipItemType"];
+		EQUIP_ITEM_ID eId = js["ItemId"];
+		iItemID = (_uint)eId;
+	}
+	EQUIP_ITEM_TYPE eEquipType;
+}EQUIP_ITEM_DESC;
 END

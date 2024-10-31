@@ -37,7 +37,8 @@ HRESULT CBuilder::Initialize(void* pArg)
 
 	if (FAILED(Ready_Builder()))
 		return E_FAIL;
-	if (FAILED(Ready_Preview("EmptyModel.model")))
+;
+	if (FAILED(Ready_Preview(static_cast<BUILD_ITEM_DESC*>( ITEMDB->Get_Data(ITEM_TYPE::BUILD, 0)))))
 		return E_FAIL;
 	return S_OK;
 }
@@ -47,11 +48,8 @@ HREFTYPE CBuilder::Ready_Builder()
 	CModelObject::MODELOBJ_DESC tModelDesc;
 	tModelDesc.fRotationPerSec = 5.f;
 	tModelDesc.fSpeedPerSec = 1.f;
-	//tModelDesc.eModelType = CModel::TYPE_ANIM;
-	tModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+	tModelDesc.eModelProtoLevelID = LEVEL_HOME;
 	strcpy_s(tModelDesc.strModelProtoName, "60100001_chocoduckyball.model");
-	//tModelDesc.eShaderProtoLevelID = LEVEL_LOADING;
-	//strcpy_s(tModelDesc.strShaderProtoName, "Prototype_Component_Shader_VtxAnimMesh");
 	m_pBird = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
 	Add_Child(m_pBird);
 	m_pBird->Set_AnimationLoop(0, true);
@@ -59,15 +57,14 @@ HREFTYPE CBuilder::Ready_Builder()
 
 	return S_OK;
 }
-HREFTYPE CBuilder::Ready_Preview(const _char* szModelTag)
+HREFTYPE CBuilder::Ready_Preview(BUILD_ITEM_DESC* pDesc)
 {
 	CTerrainObject::TERRAINOBJ_DESC tTerrObjDesc;
 	tTerrObjDesc.fRotationPerSec = 5.f;
 	tTerrObjDesc.fSpeedPerSec = 1.f;
+	tTerrObjDesc.eID = (BUILD_ITEM_ID)pDesc->iItemID;
 	tTerrObjDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tTerrObjDesc.strModelProtoName, szModelTag);
-	//tTerrObjDesc.eShaderProtoLevelID = LEVEL_LOADING;
-	//strcpy_s(tTerrObjDesc.strShaderProtoName, "Prototype_Component_Shader_VtxMesh");
+	strcpy_s(tTerrObjDesc.strModelProtoName, pDesc->strModelTag);
 	XMStoreFloat4(&tTerrObjDesc.pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_vPreviewOffset);
 
 	m_pPreview = static_cast<CBuildPreview*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ,LEVEL_HOME, CBuildPreview::m_szProtoTag, &tTerrObjDesc));
@@ -114,16 +111,13 @@ void CBuilder::Receive_KeyInput(_float fTimeDelta)
 	}
 	if (m_pGameInstance->GetKeyState(KEY::SPACE) == KEY_STATE::DOWN) // ��ġ
 	{
+		BUILD_ITEM_DESC* itemdesc =static_cast<BUILD_ITEM_DESC*>( ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)m_pPreview->Get_BuildItemID()));
 		CTerrainObject::TERRAINOBJ_DESC desc;
 		desc.fRotationPerSec = 5.f;
 		desc.fSpeedPerSec = 1.f;
-		desc.eType = TERRAIN_OBJ_TYPE::BLOCK;
-		strcpy_s(desc.strItemName, m_szItemName);
-		ITEM_DESC* itemdesc = ITEMDB->GetItemDesc(ITEM_TYPE::BUILD, desc.strItemName);
-		strcpy_s(desc.strModelProtoName, itemdesc->strModelTag);
+		desc.eID = m_pPreview->Get_BuildItemID();
 		desc.eModelProtoLevelID = LEVEL_LOADING;
-		//strcpy_s(desc.strShaderProtoName, ("Prototype_Component_Shader_VtxMesh"));
-		//desc.eShaderProtoLevelID = LEVEL_LOADING;
+		strcpy_s(desc.strModelProtoName, itemdesc->strModelTag);
 		desc.direction = m_pPreview->Get_Direction();
 		desc.data = m_iBuildData;
 		_float4 pos;
@@ -163,12 +157,13 @@ void CBuilder::Late_Update(_float fTimeDelta)
 
 
 
-void CBuilder::Set_BuildItem(const ITEM_DESC* tItemDesc)
+void CBuilder::Set_BuildItem(BUILD_ITEM_ID eID)
 {
-	strcpy_s(m_szItemName, tItemDesc->strItemName);
+	BUILD_ITEM_DESC* tItemDesc = static_cast<BUILD_ITEM_DESC*>(ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)eID));
+
 	Remove_Child(m_pPreview);
 	Safe_Release(m_pPreview);
-	Ready_Preview(tItemDesc->strModelTag);
+	Ready_Preview(tItemDesc);
 }
 
 void CBuilder::Move_To(const _vector& vPos)

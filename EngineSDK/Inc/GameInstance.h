@@ -44,8 +44,10 @@ public: /* For.Prototype_Manager */
 	class CBase* Clone_Proto_Component_Current(const _wstring& strPrototypeTag, void* pArg);
 
 public: /* For.Object_Manager */
-	HRESULT Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLevelIndex, const _wstring& strLayerTag,  void* pArg = nullptr);
-	HRESULT Add_GameObject_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, CGameObject* pObj);
+	HRESULT Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLevelIndex, const _wstring& strLayerTag,  void* pArg = nullptr, bool bDontDestroy = false);
+	HRESULT Add_GameObject_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, CGameObject* pObj, bool bDontDestroy = false);
+	CGameObject* Get_FirstGameObject(_uint iLevIdx, const _wstring& strLayerTag);
+	void ObjectManager_On_OpenLevel(_uint iLevelIndex);
 	bool RayCast(const _wstring& strLayerTag, const Ray& tRay, RaycastHit* pOut);
 	bool RayCast(const Ray& tRay, RaycastHit* pOut);
 
@@ -63,6 +65,7 @@ public: //For Key Manager
 
 public://For UI Manager
 	void Register_UIObject(class CUIObject* pUIObject);
+	void Register_DontDestroy_UIObject(class CUIObject* pUIObject);
 
 public: /* Light_Manager */
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);

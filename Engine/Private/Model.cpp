@@ -176,8 +176,8 @@ HRESULT CModel::Initialize(void* pArg)
 	if(m_eModelType == TYPE::TYPE_MIMIC)
 	{
 		MODEL_DESC* pDesc = static_cast<MODEL_DESC*>(pArg);
-		const CModel* pTarget = pDesc->pTarget;
-
+		const CModel* pTarget = pDesc->pMimicTarget;
+		assert(pTarget != nullptr);
 		for (auto& pBone : m_Bones)
 		{
 			static_cast<CMimicBone*>(pBone)->Set_Target(pTarget->Get_BoneMatrix(pBone->Get_Name()));
@@ -331,6 +331,11 @@ void CModel::Set_Animation(_uint iIdx)
 void CModel::Set_AnimPostDelayPercent(_uint iIdx, _float fPercent)
 {
 	m_Animations[iIdx]->Set_PostDealyPercent(fPercent);
+}
+
+void CModel::Set_MeshActive(_uint iIdx, _bool bIsOn)
+{
+	m_Meshes[iIdx]->Set_Active(bIsOn);
 }
 
 void CModel::Switch_Animation(_uint iIdx)

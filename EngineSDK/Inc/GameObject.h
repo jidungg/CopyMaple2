@@ -35,10 +35,14 @@ public:
 	virtual void Remove_Child(CGameObject* pChild);
 	class CComponent* Find_Component(const _wstring& strComponentTag);
 	bool Is_Active() { return m_bActive; }
-	void Set_Active(bool bValue) { m_bActive = bValue; }
 	bool Is_Dead() { return m_bDead; }
+	bool Is_DontDestroy() { return m_bDontDestroy; }
+
+	void Set_Active(bool bValue) { m_bActive = bValue; }
+	void Toggle_Active() { m_bActive = !m_bActive; }
 	void Set_Dead() { m_bDead = true; }
 	void Set_Target(CGameObject* pTaraget) { Safe_Release(m_pTarget); m_pTarget = pTaraget; Safe_AddRef(m_pTarget); }
+	void Set_DontDestroy(bool bValue) { m_bDontDestroy = bValue; }
 
 	class CTransform* Get_Transform() { return m_pTransformCom; }
 	virtual bool Check_Collision(const Ray& tRay, RaycastHit* pOut);
@@ -61,7 +65,7 @@ protected:
 
 	bool						m_bActive = { true };
 	bool						m_bDead = { false };
-	
+	bool						m_bDontDestroy = { false };	
 
 protected:
 	_uint						m_iObjID = {};

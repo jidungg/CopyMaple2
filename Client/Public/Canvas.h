@@ -7,7 +7,7 @@ class CCanvas :
     public CUIObject
 {
 public:
-	typedef struct : public CUIObject::UIOBJECT_DESC
+	typedef struct CanvasDesc: public CUIObject::UIOBJECT_DESC
 	{
 		
 	}CANVAS_DESC;

@@ -1,0 +1,45 @@
+{
+    "items": [
+        {
+            "BuildItemType": "BLOCK",
+            "ItemId": "GRASS_1",
+            "ItemGrade" :  "NORMAL",
+            "Name": "풀 블록1",
+            "Desc": "풀이 돋아난 블록.",
+            "Price": 10,
+            "IconImg": "he_ground_grass_a01.dds",
+            "Model": "he_ground_grass_a01.model"
+        },
+        {
+            "BuildItemType": "BLOCK",
+            "ItemId": "ROCK_1",
+            "ItemGrade": "NORMAL",
+            "Name": "돌 블록1",
+            "Desc": "단단한 돌 블록.",
+            "Price": 10,
+            "IconImg": "he_ground_rock_a01.dds",
+            "Model": "he_ground_rock_a01.model"
+        },
+        {
+            "BuildItemType": "FIELD",
+            "ItemId": "BUSH_1",
+            "ItemGrade": "NORMAL",
+            "Name": "부쉬 1",
+            "Desc": "부쉬.",
+            "Price": 10,
+            "IconImg": "he_fi_cubric_bush_a01.dds",
+            "Model": "he_fi_cubric_bush_a01.model"
+        },
+        {
+            "BuildItemType": "FIELD",
+            "ItemId": "FLOWER_1",
+            "ItemGrade": "NORMAL",
+            "Name": "꽃 1",
+            "Desc": "꽃.",
+            "Price": 10,
+            "IconImg": "he_fi_nature_flower_a01.dds",
+            "Model": "he_fi_nature_flower_a01.model"
+        }
+
+    ]
+}

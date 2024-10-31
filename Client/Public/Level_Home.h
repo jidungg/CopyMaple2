@@ -23,7 +23,7 @@ public:
 	virtual HRESULT Render()override;
 
 	void On_BuildItemSelected(void*);
-	void Set_BuildItem(const ITEM_DESC* pItemDesc);
+	void Set_BuildItem(BUILD_ITEM_ID eID);
 private:
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_UI(const _wstring& strLayerTag);
@@ -37,8 +37,8 @@ private:
 	CCamera_Trace* m_pCamera = { nullptr };
 	CPlayer* m_pPlayer = { nullptr };
 
-	map<string,  ITEM_DESC*>* m_pItemData = nullptr;
-	map<string,  ITEM_DESC*>::iterator m_pItemIter = {};
+	map<_uint,  ITEM_DESC*>* m_pItemData = nullptr;
+	map<_uint,  ITEM_DESC*>::iterator m_pItemIter = {};
 	bool m_bBuildMode = false;
 
 	CUIHomeDialog* m_pHomeDialog = { nullptr };

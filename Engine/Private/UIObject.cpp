@@ -10,14 +10,9 @@ CUIObject::CUIObject(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 }
 
 CUIObject::CUIObject(const CUIObject & Prototype)
-	: CGameObject{ Prototype },
-	m_pTextureCom{ Prototype.m_pTextureCom },
-	m_pVIBufferCom{ Prototype.m_pVIBufferCom },
-	m_pShaderCom{ Prototype.m_pShaderCom }
+	: CGameObject{ Prototype }
 {
-	Safe_AddRef(m_pTextureCom);
-	Safe_AddRef(m_pVIBufferCom);
-	Safe_AddRef(m_pShaderCom);
+
 	Increase_Priority();
 }
 
@@ -34,8 +29,7 @@ HRESULT CUIObject::Initialize(void * pArg)
 	{
 		m_pTarget = pDesc->pTarget;
 		Safe_AddRef(m_pTarget);
-		if(pDesc->pTextureCom)
-			m_pTextureCom = pDesc->pTextureCom;
+
 	}
 
 
@@ -55,33 +49,6 @@ void CUIObject::Update(_float fTimeDelta)
 
 }
 
-void CUIObject::Late_Update(_float fTimeDelta)
-{
-	if (false == m_bActive) return;
-
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
-}
-
-
-HRESULT CUIObject::Render()
-{
-
-	if (FAILED(Bind_ShaderResources()))
-		return E_FAIL;
-	if (m_pShaderCom)
-		m_pShaderCom->Begin(0);
-	if (m_pVIBufferCom)
-	{
-		m_pVIBufferCom->Bind_BufferDesc();
-		m_pVIBufferCom->Render();
-	}
-
-	for (auto& child : m_pChilds)
-		if (child->Is_Active())
-			child->Render();
-
-	return S_OK;
-}
 
 void CUIObject::Add_Child(CGameObject* pChild)
 {
@@ -89,7 +56,7 @@ void CUIObject::Add_Child(CGameObject* pChild)
 
 	static_cast<CUIObject*>(pChild)->m_pParent = this;
 
-	static_cast<CRect_Transform*>(pChild->Get_Transform())->Compute_Matrix();
+	Compute_Matrix_Recursive();
 }
 
 void CUIObject::Remove_Child(CGameObject* pChild)
@@ -97,15 +64,6 @@ void CUIObject::Remove_Child(CGameObject* pChild)
 	__super::Remove_Child(pChild);
 	static_cast<CUIObject*>(pChild)->m_pParent = nullptr;
 }
-
-void CUIObject::Add_OnlyTransformChild(CUIObject* pChild)
-{
-	if (pChild == nullptr)
-		return;
-	pChild->Get_Transform()->Set_Parent(m_pTransformCom);
-	static_cast<CRect_Transform*>(pChild->Get_Transform())->Compute_Matrix();
-}
-
 void CUIObject::Increase_Priority()
 {
 	if(m_pParent == nullptr)
@@ -114,25 +72,23 @@ void CUIObject::Increase_Priority()
 		static_cast<CUIObject*>(m_pParent)->Increase_Priority();
 }
 
-
-HRESULT CUIObject::Bind_ShaderResources()
+void CUIObject::Compute_Matrix_Recursive()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-		return E_FAIL;
-
-	if (m_pShaderCom)
+	Compute_Matrix();
+	for (auto& p : m_pChilds)
 	{
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_UI_VIEW))))
-			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_UI_PROJ))))
-			return E_FAIL;
+		static_cast<CUIObject*>(p)->Compute_Matrix_Recursive();
 	}
-	if(m_pTextureCom)
-		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iSRVIndex)))
-			return E_FAIL;
-
-	return S_OK;
 }
+
+void CUIObject::Compute_Matrix()
+{
+	static_cast<CRect_Transform*>(m_pTransformCom)->Compute_Matrix();
+	__super::Compute_Matrix();
+}
+
+
+
 
 
 void CUIObject::MouseOver()
@@ -234,7 +190,4 @@ void CUIObject::Free()
 	__super::Free();
 
 
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
-  	Safe_Release(m_pVIBufferCom);
 }

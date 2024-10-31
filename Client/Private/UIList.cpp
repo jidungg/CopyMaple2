@@ -36,8 +36,8 @@ HRESULT CUIList::Initialize(void* pArg)
 
 
 	_float3 fSize = m_pTransformCom->Compute_Scaled();
-	_uint iXMaxCount = fSize.x / m_fItemWidth;
-	_uint iYMaxCount = fSize.y / m_fItemHeight;
+	_uint iXMaxCount = _uint(fSize.x / m_fItemWidth);
+	_uint iYMaxCount = _uint(fSize.y / m_fItemHeight);
 	_uint iItemIdx = 0;
 	for (auto& data : *pDesc->listData)
 	{

@@ -11,7 +11,7 @@ class CUIHomeDialog :
 public:
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_HomeDialog";
 public:
-	typedef struct : public CUIPanel::PANEL_DESC
+	typedef struct PanelDesc: public CUIPanel::PANEL_DESC
 	{
 		list<UIListItemData*>* listData;
 	}HOMEDIALOG_DESC;
@@ -24,6 +24,8 @@ protected:
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
+	virtual void Late_Update(_float fTimeDelta) override;
+
 
 	virtual void On_MouseEnter();
 	virtual void MouseOver();

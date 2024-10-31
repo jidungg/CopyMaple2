@@ -20,6 +20,7 @@ public:
 
 public:
 	void Register_UIObject(CUIObject* pUIObject);
+	void Register_DeontDestroy_UIObject(CUIObject* pUIObject);
 	void Clear();
 
 	bool Consume_MouseLButtonDown();
@@ -28,6 +29,7 @@ public:
 	bool Consume_MouseRButtonUp();
 private:
 	list<CUIObject*> m_UIObjectList;
+	list<CUIObject*> m_DontDestroyUIObjectList;
 	CGameInstance* m_pGameInstance = nullptr;
 	CUIObject* m_pFocusedUI = nullptr;
 	CUIObject* m_pPressedUI = nullptr;

@@ -16,6 +16,19 @@ void CUIManager::Update()
 {
     POINT tPosition = m_pGameInstance->Get_MousePos();
 	CUIObject* pTopUI = nullptr;
+    for (auto& pUIObject : m_DontDestroyUIObjectList)
+    {
+        if (false == pUIObject->Is_Active()) continue;
+        if (pUIObject->Check_MouseOver(tPosition))
+        {
+            if (pTopUI == nullptr)
+                pTopUI = pUIObject;
+            else
+                pTopUI = pUIObject->Get_Priority() > pTopUI->Get_Priority() ? pUIObject : pTopUI;
+        }
+        else
+            pUIObject->MouseNotOver();
+    }
     for (auto& pUIObject : m_UIObjectList)
     {
         if (false == pUIObject->Is_Active()) continue;
@@ -41,7 +54,18 @@ void CUIManager::Update()
 }
 void CUIManager::Register_UIObject(CUIObject* pUIObject)
 {
-	m_UIObjectList.push_back(pUIObject);
+    if(pUIObject->Is_DontDestroy())
+		Register_DeontDestroy_UIObject(pUIObject);
+	else
+    {
+        m_UIObjectList.push_back(pUIObject);
+        Safe_AddRef(pUIObject);
+    }
+
+}
+void CUIManager::Register_DeontDestroy_UIObject(CUIObject* pUIObject)
+{
+	m_DontDestroyUIObjectList.push_back(pUIObject);
 	Safe_AddRef(pUIObject);
 }
 void CUIManager::Clear()
@@ -140,4 +164,9 @@ void CUIManager::Free(void)
 {
 	__super::Free();
     Clear();
+    for (auto& pUI : m_DontDestroyUIObjectList)
+    {
+		Safe_Release(pUI);
+    }
+    m_DontDestroyUIObjectList.clear();
 }

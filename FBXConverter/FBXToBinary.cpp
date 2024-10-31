@@ -18,7 +18,7 @@ HRESULT CModelConverter::FbxToBianry(const string& inFilePath)
 
 
 	m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
-	m_bAnim = true;
+//	m_bAnim = true;
 	m_bAnim = m_pAIScene->HasAnimations();
 	
 	if (m_bAnim == false)
@@ -238,12 +238,12 @@ HRESULT CModelConverter::Write_Animation(const aiAnimation* pAIAnim, ofstream& o
 				vRotation.y = pAIChannel->mRotationKeys[i].mValue.y;
 				vRotation.z = pAIChannel->mRotationKeys[i].mValue.z;
 				vRotation.w = pAIChannel->mRotationKeys[i].mValue.w;
-				KeyFrame.fKeyFramePosition = pAIChannel->mRotationKeys[i].mTime;
+				KeyFrame.fKeyFramePosition = (_float)pAIChannel->mRotationKeys[i].mTime;
 			}
 			if (i < pAIChannel->mNumPositionKeys)
 			{
 				memcpy(&vPosition, &pAIChannel->mPositionKeys[i].mValue, sizeof(_float3));
-				KeyFrame.fKeyFramePosition = pAIChannel->mPositionKeys[i].mTime;
+				KeyFrame.fKeyFramePosition =(_float) pAIChannel->mPositionKeys[i].mTime;
 			}
 
 			KeyFrame.vScale = vScale;

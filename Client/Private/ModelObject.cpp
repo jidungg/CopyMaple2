@@ -56,7 +56,7 @@ HRESULT CModelObject::Ready_Components(void* pArg)
     string tmp = pDesc->strModelProtoName;
     wstring wtmp = wstring(tmp.begin(), tmp.end());
 	CModel::ModelDesc modelDesc;
-	modelDesc.pTarget = pDesc->pTarget;
+    modelDesc.pMimicTarget =  pDesc->pMimicTarget;
     m_pModelCom = static_cast<CModel*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, pDesc->eModelProtoLevelID,wtmp,&modelDesc));
     if (FAILED(Add_Component(m_pModelCom, TEXT("Com_Model"))))
         return E_FAIL;
@@ -125,6 +125,20 @@ void CModelObject::Switch_Animation(_uint iIdx)
 	m_pModelCom->Switch_Animation(iIdx);
 }
 
+HRESULT CModelObject::Replace_Model(MODELOBJ_DESC* pDesc)
+{
+    Remove_Component(m_pModelCom);
+    /* Com_VIBuffer */
+    string tmp = pDesc->strModelProtoName;
+    wstring wtmp = wstring(tmp.begin(), tmp.end());
+    CModel::ModelDesc modelDesc;
+    modelDesc.pMimicTarget = pDesc->pMimicTarget;
+    m_pModelCom = static_cast<CModel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, pDesc->eModelProtoLevelID, wtmp, &modelDesc));
+    if (FAILED(Add_Component(m_pModelCom, TEXT("Com_Model"))))
+        return E_FAIL;
+
+}
+
 
 
 HRESULT CModelObject::Bind_ShaderResources(CShader* pShader)
@@ -140,7 +154,6 @@ HRESULT CModelObject::Bind_ShaderResources(CShader* pShader)
         return E_FAIL;
 
     const LIGHT_DESC* pLightDesc = m_pGameInstance->Get_LightDesc(0);
-
 
     if (FAILED(pShader->Bind_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
         return E_FAIL;

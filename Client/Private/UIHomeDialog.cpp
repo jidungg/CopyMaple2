@@ -33,6 +33,15 @@ HRESULT CUIHomeDialog::Initialize(void* pArg)
 	return S_OK;
 }
 
+void CUIHomeDialog::Late_Update(_float fTimeDelta)
+{
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
+
+	
+}
+
+
+
 void CUIHomeDialog::On_MouseEnter()
 {
 }

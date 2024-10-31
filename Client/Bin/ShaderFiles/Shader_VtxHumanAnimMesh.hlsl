@@ -93,8 +93,8 @@ PS_OUT PS_MAIN(PS_IN In)
         discard;
 
     vector vFaceDiffuse = g_FaceTexture.Sample(LinearSampler, In.vTexcoord);
-    if(vFaceDiffuse.a > 0.f)
-        vMtrlDiffuse = vFaceDiffuse;
+
+    vMtrlDiffuse = vFaceDiffuse.a * vFaceDiffuse + (1 - vFaceDiffuse.a) * vMtrlDiffuse;
 	/* ��� */
     float4 vShade = saturate(max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
 	

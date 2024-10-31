@@ -28,20 +28,21 @@ public:
 	virtual HRESULT Initialize_Prototype()override;
 	virtual HRESULT Initialize(void* pArg)override;
 	virtual void Update(_float fTimeDelta) override;
-	virtual void Late_Update(_float fTimeDelta) override;
-	virtual HRESULT Render()override;
+
 
 
 	virtual void Add_Child(CGameObject* pChild) override;
 	virtual void Remove_Child(CGameObject* pChild);
-	void Add_OnlyTransformChild(CUIObject* pUIobj);
 	void Increase_Priority();
+	void Compute_Matrix_Recursive();
+	virtual void Compute_Matrix() override;
 
 	_uint Get_Priority() { return m_iPriority; }
 public:
 
 	void MouseOver();
 	void MouseNotOver(CUIObject* pExcept = nullptr);
+	bool Check_MouseOver(POINT fPos);
 	virtual void On_MouseOver();
 	virtual void On_MouseEnter();
 	virtual void On_MouseExit();
@@ -51,20 +52,17 @@ public:
 	virtual void On_MouseRButtonUp();
 	virtual void On_MouseClick();
 	virtual void On_MouseRightClick();
-	bool Check_MouseOver(POINT fPos);
 
 	CUIObject* Find_FocusedUI(POINT fPos);
 protected:
-	virtual HRESULT Bind_ShaderResources();
+
 
 protected:
 	static _uint			m_iStaticPriority;
 	_uint					m_iPriority = {};
 	_uint					m_iSRVIndex= 0;		
 
-	CShader* m_pShaderCom = { nullptr };
-	CTexture* m_pTextureCom = { nullptr };
-	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+
 	CGameObject* m_pParent = { nullptr };
 private:
 	bool m_bMouseOver = false;

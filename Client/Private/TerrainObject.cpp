@@ -17,8 +17,7 @@ CTerrainObject::CTerrainObject(const CTerrainObject& Prototype)
 	m_pColliderCom{ Prototype.m_pColliderCom }
 	, m_eTerrainDir{ Prototype.m_eTerrainDir }
 	, m_iIndex{ Prototype.m_iIndex }
-	, m_strItemName{ Prototype.m_strItemName }
-	, m_eTerrObjType{ Prototype.m_eTerrObjType }
+	, m_eBuildItemID{ Prototype.m_eBuildItemID }
 {
 
 	Safe_AddRef(m_pColliderCom);
@@ -39,8 +38,7 @@ HRESULT CTerrainObject::Initialize(void* pArg)
 
 	pDesc->fRotationPerSec = 5.f;
 	pDesc->fSpeedPerSec = 1.f;
-	m_strItemName = pDesc->strItemName;
-	m_eTerrObjType = pDesc->eType;
+	m_eBuildItemID = pDesc->eID;
 	m_eTerrainDir = pDesc->direction;
 	m_iIndex = pDesc->index;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(pDesc->pos.x, pDesc->pos.y, pDesc->pos.z,1));
@@ -63,12 +61,11 @@ void CTerrainObject::Update(_float fTimeDelta)
 json CTerrainObject::ToJson()
 {
 	json j;
-	j["type"] = m_eTerrObjType;
-	j["model"] = m_strItemName;
-	j["data"] = 0;
-	j["iteration"] = 1;
-	j["direction"] = m_eTerrainDir;
-	j["index"] = m_iIndex;
+	j["ItemId"] = m_eBuildItemID;
+	j["Data"] = 0;
+	j["Iteration"] = 1;
+	j["Direction"] = m_eTerrainDir;
+	j["Index"] = m_iIndex;
 	return j;
 }
 
@@ -77,8 +74,6 @@ void CTerrainObject::Rotate()
 	m_eTerrainDir = (DIRECTION)(((_uint)m_eTerrainDir + 1) % (_uint)DIRECTION::XMZP);
 
 }
-
-
 
 
 HRESULT CTerrainObject::Ready_Components(TERRAINOBJ_DESC* pDesc)

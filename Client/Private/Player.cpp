@@ -6,9 +6,11 @@
 #include "StateMachine.h"
 #include "SkillManager.h"
 #include "Weapon.h"
-#include "MimicBoneModelObject.h"
 #include "Face.h"
 #include "HumanModelObject.h"
+#include "Item.h"
+#include "Inventory.h"
+#include "ItemDataBase.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -17,6 +19,19 @@ CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	{
 		m_pSkill[i] = nullptr;
 	}
+	for (auto& pEquip : m_pEquipModels)
+	{
+		pEquip = nullptr;
+	}
+	for (auto& pDeco : m_pDecoModels)
+	{
+		pDeco = nullptr;
+	}
+	for (auto& pCustomize : m_pCustomizes)
+	{
+		pCustomize = nullptr;
+	}
+
 }
 
 CPlayer::CPlayer(const CPlayer& Prototype)
@@ -31,6 +46,21 @@ CPlayer::CPlayer(const CPlayer& Prototype)
 		m_pSkill[i] = Prototype.m_pSkill[i];
 		Safe_AddRef(m_pSkill[i]);
 	}
+	//for (auto& pEquip : m_pEquipModels)
+	//{
+	//	pEquip = Prototype.m_pEquipModels[(_uint)(&pEquip - &m_pEquipModels[0])];
+	//	Safe_AddRef(pEquip);
+	//}
+	//for (auto& pDeco : m_pDecoModels)
+	//{
+	//	pDeco = Prototype.m_pDecoModels[(_uint)(&pDeco - &m_pDecoModels[0])];
+	//	Safe_AddRef(pDeco);
+	//}
+	//for (auto& pCustomize : m_pCustomizes)
+	//{
+	//	pCustomize = Prototype.m_pCustomizes[(_uint)(&pCustomize - &m_pCustomizes[0])];
+	//	Safe_AddRef(pCustomize);
+	//}
 	m_fRunSpeed = Prototype.m_fRunSpeed;
 	m_fJumpPower = Prototype.m_fJumpPower;
 	m_fFloorHeight = Prototype.m_fFloorHeight;
@@ -57,6 +87,8 @@ HRESULT CPlayer::Initialize(void* pArg)
 {
 	if (nullptr == pArg)
 		return E_FAIL;
+
+	m_pInventory = INVENTORY;
 	PLAYER_DESC* desc = static_cast<PLAYER_DESC*>(pArg);
 	desc->fSpeedPerSec = m_fRunSpeed;
 	desc->fRotationPerSec = 5.f;
@@ -73,6 +105,34 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (FAILED(Ready_Skill()))
 		return E_FAIL;
 
+	ITEM_DESC* pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_STAFF);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_HAT);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_SHOES);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_SUIT);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_SUIT);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::EVILWINGS);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_BOTTOM);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_CAPE);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_EAR);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_GLOVE);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_HAT);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_STAFF);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_TOP);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_SHOES);
+	Gain_Item(pItemDesc);
 	return S_OK;
 }
 
@@ -88,82 +148,26 @@ HRESULT CPlayer::Ready_Parts()
 	Add_Child(m_pBody);
 	m_pBody->Set_Animation((_uint)ANIM_STATE::IDLE);
 
-	//Robe
-	CModelObject::MODELOBJ_DESC tModelDesc = {};
-	tModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tModelDesc.strModelProtoName, "12200007_f_clpasuperiorcoat.model");
-	tModelDesc.pTarget = m_pBody->Get_ModelCom();
-	m_pRobe = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
-	if (nullptr == m_pRobe) return E_FAIL;
-	Add_Child(m_pRobe);
-
-	//Glove
-	tModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tModelDesc.strModelProtoName, "11701261_f_shfireprism.model");
-	tModelDesc.pTarget = m_pBody->Get_ModelCom();
-	m_pShoes = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
-	if (nullptr == m_pShoes) return E_FAIL;
-	Add_Child(m_pShoes);
-
-	//Glove
-	tModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tModelDesc.strModelProtoName, "11601166_f_glfireprism.model");
-	tModelDesc.pTarget = m_pBody->Get_ModelCom();
-	m_pGlove = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
-	if (nullptr == m_pGlove) return E_FAIL;
-	Add_Child(m_pGlove);
-	//Weapon
-	CWeapon::WEAPON_DESC WeaponDesc{};
-	WeaponDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(WeaponDesc.strModelProtoName, "15200025_evilwings.model");
-	WeaponDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Weapon_Hand_R_Point");
-	WeaponDesc.pBackSocketMatrix = (m_pBody)->Get_BoneMatrix("Weapon_Back_B_Point");
-	m_pWeapon = static_cast<CWeapon*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CWeapon::m_szProtoTag, &WeaponDesc));
-	if (nullptr == m_pWeapon) return E_FAIL;
-	m_pWeapon->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
-
-	m_pWeapon->Set_Battle(m_bBattle);
-	Add_Child(m_pWeapon);
-
 	//Hair
 	CBoneModelObject::BONEMODELOBJ_DESC tBoneModelDesc = {};
 	tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tBoneModelDesc.strModelProtoName, "00200007_f_jujuwave_p_a.model");
+	strcpy_s(tBoneModelDesc.strModelProtoName, "00200028_m_shortpigtailhair_p_a.model");
 	tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("HR");//Bip01 HeadNub_end
-	m_pHair = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
-	if (nullptr == m_pHair) return E_FAIL;
-	Add_Child(m_pHair);
-	m_pHair->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
+	m_pCustomizes[(_uint)CUSTOMIZE_PART::HAIR] = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
+	if (nullptr == m_pCustomizes[(_uint)CUSTOMIZE_PART::HAIR]) return E_FAIL;
+	Add_Child(m_pCustomizes[(_uint)CUSTOMIZE_PART::HAIR]);
+	m_pCustomizes[(_uint)CUSTOMIZE_PART::HAIR]->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
 
-	//Hat
-	tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tBoneModelDesc.strModelProtoName, "11300024_c_cpsuperiorhat_c.model");
-	tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Head");//Bip01 HeadNub_end
-	m_pHat = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
-	if (nullptr == m_pHat) return E_FAIL;
-	Add_Child(m_pHat);
-	m_pHat->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
 
 	//FaceDeco
-	//tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-	//strcpy_s(tBoneModelDesc.strModelProtoName, "01000001_c_lolipop.model");
-	//tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Head");//Bip01 HeadNub_end
-	//m_pFaceDeco = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
-	//if (nullptr == m_pFaceDeco) return E_FAIL;
-	//Add_Child(m_pFaceDeco);
-	//m_pFaceDeco->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
-
-	//Cape
 	tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tBoneModelDesc.strModelProtoName, "11800149_c_mtfireprism_idle_a.model");
-	tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Spine1");
-	m_pCape = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
-	if (nullptr == m_pCape) return E_FAIL;
-	Add_Child(m_pCape);
-	m_pCape->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
-	m_pCape->Get_Transform()->Set_State(CTransform::STATE_POSITION, XMVectorSet(0,0.07,0,1));
-	m_pCape->Set_Animation(0);
-	m_pCape->Set_AnimationLoop(0, true);
+	strcpy_s(tBoneModelDesc.strModelProtoName, "01000001_c_lolipop.model");
+	tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Head");//Bip01 HeadNub_end
+	m_pDecoModels[(_uint)DECO_TYPE::FACE] = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
+	if (nullptr == m_pDecoModels[(_uint)DECO_TYPE::FACE]) return E_FAIL;
+	Add_Child(m_pDecoModels[(_uint)DECO_TYPE::FACE]);
+	m_pDecoModels[(_uint)DECO_TYPE::FACE]->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
+
 
 
 	return S_OK;
@@ -373,15 +377,18 @@ HRESULT CPlayer::Ready_Skill()
 
 void CPlayer::Receive_KeyInput(_float fTimeDelta)
 {
+	if (m_pGameInstance->GetKeyState(KEY::I) == KEY_STATE::DOWN)
+		m_pInventory->Toggle_UI();
+	if (m_pGameInstance->GetKeyState(KEY::P) == KEY_STATE::DOWN)
+	{
+	}
 	ANIM_STATE eCurrentState = ANIM_STATE(m_pAnimStateMachine->Get_CurrentState());
 
-	if (m_pGameInstance->GetKeyState(KEY::E) == KEY_STATE::DOWN)
-		m_bWeapon = !m_bWeapon;
+
 	if (m_pGameInstance->GetKeyState(KEY::LSHIFT) == KEY_STATE::DOWN)
 		m_bWalk = true;
 	else if (m_pGameInstance->GetKeyState(KEY::LSHIFT) == KEY_STATE::UP)
 		m_bWalk = false;
-
 
 	//이하 딜레이 끝나면 누를 수 있는 키들
 	if (m_pBody->Is_AnimPostDelayEnd() == false)
@@ -465,13 +472,177 @@ void CPlayer::Use_Skill(CSkill* pSkill)
 	m_iSkillID = (_int)pSkill->Get_SkillDesc()->eID;
 }
 
+HRESULT CPlayer::Gain_Item(CItemObjet* pItem)
+{
+	return S_OK;
+}
+
+HRESULT CPlayer::Gain_Item(ITEM_DESC* pItem, _uint iCount)
+{
+	return 	m_pInventory->Insert_Item(pItem, iCount);
+}
+
+
+
 void CPlayer::Set_Battle(bool bBattle)
 {
 	m_fBattleTime = 0.f;
 	m_bBattle = bBattle;
-	m_pWeapon->Set_Battle(bBattle);
+	if(nullptr != m_pEquipModels[(_uint)EQUIP_ITEM_TYPE::WEAPON])
+		static_cast<CWeapon*>(m_pEquipModels[(_uint)EQUIP_ITEM_TYPE::WEAPON])->Set_Battle(bBattle);
+}
+
+HRESULT CPlayer::Equip(EQUIP_ITEM_DESC* pItem)
+{
+	assert(pItem != nullptr);
+
+	EQUIP_ITEM_TYPE eType = pItem->eEquipType;
+	Remove_Child(m_pEquipModels[(_uint)eType]);
+	Safe_Release(m_pEquipModels[(_uint)eType]);
+	m_pEquipModels[(_uint)eType] = nullptr;
+
+	//몸통 메쉬 켜고 끄기
+	Set_BodyMeshActive(eType, false);
+	
+	CModelObject* pModel = nullptr;
+	switch (eType)
+	{
+		//Socket
+	case EQUIP_ITEM_TYPE::EAR:
+	case EQUIP_ITEM_TYPE::HAT:
+	{
+		CBoneModelObject::BONEMODELOBJ_DESC tBoneModelDesc = {};
+		tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+		strcpy_s(tBoneModelDesc.strModelProtoName, pItem->strModelTag);
+		tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Head");//Bip01 HeadNub_end
+		pModel = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
+		if (nullptr == pModel) return E_FAIL;
+		pModel->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
+
+
+		break;
+	}		
+	case EQUIP_ITEM_TYPE::CAPE:
+	{
+		CBoneModelObject::BONEMODELOBJ_DESC tBoneModelDesc = {};
+		tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+		strcpy_s(tBoneModelDesc.strModelProtoName, pItem->strModelTag);
+		tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Spine1");
+		pModel = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
+		if (nullptr == pModel) return E_FAIL;
+		pModel->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
+		pModel->Get_Transform()->Set_State(CTransform::STATE_POSITION, XMVectorSet(0, 0.07, 0, 1));
+		pModel->Set_Animation(0);
+		pModel->Set_AnimationLoop(0, true);
+
+		break;
+	}
+		//Socket X2
+	case EQUIP_ITEM_TYPE::WEAPON:
+	{
+		CWeapon::WEAPON_DESC WeaponDesc{};
+		WeaponDesc.eModelProtoLevelID = LEVEL_LOADING;
+		strcpy_s(WeaponDesc.strModelProtoName, pItem->strModelTag);
+		WeaponDesc.pSocketMatrix = m_pBody->Get_BoneMatrix("Weapon_Hand_R_Point");
+		WeaponDesc.pBackSocketMatrix = m_pBody->Get_BoneMatrix("Weapon_Back_B_Point");
+		pModel = static_cast<CWeapon*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CWeapon::m_szProtoTag, &WeaponDesc));
+		if (nullptr == pModel) return E_FAIL;
+		pModel->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
+		static_cast<CWeapon*>(pModel)->Set_Battle(m_bBattle);
+		m_bWeapon =true;
+		break;
+	}
+		//Target
+	case EQUIP_ITEM_TYPE::BOTTOM:
+	case EQUIP_ITEM_TYPE::TOP:
+	case EQUIP_ITEM_TYPE::SUIT:
+	case EQUIP_ITEM_TYPE::GLOVES:
+	case EQUIP_ITEM_TYPE::SHOES:
+	{
+		
+		CModelObject::MODELOBJ_DESC tModelDesc = {};
+		tModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+		strcpy_s(tModelDesc.strModelProtoName, pItem->strModelTag);
+		tModelDesc.pMimicTarget = m_pBody->Get_ModelCom();
+		pModel = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
+		if (nullptr == pModel) return E_FAIL;
+		break;
+
+	}
+	
+	case EQUIP_ITEM_TYPE::LAST:
+	default:
+		break;
+	}
+
+	if (nullptr == pModel) return E_FAIL;
+	Add_Child(pModel);
+	m_pEquipModels[(_uint)eType] = pModel;
+
 
 }
+
+HRESULT CPlayer::UnEquip(EQUIP_ITEM_TYPE eType)
+{
+	Remove_Child(m_pEquipModels[(_uint)eType]);
+	Safe_Release(m_pEquipModels[(_uint)eType]);
+	m_pEquipModels[(_uint)eType] = nullptr;
+
+	Set_BodyMeshActive(eType, true);
+
+	return S_OK;
+}
+
+HRESULT CPlayer::Set_Deco(DECO_ITEM_DESC* pItem)
+{
+	return S_OK;
+}
+
+HRESULT CPlayer::Set_Customize(CUSTOMIZE_DESC* pItem)
+{
+	return S_OK;
+
+}
+
+void CPlayer::Set_BodyMeshActive(EQUIP_ITEM_TYPE eType, bool bActive)
+{
+	CHumanModelObject* pHuman = static_cast<CHumanModelObject*>(m_pBody);
+	switch (eType)
+	{
+	case EQUIP_ITEM_TYPE::WEAPON:
+		m_bWeapon = bActive;
+		break;
+	case EQUIP_ITEM_TYPE::TOP:
+		pHuman->Set_MeshActive(CHumanModelObject::MESH_PART_ID::TOP, bActive);
+		break;
+	case EQUIP_ITEM_TYPE::BOTTOM:
+		pHuman->Set_MeshActive(CHumanModelObject::MESH_PART_ID::BOTTOM, bActive);
+		break;
+	case EQUIP_ITEM_TYPE::GLOVES:
+		pHuman->Set_MeshActive(CHumanModelObject::MESH_PART_ID::GLOVE, bActive);
+		break;
+	case EQUIP_ITEM_TYPE::SHOES:
+		pHuman->Set_MeshActive(CHumanModelObject::MESH_PART_ID::SHOES, bActive);
+		break;
+	case EQUIP_ITEM_TYPE::SUIT:
+		if (bActive)
+		{
+			Set_BodyMeshActive(EQUIP_ITEM_TYPE::TOP, m_pEquipModels[(_uint)EQUIP_ITEM_TYPE::TOP] == nullptr);
+			Set_BodyMeshActive(EQUIP_ITEM_TYPE::BOTTOM, m_pEquipModels[(_uint)EQUIP_ITEM_TYPE::BOTTOM] == nullptr);
+		}
+		else
+		{
+			Set_BodyMeshActive(EQUIP_ITEM_TYPE::TOP, false);
+			Set_BodyMeshActive(EQUIP_ITEM_TYPE::BOTTOM, false);
+
+		}
+	case EQUIP_ITEM_TYPE::LAST:
+	default:
+		break;
+	}
+}
+
+
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
@@ -529,8 +700,7 @@ void CPlayer::Free()
 {
 	__super::Free();
 	Safe_Release(m_pAnimStateMachine);
+	Safe_Release(m_pFaceStateMachine);
 	for (auto& skill : m_pSkill)
-	{
 		Safe_Release(skill);
-	}
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "Base.h"
-#include "UIQuickSlot.h"
+#include "SlotItem.h"
 
 BEGIN(Client)
 typedef struct SkillDesc
@@ -40,9 +40,14 @@ private:
 	SKILL_DESC* m_pSkillDesc = { nullptr };
 	CCharacter* m_pUser = {nullptr};
 	_float m_fCurrentCasting = { 0.f };
+	_float m_fCoolTimeAcc = { 0.f };
 public:
 	static CSkill* Create(SKILL_DESC* pSkillData, CCharacter* pUser);
 	virtual void Free() override;
+
+	// IQuickItem을(를) 통해 상속됨
+	const _char* Get_IconTag() override;
+	_float Get_CoolTimeRatio() override;
 };
 
 END

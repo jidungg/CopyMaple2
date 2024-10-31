@@ -14,10 +14,7 @@ CSkill::CSkill()
 HRESULT CSkill::Initialize(SKILL_DESC* pSkillData, CCharacter* pUser)
 {
 	m_pSkillDesc = pSkillData;
-	m_szIconTag = pSkillData->strIconImageTag;
-	m_fCoolTimeLeft = 0.f;
-	m_fCoolTimeLeftRatio = 0.f;
-	m_fCoolTime = pSkillData->fCoolTime;
+
 	m_pUser = pUser;
 
 	return S_OK;
@@ -25,14 +22,13 @@ HRESULT CSkill::Initialize(SKILL_DESC* pSkillData, CCharacter* pUser)
 
 void CSkill::Update(_float fDeltaTime)
 {
-	m_fCoolTimeLeft -= fDeltaTime;
-	m_fCoolTimeLeftRatio = m_fCoolTimeLeft / m_pSkillDesc->fCoolTime;
+	m_fCoolTimeAcc += fDeltaTime;
 	m_fCurrentCasting += fDeltaTime;
 }
 
 void CSkill::Use()
 {
-	m_fCoolTimeLeft = m_pSkillDesc->fCoolTime;
+	m_fCoolTimeAcc = 0.f;
 	m_fCurrentCasting = 0.f;
 	m_pUser->Use_Skill(this);
 }
@@ -52,4 +48,14 @@ CSkill* CSkill::Create(SKILL_DESC* pSkillData, CCharacter* pUser)
 void CSkill::Free()
 {
 	__super::Free();
+}
+
+const _char* CSkill::Get_IconTag()
+{
+	return m_pSkillDesc->strIconImageTag;
+}
+
+_float CSkill::Get_CoolTimeRatio()
+{
+	return m_fCoolTimeAcc / m_pSkillDesc->fCoolTime;
 }

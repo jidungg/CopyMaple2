@@ -7,6 +7,8 @@
 #include "Loader.h"
 #include "ItemDataBase.h"
 #include "SkillManager.h"
+#include "Inventory.h"
+#include "PlayerInfo.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance { CGameInstance::GetInstance() }
@@ -29,7 +31,6 @@ HRESULT CMainApp::Initialize()
 
 	if (FAILED(m_pGameInstance->Initialize_Engine(EngineDesc, &m_pDevice, &m_pContext)))
 		return E_FAIL;
-
 	if (FAILED(SetUp_StartLevel(LEVEL_LOGO)))
 		return E_FAIL;
 
@@ -89,6 +90,8 @@ void CMainApp::Free()
 	Safe_Release(m_pContext);
 	CItemDataBase::DestroyInstance();
 	CSkillManager::DestroyInstance();
+	CInventory::DestroyInstance();
+	CPlayerInfo::DestroyInstance();
 	Safe_Release(m_pGameInstance);
 	CGameInstance::Release_Engine();
 

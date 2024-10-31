@@ -14,6 +14,13 @@ using namespace DirectX;
 #include "Effects11\d3dx11effect.h"
 #include "DirectXTK\DDSTextureLoader.h"
 #include "DirectXTK\WICTextureLoader.h"
+#include "DirectXTK\ScreenGrab.h"
+#include "DirectXTK\PrimitiveBatch.h"
+#include "DirectXTK\VertexTypes.h"
+#include "DirectXTK\Effects.h"
+
+#include "DirectXTK\SpriteBatch.h"
+#include "DirectXTK\SpriteFont.h"
 
 #include <d3dcompiler.h>
 

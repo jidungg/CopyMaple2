@@ -8,7 +8,7 @@
 #include "Level_Loading.h"
 #include "UIQuickSlot.h"
 #include "SkillManager.h"
-#include "ModelObject.h"
+#include "Bayar.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel { pDevice, pContext }
@@ -28,7 +28,8 @@ HRESULT CLevel_GamePlay::Initialize()
 		return E_FAIL;
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
-
+	if (FAILED(Ready_Monster(TEXT("Layer_Monster"))))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -118,6 +119,12 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const _wstring& strLayerTag)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, strLayerTag, m_pQuickSlot)))
 		return E_FAIL;
 	m_pQuickSlot->Set_QuickItem(m_pPlayer->Get_Skill(SKILL_ID::MAGIC_CLAW));
+	return S_OK;
+}
+HRESULT CLevel_GamePlay::Ready_Monster(const _wstring& strLayerTag)
+{
+	m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Bayar"),LEVEL_GAMEPLAY, strLayerTag);
+
 	return S_OK;
 }
 void CLevel_GamePlay::Update(_float fTimeDelta)

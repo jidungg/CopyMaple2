@@ -1,68 +1,33 @@
-﻿  Animation.cpp
-  Bone.cpp
-  Camera.cpp
+﻿  Camera.cpp
   Camera_UI.cpp
-  Channel.cpp
-  Collider.cpp
-  Condition.cpp
   ContainerObject.cpp
   Controller.cpp
-  Engine_Utility.cpp
   Event.cpp
-  EventHandlerWrapperInterface.cpp
-  EventManager.cpp
-  Graphic_Device.cpp
-  Input_Device.cpp
-  JsonParser.cpp
-  Light.cpp
-  Light_Manager.cpp
-  Mesh.cpp
+  GameInstance.cpp
+  GameObject.cpp
+  Layer.cpp
   MeshCollider.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\Public\MeshCollider.h(7,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CMeshCollider'의 기본으로 사용되었습니다.
+D:\Workbench\Portfolio\CopyMaple2\Engine\Public\MeshCollider.h(7,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CCollider_Mesh'의 기본으로 사용되었습니다.
   (소스 파일 '../Private/MeshCollider.cpp'을(를) 컴파일하는 중)
       D:\Workbench\Portfolio\CopyMaple2\Engine\Public\Collider.h(4,7):
       'Engine::CCollider' 선언을 참조하십시오.
       D:\Workbench\Portfolio\CopyMaple2\Engine\Public\MeshCollider.h(6,18):
-      'Engine::CMeshCollider' 선언을 참조하십시오.
+      'Engine::CCollider_Mesh' 선언을 참조하십시오.
   
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  MimicBone.cpp
-  Model.cpp
-  Pawn.cpp
-  Physics.cpp
-  PipeLine.cpp
-  Rect_Transform.cpp
-  State.cpp
-  StateMachine.cpp
-  Timer.cpp
-  Timer_Manager.cpp
-  Transition.cpp
-  UIManager.cpp
-  Material.cpp
-  Base.cpp
-  Component.cpp
-  GameInstance.cpp
-  GameObject.cpp
-  Layer.cpp
-  Level.cpp
-  Level_Manager.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
   Object_Manager.cpp
+  Pawn.cpp
   Prototype_Manager.cpp
   Renderer.cpp
-  Shader.cpp
-  Texture.cpp
-  Transform.cpp
+  UIManager.cpp
   UIObject.cpp
-  VIBuffer.cpp
-  VIBuffer_Rect.cpp
-  VIBuffer_Terrain.cpp
   코드를 생성하고 있습니다...
+DirectXTKd.lib(PrimitiveBatch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(PrimitiveBatch.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTKd.lib(BasicEffect.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(BasicEffect.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTKd.lib(VertexTypes.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(VertexTypes.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTKd.lib(DDSTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(DDSTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTKd.lib(WICTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(WICTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTKd.lib(EffectCommon.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(EffectCommon.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
      ../Bin/Engine.lib 라이브러리 및 ../Bin/Engine.exp 개체를 생성하고 있습니다.
   Engine.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Engine\Bin\Engine.dll
   '//' is not recognized as an internal or external command,
@@ -74,15 +39,22 @@ DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' �
   .\Engine\Public\Animation.h
   .\Engine\Public\Base.h
   .\Engine\Public\Bone.h
+  .\Engine\Public\Bounding.h
+  .\Engine\Public\Bounding_AABB.h
+  .\Engine\Public\Bounding_OBB.h
+  .\Engine\Public\Bounding_Sphere.h
   .\Engine\Public\Button_Component.h
   .\Engine\Public\Camera.h
   .\Engine\Public\Camera_UI.h
   .\Engine\Public\Channel.h
   .\Engine\Public\Collider.h
+  .\Engine\Public\Collider_AABB.h
+  .\Engine\Public\Collider_Sphere.h
   .\Engine\Public\Component.h
   .\Engine\Public\Condition.h
   .\Engine\Public\ContainerObject.h
   .\Engine\Public\Controller.h
+  .\Engine\Public\DebugDraw.h
   .\Engine\Public\Engine_Defines.h
   .\Engine\Public\Engine_Function.h
   .\Engine\Public\Engine_Macro.h
@@ -154,4 +126,4 @@ DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' �
   .\Engine\Public\DirectXTK\XboxDDSTextureLoader.h
   .\Engine\Public\Effects11\d3dx11effect.h
   .\Engine\Public\Effects11\d3dxGlobal.h
-  83 File(s) copied
+  90 File(s) copied

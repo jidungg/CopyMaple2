@@ -171,7 +171,7 @@ bool CGameObject::Check_Collision(const Ray& tRay, RaycastHit* pOut)
 	tMinHit.fDist = 9999;
 	if (pCollider != nullptr && pCollider->Is_Active())
 	{
-		if (true == pCollider->Check_Collision(tRay, pOut))
+		if (true == pCollider->RayCast(tRay, pOut))
 		{
 			bIsHit = true;
 			if (pOut->fDist < tMinHit.fDist)

@@ -699,7 +699,6 @@ CGameObject* CPlayer::Clone(void* pArg)
 void CPlayer::Free()
 {
 	__super::Free();
-	Safe_Release(m_pAnimStateMachine);
 	Safe_Release(m_pFaceStateMachine);
 	for (auto& skill : m_pSkill)
 		Safe_Release(skill);

@@ -2,18 +2,19 @@
 #include "Mesh.h"
 #include "GameObject.h"
 #include "DirectXCollision.h"
-CMeshCollider::CMeshCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CCollider_Mesh::CCollider_Mesh(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCollider(pDevice, pContext)
 {
+	m_eType = COLLIDER_TYPE::MESH;
 }
 
-HRESULT CMeshCollider::Initialize_Prototype()
+HRESULT CCollider_Mesh::Initialize_Prototype()
 {
 	
 	return S_OK;
 }
 
-HRESULT CMeshCollider::Initialize(void* pArg)
+HRESULT CCollider_Mesh::Initialize(void* pArg)
 {
 	MESH_COLLIDER_DESC* pDesc = static_cast<MESH_COLLIDER_DESC*>(pArg);
 	if (nullptr == pDesc)
@@ -45,13 +46,17 @@ HRESULT CMeshCollider::Initialize(void* pArg)
 	return S_OK;
 }
 
-bool CMeshCollider::Check_Collision(CCollider* pOther, RaycastHit* pOut)
+void CCollider_Mesh::Update(_fmatrix WorldMatrix)
 {
-	//TODO: ������ ��ƴ�..
-	return false;
 }
 
-bool CMeshCollider::Check_Collision(const Ray& tRay, RaycastHit* pOut)
+_bool CCollider_Mesh::Intersect(CCollider* pOther)
+{
+	return _bool();
+}
+
+
+bool CCollider_Mesh::RayCast(const Ray& tRay, RaycastHit* pOut)
 {
 	
 	D3D11_MAPPED_SUBRESOURCE VB ;
@@ -110,9 +115,9 @@ bool CMeshCollider::Check_Collision(const Ray& tRay, RaycastHit* pOut)
 
 	return bIsHit;
 }
-CMeshCollider* CMeshCollider::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CCollider_Mesh* CCollider_Mesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CMeshCollider* pInstance = new CMeshCollider(pDevice, pContext);
+	CCollider_Mesh* pInstance = new CCollider_Mesh(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
@@ -124,9 +129,9 @@ CMeshCollider* CMeshCollider::Create(ID3D11Device* pDevice, ID3D11DeviceContext*
 }
 
 
-CComponent* CMeshCollider::Clone(void* pArg)
+CComponent* CCollider_Mesh::Clone(void* pArg)
 {
-	CMeshCollider* pInstance = new CMeshCollider(*this);
+	CCollider_Mesh* pInstance = new CCollider_Mesh(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
@@ -136,7 +141,7 @@ CComponent* CMeshCollider::Clone(void* pArg)
 
 	return pInstance;
 }
-void CMeshCollider::Free()
+void CCollider_Mesh::Free()
 {
 	__super::Free();
 	Safe_Release(m_pStagingVB);

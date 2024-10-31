@@ -175,6 +175,7 @@
     <ClInclude Include="..\Public\InvenEquipSlot.h" />
     <ClInclude Include="..\Public\PlayerInfo.h" />
     <ClInclude Include="..\Public\PlayerEquipSlot.h" />
+    <ClInclude Include="..\Public\Bayar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -289,6 +290,7 @@
     <ClCompile Include="..\Private\InvenEquipSlot.cpp" />
     <ClCompile Include="..\Private\PlayerInfo.cpp" />
     <ClCompile Include="..\Private\PlayerEquipSlot.cpp" />
+    <ClCompile Include="..\Private\Bayar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

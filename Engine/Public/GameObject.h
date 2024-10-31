@@ -46,6 +46,7 @@ public:
 
 	class CTransform* Get_Transform() { return m_pTransformCom; }
 	virtual bool Check_Collision(const Ray& tRay, RaycastHit* pOut);
+	virtual bool Check_Collision(CGameObject* pOther) { return false; };
 protected:
 	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, const _wstring& strComponentTag, CComponent** ppOut, void* pArg = nullptr);
 	HRESULT Add_Component(CComponent* pComponent, const _wstring& strComponentTag);
@@ -70,6 +71,7 @@ protected:
 protected:
 	_uint						m_iObjID = {};
 	static _uint				m_iObjCount;
+	_uint						m_iLayerID = {};
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;

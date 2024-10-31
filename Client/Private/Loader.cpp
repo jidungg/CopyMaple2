@@ -30,9 +30,11 @@
 #include "MimicBoneModel.h"
 #include "Face.h"
 #include "HumanModelObject.h"
+#include "Bayar.h"
 
 #include "Engine_Defines.h"
 #include "UIInventory.h"
+#include "Collider_Sphere.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -202,8 +204,11 @@ HRESULT CLoader::Loading_Level_Logo()
 		TEXT("../Bin/resources/FBXs/MAP/Field/"), matPretransform)))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CMeshCollider::m_szProtoTag,
-		CMeshCollider::Create(m_pDevice, m_pContext))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_Sphere::m_szProtoTag,
+		CCollider_Sphere::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_Mesh::m_szProtoTag,
+		CCollider_Mesh::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 
@@ -288,13 +293,21 @@ HRESULT CLoader::Loading_Level_GamePlay()
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/resources/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
 
+	XMMATRIX matPretransform = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
+	matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
+		TEXT("../Bin/resources/FBXs/Anim/Boss"), CModel::TYPE_ANIM, matPretransform)))
+		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("객체 로드"));
 
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Henesys"),
 		CCubeTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/Henesys.json")))))
 		return E_FAIL;
-	
+	/* BAYAR */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Bayar"),
+		CBayar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩 완료"));
 
@@ -350,7 +363,6 @@ HRESULT CLoader::Loading_Level_MyHome()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialogBuildItemIndicator"),
 		CUIItemIndicator::Create(m_pDevice, m_pContext,LEVEL_HOME, TEXT("UI_Texture_HomeDialog")))))
 		return E_FAIL;
-
 
 
 	lstrcpy(m_szLoadingText, TEXT("로드 완료."));

@@ -5,6 +5,19 @@ class CCollider :
     public CComponent
 {
 public:
+	enum class COLLIDER_TYPE
+	{
+		SPHERE,
+		AABB,
+		OBB,
+		CAPSULE,
+		MESH,
+		LAST
+	};
+	typedef struct ColliderDesc
+	{
+		_float3		vCenter;
+	}COLLIDER_DESC;
 	static constexpr _tchar m_szCompTag[] = L"Com_Collider";
 protected:
 	CCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -14,13 +27,20 @@ protected:
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual void Late_Update(_float fTimeDelta) override;
-	virtual bool Check_Collision(CCollider* pOther, RaycastHit* pOut) abstract;
-	virtual bool Check_Collision(const Ray& tRay, RaycastHit* pOut) abstract;
-	virtual void Render() {};
+	virtual void Update(_fmatrix WorldMatrix) abstract;
+	virtual _bool Intersect(CCollider* pOther)abstract;
+	virtual _bool RayCast(const Ray& tRay, RaycastHit* pOut) abstract;
+	virtual HRESULT Render() { return S_OK; }
 
+	COLLIDER_TYPE Get_ColliderType() const {return m_eType;}
 protected:
-	_float3 m_vOffset = { 0.f, 0.f, 0.f };
+	COLLIDER_TYPE m_eType = COLLIDER_TYPE::LAST;
+	bool m_bCollide = false;
+#ifdef _DEBUG
+	PrimitiveBatch<VertexPositionColor>* m_pBatch = { nullptr };
+	BasicEffect* m_pEffect = { nullptr };
+	ID3D11InputLayout* m_pInputLayout = { nullptr };
+#endif
 
 public:
 	virtual void Free() override;

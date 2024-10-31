@@ -1,4 +1,6 @@
 #include "Collider.h"
+#include "GameInstance.h"
+#include "DebugDraw.h"
 
 CCollider::CCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CComponent(pDevice, pContext)
@@ -7,24 +9,40 @@ CCollider::CCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 CCollider::CCollider(const CCollider& Prototype)
 	:CComponent(Prototype)
+	, m_eType{ Prototype.m_eType }
+	, m_pEffect{ Prototype.m_pEffect }
+	, m_pBatch{ Prototype.m_pBatch }
+	, m_pInputLayout{ Prototype.m_pInputLayout }
 {
 }
 
 HRESULT CCollider::Initialize_Prototype()
 {
+
+#ifdef _DEBUG
+	/* �ڽ�, ���� �׷��������� ��ü���� �����س��´�. */
+	m_pBatch = new PrimitiveBatch<VertexPositionColor>(m_pContext);
+	m_pEffect = new BasicEffect(m_pDevice);
+
+	const void* pShaderByteCode = { nullptr };
+	size_t		iShaderByteCodeLength = { 0 };
+
+	m_pEffect->SetVertexColorEnabled(true);
+
+	m_pEffect->GetVertexShaderBytecode(&pShaderByteCode, &iShaderByteCodeLength);
+
+	if (FAILED(m_pDevice->CreateInputLayout(VertexPositionColor::InputElements, VertexPositionColor::InputElementCount, pShaderByteCode, iShaderByteCodeLength, &m_pInputLayout)))
+		return E_FAIL;
+
+#endif
 	return S_OK;
 }
 
 HRESULT CCollider::Initialize(void* pArg)
-{ 
+{
 
 	return S_OK;
 }
-
-void CCollider::Late_Update(_float fTimeDelta)
-{
-}
-
 
 
 void CCollider::Free()

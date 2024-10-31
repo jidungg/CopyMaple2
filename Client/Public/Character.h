@@ -31,6 +31,10 @@ protected:
 	_float m_fRunSpeed{ 2.5f };
 	_float m_fWalkSpeed{ 1.5f };
 	_float m_fFloorHeight{ 1.f };
+	_float m_fDetectionRange{ 10.f };
+
+public:
+	virtual void Free() override;
 };
 
 END

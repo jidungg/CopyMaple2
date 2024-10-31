@@ -1,6 +1,6 @@
 #include"stdafx.h"
 #include "Character.h"
-
+#include "StateMachine.h"
 CCharacter::CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPawn(pDevice, pContext)
 {
@@ -15,5 +15,11 @@ CCharacter::CCharacter(const CCharacter& Prototype)
 	, m_fRunSpeed{ Prototype.m_fRunSpeed }
 	, m_fWalkSpeed{ Prototype.m_fWalkSpeed } 
 {
+}
+
+void CCharacter::Free()
+{
+	__super::Free();
+	Safe_Release(m_pAnimStateMachine);
 }
 

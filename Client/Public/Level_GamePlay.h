@@ -22,6 +22,7 @@ private:
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
 	HRESULT Ready_Camera(const _wstring& strLayerTag);
 	HRESULT Ready_Layer_UI(const _wstring& strLayerTag);
+	HRESULT Ready_Monster(const _wstring& strLayerTag);
 
 private:
 	CUIQuickSlot* m_pQuickSlot = { nullptr };

@@ -84,9 +84,9 @@ HRESULT CTerrainObject::Ready_Components(TERRAINOBJ_DESC* pDesc)
 		m_pColliderCom = nullptr;
 	else
 	{
-		CMeshCollider::MESH_COLLIDER_DESC desc{};
+		CCollider_Mesh::MESH_COLLIDER_DESC desc{};
 		desc.pMesh = m_pModelCom->Get_Mesh(0);
-		if (FAILED(Add_Component(LEVEL_LOADING, CMeshCollider::m_szProtoTag,
+		if (FAILED(Add_Component(LEVEL_LOADING, CCollider_Mesh::m_szProtoTag,
 			CCollider::m_szCompTag, reinterpret_cast<CComponent**>(&m_pColliderCom), &desc)))
 			return E_FAIL;
 	}

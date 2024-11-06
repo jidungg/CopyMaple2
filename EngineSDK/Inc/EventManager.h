@@ -2,9 +2,8 @@
 #include "Event.h"
 #include "EventHandlerWrapperInterface.h"
 BEGIN(Engine)
-class ENGINE_DLL CEventManager : public CBase
+class CEventManager : public CBase
 {
-	DECLARE_SINGLETON(CEventManager)
 private:
 	CEventManager() {}
 	virtual ~CEventManager() { Free(); }
@@ -27,7 +26,8 @@ private:
 	std::list<CEvent*> m_eventList;
 	std::unordered_map<_uint, std::vector<IEventHandlerWrapperInterface*>> m_umapPreEventCallback;
 	std::unordered_map<_uint, std::vector<IEventHandlerWrapperInterface*>> m_umapPostEventCallback;
-private:
+public:
+	static CEventManager* Create();
 	virtual void Free() 
 	{
 		for (auto& pEvent : m_eventList)

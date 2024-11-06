@@ -29,34 +29,39 @@ HRESULT CStateMachine::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CStateMachine::Update(_float fTimeDelta)
+void CStateMachine::Late_Update(_float fTimeDelta)
 {
-
-	_uint iNewSubState = m_iCurrentSubState;
-	if(m_mapStates[m_iCurrentState]->Check_Transition(&m_iCurrentState))
+	if (m_mapStates[m_iCurrentState]->Check_Transition(&m_iCurrentState))
 	{
+
 		for (auto& callback : m_listStateChangeCallback)
 			callback(m_iCurrentState);
-		m_iCurrentSubState = m_mapStates[m_iCurrentState]->Check_SubTransition();
+		m_iCurrentSubState = m_iCurrentState;
+		m_mapStates[m_iCurrentState]->Check_SubTransition(&m_iCurrentSubState);
+	
 		for (auto& callback : m_listSubStateChangeCallback)
 			callback(m_iCurrentSubState);
 	}
-	else 
+	else if (m_mapStates[m_iCurrentSubState]->Check_SubTransition(&m_iCurrentSubState))
 	{
-		iNewSubState = m_mapStates[m_iCurrentState]->Check_SubTransition();
-		if (iNewSubState != m_iCurrentSubState)
-		{
-			m_iCurrentSubState = iNewSubState;
-			for (auto& callback : m_listSubStateChangeCallback)
-				callback(m_iCurrentSubState);
-		}
+		for (auto& callback : m_listSubStateChangeCallback)
+			callback(m_iCurrentSubState);
 	}
-	
-
 	for (auto& trigger : m_mapTriggerConditionVariable)
 	{
 		trigger.second->bValue = false;
-	} 
+	}
+	//else 
+	//{
+	//	iNewSubState = m_mapStates[m_iCurrentState]->Check_SubTransition();
+	//	if (iNewSubState != m_iCurrentSubState)
+	//	{
+	//		m_iCurrentSubState = iNewSubState;
+	//		for (auto& callback : m_listSubStateChangeCallback)
+	//			callback(m_iCurrentSubState);
+	//	}
+	//}
+	//
 }
 
 
@@ -107,7 +112,7 @@ CTransition* CStateMachine::Add_Transition(_uint iStateID, _uint iNextState)
 CTransition* CStateMachine::Add_SubTransition(_uint iStateID, _uint iNextState)
 {
 	CTransition* pTransition = CTransition::Create(iNextState);
-	m_mapStates[iStateID]->Add_SubTransition(pTransition);
+	m_mapStates[iStateID]->Add_SubTransition(iStateID,pTransition);
 	return pTransition;
 }
 
@@ -125,7 +130,8 @@ void CStateMachine::Remove_Condition(_uint iConditionID)
 void CStateMachine::Set_CurrentState(_uint iState)
 {
 	m_iCurrentState = iState;
-	m_iCurrentSubState =  m_mapStates[m_iCurrentState]->Check_SubTransition();
+	m_iCurrentSubState = m_iCurrentState;
+	m_mapStates[m_iCurrentState]->Check_SubTransition(&m_iCurrentSubState);
 }
 
 
@@ -148,7 +154,7 @@ void CStateMachine::Bind_Condition(CTransition* pTransition, _uint iConditionVar
 
 void CStateMachine::Bind_TriggerCondition(CTransition* pTransition, _uint iConditionVarID)
 {
-	pTransition->Add_Condition(TriggerCondition::Create(m_mapTriggerConditionVariable[iConditionVarID]));
+	pTransition->Add_Condition(TriggerCondition::Create(m_mapTriggerConditionVariable.at(iConditionVarID)));
 }
 
 

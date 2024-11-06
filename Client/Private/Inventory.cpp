@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "Inventory.h"
-#include "UIInventory.h"
 #include "UIManager.h"
 #include "GameInstance.h"
 #include "InvenEquipSlot.h"
+#include "UIBundle.h"
+#include "UIInventory.h"
 
 IMPLEMENT_SINGLETON(CInventory)
 
@@ -11,7 +12,7 @@ CInventory::CInventory()
 	: m_pDevice(nullptr)
 	, m_pContext(nullptr)
 	, m_pGameInstance(CGameInstance::GetInstance())
-	, m_pUI(nullptr)
+	//, m_pUI(nullptr)
 {
 }
 
@@ -41,13 +42,7 @@ HRESULT CInventory::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pCont
 			}
 		}
 	}
-	CUIInventory::UIINVENTORY_DESC tDesc;
-	tDesc.pInventory = this;
-
-	m_pUI = static_cast<CUIInventory*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIInventory::m_szProtoTag, &tDesc));
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, TEXT("Inventory_UI"), m_pUI, true)))
-		return E_FAIL;
-	m_pUI->Set_Active(false);
+	UIBUNDLE->Get_Inventory()->Ready_Slots();
 	return S_OK;
 }
 
@@ -104,14 +99,9 @@ HRESULT CInventory::Insert_Item(ITEM_DESC* pData, _uint iCount)
 	}
 	else
 	{
-		m_pUI->Update_Slot(pUpdateSlot->Get_Type(), pUpdateSlot->Get_Index());
+		//m_pUI->Update_Slot(pUpdateSlot->Get_Type(), pUpdateSlot->Get_Index());
 		return S_OK;
 	}
-}
-
-void CInventory::Toggle_UI()
-{
-	m_pUI->Toggle_Active();
 }
 
 vector<CInvenSlot*>* CInventory::Get_Slots(ITEM_TYPE eItemType)
@@ -119,10 +109,10 @@ vector<CInvenSlot*>* CInventory::Get_Slots(ITEM_TYPE eItemType)
 	return &m_vecSlot[(_uint)eItemType];
 }
 
-void CInventory::Update_SlotUI(CInvenSlot* pSlot)
-{
-	m_pUI->Update_Slot(pSlot->Get_Type(), pSlot->Get_Index());
-}
+//void CInventory::Update_SlotUI(CInvenSlot* pSlot)
+//{
+//	m_pUI->Update_Slot(pSlot->Get_Type(), pSlot->Get_Index());
+//}
 
 void CInventory::Free()
 {

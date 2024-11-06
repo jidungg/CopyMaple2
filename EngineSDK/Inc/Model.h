@@ -36,6 +36,7 @@ public:
 	_uint Get_MeshIndex(const _char* szName) const;
 	_uint Get_BoneIndex(const _char* pBoneName) const ;
 	float Get_AnimTime();
+	_uint Get_AnimIndex();
 	TYPE Get_Type() { return m_eModelType; }
 	const _float4x4* Get_BoneMatrix(const _char* pBoneName) const;
 	class CBone* Get_Bone(const _char* pBoneName) const;

@@ -2,9 +2,13 @@
 #include "GameInstance.h"
 #include "DebugDraw.h"
 
+_uint CCollider::m_iGlobalID = 0;
+
 CCollider::CCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CComponent(pDevice, pContext)
 {
+	m_iID = m_iGlobalID++;
+
 }
 
 CCollider::CCollider(const CCollider& Prototype)
@@ -14,13 +18,14 @@ CCollider::CCollider(const CCollider& Prototype)
 	, m_pBatch{ Prototype.m_pBatch }
 	, m_pInputLayout{ Prototype.m_pInputLayout }
 {
+	m_iID = m_iGlobalID++;
+	Safe_AddRef(m_pInputLayout);
 }
 
 HRESULT CCollider::Initialize_Prototype()
 {
 
 #ifdef _DEBUG
-	/* �ڽ�, ���� �׷��������� ��ü���� �����س��´�. */
 	m_pBatch = new PrimitiveBatch<VertexPositionColor>(m_pContext);
 	m_pEffect = new BasicEffect(m_pDevice);
 
@@ -48,4 +53,10 @@ HRESULT CCollider::Initialize(void* pArg)
 void CCollider::Free()
 {
 	__super::Free();
+	if (false == m_isCloned)
+	{
+		Safe_Delete(m_pBatch);
+		Safe_Delete(m_pEffect);
+	}
+	Safe_Release(m_pInputLayout);
 }

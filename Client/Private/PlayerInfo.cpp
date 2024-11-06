@@ -25,7 +25,7 @@ HRESULT CPlayerInfo::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pCon
 	PlayerDesc.fRotationPerSec = XMConvertToRadians(90.f);
 
 	m_pPlayer = static_cast<CPlayer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_Player"), &PlayerDesc));
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, TEXT("Layer_Player"), m_pPlayer, true)))
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(m_pGameInstance->Get_CurrentLevelID(), LAYER_PLAYER, m_pPlayer, true)))
 		return E_FAIL;
 	Safe_AddRef(m_pPlayer);
 

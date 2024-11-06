@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "JsonParser.h"
 #include "ItemDataBase.h"
+#include "Character.h"
 
 CCubeTerrain::CCubeTerrain(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const char* szMapFileName)
 	: CGameObject { pDevice, pContext }
@@ -81,6 +82,122 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 	return S_OK;
 }
 
+//MoveDir 는 Normalized 된 상태로 들어와야 함.
+_vector CCubeTerrain::BlockXZ(CCharacter* pCharacter)
+{
+	_vector vPos = pCharacter->Get_Position();
+	_vector vMoveDir = pCharacter->Get_MoveDirection();
+	_float fBodyCollisionRadius = pCharacter->Get_BodyCollisionRadius();
+	_float fBodyCollisionHeight = pCharacter->Get_BodyCollisionHeight();
+	_float fMoveDistance = pCharacter->Get_MoveDistance();
+	_float fXForce = XMVectorGetX(vMoveDir);
+	_float fZForce = XMVectorGetZ(vMoveDir);
+	_float fYForce = XMVectorGetY(vMoveDir);
+	_uint iCheckRange = (_uint)floor(fBodyCollisionRadius + fMoveDistance)+1;
+	_int iIdx =  PosToIndex(vPos);
+	if (iIdx < 0)
+		return  vPos + vMoveDir * fMoveDistance;
+	_int iYIdx = iIdx / (m_vSize.x * m_vSize.z);
+	_int iXIdx = iIdx % m_vSize.x;
+	_int iZIdx = iIdx / m_vSize.x % m_vSize.z;
+
+	_int iMinX = iXIdx, iMaxX = iXIdx, iMinZ = iZIdx, iMaxZ = iZIdx, iMinY = iYIdx, iMaxY = iYIdx;
+
+	if (fXForce > 0)
+		iMaxX += iCheckRange;
+	else if (fXForce < 0)
+		iMinX -= iCheckRange;
+	if (fZForce > 0)
+		iMaxZ += iCheckRange;
+	else if (fZForce < 0)
+		iMinZ -= iCheckRange;
+	iMaxY += iCheckRange;
+
+	iMaxX = min(iMaxX, m_vSize.x - 1);
+	iMinX = max(iMinX, 0);
+	iMaxZ = min(iMaxZ, m_vSize.z - 1);
+	iMinZ = max(iMinZ, 0);
+	iMaxY = min(iMaxY, m_vSize.y - 1);
+	iMinY = max(iMinY, 0);
+
+	_vector vNextPos = vPos;
+	for (_uint iY = iMinY; iY < iMaxY; iY++)
+	{
+		for (_uint iZ = iMinZ; iZ <= iMaxZ; iZ++)
+		{
+			for (_uint iX = iMinX; iX <= iMaxX; iX++)
+			{
+				_uint iIdx = iX + m_vSize.x * iZ + m_vSize.x * m_vSize.z * iY;
+				if (nullptr == m_vecCells[iIdx])
+					continue;
+				vNextPos = m_vecCells[iIdx]->BolckXZ(vPos, vMoveDir, fMoveDistance, fBodyCollisionRadius, fBodyCollisionHeight);
+				_vector vTmp = vNextPos - vPos;
+				vMoveDir = XMVector4Normalize(vTmp);
+				fMoveDistance = XMVectorGetX(XMVector3Length(vTmp));
+			}
+		}
+	}
+
+
+	vNextPos = vPos + fMoveDistance * vMoveDir;
+	return vNextPos;
+}
+
+
+_bool CCubeTerrain::RayCastXZ(const Ray& tRay, RaycastHit* pOut)
+{
+	_vector vCurrentPos = tRay.vOrigin;
+	vCurrentPos += XMVectorSet(0.5, 0, 0.5, 0);
+	_float fXDir = XMVectorGetX(tRay.vDirection);
+	_float fZDir = XMVectorGetZ(tRay.vDirection);
+	//가장 가까운 정수값이 되기 위해 필요한 값 찾기
+	_float fX = XMVectorGetX(vCurrentPos);
+	_float fZ = XMVectorGetZ(vCurrentPos);
+	_float fXRequire = 0;
+	_float fZRequire = 0;
+	_float fCurrentDistance = 0;
+
+	while (fCurrentDistance <= tRay.fDist)
+	{
+		if (fXDir > 0)
+			fXRequire = ceilf(fX) - fX;
+		else if (fXDir < 0)
+			fXRequire = floorf(fX) - fX;
+		else
+			fXRequire = FLT_MAX;
+		if (fZDir > 0)
+			fZRequire = ceilf(fZ) - fZ;
+		else if (fZDir < 0)
+			fZRequire = floorf(fZ) - fZ;
+		else
+			fZRequire = FLT_MAX;
+
+
+		_float fXReqTime = (fXRequire + 1e-6f) / (fXDir + 1e-6f);
+		_float fZReqTime = (fZRequire + 1e-6f) / (fZDir + 1e-6f);
+		//Z축 이 더 빨리 도달
+		if (fXReqTime > fZReqTime)
+			vCurrentPos += tRay.vDirection * fZReqTime;
+		//X축이 더 빨리 도달
+		else
+			vCurrentPos += tRay.vDirection * fXReqTime;
+		_vector vRealPos = vCurrentPos;
+		vRealPos -= XMVectorSet(0.5, 0, 0.5, 0);
+		_int iIdx = PosToIndex(vRealPos);
+		if (iIdx < 0)
+			return false;
+		fCurrentDistance = XMVectorGetX(XMVector3Length(vRealPos - tRay.vOrigin));
+		if (nullptr != m_vecCells[iIdx] && m_vecCells[iIdx]->RayCast(tRay, pOut))
+			return true;
+
+	}
+
+
+	return false;
+}
+
+
+
 HRESULT CCubeTerrain::Save_To_Json(string strNewFilepath)
 {
 	json j;
@@ -142,6 +259,20 @@ _uint CCubeTerrain::PosToIndex(const _float4& Pos)
 	return x + m_vSize.x * z + m_vSize.x * m_vSize.z * y;
 }
 
+_int CCubeTerrain::PosToIndex(const _fvector& Pos)
+{
+	_int x = static_cast<_int>(roundf(XMVectorGetX( Pos)));
+	_int y = static_cast<_int>(floorf(XMVectorGetY(Pos))); // 0~1 = 0
+	_int z = static_cast<_int>(roundf(XMVectorGetZ(Pos)));
+	if (x < 0 || x >= m_vSize.x)
+		return -1;
+	if (y < 0 || y >= m_vSize.y)
+		return -1;
+	if (z < 0 || z >= m_vSize.z)
+		return -1;
+	return x + m_vSize.x * z + m_vSize.x * m_vSize.z * y;
+}
+
 HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 {
 	if (m_vecCells[tDesc.index] != nullptr)
@@ -149,7 +280,6 @@ HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 	CTerrainObject* pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CTerrainObject::m_szProtoTag, &tDesc));
 	Add_Child(pGameObject);
 	m_vecCells[tDesc.index] = pGameObject;
-
 	return S_OK;
 }
 
@@ -169,6 +299,65 @@ CTerrainObject* CCubeTerrain::Get_TerrainObject(_uint Index)
 {
 	if (Index < m_vecCells.size())
 		return m_vecCells[Index];
+}
+
+_float CCubeTerrain::Get_FloorHeight(_vector Pos)
+{
+	_int index = PosToIndex(Pos);
+	if (index < 0)
+		return -1;
+	_uint iYIdx = index / (m_vSize.x * m_vSize.z);
+	_uint iXIdx = index % m_vSize.x;
+	_uint iZIdx = index / m_vSize.x % m_vSize.z;
+	
+	for (_int yIdx = (_int)iYIdx; yIdx >= 0; yIdx--)
+	{
+		_uint iTmpIndex = iXIdx + m_vSize.x * iZIdx + m_vSize.x * m_vSize.z * yIdx;
+		if (m_vecCells[iTmpIndex] != nullptr)
+		{
+			return m_vecCells[iTmpIndex]->Get_TopHeight(Pos);
+		}
+		
+	}
+	return -1;
+}
+
+_float CCubeTerrain::Get_CelingHeight(_vector Pos)
+{
+	_int index = PosToIndex(Pos);
+	if (index < 0)
+		return FLT_MAX;
+	_uint iYIdx = index / (m_vSize.x * m_vSize.z);
+	_uint iXIdx = index % m_vSize.x;
+	_uint iZIdx = index / m_vSize.x % m_vSize.z;
+
+	for (_int yIdx = (_int)iYIdx+1; yIdx < m_vSize.y; yIdx++)
+	{
+		_uint iTmpIndex = iXIdx + m_vSize.x * iZIdx + m_vSize.x * m_vSize.z * yIdx;
+		if (m_vecCells[iTmpIndex] != nullptr)
+		{
+			return m_vecCells[iTmpIndex]->Get_BottomHeight(Pos);
+		}
+
+	}
+	return FLT_MAX;
+}
+
+
+
+
+
+_bool CCubeTerrain::Is_InSide(_vector vPos)
+{
+	_float4 fPos;
+	XMStoreFloat4(&fPos, vPos);
+	if (fPos.x < -0.5 || fPos.x >= m_vSize.x - 0.5)
+		return false;
+	if (fPos.z < -0.5 || fPos.z >= m_vSize.z - 0.5)
+		return false;
+	if (fPos.y < 0 || fPos.y >= m_vSize.y )
+		return false;
+	return true;
 }
 
 

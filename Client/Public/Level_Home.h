@@ -22,12 +22,15 @@ public:
 	virtual void Update(_float fTimeDelta)override;
 	virtual HRESULT Render()override;
 
+	virtual void On_Start()override ;
+
+
 	void On_BuildItemSelected(void*);
 	void Set_BuildItem(BUILD_ITEM_ID eID);
 private:
-	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
-	HRESULT Ready_Layer_UI(const _wstring& strLayerTag);
-	HRESULT Ready_Layer_Player(const _wstring& strLayerTag);
+	HRESULT Ready_Layer_BackGround(LAYERID eLayerId);
+	HRESULT Ready_Layer_UI(LAYERID eLayerId);
+	HRESULT Ready_Layer_Camera(LAYERID eLayerId);
 	HRESULT Ready_Lights();
 
 

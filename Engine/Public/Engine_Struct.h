@@ -87,7 +87,15 @@ namespace Engine
 	typedef struct ENGINE_DLL Ray
 	{
 		Ray(const XMFLOAT4& vOrigin, const XMFLOAT4& vDirection, _float fDist = 1)
-			: vOrigin(vOrigin), vDirection(vDirection), fDist(fDist) {}
+			: fDist(fDist) 
+		{
+			this->vOrigin  = XMLoadFloat4(&vOrigin);
+			this->vDirection = XMLoadFloat4(&vDirection);
+		}
+		Ray(const FXMVECTOR& vOrigin, const FXMVECTOR& vDirection, _float fDist = 1)
+			: fDist(fDist), vOrigin{ vOrigin }, vDirection{ vDirection }
+		{
+		}
 		Ray(const POINT& tScreenDest,  _uint  iWinX, _uint iWinY,  const XMFLOAT4X4& matView, const XMFLOAT4X4& matProj)
 			: vOrigin{ 0,0,0,1 }
 			,vDirection { 0,0,0,0 }
@@ -105,20 +113,20 @@ namespace Engine
 			vNear = XMVector3TransformCoord(vNear, invViewMatrix);
 			vFar = XMVector3TransformCoord(vFar, invViewMatrix);
 
-			XMStoreFloat4(&vOrigin, vNear);
-			XMStoreFloat4(&vDirection, XMVector3Normalize( vFar-vNear));
+			vOrigin =  vNear;
+			vDirection = XMVector3Normalize( vFar-vNear);
 		}
 
-		XMFLOAT4		vOrigin;
-		XMFLOAT4		vDirection;
+		XMVECTOR		vOrigin;
+		XMVECTOR		vDirection;
 		_float				fDist =1;
 	}RAY;
 
 	typedef struct ENGINE_DLL RaycastHit
 	{
-		XMFLOAT4		vPoint;
-		XMFLOAT4		vNormal;
-		float fDist;
+		XMVECTOR		vPoint;
+		XMVECTOR		vNormal;
+		_float fDist;
 		class CCollider* pCollider = nullptr;
 
 	}RAYCASTHIT;

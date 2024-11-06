@@ -28,7 +28,6 @@ HRESULT CUIObject::Initialize(void * pArg)
 	if (nullptr != pDesc)
 	{
 		m_pTarget = pDesc->pTarget;
-		Safe_AddRef(m_pTarget);
 
 	}
 

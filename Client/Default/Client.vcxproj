@@ -177,6 +177,7 @@
     <ClInclude Include="..\Public\Character.h" />
     <ClInclude Include="..\Public\CreateObjEvent.h" />
     <ClInclude Include="..\Public\DeadObjEvent.h" />
+    <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\PlayerEquipSlot.h" />
     <ClInclude Include="..\Public\PlayerInfo.h" />
     <ClInclude Include="..\Public\InvenEquipSlot.h" />
@@ -193,7 +194,10 @@
     <ClInclude Include="..\Public\Camera_Trace.h" />
     <ClInclude Include="..\Public\Canvas.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\Public\UIBundle.h" />
+    <ClInclude Include="..\Public\UIQuickSlotBundle.h" />
     <ClInclude Include="..\Public\SlotItem.h" />
+    <ClInclude Include="..\Public\UIContainer.h" />
     <ClInclude Include="..\Public\UIInvenSlot.h" />
     <ClInclude Include="..\Public\UIListSelector.h" />
     <ClInclude Include="..\Public\UIQuickSlot.h" />
@@ -235,6 +239,7 @@
     <ClCompile Include="..\Private\Character.cpp" />
     <ClCompile Include="..\Private\CreateObjEvent.cpp" />
     <ClCompile Include="..\Private\DeadObjEvent.cpp" />
+    <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\PlayerEquipSlot.cpp" />
     <ClCompile Include="..\Private\PlayerInfo.cpp" />
     <ClCompile Include="..\Private\InvenEquipSlot.cpp" />
@@ -250,7 +255,10 @@
     <ClCompile Include="..\Private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_Trace.cpp" />
     <ClCompile Include="..\Private\Canvas.cpp" />
+    <ClCompile Include="..\Private\UIBundle.cpp" />
+    <ClCompile Include="..\Private\UIQuickSlotBundle.cpp" />
     <ClCompile Include="..\Private\SlotItem.cpp" />
+    <ClCompile Include="..\Private\UIContainer.cpp" />
     <ClCompile Include="..\Private\UIInvenSlot.cpp" />
     <ClCompile Include="..\Private\UIListSelector.cpp" />
     <ClCompile Include="..\Private\UIQuickSlot.cpp" />

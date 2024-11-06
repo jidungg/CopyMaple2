@@ -25,18 +25,18 @@ bool CState::Check_Transition(_uint* pOutNextState)
 	return true;
 }
 
-_uint CState::Check_SubTransition()
+_bool CState::Check_SubTransition(_uint* pOutNextSubState)
 {
 	CTransition* priorityTransition = nullptr;
 	_uint iMaxConditionCount = 0;
 	_uint iTmpConditionCount = 999;
 
-	for (auto& subTrans : m_vecSubTransition)
+	for (auto& subTrans : m_mapSubTransition[*pOutNextSubState])
 	{
 		if (subTrans->CheckConditions())
 		{
 			iTmpConditionCount = subTrans->Get_ConditionCount();
-			if (iMaxConditionCount < iTmpConditionCount)
+			if (iMaxConditionCount <= iTmpConditionCount)
 			{
 				iMaxConditionCount = iTmpConditionCount;
 				priorityTransition = subTrans;
@@ -44,9 +44,12 @@ _uint CState::Check_SubTransition()
 		}
 	}
 	if (priorityTransition == nullptr)
-		return m_iStateID;
+		return false;
 	else
-		return priorityTransition->Get_NextState();
+	{
+		*pOutNextSubState = priorityTransition->Get_NextState();
+		return true;
+	}
 }
 
 CState* CState::Create(_uint iStateID)
@@ -67,8 +70,12 @@ void CState::Free()
 	{
 		Safe_Release(trans);
 	}
-	for (auto& subTrans : m_vecSubTransition)
+	for (auto& vecSubTrans : m_mapSubTransition)
 	{
-		Safe_Release(subTrans);
+		for (auto& subTrans : vecSubTrans.second)
+		{
+
+			Safe_Release(subTrans);
+		}
 	}
 }

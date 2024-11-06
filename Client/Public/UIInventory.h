@@ -24,11 +24,10 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
+	HRESULT Ready_Slots();
 
 	void Set_InventoryTab(ITEM_TYPE eType);
 	void Update_Slot(ITEM_TYPE eType, _uint iIndex);
-private:
-	HRESULT Ready_Slots();
 private:
 	CInventory* m_pInventory = { nullptr };
 	_float2 m_fSlotSize = {};

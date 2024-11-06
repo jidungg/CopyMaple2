@@ -29,11 +29,19 @@ public:
 	HRESULT Remove_TerrainObject(_uint Index);
 	_float4 IndexToPos(_uint Index);
 	_uint PosToIndex(const _float4& Pos);
+	_int PosToIndex(const _fvector& Pos);
+
+	_bool Is_InSide(_vector Pos);
 	XMUINT3 Get_Size() { return m_vSize; }
 	CTerrainObject* Get_TerrainObject(_uint Index);
+	_float Get_FloorHeight(_vector Pos);
+	_float Get_CelingHeight(_vector Pos);
+
 	
 	HRESULT Save_To_Json(string strNewFilepath);
 	HRESULT Load_From_Json(string strJsonFilePath);
+	_vector BlockXZ(CCharacter* pCharacter);
+	_bool RayCastXZ(const Ray& tRay, RaycastHit* pOut);
 
 private:
 	string m_strJsonFilePath;

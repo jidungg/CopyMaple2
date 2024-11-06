@@ -32,9 +32,7 @@ void CCollider_Sphere::Update(_fmatrix WorldMatrix)
 {
 	m_pOriginalBoundDesc->Transform(*m_pBoundDesc, WorldMatrix);
 }
-void CCollider_Sphere::Late_Update(_float fTimeDelta)
-{
-}
+
 
 _bool CCollider_Sphere::Intersect(CCollider* pOther)
 {
@@ -53,10 +51,22 @@ _bool CCollider_Sphere::Intersect(CCollider* pOther)
 	return m_bCollide;
 }
 
+_bool CCollider_Sphere::Intersect(const FXMVECTOR& vPosition)
+{
+	return m_pBoundDesc->Contains(vPosition);
+}
+
 
 _bool CCollider_Sphere::RayCast(const Ray& tRay, RaycastHit* pOut)
 {
-    return false;
+	_bool bRet = m_pBoundDesc->Intersects(tRay.vOrigin, tRay.vDirection, pOut->fDist);
+	if (bRet)
+	{
+		pOut->vPoint = tRay.vOrigin + tRay.vDirection * pOut->fDist;
+		pOut->vNormal = XMVector3Normalize(pOut->vPoint - XMLoadFloat3( &m_pBoundDesc->Center));
+		pOut->pCollider = this;
+	}
+	return bRet;
 }
 
 HRESULT CCollider_Sphere::Render()
@@ -111,5 +121,6 @@ void CCollider_Sphere::Free()
     __super::Free();
 	Safe_Delete(m_pOriginalBoundDesc);
 	Safe_Delete(m_pBoundDesc);
+
 }
 

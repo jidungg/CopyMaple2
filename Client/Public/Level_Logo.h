@@ -13,11 +13,13 @@ private:
 
 public:
 	virtual HRESULT Initialize() override;
+	HRESULT Ready_Camera(LAYERID eLayerID);
 	virtual void Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
 private:
-	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
+	HRESULT Ready_Layer_BackGround(LAYERID eID);
+	HRESULT Ready_UI();
 
 public:
 	static CLevel_Logo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

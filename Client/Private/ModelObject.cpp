@@ -105,6 +105,11 @@ const _float4x4* CModelObject::Get_BoneMatrix(const _char* pBoneName) const
     return m_pModelCom->Get_BoneMatrix(pBoneName);
 }
 
+_uint CModelObject::Get_AnimIndex()
+{
+    return m_pModelCom->Get_AnimIndex();
+}
+
 void CModelObject::Set_AnimationLoop(_uint iIdx, _bool bIsLoop)
 {
 	m_pModelCom->Set_AnimationLoop(iIdx, bIsLoop);

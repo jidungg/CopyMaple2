@@ -60,7 +60,8 @@ void CPrototype_Manager::Clear(_uint iLevelIndex)
 {
 	if (iLevelIndex >= m_iNumLevels)
 		return;
-
+	if (iLevelIndex == 0)
+		return;
 	for (auto& Pair : m_pPrototypes[iLevelIndex])
 		Safe_Release(Pair.second);
 

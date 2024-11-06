@@ -27,8 +27,8 @@ HRESULT CUIQuickSlot::Initialize(void* pArg)
 
 	pDesc->tIconDesc.eAnchorType = CORNOR_TYPE::CENTER;
 	pDesc->tIconDesc.ePivotType = CORNOR_TYPE::CENTER;
-	pDesc->tIconDesc.fSizeX = pDesc->fSizeX - 5;
-	pDesc->tIconDesc.fSizeY = pDesc->fSizeY - 5;
+	pDesc->tIconDesc.fSizeX = pDesc->fSizeX ;
+	pDesc->tIconDesc.fSizeY = pDesc->fSizeY ;
 	pDesc->tIconDesc.fXOffset = 0;
 	pDesc->tIconDesc.fYOffset = 0;
 

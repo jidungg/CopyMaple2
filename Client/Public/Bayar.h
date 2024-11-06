@@ -2,7 +2,7 @@
 #include "Character.h"
 
 BEGIN(Engine)
-class CCollider;
+class CCollider_Sphere;
 END
 BEGIN(Client)
 class CSkill;
@@ -15,56 +15,80 @@ class CItemObjet;
 class CBayar :
     public CCharacter
 {
-	enum class BEHAVIOR_STATE
+	enum PART_ID
 	{
-		IDLE,
-		CHASE,
-		ATTACK,
-		DEAD,
-		LAST
+		LEFT_ARM,
+		RIGHT_ARM,
+		BODY,
+		DETECTION,
+		PART_LAST
 	};
-    enum class ANIM_STATE
+
+	enum ANIM_CONDITION
+	{
+		AC_ANIMEND
+		, AC_DETECTED
+		, AC_ATTACKTRIGGER
+		,AC_ATTACKIDX
+		, AC_ISATTACK
+		,AC_MOVE
+		,AC_WALK
+		, AC_LAST
+	};
+    enum STATE
     {
-		IDLE
-		,ATTACK_1_A
-		,ATTACK_1_B
-		,ATTACK_1_C
-		,ATTACK_1_D
-		,ATTACK_1_E
-		,ATTACK_1_F
-		,ATTACK_1_G
-		,ATTACK_1_H
-		,ATTACK_2_A
-		,ATTACK_2_B
-		,ATTACK_2_C
-		,ATTACK_2_D
-		,ATTACK_2_E
-		,ATTACK_2_G
-		,ATTACK_2_H
-		,ATTACK_3_E
-		,ATTACK_3_G
-		,ATTACK_3_H
-		,ATTACK_4_G
-		,ATTACK_IDLE
-		,BORE
-		,DAMG_A
-		,DAMG_B
-		,DEAD_A
-		,DEAD_B
-		,DEAD_DAMG_A
-		,DEAD_DAMG_B
-		,DEAD_IDLE_A
-		,JUMP
-		,JUMP_B
-		,JUMP_DOWN
-		,JUMP_LAND
-		,JUMP_READY
-		,JUMP_UP
-		,REGEN
-		,RUN
-		,STUN
-		,WALK_A
-        ,LAST
+		AS_IDLE = 0
+		,AS_ATTACK_1_A
+		,AS_ATTACK_1_B
+		,AS_ATTACK_1_C
+		,AS_ATTACK_1_D
+		,AS_ATTACK_1_E
+		,AS_ATTACK_1_F
+		,AS_ATTACK_1_G
+		,AS_ATTACK_1_H
+		,AS_ATTACK_2_A 
+		,AS_ATTACK_2_B = 10
+		,AS_ATTACK_2_C
+		,AS_ATTACK_2_D
+		,AS_ATTACK_2_E
+		,AS_ATTACK_2_G
+		,AS_ATTACK_2_H
+		,AS_ATTACK_3_E
+		,AS_ATTACK_3_G
+		,AS_ATTACK_3_H
+		,AS_ATTACK_4_G
+		,AS_ATTACK_IDLE = 20
+		,AS_BORE
+		,AS_DAMG_A
+		,AS_DAMG_B
+		,AS_DEAD_A
+		,AS_DEAD_B
+		,AS_DEAD_DAMG_A
+		,AS_DEAD_DAMG_B
+		,AS_DEAD_IDLE_A
+		,AS_JUMP
+		,AS_JUMP_B = 30
+		,AS_JUMP_DOWN
+		,AS_JUMP_LAND
+		,AS_JUMP_READY
+		,AS_JUMP_UP
+		,AS_REGEN
+		,AS_RUN = 36
+		,AS_STUN
+		,AS_WALK_A
+        ,AS_LAST
+		
+		,BS_BORN = 40
+		,BS_IDLE
+		,BS_DETECTED 
+		,BS_ATTACK1 
+		,BS_MOVE
+		,BS_JUMP
+		,BS_DAMAGED 
+		,BS_DEAD 
+		,BS_STUN
+		,BS_LAST 
+
     };
 
 protected:
@@ -77,6 +101,8 @@ public:
 	virtual HRESULT Initialize(void* pArg);
 	virtual void Priority_Update(_float fTimeDelta) override;
 	virtual void Update(_float fTimeDelta) override;
+	void Update_Collider();
+	virtual _bool Check_Collision(CGameObject* pOther) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
@@ -86,15 +112,33 @@ public:
 	HRESULT Ready_AnimStateMachine();
 	HRESULT Ready_FaceStateMachine();
 	HRESULT Ready_Skill();
-
 	void On_StateChange(_uint iState);
 	void On_SubStateChange(_uint iSubState);
 	void On_FaceStateChange(_uint iState);
 
 	virtual void Use_Skill(CSkill* pSkill) override;
 
+	_bool Is_LastAttackAnimation(_uint iAnimIdx);
+	_bool Is_FirstAttackAnimation(_uint iAnimIdx);
+	_bool Is_AttackCoolReady() { return m_fAttackTimeAcc >= m_fAttackInterval; }
 private:
-	CCollider* m_pDetectionCollider = { nullptr };
+	vector<CCollider_Sphere*> m_vecCollider;
+	vector<const XMFLOAT4X4*> m_vecPartsMatrix;
+
+	_float3 m_vHomePos = { 10.f,1.f,10.f };
+	_int m_iCurAttack = AS_ATTACK_1_A;
+	_int m_iAttackCount = 8;
+	_float m_fDetectionRange{ 5.f };
+	_float m_fAttackRange{ 2.f };
+	_float m_fChaseRange{ 3.5f };
+	_float m_fAttackInterval{ 1.f };
+	_float m_fAttackTimeAcc{ 5.f };
+	_float m_fTargetDistance= false;
+	//ConditionVariable
+	_bool m_bDetected = false;
+	_bool m_bChase = false;
+	_bool m_bWalk = false;
+	_bool m_bAttack = false;
 public:
 	static CBayar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

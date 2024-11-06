@@ -8,7 +8,7 @@ typedef struct SkillDesc
 	SkillDesc() = default;
 	SkillDesc(json& jSkillData);
 	SKILL_ID eID;
-	SKILL_TYPE eType;
+	SKILL_TYPE eCastingType;
 	_char szName[MAX_PATH] = ("");
 	_char szDesc[MAX_PATH] = ("");
 	_uint iLevel = { 0 };

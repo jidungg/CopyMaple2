@@ -21,7 +21,10 @@ D:\Workbench\Portfolio\CopyMaple2\Client\Private\ModelObject.cpp;D:\Workbench\Po
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Camera_Free.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Camera_Free.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Camera_Trace.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Camera_Trace.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Canvas.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Canvas.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIBundle.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\UIBundle.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIQuickSlotBundle.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\UIQuickSlotBundle.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\SlotItem.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\SlotItem.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIContainer.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\UIContainer.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIInvenSlot.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\UIInvenSlot.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIListSelector.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\UIListSelector.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIQuickSlot.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\UIQuickSlot.obj

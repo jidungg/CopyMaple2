@@ -17,6 +17,7 @@ public:
 
 	virtual void On_Start();
 	virtual void On_End();
+	_int Get_LevelID() { return m_iLevelID; }
 protected:
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };

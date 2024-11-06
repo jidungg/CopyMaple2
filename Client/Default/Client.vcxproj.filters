@@ -176,6 +176,10 @@
     <ClInclude Include="..\Public\PlayerInfo.h" />
     <ClInclude Include="..\Public\PlayerEquipSlot.h" />
     <ClInclude Include="..\Public\Bayar.h" />
+    <ClInclude Include="..\Public\UIContainer.h" />
+    <ClInclude Include="..\Public\UIQuickSlotBundle.h" />
+    <ClInclude Include="..\Public\UIBundle.h" />
+    <ClInclude Include="..\Public\Monster.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -291,6 +295,10 @@
     <ClCompile Include="..\Private\PlayerInfo.cpp" />
     <ClCompile Include="..\Private\PlayerEquipSlot.cpp" />
     <ClCompile Include="..\Private\Bayar.cpp" />
+    <ClCompile Include="..\Private\UIContainer.cpp" />
+    <ClCompile Include="..\Private\UIQuickSlotBundle.cpp" />
+    <ClCompile Include="..\Private\UIBundle.cpp" />
+    <ClCompile Include="..\Private\Monster.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

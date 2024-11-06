@@ -12,6 +12,7 @@
 #include "Light_Manager.h"
 #include "Physics.h"
 #include "EventManager.h"
+#include "CollisionManager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -19,7 +20,7 @@ CGameInstance::CGameInstance()
 {
 }
 
-HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext)
+HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext, _uint iLayerCouint)
 {
 	m_pGraphic_Device = CGraphic_Device::Create(EngineDesc.hWnd, EngineDesc.isWindowed, EngineDesc.iViewportWidth, EngineDesc.iViewportHeight, ppDevice, ppContext);
 	if (nullptr == m_pGraphic_Device)
@@ -67,6 +68,13 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pPhysics)
 		return E_FAIL;
 
+	m_pCollisionManager = CCollisionManager::Create(m_pObject_Manager,iLayerCouint);
+	if (nullptr == m_pCollisionManager)
+		return E_FAIL;
+	m_pEventManager = CEventManager::Create();
+	if (nullptr == m_pEventManager)
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -78,8 +86,10 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 	m_pController->Update(fTimeDelta);
 	m_pObject_Manager->Priority_Update(fTimeDelta);
 	m_pObject_Manager->Update(fTimeDelta);
+	m_pCollisionManager->Update_Collision();
 	m_pObject_Manager->Late_Update(fTimeDelta);
 	m_pObject_Manager->Final_Update();
+	m_pEventManager->DispatchEvent();
 
 	m_pPipeLine->Update();
 
@@ -216,45 +226,44 @@ CBase* CGameInstance::Clone_Proto_Component_Current(const _wstring& strPrototype
 }
 
 
-HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLevelIndex, const _wstring& strLayerTag, void* pArg, bool bDontDestroy)
+HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLevelIndex, _uint iLayerId, void* pArg, bool bDontDestroy)
 {
 	if (nullptr == m_pObject_Manager)
 		return E_FAIL;
 
-	return m_pObject_Manager->Add_GameObject_ToLayer(iPrototypeLevelIndex, strPrototypeTag, iLevelIndex, strLayerTag, pArg, bDontDestroy);
+	return m_pObject_Manager->Add_GameObject_ToLayer(iPrototypeLevelIndex, strPrototypeTag, iLevelIndex, iLayerId, pArg, bDontDestroy);
 }
-HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, CGameObject* pObj, bool bDontDestroy)
+HRESULT CGameInstance::Add_GameObject_ToLayer(_uint iLevelIndex, _uint iLayerId, CGameObject* pObj, bool bDontDestroy)
 {
 	if (nullptr == m_pObject_Manager)
 		return E_FAIL;
 
-	return m_pObject_Manager->Add_GameObject_ToLayer(iLevelIndex, strLayerTag, pObj, bDontDestroy);
+	return m_pObject_Manager->Add_GameObject_ToLayer(iLevelIndex, iLayerId, pObj, bDontDestroy);
 }
 
-CGameObject* CGameInstance::Get_FirstGameObject(_uint iLevelIdx, const _wstring& strLayerTag)
+CGameObject* CGameInstance::Get_FirstGameObject(_uint iLevelIdx, _uint iLayerId)
 {
 	if (nullptr == m_pObject_Manager)
 		return nullptr;
 
-	return m_pObject_Manager->Get_FirstGameObject(iLevelIdx, strLayerTag);
+	return m_pObject_Manager->Get_FirstGameObject(iLevelIdx, iLayerId);
 }
 
-void CGameInstance::ObjectManager_On_OpenLevel(_uint iLevelIndex)
+void CGameInstance::Move_DontDestroyObjects(_uint iOldLevel, _uint iNewLevel)
 {
 	if (nullptr == m_pObject_Manager)
 		return;
 
-	m_pObject_Manager->On_OpenLevel(iLevelIndex);
+	m_pObject_Manager->Move_DontDestroyObjects(iOldLevel, iNewLevel);
 }
 
 
-
-bool CGameInstance::RayCast(const _wstring& strLayerTag, const Ray& tRay, RaycastHit* pOut)
+bool CGameInstance::RayCast(_uint iLayerId, const Ray& tRay, RaycastHit* pOut)
 {
 	if (nullptr == m_pObject_Manager)
 		return false;
 
-	return m_pObject_Manager->RayCast(strLayerTag, tRay, pOut);
+	return m_pObject_Manager->RayCast(iLayerId, tRay, pOut);
 }
 
 bool CGameInstance::RayCast(const Ray& tRay, RaycastHit* pOut)
@@ -400,6 +409,30 @@ void CGameInstance::Dispatch_Event()
 	m_pEventManager->DispatchEvent();
 }
 
+void CGameInstance::Set_LayerCount(_uint iLayerCount)
+{
+	if (nullptr == m_pCollisionManager)
+		return;
+
+	m_pCollisionManager->Set_LayerCount(iLayerCount);
+}
+
+void CGameInstance::Set_CollisionMatrix(_uint eObjectLayer, _uint eSubjectLayer, bool bValue)
+{
+	if (nullptr == m_pCollisionManager)
+		return;
+
+	m_pCollisionManager->Set_CollisionMatrix(eObjectLayer, eSubjectLayer, bValue);
+}
+
+void CGameInstance::Zero_CollisionMatrix()
+{
+	if (nullptr == m_pCollisionManager)
+		return;
+
+	m_pCollisionManager->Zero_CollisionMatrix();
+}
+
 
 void CGameInstance::Release_Engine()
 {
@@ -424,4 +457,7 @@ void CGameInstance::Free()
 	Safe_Release(m_pUIManager);
 	Safe_Release(m_pLight_Manager);
 	Safe_Release(m_pPhysics);
+	Safe_Release(m_pCollisionManager);
+	Safe_Release(m_pEventManager);
+
 }

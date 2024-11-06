@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "InvenSlot.h"
 #include "Inventory.h"
-
+#include "UIBundle.h"
 CInvenSlot::CInvenSlot(ITEM_TYPE eItemType, _uint iIdx, CInventory* pInventory)
     :m_eItemType(eItemType)
 	, m_iIndex(iIdx)
@@ -30,7 +30,7 @@ HRESULT CInvenSlot::Insert_Item(ITEM_DESC* pData, _uint iCount)
 		return E_FAIL;
     m_pItemDesc = pData;
 	m_iStack += iCount;
-	m_pInventory->Update_SlotUI(this);
+	UIBUNDLE->Update_Slot(m_eItemType, m_iIndex);
     return S_OK;
 }
 
@@ -42,7 +42,7 @@ ITEM_DESC* CInvenSlot::Pop_Item(_uint iCount)
 	ITEM_DESC* pItem = m_pItemDesc;
 	if (m_iStack <= 0)
         m_pItemDesc = nullptr;
-	m_pInventory->Update_SlotUI(this);
+    UIBUNDLE->Update_Slot(m_eItemType, m_iIndex);
     return pItem;
 }
 

@@ -11,163 +11,183 @@ class CMimicBoneModelObject;
 class CFace;
 class CInventory;
 class CItemObjet;
+class CTerrainObject;
 class CPlayer :
 	public CCharacter
 {
 public:
-	enum class ANIM_STATE {
-		ATTACK_01
-		,ATTACK_IDLE
-		,BBQPARTY_1
-		,BBQPARTY_2
-		,BORE_A
-		,BORE_B
-		,BORE_C
-		,CLIMB_DOWN_LAND
-		,CLIMB_DOWN_TAKE
-		,CLIMB_IDLE
-		,CLIMB_L_DOWN
-		,CLIMB_L_UP
-		,CLIMB_LEFT
-		,CLIMB_R_DOWN
-		,CLIMB_R_UP
-		,CLIMB_RIGHT
-		,CLIMB_UP_LAND
-		,CLIMB_UP_TAKE
-		,CONCENTRATION
-		,DAMG_A
-		,DAMG_B
-		,DAMG_C
-		,DASH_JUMP
-		,DEAD
-		,DEAD2
-		,DOWN_IDLE_A
-		,DOWN_IDLE_B
-		,DOWN_IDLE_C
-		,DOWN_IDLE_D
-		,EQUIP_CHANAGE_CAP
-		,EQUIP_CHANGE_BODY
-		,EQUIP_CHANGE_GLOVE
-		,EQUIP_CHANGE_HAIR
-		,EQUIP_CHANGE_HEAD
-		,EQUIP_CHANGE_IDLE
-		,EQUIP_CHANGE_MANTLE
-		,EQUIP_CHANGE_SHOES
-		,FAKEMETEOR_1
-		,FAKEMETEOR_2
-		,FIRETORNADO
-		,FISHING_BORE_A
-		,FISHING_BORE_B
-		,FISHING_END
-		,FISHING_IDLE
-		,FISHING_REEL
-		,FISHING_START
-		,FLALMEBURST
-		,FLAMEWAVE
-		,FLY_IDLE
-		,FLY_RUN
-		,FUNCTOBJ_CHAIR
-		,HOLD_IDLE
-		,IDLE
-		,JUMP_ATTACK
-		,JUMP_DAMG
-		,JUMP_DASH_DOWN
-		,JUMP_DASH_FALL
-		,JUMP_DASH_LAND
-		,JUMP_DOWN_A
-		,JUMP_DOWN_B
-		,JUMP_FALL_A
-		,JUMP_FALL_B
-		,JUMP_FLYDAMG
-		,JUMP_LAND
-		,JUMP_UP_A
-		,JUMP_UP_B
-		,KINDLING_01
-		,KINDLING_02
-		,KINDLING_03_A
-		,KINDLING_03_B
-		,KNOCK_BACK
-		,LADDER_DOWN_LAND
-		,LADDER_DOWN_TAKE
-		,LADDER_IDLE
-		,LADDER_L_DOWN
-		,LADDER_L_UP
-		,LADDER_LEFT
-		,LADDER_R_DOWN
-		,LADDER_R_UP
-		,LADDER_RIGHT
-		,LADDER_UP_LAND
-		,LADDER_UP_TAKE
-		,MAGICCLAW
-		,OBJECT_REACT_A
-		,OBJECT_REACT_B
-		,OBJECT_REACT_C
-		,OBJECT_REACT_D
-		,OBJECT_REACT_E
-		,PROSTRATE
-		,PROSTRATE_CRAWL_A
-		,PROSTRATE_CRAWL_B
-		,PROSTRATE_IDLE
-		,PUSH_A
-		,PUSH_B
-		,RESURRECTION
-		,RUN
-		,SIT_CHAIR
-		,SIT_CHAIR_BORE_A
-		,SIT_CHAIR_BORE_B
-		,SIT_CHAIR_IDLE
-		,SIT_CHAIR_TALK
-		,SIT_GROUND
-		,SIT_GROUND_BORE_A
-		,SIT_GROUND_BORE_B
-		,SIT_GROUND_IDLE
-		,SIT_GROUND_TALK
-		,STAFF_ATTACK
-		,STAFF_ATTACK_IDLE
-		,STAFF_DAMG_A
-		,STAFF_DAMG_B
-		,STAFF_DEAD
-		,STAFF_JUMP_ATTACK
-		,STAFF_JUMP_DOWN_A
-		,STAFF_JUMP_DOWN_B
-		,STAFF_JUMP_LAND
-		,STAFF_JUMP_UP_A
-		,STAFF_JUMP_UP_B
-		,STAFF_RUN
-		,STAND_A
-		,STAND_B
-		,STAND_C
-		,STUCK
-		,STUN
-		,STUN_FROZEN
-		,TALK_A
-		,TALK_B
-		,TELEPORT
-		,TRINITYFORCE
-		,VOMIT
-		,WALK
-		,WILDFIRE_02
-		,WIZARD_BORE_A
-		,LAST
-	};
-	enum class ANIM_CONDITION
-	{
-		ANIM_END_TRIGGER,
-		POSTDELAY_END,
-		UPFORCE,
-		HEIGHT,
-		RANDOM,
-		MOVE,
-		IDLETIME,
-		WALK,
-		BATTLE,
-		WEAPON,
-		PAINTIME,
-		INTERACTION,
+	enum ANIM_STATE {
+		AS_ATTACK_01
+		,AS_ATTACK_IDLE
+		,AS_BBQPARTY_1
+		,AS_BBQPARTY_2
+		,AS_BORE_A
+		,AS_BORE_B
+		,AS_BORE_C
+		,AS_CLIMB_DOWN_LAND
+		,AS_CLIMB_DOWN_TAKE
+		,AS_CLIMB_IDLE 
+		,AS_CLIMB_L_DOWN = 10
+		,AS_CLIMB_L_UP
+		,AS_CLIMB_LEFT
+		,AS_CLIMB_R_DOWN
+		,AS_CLIMB_R_UP
+		,AS_CLIMB_RIGHT
+		,AS_CLIMB_UP_LAND
+		,AS_CLIMB_UP_TAKE
+		,AS_CONCENTRATION
+		,AS_DAMG_A
+		,AS_DAMG_B
+		,AS_DAMG_C
+		,AS_DASH_JUMP
+		,AS_DEAD
+		,AS_DEAD2
+		,AS_DOWN_IDLE_A
+		,AS_DOWN_IDLE_B
+		,AS_DOWN_IDLE_C
+		,AS_DOWN_IDLE_D
+		,AS_EQUIP_CHANAGE_CAP
+		,AS_EQUIP_CHANGE_BODY
+		,AS_EQUIP_CHANGE_GLOVE
+		,AS_EQUIP_CHANGE_HAIR
+		,AS_EQUIP_CHANGE_HEAD
+		,AS_EQUIP_CHANGE_IDLE
+		,AS_EQUIP_CHANGE_MANTLE
+		,AS_EQUIP_CHANGE_SHOES
+		,AS_FAKEMETEOR_1
+		,AS_FAKEMETEOR_2
+		,AS_FIRETORNADO
+		,AS_FISHING_BORE_A
+		,AS_FISHING_BORE_B
+		,AS_FISHING_END
+		,AS_FISHING_IDLE
+		,AS_FISHING_REEL
+		,AS_FISHING_START
+		,AS_FLALMEBURST
+		,AS_FLAMEWAVE
+		,AS_FLY_IDLE
+		,AS_FLY_RUN
+		,AS_FUNCTOBJ_CHAIR
+		,AS_HOLD_IDLE
+		,AS_IDLE = 52
+		,AS_JUMP_ATTACK = 53
+		,AS_JUMP_DAMG
+		,AS_JUMP_DASH_DOWN
+		,AS_JUMP_DASH_FALL
+		,AS_JUMP_DASH_LAND
+		,AS_JUMP_DOWN_A
+		,AS_JUMP_DOWN_B
+		,AS_JUMP_FALL_A
+		,AS_JUMP_FALL_B
+		,AS_JUMP_FLYDAMG
+		,AS_JUMP_LAND
+		,AS_JUMP_UP_A = 64
+		,AS_JUMP_UP_B
+		,AS_KINDLING_01
+		,AS_KINDLING_02
+		,AS_KINDLING_03_A
+		,AS_KINDLING_03_B
+		,AS_KNOCK_BACK
+		,AS_LADDER_DOWN_LAND
+		,AS_LADDER_DOWN_TAKE
+		,AS_LADDER_IDLE
+		,AS_LADDER_L_DOWN
+		,AS_LADDER_L_UP
+		,AS_LADDER_LEFT
+		,AS_LADDER_R_DOWN
+		,AS_LADDER_R_UP
+		,AS_LADDER_RIGHT
+		,AS_LADDER_UP_LAND
+		,AS_LADDER_UP_TAKE
+		,AS_MAGICCLAW
+		,AS_OBJECT_REACT_A
+		,AS_OBJECT_REACT_B
+		,AS_OBJECT_REACT_C
+		,AS_OBJECT_REACT_D
+		,AS_OBJECT_REACT_E
+		,AS_PROSTRATE
+		,AS_PROSTRATE_CRAWL_A
+		,AS_PROSTRATE_CRAWL_B
+		,AS_PROSTRATE_IDLE
+		,AS_PUSH_A
+		,AS_PUSH_B
+		,AS_RESURRECTION
+		,AS_RUN = 95
+		,AS_SIT_CHAIR
+		,AS_SIT_CHAIR_BORE_A
+		,AS_SIT_CHAIR_BORE_B
+		,AS_SIT_CHAIR_IDLE
+		,AS_SIT_CHAIR_TALK
+		,AS_SIT_GROUND
+		,AS_SIT_GROUND_BORE_A
+		,AS_SIT_GROUND_BORE_B
+		,AS_SIT_GROUND_IDLE
+		,AS_SIT_GROUND_TALK
+		,AS_STAFF_ATTACK = 106
+		,AS_STAFF_ATTACK_IDLE
+		,AS_STAFF_DAMG_A
+		,AS_STAFF_DAMG_B
+		,AS_STAFF_DEAD
+		,AS_STAFF_JUMP_ATTACK
+		,AS_STAFF_JUMP_DOWN_A
+		,AS_STAFF_JUMP_DOWN_B
+		,AS_STAFF_JUMP_LAND
+		,AS_STAFF_JUMP_UP_A
+		,AS_STAFF_JUMP_UP_B
+		,AS_STAFF_RUN
+		,AS_STAND_A
+		,AS_STAND_B
+		,AS_STAND_C
+		,AS_STUCK
+		,AS_STUN
+		,AS_STUN_FROZEN
+		,AS_TALK_A
+		,AS_TALK_B
+		,AS_TELEPORT
+		,AS_TRINITYFORCE
+		,AS_VOMIT
+		,AS_WALK
+		,AS_WILDFIRE_01
+		,AS_WIZARD_BORE_A
+		,AS_LAST
 
-		ATTACK_TRIGGER,
-		SKILL_ID,
-		LAST
+		, BS_IDLE  = 1000
+		, BS_ATTACK
+		, BS_JUMP
+		, BS_RUN
+		,BS_CLIMB
+		,BS_CLIMB_RUN = 1005
+		, BS_CLIMB_LAND
+		, BS_DAMAGED
+		, BS_DEAD
+		, BS_STUN
+		, BS_LAST
+	};
+	enum ANIM_CONDITION
+	{
+		AC_ANIM_END_TRIGGER,
+		AC_POSTDELAY_END,
+		AC_UPFORCE,
+		AC_ONFLOOR,
+		AC_RANDOM,
+		AC_MOVE,
+		AC_IDLETIME,
+		AC_WALK,
+		AC_BATTLE,
+		AC_WEAPON,
+		AC_PAINTIME,
+		AC_INTERACTION,
+		AC_ATTACK,
+		AC_BODYWALL,
+		AC_FOOTWALL,
+		AC_CLIMB,
+		AC_CLIMB_DIR,
+		AC_CLIMB_DIR_CHG,
+
+		AC_CLIMB_LAND_TRIGGER,
+		AC_ATTACK_TRIGGER,
+		AC_SKILL_ID,
+		AC_LAST
 	};
 	
 public:
@@ -189,7 +209,7 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
-
+	virtual _bool Check_Collision(CGameObject* pOther) override;
 public:
 	HRESULT Ready_Parts();
 	HRESULT Ready_AnimStateMachine();
@@ -203,8 +223,11 @@ public:
 	virtual void Use_Skill(CSkill* pSkill) override;
 	HRESULT Gain_Item(CItemObjet* pItem);
 	HRESULT Gain_Item(ITEM_DESC* pItem, _uint iCount = 1);
-
 	CSkill* Get_Skill(SKILL_ID eID) { return m_pSkill[(_uint)eID]; }
+	_uint Get_AnimationIndex(SKILL_ID eSkillID);
+	_bool Is_LastAttackAnimation(_uint iAnimIdx);
+	_bool Is_CastingAnimation(_uint iAnimIdx);
+
 	void Set_Battle(bool bBattle); 
 	HRESULT Equip(EQUIP_ITEM_DESC* pItem);
 	HRESULT UnEquip(EQUIP_ITEM_TYPE eType);
@@ -218,27 +241,35 @@ protected:
 	CModelObject* m_pDecoModels[(_uint)DECO_TYPE::LAST] = { nullptr, };
 	CModelObject* m_pCustomizes[(_uint)CUSTOMIZE_PART::LAST] = { nullptr, };
 
-	unordered_map<SKILL_ID, ANIM_CONDITION> m_mapSkillTrigger;
 
 	CStateMachine* m_pFaceStateMachine = { nullptr };
 
 	CInventory* m_pInventory = { nullptr };
 
 	_float m_fPainTime = 0.f;
+	_bool m_bCasting{ false };
+
 	//ConditionVar
 	_int m_iRandomCondition { 0 };
-	_float m_fUpForce { 0.f };
-	_float m_fHeight { 1.f };
+
 	_float m_fIdleTime  { 0.f };
+
 	_float m_fBattleTime { 0.f };
 	_bool m_bWalk{ false };
-	_bool m_bMove { false };
+	_bool m_bClimb{ false };
+	_bool m_bBodyWall{ false };
+	_bool m_bFootWall{ false };
 	_bool m_bWeapon { false };
 	_bool m_bBattle  { false };
 	_bool m_bPostDelayEnd  { false };
+	_bool m_bAttack { false };
 	_bool m_bInteraction{ false };
 	_float m_fPainTimeAcc;
 	_int m_iSkillID{ 0 };
+	_int m_iClimbDir{ (_int)DIR_U };
+	_vector m_vBodyWallNormal{ 0.f, 0.f, 0.f ,0.f};
+	_vector m_vBodyWallPoint{ 0.f, 0.f, 0.f ,0.f };
+	_float m_fBodyWallHeight{ 0.f };
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

@@ -38,7 +38,6 @@ HRESULT CGameObject::Initialize(void * pArg)
 	{
 		GAMEOBJECT_DESC*		pDesc = static_cast<GAMEOBJECT_DESC*>(pArg);
 		m_pTarget = pDesc->pTarget;
-		Safe_AddRef(m_pTarget);
 	}	
 
 	m_pTransformCom = CTransform::Create(m_pDevice, m_pContext);
@@ -140,6 +139,7 @@ void CGameObject::Add_Child(CGameObject* pChild)
 	m_pChilds.push_back(pChild);
 	pChild->m_pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
 	pChild->Get_Transform()->Set_Parent(m_pTransformCom);
+	pChild->Set_LayerID(m_iLayerID);
 }
 
 void CGameObject::Remove_Child(CGameObject* pChild)
@@ -162,7 +162,7 @@ CComponent * CGameObject::Find_Component(const _wstring & strComponentTag)
 	return iter->second;
 }
 
-bool CGameObject::Check_Collision(const Ray& tRay, RaycastHit* pOut)
+_bool CGameObject::Check_Collision(const Ray& tRay, RaycastHit* pOut)
 {
 	CCollider* pCollider = nullptr;
 	pCollider = static_cast<CCollider*>(Find_Component(CCollider::m_szCompTag));
@@ -262,5 +262,4 @@ void CGameObject::Free()
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
-	Safe_Release(m_pTarget);
 }

@@ -23,29 +23,30 @@ HRESULT CObject_Manager::Initialize(_uint iNumLevels)
 	return S_OK;
 }
 
-HRESULT CObject_Manager::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring & strPrototypeTag, _uint iLevelIndex, const _wstring & strLayerTag, void * pArg, bool bDontDestroy)
+HRESULT CObject_Manager::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring & strPrototypeTag, _uint iLevelIndex, _uint iLayerId, void * pArg, bool bDontDestroy)
 {
 	CGameObject* pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, iPrototypeLevelIndex, strPrototypeTag, pArg));
 	if (nullptr == pGameObject)
 		return E_FAIL;
 
-	return Add_GameObject_ToLayer(iLevelIndex, strLayerTag, pGameObject, bDontDestroy);
+	return Add_GameObject_ToLayer(iLevelIndex, iLayerId, pGameObject, bDontDestroy);
 }
 
-HRESULT CObject_Manager::Add_GameObject_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, CGameObject* pObj, bool bDontDestroy)
+HRESULT CObject_Manager::Add_GameObject_ToLayer(_uint iLevelIndex, _uint iLayerId, CGameObject* pObj, bool bDontDestroy)
 {
-	CLayer* pLayer = Find_Layer(iLevelIndex, strLayerTag);
+	CLayer* pLayer = Find_Layer(iLevelIndex, iLayerId);
 
 	if (nullptr == pLayer)
 	{
 		pLayer = CLayer::Create();
 
-		m_pLayers[iLevelIndex].emplace(strLayerTag, pLayer);
+		m_pLayers[iLevelIndex].emplace(iLayerId, pLayer);
 	}
 
 	pLayer->Add_GameObject(pObj);
 
 	pObj->Set_DontDestroy(bDontDestroy);
+	pObj->Set_LayerID(iLayerId);
 	CUIObject* pUI = dynamic_cast<CUIObject*>(pObj);
 	if(pUI)
 		m_pGameInstance->Register_UIObject(pUI);
@@ -101,7 +102,6 @@ void CObject_Manager::Clear(_uint iLevelIndex)
 
 	for (auto& pLayerPair : m_pLayers[iLevelIndex])
 	{
-		pLayerPair.second->Get_DontDestroyObjects(&m_DontDestroyLevel[pLayerPair.first]);
 
 		Safe_Release(pLayerPair.second);
 	}
@@ -109,21 +109,27 @@ void CObject_Manager::Clear(_uint iLevelIndex)
 	m_pLayers[iLevelIndex].clear();
 }
 
-void CObject_Manager::On_OpenLevel(_uint iLevelIndex)
+void CObject_Manager::Move_DontDestroyObjects(_uint iOldLevel, _uint iNewLevel)
 {
-	for (auto& pObjectPair : m_DontDestroyLevel)
+	for (auto& pLayer : m_pLayers[iOldLevel])
 	{
-		for (auto& pObj : pObjectPair.second)
+		pLayer.second->HandOver_DontDestroyObjects(&m_DontDestroyLevel[pLayer.first]);
+	}
+	for (auto& LayerPair : m_DontDestroyLevel)
+	{
+		for (auto& pObj : LayerPair.second)
 		{
-			Add_GameObject_ToLayer(iLevelIndex, pObjectPair.first, pObj);
+			Add_GameObject_ToLayer(iNewLevel, LayerPair.first, pObj, true);
 			pObj = nullptr;
 		}
+		LayerPair.second.clear();
 	}
+	m_DontDestroyLevel.clear();
 }
 
-bool CObject_Manager::RayCast(const _wstring& strLayerTag, const Ray& tRay, RaycastHit* pOut)
+bool CObject_Manager::RayCast(_uint iLayerId, const Ray& tRay, RaycastHit* pOut)
 {
-	return m_pLayers[m_pGameInstance->Get_CurrentLevelID()][strLayerTag]->Check_Collision(tRay, pOut);
+	return m_pLayers[m_pGameInstance->Get_CurrentLevelID()][iLayerId]->Check_Collision(tRay, pOut);
 }
 
 bool CObject_Manager::RayCast(const Ray& tRay, RaycastHit* pOut)
@@ -145,19 +151,24 @@ bool CObject_Manager::RayCast(const Ray& tRay, RaycastHit* pOut)
 	return bIsHit;
 }
 
-CGameObject* CObject_Manager::Get_FirstGameObject(_uint iLevIdx, const _wstring& strLayerTag)
+CGameObject* CObject_Manager::Get_FirstGameObject(_uint iLevIdx, _uint iLayerId)
 {
-	CLayer* pLayer= Find_Layer(iLevIdx, strLayerTag);
+	CLayer* pLayer= Find_Layer(iLevIdx, iLayerId);
 	
 	return pLayer->Get_FirstGameObject();
 }
 
-CLayer * CObject_Manager::Find_Layer(_uint iLevelIndex, const _wstring & strLayerTag)
+list<CGameObject*>* CObject_Manager::Get_GameObjectList(_uint iLayerId)
+{
+	return Find_Layer(m_pGameInstance->Get_CurrentLevelID(), iLayerId)->Get_GameObjectList();
+}
+
+CLayer * CObject_Manager::Find_Layer(_uint iLevelIndex, _uint iLayerId)
 {
 	if (iLevelIndex >= m_iNumLevels)
 		return nullptr;
 
-	auto	iter = m_pLayers[iLevelIndex].find(strLayerTag);
+	auto	iter = m_pLayers[iLevelIndex].find(iLayerId);
 	if (iter == m_pLayers[iLevelIndex].end())		
 		return nullptr;
 

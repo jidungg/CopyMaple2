@@ -64,7 +64,8 @@ public:
 	void LookToward(const _fvector& vDir);
 
 	void Turn(const _fvector& vAxis, _float fTimeDelta);
-	void TurnToward(const _fvector& vDestLook, _float fTimeDelta);
+	_bool TurnToward(const _fvector& vDestLook, _float fTimeDelta);
+	void TurnTowardXZ(const _fvector& vDestLook, _float fTimeDelta);
 	void Rotation(const _fvector& vAxis, _float fRadian);
 	void Rotation(const _float3& vDgree);
 public:

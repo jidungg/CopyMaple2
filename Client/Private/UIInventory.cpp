@@ -22,12 +22,12 @@ HRESULT CUIInventory::Initialize_Prototype()
 HRESULT CUIInventory::Initialize(void* pArg)
 {
 	UIINVENTORY_DESC* pInvenDesc = static_cast<UIINVENTORY_DESC*>(pArg);
-	pInvenDesc->eAnchorType = CORNOR_TYPE::LEFT_TOP;
-	pInvenDesc->ePivotType = CORNOR_TYPE::LEFT_TOP;
+	pInvenDesc->eAnchorType = CORNOR_TYPE::CENTER;
+	pInvenDesc->ePivotType = CORNOR_TYPE::CENTER;
 	pInvenDesc->fSizeX = 400;
 	pInvenDesc->fSizeY = 600;
-	pInvenDesc->fXOffset = 300;
-	pInvenDesc->fYOffset = 100;
+	pInvenDesc->fXOffset = 0;
+	pInvenDesc->fYOffset = 0;
 
 	pInvenDesc->pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("Common_Window.dds")));
 	if (FAILED(CUIPanel::Initialize(pArg)))
@@ -37,8 +37,6 @@ HRESULT CUIInventory::Initialize(void* pArg)
 	m_pInventory = pInvenDesc->pInventory;
 	m_fSlotSize = { 60,60 };
 	m_fSlotMargin = { 5,5 };
-	if (FAILED(Ready_Slots()))
-		return E_FAIL;
 
 	Set_InventoryTab(ITEM_TYPE::EQUIP);
 	return S_OK;

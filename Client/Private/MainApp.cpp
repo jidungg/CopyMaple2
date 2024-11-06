@@ -9,6 +9,7 @@
 #include "SkillManager.h"
 #include "Inventory.h"
 #include "PlayerInfo.h"
+#include "UIBundle.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance { CGameInstance::GetInstance() }
@@ -29,7 +30,7 @@ HRESULT CMainApp::Initialize()
 	EngineDesc.iViewportWidth = g_iWinSizeX;
 	EngineDesc.iViewportHeight = g_iWinSizeY;
 
-	if (FAILED(m_pGameInstance->Initialize_Engine(EngineDesc, &m_pDevice, &m_pContext)))
+	if (FAILED(m_pGameInstance->Initialize_Engine(EngineDesc, &m_pDevice, &m_pContext, LAYERID::LAYER_LAST)))
 		return E_FAIL;
 	if (FAILED(SetUp_StartLevel(LEVEL_LOGO)))
 		return E_FAIL;
@@ -92,6 +93,7 @@ void CMainApp::Free()
 	CSkillManager::DestroyInstance();
 	CInventory::DestroyInstance();
 	CPlayerInfo::DestroyInstance();
+	CUIBundle::DestroyInstance();
 	Safe_Release(m_pGameInstance);
 	CGameInstance::Release_Engine();
 

@@ -1,6 +1,5 @@
 #include "EventManager.h"
 
-IMPLEMENT_SINGLETON(CEventManager)
 
 void CEventManager::RegisterPreEventCallback(_uint _eventType, IEventHandlerWrapperInterface* _pCallback)
 {
@@ -74,6 +73,12 @@ void CEventManager::TriggerEvent(CEvent* _event)
 	for (auto handler : m_umapPostEventCallback[_event->GetEventID()])
 		handler->Exec(_event);//�ڵ鷯
 	Safe_Release(_event);
+}
+
+CEventManager* CEventManager::Create()
+{
+	return new CEventManager();
+
 }
 
 void CEventManager::DispatchEvent()

@@ -1,13 +1,47 @@
 {
     "skills": [
         {
+            "id": "BASIC_ATTACK",
+            "type": "INSTANT",
+            "name": "기본 공격",
+            "desc": "기본 공격",
+            "level": 1,
+            "maxlevel": 1,
+            "costtype": "NONE",
+            "cost": 0,
+            "cooltime": 0,
+            "iconimg": "10000011.png",
+            "data": [ 100.0 ],
+            "levelupdata": [ 0.0 ],
+            "preceding": [
+                [ "BASIC_ATTACK", 0 ]
+            ]
+        },
+        {
+            "id": "TELEPORT",
+            "type": "INSTANT",
+            "name": "텔레포트",
+            "desc": "마법의 힘을 이용해 신체를 전방으로 이동시킨다.",
+            "level": 1,
+            "maxlevel": 1,
+            "costtype": "EP",
+            "cost": 1,
+            "cooltime": 0,
+            "iconimg": "Teleport.png",
+            "data": [ 2.5 ],
+            "levelupdata": [ 0.0 ],
+            "preceding": [
+                [ "TELEPORT", 0 ]
+            ]
+        },
+        {
             "id": "MAGIC_CLAW",
             "type": "INSTANT",
             "name": "매직 클로",
-            "desc": "마법의 발톱으로 할퀴기.",
+            "desc": "마력으로 생성한 날카로운 발톱을 휘둘러 공격한다,",
             "level": 1,
             "maxlevel": 5,
-            "costtype" :  "NONE",
+            "costtype": "NONE",
             "cost": 0,
             "cooltime": 0,
             "iconimg": "MagicClaw.png",
@@ -16,7 +50,143 @@
             "preceding": [
                 [ "MAGIC_CLAW", 0 ]
             ]
+        },
+        {
+            "id": "FLAME_WAVE",
+            "type": "INSTANT",
+            "name": "플레임 웨이브",
+            "desc": "스태프에 화염의 기운을 집중시킨 뒤 파도 형태로 날려보낸다.",
+            "level": 1,
+            "maxlevel": 10,
+            "costtype": "SP",
+            "cost": 25,
+            "cooltime": 0,
+            "iconimg": "FlameWave.png",
+            "data": [ 200.0 ],
+            "levelupdata": [ 21.0 ],
+            "preceding": [
+                [ "FLAME_WAVE", 0 ]
+            ]
+        },
+        {
+            "id": "FIRE_TORNADO",
+            "type": "INSTANT",
+            "name": "플레임 웨이브",
+            "desc": "스태프에 화염의 기운을 집중시킨 뒤 파도 형태로 날려보낸다.",
+            "level": 1,
+            "maxlevel": 10,
+            "costtype": "SP",
+            "cost": 40,
+            "cooltime": 16,
+            "iconimg": "FireTornado.png",
+            "data": [ 155.0 ],
+            "levelupdata": [ 17.0 ],
+            "preceding": [
+                [ "FLAME_WAVE", 0 ]
+            ]
+        },
+        {
+            "id": "KINDLING",
+            "type": "CASTING",
+            "name": "불씨",
+            "desc": "작은 불덩이를 생성해 던진다.",
+            "level": 1,
+            "maxlevel": 10,
+            "costtype": "SP",
+            "cost": 20,
+            "cooltime": 0,
+            "iconimg": "Kindling.png",
+            "data": [ 689.0 ],
+            "levelupdata": [ 78.0 ],
+            "preceding": [
+                [ "FLAME_WAVE", 0 ]
+            ]
+        },
+        {
+            "id": "KINDLING2",
+            "type": "CASTING",
+            "name": "강화 불씨",
+            "desc": "작은 불덩이를 생성해 던진다.",
+            "level": 1,
+            "maxlevel": 10,
+            "costtype": "SP",
+            "cost": 20,
+            "cooltime": 0,
+            "iconimg": "Kindling.png",
+            "data": [ 689.0 ],
+            "levelupdata": [ 78.0 ],
+            "preceding": [
+                [ "FLAME_WAVE", 0 ]
+            ]
+        },
+        {
+            "id": "BBQ_PARTY",
+            "type": "CASTING",
+            "name": "바베큐 파티",
+            "desc": "지면에서 뜨거운 열기를 방출시켜 적을 통구이로 만든다.",
+            "level": 1,
+            "maxlevel": 10,
+            "costtype": "SP",
+            "cost": 40,
+            "cooltime": 8,
+            "iconimg": "BBQParty.png",
+            "data": [ 935.0 ],
+            "levelupdata": [ 141.0 ],
+            "preceding": [
+                [ "KINDLING", 3 ]
+            ]
+        },
+        {
+            "id": "FAKE_METEOR",
+            "type": "CASTING",
+            "name": "리틀 메테오",
+            "desc": "우주에 떠도는 작은 운석을 떨어트린다. ",
+            "level": 1,
+            "maxlevel": 10,
+            "costtype": "SP",
+            "cost": 60,
+            "cooltime": 30,
+            "iconimg": "FakeMeteor.png",
+            "data": [ 3710.0 ],
+            "levelupdata": [ 508.0 ],
+            "preceding": [
+                [ "BBQ_PARTY", 3 ]
+            ]
+        },
+        {
+            "id": "WILD_FIRE",
+            "type": "INSTANT",
+            "name": "와일드 파이어",
+            "desc": "순간이동으로 접근해 원형으로 뜨거운 불길을 방출하고 유유히 빠져나온다.",
+            "level": 1,
+            "maxlevel": 10,
+            "costtype": "NONE",
+            "cost": 0,
+            "cooltime": 30,
+            "iconimg": "10300291.png",
+            "data": [ 3763.0 ],
+            "levelupdata": [ 433.0 ],
+            "preceding": [
+                [ "BBQ_PARTY", 5 ],
+                [ "FAKE_METEOR", 5 ]
+            ]
+        },
+        {
+            "id": "WILD_FIRE2",
+            "type": "INSTANT",
+            "name": "와일드 파이어",
+            "desc": "순간이동으로 접근해 원형으로 뜨거운 불길을 방출하고 유유히 빠져나온다.",
+            "level": 1,
+            "maxlevel": 10,
+            "costtype": "NONE",
+            "cost": 0,
+            "cooltime": 0,
+            "iconimg": "10300291.png",
+            "data": [ 397.0 ],
+            "levelupdata": [ 45.0 ],
+            "preceding": [
+                [ "BBQ_PARTY", 3 ]
+            ]
         }
-
     ]
 }

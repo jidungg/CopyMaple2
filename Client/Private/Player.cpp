@@ -11,6 +11,11 @@
 #include "Item.h"
 #include "Inventory.h"
 #include "ItemDataBase.h"
+#include "UIBundle.h"
+#include "CubeTerrain.h"
+#include "Collider_Sphere.h"
+#include "DeadObjEvent.h"
+
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -48,25 +53,24 @@ CPlayer::CPlayer(const CPlayer& Prototype)
 	}
 	//for (auto& pEquip : m_pEquipModels)
 	//{
-	//	pEquip = Prototype.m_pEquipModels[(_uint)(&pEquip - &m_pEquipModels[0])];
+	//	pEquip = Prototype.m_pEquipModels[(&pEquip - &m_pEquipModels[0])];
 	//	Safe_AddRef(pEquip);
 	//}
 	//for (auto& pDeco : m_pDecoModels)
 	//{
-	//	pDeco = Prototype.m_pDecoModels[(_uint)(&pDeco - &m_pDecoModels[0])];
+	//	pDeco = Prototype.m_pDecoModels[(&pDeco - &m_pDecoModels[0])];
 	//	Safe_AddRef(pDeco);
 	//}
 	//for (auto& pCustomize : m_pCustomizes)
 	//{
-	//	pCustomize = Prototype.m_pCustomizes[(_uint)(&pCustomize - &m_pCustomizes[0])];
+	//	pCustomize = Prototype.m_pCustomizes[(&pCustomize - &m_pCustomizes[0])];
 	//	Safe_AddRef(pCustomize);
 	//}
 	m_fRunSpeed = Prototype.m_fRunSpeed;
 	m_fJumpPower = Prototype.m_fJumpPower;
 	m_fFloorHeight = Prototype.m_fFloorHeight;
-	m_fHeight = Prototype.m_fHeight;
 	m_fUpForce = Prototype.m_fUpForce;
-	m_vMoveDir = Prototype.m_vMoveDir;
+	m_vMoveDirectionXZ = Prototype.m_vMoveDirectionXZ;
 	m_iRandomCondition = Prototype.m_iRandomCondition;
 	m_fIdleTime = Prototype.m_fIdleTime;
 	m_bWalk = Prototype.m_bWalk;
@@ -92,7 +96,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	PLAYER_DESC* desc = static_cast<PLAYER_DESC*>(pArg);
 	desc->fSpeedPerSec = m_fRunSpeed;
 	desc->fRotationPerSec = 5.f;
-	
+	m_fBodyCollisionRadius = 0.125f;
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
@@ -104,6 +108,8 @@ HRESULT CPlayer::Initialize(void* pArg)
 		return E_FAIL;
 	if (FAILED(Ready_Skill()))
 		return E_FAIL;
+
+	m_fJumpPower = 10.f;
 
 	ITEM_DESC* pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_STAFF);
 	Gain_Item(pItemDesc);
@@ -133,6 +139,15 @@ HRESULT CPlayer::Initialize(void* pArg)
 	Gain_Item(pItemDesc);
 	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_SHOES);
 	Gain_Item(pItemDesc);
+
+	UIBUNDLE->Set_QuickItem(KEY::Q, m_pSkill[(_uint)SKILL_ID::TELEPORT]);
+	UIBUNDLE->Set_QuickItem(KEY::W, m_pSkill[(_uint)SKILL_ID::BBQ_PARTY]);
+	UIBUNDLE->Set_QuickItem(KEY::E, m_pSkill[(_uint)SKILL_ID::FAKE_METEOR]);
+	UIBUNDLE->Set_QuickItem(KEY::R, m_pSkill[(_uint)SKILL_ID::WILD_FIRE]);
+	UIBUNDLE->Set_QuickItem(KEY::A, m_pSkill[(_uint)SKILL_ID::MAGIC_CLAW]);
+	UIBUNDLE->Set_QuickItem(KEY::S, m_pSkill[(_uint)SKILL_ID::KINDLING]);
+	UIBUNDLE->Set_QuickItem(KEY::D, m_pSkill[(_uint)SKILL_ID::FLAME_WAVE]);
+	UIBUNDLE->Set_QuickItem(KEY::F, m_pSkill[(_uint)SKILL_ID::FIRE_TORNADO]);
 	return S_OK;
 }
 
@@ -146,7 +161,7 @@ HRESULT CPlayer::Ready_Parts()
 	tHumanModelDesc.szFaceProtoTag = TEXT("Face_Face1");
 	m_pBody = static_cast<CHumanModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CHumanModelObject::m_szProtoTag, &tHumanModelDesc));
 	Add_Child(m_pBody);
-	m_pBody->Set_Animation((_uint)ANIM_STATE::IDLE);
+	m_pBody->Set_Animation(ANIM_STATE::AS_IDLE);
 
 	//Hair
 	CBoneModelObject::BONEMODELOBJ_DESC tBoneModelDesc = {};
@@ -185,138 +200,294 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Register_OnSubStateChangeCallBack(bind(&CPlayer::On_SubStateChange, this, placeholders::_1));
 
 	CState* pState; CTransition* pTransition; Condition* pCondition;
-	m_pBody->Set_AnimationLoop((_uint)ANIM_STATE::IDLE, true);
-	m_pBody->Set_AnimationLoop((_uint)ANIM_STATE::ATTACK_IDLE, true);
-	m_pBody->Set_AnimationLoop((_uint)ANIM_STATE::RUN, true);
-	m_pBody->Set_AnimationLoop((_uint)ANIM_STATE::WALK, true);
-	m_pBody->Set_AnimationLoop((_uint)ANIM_STATE::STAFF_RUN, true);
-	m_pBody->Set_AnimationLoop((_uint)ANIM_STATE::STAFF_ATTACK_IDLE, true);
-	m_pBody->Set_AnimPostDelayPercent((_uint)ANIM_STATE::ATTACK_01, 0.8f);
-	m_pBody->Set_AnimPostDelayPercent((_uint)ANIM_STATE::JUMP_ATTACK, 1.0f);
-	m_pBody->Set_AnimPostDelayPercent((_uint)ANIM_STATE::STAFF_ATTACK, 0.5f);
-	m_pBody->Set_AnimPostDelayPercent((_uint)ANIM_STATE::STAFF_JUMP_ATTACK, 1.0f);
-	m_pBody->Set_AnimPostDelayPercent((_uint)ANIM_STATE::MAGICCLAW, 0.5f);
-	m_pBody->Set_AnimPostDelayPercent((_uint)ANIM_STATE::KINDLING_01, 0.6f);
+	m_pBody->Set_AnimationLoop(ANIM_STATE::AS_IDLE, true);
+	m_pBody->Set_AnimationLoop(ANIM_STATE::AS_ATTACK_IDLE, true);
+	m_pBody->Set_AnimationLoop(ANIM_STATE::AS_RUN, true);
+	m_pBody->Set_AnimationLoop(ANIM_STATE::AS_WALK, true);
+	m_pBody->Set_AnimationLoop(ANIM_STATE::AS_STAFF_RUN, true);
+	m_pBody->Set_AnimationLoop(ANIM_STATE::AS_STAFF_ATTACK_IDLE, true);
+	m_pBody->Set_AnimationLoop(ANIM_STATE::AS_CLIMB_IDLE, true);
+	m_pBody->Set_AnimationLoop(ANIM_STATE::AS_CLIMB_LEFT, true);
+	m_pBody->Set_AnimationLoop(ANIM_STATE::AS_CLIMB_RIGHT, true);
+	m_pBody->Set_AnimPostDelayPercent(ANIM_STATE::AS_ATTACK_01, 0.8f);
+	m_pBody->Set_AnimPostDelayPercent(ANIM_STATE::AS_JUMP_ATTACK, 1.0f);
+	m_pBody->Set_AnimPostDelayPercent(ANIM_STATE::AS_STAFF_ATTACK, 0.5f);
+	m_pBody->Set_AnimPostDelayPercent(ANIM_STATE::AS_STAFF_JUMP_ATTACK, 1.0f);
+	m_pBody->Set_AnimPostDelayPercent(ANIM_STATE::AS_MAGICCLAW, 0.5f);
+	m_pBody->Set_AnimPostDelayPercent(ANIM_STATE::AS_KINDLING_02, 0.5f);
+	m_pBody->Set_AnimPostDelayPercent(ANIM_STATE::AS_WILDFIRE_01, 1.f);
+	m_pBody->Set_AnimPostDelayPercent(ANIM_STATE::AS_BBQPARTY_2, 1.f);
+	m_pBody->Set_AnimPostDelayPercent(ANIM_STATE::AS_FAKEMETEOR_2, 1.f);
+	m_pBody->Set_AnimPostDelayPercent(ANIM_STATE::AS_TELEPORT, 1.f);
+	m_pBody->Set_AnimPostDelayPercent(ANIM_STATE::AS_FLAMEWAVE, 0.5f);
+	m_pBody->Set_AnimPostDelayPercent(ANIM_STATE::AS_FIRETORNADO, 1.f);
+	m_pBody->Set_AnimPostDelayPercent(ANIM_STATE::AS_CLIMB_UP_LAND, 1.f);
+	m_pBody->Set_AnimPostDelayPercent(ANIM_STATE::AS_CLIMB_DOWN_LAND, 1.f);
 
 	//CONDITION
-	m_pAnimStateMachine->Add_TriggerConditionVariable(_uint(ANIM_CONDITION::ANIM_END_TRIGGER));
-	m_pAnimStateMachine->Add_TriggerConditionVariable(_uint(ANIM_CONDITION::ATTACK_TRIGGER));
+	m_pAnimStateMachine->Add_TriggerConditionVariable(_uint(ANIM_CONDITION::AC_ANIM_END_TRIGGER));
+	m_pAnimStateMachine->Add_TriggerConditionVariable(_uint(ANIM_CONDITION::AC_ATTACK_TRIGGER));
+	m_pAnimStateMachine->Add_TriggerConditionVariable(_uint(ANIM_CONDITION::AC_CLIMB_DIR_CHG));
+	m_pAnimStateMachine->Add_TriggerConditionVariable(_uint(ANIM_CONDITION::AC_CLIMB_LAND_TRIGGER));
 
-	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::RANDOM), &m_iRandomCondition);
-	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::UPFORCE), &m_fUpForce);
-	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::HEIGHT), &m_fHeight);
-	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::IDLETIME), &m_fIdleTime);
-	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::WALK), &m_bWalk);
-	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::MOVE), &m_bMove);
-	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::WEAPON), &m_bWeapon);
-	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::BATTLE), &m_bBattle);
-	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::POSTDELAY_END), &m_bPostDelayEnd);
-	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::SKILL_ID), &m_iSkillID);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_RANDOM), &m_iRandomCondition);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_UPFORCE), &m_fUpForce);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_ONFLOOR), &m_bOnFloor);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_IDLETIME), &m_fIdleTime);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_WALK), &m_bWalk);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_MOVE), &m_bMove);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_WEAPON), &m_bWeapon);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_BATTLE), &m_bBattle);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_POSTDELAY_END), &m_bPostDelayEnd);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_SKILL_ID), &m_iSkillID);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_ATTACK), &m_bAttack);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_CLIMB), &m_bClimb);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_CLIMB_DIR), &m_iClimbDir);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_BODYWALL), &m_bBodyWall);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_FOOTWALL), &m_bFootWall);
 
 
 	//STATE
-	for (_uint i = 0; i < (_uint)ANIM_STATE::LAST; i++)
+	for (_uint i = 0; i < ANIM_STATE::AS_LAST; i++)
+		m_pAnimStateMachine->Add_State(i);
+	for (_uint i = BS_IDLE; i < ANIM_STATE::BS_LAST; i++)
 		m_pAnimStateMachine->Add_State(i);
 
-
-#pragma region SubState
-	//SUBSTATE
-//IDLE 
-	pTransition = m_pAnimStateMachine->Add_SubTransition((_uint)ANIM_STATE::IDLE, (_uint)ANIM_STATE::STAFF_ATTACK_IDLE);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::BATTLE, CONDITION_TYPE::EQUAL, true);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::WEAPON, CONDITION_TYPE::EQUAL, true);
-	pTransition = m_pAnimStateMachine->Add_SubTransition((_uint)ANIM_STATE::IDLE, (_uint)ANIM_STATE::ATTACK_IDLE);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::BATTLE, CONDITION_TYPE::EQUAL, true);
-
-	//RUN
-	pTransition = m_pAnimStateMachine->Add_SubTransition((_uint)ANIM_STATE::RUN, (_uint)ANIM_STATE::STAFF_RUN);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::BATTLE, CONDITION_TYPE::EQUAL, true);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::WEAPON, CONDITION_TYPE::EQUAL, true);
-	pTransition = m_pAnimStateMachine->Add_SubTransition((_uint)ANIM_STATE::RUN, (_uint)ANIM_STATE::WALK);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::WALK, CONDITION_TYPE::EQUAL, true);
-
-	//JUMP
-	pTransition = m_pAnimStateMachine->Add_SubTransition((_uint)ANIM_STATE::JUMP_UP_A, (_uint)ANIM_STATE::STAFF_JUMP_UP_A);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::WEAPON, CONDITION_TYPE::EQUAL, true);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::BATTLE, CONDITION_TYPE::EQUAL, true);
-	pTransition = m_pAnimStateMachine->Add_SubTransition((_uint)ANIM_STATE::JUMP_UP_B, (_uint)ANIM_STATE::STAFF_JUMP_UP_B);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::WEAPON, CONDITION_TYPE::EQUAL, true);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::BATTLE, CONDITION_TYPE::EQUAL, true);
-
-	//ATTACK
-	pTransition = m_pAnimStateMachine->Add_SubTransition((_uint)ANIM_STATE::ATTACK_01, (_uint)ANIM_STATE::JUMP_ATTACK);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::HEIGHT, CONDITION_TYPE::GREATER, m_fFloorHeight);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::BASIC_ATTACK);
-	pTransition = m_pAnimStateMachine->Add_SubTransition((_uint)ANIM_STATE::ATTACK_01, (_uint)ANIM_STATE::STAFF_ATTACK);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::WEAPON, CONDITION_TYPE::EQUAL, true);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::BASIC_ATTACK);
-	pTransition = m_pAnimStateMachine->Add_SubTransition((_uint)ANIM_STATE::ATTACK_01, (_uint)ANIM_STATE::STAFF_JUMP_ATTACK);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::WEAPON, CONDITION_TYPE::EQUAL, true);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::HEIGHT, CONDITION_TYPE::GREATER, m_fFloorHeight);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::BASIC_ATTACK);
-	pTransition = m_pAnimStateMachine->Add_SubTransition((_uint)ANIM_STATE::ATTACK_01, (_uint)ANIM_STATE::MAGICCLAW);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::WEAPON, CONDITION_TYPE::EQUAL, true);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::MAGIC_CLAW);
-#pragma endregion
 #pragma region MainTransition
 
 	//Transition
 	//IDLE
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::IDLE, (_uint)ANIM_STATE::ATTACK_01);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, (_uint)ANIM_CONDITION::ATTACK_TRIGGER);
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::IDLE, (_uint)ANIM_STATE::JUMP_UP_A);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_fJumpPower - 1.f);
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::IDLE, (_uint)ANIM_STATE::RUN);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::MOVE, CONDITION_TYPE::EQUAL, true);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_IDLE, ANIM_STATE::BS_ATTACK);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ATTACK_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_IDLE, ANIM_STATE::BS_JUMP);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_fJumpPower - 1.f);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_IDLE, ANIM_STATE::BS_RUN);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_MOVE, CONDITION_TYPE::EQUAL, true);
 
 	//ATTACK
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::ATTACK_01, (_uint)ANIM_STATE::IDLE);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, (_uint)ANIM_CONDITION::ANIM_END_TRIGGER);
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::ATTACK_01, (_uint)ANIM_STATE::JUMP_DOWN_A);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, (_uint)ANIM_CONDITION::ANIM_END_TRIGGER);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::HEIGHT, CONDITION_TYPE::GREATER, m_fFloorHeight);
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::ATTACK_01, (_uint)ANIM_STATE::RUN);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::POSTDELAY_END, CONDITION_TYPE::EQUAL, true);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::MOVE, CONDITION_TYPE::EQUAL, true);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::HEIGHT, CONDITION_TYPE::EQUAL_LESS, m_fFloorHeight);
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::ATTACK_01, (_uint)ANIM_STATE::ATTACK_01);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::POSTDELAY_END, CONDITION_TYPE::EQUAL, true);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, (_uint)ANIM_CONDITION::ATTACK_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_ATTACK, ANIM_STATE::BS_IDLE);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_ATTACK,CONDITION_TYPE::EQUAL, false);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_ATTACK, ANIM_STATE::BS_JUMP);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_ONFLOOR, CONDITION_TYPE::EQUAL, false);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_ATTACK, ANIM_STATE::BS_RUN);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_POSTDELAY_END, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_MOVE, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_ONFLOOR, CONDITION_TYPE::EQUAL, true);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_ATTACK, ANIM_STATE::BS_ATTACK);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_POSTDELAY_END, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ATTACK_TRIGGER);
 
-	//JUMP_UP
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::JUMP_UP_A, (_uint)ANIM_STATE::JUMP_DOWN_A);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, (_uint)ANIM_CONDITION::ANIM_END_TRIGGER);
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::JUMP_UP_A, (_uint)ANIM_STATE::ATTACK_01);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, (_uint)ANIM_CONDITION::ATTACK_TRIGGER);
-
-	//JUMP_DOWN
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::JUMP_DOWN_A, (_uint)ANIM_STATE::JUMP_LAND);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::HEIGHT, CONDITION_TYPE::EQUAL_LESS, m_fFloorHeight);
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::JUMP_DOWN_A, (_uint)ANIM_STATE::ATTACK_01);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, (_uint)ANIM_CONDITION::ATTACK_TRIGGER);
-
-
-	//JUMP_LAND
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::JUMP_LAND, (_uint)ANIM_STATE::IDLE);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, (_uint)ANIM_CONDITION::ANIM_END_TRIGGER);
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::JUMP_LAND, (_uint)ANIM_STATE::ATTACK_01);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, (_uint)ANIM_CONDITION::ATTACK_TRIGGER);
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::JUMP_LAND, (_uint)ANIM_STATE::JUMP_UP_A);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_fJumpPower - 1.f);
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::JUMP_LAND, (_uint)ANIM_STATE::RUN);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::MOVE, CONDITION_TYPE::EQUAL, true);
+	//JUMP
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_JUMP, ANIM_STATE::BS_ATTACK);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ATTACK_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_JUMP, ANIM_STATE::BS_IDLE);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_ONFLOOR, CONDITION_TYPE::EQUAL, true);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_JUMP, ANIM_STATE::BS_RUN);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_MOVE, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_ONFLOOR, CONDITION_TYPE::EQUAL, true);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_JUMP, ANIM_STATE::BS_CLIMB);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, true);
 
 	//RUN
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::RUN, (_uint)ANIM_STATE::IDLE);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::MOVE, CONDITION_TYPE::EQUAL, false);
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::RUN, (_uint)ANIM_STATE::ATTACK_01);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, (_uint)ANIM_CONDITION::ATTACK_TRIGGER);
-	pTransition = m_pAnimStateMachine->Add_Transition((_uint)ANIM_STATE::RUN, (_uint)ANIM_STATE::JUMP_UP_A);
-	m_pAnimStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_fJumpPower - 1.f);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_RUN, ANIM_STATE::BS_IDLE);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_MOVE, CONDITION_TYPE::EQUAL, false);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_RUN, ANIM_STATE::BS_ATTACK);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ATTACK_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_RUN, ANIM_STATE::BS_JUMP);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_fJumpPower - 1.f);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_RUN, ANIM_STATE::BS_JUMP);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_ONFLOOR, CONDITION_TYPE::EQUAL, false);
+ 
+	//CLIMB
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB, ANIM_STATE::BS_CLIMB_RUN);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_MOVE, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, true);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB, ANIM_STATE::BS_JUMP);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, false);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_fJumpPower -1.f);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB, ANIM_STATE::BS_CLIMB_LAND);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_CLIMB_LAND_TRIGGER);
+	//CLIMB_RUN
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB_RUN, ANIM_STATE::BS_JUMP);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, false);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB_RUN, ANIM_STATE::BS_JUMP);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_fJumpPower -1.f);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB_RUN, ANIM_STATE::BS_JUMP);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BODYWALL, CONDITION_TYPE::EQUAL, false);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_FOOTWALL, CONDITION_TYPE::EQUAL, false);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB_RUN, ANIM_STATE::BS_CLIMB);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_MOVE, CONDITION_TYPE::EQUAL, false);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB_RUN, ANIM_STATE::BS_CLIMB_RUN);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_CLIMB_DIR_CHG);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB_RUN, ANIM_STATE::BS_CLIMB_LAND);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_CLIMB_LAND_TRIGGER);
+
+	//CLIMB_LAND
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB_LAND, ANIM_STATE::BS_IDLE);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
 
 #pragma endregion
 
-	m_pAnimStateMachine->Set_CurrentState((_uint)ANIM_STATE::IDLE);
+#pragma region SubState
+	//SUBSTATE
+//IDLE  _SUB
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_IDLE, ANIM_STATE::AS_IDLE);
+
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_IDLE, ANIM_STATE::AS_STAFF_ATTACK_IDLE);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BATTLE, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_IDLE, ANIM_STATE::AS_ATTACK_IDLE);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BATTLE, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, false);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_IDLE, ANIM_STATE::AS_CLIMB_IDLE);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, true);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_ATTACK_IDLE, ANIM_STATE::AS_IDLE);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BATTLE, CONDITION_TYPE::EQUAL, false);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_STAFF_ATTACK_IDLE, ANIM_STATE::AS_IDLE);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BATTLE, CONDITION_TYPE::EQUAL, false);
+
+	//RUN _SUB
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_RUN, ANIM_STATE::AS_RUN);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_RUN, ANIM_STATE::AS_STAFF_RUN);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BATTLE, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_RUN, ANIM_STATE::AS_WALK);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WALK, CONDITION_TYPE::EQUAL, true);
+
+	//CLIMB _SUB
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_CLIMB, ANIM_STATE::AS_CLIMB_IDLE);
+	
+	//CLIMB_LAND _SUB
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_CLIMB_LAND, ANIM_STATE::AS_CLIMB_UP_LAND);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BODYWALL, CONDITION_TYPE::EQUAL, false);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_FOOTWALL, CONDITION_TYPE::EQUAL, true);
+
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_CLIMB_LAND, ANIM_STATE::AS_CLIMB_DOWN_LAND);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BODYWALL, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_FOOTWALL, CONDITION_TYPE::EQUAL, true);
+
+	//CLIMB_RUN _SUB
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_CLIMB_RUN, ANIM_STATE::AS_CLIMB_L_UP);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB_DIR, CONDITION_TYPE::EQUAL, (_int)DIR_U);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_CLIMB_RUN, ANIM_STATE::AS_CLIMB_R_DOWN);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB_DIR, CONDITION_TYPE::EQUAL, (_int)DIR_D);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_CLIMB_RUN, ANIM_STATE::AS_CLIMB_RIGHT);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB_DIR, CONDITION_TYPE::EQUAL, (_int)DIR_E);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_CLIMB_RUN, ANIM_STATE::AS_CLIMB_LEFT);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB_DIR, CONDITION_TYPE::EQUAL, (_int)DIR_W);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_CLIMB_L_UP, ANIM_STATE::AS_CLIMB_R_UP);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB_DIR, CONDITION_TYPE::EQUAL, (_int)DIR_U);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_CLIMB_R_UP, ANIM_STATE::AS_CLIMB_L_UP);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB_DIR, CONDITION_TYPE::EQUAL, (_int)DIR_U);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_CLIMB_L_DOWN, ANIM_STATE::AS_CLIMB_R_DOWN);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB_DIR, CONDITION_TYPE::EQUAL, (_int)DIR_D);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_CLIMB_R_DOWN, ANIM_STATE::AS_CLIMB_L_DOWN);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB_DIR, CONDITION_TYPE::EQUAL, (_int)DIR_D);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+	
+	//JUMP SUB
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_JUMP_UP_A);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_RANDOM, CONDITION_TYPE::LESS, 50);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_fJumpPower - 1.f);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_JUMP_UP_B);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_fJumpPower - 1.f);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_RANDOM, CONDITION_TYPE::EQUAL_GREATER, 50);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_JUMP_DOWN_A);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_LESS, 0);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_STAFF_JUMP_DOWN_A);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_LESS, 0);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::LESS, 0);
+
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_JUMP_UP_A, ANIM_STATE::AS_JUMP_DOWN_A);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_JUMP_UP_B, ANIM_STATE::AS_JUMP_DOWN_B);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_STAFF_JUMP_UP_A);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BATTLE, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_fJumpPower-1.f);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_STAFF_JUMP_UP_B);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BATTLE, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_fJumpPower - 1.f);
+
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_STAFF_JUMP_UP_A, ANIM_STATE::AS_STAFF_JUMP_DOWN_A);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_STAFF_JUMP_UP_B, ANIM_STATE::AS_STAFF_JUMP_DOWN_B);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_JUMP_DOWN_A, ANIM_STATE::AS_JUMP_LAND);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_JUMP_DOWN_B, ANIM_STATE::AS_JUMP_LAND);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);	
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_STAFF_JUMP_DOWN_A, ANIM_STATE::AS_STAFF_JUMP_LAND);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_STAFF_JUMP_DOWN_B, ANIM_STATE::AS_STAFF_JUMP_LAND);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+	//ATTACK
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_ATTACK, ANIM_STATE::AS_ATTACK_01);
+
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_ATTACK, ANIM_STATE::AS_JUMP_ATTACK);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_ONFLOOR, CONDITION_TYPE::EQUAL, false);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::BASIC_ATTACK);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_ATTACK, ANIM_STATE::AS_STAFF_ATTACK);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::BASIC_ATTACK);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_ATTACK, ANIM_STATE::AS_STAFF_JUMP_ATTACK);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_ONFLOOR, CONDITION_TYPE::EQUAL, false);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::BASIC_ATTACK);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_ATTACK, ANIM_STATE::AS_MAGICCLAW);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::MAGIC_CLAW);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_ATTACK, ANIM_STATE::AS_TELEPORT);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::TELEPORT);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_ATTACK, ANIM_STATE::AS_FLAMEWAVE);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::FLAME_WAVE);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_ATTACK, ANIM_STATE::AS_FIRETORNADO);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::FIRE_TORNADO);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_ATTACK, ANIM_STATE::AS_KINDLING_01);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::KINDLING);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_KINDLING_01, ANIM_STATE::AS_KINDLING_02);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_ATTACK, ANIM_STATE::AS_BBQPARTY_1);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::BBQ_PARTY);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_BBQPARTY_1, ANIM_STATE::AS_BBQPARTY_2);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_ATTACK, ANIM_STATE::AS_FAKEMETEOR_1);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::FAKE_METEOR);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_FAKEMETEOR_1, ANIM_STATE::AS_FAKEMETEOR_2);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_ATTACK, ANIM_STATE::AS_WILDFIRE_01);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::WILD_FIRE);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_WILDFIRE_01, ANIM_STATE::AS_TELEPORT);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::WILD_FIRE2);
+
+
+#pragma endregion
+
+	m_pAnimStateMachine->Set_CurrentState(ANIM_STATE::BS_IDLE);
 	return S_OK;
 }
 
@@ -327,9 +498,9 @@ HRESULT CPlayer::Ready_FaceStateMachine()
 	Add_Component(m_pFaceStateMachine, TEXT("Com_FaceStateMachine"));
 	m_pFaceStateMachine->Register_OnStateChangeCallBack(bind(&CPlayer::On_FaceStateChange, this, placeholders::_1));
 
-	m_pFaceStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::BATTLE), &m_bBattle);
-	m_pFaceStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::INTERACTION), &m_bInteraction);
-	m_pFaceStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::PAINTIME), &m_fPainTimeAcc);
+	m_pFaceStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_BATTLE), &m_bBattle);
+	m_pFaceStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_INTERACTION), &m_bInteraction);
+	m_pFaceStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_PAINTIME), &m_fPainTimeAcc);
 
 	//STATE ADD
 	for (_uint i = 0; i < (_uint)CFace::FACE_STATE::LAST; i++)
@@ -337,27 +508,27 @@ HRESULT CPlayer::Ready_FaceStateMachine()
 
 	//IDLE
 	CTransition* pTransition = m_pFaceStateMachine->Add_Transition((_uint)CFace::FACE_STATE::IDLE, (_uint)CFace::FACE_STATE::ATTACK);
-	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::BATTLE, CONDITION_TYPE::EQUAL, true);
+	m_pFaceStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BATTLE, CONDITION_TYPE::EQUAL, true);
 	pTransition = m_pFaceStateMachine->Add_Transition((_uint)CFace::FACE_STATE::IDLE, (_uint)CFace::FACE_STATE::FOCUS);
-	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::INTERACTION, CONDITION_TYPE::EQUAL, true);
+	m_pFaceStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_INTERACTION, CONDITION_TYPE::EQUAL, true);
 	pTransition = m_pFaceStateMachine->Add_Transition((_uint)CFace::FACE_STATE::IDLE, (_uint)CFace::FACE_STATE::PAIN);
-	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::PAINTIME, CONDITION_TYPE::EQUAL_LESS, m_fPainTime);
-	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::PAINTIME, CONDITION_TYPE::GREATER, 0.0f);
+	m_pFaceStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_PAINTIME, CONDITION_TYPE::EQUAL_LESS, m_fPainTime);
+	m_pFaceStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_PAINTIME, CONDITION_TYPE::GREATER, 0.0f);
 
 	//ATTACK
 	pTransition = m_pFaceStateMachine->Add_Transition((_uint)CFace::FACE_STATE::ATTACK, (_uint)CFace::FACE_STATE::IDLE);
-	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::BATTLE, CONDITION_TYPE::EQUAL, false);
+	m_pFaceStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BATTLE, CONDITION_TYPE::EQUAL, false);
 	pTransition = m_pFaceStateMachine->Add_Transition((_uint)CFace::FACE_STATE::ATTACK, (_uint)CFace::FACE_STATE::PAIN);
-	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::PAINTIME, CONDITION_TYPE::EQUAL_LESS, m_fPainTime);
-	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::PAINTIME, CONDITION_TYPE::GREATER, 0.0f);
+	m_pFaceStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_PAINTIME, CONDITION_TYPE::EQUAL_LESS, m_fPainTime);
+	m_pFaceStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_PAINTIME, CONDITION_TYPE::GREATER, 0.0f);
 
 	//PAIN
 	pTransition = m_pFaceStateMachine->Add_Transition((_uint)CFace::FACE_STATE::PAIN, (_uint)CFace::FACE_STATE::ATTACK);
-	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::PAINTIME, CONDITION_TYPE::EQUAL_GREATER, m_fPainTime);
+	m_pFaceStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_PAINTIME, CONDITION_TYPE::EQUAL_GREATER, m_fPainTime);
 
 	//FOCUS
 	pTransition = m_pFaceStateMachine->Add_Transition((_uint)CFace::FACE_STATE::FOCUS, (_uint)CFace::FACE_STATE::IDLE);
-	m_pFaceStateMachine->Bind_Condition(pTransition, (_uint)ANIM_CONDITION::INTERACTION, CONDITION_TYPE::EQUAL, false);
+	m_pFaceStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_INTERACTION, CONDITION_TYPE::EQUAL, false);
 
 	m_pFaceStateMachine->Set_CurrentState((_uint)CFace::FACE_STATE::IDLE);
 	return S_OK;
@@ -368,8 +539,11 @@ HRESULT CPlayer::Ready_FaceStateMachine()
 HRESULT CPlayer::Ready_Skill()
 {
 	CSkillManager* pSkillManager = SKILLMAN;
+	for (_uint i = 0; i < (_uint)SKILL_ID::LAST; i++)
+	{
+		m_pSkill[i] =  CSkill::Create(pSkillManager->Get_SkillData((SKILL_ID)i),this);
 
-	m_pSkill[(_uint)SKILL_ID::MAGIC_CLAW] =  CSkill::Create(pSkillManager->Get_SkillData(SKILL_ID::MAGIC_CLAW),this);
+	}
 	return S_OK;
 }
 
@@ -377,11 +551,7 @@ HRESULT CPlayer::Ready_Skill()
 
 void CPlayer::Receive_KeyInput(_float fTimeDelta)
 {
-	if (m_pGameInstance->GetKeyState(KEY::I) == KEY_STATE::DOWN)
-		m_pInventory->Toggle_UI();
-	if (m_pGameInstance->GetKeyState(KEY::P) == KEY_STATE::DOWN)
-	{
-	}
+
 	ANIM_STATE eCurrentState = ANIM_STATE(m_pAnimStateMachine->Get_CurrentState());
 
 
@@ -390,41 +560,155 @@ void CPlayer::Receive_KeyInput(_float fTimeDelta)
 	else if (m_pGameInstance->GetKeyState(KEY::LSHIFT) == KEY_STATE::UP)
 		m_bWalk = false;
 
-	//이하 딜레이 끝나면 누를 수 있는 키들
-	if (m_pBody->Is_AnimPostDelayEnd() == false)
-		return;
-	if (m_pGameInstance->GetKeyState(KEY::RIGHT) == KEY_STATE::PRESSING)
-		m_vMoveDir += Get_Direction_Vector(DIR_E);
-	if (m_pGameInstance->GetKeyState(KEY::LEFT) == KEY_STATE::PRESSING)
-		m_vMoveDir += Get_Direction_Vector(DIR_W);
-	if (m_pGameInstance->GetKeyState(KEY::UP) == KEY_STATE::PRESSING)
-		m_vMoveDir += Get_Direction_Vector(DIR_N);
-	if (m_pGameInstance->GetKeyState(KEY::DOWN) == KEY_STATE::PRESSING)
-		m_vMoveDir += Get_Direction_Vector(DIR_S);
 
-	if (m_pGameInstance->GetKeyState(KEY::X) == KEY_STATE::DOWN)
+	_vector vAddDir{ 0,0,0,0 };
+	_float vMoveSpeed = m_fRunSpeed;
+	if (m_bClimb )
 	{
-		m_pAnimStateMachine->Trigger_ConditionVariable((_uint)ANIM_CONDITION::ATTACK_TRIGGER);
-		m_iSkillID = (_int)SKILL_ID::BASIC_ATTACK;
-		Set_Battle(true);
+		_int iDirBefore = m_iClimbDir;
+		if (m_pGameInstance->GetKeyState(KEY::RIGHT) == KEY_STATE::PRESSING)
+		{
+			vAddDir += m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+			m_iClimbDir = (_int)DIR_E;
+		}
+		if (m_pGameInstance->GetKeyState(KEY::LEFT) == KEY_STATE::PRESSING)
+		{
+			vAddDir -= m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+			m_iClimbDir = (_int)DIR_W;
+		}
+		if (m_pGameInstance->GetKeyState(KEY::UP) == KEY_STATE::PRESSING)
+		{
+			vAddDir += m_pTransformCom->Get_State(CTransform::STATE_UP);
+			m_iClimbDir = (_int)DIR_U;
+		}
+		if (m_pGameInstance->GetKeyState(KEY::DOWN) == KEY_STATE::PRESSING)
+		{
+			vAddDir -= m_pTransformCom->Get_State(CTransform::STATE_UP);
+			m_iClimbDir = (_int)DIR_D;
+		}
+		if (iDirBefore != m_iClimbDir)
+			m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_CLIMB_DIR_CHG);
 	}
-	if (m_pGameInstance->GetKeyState(KEY::C) == KEY_STATE::DOWN)
-		if (m_fUpForce == 0.f)
-			m_fUpForce = m_fJumpPower;
+	else
+	{
+		if (m_pGameInstance->GetKeyState(KEY::RIGHT) == KEY_STATE::PRESSING)
+			vAddDir += Get_Direction_Vector(DIR_E);
+		if (m_pGameInstance->GetKeyState(KEY::LEFT) == KEY_STATE::PRESSING)
+			vAddDir += Get_Direction_Vector(DIR_W);
+		if (m_pGameInstance->GetKeyState(KEY::UP) == KEY_STATE::PRESSING)
+			vAddDir += Get_Direction_Vector(DIR_N);
+		if (m_pGameInstance->GetKeyState(KEY::DOWN) == KEY_STATE::PRESSING)
+			vAddDir += Get_Direction_Vector(DIR_S);
+	}
+
+
+	//이하 딜레이 끝나면 누를 수 있는 키들
+	if (m_pBody->Is_AnimPostDelayEnd())
+	{
+		if (m_pGameInstance->GetKeyState(KEY::X) == KEY_STATE::DOWN)
+		{
+			m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_ATTACK_TRIGGER);
+			m_iSkillID = (_int)SKILL_ID::BASIC_ATTACK;
+			m_bAttack = true;
+			Set_Battle(true);
+		}
+		if (m_pGameInstance->GetKeyState(KEY::C) == KEY_STATE::DOWN)
+			if (m_fUpForce == 0.f)
+			{
+				m_bClimb = false;
+				m_bOnFloor = false;
+				m_fUpForce = m_fJumpPower;
+			}
+	}
+	else
+	{
+		if (m_bOnFloor)
+			vAddDir = XMVectorZero();
+		if (m_bClimb)
+		{
+			vAddDir = m_vLookDirectionXZ+ XMVectorSet(0,1,0,0);
+			vMoveSpeed = 10.f;
+		}
+	}
+	vAddDir = XMVector3Normalize(vAddDir);
+	m_vMoveDirectionXZ += vAddDir * vMoveSpeed * fTimeDelta;
+	if (false == m_bClimb)
+		m_vLookDirectionXZ = vAddDir;
+	else
+		m_vLookDirectionXZ = -m_vBodyWallNormal;
 }
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
-	m_iRandomCondition = rand() % 100;
-	m_fUpForce -= fTimeDelta * 9.8f;
-	m_fHeight += m_fUpForce * fTimeDelta;
-	if (m_fHeight <= m_fFloorHeight)
-	{
-		m_fUpForce = 0;
-		m_fHeight = m_fFloorHeight;
-	}
-	m_bMove = XMVector4Equal(m_vMoveDir, XMVectorSet(0, 0, 0, 0)) == false;
 	
-	if (m_pAnimStateMachine->Get_CurrentState() == (_uint)ANIM_STATE::IDLE)
+	__super::Priority_Update(fTimeDelta);
+}
+void CPlayer::Update(_float fTimeDelta)
+{
+
+
+	__super::Update(fTimeDelta);
+}
+
+void CPlayer::On_StateChange(_uint iState)
+{
+	if (iState == ANIM_STATE::AS_IDLE)
+	{
+		m_fIdleTime = 0.f;
+	}
+
+}
+
+
+_bool CPlayer::Check_Collision(CGameObject* pOther)
+{
+	__super::Check_Collision(pOther);
+
+	LAYERID eLayerID = (LAYERID)pOther->Get_LayerID();
+	switch (eLayerID)
+	{
+	case Client::LAYER_MONSTER:
+		break;
+	case Client::LAYER_INTERACTION:
+		break;
+	case Client::LAYER_TERRAIN:
+	{
+
+		CCubeTerrain* pTerrain = static_cast<CCubeTerrain*>(pOther);
+		_vector vFootPos = Get_Position();
+		_vector vBodyPos = XMVectorSetY(vFootPos, vFootPos.m128_f32[1] + m_fBodyCollisionHeight);
+
+		Ray tBodyRay(vBodyPos, m_vLookDirectionXZ, m_fBodyCollisionRadius);
+		RaycastHit tBodyhit;
+		m_bBodyWall = pTerrain->RayCastXZ(tBodyRay, &tBodyhit);
+		Ray tFootRay(vFootPos, m_vLookDirectionXZ, m_fBodyCollisionRadius);
+		RaycastHit tFoothit;
+		m_bFootWall = pTerrain->RayCastXZ(tFootRay, &tFoothit);
+		if(m_bBodyWall)
+		{
+			m_vBodyWallNormal = XMVector3Normalize(tBodyhit.vNormal);
+			m_fBodyWallHeight = static_cast<CTerrainObject*>( tBodyhit.pCollider->Get_Owner())->Get_TopHeight(vBodyPos);
+			m_vBodyWallPoint = tBodyhit.vPoint;
+		}
+
+		break;
+	}
+	case Client::LAYER_PLAYER:
+	case Client::LAYER_UI:
+	case Client::LAYER_CAMERA:
+	case Client::LAYER_LAST:
+	default:
+		break;
+	}
+	return S_OK;
+}
+
+void CPlayer::Late_Update(_float fTimeDelta)
+{
+
+	m_iRandomCondition = rand() % 100;
+
+
+	if (m_pAnimStateMachine->Get_CurrentState() == ANIM_STATE::AS_IDLE)
 		m_fIdleTime += fTimeDelta;
 	if (m_bBattle)
 	{
@@ -434,42 +718,148 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 			Set_Battle(false);
 		}
 	}
+	m_bCasting = Is_CastingAnimation(m_pBody->Get_AnimIndex());
 	if (m_pBody->Is_AnimEnd())
-		m_pAnimStateMachine->Trigger_ConditionVariable((_uint)ANIM_CONDITION::ANIM_END_TRIGGER);
+	{
+		_uint iAnimIdx = m_pBody->Get_AnimIndex();
+		if (iAnimIdx == ANIM_STATE::AS_CLIMB_DOWN_LAND || iAnimIdx == ANIM_STATE::AS_CLIMB_UP_LAND)
+		{
+			m_bClimb = false;
+			m_bOnFloor = true;
+			//m_vNextPos = XMVectorSetY(m_vNextPos, m_fBodyWallHeight);
+			//m_vNextPos += m_vLookDirectionXZ * (m_fBodyCollisionRadius+0.1f);
+
+		}
+		if (Is_LastAttackAnimation(iAnimIdx))
+			m_bAttack = false;
+		//캐스팅 : 캐스팅 스킬을 시작할 때 true, 캐스팅 애니메이션이 끝났을 때 false
+
+		m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+	}
 	m_bPostDelayEnd = m_pBody->Is_AnimPostDelayEnd();
-}
-void CPlayer::Update(_float fTimeDelta)
-{
-	_float4 vPos;
-	XMStoreFloat4(&vPos,m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	vPos.y = m_fHeight;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4( &vPos));
-	//m_pBody->Get_Transform()->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPos));
+
+	//이하 Character 로직
+
+
+	m_vNextPos = XMVectorSetY(m_vNextPos, XMVectorGetY(m_vNextPos) + m_fUpForce * fTimeDelta);
+	_float fFootHeight = XMVectorGetY(m_vNextPos);
+	if (m_fCelingHeight <= fFootHeight + m_fBodyCollisionHeight)
+	{
+		m_fUpForce = 0;
+		m_vNextPos = XMVectorSetY(m_vNextPos, m_fCelingHeight - m_fBodyCollisionHeight);
+	}
+
+	m_bOnFloor = m_fFloorHeight >= XMVectorGetY(m_vNextPos);
+
+	if (m_bClimb)//벽 타는 중
+	{
+		//위로 나갔는지, 옆으로 나갔는지, 내려갔는지 판단
+		if (false == m_bBodyWall)
+		{
+			if (m_bFootWall)//위로 나감
+			{
+				m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_CLIMB_LAND_TRIGGER);
+
+			}
+			else//옆으로 나감
+			{
+				m_fUpForce = 0;
+				m_bClimb = false;
+			}
+		}
+		else if (m_bOnFloor)//내려감
+		{
+			m_fUpForce = 0;
+			m_vNextPos = XMVectorSetY(m_vNextPos, m_fFloorHeight);
+			m_bClimb = false;
+			m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_CLIMB_LAND_TRIGGER);
+		}
+		else//벽 타는 중
+		{
+
+			m_fUpForce = 0;
+		}
+	}
+	else//벽 안타는 중
+	{
+		if (m_bOnFloor)//그냥 바닥에 있는중
+		{
+			if (m_fUpForce < 0)
+			{
+				m_fUpForce = 0;
+				m_vNextPos = XMVectorSetY(m_vNextPos, m_fFloorHeight);
+			}
+		}
+		else//공중에 있는중
+		{
+			if (m_bBodyWall && m_fUpForce <= 0)//벽에 부딫힘
+			{
+				m_bClimb = true;
+				//m_vNextPos = XMVectorSetX(m_vNextPos, m_vBodyWallPoint.m128_f32[0]);
+				//m_vNextPos = XMVectorSetZ(m_vNextPos, m_vBodyWallPoint.m128_f32[2]);
+				//m_vNextPos += m_vBodyWallNormal * m_fBodyCollisionRadius;
+				m_fUpForce = 0;
+			}
+			else//그냥 공중임
+				m_fUpForce -= fTimeDelta * 9.8f * 3;
+		}
+
+	}
 
 	if (m_bMove)
 	{
-		m_pTransformCom->Go_Direction(m_vMoveDir, fTimeDelta);
-		//m_pBody->Get_Transform()->LookToward(XMVectorSetY(m_vMoveDir, 0));
-		m_pTransformCom->LookToward(XMVectorSetY(m_vMoveDir, 0));
+		if (m_bClimb)
+			m_pTransformCom->LookToward(XMVectorSetY(-m_vBodyWallNormal, 0));
+		else
+			m_pTransformCom->LookToward(XMVectorSetY(m_vLookDirectionXZ, 0));
 	}
-	__super::Update(fTimeDelta);
 
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vNextPos);
+
+	m_fMoveDistanceXZ = 0.f;
+	m_vMoveDirectionXZ = XMVectorSet(0, 0, 0, 0);
+	CPawn::Late_Update(fTimeDelta);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
+
 void CPlayer::On_SubStateChange(_uint iSubState)
 {
 	m_pBody->Switch_Animation(iSubState);
+
 }
 void CPlayer::On_FaceStateChange(_uint iState)
 {
 	static_cast<CHumanModelObject*>(m_pBody)->Set_FaceState((CFace::FACE_STATE)iState);
 }
+
+HRESULT CPlayer::Render()
+{
+	for (auto& child : m_pChilds)
+	{
+		if (child->Is_Active() && child->Is_Dead() == false)
+			child->Render();
+	}
+
+	return S_OK;
+}
+
 void CPlayer::Use_Skill(CSkill* pSkill)
 {
 	if (pSkill == nullptr)
 		return;
+	if (m_bCasting)
+		return;
+	if (false == m_pBody->Is_AnimPostDelayEnd())
+		return;
+	auto pDesc =  pSkill->Get_SkillDesc();
+	if (pDesc->eCastingType == SKILL_TYPE::CASTING && false == m_bOnFloor)
+		return;
+	m_bCasting = pDesc->eCastingType == SKILL_TYPE::CASTING;
+	m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_ATTACK_TRIGGER);
 	Set_Battle(true);
-	m_pAnimStateMachine->Trigger_ConditionVariable((_uint)ANIM_CONDITION::ATTACK_TRIGGER);
-	m_iSkillID = (_int)pSkill->Get_SkillDesc()->eID;
+	m_iSkillID = (_int)pDesc->eID;
+
+	m_bAttack = true;
 }
 
 HRESULT CPlayer::Gain_Item(CItemObjet* pItem)
@@ -480,6 +870,57 @@ HRESULT CPlayer::Gain_Item(CItemObjet* pItem)
 HRESULT CPlayer::Gain_Item(ITEM_DESC* pItem, _uint iCount)
 {
 	return 	m_pInventory->Insert_Item(pItem, iCount);
+}
+
+_uint CPlayer::Get_AnimationIndex(SKILL_ID eSkillID)
+{
+	switch (eSkillID)
+	{
+	case Client::SKILL_ID::KINDLING:
+		return ANIM_STATE::AS_KINDLING_01;
+	case Client::SKILL_ID::BBQ_PARTY:
+		return ANIM_STATE::AS_BBQPARTY_1;
+	case Client::SKILL_ID::FAKE_METEOR:
+		return ANIM_STATE::AS_FAKEMETEOR_1;
+	case Client::SKILL_ID::WILD_FIRE:
+	case Client::SKILL_ID::WILD_FIRE2:
+	case Client::SKILL_ID::BASIC_ATTACK:
+	case Client::SKILL_ID::TELEPORT:
+	case Client::SKILL_ID::MAGIC_CLAW:
+	case Client::SKILL_ID::FLAME_WAVE:
+	case Client::SKILL_ID::FIRE_TORNADO:
+	case Client::SKILL_ID::KINDLING2:
+	case Client::SKILL_ID::LAST:
+	default:
+		return ANIM_STATE::AS_LAST;
+	}
+}
+
+_bool CPlayer::Is_LastAttackAnimation(_uint iAnimIdx)
+{
+	return (
+		AS_ATTACK_01 == iAnimIdx
+		||AS_JUMP_ATTACK== iAnimIdx
+		||AS_STAFF_ATTACK== iAnimIdx
+		||AS_STAFF_JUMP_ATTACK== iAnimIdx
+		||AS_MAGICCLAW== iAnimIdx
+		|| AS_FAKEMETEOR_2 == iAnimIdx
+		|| AS_FIRETORNADO == iAnimIdx
+		|| AS_FLAMEWAVE == iAnimIdx
+		|| AS_FLALMEBURST == iAnimIdx
+		|| AS_KINDLING_02 == iAnimIdx
+		|| AS_KINDLING_03_B == iAnimIdx
+		|| AS_WILDFIRE_01 == iAnimIdx
+		|| AS_TELEPORT == iAnimIdx
+		|| AS_TRINITYFORCE == iAnimIdx);
+}
+
+_bool CPlayer::Is_CastingAnimation(_uint iAnimIdx)
+{
+	return(
+		AS_BBQPARTY_1 == iAnimIdx
+		|| AS_FAKEMETEOR_1 == iAnimIdx
+		|| AS_KINDLING_01 == iAnimIdx);
 }
 
 
@@ -643,34 +1084,6 @@ void CPlayer::Set_BodyMeshActive(EQUIP_ITEM_TYPE eType, bool bActive)
 }
 
 
-
-void CPlayer::Late_Update(_float fTimeDelta)
-{
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND,this);
-	__super::Late_Update(fTimeDelta);
-	if(m_fHeight <= m_fFloorHeight)
-		m_vMoveDir = XMVectorSet(0, 0, 0, 0);
-}
-
-HRESULT CPlayer::Render()
-{
-	for (auto& child : m_pChilds)
-	{
-		if (child->Is_Active() && child->Is_Dead() == false)
-			child->Render();
-	}
-	return S_OK;
-}
-
-
-void CPlayer::On_StateChange(_uint iState)
-{
-	if (iState == (_uint)ANIM_STATE::IDLE)
-	{
-		m_fIdleTime = 0.f;
-	}
-
-}
 
 
 

@@ -28,6 +28,7 @@ public:
 	virtual void On_MouseClick() override;
 
 	void Set_QuickItem(IQuickItem* pItem);
+	void Set_HotKey(KEY eKey) { m_eHotKey = eKey; }
 private:
 	IQuickItem* m_pQuickItem = { nullptr };
 

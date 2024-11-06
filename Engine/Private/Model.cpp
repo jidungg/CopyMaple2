@@ -275,6 +275,11 @@ float CModel::Get_AnimTime()
 	return m_Animations[m_iCurrentAnimIndex]->Get_AnimTime();
 }
 
+_uint CModel::Get_AnimIndex()
+{
+	return m_iCurrentAnimIndex;
+}
+
 const _float4x4* CModel::Get_BoneMatrix(const _char* pBoneName) const
 {
 	auto	iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool

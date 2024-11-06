@@ -22,8 +22,6 @@ public:
 	bool Is_Insertable(ITEM_DESC* pData, _uint iCount = 1);
 	bool Is_Empty() { return m_pItemDesc == nullptr; }
 	ITEM_DESC* Get_ItemDesc() { return m_pItemDesc; }
-	_uint Get_Index()  { return m_iIndex; }
-	ITEM_TYPE Get_Type()  { return m_eItemType; }
 
 	void Set_ItemDesc(ITEM_DESC* pData) { m_pItemDesc = pData; }
 

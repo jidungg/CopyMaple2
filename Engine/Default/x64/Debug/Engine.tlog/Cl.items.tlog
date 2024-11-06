@@ -7,6 +7,7 @@ D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Channel.cpp;D:\Workbench\Portfo
 D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Collider.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Collider.obj
 D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Collider_AABB.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Collider_AABB.obj
 D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Collider_Sphere.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Collider_Sphere.obj
+D:\Workbench\Portfolio\CopyMaple2\Engine\Private\CollisionManager.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\CollisionManager.obj
 D:\Workbench\Portfolio\CopyMaple2\Engine\private\Component.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Component.obj
 D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Condition.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\Condition.obj
 D:\Workbench\Portfolio\CopyMaple2\Engine\Private\ContainerObject.cpp;D:\Workbench\Portfolio\CopyMaple2\Engine\Default\x64\Debug\ContainerObject.obj

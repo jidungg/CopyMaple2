@@ -1,20 +1,23 @@
 #pragma once
 #include "Event.h"
-
-BEGIN(Client)
+BEGIN(Engine)
+class CLevel;
 class CGameObject;
-class CDeadObjEvent : public CEvent
+END
+BEGIN(Client)
+
+class CLevelChangeEvent : public CEvent
 {
 private:
-	explicit CDeadObjEvent(CGameObject* _pDeadObj);
-	virtual ~CDeadObjEvent() {}
+	explicit CLevelChangeEvent(CLevel* pLevel);
+	virtual ~CLevelChangeEvent() {}
 
 public:
-	static CDeadObjEvent* Create(CGameObject* _pDeadObj);
+	static CLevelChangeEvent* Create(CLevel* pLevel);
 	void Exec() override;
-	CGameObject* Get_DeadObj() { return m_pDeadObj; }
+
 private:
-	CGameObject* m_pDeadObj;
+	CLevel* m_pLevel = { nullptr };
 private:
 	void Free() override;
 

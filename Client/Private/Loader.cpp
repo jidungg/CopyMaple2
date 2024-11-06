@@ -35,6 +35,9 @@
 #include "Engine_Defines.h"
 #include "UIInventory.h"
 #include "Collider_Sphere.h"
+#include "UIBundle.h"
+#include "UIQuickSlotBundle.h"
+#include "Collider_AABB.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -137,7 +140,10 @@ HRESULT CLoader::Loading_Level_Logo()
 		CFace::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Face/00300011/")))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
-		TEXT("../Bin/Resources/Textures/Skill/"), TEXT(".png"))))
+		TEXT("../Bin/Resources/Textures/Icon/Skill/"), TEXT(".png"))))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
+		TEXT("../Bin/Resources/Textures/Icon/Item/"), TEXT(".png"))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/Icon/"), TEXT(".png"))))
@@ -207,6 +213,9 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_Sphere::m_szProtoTag,
 		CCollider_Sphere::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_AABB::m_szProtoTag,
+		CCollider_AABB::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_Mesh::m_szProtoTag,
 		CCollider_Mesh::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -244,12 +253,16 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIQuickSlot::m_szProtoTag,
 		CUIQuickSlot::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIInvenSlot::m_szProtoTag,
-		CUIInvenSlot::Create(m_pDevice, m_pContext))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIQuickSlotBundle::m_szProtoTag,
+		CUIQuickSlotBundle::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIInventory::m_szProtoTag,
 		CUIInventory::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIInvenSlot::m_szProtoTag,
+		CUIInvenSlot::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,

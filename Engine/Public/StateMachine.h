@@ -17,8 +17,8 @@ protected:
 public:
 	HRESULT Initialize_Prototype();
 	HRESULT Initialize_Prototype(const _char* strJsonFilePath);
-	HRESULT Initialize(void* pArg) override;
-	void Update(_float fTimeDelta) override;
+	virtual HRESULT Initialize(void* pArg) override;
+	virtual void Late_Update(_float fTimeDelta) override;
 
 	void Add_ConditionVariable(_uint iConditionVarID, float* pfValue);
 	void Add_ConditionVariable(_uint iConditionVarID, int* piValue);

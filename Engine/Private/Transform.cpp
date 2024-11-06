@@ -124,19 +124,18 @@ void CTransform::LookToward(const _fvector& vDir)
 	Set_State(STATE_UP, XMVector3Normalize(vUp) * vScale.y);
 	Set_State(STATE_LOOK, XMVector3Normalize(vLook) * vScale.z);
 }
-void CTransform::TurnToward(const _fvector& vDestLook, _float fTimeDelta)
+_bool CTransform::TurnToward(const _fvector& vDestLook, _float fTimeDelta)
 {
-	_vector vPos = Get_State(STATE_POSITION);
 	_vector vLook = Get_State(STATE_LOOK);
 	_vector vDest =  XMVector4Normalize(vDestLook);
 	vLook = XMVector4Normalize(vLook);
 
 	if (XMVector4Equal(vLook, vDest) )
-		return;
+		return true;
 
 	 _vector vAxis = XMVector3Cross(vLook,vDest);
 	 if (XMVector4Equal(vAxis, XMVectorZero()))
-		 vAxis = Get_State(STATE_LOOK);
+		 vAxis = Get_State(STATE_UP);
 
 	 _matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, m_fRotationPerSec * fTimeDelta);
 	 _vector vResultLook = XMVector3TransformNormal(vLook, RotationMatrix);
@@ -149,11 +148,39 @@ void CTransform::TurnToward(const _fvector& vDestLook, _float fTimeDelta)
 		 vLookDiff.z<= 0 != vResultDiff.z <= 0)//
 	 {
 		 LookToward(vDest);
+		 return true;
 	 }
 	 else
 	 {
 		 LookToward(vResultLook);
+		 return false;
 	 }
+}
+void CTransform::TurnTowardXZ(const _fvector& vDestLook, _float fTimeDelta)
+{
+	_vector vLook = XMVector4Normalize(XMVectorSetY(Get_State(STATE_LOOK),0));
+	_vector vDest = XMVector4Normalize(XMVectorSetY(vDestLook,0));
+
+	if (XMVector4Equal(vLook, vDest))
+		return;
+
+	XMVECTOR crossProduct = XMVector3Cross(vLook, vDest);
+	float zComponent = XMVectorGetY(crossProduct);
+	_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), (zComponent > 0 ? m_fRotationPerSec : -m_fRotationPerSec) * fTimeDelta);
+	_vector vResultLook = XMVector3TransformNormal(vLook, RotationMatrix);
+	_float4 vLookDiff, vResultDiff;
+	XMStoreFloat4(&vLookDiff, vDest - vLook);
+	XMStoreFloat4(&vResultDiff, vDest - vResultLook);
+	if (vLookDiff.x <= 0 != vResultDiff.x <= 0 ||
+		vLookDiff.y <= 0 != vResultDiff.y <= 0 ||
+		vLookDiff.z <= 0 != vResultDiff.z <= 0)//
+	{
+		LookToward(vDest);
+	}
+	else
+	{
+		LookToward(vResultLook);
+	}
 }
 void CTransform::Turn(const _fvector& vAxis, _float fTimeDelta)
 {

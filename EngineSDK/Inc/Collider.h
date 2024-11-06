@@ -1,9 +1,18 @@
 #pragma once
 #include "Component.h"
 BEGIN(Engine)
+union COLLISION_ID
+{
+	struct {
+		_uint Left_Id;
+		_uint Right_Id;
+	};
+	LONGLONG ID;
+};
 class CCollider :
     public CComponent
 {
+
 public:
 	enum class COLLIDER_TYPE
 	{
@@ -33,9 +42,12 @@ public:
 	virtual HRESULT Render() { return S_OK; }
 
 	COLLIDER_TYPE Get_ColliderType() const {return m_eType;}
+	_uint Get_ID() { return m_iID; }
 protected:
 	COLLIDER_TYPE m_eType = COLLIDER_TYPE::LAST;
-	bool m_bCollide = false;
+	_bool m_bCollide = false;
+	_uint m_iID = 0;
+	static _uint m_iGlobalID ;
 #ifdef _DEBUG
 	PrimitiveBatch<VertexPositionColor>* m_pBatch = { nullptr };
 	BasicEffect* m_pEffect = { nullptr };

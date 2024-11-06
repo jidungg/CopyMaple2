@@ -17,7 +17,7 @@ private:
 	virtual ~CGameInstance() = default;
 
 public: /* For.GameInstance */
-	HRESULT Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext);
+	HRESULT Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext, _uint iLayerCount);
 	void Update_Engine(_float fTimeDelta);
 	HRESULT Render_Begin(const _float4& vClearColor = _float4(0.f, 0.f, 1.f, 1.f));
 	HRESULT Draw();
@@ -44,11 +44,11 @@ public: /* For.Prototype_Manager */
 	class CBase* Clone_Proto_Component_Current(const _wstring& strPrototypeTag, void* pArg);
 
 public: /* For.Object_Manager */
-	HRESULT Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLevelIndex, const _wstring& strLayerTag,  void* pArg = nullptr, bool bDontDestroy = false);
-	HRESULT Add_GameObject_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, CGameObject* pObj, bool bDontDestroy = false);
-	CGameObject* Get_FirstGameObject(_uint iLevIdx, const _wstring& strLayerTag);
-	void ObjectManager_On_OpenLevel(_uint iLevelIndex);
-	bool RayCast(const _wstring& strLayerTag, const Ray& tRay, RaycastHit* pOut);
+	HRESULT Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, _uint iLevelIndex, _uint iLayerId,  void* pArg = nullptr, bool bDontDestroy = false);
+	HRESULT Add_GameObject_ToLayer(_uint iLevelIndex, _uint iLayerId, CGameObject* pObj, bool bDontDestroy = false);
+	CGameObject* Get_FirstGameObject(_uint iLevIdx, _uint iLayerId);
+	void Move_DontDestroyObjects(_uint iOldLevel, _uint iNewLevel);
+	bool RayCast(_uint iLayerId, const Ray& tRay, RaycastHit* pOut);
 	bool RayCast(const Ray& tRay, RaycastHit* pOut);
 
 public: /* For.PipeLine */
@@ -83,6 +83,10 @@ public://For EventManager
 	void Trigger_Event(CEvent* _event);
 	void Dispatch_Event();
 
+public://For CollisionManager
+	void Set_LayerCount(_uint iLayerCount);
+	void Set_CollisionMatrix(_uint eObjectLayer, _uint eSubjectLayer, bool bValue);
+	void Zero_CollisionMatrix();
 private:
 	class CGraphic_Device*				m_pGraphic_Device = { nullptr };
 	class CInput_Device*				m_pInput_Device = { nullptr };
@@ -97,6 +101,7 @@ private:
 	class CLight_Manager*				m_pLight_Manager = { nullptr };
 	class CPhysics*						m_pPhysics = { nullptr };
 	class CEventManager*			m_pEventManager = { nullptr };
+	class CCollisionManager* m_pCollisionManager = { nullptr };
 public:
 	static void Release_Engine();
 

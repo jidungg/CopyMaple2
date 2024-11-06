@@ -1,6 +1,7 @@
 #pragma once
 #include "UIPanel.h"
 BEGIN(Client)
+
 class CUISlot :
     public CUIPanel
 {

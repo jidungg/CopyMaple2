@@ -172,6 +172,7 @@ call UpdateLib.bat</Command>
     <ClInclude Include="..\Public\Collider.h" />
     <ClInclude Include="..\Public\Collider_AABB.h" />
     <ClInclude Include="..\Public\Collider_Sphere.h" />
+    <ClInclude Include="..\Public\CollisionManager.h" />
     <ClInclude Include="..\public\Component.h" />
     <ClInclude Include="..\Public\Condition.h" />
     <ClInclude Include="..\Public\ContainerObject.h" />
@@ -235,6 +236,7 @@ call UpdateLib.bat</Command>
     <ClCompile Include="..\Private\Collider.cpp" />
     <ClCompile Include="..\Private\Collider_AABB.cpp" />
     <ClCompile Include="..\Private\Collider_Sphere.cpp" />
+    <ClCompile Include="..\Private\CollisionManager.cpp" />
     <ClCompile Include="..\private\Component.cpp" />
     <ClCompile Include="..\Private\Condition.cpp" />
     <ClCompile Include="..\Private\ContainerObject.cpp" />

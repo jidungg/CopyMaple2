@@ -27,26 +27,32 @@ public:
 	virtual void Late_Update(_float fTimeDelta);
 	void Final_Update();
 	virtual HRESULT Render();
-public:
 
+public:
+	virtual _bool Check_Collision(const Ray& tRay, RaycastHit* pOut);
+	virtual _bool Check_Collision(CGameObject* pOther) { return false; };
 	//*AddRef는 스스로 할 것.
+	// LayerID를 자동으로 자신과 같게 세팅하니 주의.
 	virtual void Add_Child(CGameObject* pChild);
 	//*Release는 스스로 할 것.
 	virtual void Remove_Child(CGameObject* pChild);
 	class CComponent* Find_Component(const _wstring& strComponentTag);
-	bool Is_Active() { return m_bActive; }
-	bool Is_Dead() { return m_bDead; }
-	bool Is_DontDestroy() { return m_bDontDestroy; }
 
 	void Set_Active(bool bValue) { m_bActive = bValue; }
 	void Toggle_Active() { m_bActive = !m_bActive; }
 	void Set_Dead() { m_bDead = true; }
 	void Set_Target(CGameObject* pTaraget) { Safe_Release(m_pTarget); m_pTarget = pTaraget; Safe_AddRef(m_pTarget); }
 	void Set_DontDestroy(bool bValue) { m_bDontDestroy = bValue; }
+	void Set_LayerID(_uint iLayerID) { m_iLayerID = iLayerID; }
 
 	class CTransform* Get_Transform() { return m_pTransformCom; }
-	virtual bool Check_Collision(const Ray& tRay, RaycastHit* pOut);
-	virtual bool Check_Collision(CGameObject* pOther) { return false; };
+	_uint Get_LayerID() { return m_iLayerID; }
+	_uint Get_ObjID() { return m_iObjID; }
+
+	bool Is_Active() { return m_bActive; }
+	bool Is_Dead() { return m_bDead; }
+	bool Is_DontDestroy() { return m_bDontDestroy; }
+
 protected:
 	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, const _wstring& strComponentTag, CComponent** ppOut, void* pArg = nullptr);
 	HRESULT Add_Component(CComponent* pComponent, const _wstring& strComponentTag);

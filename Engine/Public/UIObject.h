@@ -42,7 +42,7 @@ public:
 
 	void MouseOver();
 	void MouseNotOver(CUIObject* pExcept = nullptr);
-	bool Check_MouseOver(POINT fPos);
+	virtual bool Check_MouseOver(POINT fPos);
 	virtual void On_MouseOver();
 	virtual void On_MouseEnter();
 	virtual void On_MouseExit();

@@ -1,34 +1,4 @@
-﻿  Camera.cpp
-  Camera_UI.cpp
-  ContainerObject.cpp
-  Controller.cpp
-  Event.cpp
-  GameInstance.cpp
-  GameObject.cpp
-  Layer.cpp
-  MeshCollider.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\Public\MeshCollider.h(7,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CCollider_Mesh'의 기본으로 사용되었습니다.
-  (소스 파일 '../Private/MeshCollider.cpp'을(를) 컴파일하는 중)
-      D:\Workbench\Portfolio\CopyMaple2\Engine\Public\Collider.h(4,7):
-      'Engine::CCollider' 선언을 참조하십시오.
-      D:\Workbench\Portfolio\CopyMaple2\Engine\Public\MeshCollider.h(6,18):
-      'Engine::CCollider_Mesh' 선언을 참조하십시오.
-  
-  Object_Manager.cpp
-  Pawn.cpp
-  Prototype_Manager.cpp
-  Renderer.cpp
-  UIManager.cpp
-  UIObject.cpp
-  코드를 생성하고 있습니다...
-DirectXTKd.lib(PrimitiveBatch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(PrimitiveBatch.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTKd.lib(BasicEffect.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(BasicEffect.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTKd.lib(VertexTypes.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(VertexTypes.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTKd.lib(DDSTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(DDSTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTKd.lib(WICTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(WICTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTKd.lib(EffectCommon.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(EffectCommon.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-     ../Bin/Engine.lib 라이브러리 및 ../Bin/Engine.exp 개체를 생성하고 있습니다.
+﻿  StateMachine.cpp
   Engine.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Engine\Bin\Engine.dll
   '//' is not recognized as an internal or external command,
   operable program or batch file.
@@ -39,10 +9,6 @@ DirectXTKd.lib(EffectCommon.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(Ef
   .\Engine\Public\Animation.h
   .\Engine\Public\Base.h
   .\Engine\Public\Bone.h
-  .\Engine\Public\Bounding.h
-  .\Engine\Public\Bounding_AABB.h
-  .\Engine\Public\Bounding_OBB.h
-  .\Engine\Public\Bounding_Sphere.h
   .\Engine\Public\Button_Component.h
   .\Engine\Public\Camera.h
   .\Engine\Public\Camera_UI.h
@@ -50,6 +16,7 @@ DirectXTKd.lib(EffectCommon.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(Ef
   .\Engine\Public\Collider.h
   .\Engine\Public\Collider_AABB.h
   .\Engine\Public\Collider_Sphere.h
+  .\Engine\Public\CollisionManager.h
   .\Engine\Public\Component.h
   .\Engine\Public\Condition.h
   .\Engine\Public\ContainerObject.h
@@ -126,4 +93,4 @@ DirectXTKd.lib(EffectCommon.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(Ef
   .\Engine\Public\DirectXTK\XboxDDSTextureLoader.h
   .\Engine\Public\Effects11\d3dx11effect.h
   .\Engine\Public\Effects11\d3dxGlobal.h
-  90 File(s) copied
+  87 File(s) copied

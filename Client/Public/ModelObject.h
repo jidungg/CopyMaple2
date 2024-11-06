@@ -40,7 +40,7 @@ public:
 	float Get_AnimTime() { return m_pModelCom->Get_AnimTime(); }
 	const _float4x4* Get_BoneMatrix(const _char* pBoneName) const;
 	const CModel* Get_ModelCom() const { return m_pModelCom; }
-
+	_uint Get_AnimIndex();
 	bool Is_AnimEnd() { return m_bAnimationEnd; }
 	bool Is_AnimPostDelayEnd();
 

@@ -267,6 +267,7 @@
     <ClInclude Include="..\Public\Collider_AABB.h" />
     <ClInclude Include="..\Public\Collider_Sphere.h" />
     <ClInclude Include="..\Public\DebugDraw.h" />
+    <ClInclude Include="..\Public\CollisionManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -421,6 +422,7 @@
     <ClCompile Include="..\Private\Collider_AABB.cpp" />
     <ClCompile Include="..\Private\Collider_Sphere.cpp" />
     <ClCompile Include="..\Private\DebugDraw.cpp" />
+    <ClCompile Include="..\Private\CollisionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc" />

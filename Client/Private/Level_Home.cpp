@@ -31,25 +31,26 @@ HRESULT CLevel_Home::Initialize()
 	m_pItemData = ITEMDB->GetItemMap(ITEM_TYPE::BUILD);
 	m_pItemIter = m_pItemData->begin();
 
-	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+	if (FAILED(Ready_Layer_BackGround(LAYER_TERRAIN)))
 		return E_FAIL;
-	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
+	if (FAILED(Ready_Layer_UI(LAYER_UI)))
 		return E_FAIL;
-	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+	if (FAILED(Ready_Layer_Camera(LAYER_CAMERA)))
 		return E_FAIL;
-
+	
 	CBuilder::BUILDER_DESC BuilderDesc{};
 	BuilderDesc.fRotationPerSec = 10;
 	BuilderDesc.fSpeedPerSec = 4;
 	BuilderDesc.pCubeTerrain = m_pCubeTerrain;
 	m_pBuilder = static_cast<CBuilder*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_HOME, CBuilder::m_szProtoTag, &BuilderDesc));
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, TEXT("Layer_Builder"), m_pBuilder)))
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, LAYER_PLAYER, m_pBuilder)))
 		return E_FAIL;
 	m_pBuilder->Set_Active(false);
 
 
 	Set_BuildItem((BUILD_ITEM_ID)static_cast<BUILD_ITEM_DESC*>( m_pItemIter->second)->iItemID);
 
+	
 return S_OK;
 }
 
@@ -134,6 +135,12 @@ HRESULT CLevel_Home::Render()
 	return S_OK;
 }
 
+void CLevel_Home::On_Start()
+{
+	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_PLAYER, LAYERID::LAYER_TERRAIN, true);
+}
+
+
 void CLevel_Home::On_BuildItemSelected(void* pArg)
 {
 	const BUILD_ITEM_DESC* pDesc =static_cast<const BUILD_ITEM_DESC*>( reinterpret_cast<CUIItemIndicator*>(pArg)->Get_ItemDesc());
@@ -145,19 +152,19 @@ void CLevel_Home::Set_BuildItem(BUILD_ITEM_ID eID)
 	m_pBuilder->Set_BuildItem(eID);
 }
 
-HRESULT CLevel_Home::Ready_Layer_BackGround(const _wstring& strLayerTag)
+HRESULT CLevel_Home::Ready_Layer_BackGround(LAYERID eLayerId)
 {
 	m_pCubeTerrain = static_cast<CCubeTerrain*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_HOME, 
 		TEXT("Prototype_GameObject_MyHome"), nullptr));
 	if (nullptr == m_pCubeTerrain)
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, strLayerTag, m_pCubeTerrain)))
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, eLayerId, m_pCubeTerrain)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CLevel_Home::Ready_Layer_UI(const _wstring& strLayerTag)
+HRESULT CLevel_Home::Ready_Layer_UI(LAYERID eLayerId)
 {
 	CUIHomeDialog::HOMEDIALOG_DESC PanelDesc{};
 	PanelDesc.eAnchorType = CORNOR_TYPE::RIGHT_BOT;
@@ -173,7 +180,7 @@ HRESULT CLevel_Home::Ready_Layer_UI(const _wstring& strLayerTag)
 	PanelDesc.listData = &listData;
 
 	m_pHomeDialog = static_cast<CUIHomeDialog*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialog"), &PanelDesc));
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVELID::LEVEL_HOME, strLayerTag, m_pHomeDialog)))
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVELID::LEVEL_HOME, eLayerId, m_pHomeDialog)))
 		return E_FAIL;
 	function<void(void*)> f = bind(&CLevel_Home::On_BuildItemSelected, this, placeholders::_1);
 	m_pHomeDialog->Register_OnClickCallback(f);
@@ -181,35 +188,10 @@ HRESULT CLevel_Home::Ready_Layer_UI(const _wstring& strLayerTag)
 	return S_OK; 
 }
 
-HRESULT CLevel_Home::Ready_Layer_Player(const _wstring& strLayerTag)
+HRESULT CLevel_Home::Ready_Layer_Camera(LAYERID eLayerId)
 {
-	CPlayer::PLAYER_DESC		PlayerDesc{};
-
-	PlayerDesc.fSpeedPerSec = 5.f;
-	PlayerDesc.fRotationPerSec = XMConvertToRadians(90.f);
-
-	m_pPlayer = static_cast<CPlayer*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_Player"), &PlayerDesc));
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, strLayerTag, m_pPlayer)))
-		return E_FAIL;
-	m_pGameInstance->Possess(m_pPlayer);
-	m_pPlayer->Set_Position(XMLoadFloat4(&m_pCubeTerrain->IndexToPos(100)));
-
-	CCamera_Trace::TRACECAMERA_DESC		CamDesc{};
-
-	CamDesc.fSpeedPerSec = 5.f;
-	CamDesc.fRotationPerSec = XMConvertToRadians(90.f);
-	CamDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
-	CamDesc.fFovY = XMConvertToRadians(60.f);
-	CamDesc.fNear = 0.1f;
-	CamDesc.fFar = 1000.f;
-	CamDesc.vEye = _float3(0.f, 3.f, -3.f);
-	CamDesc.vAt = _float3(0.f, 0.f, 0.f);
-	CamDesc.vArm = _float3(-7.f, 10.f, -7.f);
-	CamDesc.pTarget = m_pPlayer;
-
-	m_pCamera = static_cast<CCamera_Trace*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_Camera_Trace"), &CamDesc));
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, strLayerTag, m_pCamera)))
-		return E_FAIL;
+	m_pPlayer  = static_cast<CPlayer*>(m_pGameInstance->Get_FirstGameObject(LEVEL_LOADING, LAYER_PLAYER));;
+	m_pCamera = static_cast<CCamera_Trace*>(m_pGameInstance->Get_FirstGameObject(LEVEL_LOADING, LAYER_CAMERA));;
 	return S_OK;
 }
 HRESULT CLevel_Home::Ready_Lights()

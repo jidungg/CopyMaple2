@@ -28,6 +28,7 @@ protected:
 	class CGameInstance*			m_pGameInstance = { nullptr };
 	class CGameObject*				m_pOwner = { nullptr };
 	bool m_bActive = true;
+	_bool		m_isCloned = { false };
 public:	
 	virtual CComponent* Clone(void* pArg) = 0;
 	virtual void Free() override;

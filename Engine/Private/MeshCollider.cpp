@@ -77,11 +77,12 @@ bool CCollider_Mesh::RayCast(const Ray& tRay, RaycastHit* pOut)
 	_uint* indices = static_cast<_uint*>(IB.pData);
 
 	float fMinDist = 9999;
+	XMVECTOR vMinNormal = { 0,0,0,0 };
 	bool bIsHit = false;
 	XMMATRIX matWorld = m_pOwner->Get_Transform()->Get_WorldMatrix();
 	XMMATRIX matInverseWorld = XMMatrixInverse(nullptr, matWorld);
-	XMVECTOR vLocalOrigin = XMVector4Transform(XMLoadFloat4(&tRay.vOrigin), matInverseWorld);
-	XMVECTOR vLocalDirection = XMVector4Normalize( XMVector4Transform(XMLoadFloat4(&tRay.vDirection), matInverseWorld));
+	XMVECTOR vLocalOrigin = XMVector4Transform((tRay.vOrigin), matInverseWorld);
+	XMVECTOR vLocalDirection = XMVector4Normalize( XMVector4Transform((tRay.vDirection), matInverseWorld));
 	for (size_t indexCount = 0; indexCount < m_iNumIndexes; )
 	{
 		XMVECTOR v0 =XMLoadFloat3(&vertices[indices[indexCount++]].vPosition);
@@ -97,7 +98,9 @@ bool CCollider_Mesh::RayCast(const Ray& tRay, RaycastHit* pOut)
 				if (fDist < fMinDist)
 				{
 					fMinDist = fDist;
-
+					auto v10 = v1 - v0;
+					auto v20 = v2 - v0;
+					vMinNormal = XMVector4Transform(XMVector4Normalize(XMVector3Cross(v10, v20)), matWorld);
 				}
 			}
 		}
@@ -107,7 +110,8 @@ bool CCollider_Mesh::RayCast(const Ray& tRay, RaycastHit* pOut)
 	{
 		pOut->pCollider = this;
 		pOut->fDist = fMinDist;
-		XMStoreFloat4(&(pOut->vPoint), XMLoadFloat4(&(tRay.vOrigin)) + XMVector3Normalize(XMLoadFloat4(&(tRay.vDirection))) * fMinDist);
+		pOut->vNormal = vMinNormal;
+		pOut->vPoint, tRay.vOrigin + XMVector3Normalize(tRay.vDirection) * fMinDist;
 	}
 	// ���� ����
 	m_pContext->Unmap(m_pStagingVB, 0);

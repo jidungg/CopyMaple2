@@ -13,7 +13,7 @@ void CSkillManager::Insert_Data(json& jSkillData)
 	SKILL_DESC& desc =  m_SkillData[(_uint)iID];
 
 	desc.eID = iID;
-	desc.eType = jSkillData["type"];
+	desc.eCastingType = jSkillData["type"];
 	string str = jSkillData["name"];
 	std::copy(str.begin(), str.end(), desc.szName);
 	str = jSkillData["desc"];

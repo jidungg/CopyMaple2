@@ -50,7 +50,7 @@ void CCollider_Mesh::Update(_fmatrix WorldMatrix)
 {
 }
 
-_bool CCollider_Mesh::Intersect(CCollider* pOther)
+_bool CCollider_Mesh::Intersects(CCollider* pOther)
 {
 	return _bool();
 }
@@ -150,4 +150,9 @@ void CCollider_Mesh::Free()
 	__super::Free();
 	Safe_Release(m_pStagingVB);
 	Safe_Release(m_pStagingIB);
+}
+
+_bool CCollider_Mesh::Contains(const FXMVECTOR& vPos)
+{
+	return false;
 }

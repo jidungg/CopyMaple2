@@ -39,8 +39,9 @@ HRESULT CModelObject::Initialize(void* pArg)
 
 void CModelObject::Update(_float fTimeDelta)
 {
-	if (m_eModelType == CModel::TYPE::TYPE_ANIM)
-        m_bAnimationEnd =m_pModelCom->Play_Animation(fTimeDelta);
+    if (m_eModelType == CModel::TYPE::TYPE_ANIM)
+        m_bAnimationEnd = m_pModelCom->Play_Animation(fTimeDelta);
+
 	__super::Update(fTimeDelta);
 }
 

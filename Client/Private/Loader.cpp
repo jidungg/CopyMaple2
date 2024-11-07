@@ -38,6 +38,8 @@
 #include "UIBundle.h"
 #include "UIQuickSlotBundle.h"
 #include "Collider_AABB.h"
+#include "MonsterDataBase.h"
+#include "MonsterAnimStateMachine.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -121,9 +123,15 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(Load_SkillData()))
 		return E_FAIL;
+	if (FAILED(MONSTERDB->Load_Data()))
+		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_GameObject_StateMachine"),
 		CStateMachine::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CMonsterAnimStateMachine::m_szProtoTag,
+		CMonsterAnimStateMachine::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드."));
 	/* For.Prototype_Component_Texture_Logo */
    
@@ -203,6 +211,7 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Anim/Player"),CModel::TYPE_ANIM,matPretransform)))
 		return E_FAIL;
+
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Mimic"), CModel::TYPE_MIMIC, matPretransform)))
 		return E_FAIL;
@@ -277,6 +286,9 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_GameObject_Camera_Free"),
 		CCamera_Free::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CMonster::m_szProtoTag,
+		CMonster::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #pragma endregion
 
@@ -308,8 +320,11 @@ HRESULT CLoader::Loading_Level_GamePlay()
 
 	XMMATRIX matPretransform = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
 	matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
+	if (FAILED(Load_Dirctory_Models(LEVEL_GAMEPLAY,
 		TEXT("../Bin/resources/FBXs/Anim/Boss"), CModel::TYPE_ANIM, matPretransform)))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Models(LEVEL_GAMEPLAY,
+		TEXT("../Bin/resources/FBXs/Anim/Monster"), CModel::TYPE_ANIM, matPretransform)))
 		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("객체 로드"));
 

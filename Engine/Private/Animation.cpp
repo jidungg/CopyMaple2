@@ -57,7 +57,7 @@ bool CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones
 
 	if (m_fCurrentTrackPosition >= m_fDuration)
 	{
-		if (true == m_bLoop)
+		if (m_bLoop)
 			m_fCurrentTrackPosition = 0.f;
 		else
 			return true;
@@ -87,7 +87,12 @@ bool CAnimation::Update_AnimTransition(const vector<class CBone*>& Bones, _float
 	for (_uint channel = 0; channel < m_iNumChannels; channel++)
 	{
 		_uint iBoneIdx = m_vecChannel[channel]->Get_BoneIndex();
-		tFrame = CEngineUtility::Lerp_Frame(mapAnimTransLeftFrame.at(iBoneIdx), m_vecChannel[channel]->Get_KeyFrame(0), fRatio);
+		KEYFRAME tLeftKey;
+		if (mapAnimTransLeftFrame.find(iBoneIdx) == mapAnimTransLeftFrame.end())
+			tLeftKey = m_vecChannel[channel]->Get_KeyFrame(0);
+		else
+			tLeftKey = mapAnimTransLeftFrame.at(iBoneIdx);
+		tFrame = CEngineUtility::Lerp_Frame(tLeftKey, m_vecChannel[channel]->Get_KeyFrame(0), fRatio);
 		Bones[iBoneIdx]->Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&tFrame.vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMLoadFloat4(&tFrame.vRotation), XMVectorSetW(XMLoadFloat3(&tFrame.vPosition), 1.f)));
 	}
 

@@ -38,7 +38,7 @@ HRESULT CBuilder::Initialize(void* pArg)
 	if (FAILED(Ready_Builder()))
 		return E_FAIL;
 ;
-	if (FAILED(Ready_Preview(static_cast<BUILD_ITEM_DESC*>( ITEMDB->Get_Data(ITEM_TYPE::BUILD, 0)))))
+	if (FAILED(Ready_Preview(static_cast<BUILD_ITEM_DATA*>( ITEMDB->Get_Data(ITEM_TYPE::BUILD, 0)))))
 		return E_FAIL;
 	return S_OK;
 }
@@ -57,7 +57,7 @@ HREFTYPE CBuilder::Ready_Builder()
 
 	return S_OK;
 }
-HREFTYPE CBuilder::Ready_Preview(BUILD_ITEM_DESC* pDesc)
+HREFTYPE CBuilder::Ready_Preview(BUILD_ITEM_DATA* pDesc)
 {
 	CTerrainObject::TERRAINOBJ_DESC tTerrObjDesc;
 	tTerrObjDesc.fRotationPerSec = 5.f;
@@ -111,7 +111,7 @@ void CBuilder::Receive_KeyInput(_float fTimeDelta)
 	}
 	if (m_pGameInstance->GetKeyState(KEY::SPACE) == KEY_STATE::DOWN) // ��ġ
 	{
-		BUILD_ITEM_DESC* itemdesc =static_cast<BUILD_ITEM_DESC*>( ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)m_pPreview->Get_BuildItemID()));
+		BUILD_ITEM_DATA* itemdesc =static_cast<BUILD_ITEM_DATA*>( ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)m_pPreview->Get_BuildItemID()));
 		CTerrainObject::TERRAINOBJ_DESC desc;
 		desc.fRotationPerSec = 5.f;
 		desc.fSpeedPerSec = 1.f;
@@ -159,7 +159,7 @@ void CBuilder::Late_Update(_float fTimeDelta)
 
 void CBuilder::Set_BuildItem(BUILD_ITEM_ID eID)
 {
-	BUILD_ITEM_DESC* tItemDesc = static_cast<BUILD_ITEM_DESC*>(ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)eID));
+	BUILD_ITEM_DATA* tItemDesc = static_cast<BUILD_ITEM_DATA*>(ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)eID));
 
 	Remove_Child(m_pPreview);
 	Safe_Release(m_pPreview);

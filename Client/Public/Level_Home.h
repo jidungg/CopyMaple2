@@ -40,8 +40,8 @@ private:
 	CCamera_Trace* m_pCamera = { nullptr };
 	CPlayer* m_pPlayer = { nullptr };
 
-	map<_uint,  ITEM_DESC*>* m_pItemData = nullptr;
-	map<_uint,  ITEM_DESC*>::iterator m_pItemIter = {};
+	map<_uint,  ITEM_DATA*>* m_pItemData = nullptr;
+	map<_uint,  ITEM_DATA*>::iterator m_pItemIter = {};
 	bool m_bBuildMode = false;
 
 	CUIHomeDialog* m_pHomeDialog = { nullptr };

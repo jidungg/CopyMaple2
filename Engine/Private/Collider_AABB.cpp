@@ -35,7 +35,7 @@ void CCollider_AABB::Update(_fmatrix WorldMatrix)
 }
 
 
-_bool CCollider_AABB::Intersect(CCollider* pOther)
+_bool CCollider_AABB::Intersects(CCollider* pOther)
 {
 	m_bCollide = false;
 	CCollider::COLLIDER_TYPE eType = pOther->Get_ColliderType();
@@ -53,6 +53,12 @@ _bool CCollider_AABB::Intersect(CCollider* pOther)
 	}
 
 	return m_bCollide;
+}
+
+_bool CCollider_AABB::Contains(const FXMVECTOR& vPosition)
+{
+	return m_pBoundDesc->Contains(vPosition);
+
 }
 
 _bool CCollider_AABB::RayCast(const Ray& tRay, RaycastHit* pOut)

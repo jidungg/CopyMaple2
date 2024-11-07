@@ -18,15 +18,15 @@ HRESULT CModelConverter::FbxToBianry(const string& inFilePath)
 
 
 	m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
-//	m_bAnim = true;
-	m_bAnim = m_pAIScene->HasAnimations();
-	
-	if (m_bAnim == false)
-	{
-		iFlag |= aiProcess_PreTransformVertices;
+	m_bAnim = true;
+	//m_bAnim = m_pAIScene->HasAnimations();
+	//
+	//if (m_bAnim == false)
+	//{
+	//	iFlag |= aiProcess_PreTransformVertices;
 
-		m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
-	}
+	//	m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
+	//}
 
 	if (0 == m_pAIScene)
 		return E_FAIL;

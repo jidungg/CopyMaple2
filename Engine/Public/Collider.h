@@ -37,7 +37,8 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(_fmatrix WorldMatrix) abstract;
-	virtual _bool Intersect(CCollider* pOther)abstract;
+	virtual _bool Intersects(CCollider* pOther)abstract;
+	virtual _bool Contains(const FXMVECTOR& vPos)abstract;
 	virtual _bool RayCast(const Ray& tRay, RaycastHit* pOut) abstract;
 	virtual HRESULT Render() { return S_OK; }
 

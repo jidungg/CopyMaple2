@@ -46,7 +46,7 @@ HRESULT CInventory::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pCont
 	return S_OK;
 }
 
-HRESULT CInventory::Insert_Item(ITEM_DESC* pData, _uint iCount)
+HRESULT CInventory::Insert_Item(ITEM_DATA* pData, _uint iCount)
 {
 	assert(pData != nullptr);
 	CInvenSlot* pUpdateSlot = nullptr;

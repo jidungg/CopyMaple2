@@ -51,7 +51,7 @@ public:
 
 private:
 	HREFTYPE Ready_Builder();
-	HREFTYPE Ready_Preview(BUILD_ITEM_DESC* pDesc);
+	HREFTYPE Ready_Preview(BUILD_ITEM_DATA* pDesc);
 private:
 	CCubeTerrain* m_pCubeTerrain = { nullptr };
 

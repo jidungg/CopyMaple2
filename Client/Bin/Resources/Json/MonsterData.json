@@ -1,0 +1,106 @@
+{
+    "monsters": [
+        {
+            "Id": "SNAIL",
+            "Name": "파란 달팽이",
+            "Desc": "귀엽지만 사나운 달팽이.",
+            "Model": "Snail.model",
+            "DetectionRange": 4,
+            "ChaseRange": 3,
+            "Status": {
+                "HP": 10,
+                "SP": 10,
+                "EP": 1,
+                "ATK": 1,
+                "DEF": 1,
+                "EXP": 1,
+                "Gold": 1,
+                "JumpPower": 4.5,
+                "RunSpeed": 1.5,
+                "WalkSpeed": 0.5,
+                "AttackInterval": 3,
+                "AttackRange": 1
+            },
+            "AnimIdx": {
+                "ATTACK": [ 0 ],
+                "ATTACK_IDLE": [ 1 ],
+                "BORE": [ 2 ],
+                "DAMG": [ 3, 4 ],
+                "DEAD": [ 5, 6 ],
+                "IDLE": [ 7 ],
+                "REGEN": [ 8 ],
+                "RUN": [ 9 ],
+                "STUN": [ 10 ],
+                "WALK" : [ 11 ]
+            }
+        },
+        {
+            "Id": "CRAB",
+            "Name": "돌 게",
+            "Desc": "돌 처럼 생긴 게.",
+            "Model": "blackcarapace.model",
+            "DetectionRange": 4,
+            "ChaseRange": 3,
+            "Status": {
+                "HP": 10,
+                "SP": 10,
+                "EP": 1,
+                "ATK": 1,
+                "DEF": 1,
+                "EXP": 1,
+                "Gold": 1,
+                "JumpPower": 4.5,
+                "RunSpeed": 2.5,
+                "WalkSpeed": 1.5,
+                "AttackInterval": 3,
+                "AttackRange": 2
+            },
+            "AnimIdx": {
+                "ATTACK": [ 0 ],
+                "ATTACK_IDLE": [ 1 ],
+                "BORE": [ 2, 3 ],
+                "DAMG": [ 4, 5 ],
+                "DEAD": [ 6, 7 ],
+                "IDLE": [ 8 ],
+                "REGEN": [ 9 ],
+                "RUN": [ 10 ],
+                "STUN": [ 11 ],
+                "WALK": [ 12 ]
+            }
+        },
+        {
+            "Id": "STUMP",
+            "Name": "스텀프",
+            "Desc": "귀신 들린 나무.",
+            "Model": "Stump.model",
+            "DetectionRange": 4,
+            "ChaseRange": 3,
+            "Status": {
+                "HP": 10,
+                "SP": 10,
+                "EP": 1,
+                "ATK": 1,
+                "DEF": 1,
+                "EXP": 1,
+                "Gold": 1,
+                "JumpPower": 4.5,
+                "RunSpeed": 2.5,
+                "WalkSpeed": 1.5,
+                "AttackInterval": 1,
+                "AttackRange": 2
+            },
+            "AnimIdx": {
+                "ATTACK": [ 0 ],
+                "ATTACK_IDLE": [ 1 ],
+                "BORE": [ 2,3 ],
+                "DAMG": [ 4, 5 ],
+                "DEAD": [ 6, 7 ],
+                "IDLE": [ 8 ],
+                "REGEN": [ 9 ],
+                "RUN": [ 10 ],
+                "STUN": [ 11 ],
+                "WALK": [ 12 ]
+            }
+        }
+    ]
+}

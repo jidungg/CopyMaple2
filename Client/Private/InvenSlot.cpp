@@ -24,7 +24,7 @@ CInvenSlot::CInvenSlot(ITEM_TYPE eItemType, _uint iIdx, CInventory* pInventory)
     }
 }
 
-HRESULT CInvenSlot::Insert_Item(ITEM_DESC* pData, _uint iCount)
+HRESULT CInvenSlot::Insert_Item(ITEM_DATA* pData, _uint iCount)
 {
 	if (Is_Insertable(pData, iCount) == false)
 		return E_FAIL;
@@ -34,19 +34,19 @@ HRESULT CInvenSlot::Insert_Item(ITEM_DESC* pData, _uint iCount)
     return S_OK;
 }
 
-ITEM_DESC* CInvenSlot::Pop_Item(_uint iCount)
+ITEM_DATA* CInvenSlot::Pop_Item(_uint iCount)
 {
     if (m_iStack < iCount)
         return nullptr;
 	m_iStack -= iCount;
-	ITEM_DESC* pItem = m_pItemDesc;
+	ITEM_DATA* pItem = m_pItemDesc;
 	if (m_iStack <= 0)
         m_pItemDesc = nullptr;
     UIBUNDLE->Update_Slot(m_eItemType, m_iIndex);
     return pItem;
 }
 
-bool CInvenSlot::Is_Insertable(ITEM_DESC* pData, _uint iCount)
+bool CInvenSlot::Is_Insertable(ITEM_DATA* pData, _uint iCount)
 {
 	if (m_pItemDesc == nullptr)
 		return true;

@@ -48,7 +48,7 @@ HRESULT CLevel_Home::Initialize()
 	m_pBuilder->Set_Active(false);
 
 
-	Set_BuildItem((BUILD_ITEM_ID)static_cast<BUILD_ITEM_DESC*>( m_pItemIter->second)->iItemID);
+	Set_BuildItem((BUILD_ITEM_ID)static_cast<BUILD_ITEM_DATA*>( m_pItemIter->second)->iItemID);
 
 	
 return S_OK;
@@ -110,7 +110,7 @@ void CLevel_Home::Update(_float fTimeDelta)
 			if (m_pItemIter == m_pItemData->end())
 				m_pItemIter = m_pItemData->begin();
 
-			m_pBuilder->Set_BuildItem((BUILD_ITEM_ID)static_cast<BUILD_ITEM_DESC*>((*m_pItemIter).second)->iItemID);
+			m_pBuilder->Set_BuildItem((BUILD_ITEM_ID)static_cast<BUILD_ITEM_DATA*>((*m_pItemIter).second)->iItemID);
 	
 		}
 		//맵 저장
@@ -143,7 +143,7 @@ void CLevel_Home::On_Start()
 
 void CLevel_Home::On_BuildItemSelected(void* pArg)
 {
-	const BUILD_ITEM_DESC* pDesc =static_cast<const BUILD_ITEM_DESC*>( reinterpret_cast<CUIItemIndicator*>(pArg)->Get_ItemDesc());
+	const BUILD_ITEM_DATA* pDesc =static_cast<const BUILD_ITEM_DATA*>( reinterpret_cast<CUIItemIndicator*>(pArg)->Get_ItemDesc());
 	Set_BuildItem((BUILD_ITEM_ID)(pDesc)->iItemID);
 }
 

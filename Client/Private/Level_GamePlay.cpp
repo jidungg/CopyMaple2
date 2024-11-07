@@ -8,6 +8,7 @@
 #include "UIQuickSlot.h"
 #include "SkillManager.h"
 #include "LevelChangeEvent.h"
+#include "Monster.h"
 #include "Bayar.h"
 #include "Player.h"
 
@@ -59,10 +60,22 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(LAYERID eLayerID)
 }
 HRESULT CLevel_GamePlay::Ready_Monster(LAYERID eLayerID)
 {
-	CGameObject::GAMEOBJECT_DESC tDest;
+	CCharacter::CHARACTER_DESC tDest;
 	CGameObject* pMonster = static_cast<CGameObject*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Bayar"),&tDest));
 	m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY,LAYER_MONSTER, pMonster);
 	pMonster->Get_Transform()->Set_State(CTransform::STATE_POSITION, XMVectorSet(10, 1, 10, 1));
+
+	CMonster::MONSTER_DESC tMonDesc;
+	tMonDesc.eMonID = MONSTER_ID::SNAIL;
+	tMonDesc.vHomePos = { 3,1,10,1 };
+	CMonster* pMonster2 = static_cast<CMonster*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CMonster::m_szProtoTag, &tMonDesc));
+	m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, LAYER_MONSTER, pMonster2);
+
+	tMonDesc.eMonID = MONSTER_ID::CRAB;
+	tMonDesc.vHomePos = { 3,1,13,1 };
+	pMonster2 = static_cast<CMonster*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CMonster::m_szProtoTag, &tMonDesc));
+	m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY, LAYER_MONSTER, pMonster2);
+
 	return S_OK;
 
 }

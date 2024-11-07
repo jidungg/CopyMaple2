@@ -17,9 +17,9 @@ class CBayar :
 {
 	enum PART_ID
 	{
+		BODY,
 		LEFT_ARM,
 		RIGHT_ARM,
-		BODY,
 		DETECTION,
 		PART_LAST
 	};
@@ -107,14 +107,13 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	HRESULT Ready_Components();
+	HRESULT Ready_Components(CHARACTER_DESC* pDesc);
 	HRESULT Ready_Parts();
 	HRESULT Ready_AnimStateMachine();
 	HRESULT Ready_FaceStateMachine();
 	HRESULT Ready_Skill();
 	void On_StateChange(_uint iState);
 	void On_SubStateChange(_uint iSubState);
-	void On_FaceStateChange(_uint iState);
 
 	virtual void Use_Skill(CSkill* pSkill) override;
 
@@ -122,23 +121,23 @@ public:
 	_bool Is_FirstAttackAnimation(_uint iAnimIdx);
 	_bool Is_AttackCoolReady() { return m_fAttackTimeAcc >= m_fAttackInterval; }
 private:
-	vector<CCollider_Sphere*> m_vecCollider;
+
 	vector<const XMFLOAT4X4*> m_vecPartsMatrix;
 
 	_float3 m_vHomePos = { 10.f,1.f,10.f };
-	_int m_iCurAttack = AS_ATTACK_1_A;
-	_int m_iAttackCount = 8;
-	_float m_fDetectionRange{ 5.f };
+	_int m_iCurAttack = { AS_ATTACK_1_A };
+	_int m_iAttackCount = { 8 };
+	_float m_fDetectionRange{ 3.f };
 	_float m_fAttackRange{ 2.f };
 	_float m_fChaseRange{ 3.5f };
-	_float m_fAttackInterval{ 1.f };
+	_float m_fAttackInterval{7.f };
 	_float m_fAttackTimeAcc{ 5.f };
-	_float m_fTargetDistance= false;
+	_float m_fTargetDistance = { FLT_MAX };
 	//ConditionVariable
-	_bool m_bDetected = false;
-	_bool m_bChase = false;
-	_bool m_bWalk = false;
-	_bool m_bAttack = false;
+	_bool m_bDetected = { false };
+	_bool m_bChase = { false };
+	_bool m_bWalk = { false };
+	_bool m_bAttack = { false };
 public:
 	static CBayar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

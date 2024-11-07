@@ -11,12 +11,12 @@ CItemDataBase::CItemDataBase()
 HRESULT CItemDataBase::Load_Data()
 {
 	json j;
-	ITEM_DESC* pItemDesc;
+	ITEM_DATA* pItemDesc;
 	if (FAILED(CJsonParser::ReadJsonFile("../Bin/Resources/Json/BuildItemData.json", &j)))
 		return E_FAIL;
 	for (auto& item : j["items"])
 	{
- 		pItemDesc = new BUILD_ITEM_DESC(item);
+ 		pItemDesc = new BUILD_ITEM_DATA(item);
 		Insert_Data(pItemDesc);
 	}
 
@@ -25,7 +25,7 @@ HRESULT CItemDataBase::Load_Data()
 		return E_FAIL;
 	for (auto& item : j["items"])
 	{
-		pItemDesc = new EQUIP_ITEM_DESC(item);
+		pItemDesc = new EQUIP_ITEM_DATA(item);
 		Insert_Data(pItemDesc);
 	}
 
@@ -58,7 +58,7 @@ HRESULT CItemDataBase::Load_Data()
 	return S_OK;
 }
 
-void CItemDataBase::Insert_Data(ITEM_DESC* pData)
+void CItemDataBase::Insert_Data(ITEM_DATA* pData)
 {
 	m_mapItem[(_uint)pData->eITemType].insert({ pData->iItemID ,pData });
 }

@@ -36,13 +36,13 @@ HRESULT CPlayerInfo::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pCon
 
 HRESULT CPlayerInfo::Equip(CInvenEquipSlot* pInvenSlot)
 {
-	EQUIP_ITEM_DESC* pEQDesc = static_cast<EQUIP_ITEM_DESC	*>( pInvenSlot->Get_ItemDesc());
+	EQUIP_ITEM_DATA* pEQDesc = static_cast<EQUIP_ITEM_DATA	*>( pInvenSlot->Get_ItemDesc());
 	EQUIP_ITEM_TYPE  eEQType = pEQDesc->eEquipType;
 	assert(pEQDesc != nullptr);
 
 	//해당 부위에 장착된 아이템이 장착 해제. 
 	//한벌은 SUIT, TOP, BOTTOM 모두 장착 해제해야함.
-	list <EQUIP_ITEM_DESC*> pPopedItem;
+	list <EQUIP_ITEM_DATA*> pPopedItem;
 	pPopedItem.push_back(m_pEquipSlots[(_uint)eEQType]->Pop_Item());
 	m_pPlayer->UnEquip(eEQType);
 	if (eEQType == EQUIP_ITEM_TYPE::SUIT)

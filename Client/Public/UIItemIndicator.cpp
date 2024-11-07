@@ -69,7 +69,7 @@ HRESULT CUIItemIndicator::On_ListItemDataSet(const UIListItemData* data)
 {
 	if (nullptr == data)
 		return E_FAIL;
-	m_pItemDesc = static_cast<const ITEM_DESC*>(data);
+	m_pItemDesc = static_cast<const ITEM_DATA*>(data);
 
 	CRect_Transform::RECTTRANSFORM_DESC tRectDesc{};
 	tRectDesc.eAnchorType = CORNOR_TYPE::CENTER;

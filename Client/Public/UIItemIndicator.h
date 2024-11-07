@@ -18,10 +18,10 @@ public:
 	virtual HRESULT Render()override;
 
 	HRESULT On_ListItemDataSet(const UIListItemData* data) override;
-	const ITEM_DESC* Get_ItemDesc() { return(m_pItemDesc); }
+	const ITEM_DATA* Get_ItemDesc() { return(m_pItemDesc); }
 protected:
 	virtual void Call_Callback(const ButtonCallback& fCallback) override;
-	const ITEM_DESC* m_pItemDesc = nullptr;
+	const ITEM_DATA* m_pItemDesc = nullptr;
 	CTexture* m_pIconTexure = nullptr;
 	CRect_Transform* m_pIconTransform = nullptr;
 

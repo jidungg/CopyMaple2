@@ -43,7 +43,7 @@ HRESULT CTerrainObject::Initialize(void* pArg)
 	pDesc->fRotationPerSec = 5.f;
 	pDesc->fSpeedPerSec = 1.f;
 	m_eBuildItemID = pDesc->eID;
-	m_eBuildItemType= static_cast<BUILD_ITEM_DESC*>( ITEMDB->Get_Data(ITEM_TYPE::BUILD,(_uint)m_eBuildItemID))->eBuildType;
+	m_eBuildItemType= static_cast<BUILD_ITEM_DATA*>( ITEMDB->Get_Data(ITEM_TYPE::BUILD,(_uint)m_eBuildItemID))->eBuildType;
 	m_eTerrainDir = pDesc->direction;
 	m_iIndex = pDesc->index;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(pDesc->pos.x, pDesc->pos.y, pDesc->pos.z,1));

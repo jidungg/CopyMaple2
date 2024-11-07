@@ -34,7 +34,7 @@ void CCollider_Sphere::Update(_fmatrix WorldMatrix)
 }
 
 
-_bool CCollider_Sphere::Intersect(CCollider* pOther)
+_bool CCollider_Sphere::Intersects(CCollider* pOther)
 {
 	m_bCollide = false;
 	CCollider::COLLIDER_TYPE eType = pOther->Get_ColliderType();
@@ -51,7 +51,7 @@ _bool CCollider_Sphere::Intersect(CCollider* pOther)
 	return m_bCollide;
 }
 
-_bool CCollider_Sphere::Intersect(const FXMVECTOR& vPosition)
+_bool CCollider_Sphere::Contains(const FXMVECTOR& vPosition)
 {
 	return m_pBoundDesc->Contains(vPosition);
 }

@@ -16,8 +16,6 @@ public:
 	void Set_Position(const _vector& vPos);
 public:
 
-private:
-	
 };
 
 END

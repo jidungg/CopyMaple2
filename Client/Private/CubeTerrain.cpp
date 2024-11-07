@@ -62,7 +62,7 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 	desc.fSpeedPerSec = 1.f;
 	for (const auto& item : j["cells"]) {
 		BUILD_ITEM_ID eId =  item["ItemId"];
-		BUILD_ITEM_DESC* pBuildItemDesc = static_cast<BUILD_ITEM_DESC*>( pDB->Get_Data(ITEM_TYPE::BUILD,(_uint)eId));
+		BUILD_ITEM_DATA* pBuildItemDesc = static_cast<BUILD_ITEM_DATA*>( pDB->Get_Data(ITEM_TYPE::BUILD,(_uint)eId));
 		strcpy_s(desc.strModelProtoName, pBuildItemDesc->strModelTag);
 		desc.eModelProtoLevelID = LEVEL_LOADING;
 		desc.eID = item["ItemId"];
@@ -88,7 +88,7 @@ _vector CCubeTerrain::BlockXZ(CCharacter* pCharacter)
 	_vector vPos = pCharacter->Get_Position();
 	_vector vMoveDir = pCharacter->Get_MoveDirection();
 	_float fBodyCollisionRadius = pCharacter->Get_BodyCollisionRadius();
-	_float fBodyCollisionHeight = pCharacter->Get_BodyCollisionHeight();
+	_float3 fBodyCollisionOffset = pCharacter->Get_BodyCollisionOffset();
 	_float fMoveDistance = pCharacter->Get_MoveDistance();
 	_float fXForce = XMVectorGetX(vMoveDir);
 	_float fZForce = XMVectorGetZ(vMoveDir);
@@ -130,7 +130,7 @@ _vector CCubeTerrain::BlockXZ(CCharacter* pCharacter)
 				_uint iIdx = iX + m_vSize.x * iZ + m_vSize.x * m_vSize.z * iY;
 				if (nullptr == m_vecCells[iIdx])
 					continue;
-				vNextPos = m_vecCells[iIdx]->BolckXZ(vPos, vMoveDir, fMoveDistance, fBodyCollisionRadius, fBodyCollisionHeight);
+				vNextPos = m_vecCells[iIdx]->BolckXZ(vPos, vMoveDir, fMoveDistance, fBodyCollisionRadius, fBodyCollisionOffset.y);
 				_vector vTmp = vNextPos - vPos;
 				vMoveDir = XMVector4Normalize(vTmp);
 				fMoveDistance = XMVectorGetX(XMVector3Length(vTmp));
@@ -160,15 +160,31 @@ _bool CCubeTerrain::RayCastXZ(const Ray& tRay, RaycastHit* pOut)
 	while (fCurrentDistance <= tRay.fDist)
 	{
 		if (fXDir > 0)
+		{
 			fXRequire = ceilf(fX) - fX;
+			if (fXRequire == 0)
+				fXRequire += 1;
+		}
 		else if (fXDir < 0)
+		{
 			fXRequire = floorf(fX) - fX;
+			if (fXRequire == 0)
+				fXRequire -= 1;
+		}
 		else
 			fXRequire = FLT_MAX;
 		if (fZDir > 0)
+		{
 			fZRequire = ceilf(fZ) - fZ;
+			if (fZRequire == 0)
+				fZRequire += 1;
+		}
 		else if (fZDir < 0)
+		{
 			fZRequire = floorf(fZ) - fZ;
+			if (fZRequire == 0)
+				fZRequire -= 1;
+		}
 		else
 			fZRequire = FLT_MAX;
 

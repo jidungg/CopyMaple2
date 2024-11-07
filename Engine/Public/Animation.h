@@ -6,9 +6,9 @@
 
 BEGIN(Engine)
 
-class CAnimation final : public CBase
+class CAnimation : public CBase
 {
-private:
+protected:
 	CAnimation();
 	CAnimation(const CAnimation& Prototype);
 	virtual ~CAnimation() = default;

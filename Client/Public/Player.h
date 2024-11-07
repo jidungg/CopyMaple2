@@ -191,7 +191,7 @@ public:
 	};
 	
 public:
-	typedef struct PlayerDesc : public CGameObject::GAMEOBJECT_DESC
+	typedef struct PlayerDesc : public CCharacter::CHARACTER_DESC
 	{
 
 	}PLAYER_DESC;
@@ -222,14 +222,14 @@ public:
 
 	virtual void Use_Skill(CSkill* pSkill) override;
 	HRESULT Gain_Item(CItemObjet* pItem);
-	HRESULT Gain_Item(ITEM_DESC* pItem, _uint iCount = 1);
+	HRESULT Gain_Item(ITEM_DATA* pItem, _uint iCount = 1);
 	CSkill* Get_Skill(SKILL_ID eID) { return m_pSkill[(_uint)eID]; }
 	_uint Get_AnimationIndex(SKILL_ID eSkillID);
 	_bool Is_LastAttackAnimation(_uint iAnimIdx);
 	_bool Is_CastingAnimation(_uint iAnimIdx);
 
 	void Set_Battle(bool bBattle); 
-	HRESULT Equip(EQUIP_ITEM_DESC* pItem);
+	HRESULT Equip(EQUIP_ITEM_DATA* pItem);
 	HRESULT UnEquip(EQUIP_ITEM_TYPE eType);
 	HRESULT Set_Deco(struct DECO_ITEM_DESC* pItem);
 	HRESULT Set_Customize(struct CUSTOMIZE_DESC* pItem);

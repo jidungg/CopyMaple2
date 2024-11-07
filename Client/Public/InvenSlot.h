@@ -16,14 +16,14 @@ public:
 	// ISlotItem을(를) 통해 상속됨
 	virtual const _char* Get_IconTag() override;
 
-	virtual HRESULT Insert_Item(ITEM_DESC* pData, _uint iCount = 1);
-	virtual ITEM_DESC* Pop_Item(_uint iCount = 1);
+	virtual HRESULT Insert_Item(ITEM_DATA* pData, _uint iCount = 1);
+	virtual ITEM_DATA* Pop_Item(_uint iCount = 1);
 
-	bool Is_Insertable(ITEM_DESC* pData, _uint iCount = 1);
+	bool Is_Insertable(ITEM_DATA* pData, _uint iCount = 1);
 	bool Is_Empty() { return m_pItemDesc == nullptr; }
-	ITEM_DESC* Get_ItemDesc() { return m_pItemDesc; }
+	ITEM_DATA* Get_ItemDesc() { return m_pItemDesc; }
 
-	void Set_ItemDesc(ITEM_DESC* pData) { m_pItemDesc = pData; }
+	void Set_ItemDesc(ITEM_DATA* pData) { m_pItemDesc = pData; }
 
 	virtual void On_RightClick() abstract;
 	virtual void On_LeftClick() abstract;
@@ -31,7 +31,7 @@ public:
 private:
 	CInventory* m_pInventory = { nullptr };
 	ITEM_TYPE m_eItemType = { ITEM_TYPE::LAST };
-	ITEM_DESC* m_pItemDesc = { nullptr };
+	ITEM_DATA* m_pItemDesc = { nullptr };
 	_uint m_iStack = { 0 };
 	_uint m_iMaxStack = { 0 };
 	_uint m_iIndex = { 0 };

@@ -19,7 +19,8 @@ protected:
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual _bool Intersect(CCollider* pOther) override;
+	virtual _bool Intersects(CCollider* pOther) override;
+	virtual _bool Contains(const FXMVECTOR& vPosition)override;
 	virtual _bool RayCast(const Ray& tRay, RaycastHit* pOut) override;
 	virtual HRESULT  Render() override;
 	BoundingBox* Get_Desc() { return m_pBoundDesc; }

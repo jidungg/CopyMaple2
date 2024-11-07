@@ -9,6 +9,20 @@ CStateMachine::CStateMachine(ID3D11Device* pDevice, ID3D11DeviceContext* pContex
 CStateMachine::CStateMachine(const CStateMachine& Prototype)
 	: CComponent(Prototype)
 {
+	for (auto& state : Prototype.m_mapStates)
+	{
+		m_mapStates.insert({ state.first, static_cast<CState*>(state.second->Clone()) });
+	}
+	for (auto& cond : Prototype.m_mapConditionVariable)
+	{
+		m_mapConditionVariable.emplace(cond.first, cond.second);
+	}
+	for (auto& trigger : Prototype.m_mapTriggerConditionVariable)
+	{
+		m_mapTriggerConditionVariable.emplace(trigger.first, trigger.second);
+	}
+	m_iCurrentState = Prototype.m_iCurrentState;
+	m_iCurrentSubState = Prototype.m_iCurrentSubState;
 }
 
 HRESULT CStateMachine::Initialize_Prototype()

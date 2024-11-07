@@ -19,12 +19,13 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	// CCollider을(를) 통해 상속됨
 	void Update(_fmatrix WorldMatrix) override;
-	virtual _bool Intersect(CCollider* pOther) override;
-	_bool Intersect(const FXMVECTOR& vPosition);
+	virtual _bool Intersects(CCollider* pOther) override;
+	virtual _bool Contains(const FXMVECTOR& vPosition)override;
 ;	virtual _bool RayCast(const Ray& tRay, RaycastHit* pOut) override;
 	virtual HRESULT  Render() override;
 
 	const BoundingSphere* Get_Desc() const {return m_pBoundDesc;}
+	const _float3 Get_Offset() const { return m_pOriginalBoundDesc->Center; }
 protected:
 	BoundingSphere* m_pOriginalBoundDesc = {};
 	BoundingSphere* m_pBoundDesc = {};

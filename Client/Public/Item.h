@@ -3,10 +3,10 @@
 #include "Model.h"
 
 BEGIN(Client)
-typedef struct ItemDesc : public UIListItemData
+typedef struct ItemData : public UIListItemData
 {
-	ItemDesc() = default;
-	ItemDesc(json& js)
+	ItemData() = default;
+	ItemData(json& js)
 	{
 
 		string str = js["Name"];
@@ -29,11 +29,11 @@ typedef struct ItemDesc : public UIListItemData
 	_char strModelTag[MAX_PATH] = ("");
 	_uint iPrice = 0;
 
-}ITEM_DESC;
-typedef struct BuildItemDesc : public ItemDesc
+}ITEM_DATA;
+typedef struct BuildItemData : public ItemData
 {
-	BuildItemDesc() = default;
-	BuildItemDesc(json& js) : ItemDesc(js)
+	BuildItemData() = default;
+	BuildItemData(json& js) : ItemData(js)
 	{
 		eITemType = ITEM_TYPE::BUILD;
 		eBuildType =js["BuildItemType"];
@@ -42,11 +42,11 @@ typedef struct BuildItemDesc : public ItemDesc
 
 	}
 	BUILD_ITEM_TYPE eBuildType;
-}BUILD_ITEM_DESC;
-typedef struct EquipItemDesc : public ItemDesc
+}BUILD_ITEM_DATA;
+typedef struct EquipItemData : public ItemData
 {
-	EquipItemDesc() = default;
-	EquipItemDesc(json& js) : ItemDesc(js)
+	EquipItemData() = default;
+	EquipItemData(json& js) : ItemData(js)
 	{
 		eITemType = ITEM_TYPE::EQUIP;
 		eEquipType = js["EquipItemType"];
@@ -54,5 +54,5 @@ typedef struct EquipItemDesc : public ItemDesc
 		iItemID = (_uint)eId;
 	}
 	EQUIP_ITEM_TYPE eEquipType;
-}EQUIP_ITEM_DESC;
+}EQUIP_ITEM_DATA;
 END

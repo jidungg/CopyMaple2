@@ -10,6 +10,7 @@
 #include "Inventory.h"
 #include "PlayerInfo.h"
 #include "UIBundle.h"
+#include "MonsterDataBase.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance { CGameInstance::GetInstance() }
@@ -90,6 +91,7 @@ void CMainApp::Free()
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
 	CItemDataBase::DestroyInstance();
+	CMonsterDataBase::DestroyInstance();
 	CSkillManager::DestroyInstance();
 	CInventory::DestroyInstance();
 	CPlayerInfo::DestroyInstance();

@@ -39,7 +39,6 @@
 #include "UIQuickSlotBundle.h"
 #include "Collider_AABB.h"
 #include "MonsterDataBase.h"
-#include "MonsterAnimStateMachine.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -127,9 +126,6 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_GameObject_StateMachine"),
 		CStateMachine::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CMonsterAnimStateMachine::m_szProtoTag,
-		CMonsterAnimStateMachine::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드."));
@@ -408,7 +404,7 @@ HRESULT CLoader::Load_SkillData()
 		return E_FAIL;
 	for (auto& skill : j["skills"])
 	{
-		SKILLMAN->Insert_Data(skill);
+		SKILLDB->Insert_Data(skill);
 	}
 	return S_OK;
 }

@@ -20,7 +20,6 @@ typedef struct MonsterData
 		tStat = STATUS(js["Status"]);
 		json& jmapAnimIdx = js["AnimIdx"];
 		
-		mapAnimIdx[M_AS_ATTACK] = jmapAnimIdx["ATTACK"].get<vector<_uint>>();
 		mapAnimIdx[M_AS_ATTACK_IDLE] = jmapAnimIdx["ATTACK_IDLE"].get<vector<_uint>>();
 		mapAnimIdx[M_AS_BORE] = jmapAnimIdx["BORE"].get<vector<_uint>>();
 		mapAnimIdx[M_AS_DAMG] = jmapAnimIdx["DAMG"].get<vector<_uint>>();
@@ -30,7 +29,7 @@ typedef struct MonsterData
 		mapAnimIdx[M_AS_RUN] = jmapAnimIdx["RUN"].get<vector<_uint>>();
 		mapAnimIdx[M_AS_STUN] = jmapAnimIdx["STUN"].get<vector<_uint>>();
 		mapAnimIdx[M_AS_WALK] = jmapAnimIdx["WALK"].get<vector<_uint>>();
-
+		vecSkillID = js["Skill"].get<vector<SKILL_ID>>();
 	}
 	MONSTER_ID eMonID = MONSTER_ID::LAST;
 	_char strMonsterName[MAX_PATH] = ("");
@@ -40,6 +39,7 @@ typedef struct MonsterData
 	_float fChaseRange{ 4.f };
 	unordered_map<MON_STATE, vector<_uint>> mapAnimIdx;
 	STATUS tStat;
+	vector<SKILL_ID> vecSkillID;
 
 }MONSTER_DATA;
 
@@ -54,7 +54,22 @@ public:
 		COLLIDER_DETECT,
 		COLLIDER_LAST
 	};
-
+	enum MON_ANIM_CONDITION
+	{
+		AC_ANIMENDTRIGGER
+		, AC_DETECTED
+		, AC_ATTACKTRIGGER
+		, AC_ISATTACK
+		, AC_MOVE
+		, AC_WALK
+		, AC_RANDOM
+		, AC_BORETRIGGER
+		, AC_DAMAGETRIGGER
+		, AC_HP
+		, AC_STUN
+		, AC_SKILL_ID
+		, AC_LAST
+	};
 
 public:
 	typedef struct MonsterDesc :public CCharacter::CHARACTER_DESC
@@ -79,14 +94,17 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-	void On_StateChange(_uint iState);
-	void On_SubStateChange(_uint iSubState);
+	virtual void On_StateChange(_uint iState) override;
+	virtual void On_SubStateChange(_uint iSubState) override;
+	virtual void On_AnimEnd(_uint iAnimIdx) override;
+	virtual void On_CastingEnd(CSkill* pSkill) override;
+	virtual _bool Use_Skill(CSkill* pSkill) override;
 
 protected:
 	HRESULT Ready_Components(MONSTER_DESC* pDesc);
 	HRESULT Ready_Parts(MONSTER_DESC* pDesc);
-	HRESULT Ready_AnimStateMachine();
-
+	virtual HRESULT Ready_AnimStateMachine();
+	void To_NextSkill();
 public:
 	_bool Is_AttackCoolReady() { return m_fAttackTimeAcc >= m_pMonData->tStat.fAttackInterval; }
 protected:
@@ -97,7 +115,6 @@ protected:
 	_bool m_bDetected = { false };
 	_bool m_bChase = { false };
 	_bool m_bWalk = { false };
-	_bool m_bAttack = { false };
 	_bool m_bStun = { false };
 
 	_float m_fAttackTimeAcc{ 5.f };
@@ -107,14 +124,15 @@ protected:
 	_float m_fHomeRange{ 6.f };
 	_bool m_bBackToHome = { false };
 	_float m_fChaseRange{ 2.f };
+
+	_int m_iRandomCondition = 0;
 	unordered_map<MON_STATE, vector<_uint>> m_mapAnimIdx;
 public:
 	static CMonster* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 
-	// CCharacter을(를) 통해 상속됨
-	void Use_Skill(CSkill* pSkill) override;
+
 };
 
 END

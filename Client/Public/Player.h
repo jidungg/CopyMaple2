@@ -210,23 +210,25 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 	virtual _bool Check_Collision(CGameObject* pOther) override;
+
+	virtual void On_StateChange(_uint iState) override;
+	virtual void On_SubStateChange(_uint iSubState) override;
+	virtual void On_AnimEnd(_uint iAnimIdx) override;
+	virtual void On_CastingEnd(CSkill* pSkill) override;
+
 public:
+	void On_FaceStateChange(_uint iState);
+
 	HRESULT Ready_Parts();
 	HRESULT Ready_AnimStateMachine();
 	HRESULT Ready_FaceStateMachine();
 	HRESULT Ready_Skill();
 
-	void On_StateChange(_uint iState);
-	void On_SubStateChange(_uint iSubState);
-	void On_FaceStateChange(_uint iState);
 
-	virtual void Use_Skill(CSkill* pSkill) override;
+	virtual _bool Use_Skill(CSkill* pSkill) override;
+
 	HRESULT Gain_Item(CItemObjet* pItem);
 	HRESULT Gain_Item(ITEM_DATA* pItem, _uint iCount = 1);
-	CSkill* Get_Skill(SKILL_ID eID) { return m_pSkill[(_uint)eID]; }
-	_uint Get_AnimationIndex(SKILL_ID eSkillID);
-	_bool Is_LastAttackAnimation(_uint iAnimIdx);
-	_bool Is_CastingAnimation(_uint iAnimIdx);
 
 	void Set_Battle(bool bBattle); 
 	HRESULT Equip(EQUIP_ITEM_DATA* pItem);
@@ -236,7 +238,7 @@ public:
 	void Set_BodyMeshActive(EQUIP_ITEM_TYPE eType, bool bActive);
 protected:
 
-	CSkill* m_pSkill[(_uint)SKILL_ID::LAST] = { nullptr, };
+
 	CModelObject* m_pEquipModels[(_uint)EQUIP_ITEM_TYPE::LAST] = { nullptr, };
 	CModelObject* m_pDecoModels[(_uint)DECO_TYPE::LAST] = { nullptr, };
 	CModelObject* m_pCustomizes[(_uint)CUSTOMIZE_PART::LAST] = { nullptr, };
@@ -247,7 +249,7 @@ protected:
 	CInventory* m_pInventory = { nullptr };
 
 	_float m_fPainTime = 0.f;
-	_bool m_bCasting{ false };
+
 
 	//ConditionVar
 	_int m_iRandomCondition { 0 };
@@ -262,10 +264,9 @@ protected:
 	_bool m_bWeapon { false };
 	_bool m_bBattle  { false };
 	_bool m_bPostDelayEnd  { false };
-	_bool m_bAttack { false };
+
 	_bool m_bInteraction{ false };
 	_float m_fPainTimeAcc;
-	_int m_iSkillID{ 0 };
 	_int m_iClimbDir{ (_int)DIR_U };
 	_vector m_vBodyWallNormal{ 0.f, 0.f, 0.f ,0.f};
 	_vector m_vBodyWallPoint{ 0.f, 0.f, 0.f ,0.f };

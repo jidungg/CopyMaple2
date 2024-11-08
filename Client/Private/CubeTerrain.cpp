@@ -280,11 +280,11 @@ _int CCubeTerrain::PosToIndex(const _fvector& Pos)
 	_int x = static_cast<_int>(roundf(XMVectorGetX( Pos)));
 	_int y = static_cast<_int>(floorf(XMVectorGetY(Pos))); // 0~1 = 0
 	_int z = static_cast<_int>(roundf(XMVectorGetZ(Pos)));
-	if (x < 0 || x >= m_vSize.x)
+	if (x < 0 || x >= (_int)m_vSize.x)
 		return -1;
-	if (y < 0 || y >= m_vSize.y)
+	if (y < 0 || y >= (_int)m_vSize.y)
 		return -1;
-	if (z < 0 || z >= m_vSize.z)
+	if (z < 0 || z >= (_int)m_vSize.z)
 		return -1;
 	return x + m_vSize.x * z + m_vSize.x * m_vSize.z * y;
 }
@@ -315,6 +315,7 @@ CTerrainObject* CCubeTerrain::Get_TerrainObject(_uint Index)
 {
 	if (Index < m_vecCells.size())
 		return m_vecCells[Index];
+	return nullptr;
 }
 
 _float CCubeTerrain::Get_FloorHeight(_vector Pos)
@@ -347,7 +348,7 @@ _float CCubeTerrain::Get_CelingHeight(_vector Pos)
 	_uint iXIdx = index % m_vSize.x;
 	_uint iZIdx = index / m_vSize.x % m_vSize.z;
 
-	for (_int yIdx = (_int)iYIdx+1; yIdx < m_vSize.y; yIdx++)
+	for (_int yIdx = (_int)iYIdx+1; yIdx < (_int)m_vSize.y; yIdx++)
 	{
 		_uint iTmpIndex = iXIdx + m_vSize.x * iZIdx + m_vSize.x * m_vSize.z * yIdx;
 		if (m_vecCells[iTmpIndex] != nullptr)

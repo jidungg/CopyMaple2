@@ -8,14 +8,14 @@
 #include "CubeTerrain.h"
 
 CBayar::CBayar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CCharacter(pDevice, pContext)
+	: CMonster(pDevice, pContext)
 {
 	m_vecCollider.resize(PART_LAST);
 	m_vecPartsMatrix.resize(PART_LAST);
 }
 
 CBayar::CBayar(const CBayar& Prototype)
-	: CCharacter(Prototype)
+	: CMonster(Prototype)
 {
 	m_vecCollider.resize(PART_LAST);
 	m_vecPartsMatrix.resize(PART_LAST);
@@ -28,13 +28,14 @@ HRESULT CBayar::Initialize_Prototype()
 
 HRESULT CBayar::Initialize(void* pArg)
 {
-	CCharacter::CHARACTER_DESC* pDesc = static_cast<CCharacter::CHARACTER_DESC*>(pArg);
+	CMonster::MONSTER_DESC* pDesc = static_cast<CMonster::MONSTER_DESC*>(pArg);
 	pDesc->fRotationPerSec = XMConvertToRadians(360.f);
 	pDesc->fSpeedPerSec = 5.f;
 	pDesc->fBodyCollisionRadius = 0.45;
 	pDesc->fBodyCollisionOffset = { 0.2f,0.05f, 0.f };
 	pDesc->iBodyColliderIndex = PART_ID::BODY;
 	pDesc->iColliderCount = PART_LAST;
+	pDesc->eMonID = MONSTER_ID::BAYAR;
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 	if (FAILED(Ready_Components(pDesc)))
@@ -57,6 +58,7 @@ HRESULT CBayar::Initialize(void* pArg)
 
 HRESULT CBayar::Ready_Components(CHARACTER_DESC* pDesc)
 {
+	m_vecCollider.resize(PART_LAST);
 	//DETECTION
 	CCollider_Sphere::SPHERE_COLLIDER_DESC tDesc = {};
 	tDesc.fRadius = m_fDetectionRange;
@@ -78,10 +80,10 @@ HRESULT CBayar::Ready_Components(CHARACTER_DESC* pDesc)
 		return E_FAIL;
 
 	//BODY
-	tDesc.fRadius = pDesc->fBodyCollisionRadius;
-	tDesc.vCenter = pDesc->fBodyCollisionOffset;
-	if (FAILED(Add_Component(LEVEL_LOADING, CCollider_Sphere::m_szProtoTag, TEXT("Com_Body_Collider"), (CComponent**)&m_vecCollider[PART_ID::BODY], &tDesc)))
-		return E_FAIL;
+	//tDesc.fRadius = pDesc->fBodyCollisionRadius;
+	//tDesc.vCenter = pDesc->fBodyCollisionOffset;
+	//if (FAILED(Add_Component(LEVEL_LOADING, CCollider_Sphere::m_szProtoTag, TEXT("Com_Body_Collider"), (CComponent**)&m_vecCollider[PART_ID::BODY], &tDesc)))
+	//	return E_FAIL;
 	//TODO : Hand
 	return S_OK;
 }
@@ -93,7 +95,7 @@ HRESULT CBayar::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Register_OnSubStateChangeCallBack(bind(&CBayar::On_SubStateChange, this, placeholders::_1));
 
 	m_pBody->Set_Animation((_uint)STATE::AS_REGEN);
-	CState* pState; CTransition* pTransition; Condition* pCondition;
+	CTransition* pTransition; Condition* pCondition;
 	m_pBody->Set_AnimationLoop((_uint)STATE::AS_WALK_A, true);
 	m_pBody->Set_AnimationLoop((_uint)STATE::AS_RUN, true);
 	m_pBody->Set_AnimationLoop((_uint)STATE::AS_IDLE, true);
@@ -125,7 +127,7 @@ HRESULT CBayar::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Add_TriggerConditionVariable(ANIM_CONDITION::AC_ATTACKTRIGGER);
 	m_pAnimStateMachine->Add_ConditionVariable(ANIM_CONDITION::AC_ISATTACK, &m_bAttack);
 	m_pAnimStateMachine->Add_ConditionVariable(ANIM_CONDITION::AC_DETECTED, &m_bDetected);
-	m_pAnimStateMachine->Add_ConditionVariable(ANIM_CONDITION::AC_ATTACKIDX, &m_iCurAttack);
+	m_pAnimStateMachine->Add_ConditionVariable(ANIM_CONDITION::AC_ATTACKIDX, &m_iCurrentSkillID);
 	m_pAnimStateMachine->Add_ConditionVariable(ANIM_CONDITION::AC_MOVE, &m_bMove);
 	m_pAnimStateMachine->Add_ConditionVariable(ANIM_CONDITION::AC_WALK, &m_bWalk);
 
@@ -357,20 +359,8 @@ _bool CBayar::Check_Collision(CGameObject* pOther)
 void CBayar::Late_Update(_float fTimeDelta)
 {
 
-	if (m_pBody->Is_AnimEnd())
-	{
-		if (Is_LastAttackAnimation(m_pBody->Get_AnimIndex()))
-		{
-			if (++m_iCurAttack >= m_iAttackCount + AS_ATTACK_1_A)
-				m_iCurAttack = AS_ATTACK_1_A;
-			m_bAttack = false;
-
-		}
-		m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_ANIMEND);
-	}
-
 	if (Is_AttackCoolReady())
-		m_fAttackTimeAcc = m_fAttackInterval;
+		m_fAttackTimeAcc = m_tStat.fAttackInterval;
 	else
 		m_fAttackTimeAcc += fTimeDelta;
 
@@ -390,6 +380,29 @@ void CBayar::On_SubStateChange(_uint iSubState)
 	m_pBody->Switch_Animation(iSubState);
 
 }
+void CBayar::On_AnimEnd(_uint iAnimIdx)
+{
+	m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_ANIMEND);
+	if (m_bAttack)
+	{
+		_int iNextAnim = m_mapSkill[(SKILL_ID)m_iCurrentSkillID]->Get_NextAnimation(iAnimIdx);
+		if (iNextAnim == -1)//스킬 종료
+		{
+			m_bAttack = false;
+			To_NextSkill();
+		}
+	}
+	//if (Is_LastAttackAnimation(iAnimIdx))
+	//{
+	//	if (++m_eCurrentSkillID >= m_eCurrentSkillID + AS_ATTACK_1_A)
+	//		m_iCurAttack = AS_ATTACK_1_A;
+	//	m_bAttack = false;
+
+	//}
+
+}
+
+
 HRESULT CBayar::Render()
 {
 	for (auto& child : m_pChilds)
@@ -434,46 +447,13 @@ HRESULT CBayar::Ready_Skill()
 }
 
 
-
-
-void CBayar::Use_Skill(CSkill* pSkill)
-{
-}
-
-_bool CBayar::Is_LastAttackAnimation(_uint iAnimIdx)
-{
-	return (
-		AS_ATTACK_2_A == iAnimIdx
-		|| AS_ATTACK_2_B == iAnimIdx
-		|| AS_ATTACK_2_C == iAnimIdx
-		|| AS_ATTACK_2_D == iAnimIdx
-		|| AS_ATTACK_3_E == iAnimIdx
-		|| AS_ATTACK_1_F == iAnimIdx
-		|| AS_ATTACK_4_G == iAnimIdx
-		|| AS_ATTACK_3_H == iAnimIdx);
-}
-
-_bool CBayar::Is_FirstAttackAnimation(_uint iAnimIdx)
-{
-	return (
-		AS_ATTACK_1_A == iAnimIdx
-		|| AS_ATTACK_1_B == iAnimIdx
-		|| AS_ATTACK_1_C == iAnimIdx
-		|| AS_ATTACK_1_D == iAnimIdx
-		|| AS_ATTACK_1_E == iAnimIdx
-		|| AS_ATTACK_1_F == iAnimIdx
-		|| AS_ATTACK_1_G == iAnimIdx
-		|| AS_ATTACK_1_H == iAnimIdx);
-}
-
-
 CBayar* CBayar::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CBayar* pInstance = new CBayar(pDevice, pContext);
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
+		MSG_BOX("Failed to Created : CBayar");
 		Safe_Release(pInstance);
-		return nullptr;
 	}
 	return pInstance;
 }
@@ -483,8 +463,8 @@ CGameObject* CBayar::Clone(void* pArg)
 	CBayar* pInstance = new CBayar(*this);
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
+		MSG_BOX("Failed to Cloned : CBayar");
 		Safe_Release(pInstance);
-		return nullptr;
 	}
 	return pInstance;
 }
@@ -492,8 +472,5 @@ CGameObject* CBayar::Clone(void* pArg)
 void CBayar::Free()
 {
 	__super::Free();
-	for (auto& pCollider : m_vecCollider)
-	{
-		Safe_Release(pCollider);
-	}
 }
+

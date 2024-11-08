@@ -23,12 +23,14 @@ public:
 	float Get_AnimTime() { return m_fDuration; }
 	void Get_Frame(_float fTrackPos, map<_uint, KEYFRAME>* pOutKeyFrames) const;
 	void Get_CurrentFrame(map<_uint, KEYFRAME>* pOutKeyFrames) const;
+	_float Get_Progress() ;
 	bool Is_AnimChangeable();
 
 	void Set_Loop(bool bLoop) { m_bLoop = bLoop; }
 	void Set_PostDealyPercent(_float fPercentage) { m_fPostDelayPercentage = fPercentage; }
 	void Set_AnimTransitionTime(_float fTime) { m_fAnimTransitionTime = fTime; }
 	void Ready_AnimTransition();
+
 private:
 	_char					m_szName[MAX_PATH] = {};
 	_uint					m_iNumChannels = {};
@@ -45,6 +47,7 @@ private:
 	
 	//Channel마다 현재 KeyFrameIndex를 저장하는 배열
 	vector<_uint>			m_CurrentKeyFrameIndices;
+
 public:
 	static CAnimation* Create(ifstream& inFile, const class CModel* pModel);
 	virtual CAnimation* Clone();

@@ -151,6 +151,7 @@ namespace Engine
 		TRIGGER,
 		LAST
 	};
+
 }
 
 #include <string>

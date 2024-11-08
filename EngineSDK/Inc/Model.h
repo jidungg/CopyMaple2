@@ -28,8 +28,7 @@ public:
 	HRESULT Bind_Material(class CShader* pShader, const _char* pConstantName, _uint iMeshIndex, TEXTURE_TYPE eType, _uint iTextureIndex = 0);
 	HRESULT Bind_BoneMatrices(class CShader* pShader, const _char* pConstantName, _uint iMeshIndex);
 
-	//애니메이션 종료되면 true 반환
-	bool Play_Animation(_float fTimeDelta);
+	_bool Play_Animation(_float fTimeDelta);
 
 	_uint Get_NumMeshes() const {return m_iNumMeshes;}
 	CMesh* Get_Mesh(_uint iMeshIndex) const { return m_Meshes[iMeshIndex]; }
@@ -37,6 +36,7 @@ public:
 	_uint Get_BoneIndex(const _char* pBoneName) const ;
 	float Get_AnimTime();
 	_uint Get_AnimIndex();
+	_float Get_AnimationProgress(_uint iAnimIdx);
 	TYPE Get_Type() { return m_eModelType; }
 	const _float4x4* Get_BoneMatrix(const _char* pBoneName) const;
 	class CBone* Get_Bone(const _char* pBoneName) const;
@@ -47,7 +47,6 @@ public:
 	void Set_Animation(_uint iIdx);
 	void Set_AnimPostDelayPercent(_uint iIdx, _float fPercent);
 	void Set_MeshActive(_uint iIdx, _bool bIsOn);
-
 	void Switch_Animation(_uint iIdx);
 
 protected:

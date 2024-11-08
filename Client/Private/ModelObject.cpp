@@ -40,7 +40,13 @@ HRESULT CModelObject::Initialize(void* pArg)
 void CModelObject::Update(_float fTimeDelta)
 {
     if (m_eModelType == CModel::TYPE::TYPE_ANIM)
-        m_bAnimationEnd = m_pModelCom->Play_Animation(fTimeDelta);
+    {
+        if (m_pModelCom->Play_Animation(fTimeDelta))
+        {
+            for (auto& callback : m_listAnimEndCallBack)
+                callback(m_pModelCom->Get_AnimIndex());
+        }
+    }
 
 	__super::Update(fTimeDelta);
 }
@@ -101,6 +107,12 @@ HRESULT CModelObject::Render()
     return S_OK;
 }
 
+
+_float CModelObject::Get_AnimationProgress(_uint iAnimIdx)
+{
+    return m_pModelCom->Get_AnimationProgress(iAnimIdx);
+}
+
 const _float4x4* CModelObject::Get_BoneMatrix(const _char* pBoneName) const
 {
     return m_pModelCom->Get_BoneMatrix(pBoneName);
@@ -130,6 +142,8 @@ void CModelObject::Switch_Animation(_uint iIdx)
 {
 	m_pModelCom->Switch_Animation(iIdx);
 }
+
+
 
 HRESULT CModelObject::Replace_Model(MODELOBJ_DESC* pDesc)
 {

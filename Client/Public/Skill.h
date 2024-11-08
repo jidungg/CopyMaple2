@@ -1,12 +1,14 @@
 #pragma once
 #include "Base.h"
 #include "SlotItem.h"
-
+BEGIN(Engine)
+class CAnimation;
+END
 BEGIN(Client)
-typedef struct SkillDesc
+
+typedef struct SkillData
 {
-	SkillDesc() = default;
-	SkillDesc(json& jSkillData);
+	SkillData() = default;
 	SKILL_ID eID;
 	SKILL_TYPE eCastingType;
 	_char szName[MAX_PATH] = ("");
@@ -20,7 +22,14 @@ typedef struct SkillDesc
 	vector<float> vecData;
 	vector<float> vecLevelUpData;
 	map<SKILL_ID, _uint> mapPreceding;
-}SKILL_DESC;
+	vector <_uint> vecAnimation;
+}SKILL_DATA;
+//use가 호출되면 vecAnimation 에 담긴 첫 번째 애니메이션을 Player에게 전달한다.
+// Player는 이 애니메이션을 실행하고 애니메이션 종료 시 마다 Skill에게 알림을 줌.
+// Skill은 알림받은 애니메이션의 다음 애니메이션을 반환한다.
+// 다음 애니메이션이 없으면 -1을 반환한다.
+// Player는 -1을 받으면 스킬 종료
+//아니면 다음 애니메이션 실행.
 class CCharacter;
 class CSkill :
 	public CBase, public IQuickItem
@@ -29,20 +38,28 @@ private:
 	CSkill();
 	virtual ~CSkill() = default;
 public:
-	HRESULT Initialize(SKILL_DESC* pSkillData, CCharacter* pUser);
-	void Update(_float fDeltaTime );
+	HRESULT Initialize(SKILL_DATA* pSkillData, CCharacter* pUser);
+	virtual void Update(_float fDeltaTime );
+	void Update_CastingTime(_float fDeltaTime );
 
 	void Use();
 
-	SKILL_DESC* Get_SkillDesc() { return m_pSkillDesc; }
+	SKILL_DATA* Get_SkillDesc() { return m_pSkillDesc; }
+	_int Get_NextAnimation(_uint iAnimIdx);
+	vector<_uint>& Get_AnimIdcies();
+	_bool Is_CoolReady();
+	_bool Is_CastingComplete();
+private:
+	void Update_CoolTime(_float fDeltaTime );
 private:
 
-	SKILL_DESC* m_pSkillDesc = { nullptr };
+	SKILL_DATA* m_pSkillDesc = { nullptr };
 	CCharacter* m_pUser = {nullptr};
-	_float m_fCurrentCasting = { 0.f };
+	_float m_fCastingTimeAcc = { 0.f };
 	_float m_fCoolTimeAcc = { 0.f };
+
 public:
-	static CSkill* Create(SKILL_DESC* pSkillData, CCharacter* pUser);
+	static CSkill* Create(SKILL_DATA* pSkillData, CCharacter* pUser);
 	virtual void Free() override;
 
 	// IQuickItem을(를) 통해 상속됨

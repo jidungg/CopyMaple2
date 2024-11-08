@@ -1,0 +1,40 @@
+{
+    "character": 
+        {
+            "Id": "PLAYER",
+            "Name": "플레이어",
+            "Desc": "플레이어",
+            "Model": "Female_Wizard.model",
+            "DetectionRange": 4,
+            "ChaseRange": 3,
+            "Status": {
+                "HP": 10,
+                "SP": 10,
+                "EP": 1,
+                "ATK": 1,
+                "DEF": 1,
+                "EXP": 1,
+                "Gold": 1,
+                "JumpPower": 4.5,
+                "RunSpeed": 1.5,
+                "WalkSpeed": 0.5,
+                "AttackInterval": 3,
+                "AttackRange": 1
+            },
+            "Skill": [
+                "BASIC_ATTACK",
+                "TELEPORT",
+                "MAGIC_CLAW",
+                "FLAME_WAVE",
+                "FIRE_TORNADO",
+                "KINDLING",
+                "KINDLING2",
+                "BBQ_PARTY",
+                "FAKE_METEOR",
+                "WILD_FIRE",
+                "WILD_FIRE2"
+            ]
+
+        }
+    
+}

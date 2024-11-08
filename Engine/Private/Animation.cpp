@@ -57,7 +57,7 @@ bool CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones
 
 	if (m_fCurrentTrackPosition >= m_fDuration)
 	{
-		if (m_bLoop)
+		if (true == m_bLoop)
 			m_fCurrentTrackPosition = 0.f;
 		else
 			return true;
@@ -110,6 +110,11 @@ void CAnimation::Get_CurrentFrame(map<_uint, KEYFRAME>* pOutKeyFrames) const
 {
 	for (auto& channel : m_vecChannel)
 		channel->Get_Frame(m_fCurrentTrackPosition, pOutKeyFrames);
+}
+
+_float CAnimation::Get_Progress()
+{
+	return m_fCurrentTrackPosition / m_fDuration;
 }
 
 bool CAnimation::Is_AnimChangeable()

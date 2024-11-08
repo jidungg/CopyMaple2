@@ -1,5 +1,5 @@
 #pragma once
-#include "Character.h"
+#include "Monster.h"
 
 BEGIN(Engine)
 class CCollider_Sphere;
@@ -13,14 +13,14 @@ class CInventory;
 class CItemObjet;
 
 class CBayar :
-    public CCharacter
+    public CMonster
 {
 	enum PART_ID
 	{
 		BODY,
+		DETECTION,
 		LEFT_ARM,
 		RIGHT_ARM,
-		DETECTION,
 		PART_LAST
 	};
 
@@ -109,39 +109,22 @@ public:
 public:
 	HRESULT Ready_Components(CHARACTER_DESC* pDesc);
 	HRESULT Ready_Parts();
-	HRESULT Ready_AnimStateMachine();
+	virtual HRESULT Ready_AnimStateMachine() override;
 	HRESULT Ready_FaceStateMachine();
 	HRESULT Ready_Skill();
-	void On_StateChange(_uint iState);
-	void On_SubStateChange(_uint iSubState);
-
-	virtual void Use_Skill(CSkill* pSkill) override;
-
-	_bool Is_LastAttackAnimation(_uint iAnimIdx);
-	_bool Is_FirstAttackAnimation(_uint iAnimIdx);
-	_bool Is_AttackCoolReady() { return m_fAttackTimeAcc >= m_fAttackInterval; }
+	virtual void On_StateChange(_uint iState) override;
+	virtual void On_SubStateChange(_uint iSubState) override;
+	virtual void On_AnimEnd(_uint iAnimIdx) override;
 private:
 
 	vector<const XMFLOAT4X4*> m_vecPartsMatrix;
 
-	_float3 m_vHomePos = { 10.f,1.f,10.f };
-	_int m_iCurAttack = { AS_ATTACK_1_A };
-	_int m_iAttackCount = { 8 };
-	_float m_fDetectionRange{ 3.f };
-	_float m_fAttackRange{ 2.f };
-	_float m_fChaseRange{ 3.5f };
-	_float m_fAttackInterval{7.f };
-	_float m_fAttackTimeAcc{ 5.f };
-	_float m_fTargetDistance = { FLT_MAX };
-	//ConditionVariable
-	_bool m_bDetected = { false };
-	_bool m_bChase = { false };
-	_bool m_bWalk = { false };
-	_bool m_bAttack = { false };
+
 public:
 	static CBayar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
+
 };
 
 END

@@ -114,7 +114,7 @@ HRESULT CModel::Ready_Bones(ifstream& inFile, _uint iParentBoneIndex)
 	_uint iNumChildren = 0;
 	inFile.read(reinterpret_cast<char*>(&iNumChildren), sizeof(_uint));
 	//cout << iNumChildren << endl;
-	for (size_t i = 0; i < iNumChildren; ++i)
+	for (_uint i = 0; i < iNumChildren; ++i)
 	{
 		Ready_Bones(inFile, iParentBoneIndex);
 	}
@@ -126,7 +126,7 @@ HRESULT CModel::Ready_Meshes(ifstream& inFile)
 	//inFile.read(reinterpret_cast<char*>(&m_iNumMeshes), sizeof(_uint));
 	inFile.read(reinterpret_cast<char*>(&m_iNumMeshes), sizeof(_uint));
 	//cout  << m_iNumMeshes << endl;
-	for (size_t i = 0; i < m_iNumMeshes; i++)
+	for (_uint i = 0; i < m_iNumMeshes; i++)
 	{
 		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_eModelType,this, inFile, XMLoadFloat4x4(&m_PreTransformMatrix));
 		if (nullptr == pMesh)
@@ -147,7 +147,7 @@ HRESULT CModel::Ready_Materials(ifstream& inFile, const _char* pModelFilePath)
 	_char		szDirectory[MAX_PATH] = "";
 	_splitpath_s(pModelFilePath, szDrive, MAX_PATH, szDirectory, MAX_PATH, nullptr, 0, nullptr, 0);
 	strcat_s(szDrive, szDirectory);
-	for (size_t i = 0; i < m_iNumMaterials; i++)
+	for (_uint i = 0; i < m_iNumMaterials; i++)
 	{
 		CMaterial* pMaterial = CMaterial::Create(m_pDevice, m_pContext, szDrive, inFile);
 		m_Materials[i] = pMaterial;
@@ -158,8 +158,8 @@ HRESULT CModel::Ready_Materials(ifstream& inFile, const _char* pModelFilePath)
 HRESULT CModel::Ready_Animations(ifstream& inFile)
 {
 	inFile.read(reinterpret_cast<char*>(&m_iNumAnimations), sizeof(_uint));
-
-	for (size_t i = 0; i < m_iNumAnimations; i++)
+	m_Animations.reserve(m_iNumAnimations);
+	for (_uint i = 0; i < m_iNumAnimations; i++)
 	{
 		CAnimation* pAnimation = CAnimation::Create(inFile, this);
 		if (nullptr == pAnimation)
@@ -208,24 +208,28 @@ HRESULT CModel::Bind_BoneMatrices(CShader* pShader, const _char* pConstantName, 
 	return m_Meshes[iMeshIndex]->Bind_BoneMatrices(pShader, pConstantName, m_Bones);
 }
 
-bool CModel::Play_Animation(_float fTimeDelta)
+_bool CModel::Play_Animation(_float fTimeDelta)
 {
 	if (m_eModelType == TYPE::TYPE_MIMIC)
 		return false;
 
 	//뼈들의 변환행렬을 갱신
-	bool bAnimEnd = false;
+	_bool bReturn= false;
 	if(m_iCurrentAnimIndex == m_iPrevAnimIndex)
-		bAnimEnd = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, fTimeDelta);
+	{
+		bReturn = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, fTimeDelta);
+	}
 	else
-		if(m_Animations[m_iCurrentAnimIndex]->Update_AnimTransition(m_Bones, fTimeDelta, m_mapAnimTransLeftFrame))
-			m_iPrevAnimIndex = m_iCurrentAnimIndex ;
+	{
+		if (m_Animations[m_iCurrentAnimIndex]->Update_AnimTransition(m_Bones, fTimeDelta, m_mapAnimTransLeftFrame))
+			m_iPrevAnimIndex = m_iCurrentAnimIndex;
+	}
 
 	//뼈들의 합성변환행렬을 갱신
 	for (auto& pBone : m_Bones)
 		pBone->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
 
-	return bAnimEnd;
+	return bReturn;
 }
 
 _uint CModel::Get_MeshIndex(const _char* szName) const
@@ -279,6 +283,13 @@ _uint CModel::Get_AnimIndex()
 {
 	return m_iCurrentAnimIndex;
 }
+
+_float CModel::Get_AnimationProgress(_uint iAnimIdx)
+{
+	return m_Animations[iAnimIdx]->Get_Progress();
+}
+
+
 
 const _float4x4* CModel::Get_BoneMatrix(const _char* pBoneName) const
 {
@@ -342,6 +353,7 @@ void CModel::Set_MeshActive(_uint iIdx, _bool bIsOn)
 {
 	m_Meshes[iIdx]->Set_Active(bIsOn);
 }
+
 
 void CModel::Switch_Animation(_uint iIdx)
 {

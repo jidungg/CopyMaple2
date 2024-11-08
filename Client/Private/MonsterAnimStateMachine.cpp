@@ -42,7 +42,7 @@ HRESULT CMonsterAnimStateMachine::Initialize(void* pArg)
 	Add_ConditionVariable(MON_ANIM_CONDITION::AC_HP, pDesc->iHp);
 	Add_ConditionVariable(MON_ANIM_CONDITION::AC_RANDOM, &m_iRandomCondition);
 
-	CState* pState; CTransition* pTransition; Condition* pCondition;
+	CTransition* pTransition; Condition* pCondition;
 
 	//MAIN TRAINSITINO
 	//BORN_MAIN

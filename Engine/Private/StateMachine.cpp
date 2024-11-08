@@ -145,7 +145,7 @@ void CStateMachine::Set_CurrentState(_uint iState)
 {
 	m_iCurrentState = iState;
 	m_iCurrentSubState = m_iCurrentState;
-	m_mapStates[m_iCurrentState]->Check_SubTransition(&m_iCurrentSubState);
+	Late_Update(0);
 }
 
 

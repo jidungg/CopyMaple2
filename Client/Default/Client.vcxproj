@@ -178,7 +178,6 @@
     <ClInclude Include="..\Public\CreateObjEvent.h" />
     <ClInclude Include="..\Public\DeadObjEvent.h" />
     <ClInclude Include="..\Public\Monster.h" />
-    <ClInclude Include="..\Public\MonsterAnimStateMachine.h" />
     <ClInclude Include="..\Public\MonsterDataBase.h" />
     <ClInclude Include="..\Public\PlayerEquipSlot.h" />
     <ClInclude Include="..\Public\PlayerInfo.h" />
@@ -243,7 +242,6 @@
     <ClCompile Include="..\Private\CreateObjEvent.cpp" />
     <ClCompile Include="..\Private\DeadObjEvent.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
-    <ClCompile Include="..\Private\MonsterAnimStateMachine.cpp" />
     <ClCompile Include="..\Private\MonsterDataBase.cpp" />
     <ClCompile Include="..\Private\PlayerEquipSlot.cpp" />
     <ClCompile Include="..\Private\PlayerInfo.cpp" />

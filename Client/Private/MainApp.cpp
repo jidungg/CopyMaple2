@@ -92,7 +92,7 @@ void CMainApp::Free()
 	Safe_Release(m_pContext);
 	CItemDataBase::DestroyInstance();
 	CMonsterDataBase::DestroyInstance();
-	CSkillManager::DestroyInstance();
+	CSkillDataBase::DestroyInstance();
 	CInventory::DestroyInstance();
 	CPlayerInfo::DestroyInstance();
 	CUIBundle::DestroyInstance();

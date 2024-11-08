@@ -5,6 +5,7 @@
 #include "DeadObjEvent.h"
 #include "CubeTerrain.h"
 #include "Collider_Sphere.h"
+#include "Skill.h"
 CCharacter::CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPawn(pDevice, pContext)
 {
@@ -15,6 +16,7 @@ CCharacter::CCharacter(const CCharacter& Prototype)
 	, m_pAnimStateMachine{ Prototype.m_pAnimStateMachine }
 	, m_vMoveDirectionXZ{ Prototype.m_vMoveDirectionXZ }
 	, m_tStat{ Prototype.m_tStat }
+	, m_mapSkill{ Prototype.m_mapSkill }
 {
 }
 
@@ -29,6 +31,10 @@ HRESULT CCharacter::Initialize(void* pArg)
 	tDesc.fRadius = pDesc->fBodyCollisionRadius;
 	m_vecCollider[m_iBodyColliderIndex] = static_cast<CCollider_Sphere*>(m_pGameInstance->Clone_Proto_Component_Stock(CCollider_Sphere::m_szProtoTag, &tDesc));
 	Add_Component(m_vecCollider[m_iBodyColliderIndex], L"Com_Collider_Body");
+
+	//AnimStateMachine
+	m_pAnimStateMachine = static_cast<CStateMachine*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("Prototype_GameObject_StateMachine")));
+	Add_Component(m_pAnimStateMachine, TEXT("Com_StateMachine"));
 
 	return S_OK;
 }
@@ -46,6 +52,12 @@ void CCharacter::Update(_float fTimeDelta)
 	 m_vMoveDirectionXZ = XMVector4Normalize(m_vMoveDirectionXZ);
 	 m_bMove = false == XMVector4Equal(m_vMoveDirectionXZ, XMVectorSet(0, 0, 0, 0));
 	 m_bRotate = false == XMVector4Equal(m_vLookDirectionXZ, XMVectorSet(0, 0, 0, 0));
+
+	 for (auto& pSkill : m_mapSkill)
+		 pSkill.second->Update(fTimeDelta);
+	 if(m_bAttack)
+		Get_CurrentSkill()->Update_CastingTime(fTimeDelta);
+
 	__super::Update(fTimeDelta);
 }
 
@@ -82,6 +94,11 @@ _bool CCharacter::Check_Collision(CGameObject* pOther)
 	return false;
 }
 
+_bool CCharacter::Use_Skill(CSkill* pSkill)
+{
+	return true;
+}
+
 _float CCharacter::Get_BodyCollisionRadius()
 {
 	return Get_Collider(m_iBodyColliderIndex)->Get_Desc()->Radius;
@@ -92,11 +109,21 @@ _float3 CCharacter::Get_BodyCollisionOffset()
 	return  Get_Collider(m_iBodyColliderIndex)->Get_Offset();
 }
 
+_uint CCharacter::Get_CurrentAnimIdx()
+{
+	return m_pBody->Get_AnimIndex();
+}
+
 CCollider_Sphere* CCharacter::Get_Collider(_uint iColliderIndex)
 {
 	return static_cast<CCollider_Sphere*>(m_vecCollider[iColliderIndex]);
 	
 }
+_float CCharacter::Get_AnimationProgress(_uint iAnimIdx)
+{
+	return m_pBody->Get_AnimationProgress(iAnimIdx);
+}
+
 void CCharacter::Late_Update(_float fTimeDelta)
 {
 	m_vNextPos = XMVectorSetY(m_vNextPos, XMVectorGetY(m_vNextPos) + m_fUpForce * fTimeDelta);
@@ -130,6 +157,12 @@ void CCharacter::Free()
 {
 	__super::Free();
 	Safe_Release(m_pAnimStateMachine);
-
+	for (auto& pCollider : m_vecCollider)
+	{
+		Safe_Release(pCollider);
+	}
+	m_vecCollider.clear();
+		for (auto& skill : m_mapSkill)
+		Safe_Release(skill.second);
 }
 

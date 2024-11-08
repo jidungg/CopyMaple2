@@ -1,16 +1,16 @@
 #include "stdafx.h"
 #include "SkillManager.h"
 
-IMPLEMENT_SINGLETON(CSkillManager)
-CSkillManager::CSkillManager()
+IMPLEMENT_SINGLETON(CSkillDataBase)
+CSkillDataBase::CSkillDataBase()
 {
 
 }
 
-void CSkillManager::Insert_Data(json& jSkillData)
+void CSkillDataBase::Insert_Data(json& jSkillData)
 {
 	SKILL_ID iID = jSkillData["id"];
-	SKILL_DESC& desc =  m_SkillData[(_uint)iID];
+	SKILL_DATA& desc =  m_SkillData[(_uint)iID];
 
 	desc.eID = iID;
 	desc.eCastingType = jSkillData["type"];
@@ -39,11 +39,13 @@ void CSkillManager::Insert_Data(json& jSkillData)
 		_uint iLev = data[1];
 		desc.mapPreceding.insert({ eID , iLev });
 	}
-
-	
+	for (auto& data : jSkillData["animation"])
+	{
+		desc.vecAnimation.push_back(data);
+	}
 }
 
-void CSkillManager::Free()
+void CSkillDataBase::Free()
 {
 	__super::Free();
 }

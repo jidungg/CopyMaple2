@@ -22,7 +22,7 @@ CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	for (_uint i = 0; i < (_uint)SKILL_ID::LAST; i++)
 	{
-		m_pSkill[i] = nullptr;
+		m_mapSkill[(SKILL_ID)i] = nullptr;
 	}
 	for (auto& pEquip : m_pEquipModels)
 	{
@@ -40,17 +40,14 @@ CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 }
 
 CPlayer::CPlayer(const CPlayer& Prototype)
-	: CCharacter(Prototype)
+	: CCharacter(Prototype)\
+
 {
 
 	Safe_AddRef(m_pAnimStateMachine);
 	m_pBody = Prototype.m_pBody;
 	Safe_AddRef(m_pBody);
-	for (_uint i = 0; i < (_uint)SKILL_ID::LAST; i++)
-	{
-		m_pSkill[i] = Prototype.m_pSkill[i];
-		Safe_AddRef(m_pSkill[i]);
-	}
+
 	//for (auto& pEquip : m_pEquipModels)
 	//{
 	//	pEquip = Prototype.m_pEquipModels[(&pEquip - &m_pEquipModels[0])];
@@ -142,14 +139,14 @@ HRESULT CPlayer::Initialize(void* pArg)
 	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_SHOES);
 	Gain_Item(pItemDesc);
 
-	UIBUNDLE->Set_QuickItem(KEY::Q, m_pSkill[(_uint)SKILL_ID::TELEPORT]);
-	UIBUNDLE->Set_QuickItem(KEY::W, m_pSkill[(_uint)SKILL_ID::BBQ_PARTY]);
-	UIBUNDLE->Set_QuickItem(KEY::E, m_pSkill[(_uint)SKILL_ID::FAKE_METEOR]);
-	UIBUNDLE->Set_QuickItem(KEY::R, m_pSkill[(_uint)SKILL_ID::WILD_FIRE]);
-	UIBUNDLE->Set_QuickItem(KEY::A, m_pSkill[(_uint)SKILL_ID::MAGIC_CLAW]);
-	UIBUNDLE->Set_QuickItem(KEY::S, m_pSkill[(_uint)SKILL_ID::KINDLING]);
-	UIBUNDLE->Set_QuickItem(KEY::D, m_pSkill[(_uint)SKILL_ID::FLAME_WAVE]);
-	UIBUNDLE->Set_QuickItem(KEY::F, m_pSkill[(_uint)SKILL_ID::FIRE_TORNADO]);
+	UIBUNDLE->Set_QuickItem(KEY::Q, m_mapSkill[SKILL_ID::TELEPORT]);
+	UIBUNDLE->Set_QuickItem(KEY::W, m_mapSkill[SKILL_ID::BBQ_PARTY]);
+	UIBUNDLE->Set_QuickItem(KEY::E, m_mapSkill[SKILL_ID::FAKE_METEOR]);
+	UIBUNDLE->Set_QuickItem(KEY::R, m_mapSkill[SKILL_ID::WILD_FIRE]);
+	UIBUNDLE->Set_QuickItem(KEY::A, m_mapSkill[SKILL_ID::MAGIC_CLAW]);
+	UIBUNDLE->Set_QuickItem(KEY::S, m_mapSkill[SKILL_ID::KINDLING]);
+	UIBUNDLE->Set_QuickItem(KEY::D, m_mapSkill[SKILL_ID::FLAME_WAVE]);
+	UIBUNDLE->Set_QuickItem(KEY::F, m_mapSkill[SKILL_ID::FIRE_TORNADO]);
 	return S_OK;
 }
 
@@ -194,14 +191,16 @@ HRESULT CPlayer::Ready_Parts()
 
 HRESULT CPlayer::Ready_AnimStateMachine()
 {
-
-	//AnimStateMachine
-	m_pAnimStateMachine = static_cast<CStateMachine*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("Prototype_GameObject_StateMachine")));
-	Add_Component(m_pAnimStateMachine, TEXT("Com_StateMachine"));
+	////AnimStateMachine
+	//m_pAnimStateMachine = static_cast<CStateMachine*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("Prototype_GameObject_StateMachine")));
+	//Add_Component(m_pAnimStateMachine, TEXT("Com_StateMachine"));
+	//m_pAnimStateMachine->Register_OnStateChangeCallBack(bind(&CPlayer::On_StateChange, this, placeholders::_1));
+	//m_pAnimStateMachine->Register_OnSubStateChangeCallBack(bind(&CPlayer::On_SubStateChange, this, placeholders::_1));
 	m_pAnimStateMachine->Register_OnStateChangeCallBack(bind(&CPlayer::On_StateChange, this, placeholders::_1));
 	m_pAnimStateMachine->Register_OnSubStateChangeCallBack(bind(&CPlayer::On_SubStateChange, this, placeholders::_1));
+	m_pBody->Register_OnAnimEndCallBack(bind(&CPlayer::On_AnimEnd, this, placeholders::_1));
 
-	CState* pState; CTransition* pTransition; Condition* pCondition;
+	CTransition* pTransition; Condition* pCondition;
 	m_pBody->Set_AnimationLoop(ANIM_STATE::AS_IDLE, true);
 	m_pBody->Set_AnimationLoop(ANIM_STATE::AS_ATTACK_IDLE, true);
 	m_pBody->Set_AnimationLoop(ANIM_STATE::AS_RUN, true);
@@ -241,7 +240,7 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_WEAPON), &m_bWeapon);
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_BATTLE), &m_bBattle);
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_POSTDELAY_END), &m_bPostDelayEnd);
-	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_SKILL_ID), &m_iSkillID);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_SKILL_ID), &m_iCurrentSkillID);
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_ATTACK), &m_bAttack);
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_CLIMB), &m_bClimb);
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_CLIMB_DIR), &m_iClimbDir);
@@ -439,7 +438,7 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_STAFF_JUMP_DOWN_B, ANIM_STATE::AS_STAFF_JUMP_LAND);
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
-	//ATTACK
+	//ATTACK_SUB
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_ATTACK, ANIM_STATE::AS_ATTACK_01);
 
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_ATTACK, ANIM_STATE::AS_JUMP_ATTACK);
@@ -540,10 +539,10 @@ HRESULT CPlayer::Ready_FaceStateMachine()
 
 HRESULT CPlayer::Ready_Skill()
 {
-	CSkillManager* pSkillManager = SKILLMAN;
+	CSkillDataBase* pSkillManager = SKILLDB;
 	for (_uint i = 0; i < (_uint)SKILL_ID::LAST; i++)
 	{
-		m_pSkill[i] =  CSkill::Create(pSkillManager->Get_SkillData((SKILL_ID)i),this);
+		m_mapSkill[(SKILL_ID)i] =  CSkill::Create(pSkillManager->Get_SkillData((SKILL_ID)i),this);
 
 	}
 	return S_OK;
@@ -619,7 +618,7 @@ void CPlayer::Receive_KeyInput(_float fTimeDelta)
 		if (m_pGameInstance->GetKeyState(KEY::X) == KEY_STATE::DOWN)
 		{
 			m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_ATTACK_TRIGGER);
-			m_iSkillID = (_int)SKILL_ID::BASIC_ATTACK;
+			m_iCurrentSkillID =(_int) SKILL_ID::BASIC_ATTACK;
 			m_bAttack = true;
 			Set_Battle(true);
 		}
@@ -651,18 +650,9 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 void CPlayer::Update(_float fTimeDelta)
 {
 
-
 	__super::Update(fTimeDelta);
 }
 
-void CPlayer::On_StateChange(_uint iState)
-{
-	if (iState == ANIM_STATE::AS_IDLE)
-	{
-		m_fIdleTime = 0.f;
-	}
-
-}
 
 
 _bool CPlayer::Check_Collision(CGameObject* pOther)
@@ -724,24 +714,7 @@ void CPlayer::Late_Update(_float fTimeDelta)
 			Set_Battle(false);
 		}
 	}
-	m_bCasting = Is_CastingAnimation(m_pBody->Get_AnimIndex());
-	if (m_pBody->Is_AnimEnd())
-	{
-		_uint iAnimIdx = m_pBody->Get_AnimIndex();
-		if (iAnimIdx == ANIM_STATE::AS_CLIMB_DOWN_LAND || iAnimIdx == ANIM_STATE::AS_CLIMB_UP_LAND)
-		{
-			m_bClimb = false;
-			m_bOnFloor = true;
-			//m_vNextPos = XMVectorSetY(m_vNextPos, m_fBodyWallHeight);
-			//m_vNextPos += m_vLookDirectionXZ * (m_fBodyCollisionRadius+0.1f);
 
-		}
-		if (Is_LastAttackAnimation(iAnimIdx))
-			m_bAttack = false;
-		//캐스팅 : 캐스팅 스킬을 시작할 때 true, 캐스팅 애니메이션이 끝났을 때 false
-
-		m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_ANIM_END_TRIGGER);
-	}
 	m_bPostDelayEnd = m_pBody->Is_AnimPostDelayEnd();
 
 	//이하 Character 로직
@@ -828,12 +801,43 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	CPawn::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
+void CPlayer::On_StateChange(_uint iState)
+{
+	if (iState == ANIM_STATE::AS_IDLE)
+	{
+		m_fIdleTime = 0.f;
+	}
+
+}
 
 void CPlayer::On_SubStateChange(_uint iSubState)
 {
 	m_pBody->Switch_Animation(iSubState);
 
 }
+void CPlayer::On_AnimEnd(_uint iAnimIdx)
+{
+	m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+
+	if (iAnimIdx == ANIM_STATE::AS_CLIMB_DOWN_LAND || iAnimIdx == ANIM_STATE::AS_CLIMB_UP_LAND)
+	{
+		m_bClimb = false;
+		m_bOnFloor = true;
+	}
+	else if(m_bAttack)
+	{
+		_int iNextAnim = m_mapSkill[(SKILL_ID)m_iCurrentSkillID]->Get_NextAnimation(iAnimIdx);
+		if (iNextAnim == -1)//스킬 종료
+		{
+			m_bAttack = false;
+		}
+	}
+}
+
+void CPlayer::On_CastingEnd(CSkill* pSkill)
+{
+}
+
 void CPlayer::On_FaceStateChange(_uint iState)
 {
 	static_cast<CHumanModelObject*>(m_pBody)->Set_FaceState((CFace::FACE_STATE)iState);
@@ -850,23 +854,25 @@ HRESULT CPlayer::Render()
 	return S_OK;
 }
 
-void CPlayer::Use_Skill(CSkill* pSkill)
+_bool CPlayer::Use_Skill(CSkill* pSkill)
 {
 	if (pSkill == nullptr)
-		return;
-	if (m_bCasting)
-		return;
+		return false ;
+	if (false == Get_CurrentSkill()->Is_CastingComplete())
+		return false;
 	if (false == m_pBody->Is_AnimPostDelayEnd())
-		return;
-	auto pDesc =  pSkill->Get_SkillDesc();
+		return false;
+	auto pDesc = pSkill->Get_SkillDesc();
 	if (pDesc->eCastingType == SKILL_TYPE::CASTING && false == m_bOnFloor)
-		return;
-	m_bCasting = pDesc->eCastingType == SKILL_TYPE::CASTING;
+		return false;
+
+
 	m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_ATTACK_TRIGGER);
 	Set_Battle(true);
-	m_iSkillID = (_int)pDesc->eID;
-
+	m_iCurrentSkillID = (_int)pDesc->eID;
 	m_bAttack = true;
+
+	return true;
 }
 
 HRESULT CPlayer::Gain_Item(CItemObjet* pItem)
@@ -879,56 +885,7 @@ HRESULT CPlayer::Gain_Item(ITEM_DATA* pItem, _uint iCount)
 	return 	m_pInventory->Insert_Item(pItem, iCount);
 }
 
-_uint CPlayer::Get_AnimationIndex(SKILL_ID eSkillID)
-{
-	switch (eSkillID)
-	{
-	case Client::SKILL_ID::KINDLING:
-		return ANIM_STATE::AS_KINDLING_01;
-	case Client::SKILL_ID::BBQ_PARTY:
-		return ANIM_STATE::AS_BBQPARTY_1;
-	case Client::SKILL_ID::FAKE_METEOR:
-		return ANIM_STATE::AS_FAKEMETEOR_1;
-	case Client::SKILL_ID::WILD_FIRE:
-	case Client::SKILL_ID::WILD_FIRE2:
-	case Client::SKILL_ID::BASIC_ATTACK:
-	case Client::SKILL_ID::TELEPORT:
-	case Client::SKILL_ID::MAGIC_CLAW:
-	case Client::SKILL_ID::FLAME_WAVE:
-	case Client::SKILL_ID::FIRE_TORNADO:
-	case Client::SKILL_ID::KINDLING2:
-	case Client::SKILL_ID::LAST:
-	default:
-		return ANIM_STATE::AS_LAST;
-	}
-}
 
-_bool CPlayer::Is_LastAttackAnimation(_uint iAnimIdx)
-{
-	return (
-		AS_ATTACK_01 == iAnimIdx
-		||AS_JUMP_ATTACK== iAnimIdx
-		||AS_STAFF_ATTACK== iAnimIdx
-		||AS_STAFF_JUMP_ATTACK== iAnimIdx
-		||AS_MAGICCLAW== iAnimIdx
-		|| AS_FAKEMETEOR_2 == iAnimIdx
-		|| AS_FIRETORNADO == iAnimIdx
-		|| AS_FLAMEWAVE == iAnimIdx
-		|| AS_FLALMEBURST == iAnimIdx
-		|| AS_KINDLING_02 == iAnimIdx
-		|| AS_KINDLING_03_B == iAnimIdx
-		|| AS_WILDFIRE_01 == iAnimIdx
-		|| AS_TELEPORT == iAnimIdx
-		|| AS_TRINITYFORCE == iAnimIdx);
-}
-
-_bool CPlayer::Is_CastingAnimation(_uint iAnimIdx)
-{
-	return(
-		AS_BBQPARTY_1 == iAnimIdx
-		|| AS_FAKEMETEOR_1 == iAnimIdx
-		|| AS_KINDLING_01 == iAnimIdx);
-}
 
 
 
@@ -1120,6 +1077,5 @@ void CPlayer::Free()
 {
 	__super::Free();
 	Safe_Release(m_pFaceStateMachine);
-	for (auto& skill : m_pSkill)
-		Safe_Release(skill);
+
 }

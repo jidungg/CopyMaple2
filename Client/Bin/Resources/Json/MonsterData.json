@@ -22,7 +22,6 @@
                 "AttackRange": 1
             },
             "AnimIdx": {
-                "ATTACK": [ 0 ],
                 "ATTACK_IDLE": [ 1 ],
                 "BORE": [ 2 ],
                 "DAMG": [ 3, 4 ],
@@ -31,8 +30,11 @@
                 "REGEN": [ 8 ],
                 "RUN": [ 9 ],
                 "STUN": [ 10 ],
-                "WALK" : [ 11 ]
-            }
+                "WALK": [ 11 ]
+            },
+            "Skill": [
+                "SNAIL_ATTACK"
+            ]
         },
         {
             "Id": "CRAB",
@@ -56,7 +58,6 @@
                 "AttackRange": 2
             },
             "AnimIdx": {
-                "ATTACK": [ 0 ],
                 "ATTACK_IDLE": [ 1 ],
                 "BORE": [ 2, 3 ],
                 "DAMG": [ 4, 5 ],
@@ -66,7 +67,10 @@
                 "RUN": [ 10 ],
                 "STUN": [ 11 ],
                 "WALK": [ 12 ]
-            }
+            },
+            "Skill": [
+                "CRAB_ATTACK"
+            ]
         },
         {
             "Id": "STUMP",
@@ -90,9 +94,8 @@
                 "AttackRange": 2
             },
             "AnimIdx": {
-                "ATTACK": [ 0 ],
                 "ATTACK_IDLE": [ 1 ],
-                "BORE": [ 2,3 ],
+                "BORE": [ 2, 3 ],
                 "DAMG": [ 4, 5 ],
                 "DEAD": [ 6, 7 ],
                 "IDLE": [ 8 ],
@@ -100,7 +103,55 @@
                 "RUN": [ 10 ],
                 "STUN": [ 11 ],
                 "WALK": [ 12 ]
-            }
+            },
+            "Skill": [
+                "STUMP_ATTACK",
+                "STUMP_ATTACK2",
+                "SUTMP_ATTACK3"
+            ]
+        },
+        {
+            "Id": "BAYAR",
+            "Name": "최후의 바야르",
+            "Desc": "돌 수호병.",
+            "Model": "Bayar.model",
+            "DetectionRange": 4,
+            "ChaseRange": 3,
+            "Status": {
+                "HP": 10,
+                "SP": 10,
+                "EP": 1,
+                "ATK": 1,
+                "DEF": 1,
+                "EXP": 1,
+                "Gold": 1,
+                "JumpPower": 4.5,
+                "RunSpeed": 2.5,
+                "WalkSpeed": 1.5,
+                "AttackInterval": 1,
+                "AttackRange": 2
+            },
+            "AnimIdx": {
+                "ATTACK_IDLE": [ 1 ],
+                "BORE": [ 2, 3 ],
+                "DAMG": [ 4, 5 ],
+                "DEAD": [ 6, 7 ],
+                "IDLE": [ 8 ],
+                "REGEN": [ 9 ],
+                "RUN": [ 10 ],
+                "STUN": [ 11 ],
+                "WALK": [ 12 ]
+            },
+            "Skill": [
+                "BAYAR_ATTACK_A",
+                "BAYAR_ATTACK_B",
+                "BAYAR_ATTACK_C",
+                "BAYAR_ATTACK_D",
+                "BAYAR_ATTACK_E",
+                "BAYAR_ATTACK_F",
+                "BAYAR_ATTACK_G",
+                "BAYAR_ATTACK_H"
+            ]
         }
     ]
 }

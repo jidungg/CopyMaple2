@@ -182,7 +182,6 @@
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\MonsterDataBase.h" />
     <ClInclude Include="..\Public\Status.h" />
-    <ClInclude Include="..\Public\MonsterAnimStateMachine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -304,7 +303,6 @@
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\MonsterDataBase.cpp" />
     <ClCompile Include="..\Private\Status.cpp" />
-    <ClCompile Include="..\Private\MonsterAnimStateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

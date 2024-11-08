@@ -12,6 +12,7 @@ class CHumanModelObject;
 class CCollider_Sphere;
 class CCollider;
 class CCollider_Sphere;
+class CAnimation;
 END
 BEGIN(Client)
 class CSkill;
@@ -33,21 +34,34 @@ protected:
 
 public:
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual void Use_Skill(CSkill* pSkill) abstract;
 	virtual void Priority_Update(_float fTimeDelta) override;
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual _bool Check_Collision(CGameObject* pOther) override;
+
+
+	virtual void On_StateChange(_uint iState) abstract;
+	virtual void On_SubStateChange(_uint iSubState) abstract;
+	virtual void On_AnimEnd(_uint iAnimIdx)abstract;
+	virtual void On_CastingEnd(CSkill* pSkill) abstract;
+	virtual _bool Use_Skill(CSkill* pSkill);
 
 	_vector Get_MoveDirection() { return m_vMoveDirectionXZ; }
 	_vector Get_Position() { return m_pTransformCom->Get_State(CTransform::STATE_POSITION); }
 	_float Get_BodyCollisionRadius();
 	_float3 Get_BodyCollisionOffset();
 	_float Get_MoveDistance() { return m_fMoveDistanceXZ; }
+	_uint Get_CurrentAnimIdx();
 	CCollider_Sphere* Get_Collider(_uint iColliderIndex);
+	CSkill* Get_Skill(SKILL_ID eID) { return m_mapSkill[eID]; }
+	CSkill* Get_CurrentSkill() { return m_mapSkill[(SKILL_ID)m_iCurrentSkillID]; }
+	_float Get_AnimationProgress(_uint iAnimIdx);
 protected:
 	class CModelObject* m_pBody = { nullptr };
 	CStateMachine* m_pAnimStateMachine = { nullptr };
+
+
+	map<SKILL_ID, CSkill* > m_mapSkill;
 
 	//실 객체 클래스에서 직접 업데이트 해주어야 하는 속성.
 	_vector m_vMoveDirectionXZ{ XMVectorSet(0, 0, 0, 0) };
@@ -71,6 +85,8 @@ protected:
 	_bool m_bMove{ false };
 	_bool m_bRotate{ true };
 	_bool m_bOnFloor{ true };
+	_bool m_bAttack{ false };
+	_int m_iCurrentSkillID{ 0 };
 
 	vector<CCollider*> m_vecCollider;
 private:

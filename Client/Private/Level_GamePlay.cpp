@@ -61,9 +61,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(LAYERID eLayerID)
 HRESULT CLevel_GamePlay::Ready_Monster(LAYERID eLayerID)
 {
 	CMonster::MONSTER_DESC tMonDesc;
+	CMonster* pMonster;
 	tMonDesc.eMonID = MONSTER_ID::BAYAR;
 	tMonDesc.vHomePos = { 10,1,10,1 };
-	CMonster* pMonster = static_cast<CMonster*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CMonster::m_szProtoTag,&tMonDesc));
+	pMonster = static_cast<CMonster*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Bayar"),&tMonDesc));
 	m_pGameInstance->Add_GameObject_ToLayer(LEVEL_GAMEPLAY,LAYER_MONSTER, pMonster);
 	
 	tMonDesc.eMonID = MONSTER_ID::SNAIL;

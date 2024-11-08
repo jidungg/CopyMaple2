@@ -1,4 +1,57 @@
-﻿  Monster.cpp
+﻿  Bayar.cpp
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider_Sphere.h(5,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CCollider_Sphere'의 기본으로 사용되었습니다.
+  (소스 파일 '/Private/Bayar.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider.h(12,7):
+      'Engine::CCollider' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider_Sphere.h(4,18):
+      'Engine::CCollider_Sphere' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Bayar.cpp(57,18): warning C4305: '=': 'double'에서 'Engine::_float'(으)로 잘립니다.
+  (소스 파일 '/Private/Bayar.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Bayar.cpp(63,18): warning C4305: '=': 'double'에서 'Engine::_float'(으)로 잘립니다.
+  (소스 파일 '/Private/Bayar.cpp'을(를) 컴파일하는 중)
+  
+  Character.cpp
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider_Sphere.h(5,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CCollider_Sphere'의 기본으로 사용되었습니다.
+  (소스 파일 '/Private/Character.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider.h(12,7):
+      'Engine::CCollider' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider_Sphere.h(4,18):
+      'Engine::CCollider_Sphere' 선언을 참조하십시오.
+  
+  CubeTerrain.cpp
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\CubeTerrain.cpp(116,10): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  (소스 파일 '/Private/CubeTerrain.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\CubeTerrain.cpp(118,10): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  (소스 파일 '/Private/CubeTerrain.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\CubeTerrain.cpp(120,10): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  (소스 파일 '/Private/CubeTerrain.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\CubeTerrain.cpp(124,28): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  (소스 파일 '/Private/CubeTerrain.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\CubeTerrain.cpp(126,29): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
+  (소스 파일 '/Private/CubeTerrain.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\CubeTerrain.cpp(128,30): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
+  (소스 파일 '/Private/CubeTerrain.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\CubeTerrain.cpp(262,16): warning C4244: '=': 'Engine::_uint'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Private/CubeTerrain.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\CubeTerrain.cpp(263,28): warning C4244: '=': 'Engine::_uint'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Private/CubeTerrain.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\CubeTerrain.cpp(264,16): warning C4244: '=': 'Engine::_uint'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Private/CubeTerrain.cpp'을(를) 컴파일하는 중)
+  
+  Level_GamePlay.cpp
+  Level_Home.cpp
+  Level_Logo.cpp
+  Monster.cpp
 D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider_Sphere.h(5,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CCollider_Sphere'의 기본으로 사용되었습니다.
   (소스 파일 '/Private/Monster.cpp'을(를) 컴파일하는 중)
       D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider.h(12,7):
@@ -18,4 +71,101 @@ D:\Workbench\Portfolio\CopyMaple2\Client\Private\Monster.cpp(227,43): warning C4
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Monster.cpp(130,39): warning C4101: 'pCondition' :참조되지 않은 지역 변수입니다.
   (소스 파일 '/Private/Monster.cpp'을(를) 컴파일하는 중)
   
+  MonsterDataBase.cpp
+  Player.cpp
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider_Sphere.h(5,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CCollider_Sphere'의 기본으로 사용되었습니다.
+  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider.h(12,7):
+      'Engine::CCollider' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider_Sphere.h(4,18):
+      'Engine::CCollider_Sphere' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp(203,39): warning C4101: 'pCondition' :참조되지 않은 지역 변수입니다.
+  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp(939,81): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
+  
+  PlayerInfo.cpp
+  Skill.cpp
+  TerrainObject.cpp
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\MeshCollider.h(7,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CCollider_Mesh'의 기본으로 사용되었습니다.
+  (소스 파일 '/Private/TerrainObject.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider.h(12,7):
+      'Engine::CCollider' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\MeshCollider.h(6,18):
+      'Engine::CCollider_Mesh' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider_AABB.h(5,9): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CCollider_AABB'의 기본으로 사용되었습니다.
+  (소스 파일 '/Private/TerrainObject.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider.h(12,7):
+      'Engine::CCollider' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider_AABB.h(4,18):
+      'Engine::CCollider_AABB' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider_Sphere.h(5,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CCollider_Sphere'의 기본으로 사용되었습니다.
+  (소스 파일 '/Private/TerrainObject.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider.h(12,7):
+      'Engine::CCollider' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider_Sphere.h(4,18):
+      'Engine::CCollider_Sphere' 선언을 참조하십시오.
+  
+  Loader.cpp
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\MeshCollider.h(7,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CCollider_Mesh'의 기본으로 사용되었습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider.h(12,7):
+      'Engine::CCollider' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\MeshCollider.h(6,18):
+      'Engine::CCollider_Mesh' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider_Sphere.h(5,12): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CCollider_Sphere'의 기본으로 사용되었습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider.h(12,7):
+      'Engine::CCollider' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider_Sphere.h(4,18):
+      'Engine::CCollider_Sphere' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider_AABB.h(5,9): warning C4275: DLL 인터페이스가 아닌 class 'Engine::CCollider'이(가) DLL 인터페이스 class 'Engine::CCollider_AABB'의 기본으로 사용되었습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider.h(12,7):
+      'Engine::CCollider' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Collider_AABB.h(4,18):
+      'Engine::CCollider_AABB' 선언을 참조하십시오.
+  
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\xutility(4689,18): warning C4244: '=': 'wchar_t'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\xutility(4689,18):
+      템플릿 인스턴스화 컨텍스트(가장 오래된 인스턴스화 컨텍스트)가
+          D:\Workbench\Portfolio\CopyMaple2\Client\private\Loader.cpp(456,13):
+          컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Elem=wchar_t,
+              _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
+              _Alloc=std::allocator<char>
+          ]
+              D:\Workbench\Portfolio\CopyMaple2\Client\private\Loader.cpp(456,13):
+              'Client::CLoader::Load_Dirctory_Models'에서 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string'에 대한 첫 번째 참조를 확인하세요.
+          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\xstring(793,17):
+          컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct_from_iter<wchar_t*,wchar_t*,_Size_type>(_Iter,const _Sent,_Size)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Size_type=unsigned __int64,
+              _Iter=wchar_t *,
+              _Sent=wchar_t *,
+              _Size=unsigned __int64
+          ]
+          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\xstring(949,18):
+          컴파일되는 함수 템플릿 인스턴스화 '_OutIt *std::_Copy_n_unchecked4<wchar_t*,_Size,char*>(_InIt,_SizeTy,_OutIt)'에 대한 참조를 확인하세요.
+          with
+          [
+              _OutIt=char *,
+              _Size=unsigned __int64,
+              _InIt=wchar_t *,
+              _SizeTy=unsigned __int64
+          ]
+  
+  MainApp.cpp
+  코드를 생성하고 있습니다...
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp(988,1): warning C4715: 'Client::CPlayer::Equip': 모든 제어 경로에서 값을 반환하지는 않습니다.
   Client.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Client.exe

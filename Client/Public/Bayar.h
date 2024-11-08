@@ -101,20 +101,15 @@ public:
 	virtual HRESULT Initialize(void* pArg);
 	virtual void Priority_Update(_float fTimeDelta) override;
 	virtual void Update(_float fTimeDelta) override;
-	void Update_Collider();
+	virtual void Update_Collider()override;
 	virtual _bool Check_Collision(CGameObject* pOther) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
 public:
 	HRESULT Ready_Components(CHARACTER_DESC* pDesc);
-	HRESULT Ready_Parts();
 	virtual HRESULT Ready_AnimStateMachine() override;
-	HRESULT Ready_FaceStateMachine();
-	HRESULT Ready_Skill();
-	virtual void On_StateChange(_uint iState) override;
-	virtual void On_SubStateChange(_uint iSubState) override;
-	virtual void On_AnimEnd(_uint iAnimIdx) override;
+
 private:
 
 	vector<const XMFLOAT4X4*> m_vecPartsMatrix;

@@ -112,7 +112,9 @@ void CStateMachine::Add_TriggerConditionVariable(_uint iConditionID)
 CState* CStateMachine::Add_State(_uint iStateID)
 {
 	CState* pState = CState::Create(iStateID);
-	m_mapStates.emplace(iStateID, pState);
+	auto b = m_mapStates.emplace(iStateID, pState);
+	if (!b.second)
+		Safe_Release(pState);
 	return pState;
 }
 

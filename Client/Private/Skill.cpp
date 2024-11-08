@@ -13,6 +13,8 @@ HRESULT CSkill::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	m_pSkillDesc = pSkillData;
 
 	m_pUser = pUser;
+	m_fCoolTimeAcc = pSkillData->fCoolTime;
+
 
 	return S_OK;
 }

@@ -30,6 +30,9 @@ typedef struct MonsterData
 		mapAnimIdx[M_AS_STUN] = jmapAnimIdx["STUN"].get<vector<_uint>>();
 		mapAnimIdx[M_AS_WALK] = jmapAnimIdx["WALK"].get<vector<_uint>>();
 		vecSkillID = js["Skill"].get<vector<SKILL_ID>>();
+		fBodyCollisionRadius = js["BodyCollisionRadius"];
+		json jOffset = js["BodyCollisionOffset"];
+		fBodyCollisionOffset = { jOffset[0],jOffset[1],jOffset[2] };
 	}
 	MONSTER_ID eMonID = MONSTER_ID::LAST;
 	_char strMonsterName[MAX_PATH] = ("");
@@ -37,6 +40,8 @@ typedef struct MonsterData
 	_char strModelTag[MAX_PATH] = ("");
 	_float fDetectionRange{ 3.f };
 	_float fChaseRange{ 4.f };
+	_float fBodyCollisionRadius;
+	_float3 fBodyCollisionOffset;
 	unordered_map<MON_STATE, vector<_uint>> mapAnimIdx;
 	STATUS tStat;
 	vector<SKILL_ID> vecSkillID;
@@ -92,7 +97,6 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual _bool Check_Collision(CGameObject* pOther) override;
 	virtual void Late_Update(_float fTimeDelta) override;
-	virtual HRESULT Render() override;
 
 	virtual void On_StateChange(_uint iState) override;
 	virtual void On_SubStateChange(_uint iSubState) override;

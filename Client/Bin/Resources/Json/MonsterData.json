@@ -7,6 +7,8 @@
             "Model": "Snail.model",
             "DetectionRange": 4,
             "ChaseRange": 3,
+            "BodyCollisionRadius": 0.2,
+            "BodyCollisionOffset": [0,0,0],
             "Status": {
                 "HP": 10,
                 "SP": 10,
@@ -43,6 +45,8 @@
             "Model": "blackcarapace.model",
             "DetectionRange": 4,
             "ChaseRange": 3,
+            "BodyCollisionRadius": 0.2,
+            "BodyCollisionOffset": [ 0, 0, 0 ],
             "Status": {
                 "HP": 10,
                 "SP": 10,
@@ -79,6 +83,8 @@
             "Model": "Stump.model",
             "DetectionRange": 4,
             "ChaseRange": 3,
+            "BodyCollisionRadius": 0.2,
+            "BodyCollisionOffset": [ 0, 0, 0 ],
             "Status": {
                 "HP": 10,
                 "SP": 10,
@@ -117,6 +123,8 @@
             "Model": "Bayar.model",
             "DetectionRange": 4,
             "ChaseRange": 3,
+            "BodyCollisionRadius": 0.5,
+            "BodyCollisionOffset": [ 0.15, 0, 0 ],
             "Status": {
                 "HP": 10,
                 "SP": 10,
@@ -132,15 +140,15 @@
                 "AttackRange": 2
             },
             "AnimIdx": {
-                "ATTACK_IDLE": [ 1 ],
-                "BORE": [ 2, 3 ],
-                "DAMG": [ 4, 5 ],
-                "DEAD": [ 6, 7 ],
-                "IDLE": [ 8 ],
-                "REGEN": [ 9 ],
-                "RUN": [ 10 ],
-                "STUN": [ 11 ],
-                "WALK": [ 12 ]
+                "ATTACK_IDLE": [ 20 ],
+                "BORE": [ 21 ],
+                "DAMG": [ 22, 23 ],
+                "DEAD": [ 24, 25 ],
+                "IDLE": [ 0 ],
+                "REGEN": [ 35 ],
+                "RUN": [ 36 ],
+                "STUN": [ 37 ],
+                "WALK": [ 38 ]
             },
             "Skill": [
                 "BAYAR_ATTACK_A",

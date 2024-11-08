@@ -57,8 +57,16 @@ void CCharacter::Update(_float fTimeDelta)
 		 pSkill.second->Update(fTimeDelta);
 	 if(m_bAttack)
 		Get_CurrentSkill()->Update_CastingTime(fTimeDelta);
-
+	 Update_Collider();
 	__super::Update(fTimeDelta);
+}
+
+void CCharacter::Update_Collider()
+{
+	for (auto& pCollider : m_vecCollider)
+	{
+		pCollider->Update(XMLoadFloat4x4(&m_WorldMatrix));
+	}
 }
 
 
@@ -152,6 +160,15 @@ void CCharacter::Late_Update(_float fTimeDelta)
 	m_fMoveDistanceXZ = 0.f;
 	m_vMoveDirectionXZ = XMVectorSet(0, 0, 0, 0);
 	__super::Late_Update(fTimeDelta);
+}
+HRESULT CCharacter::Render()
+{
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+	for (auto& pCollider : m_vecCollider)
+		if (pCollider->Is_Active())
+			pCollider->Render();
+	return S_OK;
 }
 void CCharacter::Free()
 {

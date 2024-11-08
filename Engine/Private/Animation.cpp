@@ -68,8 +68,8 @@ bool CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones
 	{
 		m_vecChannel[i]->Update_TransformationMatrix(m_fCurrentTrackPosition, &m_CurrentKeyFrameIndices[i], Bones);
 	}
-
 	m_fCurrentTrackPosition += m_fTickPerSecond * fTimeDelta;
+
 	return false;
 }
 
@@ -81,6 +81,7 @@ bool CAnimation::Update_AnimTransition(const vector<class CBone*>& Bones, _float
 		Reset_CurrentTrackPosition();
 		return true;
 	}
+	m_fCurrentTrackPosition += m_fTickPerSecond* fTimeDelta;
 
 	_float			fRatio = m_fCurrentTrackPosition  / _fAnimTransitionTrackPos;
 	KEYFRAME tFrame ;
@@ -96,7 +97,6 @@ bool CAnimation::Update_AnimTransition(const vector<class CBone*>& Bones, _float
 		Bones[iBoneIdx]->Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&tFrame.vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMLoadFloat4(&tFrame.vRotation), XMVectorSetW(XMLoadFloat3(&tFrame.vPosition), 1.f)));
 	}
 
-	m_fCurrentTrackPosition += m_fTickPerSecond* fTimeDelta;
 	return false;
 }
 

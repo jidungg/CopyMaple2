@@ -36,7 +36,9 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
 	virtual void Update(_float fTimeDelta) override;
+	virtual void Update_Collider();
 	virtual void Late_Update(_float fTimeDelta) override;
+	virtual HRESULT Render() override;
 	virtual _bool Check_Collision(CGameObject* pOther) override;
 
 

@@ -29,8 +29,8 @@ HRESULT CMonster::Initialize(void* pArg)
 {
 	MONSTER_DESC* pDesc = (MONSTER_DESC*)pArg;
 	m_pMonData = MONSTERDB->Get_Data(pDesc->eMonID);
-	pDesc->fBodyCollisionOffset = { 0,0.2f,0 };
-	pDesc->fBodyCollisionRadius = 0.2f;
+	pDesc->fBodyCollisionOffset = m_pMonData->fBodyCollisionOffset;
+	pDesc->fBodyCollisionRadius = m_pMonData->fBodyCollisionRadius;
 	pDesc->fRotationPerSec = XMConvertToRadians(90.f);
 	pDesc->fSpeedPerSec = 2.0f;
 	pDesc->iColliderCount = COLLIDER_LAST;
@@ -147,9 +147,9 @@ HRESULT CMonster::Ready_AnimStateMachine()
 
 	//ATTACK_MAIN
 	pTransition = m_pAnimStateMachine->Add_Transition(M_BS_ATTACK, M_BS_IDLE);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, MON_ANIM_CONDITION::AC_ANIMENDTRIGGER);
+	m_pAnimStateMachine->Bind_Condition(pTransition, MON_ANIM_CONDITION::AC_ISATTACK, CONDITION_TYPE::EQUAL, false);
 	pTransition = m_pAnimStateMachine->Add_Transition(M_BS_ATTACK, M_BS_MOVE);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, MON_ANIM_CONDITION::AC_ANIMENDTRIGGER);
+	m_pAnimStateMachine->Bind_Condition(pTransition, MON_ANIM_CONDITION::AC_ISATTACK, CONDITION_TYPE::EQUAL, false);
 	m_pAnimStateMachine->Bind_Condition(pTransition, MON_ANIM_CONDITION::AC_MOVE, CONDITION_TYPE::EQUAL, true);
 	pTransition = m_pAnimStateMachine->Add_Transition(M_BS_ATTACK, M_BS_DEAD);
 	m_pAnimStateMachine->Bind_Condition(pTransition, MON_ANIM_CONDITION::AC_HP, CONDITION_TYPE::EQUAL_LESS, 0);
@@ -370,10 +370,7 @@ void CMonster::Priority_Update(_float fTimeDelta)
 void CMonster::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
-	for (auto& pCollider : m_vecCollider)
-	{
-		pCollider->Update(XMLoadFloat4x4(&m_WorldMatrix));
-	}
+
 }
 
 _bool CMonster::Check_Collision(CGameObject* pOther)
@@ -425,19 +422,6 @@ void CMonster::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
-HRESULT CMonster::Render()
-{
-	for (auto& child : m_pChilds)
-	{
-		if (child->Is_Active() && child->Is_Dead() == false)
-			child->Render();
-	}
-	for (auto& pCollider : m_vecCollider)
-		pCollider->Render();
-
-	return __super::Render();
-}
-
 void CMonster::On_StateChange(_uint iState)
 {
 	cout << "Monster State Changed : " << iState << endl;
@@ -459,6 +443,7 @@ void CMonster::On_AnimEnd(_uint iAnimIdx)
 		if (iNextAnim == -1)//스킬 종료
 		{
 			m_bAttack = false;
+			To_NextSkill();
 		}
 	}
 }

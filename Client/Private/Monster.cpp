@@ -12,11 +12,13 @@
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CCharacter(pDevice, pContext)
 {
+	m_eTeam = TEAM::MONSTER;
 }
 
 CMonster::CMonster(const CMonster& Prototype)
 	: CCharacter(Prototype)
 {
+	m_eTeam = TEAM::MONSTER;
 }
 
 
@@ -40,15 +42,27 @@ HRESULT CMonster::Initialize(void* pArg)
 	m_fChaseRange = m_pMonData->fChaseRange;
 	m_mapAnimIdx = m_pMonData->mapAnimIdx;
 	m_vHomePos = pDesc->vHomePos;
-	for (auto& eSkillID : m_pMonData->vecSkillID)
-		m_mapSkill[eSkillID] = CSkill::Create(SKILLDB->Get_SkillData(eSkillID), this);
-	m_iCurrentSkillID = (_int)m_mapSkill.begin()->first;
+
+
+	m_fRandomMoveTime = m_pGameInstance->Get_RandomFloat(5,10);
+
+
+
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 	if (FAILED(Ready_Components(pDesc)))
 		return E_FAIL;
 	if (FAILED(Ready_Parts(pDesc)))
 		return E_FAIL;
+	//ReadySkill
+	CSkillDataBase* pSkillManager = SKILLDB;
+	for (auto& eSkillID : m_pMonData->vecSkillID)
+	{
+		m_mapSkill[eSkillID] = CSkill::Create(pSkillManager->Get_SkillData(eSkillID), this);
+		m_mapSkill[eSkillID]->Register_AnimEvent(m_pBody);
+	}
+	m_iCurrentSkillID = (_int)m_mapSkill.begin()->first;
+
 	if (FAILED(Ready_AnimStateMachine()))
 		return E_FAIL;
 
@@ -284,6 +298,7 @@ void CMonster::Priority_Update(_float fTimeDelta)
 	_vector vDestination;
 	_float fMoveSpeed = m_tStat.fRunSpeed;
 	_float fHomeDistance;
+	CGameObject* pTarget = Get_Target();
 	XMStoreFloat(&fHomeDistance, XMVector3Length(vMyPos - m_vHomePos));
 	if (m_bBackToHome)
 	{
@@ -291,7 +306,7 @@ void CMonster::Priority_Update(_float fTimeDelta)
 		{
 			m_bBackToHome = false;
 			m_bDetected = false;
-			m_pTarget = nullptr;
+			Set_Target (nullptr);
 			m_fTargetDistance = FLT_MAX;
 			return;
 		}
@@ -300,25 +315,47 @@ void CMonster::Priority_Update(_float fTimeDelta)
 	}
 	else if (fHomeDistance > m_fHomeRange)
 	{
-		m_pTarget = nullptr;
+		Set_Target(nullptr);
 		m_bDetected = false;
 		m_bBackToHome = true;
 		m_fTargetDistance = FLT_MAX;
 		vDestination = m_vHomePos;
 	}
-	else if(nullptr == m_pTarget || false == m_pTarget->Is_Active() || m_pTarget->Is_Dead())
+	else if(nullptr == pTarget || false == pTarget->Is_Active() || pTarget->Is_Dead())
 	{
-		m_pTarget = nullptr;
+		Set_Target(nullptr);
 		m_bDetected = false;
 		m_fTargetDistance = FLT_MAX;
-		return;
+		
+		if (m_fRandomMoveTime <= m_fRandomMoveTimeAcc)
+		{
+			m_bRandomMove = !m_bRandomMove;
+			m_fRandomMoveTime = m_pGameInstance->Get_RandomFloat(5, 10);
+			m_fRandomMoveTimeAcc = 0.f;
+			if(m_bRandomMove)
+			{
+				_float fX = m_pGameInstance->Get_RandomFloat(-2, 2);
+				_float fZ = m_pGameInstance->Get_RandomFloat(-2, 2);
+				cout << fX << " " << fZ << endl;
+				m_vRandomHomePosition = { fX ,0, fZ ,1 };
+			}
+
+
+		}
+		m_fRandomMoveTimeAcc += fTimeDelta;
+		vDestination = m_vHomePos + m_vRandomHomePosition;
+		if(XMVectorGetX( XMVector3Length(vDestination - vMyPos)) <= 0.1f)
+			vDestination = vMyPos;
+		fMoveSpeed = m_tStat.fWalkSpeed;
+		m_bWalk = true;
 	}
 	else
-		vDestination = m_pTarget->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		vDestination = pTarget->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
 
 	m_vMoveDirectionXZ = vDestination - vMyPos;
 	m_vMoveDirectionXZ = XMVectorSetY(m_vMoveDirectionXZ, 0);
+	m_vMoveDirectionXZ = XMVectorSetW(m_vMoveDirectionXZ, 0);
 	XMStoreFloat(&m_fTargetDistance, XMVector3Length(m_vMoveDirectionXZ));
 	m_vMoveDirectionXZ = XMVector3Normalize(m_vMoveDirectionXZ);
 	m_vLookDirectionXZ = m_vMoveDirectionXZ;
@@ -326,6 +363,9 @@ void CMonster::Priority_Update(_float fTimeDelta)
 
 	if (m_bBackToHome)
 		return;
+	if (nullptr == pTarget)
+		return;
+	m_bWalk = false;
 	//공격 쿨이 다 됐으면 공격 범위 안까지 추적
 	//공격 쿨이 안됐으면
 	//추적 상태일 경우 공격범위 안까지 추적
@@ -354,7 +394,9 @@ void CMonster::Priority_Update(_float fTimeDelta)
 				m_bChase = false;
 		}
 		if (false == m_bChase)
+		{
 			m_vMoveDirectionXZ = XMVectorZero(); // 멈춤
+		}
 	}
 	
 	if (m_bAttack)
@@ -370,7 +412,6 @@ void CMonster::Priority_Update(_float fTimeDelta)
 void CMonster::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
-
 }
 
 _bool CMonster::Check_Collision(CGameObject* pOther)
@@ -387,7 +428,7 @@ _bool CMonster::Check_Collision(CGameObject* pOther)
 
 		if (m_vecCollider[COLLIDER_DETECT]->Contains(vPos))
 		{
-			m_pTarget = pOther;
+			Set_Target(pOther);
 			m_bDetected = true;
 			return true;
 		}
@@ -424,12 +465,12 @@ void CMonster::Late_Update(_float fTimeDelta)
 
 void CMonster::On_StateChange(_uint iState)
 {
-	cout << "Monster State Changed : " << iState << endl;
+	//cout << "Monster State Changed : " << iState << endl;
 }
 
 void CMonster::On_SubStateChange(_uint iSubState)
 {
-	cout << "Monster SubState Changed : " << iSubState << endl;
+	//cout << "Monster SubState Changed : " << iSubState << endl;
 	m_pBody->Switch_Animation(iSubState);
 }
 
@@ -474,4 +515,8 @@ CGameObject* CMonster::Clone(void* pArg)
 void CMonster::Free()
 {
 	__super::Free();
+}
+
+void CMonster::On_HPZero()
+{
 }

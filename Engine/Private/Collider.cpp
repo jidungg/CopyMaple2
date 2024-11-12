@@ -2,16 +2,16 @@
 #include "GameInstance.h"
 #include "DebugDraw.h"
 
-_uint CCollider::m_iGlobalID = 0;
+_uint CColliderBase::m_iGlobalID = 0;
 
-CCollider::CCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CColliderBase::CColliderBase(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CComponent(pDevice, pContext)
 {
 	m_iID = m_iGlobalID++;
 
 }
 
-CCollider::CCollider(const CCollider& Prototype)
+CColliderBase::CColliderBase(const CColliderBase& Prototype)
 	:CComponent(Prototype)
 	, m_eType{ Prototype.m_eType }
 	, m_pEffect{ Prototype.m_pEffect }
@@ -22,7 +22,7 @@ CCollider::CCollider(const CCollider& Prototype)
 	Safe_AddRef(m_pInputLayout);
 }
 
-HRESULT CCollider::Initialize_Prototype()
+HRESULT CColliderBase::Initialize_Prototype()
 {
 
 #ifdef _DEBUG
@@ -43,14 +43,14 @@ HRESULT CCollider::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CCollider::Initialize(void* pArg)
+HRESULT CColliderBase::Initialize(void* pArg)
 {
 
 	return S_OK;
 }
 
 
-void CCollider::Free()
+void CColliderBase::Free()
 {
 	__super::Free();
 	if (false == m_isCloned)

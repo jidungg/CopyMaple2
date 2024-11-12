@@ -2,10 +2,10 @@
 #include "Collider.h"
 BEGIN(Engine)
 class ENGINE_DLL CCollider_AABB :
-	public CCollider
+	public CColliderBase
 {
 public:
-	typedef struct AABB_ColliderDesc : public CCollider::ColliderDesc
+	typedef struct AABB_ColliderDesc : public CColliderBase::ColliderDesc
 	{
 		_float3		vExtentes;
 	}AABB_COLLIDER_DESC;
@@ -19,7 +19,8 @@ protected:
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual _bool Intersects(CCollider* pOther) override;
+	virtual void Update(_fmatrix WorldMatrix) override;
+	virtual _bool Intersects(CColliderBase* pOther) override;
 	virtual _bool Contains(const FXMVECTOR& vPosition)override;
 	virtual _bool RayCast(const Ray& tRay, RaycastHit* pOut) override;
 	virtual HRESULT  Render() override;
@@ -32,11 +33,6 @@ public:
 	static CCollider_AABB* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CComponent* Clone(void* pArg = nullptr) override;
 	virtual void Free() override;
-
-
-	// CCollider을(를) 통해 상속됨
-	void Update(_fmatrix WorldMatrix) override;
-
 };
 
 END

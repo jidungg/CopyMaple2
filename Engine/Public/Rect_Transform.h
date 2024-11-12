@@ -62,7 +62,7 @@ protected:
 	CORNOR_TYPE m_eAnchorType = CORNOR_TYPE::CENTER;
 
 public:
-	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CRect_Transform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CComponent* Clone(void* pArg);
 	virtual void Free() override;
 };

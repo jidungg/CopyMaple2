@@ -9,7 +9,7 @@ class CShader;
 class CTexture;
 class CModel;
 class CVIBuffer_Rect;
-class CCollider;
+class CColliderBase;
 END
 
 BEGIN(Client)
@@ -18,6 +18,7 @@ class CModelObject;
 class CCubeTerrain;
 class CTerrainObject;
 class CBuildPreview;
+class CUIBar;
 class CBuilder :
     public CPawn
 {

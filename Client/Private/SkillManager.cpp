@@ -26,13 +26,9 @@ void CSkillDataBase::Insert_Data(json& jSkillData)
 	str = jSkillData["iconimg"];
 	std::copy(str.begin(), str.end(), desc.strIconImageTag);
 	for (auto& data : jSkillData["data"])
-	{
 		desc.vecData.push_back(data);
-	}
 	for (auto& data : jSkillData["levelupdata"])
-	{
 		desc.vecLevelUpData.push_back(data);
-	}
 	for (auto& data : jSkillData["preceding"])
 	{
 		SKILL_ID eID = data[0];
@@ -40,8 +36,12 @@ void CSkillDataBase::Insert_Data(json& jSkillData)
 		desc.mapPreceding.insert({ eID , iLev });
 	}
 	for (auto& data : jSkillData["animation"])
-	{
 		desc.vecAnimation.push_back(data);
+	for (auto& data : jSkillData["eventtime"])
+	{
+		_uint iAnimIdx = data[0];
+		_float fTime = data[1];
+		desc.mapAnimEventTime.insert({ iAnimIdx, fTime });
 	}
 }
 

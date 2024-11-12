@@ -29,8 +29,9 @@ public:
 	void Set_Loop(bool bLoop) { m_bLoop = bLoop; }
 	void Set_PostDealyPercent(_float fPercentage) { m_fPostDelayPercentage = fPercentage; }
 	void Set_AnimTransitionTime(_float fTime) { m_fAnimTransitionTime = fTime; }
-	void Ready_AnimTransition();
+	void Register_AnimEvent(ANIM_EVENT tAnimEvent);
 
+	void Ready_AnimTransition();
 private:
 	_char					m_szName[MAX_PATH] = {};
 	_uint					m_iNumChannels = {};
@@ -47,7 +48,7 @@ private:
 	
 	//Channel마다 현재 KeyFrameIndex를 저장하는 배열
 	vector<_uint>			m_CurrentKeyFrameIndices;
-
+	list< ANIM_EVENT>m_listAnimEvent;
 public:
 	static CAnimation* Create(ifstream& inFile, const class CModel* pModel);
 	virtual CAnimation* Clone();

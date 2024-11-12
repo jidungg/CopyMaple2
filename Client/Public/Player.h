@@ -64,7 +64,7 @@ public:
 		,AS_FISHING_REEL
 		,AS_FISHING_START
 		,AS_FLALMEBURST
-		,AS_FLAMEWAVE
+		,AS_FLAMEWAVE = 47
 		,AS_FLY_IDLE
 		,AS_FLY_RUN
 		,AS_FUNCTOBJ_CHAIR
@@ -193,7 +193,7 @@ public:
 public:
 	typedef struct PlayerDesc : public CCharacter::CHARACTER_DESC
 	{
-
+		json jPlayerData;
 	}PLAYER_DESC;
 
 protected:
@@ -215,15 +215,16 @@ public:
 	virtual void On_SubStateChange(_uint iSubState) override;
 	virtual void On_AnimEnd(_uint iAnimIdx) override;
 	virtual void On_CastingEnd(CSkill* pSkill) override;
+	virtual void On_HPZero() override;
+	void On_FaceStateChange(_uint iState);
 
 public:
-	void On_FaceStateChange(_uint iState);
 
 	HRESULT Ready_Parts();
 	HRESULT Ready_AnimStateMachine();
 	HRESULT Ready_FaceStateMachine();
-	HRESULT Ready_Skill();
-
+	HRESULT Ready_Skill(const json& jSkillData);
+	HRESULT Ready_Stat(const json& jStatData);
 
 	virtual _bool Use_Skill(CSkill* pSkill) override;
 
@@ -236,9 +237,9 @@ public:
 	HRESULT Set_Deco(struct DECO_ITEM_DESC* pItem);
 	HRESULT Set_Customize(struct CUSTOMIZE_DESC* pItem);
 	void Set_BodyMeshActive(EQUIP_ITEM_TYPE eType, bool bActive);
+
+
 protected:
-
-
 	CModelObject* m_pEquipModels[(_uint)EQUIP_ITEM_TYPE::LAST] = { nullptr, };
 	CModelObject* m_pDecoModels[(_uint)DECO_TYPE::LAST] = { nullptr, };
 	CModelObject* m_pCustomizes[(_uint)CUSTOMIZE_PART::LAST] = { nullptr, };

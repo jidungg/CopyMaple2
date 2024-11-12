@@ -17,7 +17,7 @@ HRESULT CPipeLine::Initialize()
 
 	m_pContext->RSGetViewports(&iNumViewports, &ViewportDesc);
 
-	/* Á÷±³Æ¢¿µÀ» À§ÇÑ ºä¤Ñ, Åõ¿µÇà¸£À» ¸¸µé¾ú´Ù. */
+	/* ï¿½ï¿½ï¿½ï¿½Æ¢ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½à¸£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. */
 	XMStoreFloat4x4(&m_TransformMatrices[D3DTS_UI_VIEW], XMMatrixIdentity());
 	XMStoreFloat4x4(&m_TransformMatrices[D3DTS_UI_PROJ], XMMatrixOrthographicLH(ViewportDesc.Width, ViewportDesc.Height, 0.f, 1.f));
 

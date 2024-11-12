@@ -48,16 +48,14 @@ void CCharacter::Priority_Update(_float fTimeDelta)
 
 void CCharacter::Update(_float fTimeDelta)
 {
-	 XMStoreFloat(&m_fMoveDistanceXZ,XMVector3Length(m_vMoveDirectionXZ));
-	 m_vMoveDirectionXZ = XMVector4Normalize(m_vMoveDirectionXZ);
-	 m_bMove = false == XMVector4Equal(m_vMoveDirectionXZ, XMVectorSet(0, 0, 0, 0));
-	 m_bRotate = false == XMVector4Equal(m_vLookDirectionXZ, XMVectorSet(0, 0, 0, 0));
+
 
 	 for (auto& pSkill : m_mapSkill)
-		 pSkill.second->Update(fTimeDelta);
+		 pSkill.second->Update_CoolTime(fTimeDelta);
 	 if(m_bAttack)
 		Get_CurrentSkill()->Update_CastingTime(fTimeDelta);
-	 Update_Collider();
+
+	 Get_CurrentSkill()->Update(fTimeDelta);
 	__super::Update(fTimeDelta);
 }
 
@@ -74,6 +72,11 @@ void CCharacter::Update_Collider()
 //MoveDirection과 MoveDistance가 계산돼있어야 함.
 _bool CCharacter::Check_Collision(CGameObject* pOther)
 {
+	XMStoreFloat(&m_fMoveDistanceXZ, XMVector3Length(m_vMoveDirectionXZ));
+	m_vMoveDirectionXZ = XMVector4Normalize(m_vMoveDirectionXZ);
+	m_bMove = false == XMVector4Equal(m_vMoveDirectionXZ, XMVectorSet(0, 0, 0, 0));
+	m_bRotate = false == XMVector4Equal(m_vLookDirectionXZ, XMVectorSet(0, 0, 0, 0));
+	Update_Collider();
 	LAYERID eLayerID = (LAYERID)pOther->Get_LayerID();
 	switch (eLayerID)
 	{
@@ -102,35 +105,6 @@ _bool CCharacter::Check_Collision(CGameObject* pOther)
 	return false;
 }
 
-_bool CCharacter::Use_Skill(CSkill* pSkill)
-{
-	return true;
-}
-
-_float CCharacter::Get_BodyCollisionRadius()
-{
-	return Get_Collider(m_iBodyColliderIndex)->Get_Desc()->Radius;
-}
-
-_float3 CCharacter::Get_BodyCollisionOffset()
-{
-	return  Get_Collider(m_iBodyColliderIndex)->Get_Offset();
-}
-
-_uint CCharacter::Get_CurrentAnimIdx()
-{
-	return m_pBody->Get_AnimIndex();
-}
-
-CCollider_Sphere* CCharacter::Get_Collider(_uint iColliderIndex)
-{
-	return static_cast<CCollider_Sphere*>(m_vecCollider[iColliderIndex]);
-	
-}
-_float CCharacter::Get_AnimationProgress(_uint iAnimIdx)
-{
-	return m_pBody->Get_AnimationProgress(iAnimIdx);
-}
 
 void CCharacter::Late_Update(_float fTimeDelta)
 {
@@ -159,6 +133,8 @@ void CCharacter::Late_Update(_float fTimeDelta)
 
 	m_fMoveDistanceXZ = 0.f;
 	m_vMoveDirectionXZ = XMVectorSet(0, 0, 0, 0);
+
+	Get_CurrentSkill()->Late_Update(fTimeDelta);
 	__super::Late_Update(fTimeDelta);
 }
 HRESULT CCharacter::Render()
@@ -169,6 +145,52 @@ HRESULT CCharacter::Render()
 		if (pCollider->Is_Active())
 			pCollider->Render();
 	return S_OK;
+}
+
+_bool CCharacter::Use_Skill(CSkill* pSkill)
+{
+	return true;
+}
+
+_float CCharacter::Get_BodyCollisionRadius()
+{
+	return Get_Collider(m_iBodyColliderIndex)->Get_Desc()->Radius;
+}
+
+_float3 CCharacter::Get_BodyCollisionOffset()
+{
+	return  Get_Collider(m_iBodyColliderIndex)->Get_Offset();
+}
+
+_uint CCharacter::Get_CurrentAnimIdx()
+{
+	return m_pBody->Get_AnimIndex();
+}
+
+CCollider_Sphere* CCharacter::Get_Collider(_uint iColliderIndex)
+{
+	return static_cast<CCollider_Sphere*>(m_vecCollider[iColliderIndex]);
+
+}
+_float CCharacter::Get_AnimationProgress(_uint iAnimIdx)
+{
+	return m_pBody->Get_AnimationProgress(iAnimIdx);
+}
+
+void CCharacter::Move_Forward(_float fDist)
+{
+	m_vMoveDirectionXZ = XMVector3Normalize( m_pTransformCom->Get_State(CTransform::STATE_LOOK))* fDist;
+}
+void CCharacter::Hit(_int fDamage)
+{
+	cout << "Hit" << endl;
+	m_tStat.iHP -= fDamage;
+	if (m_tStat.iHP <= 0)
+	{
+		m_tStat.iHP = 0;
+		On_HPZero();
+	}
+
 }
 void CCharacter::Free()
 {

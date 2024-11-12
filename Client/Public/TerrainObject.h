@@ -2,7 +2,7 @@
 #include "ModelObject.h"
 
 BEGIN(Engine)
-class CCollider;
+class CColliderBase;
 END
 
 BEGIN(Client)
@@ -51,7 +51,7 @@ protected:
 	BUILD_ITEM_TYPE m_eBuildItemType = BUILD_ITEM_TYPE::LAST;
 	_uint m_iIndex = 0;
 	DIRECTION m_eTerrainDir = DIRECTION::LAST;
-	CCollider* m_pColliderCom = {nullptr};
+	CColliderBase* m_pColliderCom = {nullptr};
 	_bool m_bRotating = false;
 public:
 	static CTerrainObject* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

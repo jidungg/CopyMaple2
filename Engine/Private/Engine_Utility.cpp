@@ -9,3 +9,9 @@ KEYFRAME CEngineUtility::Lerp_Frame(const KEYFRAME& Frame1, const KEYFRAME& Fram
 
 	return KeyFrame;
 }
+
+_float CEngineUtility::Get_RandomFloat(_float fMin, _float fMax)
+{
+	float random = static_cast<float>(rand()) / static_cast<float>(RAND_MAX); 
+	return fMin + random * (fMax - fMin);
+}

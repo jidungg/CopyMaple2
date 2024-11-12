@@ -127,7 +127,7 @@ namespace Engine
 		XMVECTOR		vPoint;
 		XMVECTOR		vNormal;
 		_float fDist;
-		class CCollider* pCollider = nullptr;
+		class CColliderBase* pCollider = nullptr;
 
 	}RAYCASTHIT;
 
@@ -138,6 +138,13 @@ namespace Engine
 		XMFLOAT3		vPosition;
 		float			fTrackPosition;
 	}KEYFRAME;
+
+	typedef struct AnimEvent
+	{
+		_float fTime;
+		_bool bIsTriggered = false;
+		function<void()> pFunc;
+	}ANIM_EVENT;
 }
 
 

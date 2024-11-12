@@ -46,8 +46,10 @@ public:
 	void Set_LayerID(_uint iLayerID) { m_iLayerID = iLayerID; }
 
 	class CTransform* Get_Transform() { return m_pTransformCom; }
+	CGameObject* Get_Target() { return m_pTarget; }
 	_uint Get_LayerID() { return m_iLayerID; }
 	_uint Get_ObjID() { return m_iObjID; }
+	_vector Get_Position() { return m_pTransformCom->Get_State(CTransform::STATE_POSITION); }
 
 	bool Is_Active() { return m_bActive; }
 	bool Is_Dead() { return m_bDead; }
@@ -63,7 +65,6 @@ protected:
 	class CGameInstance*		m_pGameInstance = { nullptr };
 
 	class CTransform*			m_pTransformCom = { nullptr };
-	CGameObject*				m_pTarget = { nullptr };
 
 	list<CGameObject*>			m_pChilds;
 	map<const _wstring, class CComponent*>		m_Components;
@@ -78,6 +79,8 @@ protected:
 	_uint						m_iObjID = {};
 	static _uint				m_iObjCount;
 	_uint						m_iLayerID = {};
+private:
+	CGameObject*				m_pTarget = { nullptr };
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;

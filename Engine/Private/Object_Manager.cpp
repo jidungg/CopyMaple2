@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Layer.h"
 #include "UIObject.h"
+#include "Collider.h"
 
 CObject_Manager::CObject_Manager()
 	: m_pGameInstance { CGameInstance::GetInstance() }
@@ -149,6 +150,18 @@ bool CObject_Manager::RayCast(const Ray& tRay, RaycastHit* pOut)
 	if (bIsHit)
 		*pOut = tMinHit;
 	return bIsHit;
+}
+
+void CObject_Manager::Check_Collision(_uint iLayerId, CGameObject* pObject, list<CGameObject*>* pOutList)
+{
+	list<CGameObject*>* pList = Get_GameObjectList(iLayerId);
+	for (auto& pObj : *pList)
+	{
+		if (pObj->Is_Dead())
+			continue;
+		if (pObject->Check_Collision(pObj))
+			pOutList->push_back(pObj);
+	}
 }
 
 CGameObject* CObject_Manager::Get_FirstGameObject(_uint iLevIdx, _uint iLayerId)

@@ -13,21 +13,6 @@ CRenderer::CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 HRESULT CRenderer::Initialize()
 {
 
-	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
-	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
-	depthStencilDesc.DepthEnable = FALSE; // ���� �׽�Ʈ ��Ȱ��ȭ
-	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
-	depthStencilDesc.StencilEnable = FALSE;
-
-	m_pDevice->CreateDepthStencilState(&depthStencilDesc, &m_pUIDSState);
-
-	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
-	depthStencilDesc.DepthEnable = TRUE; // ���� �׽�Ʈ Ȱ��ȭ
-	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
-	depthStencilDesc.StencilEnable = FALSE;
-	m_pDevice->CreateDepthStencilState(&depthStencilDesc, &m_pNonUIDSState);
 
 	return S_OK;
 }
@@ -103,7 +88,7 @@ HRESULT CRenderer::Render_Blend()
 
 HRESULT CRenderer::Render_UI()
 {
-	m_pContext->OMSetDepthStencilState(m_pUIDSState, 1);
+
 	priority_queue<CUIObject*, vector<CUIObject*>, UIPriorityCompare> pqUI;
 	for (auto& pRenderObject : m_RenderObjects[RG_UI])
 	{
@@ -119,7 +104,7 @@ HRESULT CRenderer::Render_UI()
 		Safe_Release(pUI);
 		pqUI.pop();
 	}
-	m_pContext->OMSetDepthStencilState(m_pNonUIDSState, 1);
+
 
 	return S_OK;
 }
@@ -151,8 +136,6 @@ void CRenderer::Free()
 
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
-	Safe_Release(m_pUIDSState);
-	Safe_Release(m_pNonUIDSState);
 	
 }
 

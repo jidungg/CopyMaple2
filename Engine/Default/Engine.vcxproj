@@ -171,6 +171,7 @@ call UpdateLib.bat</Command>
     <ClInclude Include="..\Public\Channel.h" />
     <ClInclude Include="..\Public\Collider.h" />
     <ClInclude Include="..\Public\Collider_AABB.h" />
+    <ClInclude Include="..\Public\Collider_Frustum.h" />
     <ClInclude Include="..\Public\Collider_Sphere.h" />
     <ClInclude Include="..\Public\CollisionManager.h" />
     <ClInclude Include="..\public\Component.h" />
@@ -236,6 +237,7 @@ call UpdateLib.bat</Command>
     <ClCompile Include="..\Private\Channel.cpp" />
     <ClCompile Include="..\Private\Collider.cpp" />
     <ClCompile Include="..\Private\Collider_AABB.cpp" />
+    <ClCompile Include="..\Private\Collider_Frustum.cpp" />
     <ClCompile Include="..\Private\Collider_Sphere.cpp" />
     <ClCompile Include="..\Private\CollisionManager.cpp" />
     <ClCompile Include="..\private\Component.cpp" />
@@ -287,6 +289,9 @@ call UpdateLib.bat</Command>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Bin\ShaderFiles\Engine_Shader_Define.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

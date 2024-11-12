@@ -70,6 +70,16 @@ bool CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones
 	}
 	m_fCurrentTrackPosition += m_fTickPerSecond * fTimeDelta;
 
+	for (auto& tEvnt : m_listAnimEvent)
+	{
+		if (tEvnt.bIsTriggered)
+			continue;
+		if (Get_Progress() >= tEvnt.fTime)
+		{
+			tEvnt.pFunc();
+			tEvnt.bIsTriggered = true;
+		}
+	}
 	return false;
 }
 
@@ -104,6 +114,8 @@ void CAnimation::Reset_CurrentTrackPosition()
 {
 	m_fCurrentTrackPosition = 0.f; 
 	ZeroMemory(m_CurrentKeyFrameIndices.data(), 0);
+	for (auto& tEvnt : m_listAnimEvent)
+		tEvnt.bIsTriggered = false;
 }
 
 void CAnimation::Get_CurrentFrame(map<_uint, KEYFRAME>* pOutKeyFrames) const
@@ -128,6 +140,11 @@ void CAnimation::Get_Frame(_float fTrackPos, map<_uint, KEYFRAME>* pOutKeyFrames
 		channel->Get_Frame(fTrackPos, pOutKeyFrames);
 }
 
+
+void CAnimation::Register_AnimEvent(ANIM_EVENT tAnimEvent)
+{
+	m_listAnimEvent.push_back(tAnimEvent);
+}
 
 void CAnimation::Ready_AnimTransition()
 {

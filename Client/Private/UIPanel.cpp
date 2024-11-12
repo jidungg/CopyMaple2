@@ -84,7 +84,7 @@ HRESULT CUIPanel::Bind_ShaderResources()
 HRESULT CUIPanel::Ready_Components()
 {
 	/* Com_Shader */
-	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxPosTex"),
+	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_UI"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
@@ -100,11 +100,6 @@ HRESULT CUIPanel::Ready_Components()
 
 	return S_OK;
 }
-void CUIPanel::Priority_Update(_float fTimeDelta)
-{
-	__super::Priority_Update(fTimeDelta);
-}
-
 void CUIPanel::Set_Texture(CTexture* pTexture)
 {
 	Remove_Component(m_pTextureCom);

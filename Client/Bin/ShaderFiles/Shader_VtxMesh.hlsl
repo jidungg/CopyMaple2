@@ -1,4 +1,6 @@
 
+#include "../../../EngineSDK/hlsl/Engine_Shader_Define.hlsli"
+
 float4x4		g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
 vector			g_vLightDir = float4(1.f, -1.f, 1.f, 0.f);
@@ -12,13 +14,6 @@ vector			g_vMtrlSpecular = float4(0.f, 0.f, 0.f, 0.f);
 
 vector			g_vCamPosition;
 
-/* D3D11_SAMPLER_DESC */
-sampler			LinearSampler = sampler_state 
-{	
-	Filter = MIN_MAG_MIP_LINEAR;
-	AddressU = wrap;
-	AddressV = wrap;
-};
 
 struct VS_IN
 {
@@ -36,7 +31,6 @@ struct VS_OUT
 	float4		vWorldPos : TEXCOORD1;
 };
 
-/* 1. ������ġ�� ���� �������� ��ȯ������ �����Ѵ�.(���庯ȯ, �亯ȯ, ) */
 
 VS_OUT VS_MAIN(VS_IN In)
 {
@@ -77,18 +71,15 @@ PS_OUT PS_MAIN(PS_IN In)
 	if (vMtrlDiffuse.a < 0.1f)
 		discard;
 
-	/* ��� */
+
 	float4			vShade = saturate(max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
 	
-	/* 0.f ~ 1.f */
-	/* ���� ���ͼ� �°� ƨ�� �ݻ纤�Ϳ� �� �ȼ��� �ٶ󺸴� �ü����Ͱ� �̷�� ���� 180�� �϶� �ִ� */
 	float4			vReflect = reflect(normalize(g_vLightDir), normalize(In.vNormal));
 	float4			vLook = In.vWorldPos - g_vCamPosition;
 
 	float			fSpecular = pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f);
 
-	/* (g_vLightDiffuse * vMtrlDiffuse) : ���� ���� �ȼ��� �ݻ��ϴ� ����.  */
-	/* (g_vLightSpecular * vMtrlSpecular) : ���� ���� �ȼ��� �ݻ��ϴ� ����.  */
+
 	Out.vColor = (g_vLightDiffuse * vMtrlDiffuse) * vShade + (g_vLightSpecular * g_vMtrlSpecular) * fSpecular;
 
 	return Out;
@@ -100,6 +91,10 @@ technique11			DefaultTechnique
 	
 	pass DefaultPass
 	{
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
 		VertexShader = compile vs_5_0 VS_MAIN();
 		PixelShader = compile ps_5_0 PS_MAIN();
 	}

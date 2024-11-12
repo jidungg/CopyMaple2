@@ -2,8 +2,6 @@
 
 #include "GameObject.h"
 
-/* ũ���̾�Ʈ���� ���� �����̿� ��ü�帣�� �θ� �Ǵ� Ŭ������.*/
-/* �������ѿ�9���� ���� �����Ϳ� ����� ������ ���� ����. */
 
 BEGIN(Engine)
 
@@ -15,9 +13,6 @@ class ENGINE_DLL CUIObject  : public CGameObject
 public:
 	typedef struct UIObjectDesc: public CRect_Transform::RECTTRANSFORM_DESC
 	{
-		CGameObject* pParent = { nullptr };
-		CGameObject* pTarget = { nullptr };
-		CTexture* pTextureCom = { nullptr };
 	}UIOBJECT_DESC;
 protected:
 	CUIObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

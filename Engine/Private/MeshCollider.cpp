@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include "DirectXCollision.h"
 CCollider_Mesh::CCollider_Mesh(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CCollider(pDevice, pContext)
+	: CColliderBase(pDevice, pContext)
 {
 	m_eType = COLLIDER_TYPE::MESH;
 }
@@ -50,7 +50,7 @@ void CCollider_Mesh::Update(_fmatrix WorldMatrix)
 {
 }
 
-_bool CCollider_Mesh::Intersects(CCollider* pOther)
+_bool CCollider_Mesh::Intersects(CColliderBase* pOther)
 {
 	return _bool();
 }
@@ -150,6 +150,11 @@ void CCollider_Mesh::Free()
 	__super::Free();
 	Safe_Release(m_pStagingVB);
 	Safe_Release(m_pStagingIB);
+}
+
+HRESULT CCollider_Mesh::Render()
+{
+	return S_OK;
 }
 
 _bool CCollider_Mesh::Contains(const FXMVECTOR& vPos)

@@ -5,13 +5,13 @@
 
 
 CCollider_AABB::CCollider_AABB(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	:CCollider(pDevice, pContext)
+	:CColliderBase(pDevice, pContext)
 {
 	m_eType = (COLLIDER_TYPE::AABB);
 }
 
 CCollider_AABB::CCollider_AABB(const CCollider_AABB& Prototype)
-	:CCollider(Prototype)
+	:CColliderBase(Prototype)
 {
 	m_eType = (COLLIDER_TYPE::AABB);
 }
@@ -35,10 +35,10 @@ void CCollider_AABB::Update(_fmatrix WorldMatrix)
 }
 
 
-_bool CCollider_AABB::Intersects(CCollider* pOther)
+_bool CCollider_AABB::Intersects(CColliderBase* pOther)
 {
 	m_bCollide = false;
-	CCollider::COLLIDER_TYPE eType = pOther->Get_ColliderType();
+	CColliderBase::COLLIDER_TYPE eType = pOther->Get_ColliderType();
 	switch (eType)
 	{
 		//TODO :AABB OBB MESH
@@ -63,9 +63,13 @@ _bool CCollider_AABB::Contains(const FXMVECTOR& vPosition)
 
 _bool CCollider_AABB::RayCast(const Ray& tRay, RaycastHit* pOut)
 {
-	_bool bRet = m_pBoundDesc->Intersects(tRay.vOrigin, tRay.vDirection, pOut->fDist);
+	_float fDist = FLT_MAX;
+	_bool bRet = m_pBoundDesc->Intersects(tRay.vOrigin, tRay.vDirection, fDist);
 	if(bRet)
 	{
+		if (tRay.fDist < fDist)
+			return false;
+		pOut->fDist = fDist;
 		pOut->vPoint = tRay.vOrigin + tRay.vDirection * pOut->fDist;
 		pOut->vNormal = pOut->vPoint - XMLoadFloat3(& m_pBoundDesc->Center);
 		float x = XMVectorGetX(pOut->vNormal);

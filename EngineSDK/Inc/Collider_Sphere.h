@@ -2,15 +2,15 @@
 #include "Collider.h"
 BEGIN(Engine)
 class ENGINE_DLL CCollider_Sphere :
-    public CCollider
+    public CColliderBase
 {
 public:
-	typedef struct SphereColliderDesc : public CCollider::ColliderDesc
+	typedef struct SphereColliderDesc : public CColliderBase::ColliderDesc
 	{
 		_float		fRadius;
 	}SPHERE_COLLIDER_DESC;
 	static constexpr _tchar m_szProtoTag[] = TEXT("Proto_Collider_Sphere");
-protected:
+private:
 	explicit CCollider_Sphere(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	explicit CCollider_Sphere(const CCollider_Sphere& Prototype);
 	virtual ~CCollider_Sphere() = default;
@@ -19,14 +19,14 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	// CCollider을(를) 통해 상속됨
 	void Update(_fmatrix WorldMatrix) override;
-	virtual _bool Intersects(CCollider* pOther) override;
+	virtual _bool Intersects(CColliderBase* pOther) override;
 	virtual _bool Contains(const FXMVECTOR& vPosition)override;
 ;	virtual _bool RayCast(const Ray& tRay, RaycastHit* pOut) override;
 	virtual HRESULT  Render() override;
 
 	const BoundingSphere* Get_Desc() const {return m_pBoundDesc;}
 	const _float3 Get_Offset() const { return m_pOriginalBoundDesc->Center; }
-protected:
+private:
 	BoundingSphere* m_pOriginalBoundDesc = {};
 	BoundingSphere* m_pBoundDesc = {};
 public:

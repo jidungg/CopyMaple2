@@ -5,6 +5,8 @@
 BEGIN(Engine)
 class CMaterial;
 class CMesh;
+class CEvent;
+
 class ENGINE_DLL CModel : public CComponent
 {
 public:
@@ -48,6 +50,7 @@ public:
 	void Set_AnimPostDelayPercent(_uint iIdx, _float fPercent);
 	void Set_MeshActive(_uint iIdx, _bool bIsOn);
 	void Switch_Animation(_uint iIdx);
+	void Register_AnimEvent(_uint iAnimIdx, ANIM_EVENT tAnimEvent);
 
 protected:
 	TYPE						m_eModelType = { TYPE_END };
@@ -64,7 +67,7 @@ protected:
 	_uint						m_iCurrentAnimIndex = {};
 	_uint						m_iPrevAnimIndex = {};	
 	_uint						m_iNumAnimations = {};
-	vector<class CAnimation*>	m_Animations;
+	vector<class CAnimation*>	m_vecAnimation;
 
 	map<_uint, KEYFRAME> m_mapAnimTransLeftFrame;
 protected:

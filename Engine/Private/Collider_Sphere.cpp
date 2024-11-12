@@ -3,13 +3,13 @@
 #include "DebugDraw.h"
 
 CCollider_Sphere::CCollider_Sphere(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	:CCollider(pDevice, pContext)
+	:CColliderBase(pDevice, pContext)
 {
 	m_eType = (COLLIDER_TYPE::SPHERE);
 }
 
 CCollider_Sphere::CCollider_Sphere(const CCollider_Sphere& Prototype)
-	:CCollider(Prototype)
+	:CColliderBase(Prototype)
 {
 	m_eType = (COLLIDER_TYPE::SPHERE);
 }
@@ -34,10 +34,10 @@ void CCollider_Sphere::Update(_fmatrix WorldMatrix)
 }
 
 
-_bool CCollider_Sphere::Intersects(CCollider* pOther)
+_bool CCollider_Sphere::Intersects(CColliderBase* pOther)
 {
 	m_bCollide = false;
-	CCollider::COLLIDER_TYPE eType = pOther->Get_ColliderType();
+	CColliderBase::COLLIDER_TYPE eType = pOther->Get_ColliderType();
 	switch (eType)
 	{
 		//TODO :AABB OBB MESH

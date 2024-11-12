@@ -4,7 +4,7 @@
 BEGIN(Engine)
 class CMesh;
 class ENGINE_DLL CCollider_Mesh :
-    public CCollider
+    public CColliderBase
 {
 public:
 	typedef struct MeshColliderDesc
@@ -20,8 +20,9 @@ public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual	void Update(_fmatrix WorldMatrix) override;
+	HRESULT Render() override;
 	virtual _bool Contains(const FXMVECTOR& vPos) override;
-	virtual _bool Intersects(CCollider* pOther) override;
+	virtual _bool Intersects(CColliderBase* pOther) override;
 	bool RayCast(const Ray& tRay, RaycastHit* pOut) override;
 
 private:
@@ -33,10 +34,6 @@ public:
 	static CCollider_Mesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
-
-
-
-
 };
 
 END

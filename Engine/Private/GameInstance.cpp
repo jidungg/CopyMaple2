@@ -13,6 +13,8 @@
 #include "Physics.h"
 #include "EventManager.h"
 #include "CollisionManager.h"
+#include "Engine_Utility.h"
+
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -152,6 +154,16 @@ void CGameInstance::Update_TimeDelta(const _wstring & strTimerTag)
 	return m_pTimer_Manager->Update_TimeDelta(strTimerTag);
 }
 
+KEYFRAME CGameInstance::Lerp_Frame(const KEYFRAME& Frame1, const KEYFRAME& Frame2, _float fRatio)
+{
+	return CEngineUtility::Lerp_Frame(Frame1, Frame2, fRatio);
+}
+
+_float CGameInstance::Get_RandomFloat(_float fMin, _float fMax)
+{
+	return CEngineUtility::Get_RandomFloat(fMin, fMax);
+}
+
 HRESULT CGameInstance::Add_RenderObject(CRenderer::RENDERGROUP eRenderGroup, CGameObject * pRenderObject)
 {
 	if (nullptr == m_pRenderer)
@@ -272,6 +284,14 @@ bool CGameInstance::RayCast(const Ray& tRay, RaycastHit* pOut)
 		return false;
 
 	return m_pObject_Manager->RayCast(tRay, pOut);
+}
+
+list<CGameObject*>* CGameInstance::Get_GameObjectList(_uint iLayerId)
+{
+	if (nullptr == m_pObject_Manager)
+		return nullptr;
+
+	return m_pObject_Manager->Get_GameObjectList(iLayerId);
 }
 
 void CGameInstance::Set_Transform(CPipeLine::D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix)

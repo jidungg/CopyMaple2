@@ -23,7 +23,6 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render()override;
-	virtual void Priority_Update(_float fTimeDelta) override;
 
 	void Set_Texture(CTexture* pTexture);
 	bool Is_TextureNullptr() { return m_pTextureCom == nullptr; }

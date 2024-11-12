@@ -8,6 +8,7 @@
 #include "UIQuickSlot.h"
 #include "UIInventory.h"
 #include "Inventory.h"
+#include "UIBar.h"
 
 IMPLEMENT_SINGLETON(CUIBundle)
 
@@ -50,6 +51,21 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	m_pQuickSlotBundle = static_cast<CUIQuickSlotBundle*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIQuickSlotBundle::m_szProtoTag, &tQuickDesc));
 	Add_Child(m_pQuickSlotBundle);
 	Safe_AddRef(m_pQuickSlotBundle);
+
+	CUIBar::UIBarDesc tBarDesc;
+	tBarDesc.eAnchorType = CORNOR_TYPE::CENTER;
+	tBarDesc.ePivotType = CORNOR_TYPE::CENTER;
+	tBarDesc.fSizeX = 300;
+	tBarDesc.fSizeY = 30;
+	tBarDesc.fXOffset = 0;
+	tBarDesc.fYOffset = 0;
+
+	tBarDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock( TEXT("castingbar_mainfrm.dds")));
+	tBarDesc.pFillTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("castingbar_fill.dds")));
+	m_pCastingBar = static_cast<CUIBar*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIBar::m_szProtoTag, &tBarDesc));
+	Add_Child(m_pCastingBar);
+	Safe_AddRef(m_pCastingBar);
+	m_pCastingBar->Set_Active(false);
 	return S_OK;
 }
 
@@ -73,9 +89,20 @@ void CUIBundle::Update_Slot(ITEM_TYPE eType, _uint iIndex)
 	m_pInventory->Update_Slot(eType, iIndex);
 }
 
+void CUIBundle::Update_CastingRatio(_float fRatio)
+{
+	m_pCastingBar->Update_Ratio(fRatio);
+}
+
+void CUIBundle::Set_CastingBarVisible(_bool bVisible)
+{
+	m_pCastingBar->Set_Active(bVisible);
+}
+
 void CUIBundle::Free()
 {
 	__super::Free();
 	Safe_Release(m_pQuickSlotBundle);
 	Safe_Release(m_pInventory);
+	Safe_Release(m_pCastingBar);
 }

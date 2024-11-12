@@ -67,7 +67,6 @@ HRESULT CUIInventory::Ready_Slots()
 			tSlotDesc.fSizeY = m_fSlotSize.y;
 			tSlotDesc.pInvenSlot = pSlots->at(i);
 			tSlotDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("Texture_InvenSlotBack")));
-			tSlotDesc.pParent = this;
 
 			CUIInvenSlot* pSlot =  static_cast<CUIInvenSlot*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIInvenSlot::m_szProtoTag, &tSlotDesc));
 			Add_Child(pSlot);

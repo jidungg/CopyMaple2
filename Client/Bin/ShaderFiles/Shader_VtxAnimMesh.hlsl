@@ -1,4 +1,6 @@
 
+#include "../../../EngineSDK/hlsl/Engine_Shader_Define.hlsli"
+
 float4x4 g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
 float4x4 g_BoneMatrices[512];
@@ -13,14 +15,6 @@ vector g_vMtrlAmbient = float4(0.3f, 0.3f, 0.3f, 1.f);
 vector g_vMtrlSpecular = float4(1.f, 1.f, 1.f, 1.f);
 
 vector g_vCamPosition;
-
-/* D3D11_SAMPLER_DESC */
-sampler LinearSampler = sampler_state
-{
-    Filter = MIN_MAG_MIP_LINEAR;
-    AddressU = wrap;
-    AddressV = wrap;
-};
 
 struct VS_IN
 {
@@ -110,6 +104,10 @@ technique11 DefaultTechnique
 	
     pass DefaultPass
     {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
         VertexShader = compile vs_5_0 VS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN();
     }

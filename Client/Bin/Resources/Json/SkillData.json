@@ -16,7 +16,8 @@
             "preceding": [
                 [ "BASIC_ATTACK", 0 ]
             ],
-            "animation": [ 0 ]
+            "animation": [ 0 ],
+            "eventtime": [ [ 0 ,0] ]
         },
         {
             "id": "TELEPORT",
@@ -34,7 +35,8 @@
             "preceding": [
                 [ "TELEPORT", 0 ]
             ],
-            "animation": [ 126 ]
+            "animation": [ 126 ],
+            "eventtime": [ [ 0, 0 ] ]
         },
         {
             "id": "MAGIC_CLAW",
@@ -52,7 +54,8 @@
             "preceding": [
                 [ "MAGIC_CLAW", 0 ]
             ],
-            "animation": [ 82 ]
+            "animation": [ 82 ],
+            "eventtime": [ [ 0, 0 ] ]
         },
         {
             "id": "FLAME_WAVE",
@@ -70,7 +73,8 @@
             "preceding": [
                 [ "FLAME_WAVE", 0 ]
             ],
-            "animation": [ 47 ]
+            "animation": [ 47 ],
+            "eventtime": [ [ 0, 0 ] ]
         },
         {
             "id": "FIRE_TORNADO",
@@ -88,7 +92,8 @@
             "preceding": [
                 [ "FLAME_WAVE", 0 ]
             ],
-            "animation": [ 39 ]
+            "animation": [ 39 ],
+            "eventtime": [ [ 0, 0 ] ]
         },
         {
             "id": "KINDLING",
@@ -106,7 +111,8 @@
             "preceding": [
                 [ "FLAME_WAVE", 0 ]
             ],
-            "animation": [ 66, 67 ]
+            "animation": [ 66, 67 ],
+            "eventtime": [ [ 1, 0 ] ]
         },
         {
             "id": "KINDLING2",
@@ -124,7 +130,8 @@
             "preceding": [
                 [ "FLAME_WAVE", 0 ]
             ],
-            "animation": [ 68, 69 ]
+            "animation": [ 68, 69 ],
+            "eventtime": [ [ 1, 0 ] ]
         },
         {
             "id": "BBQ_PARTY",
@@ -142,7 +149,8 @@
             "preceding": [
                 [ "KINDLING", 3 ]
             ],
-            "animation": [ 2, 3 ]
+            "animation": [ 2, 3 ],
+            "eventtime": [ [ 1, 0 ] ]
         },
         {
             "id": "FAKE_METEOR",
@@ -160,7 +168,8 @@
             "preceding": [
                 [ "BBQ_PARTY", 3 ]
             ],
-            "animation": [ 37, 38 ]
+            "animation": [ 37, 38 ],
+            "eventtime": [ [ 1, 0 ] ]
         },
         {
             "id": "WILD_FIRE",
@@ -179,7 +188,8 @@
                 [ "BBQ_PARTY", 5 ],
                 [ "FAKE_METEOR", 5 ]
             ],
-            "animation": [ 130 ]
+            "animation": [ 130 ],
+            "eventtime": [ [ 0, 0 ] ]
         },
         {
             "id": "WILD_FIRE2",
@@ -197,7 +207,8 @@
             "preceding": [
                 [ "BBQ_PARTY", 3 ]
             ],
-            "animation": [ 126 ]
+            "animation": [ 126 ],
+            "eventtime": [ [ 0, 0 ] ]
         },
         {
             "id": "SNAIL_ATTACK",
@@ -215,7 +226,8 @@
             "preceding": [
                 [ "SNAIL_ATTACK", 0 ]
             ],
-            "animation": [ 0 ]
+            "animation": [ 0 ],
+            "eventtime": [ [ 0, 0 ] ]
         },
         {
             "id": "CRAB_ATTACK",
@@ -232,7 +244,8 @@
             "levelupdata": [ 45.0 ],
             "preceding": [
             ],
-            "animation": [ 0 ]
+            "animation": [ 0 ],
+            "eventtime": [ [ 0, 0 ] ]
         },
         {
             "id": "STUMP_CHARGE_ATTACK",
@@ -249,7 +262,8 @@
             "levelupdata": [ 45.0 ],
             "preceding": [
             ],
-            "animation": [ 0, 1 ]
+            "animation": [ 0, 1 ],
+            "eventtime": [ [ 1, 0 ] ]
         },
         {
             "id": "STUMP_KICK",
@@ -267,7 +281,8 @@
             "preceding": [
 
             ],
-            "animation": [ 2 ]
+            "animation": [ 2 ],
+            "eventtime": [ [ 0, 0 ] ]
         },
         {
             "id": "STUMP_BUNTING",
@@ -285,7 +300,8 @@
             "preceding": [
 
             ],
-            "animation": [ 3, 4 ]
+            "animation": [ 3, 4 ],
+            "eventtime": [ [ 1, 0 ] ]
         },
         {
             "id": "BAYAR_ATTACK_A",
@@ -303,7 +319,8 @@
             "preceding": [
 
             ],
-            "animation": [ 1, 9 ]
+            "animation": [ 1, 9 ],
+            "eventtime": [ [ 1, 0 ] ]
         },
         {
             "id": "BAYAR_ATTACK_B",
@@ -321,7 +338,8 @@
             "preceding": [
 
             ],
-            "animation": [ 2, 10 ]
+            "animation": [ 2, 10 ],
+            "eventtime": [ [ 1, 0 ] ]
         },
         {
             "id": "BAYAR_ATTACK_C",
@@ -339,7 +357,8 @@
             "preceding": [
 
             ],
-            "animation": [ 3, 11 ]
+            "animation": [ 3, 11 ],
+            "eventtime": [ [ 1, 0 ] ]
         },
         {
             "id": "BAYAR_ATTACK_D",
@@ -357,7 +376,8 @@
             "preceding": [
 
             ],
-            "animation": [ 4, 12 ]
+            "animation": [ 4, 12 ],
+            "eventtime": [ [ 1, 0 ] ]
         },
         {
             "id": "BAYAR_ATTACK_E",
@@ -375,7 +395,8 @@
             "preceding": [
 
             ],
-            "animation": [ 5, 13, 16 ]
+            "animation": [ 5, 13, 16 ],
+            "eventtime": [ [ 2, 0 ] ]
         },
         {
             "id": "BAYAR_ATTACK_F",
@@ -393,7 +414,8 @@
             "preceding": [
 
             ],
-            "animation": [ 5, 6 ]
+            "animation": [ 5, 6 ],
+            "eventtime": [ [1, 0 ] ]
         },
         {
             "id": "BAYAR_ATTACK_G",
@@ -411,7 +433,11 @@
             "preceding": [
 
             ],
-            "animation": [ 7, 14, 17, 19 ]
+            "animation": [ 7, 14, 17, 19 ],
+            "eventtime": [
+                [ 1, 0 ],
+                [ 2, 0 ]
+            ]
         },
         {
             "id": "BAYAR_ATTACK_H",
@@ -429,7 +455,8 @@
             "preceding": [
 
             ],
-            "animation": [ 8, 15, 18]
+            "animation": [ 8, 15, 18 ],
+            "eventtime": [ [ 1, 0 ] ]
         }
     ]
 }

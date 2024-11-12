@@ -5,6 +5,7 @@ BEGIN(Client)
 class IQuickItem;
 class CUIQuickSlotBundle;
 class CUIInventory;
+class CUIBar;
 class CUIBundle :
     public CUIContainer
 {
@@ -28,9 +29,12 @@ public:
 
 	void Set_QuickItem(KEY eHotKey, IQuickItem* pItem);
 	void Update_Slot(ITEM_TYPE eType, _uint iIndex);
+	void Update_CastingRatio(_float fRatio);
+	void Set_CastingBarVisible(_bool bVisible);
 private:
-	CUIQuickSlotBundle* m_pQuickSlotBundle = nullptr;
-	CUIInventory* m_pInventory = nullptr;
+	CUIQuickSlotBundle* m_pQuickSlotBundle = { nullptr };
+	CUIInventory* m_pInventory = { nullptr };
+	CUIBar* m_pCastingBar = { nullptr };
 public:
 	void Free() override;
 };

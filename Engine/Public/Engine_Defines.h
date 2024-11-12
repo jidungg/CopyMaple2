@@ -164,6 +164,7 @@ namespace Engine
 #include <fstream>
 #include <iostream>
 #include <filesystem>
+#include "random"
 using namespace std;
 namespace fs = std::filesystem;
 using namespace fs;

@@ -10,7 +10,7 @@ class CVIBuffer_Rect;
 class CStateMachine;
 class CHumanModelObject;
 class CCollider_Sphere;
-class CCollider;
+class CColliderBase;
 class CCollider_Sphere;
 class CAnimation;
 END
@@ -37,19 +37,23 @@ public:
 	virtual void Priority_Update(_float fTimeDelta) override;
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Update_Collider();
+	virtual _bool Check_Collision(CGameObject* pOther) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
-	virtual _bool Check_Collision(CGameObject* pOther) override;
-
 
 	virtual void On_StateChange(_uint iState) abstract;
 	virtual void On_SubStateChange(_uint iSubState) abstract;
 	virtual void On_AnimEnd(_uint iAnimIdx)abstract;
 	virtual void On_CastingEnd(CSkill* pSkill) abstract;
+	virtual void On_HPZero() abstract;
 	virtual _bool Use_Skill(CSkill* pSkill);
 
+	void Move_Forward(_float fDist);
+	void Hit(_int fDamage);
+
 	_vector Get_MoveDirection() { return m_vMoveDirectionXZ; }
-	_vector Get_Position() { return m_pTransformCom->Get_State(CTransform::STATE_POSITION); }
+	_vector Get_LookDirection() { return m_vLookDirectionXZ; }
+
 	_float Get_BodyCollisionRadius();
 	_float3 Get_BodyCollisionOffset();
 	_float Get_MoveDistance() { return m_fMoveDistanceXZ; }
@@ -58,10 +62,12 @@ public:
 	CSkill* Get_Skill(SKILL_ID eID) { return m_mapSkill[eID]; }
 	CSkill* Get_CurrentSkill() { return m_mapSkill[(SKILL_ID)m_iCurrentSkillID]; }
 	_float Get_AnimationProgress(_uint iAnimIdx);
+	TEAM Get_Team() { return m_eTeam; }
+
 protected:
 	class CModelObject* m_pBody = { nullptr };
 	CStateMachine* m_pAnimStateMachine = { nullptr };
-
+	TEAM m_eTeam = { TEAM::LAST };
 
 	map<SKILL_ID, CSkill* > m_mapSkill;
 
@@ -90,7 +96,7 @@ protected:
 	_bool m_bAttack{ false };
 	_int m_iCurrentSkillID{ 0 };
 
-	vector<CCollider*> m_vecCollider;
+	vector<CColliderBase*> m_vecCollider;
 private:
 	_uint m_iBodyColliderIndex = { 0 };
 public:

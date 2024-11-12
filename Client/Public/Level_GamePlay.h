@@ -27,8 +27,7 @@ private:
 private:
 	CUIQuickSlot* m_pQuickSlot = { nullptr };
 	CPlayer* m_pPlayer = { nullptr };
-	CModelObject* m_pModel = { nullptr };
-	CModelObject* m_pHair = nullptr;
+
 public:
 	static CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void Free() override;

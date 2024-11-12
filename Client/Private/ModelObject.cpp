@@ -143,6 +143,11 @@ void CModelObject::Switch_Animation(_uint iIdx)
 	m_pModelCom->Switch_Animation(iIdx);
 }
 
+void CModelObject::Register_AnimEvent(_uint iAnimIdx, ANIM_EVENT tAnimEvent)
+{
+	m_pModelCom->Register_AnimEvent(iAnimIdx, tAnimEvent);
+}
+
 
 
 HRESULT CModelObject::Replace_Model(MODELOBJ_DESC* pDesc)
@@ -164,8 +169,8 @@ HRESULT CModelObject::Replace_Model(MODELOBJ_DESC* pDesc)
 HRESULT CModelObject::Bind_ShaderResources(CShader* pShader)
 {
 
-    if (FAILED(m_pTransformCom->Bind_ShaderResource(pShader, "g_WorldMatrix")))
-        return E_FAIL;
+    //if (FAILED(m_pTransformCom->Bind_ShaderResource(pShader, "g_WorldMatrix")))
+    //    return E_FAIL;
     if (FAILED(pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
         return E_FAIL;
     if (FAILED(pShader->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW))))

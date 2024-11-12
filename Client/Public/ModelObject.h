@@ -9,7 +9,7 @@ class CShader;
 class CTexture;
 class CModel;
 class CVIBuffer_Rect;
-class CCollider;
+class CColliderBase;
 END
 
 BEGIN(Client)
@@ -49,6 +49,7 @@ public:
 	void Set_AnimPostDelayPercent(_uint iIdx, _float fPercent);
 	void Switch_Animation(_uint iIdx);
 	void Register_OnAnimEndCallBack(const function<void(_uint)>& fCallback) { m_listAnimEndCallBack.push_back(fCallback); }
+	void Register_AnimEvent(_uint iAnimIdx, ANIM_EVENT tAnimEvent);
 
 	HRESULT Replace_Model(MODELOBJ_DESC* pDesc);
 protected:

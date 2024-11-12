@@ -93,101 +93,107 @@ void CTerrainObject::Rotate()
 
 _vector CTerrainObject::BolckXZ(_vector vCharacterPosition, _vector vMoveDirection, _float fMoveDistance, _float fCollisionRadius, _float fCollisionHeight)
 {
+	_vector vNextPosition = vCharacterPosition + vMoveDirection * fMoveDistance;
+	if (false == DirectX::Internal::XMVector3IsUnit(vMoveDirection))
+		return vNextPosition;
 	m_pColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
 
 	CCollider_AABB* pCollider = static_cast<CCollider_AABB*>(m_pColliderCom);
+	BoundingBox* tBox = pCollider->Get_Desc();
 	_float3* pCorners = new _float3[8];
-	pCollider->Get_Desc()->GetCorners(pCorners);
+	tBox->GetCorners(pCorners);
+	_vector vBlockCenter= XMLoadFloat3( &tBox->Center);
 	_vector vMin = XMLoadFloat3(&pCorners[4]);
 	_vector vMax = XMLoadFloat3(&pCorners[2]);
+	_float fBlockX = vMax.m128_f32[0] - vMin.m128_f32[0];
+	_float fBlockZ = vMax.m128_f32[2] - vMin.m128_f32[2];
 	delete[] pCorners;
 
-	_vector vNextPosition = vCharacterPosition + vMoveDirection * fMoveDistance;
-	
-	_vector vClosestPoint = XMVectorClamp(vNextPosition, vMin, vMax);
 
-	_vector vCollisionDir = vNextPosition - vClosestPoint;
-	_float fDistance = XMVectorGetX(XMVector3Length(vCollisionDir));
-	_float fCollisionDepth = fCollisionRadius - fDistance;
+	//충돌한 평면을 찾는다
+	//평면의 방정식에  CharPosition과 NextPosition을 대입해서 평면까지의 거리를 구한다.
+	//평면에서 각 점으로까지의 거리의 부호가 다른지 확인한다.
 
 
-	if (fCollisionDepth > 0)
+	Ray ray(XMVectorSetY( vCharacterPosition, XMVectorGetY(vCharacterPosition) +fCollisionHeight), vMoveDirection, fMoveDistance);
+	RaycastHit hitInfo;
+	//평면의 Normal * (NextPosition에서 평면까지의 거리+ Radius) 만큼 이동
+	if (pCollider->RayCast(ray, &hitInfo))
 	{
-		_float fMoveSlope = vMoveDirection.m128_f32[2] / vMoveDirection.m128_f32[0];
-		_float fCollisionSlope = vCollisionDir.m128_f32[2] / vCollisionDir.m128_f32[0];
-		_vector vCollisionNormal = XMVector3Normalize(vCollisionDir);
-		//왼쪽
-		if (vMin.m128_f32[0] > vCharacterPosition.m128_f32[0])
-		{
-			//LB : 원 중심에서 충돌점 까지의 벡터보다 진행방향 기울기가 작으면 윗면충돌
-			if (vMin.m128_f32[2] > vCharacterPosition.m128_f32[2])
-			{
-				vCollisionNormal = fMoveSlope > fCollisionSlope ? XMVectorSet(-1, 0, 0, 0) : XMVectorSet(0, 0, -1, 0);
-			}
-			//LT
-			else if (vMax.m128_f32[2] <= vCharacterPosition.m128_f32[2])
-			{
-				vCollisionNormal = fMoveSlope > fCollisionSlope ? XMVectorSet(0, 0, 1, 0) : XMVectorSet(-1, 0, 0, 0);
-			}
-			//L
-			else
-			{
-				vCollisionNormal = XMVectorSet(-1, 0, 0, 0);
-			}
-		}
-		//오른쪽
-		else if (vMax.m128_f32[0] <= vCharacterPosition.m128_f32[0])
-		{
-			//RB
-			if (vMin.m128_f32[2] > vCharacterPosition.m128_f32[2])
-			{
-				vCollisionNormal = fMoveSlope > fCollisionSlope ? XMVectorSet(0, 0, -1, 0) : XMVectorSet(1, 0, 0, 0);
-			}
-			//RT
-			if (vMax.m128_f32[2] <= vCharacterPosition.m128_f32[2])
-			{
-				vCollisionNormal = fMoveSlope > fCollisionSlope ? XMVectorSet(1, 0, 0, 0) : XMVectorSet(0, 0, 1, 0);
-			}
-			//R
-			else
-			{
-				vCollisionNormal = XMVectorSet(1, 0, 0, 0);
-			}
-		}
-		//가운데
-		else
-		{
-			//B
-			if (vMin.m128_f32[2] > vCharacterPosition.m128_f32[2])
-			{
-				vCollisionNormal = XMVectorSet(0, 0, -1, 0);
-			}
-			//T
-			else if (vMax.m128_f32[2] <= vCharacterPosition.m128_f32[2])
-			{
-				vCollisionNormal = XMVectorSet(0, 0, 1, 0);
-
-			}
-			//M
-			else
-			{
-				return  vCharacterPosition;
-			}
-		}
-
-		//비빌 때 너무 빠름
-
-		_vector vVertical = vCollisionNormal * fCollisionDepth;
-		//_vector v11 = XMVector4Dot(vCollisionNormal, -fMoveDistance * vMoveDirection);
-		//_vector v1 = vCollisionNormal * XMVectorGetX(v11);
-		//_vector v2 = fMoveDistance * vMoveDirection ;
-		//_vector vHorizontal = XMVectorSetX(  v2,.0);//v1+v2
-		//_vector v2 = fMoveDistance * vMoveDirection;
-		//_vector vHorizontal = v1 + v2;
-		return  vNextPosition + vVertical;
+		//_float fPlaneA = hitInfo.vNormal.m128_f32[0];
+		//_float fPlaneB = hitInfo.vNormal.m128_f32[1];
+		//_float fPlaneC = hitInfo.vNormal.m128_f32[2];
+		//fPlaneD = -(fPlaneA * hitInfo.vPoint.m128_f32[0] + fPlaneB * hitInfo.vPoint.m128_f32[1] + fPlaneC * hitInfo.vPoint.m128_f32[2]);
+		_float fPlaneD = -XMVector3Dot(hitInfo.vNormal, hitInfo.vPoint).m128_f32[0];
+		_float fPlaneDistance = XMVector3Dot(hitInfo.vNormal, vNextPosition).m128_f32[0] + fPlaneD;
+		vNextPosition += hitInfo.vNormal * (fCollisionRadius + fabsf(fPlaneDistance));	
+		return vNextPosition;
 	}
+	else
+	{
+		_vector vClosestPoint = XMVectorClamp(vNextPosition, vMin, vMax);
+		_vector vCollisionDir = vNextPosition - vClosestPoint;
+		_float fDistance = XMVectorGetX(XMVector3Length(vCollisionDir));
+		_float fCollisionDepth = fCollisionRadius - fDistance;
 
-	return vCharacterPosition + vMoveDirection * fMoveDistance;
+		if (fCollisionDepth > 0)
+		{
+			_float fMoveSlope = vMoveDirection.m128_f32[2] / vMoveDirection.m128_f32[0];
+			_float fCollisionSlope = vCollisionDir.m128_f32[2] / vCollisionDir.m128_f32[0];
+			_vector vCollisionNormal = XMVector3Normalize(vCollisionDir);
+			//왼쪽
+			if (vMin.m128_f32[0] > vCharacterPosition.m128_f32[0])
+			{
+				//LB : 원 중심에서 충돌점 까지의 벡터보다 진행방향 기울기가 작으면 윗면충돌
+				if (vMin.m128_f32[2] > vCharacterPosition.m128_f32[2])
+					vCollisionNormal = fMoveSlope > fCollisionSlope ? XMVectorSet(-1, 0, 0, 0) : XMVectorSet(0, 0, -1, 0);
+				//LT
+				else if (vMax.m128_f32[2] <= vCharacterPosition.m128_f32[2])
+					vCollisionNormal = fMoveSlope > fCollisionSlope ? XMVectorSet(0, 0, 1, 0) : XMVectorSet(-1, 0, 0, 0);
+				//L
+				else
+					vCollisionNormal = XMVectorSet(-1, 0, 0, 0);
+			}
+			//오른쪽
+			else if (vMax.m128_f32[0] <= vCharacterPosition.m128_f32[0])
+			{
+				//RB
+				if (vMin.m128_f32[2] > vCharacterPosition.m128_f32[2])
+					vCollisionNormal = fMoveSlope > fCollisionSlope ? XMVectorSet(0, 0, -1, 0) : XMVectorSet(1, 0, 0, 0);
+				//RT
+				if (vMax.m128_f32[2] <= vCharacterPosition.m128_f32[2])
+					vCollisionNormal = fMoveSlope > fCollisionSlope ? XMVectorSet(1, 0, 0, 0) : XMVectorSet(0, 0, 1, 0);
+				//R
+				else
+					vCollisionNormal = XMVectorSet(1, 0, 0, 0);
+			}
+			//가운데
+			else
+			{
+				//B
+				if (vMin.m128_f32[2] > vCharacterPosition.m128_f32[2])
+					vCollisionNormal = XMVectorSet(0, 0, -1, 0);
+				//T
+				else if (vMax.m128_f32[2] <= vCharacterPosition.m128_f32[2])
+					vCollisionNormal = XMVectorSet(0, 0, 1, 0);
+				//M
+				else
+					return  vCharacterPosition;
+			}
+
+			_vector vVertical = vCollisionNormal * fCollisionDepth;
+			//_vector v11 = XMVector4Dot(vCollisionNormal, -fMoveDistance * vMoveDirection);
+			//_vector v1 = vCollisionNormal * XMVectorGetX(v11);
+			//_vector v2 = fMoveDistance * vMoveDirection ;
+			//_vector vHorizontal = XMVectorSetX(  v2,.0);//v1+v2
+			//_vector v2 = fMoveDistance * vMoveDirection;
+			//_vector vHorizontal = v1 + v2;
+			return  vNextPosition + vVertical;
+		}
+	}
+	
+
+	return vNextPosition;
 }
 
 _float CTerrainObject::Get_TopHeight(_vector Pos)
@@ -276,7 +282,7 @@ HRESULT CTerrainObject::Ready_Components(TERRAINOBJ_DESC* pDesc)
 		desc.vExtentes = { 0.5f,0.5f,0.5f };
 
 		if (FAILED(Add_Component(LEVEL_LOADING, CCollider_AABB::m_szProtoTag,
-			CCollider::m_szCompTag, reinterpret_cast<CComponent**>(&m_pColliderCom), &desc)))
+			CColliderBase::m_szCompTag, reinterpret_cast<CComponent**>(&m_pColliderCom), &desc)))
 			return E_FAIL;
 		break;
 	}
@@ -286,7 +292,7 @@ HRESULT CTerrainObject::Ready_Components(TERRAINOBJ_DESC* pDesc)
 		desc.pMesh = m_pModelCom->Get_Mesh(0);
 
 		if (FAILED(Add_Component(LEVEL_LOADING, CCollider_Mesh::m_szProtoTag,
-			CCollider::m_szCompTag, reinterpret_cast<CComponent**>(&m_pColliderCom), &desc)))
+			CColliderBase::m_szCompTag, reinterpret_cast<CComponent**>(&m_pColliderCom), &desc)))
 			return E_FAIL;
 		break;
 	}

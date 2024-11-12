@@ -38,7 +38,11 @@
 #include "UIBundle.h"
 #include "UIQuickSlotBundle.h"
 #include "Collider_AABB.h"
+#include "Collider_Frustum.h"
 #include "MonsterDataBase.h"
+#include "UIBar.h"
+
+#include "Bullet_MagicClaw.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -156,6 +160,12 @@ HRESULT CLoader::Loading_Level_Logo()
 		TEXT("../Bin/Resources/Textures/UI/Inventory/"), TEXT(".dds"))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
+		TEXT("../Bin/Resources/Textures/UI/CastingBar/"), TEXT(".dds"))))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
+		TEXT("../Bin/Resources/Textures/Effect/"), TEXT(".dds"))))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/NonAnim/Cube/"), TEXT(".dds"))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
@@ -186,6 +196,10 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxHumanAnimMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_VtxHumanAnimMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
 		return E_FAIL;
+	/* For.Prototype_Component_Shader_UI*/
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_UI"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_UI.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
 #pragma endregion
 
 	lstrcpy(m_szLoadingText, TEXT("모델 로드."));
@@ -214,6 +228,9 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/MAP/Field/"), matPretransform)))
 		return E_FAIL;
+	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
+		TEXT("../Bin/resources/FBXs/Effect"), CModel::TYPE_NONANIM, matPretransform)))
+		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_Sphere::m_szProtoTag,
 		CCollider_Sphere::Create(m_pDevice, m_pContext))))
@@ -224,7 +241,9 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_Mesh::m_szProtoTag,
 		CCollider_Mesh::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_Frustum::m_szProtoTag,
+		CCollider_Frustum::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 
@@ -248,6 +267,11 @@ HRESULT CLoader::Loading_Level_Logo()
 		CTerrainObject::m_szProtoTag,
 		CTerrainObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	//BULLETS
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBullet_MagicClaw::m_szProtoTag,
+		CBullet_MagicClaw::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	/* For.Prototype_GameObject_BackGround */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIPanel::m_szProtoTag,
 		CUIPanel::Create(m_pDevice, m_pContext))))
@@ -266,6 +290,9 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIInvenSlot::m_szProtoTag,
 		CUIInvenSlot::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIBar::m_szProtoTag,
+		CUIBar::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 
@@ -387,6 +414,8 @@ HRESULT CLoader::Loading_Level_MyHome()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialogBuildItemIndicator"),
 		CUIItemIndicator::Create(m_pDevice, m_pContext,LEVEL_HOME, TEXT("UI_Texture_HomeDialog")))))
 		return E_FAIL;
+
+
 
 
 	lstrcpy(m_szLoadingText, TEXT("로드 완료."));

@@ -102,6 +102,7 @@ public:
 	virtual void On_SubStateChange(_uint iSubState) override;
 	virtual void On_AnimEnd(_uint iAnimIdx) override;
 	virtual void On_CastingEnd(CSkill* pSkill) override;
+	virtual void On_HPZero() override;
 	virtual _bool Use_Skill(CSkill* pSkill) override;
 
 protected:
@@ -131,12 +132,16 @@ protected:
 
 	_int m_iRandomCondition = 0;
 	unordered_map<MON_STATE, vector<_uint>> m_mapAnimIdx;
+
+	_float m_fRandomMoveTimeAcc = 0.f;
+	_float m_fRandomMoveTime = 10.f;
+	_bool m_bRandomMove = false;
+	_vector m_vRandomHomePosition = { 0.f,0.f,0.f,0.f };
+
 public:
 	static CMonster* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
-
-
 };
 
 END

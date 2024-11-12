@@ -27,7 +27,6 @@ HRESULT CUIObject::Initialize(void * pArg)
 	UIOBJECT_DESC*	pDesc = static_cast<UIOBJECT_DESC*>(pArg);
 	if (nullptr != pDesc)
 	{
-		m_pTarget = pDesc->pTarget;
 
 	}
 

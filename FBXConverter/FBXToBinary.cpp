@@ -18,15 +18,15 @@ HRESULT CModelConverter::FbxToBianry(const string& inFilePath)
 
 
 	m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
-	m_bAnim = true;
-	//m_bAnim = m_pAIScene->HasAnimations();
-	//
-	//if (m_bAnim == false)
-	//{
-	//	iFlag |= aiProcess_PreTransformVertices;
+//	m_bAnim = true;
+	m_bAnim = m_pAIScene->HasAnimations();
+	
+	if (m_bAnim == false)
+	{
+		iFlag |= aiProcess_PreTransformVertices;
 
-	//	m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
-	//}
+		m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
+	}
 
 	if (0 == m_pAIScene)
 		return E_FAIL;
@@ -63,6 +63,7 @@ HRESULT CModelConverter::FbxToBianry(const string& inFilePath)
 	_uint iNumMaterials = m_pAIScene->mNumMaterials;
 	outFile.write(reinterpret_cast<const char*>(&iNumMaterials), sizeof(_uint));
 	//cout << iNumMaterials << endl;
+	auto textures = m_pAIScene->mTextures;
 	for (size_t i = 0; i < iNumMaterials; i++)
 	{
 		if (FAILED(Write_Material(m_pAIScene->mMaterials[i], outFile)))
@@ -164,7 +165,7 @@ HRESULT CModelConverter::Write_Material(const aiMaterial* pAIMaterial, ofstream&
 			outFile.write(reinterpret_cast<const char*>(&strPath.length), sizeof(ai_uint32));
 			//cout << strPath.length << endl;
 			outFile.write(strPath.C_Str(), strPath.length);
-			//cout << strPath.C_Str() << endl;
+			cout << strPath.C_Str() << endl;
 		}
 
 	}

@@ -37,7 +37,7 @@ HRESULT CGameObject::Initialize(void * pArg)
 	if (nullptr != pArg)
 	{
 		GAMEOBJECT_DESC*		pDesc = static_cast<GAMEOBJECT_DESC*>(pArg);
-		m_pTarget = pDesc->pTarget;
+		Set_Target(pDesc->pTarget);
 	}	
 
 	m_pTransformCom = CTransform::Create(m_pDevice, m_pContext);
@@ -164,8 +164,8 @@ CComponent * CGameObject::Find_Component(const _wstring & strComponentTag)
 
 _bool CGameObject::Check_Collision(const Ray& tRay, RaycastHit* pOut)
 {
-	CCollider* pCollider = nullptr;
-	pCollider = static_cast<CCollider*>(Find_Component(CCollider::m_szCompTag));
+	CColliderBase* pCollider = nullptr;
+	pCollider = static_cast<CColliderBase*>(Find_Component(CColliderBase::m_szCompTag));
 	bool bIsHit = false;
 	RaycastHit tMinHit;
 	tMinHit.fDist = 9999;
@@ -262,4 +262,5 @@ void CGameObject::Free()
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
+	Safe_Release(m_pTarget);
 }

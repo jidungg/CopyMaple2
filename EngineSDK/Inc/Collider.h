@@ -9,7 +9,7 @@ union COLLISION_ID
 	};
 	LONGLONG ID;
 };
-class CCollider :
+class ENGINE_DLL CColliderBase :
     public CComponent
 {
 
@@ -19,8 +19,9 @@ public:
 		SPHERE,
 		AABB,
 		OBB,
-		CAPSULE,
+		FRUSTUM,
 		MESH,
+		CAPSULE,
 		LAST
 	};
 	typedef struct ColliderDesc
@@ -29,18 +30,18 @@ public:
 	}COLLIDER_DESC;
 	static constexpr _tchar m_szCompTag[] = L"Com_Collider";
 protected:
-	CCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CCollider(const CCollider& Prototype);
-	virtual ~CCollider() = default;
+	CColliderBase(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CColliderBase(const CColliderBase& Prototype);
+	virtual ~CColliderBase() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(_fmatrix WorldMatrix) abstract;
-	virtual _bool Intersects(CCollider* pOther)abstract;
+	virtual _bool Intersects(CColliderBase* pOther)abstract;
 	virtual _bool Contains(const FXMVECTOR& vPos)abstract;
 	virtual _bool RayCast(const Ray& tRay, RaycastHit* pOut) abstract;
-	virtual HRESULT Render() { return S_OK; }
+	virtual HRESULT Render() abstract;
 
 	COLLIDER_TYPE Get_ColliderType() const {return m_eType;}
 	_uint Get_ID() { return m_iID; }

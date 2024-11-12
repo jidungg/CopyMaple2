@@ -11,6 +11,7 @@
 #include "Monster.h"
 #include "Bayar.h"
 #include "Player.h"
+#include "ModelObject.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel { pDevice, pContext }
@@ -34,6 +35,9 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Monster(LAYER_MONSTER)))
 		return E_FAIL;
 
+	CModelObject::MODELOBJ_DESC tBulletDesc;
+	tBulletDesc.eModelProtoLevelID = LEVEL_LOADING;
+	strcpy_s(tBulletDesc.strModelProtoName, "eff_wizard_magicclaw_remain_01_a.model");
 	return S_OK;
 }
 
@@ -86,7 +90,6 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 	{
 		m_pGameInstance->Push_Event(CLevelChangeEvent::Create(CLevel_Loading::Create(m_pDevice,m_pContext, LEVEL_HOME)));
 	}
-		
 
 }
 

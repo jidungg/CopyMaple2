@@ -25,8 +25,8 @@ CModel::CModel(const CModel& Prototype)
 	for (auto& pPrototypeBone : Prototype.m_Bones)
 		m_Bones.push_back(pPrototypeBone->Clone());
 
-	for (auto& pPrototypeAnimation : Prototype.m_Animations)
-		m_Animations.push_back(pPrototypeAnimation->Clone());
+	for (auto& pPrototypeAnimation : Prototype.m_vecAnimation)
+		m_vecAnimation.push_back(pPrototypeAnimation->Clone());
 
 	for (auto& pMesh : m_Meshes)
 		Safe_AddRef(pMesh);
@@ -158,14 +158,14 @@ HRESULT CModel::Ready_Materials(ifstream& inFile, const _char* pModelFilePath)
 HRESULT CModel::Ready_Animations(ifstream& inFile)
 {
 	inFile.read(reinterpret_cast<char*>(&m_iNumAnimations), sizeof(_uint));
-	m_Animations.reserve(m_iNumAnimations);
+	m_vecAnimation.reserve(m_iNumAnimations);
 	for (_uint i = 0; i < m_iNumAnimations; i++)
 	{
 		CAnimation* pAnimation = CAnimation::Create(inFile, this);
 		if (nullptr == pAnimation)
 			return E_FAIL;
 
-		m_Animations.push_back(pAnimation );
+		m_vecAnimation.push_back(pAnimation );
 	}
 
 	return S_OK;
@@ -217,14 +217,15 @@ _bool CModel::Play_Animation(_float fTimeDelta)
 	_bool bReturn= false;
 	if(m_iCurrentAnimIndex == m_iPrevAnimIndex)
 	{
-		bReturn = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, fTimeDelta);
+		bReturn = m_vecAnimation[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, fTimeDelta);
 	}
 	else
 	{
-		if (m_Animations[m_iCurrentAnimIndex]->Update_AnimTransition(m_Bones, fTimeDelta, m_mapAnimTransLeftFrame))
+		if (m_vecAnimation[m_iCurrentAnimIndex]->Update_AnimTransition(m_Bones, fTimeDelta, m_mapAnimTransLeftFrame))
 			m_iPrevAnimIndex = m_iCurrentAnimIndex;
 	}
 
+	
 	//뼈들의 합성변환행렬을 갱신
 	for (auto& pBone : m_Bones)
 		pBone->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
@@ -276,7 +277,7 @@ _uint CModel::Get_BoneIndex(const _char* pBoneName) const
 
 float CModel::Get_AnimTime()
 {
-	return m_Animations[m_iCurrentAnimIndex]->Get_AnimTime();
+	return m_vecAnimation[m_iCurrentAnimIndex]->Get_AnimTime();
 }
 
 _uint CModel::Get_AnimIndex()
@@ -286,7 +287,10 @@ _uint CModel::Get_AnimIndex()
 
 _float CModel::Get_AnimationProgress(_uint iAnimIdx)
 {
-	return m_Animations[iAnimIdx]->Get_Progress();
+	if (m_iCurrentAnimIndex == m_iPrevAnimIndex)
+		return m_vecAnimation[m_iCurrentAnimIndex]->Get_Progress();
+	else
+		return 0;
 }
 
 
@@ -324,7 +328,7 @@ CBone* CModel::Get_Bone(const _char* pBoneName) const
 
 bool CModel::Is_AnimChangeable()
 {
-	return m_Animations[m_iCurrentAnimIndex]->Is_AnimChangeable();
+	return m_vecAnimation[m_iCurrentAnimIndex]->Is_AnimChangeable();
 }
 
 bool CModel::Is_MeshActive(_uint iIdx)
@@ -334,19 +338,19 @@ bool CModel::Is_MeshActive(_uint iIdx)
 
 void CModel::Set_AnimationLoop(_uint iIdx, _bool bIsLoop)
 {
-	m_Animations[iIdx]->Set_Loop(bIsLoop); 
+	m_vecAnimation[iIdx]->Set_Loop(bIsLoop); 
 }
 
 void CModel::Set_Animation(_uint iIdx)
 {
 	m_iCurrentAnimIndex = iIdx;
 	m_iPrevAnimIndex = iIdx;
-	m_Animations[m_iCurrentAnimIndex]->Reset_CurrentTrackPosition();
+	m_vecAnimation[m_iCurrentAnimIndex]->Reset_CurrentTrackPosition();
 }
 
 void CModel::Set_AnimPostDelayPercent(_uint iIdx, _float fPercent)
 {
-	m_Animations[iIdx]->Set_PostDealyPercent(fPercent);
+	m_vecAnimation[iIdx]->Set_PostDealyPercent(fPercent);
 }
 
 void CModel::Set_MeshActive(_uint iIdx, _bool bIsOn)
@@ -360,8 +364,13 @@ void CModel::Switch_Animation(_uint iIdx)
 	m_iPrevAnimIndex = m_iCurrentAnimIndex;
 	m_iCurrentAnimIndex = iIdx;
 	m_mapAnimTransLeftFrame.clear();
-	m_Animations[m_iCurrentAnimIndex]->Reset_CurrentTrackPosition();
-	m_Animations[m_iPrevAnimIndex]->Get_CurrentFrame( &m_mapAnimTransLeftFrame);
+	m_vecAnimation[m_iCurrentAnimIndex]->Reset_CurrentTrackPosition();
+	m_vecAnimation[m_iPrevAnimIndex]->Get_CurrentFrame( &m_mapAnimTransLeftFrame);
+}
+
+void CModel::Register_AnimEvent(_uint iAnimIdx, ANIM_EVENT tAnimEvent)
+{
+	m_vecAnimation[iAnimIdx]->Register_AnimEvent(tAnimEvent);
 }
 
 
@@ -414,8 +423,8 @@ void CModel::Free()
 	for (auto& pBone : m_Bones)
 		Safe_Release(pBone);
 	m_Bones.clear();
-	for (auto& pAnim : m_Animations)
+	for (auto& pAnim : m_vecAnimation)
 		Safe_Release(pAnim);
-	m_Animations.clear();
+	m_vecAnimation.clear();
 
 }

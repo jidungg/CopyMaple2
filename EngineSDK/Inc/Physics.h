@@ -2,7 +2,7 @@
 #include "Base.h"
 
 BEGIN(Engine)
-class CCollider;
+class CColliderBase;
 class CGameInstance;
 class CPhysics :
     public CBase

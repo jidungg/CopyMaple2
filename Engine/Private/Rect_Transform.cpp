@@ -134,8 +134,8 @@ void CRect_Transform::Set_Offset(_float fX, _float fY)
 
 void CRect_Transform::Set_Size(_float fSizeX, _float fSizeY)
 {
-	m_fSizeX = fSizeX;
-	m_fSizeY = fSizeY;
+	m_fSizeX = max(1, fSizeX);
+	m_fSizeY = max(1, fSizeY);
 	Compute_Matrix();
 }
 
@@ -226,7 +226,7 @@ _float2 CRect_Transform::Get_CornorRatio(CORNOR_TYPE ePivotType)
 	return fPivotOffset;
 }
 
-CTransform* CRect_Transform::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CRect_Transform* CRect_Transform::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CRect_Transform* pInstance = new CRect_Transform(pDevice, pContext);
 

@@ -20,10 +20,6 @@
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
 {
-	for (_uint i = 0; i < (_uint)SKILL_ID::LAST; i++)
-	{
-		m_mapSkill[(SKILL_ID)i] = nullptr;
-	}
 	for (auto& pEquip : m_pEquipModels)
 	{
 		pEquip = nullptr;
@@ -36,18 +32,17 @@ CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	{
 		pCustomize = nullptr;
 	}
-
+	m_eTeam = TEAM::PLAYER;
 }
 
 CPlayer::CPlayer(const CPlayer& Prototype)
-	: CCharacter(Prototype)\
-
+	: CCharacter(Prototype)
 {
 
 	Safe_AddRef(m_pAnimStateMachine);
 	m_pBody = Prototype.m_pBody;
 	Safe_AddRef(m_pBody);
-
+	m_eTeam = TEAM::PLAYER;
 	//for (auto& pEquip : m_pEquipModels)
 	//{
 	//	pEquip = Prototype.m_pEquipModels[(&pEquip - &m_pEquipModels[0])];
@@ -106,7 +101,9 @@ HRESULT CPlayer::Initialize(void* pArg)
 		return E_FAIL;
 	if (FAILED(Ready_FaceStateMachine()))
 		return E_FAIL;
-	if (FAILED(Ready_Skill()))
+	if (FAILED(Ready_Skill(desc->jPlayerData["Skill"])))
+		return E_FAIL;
+	if (FAILED(Ready_Stat(desc->jPlayerData["Status"])))
 		return E_FAIL;
 
 
@@ -200,7 +197,7 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Register_OnSubStateChangeCallBack(bind(&CPlayer::On_SubStateChange, this, placeholders::_1));
 	m_pBody->Register_OnAnimEndCallBack(bind(&CPlayer::On_AnimEnd, this, placeholders::_1));
 
-	CTransition* pTransition; Condition* pCondition;
+	CTransition* pTransition; 
 	m_pBody->Set_AnimationLoop(ANIM_STATE::AS_IDLE, true);
 	m_pBody->Set_AnimationLoop(ANIM_STATE::AS_ATTACK_IDLE, true);
 	m_pBody->Set_AnimationLoop(ANIM_STATE::AS_RUN, true);
@@ -537,14 +534,21 @@ HRESULT CPlayer::Ready_FaceStateMachine()
 
 
 
-HRESULT CPlayer::Ready_Skill()
+HRESULT CPlayer::Ready_Skill(const json& jSkillData)
 {
 	CSkillDataBase* pSkillManager = SKILLDB;
-	for (_uint i = 0; i < (_uint)SKILL_ID::LAST; i++)
+	vector<SKILL_ID> vecSkillID = jSkillData.get<vector<SKILL_ID>>();
+	for (auto& eSkillID : vecSkillID)
 	{
-		m_mapSkill[(SKILL_ID)i] =  CSkill::Create(pSkillManager->Get_SkillData((SKILL_ID)i),this);
-
+		m_mapSkill[eSkillID] = CSkill::Create(pSkillManager->Get_SkillData(eSkillID), this);
+		m_mapSkill[eSkillID]->Register_AnimEvent(m_pBody);
 	}
+
+	return S_OK;
+}
+
+HRESULT CPlayer::Ready_Stat(const json& jStatData)
+{
 	return S_OK;
 }
 
@@ -663,7 +667,9 @@ _bool CPlayer::Check_Collision(CGameObject* pOther)
 	switch (eLayerID)
 	{
 	case Client::LAYER_MONSTER:
+	{
 		break;
+	}
 	case Client::LAYER_INTERACTION:
 		break;
 	case Client::LAYER_TERRAIN:
@@ -775,9 +781,6 @@ void CPlayer::Late_Update(_float fTimeDelta)
 			if (m_bBodyWall && m_fUpForce <= 0)//벽에 부딫힘
 			{
 				m_bClimb = true;
-				//m_vNextPos = XMVectorSetX(m_vNextPos, m_vBodyWallPoint.m128_f32[0]);
-				//m_vNextPos = XMVectorSetZ(m_vNextPos, m_vBodyWallPoint.m128_f32[2]);
-				//m_vNextPos += m_vBodyWallNormal * m_fBodyCollisionRadius;
 				m_fUpForce = 0;
 			}
 			else//그냥 공중임
@@ -792,12 +795,15 @@ void CPlayer::Late_Update(_float fTimeDelta)
 			m_pTransformCom->LookToward(XMVectorSetY(-m_vBodyWallNormal, 0));
 		else
 			m_pTransformCom->LookToward(XMVectorSetY(m_vLookDirectionXZ, 0));
+
+		Get_CurrentSkill()->Cancel_Casting();
 	}
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vNextPos);
 
 	m_fMoveDistanceXZ = 0.f;
 	m_vMoveDirectionXZ = XMVectorSet(0, 0, 0, 0);
+	Get_CurrentSkill()->Late_Update(fTimeDelta);
 	CPawn::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
@@ -836,6 +842,7 @@ void CPlayer::On_AnimEnd(_uint iAnimIdx)
 
 void CPlayer::On_CastingEnd(CSkill* pSkill)
 {
+	UIBUNDLE->Set_CastingBarVisible(false);
 }
 
 void CPlayer::On_FaceStateChange(_uint iState)
@@ -850,7 +857,7 @@ HRESULT CPlayer::Render()
 		if (child->Is_Active() && child->Is_Dead() == false)
 			child->Render();
 	}
-
+	Get_CurrentSkill()->Render_Collider();
 	return S_OK;
 }
 
@@ -869,9 +876,10 @@ _bool CPlayer::Use_Skill(CSkill* pSkill)
 
 	m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_ATTACK_TRIGGER);
 	Set_Battle(true);
-	m_iCurrentSkillID = (_int)pDesc->eID;
 	m_bAttack = true;
-
+	m_iCurrentSkillID = (_int)pDesc->eID;
+	if (pDesc->eCastingType == SKILL_TYPE::CASTING)
+		UIBUNDLE->Set_CastingBarVisible(true);
 	return true;
 }
 
@@ -1078,4 +1086,9 @@ void CPlayer::Free()
 	__super::Free();
 	Safe_Release(m_pFaceStateMachine);
 
+}
+
+void CPlayer::On_HPZero()
+{
+	
 }

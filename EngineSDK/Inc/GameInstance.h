@@ -5,7 +5,7 @@
 #include "PipeLine.h"
 
 BEGIN(Engine)
-class CCollider;
+class CColliderBase;
 class CPawn;
 class CEvent;
 class IEventHandlerWrapperInterface;
@@ -29,6 +29,9 @@ public: /* For.timer_Manager */
 	HRESULT	Add_Timer(const _wstring& strTimerTag);
 	void Update_TimeDelta(const _wstring& strTimerTag);
 
+public://For Utility
+	KEYFRAME Lerp_Frame(const KEYFRAME& Frame1, const KEYFRAME& Frame2, _float fRatio);
+	_float Get_RandomFloat(_float fMin, _float fMax);
 public: /* For.Renderer */
 	HRESULT Add_RenderObject(CRenderer::RENDERGROUP eRenderGroup, class CGameObject* pRenderObject);
 
@@ -50,6 +53,7 @@ public: /* For.Object_Manager */
 	void Move_DontDestroyObjects(_uint iOldLevel, _uint iNewLevel);
 	bool RayCast(_uint iLayerId, const Ray& tRay, RaycastHit* pOut);
 	bool RayCast(const Ray& tRay, RaycastHit* pOut);
+	list<CGameObject*>* Get_GameObjectList(_uint iLayerId);
 
 public: /* For.PipeLine */
 	void Set_Transform(CPipeLine::D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix);

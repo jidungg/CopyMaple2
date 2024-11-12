@@ -5,7 +5,7 @@
 /* ��ü���� ���̾� ���� ��� �ټ� �����Ѵ�. */
 
 BEGIN(Engine)
-class CCollider;
+class CColliderBase;
 class CLayer final : public CBase
 {
 private:

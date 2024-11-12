@@ -25,6 +25,7 @@ public:
 	void Move_DontDestroyObjects(_uint iOldLevel, _uint iNewLevel);
 	bool RayCast(_uint iLayerId, const Ray& tRay, RaycastHit* pOut);
 	bool RayCast(const Ray& tRay, RaycastHit* pOut);
+	void Check_Collision(_uint iLayerId, CGameObject* pObject, list<CGameObject*>* pOutList);
 
 	CGameObject* Get_FirstGameObject(_uint iLevIdx, _uint iLayerId);
 	list<CGameObject*>* Get_GameObjectList(_uint iLayerId);

@@ -14,7 +14,7 @@ private:
 
 public:
 	void Insert_Data(json& jSkillData);
-
+	HRESULT Load_Data();
 	SKILL_DATA* Get_SkillData(SKILL_ID eSkillId) { return &m_SkillData[(_uint)eSkillId]; }
 
 private:

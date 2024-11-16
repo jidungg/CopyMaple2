@@ -15,7 +15,7 @@
 #include "CubeTerrain.h"
 #include "Collider_Sphere.h"
 #include "DeadObjEvent.h"
-
+#include "Interactable.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -84,13 +84,11 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 	m_pInventory = INVENTORY;
 	PLAYER_DESC* desc = static_cast<PLAYER_DESC*>(pArg);
-	desc->fSpeedPerSec = m_tStat.fRunSpeed;
 	desc->fRotationPerSec = 5.f;
 	desc->fBodyCollisionRadius = 0.125f;
 	desc->fBodyCollisionOffset = { 0, 0.4f, 0 };
 	desc->iBodyColliderIndex = 0;
 	desc->iColliderCount = 1;
-	m_tStat.fJumpPower = 10.f;
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -227,11 +225,12 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Add_TriggerConditionVariable(_uint(ANIM_CONDITION::AC_ATTACK_TRIGGER));
 	m_pAnimStateMachine->Add_TriggerConditionVariable(_uint(ANIM_CONDITION::AC_CLIMB_DIR_CHG));
 	m_pAnimStateMachine->Add_TriggerConditionVariable(_uint(ANIM_CONDITION::AC_CLIMB_LAND_TRIGGER));
+	m_pAnimStateMachine->Add_TriggerConditionVariable(_uint(ANIM_CONDITION::AC_JUMP_TRIGGER));
 
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_RANDOM), &m_iRandomCondition);
-	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_UPFORCE), &m_fUpForce);
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_ONFLOOR), &m_bOnFloor);
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_IDLETIME), &m_fIdleTime);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_UPFORCE), &m_fUpForce);
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_WALK), &m_bWalk);
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_MOVE), &m_bMove);
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_WEAPON), &m_bWeapon);
@@ -243,6 +242,7 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_CLIMB_DIR), &m_iClimbDir);
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_BODYWALL), &m_bBodyWall);
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_FOOTWALL), &m_bFootWall);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_HPZERO), &m_bHPZero);
 
 
 	//STATE
@@ -258,9 +258,11 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_IDLE, ANIM_STATE::BS_ATTACK);
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ATTACK_TRIGGER);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_IDLE, ANIM_STATE::BS_JUMP);
-	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_tStat.fJumpPower - 1.f);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_JUMP_TRIGGER);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_IDLE, ANIM_STATE::BS_RUN);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_MOVE, CONDITION_TYPE::EQUAL, true);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_IDLE, ANIM_STATE::BS_DEAD);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_HPZERO, CONDITION_TYPE::EQUAL, true);
 
 	//ATTACK
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_ATTACK, ANIM_STATE::BS_IDLE);
@@ -275,6 +277,8 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_ATTACK, ANIM_STATE::BS_ATTACK);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_POSTDELAY_END, CONDITION_TYPE::EQUAL, true);
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ATTACK_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_ATTACK, ANIM_STATE::BS_DEAD);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_HPZERO, CONDITION_TYPE::EQUAL, true);
 
 	//JUMP
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_JUMP, ANIM_STATE::BS_ATTACK);
@@ -286,6 +290,8 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_ONFLOOR, CONDITION_TYPE::EQUAL, true);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_JUMP, ANIM_STATE::BS_CLIMB);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, true);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_JUMP, ANIM_STATE::BS_DEAD);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_HPZERO, CONDITION_TYPE::EQUAL, true);
 
 	//RUN
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_RUN, ANIM_STATE::BS_IDLE);
@@ -293,24 +299,29 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_RUN, ANIM_STATE::BS_ATTACK);
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ATTACK_TRIGGER);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_RUN, ANIM_STATE::BS_JUMP);
-	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_tStat.fJumpPower - 1.f);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_JUMP_TRIGGER);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_RUN, ANIM_STATE::BS_JUMP);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_ONFLOOR, CONDITION_TYPE::EQUAL, false);
- 
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_RUN, ANIM_STATE::BS_DEAD);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_HPZERO, CONDITION_TYPE::EQUAL, true);
+
 	//CLIMB
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB, ANIM_STATE::BS_CLIMB_RUN);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_MOVE, CONDITION_TYPE::EQUAL, true);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, true);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB, ANIM_STATE::BS_JUMP);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, false);
-	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_tStat.fJumpPower -1.f);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_JUMP_TRIGGER);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB, ANIM_STATE::BS_CLIMB_LAND);
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_CLIMB_LAND_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB, ANIM_STATE::BS_DEAD);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_HPZERO, CONDITION_TYPE::EQUAL, true);
+
 	//CLIMB_RUN
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB_RUN, ANIM_STATE::BS_JUMP);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, false);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB_RUN, ANIM_STATE::BS_JUMP);
-	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_tStat.fJumpPower -1.f);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_JUMP_TRIGGER);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB_RUN, ANIM_STATE::BS_JUMP);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BODYWALL, CONDITION_TYPE::EQUAL, false);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_FOOTWALL, CONDITION_TYPE::EQUAL, false);
@@ -320,10 +331,18 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_CLIMB_DIR_CHG);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB_RUN, ANIM_STATE::BS_CLIMB_LAND);
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_CLIMB_LAND_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB_RUN, ANIM_STATE::BS_DEAD);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_HPZERO, CONDITION_TYPE::EQUAL, true);
 
 	//CLIMB_LAND
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB_LAND, ANIM_STATE::BS_IDLE);
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB_LAND, ANIM_STATE::BS_DEAD);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_HPZERO, CONDITION_TYPE::EQUAL, true);
+
+	//DEAD_
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_DEAD, ANIM_STATE::BS_IDLE);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_HPZERO, CONDITION_TYPE::EQUAL, false);
 
 #pragma endregion
 
@@ -398,9 +417,9 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	//JUMP SUB
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_JUMP_UP_A);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_RANDOM, CONDITION_TYPE::LESS, 50);
-	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_tStat.fJumpPower - 1.f);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_JUMP_TRIGGER);
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_JUMP_UP_B);
-	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_tStat.fJumpPower - 1.f);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_JUMP_TRIGGER);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_RANDOM, CONDITION_TYPE::EQUAL_GREATER, 50);
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_JUMP_DOWN_A);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_LESS, 0);
@@ -416,11 +435,11 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_STAFF_JUMP_UP_A);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BATTLE, CONDITION_TYPE::EQUAL, true);
-	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_tStat.fJumpPower-1.f);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_JUMP_TRIGGER);
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_STAFF_JUMP_UP_B);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BATTLE, CONDITION_TYPE::EQUAL, true);
-	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_GREATER, m_tStat.fJumpPower - 1.f);
+	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_JUMP_TRIGGER);
 
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_STAFF_JUMP_UP_A, ANIM_STATE::AS_STAFF_JUMP_DOWN_A);
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
@@ -482,6 +501,8 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_SKILL_ID, CONDITION_TYPE::EQUAL, (_int)SKILL_ID::WILD_FIRE2);
 
+	//DEAD_SUB
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_DEAD, ANIM_STATE::AS_STAFF_DEAD);
 
 #pragma endregion
 
@@ -549,6 +570,8 @@ HRESULT CPlayer::Ready_Skill(const json& jSkillData)
 
 HRESULT CPlayer::Ready_Stat(const json& jStatData)
 {
+	m_tStatDefault = Stat(jStatData);
+	m_tStat = m_tStatDefault;
 	return S_OK;
 }
 
@@ -632,7 +655,13 @@ void CPlayer::Receive_KeyInput(_float fTimeDelta)
 				m_bClimb = false;
 				m_bOnFloor = false;
 				m_fUpForce = m_tStat.fJumpPower;
+				m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_JUMP_TRIGGER);
 			}
+		if (m_pGameInstance->GetKeyState(KEY::SPACE) == KEY_STATE::DOWN)
+		{
+			if (m_pInteractable)
+				m_pInteractable->Interact(this);
+		}
 	}
 	else
 	{
@@ -661,6 +690,9 @@ void CPlayer::Update(_float fTimeDelta)
 
 _bool CPlayer::Check_Collision(CGameObject* pOther)
 {
+	assert(pOther->Is_Active());
+	assert(false == pOther->Is_Dead());
+
 	__super::Check_Collision(pOther);
 
 	LAYERID eLayerID = (LAYERID)pOther->Get_LayerID();
@@ -671,7 +703,27 @@ _bool CPlayer::Check_Collision(CGameObject* pOther)
 		break;
 	}
 	case Client::LAYER_INTERACTION:
+	{
+		CInteractableObject* pInteractable = static_cast<CInteractableObject*>(pOther);
+		if (pInteractable->Check_Collision(this))
+		{
+			if (pInteractable->Is_InteractionPossible(this))
+			{
+				//이미 상호작용 가능한 오브젝트가 있으면?
+				if (m_pInteractable && m_pInteractable != pInteractable)
+				{
+					// 누가 더 가까운지 판단하기 -> 더 가까운 오브젝트로 교체
+					if (m_pInteractable->Get_Distance(this) > pOther->Get_Distance(this))
+						m_pInteractable = pInteractable;
+				}
+				else
+					m_pInteractable = pInteractable;
+			}
+		}
+	
+
 		break;
+	}
 	case Client::LAYER_TERRAIN:
 	{
 
@@ -735,8 +787,15 @@ void CPlayer::Late_Update(_float fTimeDelta)
 		m_vNextPos = XMVectorSetY(m_vNextPos, m_fCelingHeight - fColliderHeight);
 	}
 
-	m_bOnFloor = m_fFloorHeight >= XMVectorGetY(m_vNextPos);
+	//그냥 걸어가다가 떨어지는 건 
+	if (m_bOnFloor)
+	{
 
+		if (XMVectorGetY(m_vNextPos) - m_fFloorHeight >= 0.2f)
+			m_bOnFloor = false;
+	}
+	else
+		m_bOnFloor = XMVectorGetY(m_vNextPos) <= m_fFloorHeight;
 	if (m_bClimb)//벽 타는 중
 	{
 		//위로 나갔는지, 옆으로 나갔는지, 내려갔는지 판단
@@ -773,8 +832,8 @@ void CPlayer::Late_Update(_float fTimeDelta)
 			if (m_fUpForce < 0)
 			{
 				m_fUpForce = 0;
-				m_vNextPos = XMVectorSetY(m_vNextPos, m_fFloorHeight);
 			}
+			m_vNextPos = XMVectorSetY(m_vNextPos, m_fFloorHeight);
 		}
 		else//공중에 있는중
 		{
@@ -870,7 +929,7 @@ _bool CPlayer::Use_Skill(CSkill* pSkill)
 	if (false == m_pBody->Is_AnimPostDelayEnd())
 		return false;
 	auto pDesc = pSkill->Get_SkillDesc();
-	if (pDesc->eCastingType == SKILL_TYPE::CASTING && false == m_bOnFloor)
+	if (pDesc->eCastingType == SKILL_CASTING_TYPE::CASTING && false == m_bOnFloor)
 		return false;
 
 
@@ -878,7 +937,7 @@ _bool CPlayer::Use_Skill(CSkill* pSkill)
 	Set_Battle(true);
 	m_bAttack = true;
 	m_iCurrentSkillID = (_int)pDesc->eID;
-	if (pDesc->eCastingType == SKILL_TYPE::CASTING)
+	if (pDesc->eCastingType == SKILL_CASTING_TYPE::CASTING)
 		UIBUNDLE->Set_CastingBarVisible(true);
 	return true;
 }
@@ -1090,5 +1149,7 @@ void CPlayer::Free()
 
 void CPlayer::On_HPZero()
 {
-	
+	//데드 애님 재생
+	//
+	m_bHPZero = true;
 }

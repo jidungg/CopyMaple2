@@ -12,6 +12,7 @@ public:
 	typedef struct PanelDesc: public CUIObject::UIOBJECT_DESC
 	{
 		CTexture* pTextureCom = { nullptr };
+		_float4  vBorder = { 0,0,0,0 };
 	}PANEL_DESC;
 
 protected:
@@ -35,6 +36,7 @@ protected:
 	CShader* m_pShaderCom = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+	_float4 m_vBorder = { 0,0,0,0 };//상 하 좌 우 순 픽셀 수
 public:
 	static CUIPanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

@@ -24,7 +24,7 @@ protected:
 	const ITEM_DATA* m_pItemDesc = nullptr;
 	CTexture* m_pIconTexure = nullptr;
 	CRect_Transform* m_pIconTransform = nullptr;
-
+	_float4 m_vIconBorder = { 3,3,3,3 };
 public:
 	static CUIItemIndicator* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eBackTexProtoLev, const _tchar* szBackTexProtoTag);
 	virtual CGameObject* Clone(void* pArg);

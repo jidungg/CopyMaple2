@@ -8,6 +8,8 @@
 #include "StateMachine.h"
 #include "Skill.h"
 #include "SkillManager.h"
+#include "DeadObjEvent.h"
+#include "Client_Utility.h"
 
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CCharacter(pDevice, pContext)
@@ -37,16 +39,14 @@ HRESULT CMonster::Initialize(void* pArg)
 	pDesc->fSpeedPerSec = 2.0f;
 	pDesc->iColliderCount = COLLIDER_LAST;
 	pDesc->iBodyColliderIndex = COLLIDER_BODY;
-	m_tStat = m_pMonData->tStat;
+	m_tStatDefault = m_pMonData->tStat;
+	m_tStat = m_tStatDefault;
 	m_fDetectionRange = m_pMonData->fDetectionRange;
 	m_fChaseRange = m_pMonData->fChaseRange;
 	m_mapAnimIdx = m_pMonData->mapAnimIdx;
-	m_vHomePos = pDesc->vHomePos;
-
+	m_vHomePos = pDesc->vHomePos; 
 
 	m_fRandomMoveTime = m_pGameInstance->Get_RandomFloat(5,10);
-
-
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -66,6 +66,7 @@ HRESULT CMonster::Initialize(void* pArg)
 	if (FAILED(Ready_AnimStateMachine()))
 		return E_FAIL;
 
+	m_pTransformCom->Scaling(m_pMonData->vScale.x, m_pMonData->vScale.y, m_pMonData->vScale.z);
 	Set_Position(m_vHomePos);
 	return S_OK;
 }
@@ -87,7 +88,9 @@ HRESULT CMonster::Ready_Parts(MONSTER_DESC* pDesc)
 	CModelObject::MODELOBJ_DESC tModelDesc = {};
 	tModelDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	tModelDesc.fSpeedPerSec = 5.f;
-	tModelDesc.eModelProtoLevelID = LEVEL_GAMEPLAY;
+	//몬스터가 생성될 레벨을 가져와야 하느ㅏㄴ데,
+	// Create는 LoadingLevel에서 하기 때문에 CurrentLevel 하면 안됨.
+	tModelDesc.eModelProtoLevelID = Get_CurrentTrueLevel();
 	strcpy_s(tModelDesc.strModelProtoName, m_pMonData->strModelTag);
 	m_pBody = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
 	Add_Child(m_pBody);
@@ -187,7 +190,9 @@ HRESULT CMonster::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, MON_ANIM_CONDITION::AC_ANIMENDTRIGGER);
 	pTransition = m_pAnimStateMachine->Add_Transition(M_BS_MOVE, M_BS_DEAD);
 	m_pAnimStateMachine->Bind_Condition(pTransition, MON_ANIM_CONDITION::AC_HP, CONDITION_TYPE::EQUAL_LESS, 0);
-
+	//DEAD_MAIN
+	pTransition = m_pAnimStateMachine->Add_Transition(M_BS_DEAD, M_BS_IDLE);
+	m_pAnimStateMachine->Bind_Condition(pTransition, MON_ANIM_CONDITION::AC_HP, CONDITION_TYPE::GREATER, 0);
 	//Sub Transition
 	//BORN_SUB
 	pTransition = m_pAnimStateMachine->Add_SubTransition(M_BS_BORN, m_mapAnimIdx[M_AS_REGEN].front());
@@ -276,7 +281,7 @@ _bool CMonster::Use_Skill(CSkill* pSkill)
 	if (false == m_pBody->Is_AnimPostDelayEnd())
 		return false;
 	auto pDesc = pSkill->Get_SkillDesc();
-	if (pDesc->eCastingType == SKILL_TYPE::CASTING && false == m_bOnFloor)
+	if (pDesc->eCastingType == SKILL_CASTING_TYPE::CASTING && false == m_bOnFloor)
 		return false;
 	m_iCurrentSkillID = (_int)pDesc->eID;
 	m_bChase = false;
@@ -287,13 +292,33 @@ _bool CMonster::Use_Skill(CSkill* pSkill)
 	return true;
 }
 
+void CMonster::Respawn()
+{
+	__super::Respawn();
+	m_pAnimStateMachine->Set_CurrentState(M_BS_BORN);
+}
+
+_bool CMonster::Is_Targetable()
+{
+	if (false == Is_Valid())
+		return false;
+	if (m_pMonData->eMonGrade != MONSTER_GRADE::BOSS)
+	{
+		if (m_bHPZero)
+			return false;
+	}
+
+	return true;
+}
+
 void CMonster::On_CastingEnd(CSkill* pSkill)
 {
 }
 
 void CMonster::Priority_Update(_float fTimeDelta)
 {
-
+	if (m_bHPZero)
+		return;
 	_vector vMyPos = Get_Position();
 	_vector vDestination;
 	_float fMoveSpeed = m_tStat.fRunSpeed;
@@ -320,6 +345,7 @@ void CMonster::Priority_Update(_float fTimeDelta)
 		m_bBackToHome = true;
 		m_fTargetDistance = FLT_MAX;
 		vDestination = m_vHomePos;
+		Restore_HP();
 	}
 	else if(nullptr == pTarget || false == pTarget->Is_Active() || pTarget->Is_Dead())
 	{
@@ -336,7 +362,6 @@ void CMonster::Priority_Update(_float fTimeDelta)
 			{
 				_float fX = m_pGameInstance->Get_RandomFloat(-2, 2);
 				_float fZ = m_pGameInstance->Get_RandomFloat(-2, 2);
-				cout << fX << " " << fZ << endl;
 				m_vRandomHomePosition = { fX ,0, fZ ,1 };
 			}
 
@@ -412,6 +437,17 @@ void CMonster::Priority_Update(_float fTimeDelta)
 void CMonster::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
+	if (m_bHPZero)
+	{
+		if (m_fDeadIdleTime <= m_fDeadIdleTimeAcc)
+		{
+			m_pGameInstance->Push_Event(CDeadObjEvent::Create(this));
+
+			m_fDeadIdleTimeAcc = 0.f;
+		}
+		else
+			m_fDeadIdleTimeAcc += fTimeDelta;
+	}
 }
 
 _bool CMonster::Check_Collision(CGameObject* pOther)
@@ -423,19 +459,15 @@ _bool CMonster::Check_Collision(CGameObject* pOther)
 	{
 	case Client::LAYER_PLAYER:
 	{
+		if (m_bHPZero)
+			break;
 		_vector vPos = pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-
-
 		if (m_vecCollider[COLLIDER_DETECT]->Contains(vPos))
 		{
 			Set_Target(pOther);
 			m_bDetected = true;
 			return true;
 		}
-
-
-
-
 	}
 	case Client::LAYER_TERRAIN:
 	case Client::LAYER_MONSTER:
@@ -519,4 +551,7 @@ void CMonster::Free()
 
 void CMonster::On_HPZero()
 {
+	m_bHPZero = true;
+
+	Set_Target(nullptr);
 }

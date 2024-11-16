@@ -5,7 +5,7 @@ BEGIN(Client)
 typedef struct Stat 
 {
 	Stat() = default;
-	Stat(json& js)
+	Stat(const json& js)
 	{
 		iHP = js["HP"];
 		iSP = js["SP"];

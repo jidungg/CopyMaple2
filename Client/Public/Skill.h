@@ -10,8 +10,13 @@ BEGIN(Client)
 typedef struct SkillData
 {
 	SkillData() = default;
+	SkillData(const json& jData);
 	SKILL_ID eID;
-	SKILL_TYPE eCastingType;
+	SKILL_CASTING_TYPE eCastingType;
+
+	SKILL_TARGET_TYPE eTargetType;
+	SKILL_RANGE_TYPE eRangeType;
+	//.콜라이더 크기, 오픠ㅏ셋 정보 추가
 	_char szName[MAX_PATH] = ("");
 	_char szDesc[MAX_PATH] = ("");
 	_uint iLevel = { 0 };
@@ -58,8 +63,10 @@ public:
 	SKILL_DATA* Get_SkillDesc() { return m_pSkillDesc; }
 	_int Get_NextAnimation(_uint iAnimIdx);
 	vector<_uint>& Get_AnimIdcies();
-	_bool Is_CoolReady();
 	_bool Is_CastingComplete();
+	_bool Is_CoolReady();
+	_bool Is_EnoughCost();
+	virtual _bool Is_Available();
 
 protected:
 	virtual void Initialzie_AnimEvent() abstract;

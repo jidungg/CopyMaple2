@@ -9,7 +9,7 @@
 
 int main(int argc, char* argv[])
 {
-	CModelConverter modelConverter;
+	CFbxToBinary modelConverter;
 	fs::path path;
 	path = fs::current_path();
 	cin >> path;
@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     for (const auto& entry : recursive_directory_iterator(path)) {
         if (entry.path().extension() == ".fbx") {
             //cout << entry.path().string() << endl;
-			modelConverter.FbxToBianry( entry.path().string());
+			modelConverter.FbxToBinary( entry.path().string());
         }
     }
 		

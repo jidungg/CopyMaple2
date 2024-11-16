@@ -15,11 +15,17 @@ typedef struct MonsterData
 		std::copy(str.begin(), str.end(), strMonsterDesc);
 		str = js["Model"];
 		std::copy(str.begin(), str.end(), strModelTag);
+		tStat = STATUS(js["Status"]);
+		vecSkillID = js["Skill"].get<vector<SKILL_ID>>();
+		fBodyCollisionRadius = js["BodyCollisionRadius"];
+		json jOffset = js["BodyCollisionOffset"];
+		fBodyCollisionOffset = { jOffset[0],jOffset[1],jOffset[2] };
+
 		fDetectionRange = js["DetectionRange"];
 		fChaseRange = js["ChaseRange"];
-		tStat = STATUS(js["Status"]);
+		auto jScale = js["Scale"];
+		vScale = { jScale[0].get<_float>(),jScale[1].get<_float>(),jScale[2].get<_float>() };
 		json& jmapAnimIdx = js["AnimIdx"];
-		
 		mapAnimIdx[M_AS_ATTACK_IDLE] = jmapAnimIdx["ATTACK_IDLE"].get<vector<_uint>>();
 		mapAnimIdx[M_AS_BORE] = jmapAnimIdx["BORE"].get<vector<_uint>>();
 		mapAnimIdx[M_AS_DAMG] = jmapAnimIdx["DAMG"].get<vector<_uint>>();
@@ -29,12 +35,9 @@ typedef struct MonsterData
 		mapAnimIdx[M_AS_RUN] = jmapAnimIdx["RUN"].get<vector<_uint>>();
 		mapAnimIdx[M_AS_STUN] = jmapAnimIdx["STUN"].get<vector<_uint>>();
 		mapAnimIdx[M_AS_WALK] = jmapAnimIdx["WALK"].get<vector<_uint>>();
-		vecSkillID = js["Skill"].get<vector<SKILL_ID>>();
-		fBodyCollisionRadius = js["BodyCollisionRadius"];
-		json jOffset = js["BodyCollisionOffset"];
-		fBodyCollisionOffset = { jOffset[0],jOffset[1],jOffset[2] };
 	}
-	MONSTER_ID eMonID = MONSTER_ID::LAST;
+	MONSTER_ID eMonID = { MONSTER_ID::LAST };
+	MONSTER_GRADE  eMonGrade = { MONSTER_GRADE::LAST };
 	_char strMonsterName[MAX_PATH] = ("");
 	_char strMonsterDesc[MAX_PATH] = ("");
 	_char strModelTag[MAX_PATH] = ("");
@@ -45,6 +48,7 @@ typedef struct MonsterData
 	unordered_map<MON_STATE, vector<_uint>> mapAnimIdx;
 	STATUS tStat;
 	vector<SKILL_ID> vecSkillID;
+	_float3 vScale = { 1,1,1 };
 
 }MONSTER_DATA;
 
@@ -104,7 +108,9 @@ public:
 	virtual void On_CastingEnd(CSkill* pSkill) override;
 	virtual void On_HPZero() override;
 	virtual _bool Use_Skill(CSkill* pSkill) override;
+	virtual void Respawn();
 
+	virtual _bool Is_Targetable() override;
 protected:
 	HRESULT Ready_Components(MONSTER_DESC* pDesc);
 	HRESULT Ready_Parts(MONSTER_DESC* pDesc);
@@ -115,7 +121,6 @@ public:
 protected:
 	MONSTER_DATA* m_pMonData = { nullptr };
 
-	_vector m_vHomePos = { 10.f,1.f,10.f,1.f };
 
 	_bool m_bDetected = { false };
 	_bool m_bChase = { false };
@@ -130,13 +135,16 @@ protected:
 	_bool m_bBackToHome = { false };
 	_float m_fChaseRange{ 2.f };
 
-	_int m_iRandomCondition = 0;
+	_int m_iRandomCondition = { 0 };
 	unordered_map<MON_STATE, vector<_uint>> m_mapAnimIdx;
 
-	_float m_fRandomMoveTimeAcc = 0.f;
-	_float m_fRandomMoveTime = 10.f;
-	_bool m_bRandomMove = false;
+	_float m_fRandomMoveTimeAcc = { 0.f };
+	_float m_fRandomMoveTime = { 10.f };
+	_bool m_bRandomMove = { false };
 	_vector m_vRandomHomePosition = { 0.f,0.f,0.f,0.f };
+
+	_float m_fDeadIdleTime = { 3.f };
+	_float m_fDeadIdleTimeAcc = { 0.f };
 
 public:
 	static CMonster* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

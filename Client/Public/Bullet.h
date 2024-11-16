@@ -8,6 +8,11 @@ class CCharacter;
 class CBullet abstract :
     public CModelObject
 {
+public:
+	typedef struct BulletDesc : CModelObject::MODELOBJ_DESC
+	{
+		CGameObject* pShooter = { nullptr };
+	}BULLET_DESC;
 protected:
 	explicit CBullet(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CBullet(const CBullet& Prototype);
@@ -16,6 +21,7 @@ protected:
 public:
 	virtual HRESULT Initialize_Prototype()override;
 	virtual HRESULT Initialize(void* pArg)override;
+	virtual HRESULT Ready_Components(void* pArg);
 	virtual _bool Check_Collision(CGameObject* pOther)override;
 
 	virtual void Invoke(_float fDamg, _vector vPosition);
@@ -26,7 +32,7 @@ protected:
 	_float m_iDamage = { 0 };
 	_bool m_bInvoke = { false };
 	_float m_fTimeAcc = { 0.f };
-
+	CGameObject* m_pShooter = { nullptr };
 public:
 
 	virtual void Free();

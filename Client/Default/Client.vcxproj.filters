@@ -187,6 +187,12 @@
     <ClInclude Include="..\Public\BasicAttack.h" />
     <ClInclude Include="..\Public\Bullet.h" />
     <ClInclude Include="..\Public\Bullet_MagicClaw.h" />
+    <ClInclude Include="..\Public\Spawner.h" />
+    <ClInclude Include="..\Public\MonsterSpawner.h" />
+    <ClInclude Include="..\Public\Portal.h" />
+    <ClInclude Include="..\Public\Interactable.h" />
+    <ClInclude Include="..\Public\PortalTerrainObject.h" />
+    <ClInclude Include="..\Public\WayFinder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -313,6 +319,12 @@
     <ClCompile Include="..\Private\BasicAttack.cpp" />
     <ClCompile Include="..\Private\Bullet.cpp" />
     <ClCompile Include="..\Private\Bullet_MagicClaw.cpp" />
+    <ClCompile Include="..\Private\Spawner.cpp" />
+    <ClCompile Include="..\Private\MonsterSpawner.cpp" />
+    <ClCompile Include="..\Private\Portal.cpp" />
+    <ClCompile Include="..\Private\Interactable.cpp" />
+    <ClCompile Include="..\Private\PortalTerrainObject.cpp" />
+    <ClCompile Include="..\Private\WayFinder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -349,6 +361,9 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_UI.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxEffectMesh.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

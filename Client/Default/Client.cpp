@@ -138,13 +138,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 //   �Լ�: InitInstance(HINSTANCE, int)
 //
-//   ����: �ν��Ͻ� �ڵ��� �����ϰ� �� â�� ����ϴ�.
-//
-//   ����:
-//
-//        �� �Լ��� ���� �ν��Ͻ� �ڵ��� ���� ������ �����ϰ�
-//        �� ���α׷� â�� ���� ���� ǥ���մϴ�.
-//
+
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    g_hInst = hInstance; // �ν��Ͻ� �ڵ��� ���� ������ �����մϴ�.

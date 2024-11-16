@@ -38,13 +38,13 @@ namespace Engine
 
 	enum class MOUSE_KEY { LB, RB, MB, LAST, };
 	enum class MOUSE_MOVE { X, Y, Z, LAST, };
-
 	enum class KEY
 	{
 		LEFT,
 		RIGHT,
 		UP,
 		DOWN,
+		NUM0,
 		NUM1,
 		NUM2,
 		NUM3,
@@ -54,7 +54,6 @@ namespace Engine
 		NUM7,
 		NUM8,
 		NUM9,
-		NUM0,
 		NUMPAD8,
 		NUMPAD4,
 		NUMPAD5,
@@ -91,9 +90,20 @@ namespace Engine
 		ENTER,
 		ESC,
 		TAB,
+		F1,
+		F2,
+		F3,
+		F4,
+		F5,
+		F6,
+		F7,
+		F8,
+		F9,
+		F10,
+		F11,
+		F12,
 		LAST, // ���� �˸���.
 	};
-
 	enum class CORNOR_TYPE
 	{
 		LEFT_TOP,

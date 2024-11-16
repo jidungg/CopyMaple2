@@ -14,10 +14,6 @@ protected:
 	CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CGameObject(const CGameObject& Prototype);
 	virtual ~CGameObject() = default;
-
-public:
-	
-		
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
@@ -41,7 +37,8 @@ public:
 	void Set_Active(bool bValue) { m_bActive = bValue; }
 	void Toggle_Active() { m_bActive = !m_bActive; }
 	void Set_Dead() { m_bDead = true; }
-	void Set_Target(CGameObject* pTaraget) { Safe_Release(m_pTarget); m_pTarget = pTaraget; Safe_AddRef(m_pTarget); }
+	void Set_Dead(_bool bValue) { m_bDead = bValue; }
+	void Set_Target(CGameObject* pTaraget) { m_pTarget = pTaraget; }
 	void Set_DontDestroy(bool bValue) { m_bDontDestroy = bValue; }
 	void Set_LayerID(_uint iLayerID) { m_iLayerID = iLayerID; }
 
@@ -50,11 +47,13 @@ public:
 	_uint Get_LayerID() { return m_iLayerID; }
 	_uint Get_ObjID() { return m_iObjID; }
 	_vector Get_Position() { return m_pTransformCom->Get_State(CTransform::STATE_POSITION); }
+	_float Get_Distance(CGameObject* pOther);
+	CColliderBase* Get_Collider(_uint iColliderIndex);
 
 	bool Is_Active() { return m_bActive; }
 	bool Is_Dead() { return m_bDead; }
 	bool Is_DontDestroy() { return m_bDontDestroy; }
-
+	bool Is_Valid();
 protected:
 	HRESULT Add_Component(_uint iPrototypeLevelIndex, const _wstring& strPrototypeTag, const _wstring& strComponentTag, CComponent** ppOut, void* pArg = nullptr);
 	HRESULT Add_Component(CComponent* pComponent, const _wstring& strComponentTag);
@@ -75,6 +74,7 @@ protected:
 	bool						m_bDead = { false };
 	bool						m_bDontDestroy = { false };	
 
+	vector<CColliderBase*> m_vecCollider;
 protected:
 	_uint						m_iObjID = {};
 	static _uint				m_iObjCount;

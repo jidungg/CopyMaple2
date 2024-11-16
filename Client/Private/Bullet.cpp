@@ -2,6 +2,7 @@
 #include "Bullet.h"
 #include "Character.h"
 #include "Collider_Sphere.h"
+#include "GameInstance.h"
 
 CBullet::CBullet(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CModelObject(pDevice, pContext)
@@ -24,7 +25,31 @@ HRESULT CBullet::Initialize(void* pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
+	BulletDesc* pDesc =static_cast< BulletDesc*>(pArg);
+	m_pShooter = pDesc->pShooter;
+	return S_OK;
+}
 
+HRESULT CBullet::Ready_Components(void* pArg)
+{
+
+	MODELOBJ_DESC* pDesc = (MODELOBJ_DESC*)pArg;
+	/* Com_VIBuffer */
+	string tmp = pDesc->strModelProtoName;
+	wstring wtmp = wstring(tmp.begin(), tmp.end());
+	CModel::ModelDesc modelDesc;
+	modelDesc.pMimicTarget = pDesc->pMimicTarget;
+	m_pModelCom = static_cast<CModel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, pDesc->eModelProtoLevelID, wtmp, &modelDesc));
+	if (FAILED(Add_Component(m_pModelCom, TEXT("Com_Model"))))
+		return E_FAIL;
+
+	m_eModelType = m_pModelCom->Get_Type();
+
+	/* Com_Shader */
+	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxEffectMesh"),
+		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+		return E_FAIL;
+	//m_pTransformCom->LookToward(Get_Direction_Vector(pDesc->direction));
 	return S_OK;
 }
 
@@ -37,10 +62,10 @@ _bool CBullet::Check_Collision(CGameObject* pOther)
 	if (pCharacter->Get_Team() == m_eTeam)
 		return false;
 
-	CCollider_Sphere* pCollider =  pCharacter->Get_Collider(0);
+	CCollider_Sphere* pCollider =  static_cast<CCollider_Sphere*>( pCharacter->Get_Collider(0));
 	if(pCollider->Intersects(m_pCollider))
 	{
-		pCharacter->Hit(m_iDamage);
+		pCharacter->Hit(m_pShooter,m_iDamage);
 		return true;
 	}
 	return false;

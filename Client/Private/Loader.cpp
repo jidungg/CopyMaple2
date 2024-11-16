@@ -43,6 +43,9 @@
 #include "UIBar.h"
 
 #include "Bullet_MagicClaw.h"
+#include "MonsterSpawner.h"
+#include "PortalTerrainObject.h"
+#include "Portal.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -124,7 +127,7 @@ HRESULT CLoader::Loading_Level_Logo()
 {
 	if (FAILED(ITEMDB->Load_Data()))
 		return E_FAIL;
-	if (FAILED(Load_SkillData()))
+	if (FAILED(SKILLDB->Load_Data()))
 		return E_FAIL;
 	if (FAILED(MONSTERDB->Load_Data()))
 		return E_FAIL;
@@ -163,7 +166,7 @@ HRESULT CLoader::Loading_Level_Logo()
 		TEXT("../Bin/Resources/Textures/UI/CastingBar/"), TEXT(".dds"))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
-		TEXT("../Bin/Resources/Textures/Effect/"), TEXT(".dds"))))
+		TEXT("../Bin/Resources/Textures/"), TEXT(".dds"))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/NonAnim/Cube/"), TEXT(".dds"))))
@@ -200,6 +203,10 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_UI"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_UI.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
 		return E_FAIL;
+	/* For.Prototype_Component_Shader_EffectLMesh*/
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxEffectMesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_VtxEffectMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
+		return E_FAIL;
 #pragma endregion
 
 	lstrcpy(m_szLoadingText, TEXT("모델 로드."));
@@ -217,6 +224,12 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Anim/Equip"), CModel::TYPE_ANIM, matPretransform)))
 		return E_FAIL;
+	//if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
+	//	TEXT("../Bin/resources/FBXs/Effect"), CModel::TYPE_ANIM, matPretransform)))
+	//	return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("eff_wizard_magicclaw_remain_01_a.model"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, ("../Bin/resources/FBXs/Effect/eff_wizard_magicclaw_remain_01_a.model"), matPretransform))))
+	//	return E_FAIL;
 	matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Anim/Player"),CModel::TYPE_ANIM,matPretransform)))
@@ -226,12 +239,14 @@ HRESULT CLoader::Loading_Level_Logo()
 		TEXT("../Bin/resources/FBXs/Mimic"), CModel::TYPE_MIMIC, matPretransform)))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
-		TEXT("../Bin/resources/FBXs/MAP/Field/"), matPretransform)))
+		TEXT("../Bin/resources/FBXs/MAP/"), matPretransform)))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
-		TEXT("../Bin/resources/FBXs/Effect"), CModel::TYPE_NONANIM, matPretransform)))
+		TEXT("../Bin/resources/FBXs/MAP/Field/"), matPretransform)))
 		return E_FAIL;
-
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("EmptyModel.model"),
+	//	CModel::Create(m_pDevice, m_pContext, ("../Bin/resources/FBXs/NonAnim/EmptyModel.model"), matPretransform))))
+	//	return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_Sphere::m_szProtoTag,
 		CCollider_Sphere::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -267,7 +282,12 @@ HRESULT CLoader::Loading_Level_Logo()
 		CTerrainObject::m_szProtoTag,
 		CTerrainObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CPortal::m_szProtoTag,
+		CPortal::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CPortalTerrainObject::m_szProtoTag,
+		CPortalTerrainObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	//BULLETS
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBullet_MagicClaw::m_szProtoTag,
 		CBullet_MagicClaw::Create(m_pDevice, m_pContext))))
@@ -295,8 +315,6 @@ HRESULT CLoader::Loading_Level_Logo()
 		CUIBar::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-
-
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,
 		CHumanModelObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -312,6 +330,10 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CMonster::m_szProtoTag,
 		CMonster::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CMonsterSpawner::m_szProtoTag,
+		CMonsterSpawner::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 #pragma endregion
 
@@ -336,10 +358,6 @@ HRESULT CLoader::Loading_Level_GamePlay()
 
 
 	lstrcpy(m_szLoadingText, TEXT("모델 로드"));
-	/* For.Prototype_Component_VIBuffer_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
-		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/resources/Textures/Terrain/Height.bmp")))))
-		return E_FAIL;
 
 	XMMATRIX matPretransform = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
 	matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
@@ -396,6 +414,7 @@ HRESULT CLoader::Loading_Level_MyHome()
 	if (FAILED(Load_Dirctory_Models(LEVEL_HOME,
 		TEXT("../Bin/resources/FBXs/Anim/DuckyBall"), CModel::TYPE_ANIM, matPretransform)))
 		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("객체 로드."));
 	/* For.Prototype_GameObject_HomeDialog */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, CUIHomeDialog::m_szProtoTag,
@@ -425,18 +444,6 @@ HRESULT CLoader::Loading_Level_MyHome()
 	return S_OK;
 }
 
-
-HRESULT CLoader::Load_SkillData()
-{
-	json j;
-	if (FAILED(CJsonParser::ReadJsonFile("../Bin/Resources/Json/SkillData.json", &j)))
-		return E_FAIL;
-	for (auto& skill : j["skills"])
-	{
-		SKILLDB->Insert_Data(skill);
-	}
-	return S_OK;
-}
 
 HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId,  const _tchar* szDirPath,CModel::TYPE eType ,_fmatrix PreTransformMatrix)
 {
@@ -522,9 +529,6 @@ HRESULT CLoader::Load_Dirctory_Textures(LEVELID eLevId, const _tchar* szDirPath,
 		lstrcat(szFullPath, FindFileData.cFileName);
 
 		wstring wstr = szFullPath;
-
-		XMMATRIX matGlobal = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
-		matGlobal = matGlobal * XMMatrixRotationY(XMConvertToRadians(180.f));
 
 		if (FAILED(m_pGameInstance->Add_Prototype(eLevId, FindFileData.cFileName,
 			CTexture::Create(m_pDevice, m_pContext, wstr.c_str(), 1))))

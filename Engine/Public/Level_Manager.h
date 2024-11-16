@@ -22,6 +22,7 @@ public:
 	HRESULT Render();
 
 	_int Get_CurrentLevelID() const { return m_iCurrentLevelID; }
+	CLevel* Get_CurrentLevel() const { return m_pCurrentLevel; }
 private:
 	_int					m_iCurrentLevelID = { -1 };
 	class CLevel*			m_pCurrentLevel = { nullptr };

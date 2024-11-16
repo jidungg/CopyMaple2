@@ -97,8 +97,11 @@ HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle,
 			hr = CreateWICTextureFromFile(m_pDevice, szPerfectPath, nullptr, &pSRV);
 		if (FAILED(hr))
 		{
-			CreateDDSTextureFromFile(m_pDevice, TEXT("../Bin/Resources/Textures/Default.dds"), nullptr, &pSRV);
+			hr = CreateDDSTextureFromFile(m_pDevice, TEXT("../Bin/Resources/Textures/Default.dds"), nullptr, &pSRV);
 		}
+
+		assert(SUCCEEDED(hr));
+
 		m_SRVs.push_back(pSRV);
 		delete[] strTexturePath;
 	}

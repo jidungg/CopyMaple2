@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Client_Utility.h"
+#include "GameInstance.h"
+#include "Level_Loading.h"
 
 DirectX::XMVECTOR Client::Get_Direction_Vector(DIRECTION eDirection)
 {
@@ -42,4 +44,15 @@ DirectX::XMVECTOR Client::Get_Direction_Vector(DIRECTION eDirection)
 		break;
 	}
 	return vDirection;
+}
+
+LEVELID Client::Get_CurrentTrueLevel()
+{
+	auto pGameInstance = CGameInstance::GetInstance();
+	LEVELID eLevelID =(LEVELID)pGameInstance->Get_CurrentLevelID();
+	if (eLevelID == LEVELID::LEVEL_LOADING)
+	{
+		eLevelID =  static_cast<CLevel_Loading*>(pGameInstance->Get_CurrentLevel())->Get_NextLevelID();
+	}
+	return eLevelID;
 }

@@ -9,8 +9,13 @@ D:\Workbench\Portfolio\CopyMaple2\Client\Private\Character.cpp;D:\Workbench\Port
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\CreateObjEvent.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\CreateObjEvent.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\DeadObjEvent.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\DeadObjEvent.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\BasicAttack.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\BasicAttack.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Interactable.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Interactable.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Monster.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Monster.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\MonsterDataBase.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\MonsterDataBase.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\MonsterSpawner.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\MonsterSpawner.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Portal.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Portal.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\PortalTerrainObject.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\PortalTerrainObject.obj
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Spawner.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\Spawner.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\PlayerEquipSlot.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\PlayerEquipSlot.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\PlayerInfo.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\PlayerInfo.obj
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\InvenEquipSlot.cpp;D:\Workbench\Portfolio\CopyMaple2\Client\Default\x64\Debug\InvenEquipSlot.obj

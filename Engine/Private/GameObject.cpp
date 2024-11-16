@@ -201,6 +201,23 @@ _bool CGameObject::Check_Collision(const Ray& tRay, RaycastHit* pOut)
 	return bIsHit;
 }
 
+
+_float CGameObject::Get_Distance(CGameObject* pOther)
+{
+	_vector vDist = pOther->Get_Position() - Get_Position();
+	return XMVector3Length(vDist).m128_f32[0];
+}
+
+CColliderBase* CGameObject::Get_Collider(_uint iColliderIndex)
+{
+	return (m_vecCollider[iColliderIndex]);
+}
+
+bool CGameObject::Is_Valid()
+{
+	return 	(false == Is_Dead() && true == Is_Active());
+}
+
 HRESULT CGameObject::Add_Component(_uint iPrototypeLevelIndex, const _wstring & strPrototypeTag, const _wstring & strComponentTag, CComponent** ppOut, void * pArg)
 {
 	if (nullptr != Find_Component(strComponentTag))
@@ -257,10 +274,14 @@ void CGameObject::Free()
 		Safe_Release(i);
 	}
  	m_pChilds.clear();
+	for (auto& pCollider : m_vecCollider)
+	{
+		Safe_Release(pCollider);
+	}
+	m_vecCollider.clear();
 
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
-	Safe_Release(m_pTarget);
 }

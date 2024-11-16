@@ -36,6 +36,7 @@ public:
 	CTerrainObject* Get_TerrainObject(_uint Index);
 	_float Get_FloorHeight(_vector Pos);
 	_float Get_CelingHeight(_vector Pos);
+	void Get_AdjCells(_uint Index, vector<CTerrainObject*>& vecAdjCells);
 
 	
 	HRESULT Save_To_Json(string strNewFilepath);

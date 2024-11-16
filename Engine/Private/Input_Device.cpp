@@ -6,6 +6,7 @@ int g_ArrDK[(int)KEY::LAST] = {
     DIK_RIGHT,
     DIK_UP,
     DIK_DOWN,
+    DIK_0,
     DIK_1,
     DIK_2,
     DIK_3,
@@ -15,7 +16,6 @@ int g_ArrDK[(int)KEY::LAST] = {
     DIK_7,
     DIK_8,
     DIK_9,
-    DIK_0,
     DIK_NUMPAD8,
     DIK_NUMPAD4,
     DIK_NUMPAD5,
@@ -51,9 +51,19 @@ int g_ArrDK[(int)KEY::LAST] = {
     DIK_SPACE,    // SPACE,
     DIK_RETURN,   // ENTER,
     DIK_ESCAPE,   // ESC,
-    DIK_TAB       // TAB,
-
-
+    DIK_TAB,       // TAB,
+    DIK_F1,
+	DIK_F2,
+	DIK_F3,
+	DIK_F4,
+	DIK_F5,
+	DIK_F6,
+	DIK_F7,
+	DIK_F8,
+	DIK_F9,
+	DIK_F10,
+	DIK_F11,
+	DIK_F12,
 };
 
 

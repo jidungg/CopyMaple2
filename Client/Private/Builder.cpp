@@ -89,7 +89,20 @@ void CBuilder::Receive_KeyInput(_float fTimeDelta)
 	if (m_pGameInstance->GetKeyState(KEY::S) == KEY_STATE::PRESSING)
 		m_vMoveDir += Get_Direction_Vector(DIR_D);
 
-
+#ifdef _DEBUG
+	for (_uint key = 0; key < 10; key++)
+	{
+		if (m_pGameInstance->GetKeyState((KEY)((_uint)KEY::NUM0 + key)) == KEY_STATE::DOWN)
+		{
+			m_iBuildData = key;
+			break;
+		}
+	}
+	if (m_pGameInstance->GetKeyState(KEY::F1) == KEY_STATE::PRESSING)
+		m_fBuildData -= m_fBuildDataDelta;
+	if (m_pGameInstance->GetKeyState(KEY::F2) == KEY_STATE::PRESSING)
+		m_fBuildData += m_fBuildDataDelta;
+#endif
 	if (m_pGameInstance->GetKeyState(KEY::R) == KEY_STATE::DOWN)//ȸ��
 	{
 		_float4 pos;
@@ -112,6 +125,7 @@ void CBuilder::Receive_KeyInput(_float fTimeDelta)
 	if (m_pGameInstance->GetKeyState(KEY::SPACE) == KEY_STATE::DOWN) // ��ġ
 	{
 		BUILD_ITEM_DATA* itemdesc =static_cast<BUILD_ITEM_DATA*>( ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)m_pPreview->Get_BuildItemID()));
+
 		CTerrainObject::TERRAINOBJ_DESC desc;
 		desc.fRotationPerSec = 5.f;
 		desc.fSpeedPerSec = 1.f;
@@ -119,7 +133,8 @@ void CBuilder::Receive_KeyInput(_float fTimeDelta)
 		desc.eModelProtoLevelID = LEVEL_LOADING;
 		strcpy_s(desc.strModelProtoName, itemdesc->strModelTag);
 		desc.direction = m_pPreview->Get_Direction();
-		desc.data = m_iBuildData;
+		desc.vecIData.push_back(m_iBuildData);
+		desc.vecFData.push_back(m_fBuildData);
 		_float4 pos;
 		XMStoreFloat4(&pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		desc.index = m_pCubeTerrain->PosToIndex(pos);

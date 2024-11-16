@@ -18,13 +18,14 @@ CTerrainObject::CTerrainObject(ID3D11Device* pDevice, ID3D11DeviceContext* pCont
 
 CTerrainObject::CTerrainObject(const CTerrainObject& Prototype)
 	: CModelObject(Prototype),
-	m_pColliderCom{ Prototype.m_pColliderCom }
+	m_pCubeColliderCom{ Prototype.m_pCubeColliderCom }
 	, m_eTerrainDir{ Prototype.m_eTerrainDir }
 	, m_iIndex{ Prototype.m_iIndex }
 	, m_eBuildItemID{ Prototype.m_eBuildItemID }
 {
 
-	Safe_AddRef(m_pColliderCom);
+	Safe_AddRef(m_pCubeColliderCom);
+	Safe_AddRef(m_pMeshColliderCom);
 }
 
 HRESULT CTerrainObject::Initialize_Prototype()
@@ -54,6 +55,46 @@ HRESULT CTerrainObject::Initialize(void* pArg)
 	return S_OK;
 }
 
+HRESULT CTerrainObject::Ready_Components(TERRAINOBJ_DESC* pDesc)
+{
+
+	switch (m_eBuildItemType)
+	{
+	case Client::BUILD_ITEM_TYPE::CUBE:
+	case Client::BUILD_ITEM_TYPE::FILED_BLOCK:
+	{
+		CCollider_AABB::AABB_COLLIDER_DESC tDesc{};
+		tDesc.vCenter = { 0,0.5f,0 };
+		tDesc.vExtentes = { 0.5f,0.5f,0.5f };
+
+		if (FAILED(Add_Component(LEVEL_LOADING, CCollider_AABB::m_szProtoTag,
+			CColliderBase::m_szCompTag, reinterpret_cast<CComponent**>(&m_pCubeColliderCom), &tDesc)))
+			return E_FAIL;
+		if (m_eBuildItemType == BUILD_ITEM_TYPE::FILED_BLOCK)
+		{
+			CCollider_Mesh::MESH_COLLIDER_DESC tMeshDesc{};
+			tMeshDesc.pMesh = m_pModelCom->Get_Mesh(0);
+
+			if (FAILED(Add_Component(LEVEL_LOADING, CCollider_Mesh::m_szProtoTag,
+				TEXT("Com_ModelCollider"), reinterpret_cast<CComponent**>(&m_pMeshColliderCom), &tMeshDesc)))
+				return E_FAIL;
+		}
+
+		break;
+	}
+	case Client::BUILD_ITEM_TYPE::INTERACTABLE:
+	case Client::BUILD_ITEM_TYPE::FILED_NON_BLOCK:
+	case Client::BUILD_ITEM_TYPE::SPAWN:
+	case Client::BUILD_ITEM_TYPE::LAST:
+	default:
+		m_pCubeColliderCom = nullptr;
+		m_pMeshColliderCom = nullptr;
+		break;
+	}
+	return S_OK;
+}
+
+
 void CTerrainObject::Update(_float fTimeDelta)
 {
 	if(m_bRotating)
@@ -62,22 +103,16 @@ void CTerrainObject::Update(_float fTimeDelta)
 	__super::Update(fTimeDelta);
 }
 
-HRESULT CTerrainObject::Render()
-{
-	if (FAILED(__super::Render()))
-		return E_FAIL;
-	m_pColliderCom->Render();
-	return S_OK;
-}
-
-
 
 
 json CTerrainObject::ToJson()
 {
 	json j;
 	j["ItemId"] = m_eBuildItemID;
-	j["Data"] = 0;
+	list<_int> iData;
+	j["IntData"] = iData;
+	list<_float> fData;
+	j["FloatData"] = fData;
 	j["Iteration"] = 1;
 	j["Direction"] = m_eTerrainDir;
 	j["Index"] = m_iIndex;
@@ -93,12 +128,16 @@ void CTerrainObject::Rotate()
 
 _vector CTerrainObject::BolckXZ(_vector vCharacterPosition, _vector vMoveDirection, _float fMoveDistance, _float fCollisionRadius, _float fCollisionHeight)
 {
+	if (nullptr == m_pCubeColliderCom)
+		return vCharacterPosition + vMoveDirection * fMoveDistance;
+
+
 	_vector vNextPosition = vCharacterPosition + vMoveDirection * fMoveDistance;
 	if (false == DirectX::Internal::XMVector3IsUnit(vMoveDirection))
 		return vNextPosition;
-	m_pColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
+	m_pCubeColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
 
-	CCollider_AABB* pCollider = static_cast<CCollider_AABB*>(m_pColliderCom);
+	CCollider_AABB* pCollider = static_cast<CCollider_AABB*>(m_pCubeColliderCom);
 	BoundingBox* tBox = pCollider->Get_Desc();
 	_float3* pCorners = new _float3[8];
 	tBox->GetCorners(pCorners);
@@ -195,33 +234,34 @@ _vector CTerrainObject::BolckXZ(_vector vCharacterPosition, _vector vMoveDirecti
 
 	return vNextPosition;
 }
-
 _float CTerrainObject::Get_TopHeight(_vector Pos)
 {
 	switch (m_eBuildItemType)
 	{
-	case Client::BUILD_ITEM_TYPE::BLOCK:
+	case Client::BUILD_ITEM_TYPE::CUBE:
 		return m_WorldMatrix.m[3][1] + 1.0f;
 		break;
 
-	case Client::BUILD_ITEM_TYPE::FILED:
+	case Client::BUILD_ITEM_TYPE::FILED_BLOCK:
 	{
-		m_pColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
+		m_pMeshColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
 		RaycastHit hitInfo;
-		Pos = XMVectorSetY(Pos, XMVectorGetY(Pos) + 1.f);
+		Pos = XMVectorSetY(Pos, XMVectorGetY(Pos) + 0.5f);
 		Ray ray(Pos, XMVECTOR{ 0,-1,0,0 });
 
-		if (m_pColliderCom->RayCast(ray, &hitInfo))
+		if (m_pMeshColliderCom->RayCast(ray, &hitInfo))
 		{
-			return XMVectorGetY(hitInfo.vPoint);
+			cout << XMVectorGetY(hitInfo.vPoint) << endl;
+			return XMVectorGetY(hitInfo.vPoint); 
 		}
 		break;
 	}
-	case Client::BUILD_ITEM_TYPE::PORTAL:
+	case Client::BUILD_ITEM_TYPE::FILED_NON_BLOCK:
+	case Client::BUILD_ITEM_TYPE::INTERACTABLE:
 	case Client::BUILD_ITEM_TYPE::SPAWN:
 	case Client::BUILD_ITEM_TYPE::LAST:
 	default:
-		return m_WorldMatrix.m[3][1];
+		return -1;
 		break;
 	}
 
@@ -232,28 +272,28 @@ _float CTerrainObject::Get_BottomHeight(_vector Pos)
 {
 	switch (m_eBuildItemType)
 	{
-	case Client::BUILD_ITEM_TYPE::BLOCK:
+	case Client::BUILD_ITEM_TYPE::CUBE:
 		return m_WorldMatrix.m[3][1];
 		break;
 
-	case Client::BUILD_ITEM_TYPE::FILED:
+	case Client::BUILD_ITEM_TYPE::FILED_BLOCK:
 	{
-		m_pColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
+		m_pCubeColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
 		RaycastHit hitInfo;
 		Pos = XMVectorSetY(Pos, XMVectorGetY(Pos) -1.f);
 		Ray ray(Pos, XMVECTOR{ 0,1,0,0 });
 
-		if (m_pColliderCom->RayCast(ray, &hitInfo))
+		if (m_pCubeColliderCom->RayCast(ray, &hitInfo))
 		{
 			return XMVectorGetY(hitInfo.vPoint);
 		}
 		break;
 	}
-	case Client::BUILD_ITEM_TYPE::PORTAL:
+	case Client::BUILD_ITEM_TYPE::INTERACTABLE:
 	case Client::BUILD_ITEM_TYPE::SPAWN:
 	case Client::BUILD_ITEM_TYPE::LAST:
 	default:
-		return m_WorldMatrix.m[3][1];
+		return FLT_MAX;
 		break;
 	}
 
@@ -262,50 +302,13 @@ _float CTerrainObject::Get_BottomHeight(_vector Pos)
 
 _bool CTerrainObject::RayCast(const Ray& tRay, RaycastHit* pOut)
 {
-	m_pColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
+	if (nullptr == m_pCubeColliderCom)
+		return false;
+	m_pCubeColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
 
-	return m_pColliderCom->RayCast(tRay, pOut);
+	return m_pCubeColliderCom->RayCast(tRay, pOut);
 }
 
-
-
-HRESULT CTerrainObject::Ready_Components(TERRAINOBJ_DESC* pDesc)
-{
-
-	switch (m_eBuildItemType)
-	{
-	case Client::BUILD_ITEM_TYPE::PORTAL:
-	case Client::BUILD_ITEM_TYPE::BLOCK:
-	{
-		CCollider_AABB::AABB_COLLIDER_DESC desc{};
-		desc.vCenter = { 0,0.5f,0 };
-		desc.vExtentes = { 0.5f,0.5f,0.5f };
-
-		if (FAILED(Add_Component(LEVEL_LOADING, CCollider_AABB::m_szProtoTag,
-			CColliderBase::m_szCompTag, reinterpret_cast<CComponent**>(&m_pColliderCom), &desc)))
-			return E_FAIL;
-		break;
-	}
-	case Client::BUILD_ITEM_TYPE::FILED:
-	{
-		CCollider_Mesh::MESH_COLLIDER_DESC desc{};
-		desc.pMesh = m_pModelCom->Get_Mesh(0);
-
-		if (FAILED(Add_Component(LEVEL_LOADING, CCollider_Mesh::m_szProtoTag,
-			CColliderBase::m_szCompTag, reinterpret_cast<CComponent**>(&m_pColliderCom), &desc)))
-			return E_FAIL;
-		break;
-	}
-	case Client::BUILD_ITEM_TYPE::SPAWN:
-	case Client::BUILD_ITEM_TYPE::LAST:
-	default:
-		m_pColliderCom = nullptr;
-		break;
-	}
-
-
-	return S_OK; 
-}
 
 
 CTerrainObject* CTerrainObject::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -337,5 +340,6 @@ CGameObject* CTerrainObject::Clone(void* pArg)
 void CTerrainObject::Free()
 {
  	__super::Free();
-	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pCubeColliderCom);
+	Safe_Release(m_pMeshColliderCom);
 }

@@ -8,16 +8,16 @@ typedef struct
 	XMFLOAT3		vPosition;
 	float			fKeyFramePosition;
 }KEYFRAME;
-class CModelConverter
+class CFbxToBinary
 {
 public:
 	enum TYPE { TYPE_NONANIM, TYPE_ANIM, TYPE_END };
 
 public:
-	CModelConverter();
-	~CModelConverter();
+	CFbxToBinary();
+	~CFbxToBinary();
 
-	HRESULT FbxToBianry(const string& inFilePath);
+	HRESULT FbxToBinary(const string& inFilePath);
 	//HRESULT BinaryToModel(const string& file, TYPE type = TYPE_NONANIM);
 
 private:

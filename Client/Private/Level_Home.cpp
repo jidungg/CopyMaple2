@@ -33,8 +33,7 @@ HRESULT CLevel_Home::Initialize()
 
 	if (FAILED(Ready_Layer_BackGround(LAYER_TERRAIN)))
 		return E_FAIL;
-	if (FAILED(Ready_Layer_UI(LAYER_UI)))
-		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Camera(LAYER_CAMERA)))
 		return E_FAIL;
 	
@@ -137,7 +136,13 @@ HRESULT CLevel_Home::Render()
 
 void CLevel_Home::On_Start()
 {
+	Ready_Layer_UI(LAYER_UI);
+
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_PLAYER, LAYERID::LAYER_TERRAIN, true);
+	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_PLAYER, LAYERID::LAYER_MONSTER, true);
+	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_MONSTER, LAYERID::LAYER_PLAYER, true);
+	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_MONSTER, LAYERID::LAYER_TERRAIN, true);
+	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_PLAYER, LAYERID::LAYER_INTERACTION, true);
 }
 
 
@@ -173,6 +178,7 @@ HRESULT CLevel_Home::Ready_Layer_UI(LAYERID eLayerId)
 	PanelDesc.fYOffset = 0;
 	PanelDesc.fSizeX = g_iWinSizeX/2;
 	PanelDesc.fSizeY = g_iWinSizeY/4;
+	PanelDesc.vBorder = {3,3,3,3 };
 	PanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, m_iLevelID, TEXT("UI_Texture_HomeDialog"), nullptr));
 	list<UIListItemData*> listData;
 	for (auto& i : *m_pItemData)
@@ -190,8 +196,8 @@ HRESULT CLevel_Home::Ready_Layer_UI(LAYERID eLayerId)
 
 HRESULT CLevel_Home::Ready_Layer_Camera(LAYERID eLayerId)
 {
-	m_pPlayer  = static_cast<CPlayer*>(m_pGameInstance->Get_FirstGameObject(LEVEL_LOADING, LAYER_PLAYER));;
-	m_pCamera = static_cast<CCamera_Trace*>(m_pGameInstance->Get_FirstGameObject(LEVEL_LOADING, LAYER_CAMERA));;
+	m_pPlayer  = static_cast<CPlayer*>(m_pGameInstance->Get_FirstGameObject(LEVEL_HOME, LAYER_PLAYER));;
+	m_pCamera = static_cast<CCamera_Trace*>(m_pGameInstance->Get_FirstGameObject(LEVEL_HOME, LAYER_CAMERA));;
 	return S_OK;
 }
 HRESULT CLevel_Home::Ready_Lights()

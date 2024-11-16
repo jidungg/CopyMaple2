@@ -1,2251 +1,1614 @@
 {
     "cells": [
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 0,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 2,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 4,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 6,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 8,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 10,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 12,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 14,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 16,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 18,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 20,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 22,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 24,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 26,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 28,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 30,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 32,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 34,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 36,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 38,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 40,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 42,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 44,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 46,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 48,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 50,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 52,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 54,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 56,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 58,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 60,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 62,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 64,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 66,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 68,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 70,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 72,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 74,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 76,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 78,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 80,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 82,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 84,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 86,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 88,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 90,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 92,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 94,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 96,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 98,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 122,
-            "ItemId": "GRASS_1",
-            "Iteration": 2
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 114,
-            "ItemId": "ROCK_1",
-            "Iteration": 2
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 116,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 110,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 130,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 113,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 100,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 102,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 104,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 106,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 108,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 111,
+            "FloatData": [],
+            "Index": 110,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 117,
+            "FloatData": [],
+            "Index": 112,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 119,
+            "FloatData": [],
+            "Index": 114,
+            "IntData": [],
             "ItemId": "GRASS_1",
-            "Iteration": 1
+            "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 139,
+            "FloatData": [],
+            "Index": 116,
+            "IntData": [],
             "ItemId": "GRASS_1",
-            "Iteration": 1
+            "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 136,
+            "FloatData": [],
+            "Index": 118,
+            "IntData": [],
             "ItemId": "GRASS_1",
-            "Iteration": 1
+            "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 135,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 132,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 131,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 129,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 128,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 127,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 126,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 125,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 124,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 121,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 120,
+            "IntData": [],
             "ItemId": "GRASS_1",
-            "Iteration": 1
+            "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
+            "Index": 122,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 124,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 126,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 128,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 130,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 132,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 134,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 136,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 138,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
             "Index": 140,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 142,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 144,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 146,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 148,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 150,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 152,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 133,
-            "ItemId": "GRASS_1",
-            "Iteration": 2
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 154,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 156,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 137,
-            "ItemId": "GRASS_1",
-            "Iteration": 2
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 158,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 179,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 178,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 177,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 176,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 175,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 174,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 173,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 172,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 171,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 170,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 169,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 168,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 167,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 166,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 165,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 164,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 163,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 162,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 161,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 160,
+            "IntData": [],
             "ItemId": "GRASS_1",
-            "Iteration": 1
+            "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
+            "Index": 162,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 164,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 166,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 168,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 170,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 172,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 174,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 176,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 178,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
             "Index": 180,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 182,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 184,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 186,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 188,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 190,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 192,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 194,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 196,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 198,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 219,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 218,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 217,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 216,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 215,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 214,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 213,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 212,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 211,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 210,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 209,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 208,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 207,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 206,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 205,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 204,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 203,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 202,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 201,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 200,
+            "IntData": [],
             "ItemId": "GRASS_1",
-            "Iteration": 1
+            "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
+            "Index": 202,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 204,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 206,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 208,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 210,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 212,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 214,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 216,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 218,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
             "Index": 220,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 222,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 224,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 226,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 228,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 230,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 232,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 234,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 236,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 238,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 259,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 258,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 257,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 256,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 255,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 254,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 253,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 252,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 251,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 250,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 249,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 248,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 247,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 246,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 245,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 244,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 243,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 242,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 241,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 240,
+            "IntData": [],
             "ItemId": "GRASS_1",
-            "Iteration": 1
+            "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
+            "Index": 242,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 244,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 246,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 248,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 250,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 252,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 254,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 256,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 258,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
             "Index": 260,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 262,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 264,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 266,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 269,
-            "ItemId": "GRASS_1",
-            "Iteration": 2
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 268,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 271,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 273,
+            "FloatData": [],
+            "Index": 270,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 275,
+            "FloatData": [],
+            "Index": 272,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 277,
+            "FloatData": [],
+            "Index": 274,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 279,
+            "FloatData": [],
+            "Index": 276,
+            "IntData": [],
             "ItemId": "GRASS_1",
-            "Iteration": 1
+            "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 299,
+            "FloatData": [],
+            "Index": 278,
+            "IntData": [],
             "ItemId": "GRASS_1",
-            "Iteration": 1
+            "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 298,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 297,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 296,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 294,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 293,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 295,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 292,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 291,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 290,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 289,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 288,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 287,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 286,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 285,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 284,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 283,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 282,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 281,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 280,
+            "IntData": [],
             "ItemId": "GRASS_1",
-            "Iteration": 1
+            "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
+            "Index": 282,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 284,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 286,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 288,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 290,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 292,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 294,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 296,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 298,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
             "Index": 300,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 302,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 304,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 306,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 308,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 310,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 312,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 314,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 316,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
             "Index": 318,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 339,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 338,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 337,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 336,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 334,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 333,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 335,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 332,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 331,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 330,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 329,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 328,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 327,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 326,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 325,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 324,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 323,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 322,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 320,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
+            "FloatData": [],
+            "Index": 322,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 324,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 326,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 328,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 330,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 332,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 334,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 336,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 338,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
             "Index": 340,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 360,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 380,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 361,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 341,
+            "FloatData": [],
+            "Index": 342,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 382,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 362,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 383,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 363,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 343,
+            "FloatData": [],
+            "Index": 344,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 364,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 384,
+            "FloatData": [],
+            "Index": 346,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 365,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 345,
-            "ItemId": "GRASS_1",
-            "Iteration": 2
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 366,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 386,
-            "ItemId": "GRASS_1",
-            "Iteration": 2
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 367,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 348,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 368,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 389,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 388,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 347,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 349,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 369,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 390,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 350,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 371,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 391,
-            "ItemId": "GRASS_1",
-            "Iteration": 2
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 373,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 372,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 352,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 393,
-            "ItemId": "GRASS_1",
-            "Iteration": 2
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 374,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 354,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 375,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 395,
-            "ItemId": "GRASS_1",
-            "Iteration": 2
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 376,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 356,
+            "IntData": [],
             "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 377,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 397,
-            "ItemId": "GRASS_1",
-            "Iteration": 2
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 378,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 359,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 379,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 399,
-            "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
+            "FloatData": [],
             "Index": 358,
+            "IntData": [],
             "ItemId": "GRASS_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 599,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 579,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 559,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 959,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 979,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 999,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 1399,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 1379,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 1359,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 1759,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 1779,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 1799,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 2199,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 2159,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 2179,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 447,
-            "ItemId": "ROCK_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 449,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 469,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 489,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 450,
-            "ItemId": "ROCK_1",
+            "FloatData": [],
+            "Index": 360,
+            "IntData": [],
+            "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 452,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 849,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 869,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 889,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 829,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 429,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 409,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 809,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 909,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 888,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 868,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 887,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 867,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 446,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 445,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 444,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 443,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 1229,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 1209,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 1609,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 1629,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 2009,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 2029,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 1267,
-            "ItemId": "ROCK_1",
+            "FloatData": [],
+            "Index": 362,
+            "IntData": [],
+            "ItemId": "GRASS_1",
             "Iteration": 2
         },
         {
-            "Data": 0,
             "Direction": 0,
-            "Index": 1668,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 1667,
-            "ItemId": "ROCK_1",
-            "Iteration": 1
-        },
-        {
-            "Data": 0,
-            "Direction": 0,
-            "Index": 2067,
-            "ItemId": "ROCK_1",
+            "FloatData": [],
+            "Index": 364,
+            "IntData": [],
+            "ItemId": "GRASS_1",
             "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 366,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 368,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 370,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 372,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 374,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 376,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 378,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 380,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 382,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 384,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 386,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 388,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 390,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 392,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 394,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 396,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 398,
+            "IntData": [],
+            "ItemId": "GRASS_1",
+            "Iteration": 2
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 480,
+            "IntData": [
+                2
+            ],
+            "ItemId": "PORTAL",
+            "Iteration": 1
         }
     ],
     "size": [

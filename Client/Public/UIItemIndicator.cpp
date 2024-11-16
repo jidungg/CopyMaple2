@@ -37,7 +37,7 @@ HRESULT CUIItemIndicator::Initialize_Prototype(LEVELID eBackTexProtoLev, const _
 
 HRESULT CUIItemIndicator::Initialize(void* pArg)
 {
-	if(FAILED(CUIObject::Initialize(pArg)))
+	if(FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 
@@ -54,6 +54,11 @@ HRESULT CUIItemIndicator::Render()
 	if (FAILED(m_pIconTransform->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 	if (FAILED(m_pIconTexure->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_BorderSize", &m_vIconBorder, sizeof(XMUINT4))))
+		return E_FAIL;
+	_float4 vMinMax = static_cast<CRect_Transform*>(m_pIconTransform)->Get_MinMax();
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_MinMax", &vMinMax, sizeof(XMUINT4))))
 		return E_FAIL;
 	if (m_pShaderCom)
 		m_pShaderCom->Begin(0);

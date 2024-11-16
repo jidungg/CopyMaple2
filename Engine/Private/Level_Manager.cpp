@@ -14,8 +14,7 @@ HRESULT CLevel_Manager::Open_Level(_int iLevelIndex, CLevel * pNewLevel)
 	if(nullptr != m_pCurrentLevel)
 	{
 		m_pCurrentLevel->On_End();
-		m_pGameInstance->Move_DontDestroyObjects(m_iCurrentLevelID, iLevelIndex);
-		m_pGameInstance->Clear(m_iCurrentLevelID);
+
 	}
 
 	Safe_Release(m_pCurrentLevel);

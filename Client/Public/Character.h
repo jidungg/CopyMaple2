@@ -49,7 +49,10 @@ public:
 	virtual _bool Use_Skill(CSkill* pSkill);
 
 	void Move_Forward(_float fDist);
-	void Hit(_int fDamage);
+	void Hit(CGameObject* pFoe,_int fDamage);
+	void Restore_HP();
+	virtual void Respawn();
+	virtual _bool Is_Targetable();
 
 	_vector Get_MoveDirection() { return m_vMoveDirectionXZ; }
 	_vector Get_LookDirection() { return m_vLookDirectionXZ; }
@@ -58,11 +61,12 @@ public:
 	_float3 Get_BodyCollisionOffset();
 	_float Get_MoveDistance() { return m_fMoveDistanceXZ; }
 	_uint Get_CurrentAnimIdx();
-	CCollider_Sphere* Get_Collider(_uint iColliderIndex);
+
 	CSkill* Get_Skill(SKILL_ID eID) { return m_mapSkill[eID]; }
 	CSkill* Get_CurrentSkill() { return m_mapSkill[(SKILL_ID)m_iCurrentSkillID]; }
 	_float Get_AnimationProgress(_uint iAnimIdx);
 	TEAM Get_Team() { return m_eTeam; }
+	Stat Get_Stat() { return m_tStat; }
 
 protected:
 	class CModelObject* m_pBody = { nullptr };
@@ -87,6 +91,7 @@ protected:
 	//Status
 	_float m_fBattleTimeMax{ 4.f };
 	_float m_fBoreTime{ 10.f };
+	STATUS m_tStatDefault;
 	STATUS m_tStat;
 
 	//공통 상태 컨트롤 변수
@@ -95,8 +100,10 @@ protected:
 	_bool m_bOnFloor{ true };
 	_bool m_bAttack{ false };
 	_int m_iCurrentSkillID{ 0 };
+	_bool m_bHPZero = { false };
 
-	vector<CColliderBase*> m_vecCollider;
+
+	_vector m_vHomePos = { 10.f,1.f,10.f,1.f };
 private:
 	_uint m_iBodyColliderIndex = { 0 };
 public:

@@ -42,14 +42,14 @@ HRESULT CUIList::Initialize(void* pArg)
 	for (auto& data : *pDesc->listData)
 	{
 
-		CUIObject::UIObjectDesc desc{};
+		CUIPanel::PANEL_DESC desc{};
 		desc.eAnchorType = CORNOR_TYPE::LEFT_TOP;
 		desc.ePivotType = CORNOR_TYPE::LEFT_TOP;
 		desc.fXOffset = iItemIdx % iXMaxCount * (m_fItemWidth + m_fItemMarginX) + m_fItemMarginX / 2;
 		desc.fYOffset = iItemIdx / iXMaxCount * (m_fItemHeight + m_fItemMarginY) + m_fItemMarginY / 2;
 		desc.fSizeX = m_fItemWidth;
 		desc.fSizeY = m_fItemHeight;
-
+		desc.vBorder = {3,3,3,3};
 		CGameObject* pItem = static_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, m_eBackTexProtoLev, m_szBackTexProtoTag, &desc));
 		Add_Child(pItem);
 		IUIListItemEntry* pListItemEntry = dynamic_cast<IUIListItemEntry*>(pItem);

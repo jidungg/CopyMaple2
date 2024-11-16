@@ -1,0 +1,17 @@
+﻿  CNIFToBinary.cpp
+D:\Workbench\Portfolio\CopyMaple2\FBXConverter\assimp\defs.h(53,10): error C1083: 포함 파일을 열 수 없습니다. 'assimp/config.h': No such file or directory
+  (소스 파일 'CNIFToBinary.cpp'을(를) 컴파일하는 중)
+  
+  FBXToBinary.cpp
+D:\Workbench\Portfolio\CopyMaple2\FBXConverter\assimp\defs.h(53,10): error C1083: 포함 파일을 열 수 없습니다. 'assimp/config.h': No such file or directory
+  (소스 파일 'FBXToBinary.cpp'을(를) 컴파일하는 중)
+  
+  FBXConverter.cpp
+D:\Workbench\Portfolio\CopyMaple2\FBXConverter\assimp\defs.h(53,10): error C1083: 포함 파일을 열 수 없습니다. 'assimp/config.h': No such file or directory
+  (소스 파일 'FBXConverter.cpp'을(를) 컴파일하는 중)
+  
+  pch.cpp
+D:\Workbench\Portfolio\CopyMaple2\FBXConverter\assimp\defs.h(53,10): error C1083: 포함 파일을 열 수 없습니다. 'assimp/config.h': No such file or directory
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+  코드를 생성하고 있습니다...

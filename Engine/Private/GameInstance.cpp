@@ -122,7 +122,6 @@ HRESULT CGameInstance::Render_End()
 
 void CGameInstance::Clear(_int iLevelID)
 {
-	/* Ư�� ������ ��ü���� �����. */
 	m_pObject_Manager->Clear(iLevelID);
 
 	m_pPrototype_Manager->Clear(iLevelID);
@@ -186,6 +185,13 @@ _int CGameInstance::Get_CurrentLevelID() const
 		return -1;
 
 	return m_pLevel_Manager->Get_CurrentLevelID();
+}
+
+CLevel* CGameInstance::Get_CurrentLevel() const
+{
+	if (nullptr == m_pLevel_Manager)
+		return nullptr;
+	return m_pLevel_Manager->Get_CurrentLevel();
 }
 
 HRESULT CGameInstance::Add_Prototype(_uint iLevelIndex, const _wstring & strPrototypeTag, CBase * pPrototype)

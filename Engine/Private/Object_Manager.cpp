@@ -173,7 +173,11 @@ CGameObject* CObject_Manager::Get_FirstGameObject(_uint iLevIdx, _uint iLayerId)
 
 list<CGameObject*>* CObject_Manager::Get_GameObjectList(_uint iLayerId)
 {
-	return Find_Layer(m_pGameInstance->Get_CurrentLevelID(), iLayerId)->Get_GameObjectList();
+	auto pLayer = Find_Layer(m_pGameInstance->Get_CurrentLevelID(), iLayerId);
+	if (pLayer == nullptr)
+		return nullptr;
+	auto pList = pLayer->Get_GameObjectList();
+	return pList;
 }
 
 CLayer * CObject_Manager::Find_Layer(_uint iLevelIndex, _uint iLayerId)

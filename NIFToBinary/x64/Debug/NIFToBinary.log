@@ -1,0 +1,7 @@
+﻿  pch.cpp
+  CNifToBinary.cpp
+  main.cpp
+  코드를 생성하고 있습니다...
+CNifToBinary.obj : error LNK2019: "class Niflib::Ref<class Niflib::NiObject> __cdecl Niflib::ReadNifTree(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,struct Niflib::NifInfo *)" (?ReadNifTree@Niflib@@YA?AV?$Ref@VNiObject@Niflib@@@1@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PEAUNifInfo@1@@Z)"public: long __cdecl CNifToBinary::NifToBinary(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)" (?NifToBinary@CNifToBinary@@QEAAJAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) 함수에서 참조되는 확인할 수 없는 외부 기호
+CNifToBinary.obj : error LNK2019: "public: void __cdecl Niflib::NiObject::SubtractRef(void)const " (?SubtractRef@NiObject@Niflib@@QEBAXXZ)"public: __cdecl Niflib::Ref<class Niflib::NiObject>::~Ref<class Niflib::NiObject>(void)" (??1?$Ref@VNiObject@Niflib@@@Niflib@@QEAA@XZ) 함수에서 참조되는 확인할 수 없는 외부 기호
+D:\Workbench\Portfolio\CopyMaple2\x64\Debug\NIFToBinary.exe : fatal error LNK1120: 2개의 확인할 수 없는 외부 참조입니다.

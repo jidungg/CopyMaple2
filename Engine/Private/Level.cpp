@@ -34,6 +34,7 @@ void CLevel::On_Start()
 void CLevel::On_End()
 {
 	m_pGameInstance->Zero_CollisionMatrix();
+
 }
 
 void CLevel::Free()

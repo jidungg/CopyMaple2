@@ -42,9 +42,10 @@ HRESULT CMagicClaw::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	m_pTargetSearcher->Set_Active(false);
 
 	//Bullet
-	CModelObject::MODELOBJ_DESC tBulletDesc;
+	CBullet::BULLET_DESC tBulletDesc;
 	tBulletDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tBulletDesc.strModelProtoName, "he_ground_grass_d02.model");
+	tBulletDesc.pShooter = m_pUser;
+	strcpy_s(tBulletDesc.strModelProtoName, "he_fi_prop_tgdtable_a02.model");
 	m_pBullet = static_cast<CBullet_MagicClaw*>( m_pGameInstance->Clone_Proto_Object_Stock(CBullet_MagicClaw::m_szProtoTag, &tBulletDesc));
 	m_pBullet->Set_Active(true);
 	return S_OK;
@@ -62,7 +63,6 @@ void CMagicClaw::Late_Update(_float fTimeDelta)
 }
 void CMagicClaw::AnimEventFunc1()
 {
-	cout << "MagicClaw" << endl;
 	//SearchTarget :FustumCollider 켜기
 	m_pTargetSearcher->Update(XMMatrixTranslation(0, m_pUser->Get_BodyCollisionOffset().y, -1) * m_pUser->Get_Transform()->Get_WorldMatrix());
 	CCharacter* pTarget =  SearchTarget();
@@ -70,6 +70,7 @@ void CMagicClaw::AnimEventFunc1()
 	if(pTarget)
 	{
 		_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
+		fDmg = m_pUser->Get_Stat().iATK * fDmg*0.01;
 		m_pBullet->Invoke(fDmg, pTarget);
 	}
 }
@@ -81,6 +82,8 @@ CCharacter* CMagicClaw::SearchTarget()
 	for (auto& pMonster : *listMonster)
 	{
 		CCharacter* pTmpCharacter = static_cast<CCharacter*>(pMonster);
+		if (false == pTmpCharacter->Is_Targetable())
+			continue;
 		if (Check_InRange(pTmpCharacter))
 		{
 			_float fTmpDistance = XMVectorGetX(XMVector3Length(pTmpCharacter->Get_Position() - m_pUser->Get_Position()));

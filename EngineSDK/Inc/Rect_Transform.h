@@ -44,7 +44,8 @@ public:
 	_float2 Get_PivotOffset(CORNOR_TYPE ePivotType);
 	_float2 Get_PivotPosition(CORNOR_TYPE ePivotType);
 	_float2 Get_AnchorPosition(CORNOR_TYPE eAnchorType);
-	bool Is_InRect(_float2 vPosition);
+	_float4 Get_MinMax();
+	_bool Is_InRect(_float2 vPosition);
 public:
 	static _float2 Get_CornorRatio(CORNOR_TYPE ePivotType);
 protected:

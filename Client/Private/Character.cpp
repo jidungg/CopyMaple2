@@ -15,7 +15,7 @@ CCharacter::CCharacter(const CCharacter& Prototype)
 	: CPawn(Prototype)
 	, m_pAnimStateMachine{ Prototype.m_pAnimStateMachine }
 	, m_vMoveDirectionXZ{ Prototype.m_vMoveDirectionXZ }
-	, m_tStat{ Prototype.m_tStat }
+	, m_tStatDefault{ Prototype.m_tStatDefault }
 	, m_mapSkill{ Prototype.m_mapSkill }
 {
 }
@@ -48,8 +48,6 @@ void CCharacter::Priority_Update(_float fTimeDelta)
 
 void CCharacter::Update(_float fTimeDelta)
 {
-
-
 	 for (auto& pSkill : m_mapSkill)
 		 pSkill.second->Update_CoolTime(fTimeDelta);
 	 if(m_bAttack)
@@ -154,12 +152,12 @@ _bool CCharacter::Use_Skill(CSkill* pSkill)
 
 _float CCharacter::Get_BodyCollisionRadius()
 {
-	return Get_Collider(m_iBodyColliderIndex)->Get_Desc()->Radius;
+	return static_cast<CCollider_Sphere*>( Get_Collider(m_iBodyColliderIndex))->Get_Desc()->Radius;
 }
 
 _float3 CCharacter::Get_BodyCollisionOffset()
 {
-	return  Get_Collider(m_iBodyColliderIndex)->Get_Offset();
+	return  static_cast<CCollider_Sphere*>(Get_Collider(m_iBodyColliderIndex))->Get_Offset();
 }
 
 _uint CCharacter::Get_CurrentAnimIdx()
@@ -167,11 +165,7 @@ _uint CCharacter::Get_CurrentAnimIdx()
 	return m_pBody->Get_AnimIndex();
 }
 
-CCollider_Sphere* CCharacter::Get_Collider(_uint iColliderIndex)
-{
-	return static_cast<CCollider_Sphere*>(m_vecCollider[iColliderIndex]);
 
-}
 _float CCharacter::Get_AnimationProgress(_uint iAnimIdx)
 {
 	return m_pBody->Get_AnimationProgress(iAnimIdx);
@@ -181,10 +175,11 @@ void CCharacter::Move_Forward(_float fDist)
 {
 	m_vMoveDirectionXZ = XMVector3Normalize( m_pTransformCom->Get_State(CTransform::STATE_LOOK))* fDist;
 }
-void CCharacter::Hit(_int fDamage)
+void CCharacter::Hit(CGameObject* pFoe,_int fDamage)
 {
-	cout << "Hit" << endl;
 	m_tStat.iHP -= fDamage;
+	cout << "Hit : " << fDamage <<", Remain HP : "<< m_tStat.iHP << endl;
+	Set_Target(pFoe);
 	if (m_tStat.iHP <= 0)
 	{
 		m_tStat.iHP = 0;
@@ -192,16 +187,27 @@ void CCharacter::Hit(_int fDamage)
 	}
 
 }
+void CCharacter::Restore_HP()
+{
+	m_tStat.iHP = m_tStatDefault.iHP;
+}
+void CCharacter::Respawn()
+{
+	Set_Active(true);
+	Set_Target(nullptr);
+	Restore_HP();
+	m_bHPZero = false;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vHomePos);
+}
+_bool CCharacter::Is_Targetable()
+{
+	return 	Is_Valid();
+}
 void CCharacter::Free()
 {
 	__super::Free();
 	Safe_Release(m_pAnimStateMachine);
-	for (auto& pCollider : m_vecCollider)
-	{
-		Safe_Release(pCollider);
-	}
-	m_vecCollider.clear();
-		for (auto& skill : m_mapSkill)
+	for (auto& skill : m_mapSkill)
 		Safe_Release(skill.second);
 }
 

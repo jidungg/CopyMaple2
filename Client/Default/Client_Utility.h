@@ -6,5 +6,5 @@ namespace Client
 {
 
 	DirectX::XMVECTOR Get_Direction_Vector(DIRECTION eDirection);
-	
+	LEVELID Get_CurrentTrueLevel();
 }

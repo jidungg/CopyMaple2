@@ -16,6 +16,7 @@ CLevel_Loading::CLevel_Loading(ID3D11Device * pDevice, ID3D11DeviceContext * pCo
 
 HRESULT CLevel_Loading::Initialize(LEVELID eNextLevelID)
 {
+	m_ePrevLevelID = (LEVELID) m_pGameInstance->Get_CurrentLevelID();
 	m_eNextLevelID = eNextLevelID;
 
 	m_pLoader = CLoader::Create(m_pDevice, m_pContext, m_eNextLevelID);
@@ -31,6 +32,11 @@ void CLevel_Loading::Update(_float fTimeDelta)
 	{
 		
 		CLevel*			pNewLevel = { nullptr };
+		if(m_ePrevLevelID != -1)
+		{
+			m_pGameInstance->Move_DontDestroyObjects(m_ePrevLevelID, m_eNextLevelID);
+			m_pGameInstance->Clear(m_ePrevLevelID);
+		}
 
 		switch (m_eNextLevelID)
 		{

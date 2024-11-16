@@ -52,6 +52,8 @@ void CCollisionManager::Check_Collision_Layer(_uint eObjectLayer, _uint eSubject
 	list<CGameObject*>* pLeftLayer = m_pObjectMgr->Get_GameObjectList(eObjectLayer);
 	list<CGameObject*>* pRightLayer = m_pObjectMgr->Get_GameObjectList(eSubjectLayer);
 
+	if (pLeftLayer == nullptr || pRightLayer == nullptr)
+		return;
 	for (auto& left : *pLeftLayer)
 	{
 		if (left->Is_Active() == false)continue;

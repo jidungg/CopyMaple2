@@ -15,8 +15,9 @@ public:
 	{
 		BUILD_ITEM_ID eID = BUILD_ITEM_ID::LAST;
 		_float4 pos = {0,0,0,1};
-		int data = 0;//MonsterSpawner 
 		_uint index = 0;
+		vector<_int> vecIData ;
+		vector<_float> vecFData ;
 	}TERRAINOBJ_DESC;
 public:
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_TerrainObject";
@@ -29,7 +30,7 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(_float fTimeDelta) override;
-	virtual HRESULT Render() override;
+	
 
 	virtual json ToJson();
 	void Rotate();
@@ -40,6 +41,8 @@ public:
 	_vector BolckXZ(_vector vPosition, _vector vDirection, _float fMoveDistance, _float fCollisionRadius, _float fCollisionHeight);
 	_float Get_TopHeight(_vector Pos);
 	_float Get_BottomHeight(_vector Pos);
+	_float Get_BuildItemType() { return (_float)m_eBuildItemType; }
+	_bool Is_BlockingType() { return m_eBuildItemType == BUILD_ITEM_TYPE::CUBE || m_eBuildItemType == BUILD_ITEM_TYPE::FILED_BLOCK; }
 	_bool RayCast(const Ray& tRay, RaycastHit* pOut);
 
 	void Set_TerrainDir(DIRECTION eDir) { m_eTerrainDir = eDir; }
@@ -51,7 +54,8 @@ protected:
 	BUILD_ITEM_TYPE m_eBuildItemType = BUILD_ITEM_TYPE::LAST;
 	_uint m_iIndex = 0;
 	DIRECTION m_eTerrainDir = DIRECTION::LAST;
-	CColliderBase* m_pColliderCom = {nullptr};
+	CColliderBase* m_pCubeColliderCom = {nullptr};
+	CColliderBase* m_pMeshColliderCom = {nullptr};
 	_bool m_bRotating = false;
 public:
 	static CTerrainObject* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

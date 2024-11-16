@@ -38,6 +38,7 @@ public: /* For.Renderer */
 public: /* for.Level_Manager */
 	HRESULT Open_Level(_int iLevelIndex, class CLevel* pNewLevel);
 	_int Get_CurrentLevelID()const;
+	CLevel* Get_CurrentLevel() const;
 public: /* For.Prototype_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const _wstring& strPrototypeTag, class CBase* pPrototype);
 	class CBase* Clone_Prototype(Engine::PROTOTYPE eType, _uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg = nullptr);

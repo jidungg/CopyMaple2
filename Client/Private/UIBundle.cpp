@@ -58,7 +58,9 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	tBarDesc.fSizeX = 300;
 	tBarDesc.fSizeY = 30;
 	tBarDesc.fXOffset = 0;
-	tBarDesc.fYOffset = 0;
+	tBarDesc.fYOffset = 0; 
+	tBarDesc.vBorder = { 3,3,3,3};
+	tBarDesc.vFillBorder = { 2,2,2,2 };
 
 	tBarDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock( TEXT("castingbar_mainfrm.dds")));
 	tBarDesc.pFillTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("castingbar_fill.dds")));

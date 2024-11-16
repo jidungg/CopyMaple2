@@ -88,12 +88,13 @@ bool CCollider_Mesh::RayCast(const Ray& tRay, RaycastHit* pOut)
 		XMVECTOR v0 =XMLoadFloat3(&vertices[indices[indexCount++]].vPosition);
 		XMVECTOR v1 = XMLoadFloat3(&vertices[indices[indexCount++]].vPosition);
 		XMVECTOR v2 =XMLoadFloat3(&vertices[indices[indexCount++]].vPosition);
+
 		float fDist ;
 		if(TriangleTests::Intersects(vLocalOrigin, vLocalDirection,v0, v1, v2, fDist))
 		{
-
 			if (fDist <= (tRay.fDist < 0 ? 9999 : tRay.fDist))
 			{
+
 				bIsHit = true;
 				if (fDist < fMinDist)
 				{
@@ -111,7 +112,7 @@ bool CCollider_Mesh::RayCast(const Ray& tRay, RaycastHit* pOut)
 		pOut->pCollider = this;
 		pOut->fDist = fMinDist;
 		pOut->vNormal = vMinNormal;
-		pOut->vPoint, tRay.vOrigin + XMVector3Normalize(tRay.vDirection) * fMinDist;
+		pOut->vPoint =  tRay.vOrigin + XMVector3Normalize(tRay.vDirection) * fMinDist;
 	}
 	// ���� ����
 	m_pContext->Unmap(m_pStagingVB, 0);

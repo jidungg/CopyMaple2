@@ -12,6 +12,7 @@ class CFace;
 class CInventory;
 class CItemObjet;
 class CTerrainObject;
+class CInteractableObject;
 class CPlayer :
 	public CCharacter
 {
@@ -77,7 +78,7 @@ public:
 		,AS_JUMP_DASH_LAND
 		,AS_JUMP_DOWN_A
 		,AS_JUMP_DOWN_B
-		,AS_JUMP_FALL_A
+		,AS_JUMP_FALL_A = 60
 		,AS_JUMP_FALL_B
 		,AS_JUMP_FLYDAMG
 		,AS_JUMP_LAND
@@ -129,7 +130,7 @@ public:
 		,AS_STAFF_DAMG_B
 		,AS_STAFF_DEAD
 		,AS_STAFF_JUMP_ATTACK
-		,AS_STAFF_JUMP_DOWN_A
+		,AS_STAFF_JUMP_DOWN_A =112
 		,AS_STAFF_JUMP_DOWN_B
 		,AS_STAFF_JUMP_LAND
 		,AS_STAFF_JUMP_UP_A
@@ -167,10 +168,12 @@ public:
 	{
 		AC_ANIM_END_TRIGGER,
 		AC_POSTDELAY_END,
-		AC_UPFORCE,
+		AC_JUMP_TRIGGER,
 		AC_ONFLOOR,
+		AC_UPFORCE,
 		AC_RANDOM,
 		AC_MOVE,
+		AC_HPZERO,
 		AC_IDLETIME,
 		AC_WALK,
 		AC_BATTLE,
@@ -240,6 +243,8 @@ public:
 
 
 protected:
+	CInteractableObject* m_pInteractable = { nullptr };
+
 	CModelObject* m_pEquipModels[(_uint)EQUIP_ITEM_TYPE::LAST] = { nullptr, };
 	CModelObject* m_pDecoModels[(_uint)DECO_TYPE::LAST] = { nullptr, };
 	CModelObject* m_pCustomizes[(_uint)CUSTOMIZE_PART::LAST] = { nullptr, };

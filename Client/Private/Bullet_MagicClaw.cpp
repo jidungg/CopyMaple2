@@ -41,18 +41,27 @@ void CBullet_MagicClaw::Update(_float fTimeDelta)
 		m_iAttackCount++;
 		//데미지 주기
 		cout << "AttackCount : " << m_iAttackCount << endl;
-		static_cast<CCharacter*>(Get_Target())->Hit(m_iDamage);
+		CGameObject* pTarget = Get_Target();
+		if (nullptr != pTarget && pTarget->Is_Valid())
+		{
+			static_cast<CCharacter*>(pTarget)->Hit(m_pShooter,m_iDamage);
+		}
 	}
 	else
 	{
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, Get_Target()->Get_Position());
-		m_pCollider->Update(m_pTransformCom->Get_WorldMatrix());
+		CGameObject* pTarget = Get_Target();
+		if (nullptr  != pTarget&& pTarget->Is_Valid())
+		{
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, pTarget->Get_Position());
+			m_pCollider->Update(m_pTransformCom->Get_WorldMatrix());
+		}
+
 	}
 	if (m_iAttackCount >= m_fAttackTime.size())
 	{
 		m_bInvoke = false;
 		m_iAttackCount = 0;
-		cout << "MgicClawEnd : " << m_iAttackCount << endl;
+		Set_Active(false);
 	}
 	m_fTimeAcc += fTimeDelta;
 }

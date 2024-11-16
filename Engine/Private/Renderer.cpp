@@ -49,7 +49,8 @@ HRESULT CRenderer::Render_Priority()
 	for (auto& pRenderObject : m_RenderObjects[RG_PRIORITY])
 	{
 		if (nullptr != pRenderObject)
-			pRenderObject->Render();
+			if (pRenderObject->Is_Active())
+				pRenderObject->Render();
 
 		Safe_Release(pRenderObject);
 	}
@@ -63,7 +64,8 @@ HRESULT CRenderer::Render_NonBlend()
 	for (auto& pRenderObject : m_RenderObjects[RG_NONBLEND])
 	{
 		if (nullptr != pRenderObject)
-			pRenderObject->Render();
+			if(pRenderObject->Is_Active())
+				pRenderObject->Render();
 
 		Safe_Release(pRenderObject);
 	}	
@@ -77,7 +79,8 @@ HRESULT CRenderer::Render_Blend()
 	for (auto& pRenderObject : m_RenderObjects[RG_BLEND])
 	{
 		if (nullptr != pRenderObject)
-			pRenderObject->Render();
+			if (pRenderObject->Is_Active())
+				pRenderObject->Render();
 
 		Safe_Release(pRenderObject);
 	}
@@ -93,7 +96,8 @@ HRESULT CRenderer::Render_UI()
 	for (auto& pRenderObject : m_RenderObjects[RG_UI])
 	{
 		if (nullptr != pRenderObject)
-			pqUI.push(static_cast<CUIObject*>(pRenderObject));
+			if (pRenderObject->Is_Active())
+				pqUI.push(static_cast<CUIObject*>(pRenderObject));
 	}
 	m_RenderObjects[RG_UI].clear();
 	

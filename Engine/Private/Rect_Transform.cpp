@@ -176,7 +176,17 @@ _float2 CRect_Transform::Get_AnchorPosition(CORNOR_TYPE eAnchorType)
 	return fAnchorPoint;
 }
 
-bool CRect_Transform::Is_InRect(_float2 vPosition)
+_float4 CRect_Transform::Get_MinMax()
+{
+	_float4		tMinMax{};
+	tMinMax.x = m_fXPosition - m_fSizeX * 0.5f;
+	tMinMax.y = m_fYPosition - m_fSizeY * 0.5f;
+	tMinMax.z = m_fXPosition + m_fSizeX * 0.5f;
+	tMinMax.w = m_fYPosition + m_fSizeY * 0.5f;
+	return tMinMax;
+}
+
+_bool CRect_Transform::Is_InRect(_float2 vPosition)
 {
 	return  (vPosition.x <= m_fXPosition + m_fSizeX * 0.5f &&
 		vPosition.x >= m_fXPosition - m_fSizeX * 0.5f &&

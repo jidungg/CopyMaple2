@@ -66,6 +66,12 @@ HRESULT CUISlot::Render()
 			return E_FAIL;
 		if (FAILED(m_pIconTexure->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
 			return E_FAIL;
+		_float4 vIconBorder = { 0,0,0,0 };
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_BorderSize", &vIconBorder, sizeof(XMUINT4))))
+			return E_FAIL;
+		_float4 vMinMax = static_cast<CRect_Transform*>(m_pIconTransform)->Get_MinMax();
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_MinMax", &vMinMax, sizeof(XMUINT4))))
+			return E_FAIL;
 		if (m_pShaderCom)
 			m_pShaderCom->Begin(0);
 		if (m_pVIBufferCom)

@@ -5,6 +5,8 @@
 #include "JsonParser.h"
 #include "ItemDataBase.h"
 #include "Character.h"
+#include "MonsterSpawner.h"
+#include "PortalTerrainObject.h"
 
 CCubeTerrain::CCubeTerrain(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const char* szMapFileName)
 	: CGameObject { pDevice, pContext }
@@ -56,20 +58,21 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 
 	m_vSize = { j["size"][0],j["size"][1],j["size"][2] };
 	m_vecCells.resize(m_vSize.x * m_vSize.y * m_vSize.z, nullptr);
-
-	CTerrainObject::TERRAINOBJ_DESC desc;
-	desc.fRotationPerSec = 5.f;
-	desc.fSpeedPerSec = 1.f;
 	for (const auto& item : j["cells"]) {
 		BUILD_ITEM_ID eId =  item["ItemId"];
-		BUILD_ITEM_DATA* pBuildItemDesc = static_cast<BUILD_ITEM_DATA*>( pDB->Get_Data(ITEM_TYPE::BUILD,(_uint)eId));
-		strcpy_s(desc.strModelProtoName, pBuildItemDesc->strModelTag);
-		desc.eModelProtoLevelID = LEVEL_LOADING;
-		desc.eID = item["ItemId"];
-		desc.direction = item["Direction"];
-		desc.data = item["Data"];
 		size_t iteration = item["Iteration"];
 		_uint terrIdx = item["Index"];
+		BUILD_ITEM_DATA* pBuildItemDesc = static_cast<BUILD_ITEM_DATA*>( pDB->Get_Data(ITEM_TYPE::BUILD,(_uint)eId));
+
+		CTerrainObject::TERRAINOBJ_DESC desc;
+		desc.fRotationPerSec = 5.f;
+		desc.fSpeedPerSec = 1.f;
+		strcpy_s(desc.strModelProtoName, pBuildItemDesc->strModelTag);
+		desc.eModelProtoLevelID = LEVEL_LOADING;
+		desc.eID = eId;
+		desc.direction = item["Direction"];
+		desc.vecIData = item["IntData"].get<vector<_int>>();
+		desc.vecFData = item["FloatData"].get<vector<_float>>();
 
 		for (int i = 0 ; i < iteration; i++)
 		{
@@ -129,6 +132,8 @@ _vector CCubeTerrain::BlockXZ(CCharacter* pCharacter)
 			{
 				_uint iIdx = iX + m_vSize.x * iZ + m_vSize.x * m_vSize.z * iY;
 				if (nullptr == m_vecCells[iIdx])
+					continue;
+				if (false == m_vecCells[iIdx]->Is_BlockingType())
 					continue;
 				vNextPos = m_vecCells[iIdx]->BolckXZ(vPos, vMoveDir, fMoveDistance, fBodyCollisionRadius, fBodyCollisionOffset.y);
 				_vector vTmp = vNextPos - vPos;
@@ -236,7 +241,8 @@ HRESULT CCubeTerrain::Save_To_Json(string strNewFilepath)
 		int curIdx = jCurObj["Index"];
 		int curIter = jCurObj["Iteration"];
 		if ( jCurObj["ItemId"] == jTemp["ItemId"]
-			&& jCurObj["Data"] == jTemp["Data"]
+			&& jCurObj["IntData"] == jTemp["IntData"]
+			&& jCurObj["FloatData"] == jTemp["FloatData"]
 			&& jCurObj["Direction"] == jCurObj["Direction"]
 			&& (curIdx +curIter) == jTemp["Index"])
 		{
@@ -293,7 +299,42 @@ HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 {
 	if (m_vecCells[tDesc.index] != nullptr)
 		return E_FAIL;
-	CTerrainObject* pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CTerrainObject::m_szProtoTag, &tDesc));
+	BUILD_ITEM_TYPE eType = static_cast<BUILD_ITEM_DATA*>(ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)tDesc.eID))->eBuildType;
+
+	CTerrainObject* pGameObject = nullptr;
+	switch (eType)
+	{
+	case Client::BUILD_ITEM_TYPE::CUBE:
+	case Client::BUILD_ITEM_TYPE::FILED_BLOCK:
+	case Client::BUILD_ITEM_TYPE::FILED_NON_BLOCK:
+		pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CTerrainObject::m_szProtoTag, &tDesc));
+		break;
+	case Client::BUILD_ITEM_TYPE::INTERACTABLE:
+		if (tDesc.eID == Client::BUILD_ITEM_ID::PORTAL)
+			pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CPortalTerrainObject::m_szProtoTag, &tDesc));
+		break;
+	case Client::BUILD_ITEM_TYPE::SPAWN:
+	{
+		switch (tDesc.eID)
+		{
+		case Client::BUILD_ITEM_ID::MONSTER_SPAWNER:
+			pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CMonsterSpawner::m_szProtoTag, &tDesc));
+			break;
+		case Client::BUILD_ITEM_ID::PLAYER_SPAWNER:
+			//pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CMonsterSpawner::m_szProtoTag, &tDesc));
+			break;
+		default:
+			break;
+		}
+		break;
+	}
+	case Client::BUILD_ITEM_TYPE::LAST:
+		break;
+	default:
+		break;
+	}
+	if(nullptr == pGameObject)
+		return E_FAIL;
 	Add_Child(pGameObject);
 	m_vecCells[tDesc.index] = pGameObject;
 	return S_OK;
@@ -332,7 +373,9 @@ _float CCubeTerrain::Get_FloorHeight(_vector Pos)
 		_uint iTmpIndex = iXIdx + m_vSize.x * iZIdx + m_vSize.x * m_vSize.z * yIdx;
 		if (m_vecCells[iTmpIndex] != nullptr)
 		{
-			return m_vecCells[iTmpIndex]->Get_TopHeight(Pos);
+			
+			if(m_vecCells[iTmpIndex]->Is_BlockingType())
+				return m_vecCells[iTmpIndex]->Get_TopHeight(Pos);
 		}
 		
 	}
@@ -358,6 +401,22 @@ _float CCubeTerrain::Get_CelingHeight(_vector Pos)
 
 	}
 	return FLT_MAX;
+}
+
+void CCubeTerrain::Get_AdjCells(_uint Index, vector<CTerrainObject*>& vecAdjCells)
+{
+	_uint iCellCount = m_vecCells.size();
+	assert(Index < iCellCount);
+	_uint iXIdx = Index % m_vSize.x;
+	_uint iZIdx = Index % m_vSize.z / m_vSize.x ;
+	_uint iYIdx = Index / (m_vSize.x * m_vSize.z);
+
+	_uint iAdjIdx = iCellCount;
+	_uint iXAdjIdx = iCellCount;
+	_uint iZAdjIdx = iCellCount;
+	_uint iYAdjIdx = iCellCount;
+	if (iXIdx - 1 >= 0)
+		iXAdjIdx = iXIdx -1;
 }
 
 

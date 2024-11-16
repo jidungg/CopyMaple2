@@ -2,17 +2,17 @@
 
 #include "FBXToBinary.h"
 
-CModelConverter::CModelConverter()
+CFbxToBinary::CFbxToBinary()
 {
 }
 
-CModelConverter::~CModelConverter()
+CFbxToBinary::~CFbxToBinary()
 {
 }
 
 
 
-HRESULT CModelConverter::FbxToBianry(const string& inFilePath)
+HRESULT CFbxToBinary::FbxToBinary(const string& inFilePath)
 {
 	_uint		iFlag = { aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast };
 
@@ -82,7 +82,7 @@ HRESULT CModelConverter::FbxToBianry(const string& inFilePath)
 	return S_OK;
 }
 
-HRESULT CModelConverter::Write_Meshe(const aiMesh* pAIMesh, ofstream& outFile)
+HRESULT CFbxToBinary::Write_Meshe(const aiMesh* pAIMesh, ofstream& outFile)
 {
 	outFile.write(reinterpret_cast<const char*>(&pAIMesh->mMaterialIndex), sizeof(_uint));
 	//cout << pAIMesh->mMaterialIndex << endl;
@@ -151,7 +151,7 @@ HRESULT CModelConverter::Write_Meshe(const aiMesh* pAIMesh, ofstream& outFile)
 	return S_OK;
 }
 //55, 44
-HRESULT CModelConverter::Write_Material(const aiMaterial* pAIMaterial, ofstream& outFile)
+HRESULT CFbxToBinary::Write_Material(const aiMaterial* pAIMaterial, ofstream& outFile)
 {
 	for (size_t texTypeIdx = 1; texTypeIdx < AI_TEXTURE_TYPE_MAX; texTypeIdx++)
 	{
@@ -173,7 +173,7 @@ HRESULT CModelConverter::Write_Material(const aiMaterial* pAIMaterial, ofstream&
 	return S_OK;
 }
 
-HRESULT CModelConverter::Write_Bone(const aiNode* pAINode, ofstream& outFile)
+HRESULT CFbxToBinary::Write_Bone(const aiNode* pAINode, ofstream& outFile)
 {
 	outFile.write(reinterpret_cast<const char*>(&pAINode->mName.length), sizeof(_uint));
 	//cout << pAINode->mName.length << endl;
@@ -194,7 +194,7 @@ HRESULT CModelConverter::Write_Bone(const aiNode* pAINode, ofstream& outFile)
 	return S_OK;
 }
 
-HRESULT CModelConverter::Write_Animation(const aiAnimation* pAIAnim, ofstream& outFile)
+HRESULT CFbxToBinary::Write_Animation(const aiAnimation* pAIAnim, ofstream& outFile)
 {
 	outFile.write(reinterpret_cast<const char*>(&pAIAnim->mName.length), sizeof(_uint));
 	//cout << pAIAnim->mName.length << endl;

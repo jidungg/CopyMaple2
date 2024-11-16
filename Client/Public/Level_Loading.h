@@ -3,9 +3,6 @@
 #include "Client_Defines.h"
 #include "Level.h"
 
-/* �ε�ȭ���� �����ϱ����� ��ü(�ε�ȭ���� ���, �ε� ��, �ε� ��Ʈ)�� ������. */
-/* ���� ������ �ʿ��� �ڿ��� �ε��ϴ� ��Ȱ�� �ϴ� ��ü�� �������ش�.  */
-
 BEGIN(Client)
 
 class CLevel_Loading final : public CLevel
@@ -18,9 +15,10 @@ public:
 	virtual HRESULT Initialize(LEVELID eNextLevelID);
 	virtual void Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
-
+	LEVELID Get_NextLevelID() { return m_eNextLevelID; }
 private:
 	LEVELID			m_eNextLevelID = { LAST };
+	LEVELID			m_ePrevLevelID = { LAST };
 	class CLoader*	m_pLoader = { nullptr };
 
 public:

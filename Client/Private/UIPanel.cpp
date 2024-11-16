@@ -32,6 +32,7 @@ HRESULT CUIPanel::Initialize(void* pArg)
 	PANEL_DESC* pDesc = static_cast<PANEL_DESC*>(pArg);
 	if (pDesc->pTextureCom)
 		m_pTextureCom = pDesc->pTextureCom;
+	m_vBorder = pDesc->vBorder;
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -72,6 +73,11 @@ HRESULT CUIPanel::Bind_ShaderResources()
 		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_UI_VIEW))))
 			return E_FAIL;
 		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_UI_PROJ))))
+			return E_FAIL;
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_BorderSize", &m_vBorder,sizeof(XMUINT4))))
+			return E_FAIL;
+		_float4 vMinMax = static_cast<CRect_Transform*>(m_pTransformCom)->Get_MinMax();
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_MinMax", &vMinMax, sizeof(XMUINT4))))
 			return E_FAIL;
 	}
 	if (m_pTextureCom)

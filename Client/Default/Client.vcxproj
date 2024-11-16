@@ -180,8 +180,13 @@
     <ClInclude Include="..\Public\CreateObjEvent.h" />
     <ClInclude Include="..\Public\DeadObjEvent.h" />
     <ClInclude Include="..\Public\BasicAttack.h" />
+    <ClInclude Include="..\Public\Interactable.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\MonsterDataBase.h" />
+    <ClInclude Include="..\Public\MonsterSpawner.h" />
+    <ClInclude Include="..\Public\Portal.h" />
+    <ClInclude Include="..\Public\PortalTerrainObject.h" />
+    <ClInclude Include="..\Public\Spawner.h" />
     <ClInclude Include="..\Public\PlayerEquipSlot.h" />
     <ClInclude Include="..\Public\PlayerInfo.h" />
     <ClInclude Include="..\Public\InvenEquipSlot.h" />
@@ -230,6 +235,7 @@
     <ClInclude Include="..\Public\UIListItemEntry.h" />
     <ClInclude Include="..\Public\UIPanel.h" />
     <ClInclude Include="..\Public\UISlot.h" />
+    <ClInclude Include="..\Public\WayFinder.h" />
     <ClInclude Include="..\Public\Weapon.h" />
     <ClInclude Include="Client_Utility.h" />
     <ClInclude Include="Client.h" />
@@ -249,8 +255,13 @@
     <ClCompile Include="..\Private\CreateObjEvent.cpp" />
     <ClCompile Include="..\Private\DeadObjEvent.cpp" />
     <ClCompile Include="..\Private\BasicAttack.cpp" />
+    <ClCompile Include="..\Private\Interactable.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\MonsterDataBase.cpp" />
+    <ClCompile Include="..\Private\MonsterSpawner.cpp" />
+    <ClCompile Include="..\Private\Portal.cpp" />
+    <ClCompile Include="..\Private\PortalTerrainObject.cpp" />
+    <ClCompile Include="..\Private\Spawner.cpp" />
     <ClCompile Include="..\Private\PlayerEquipSlot.cpp" />
     <ClCompile Include="..\Private\PlayerInfo.cpp" />
     <ClCompile Include="..\Private\InvenEquipSlot.cpp" />
@@ -297,6 +308,7 @@
     <ClCompile Include="..\Private\UIListItemEntry.cpp" />
     <ClCompile Include="..\Private\UIPanel.cpp" />
     <ClCompile Include="..\Private\UISlot.cpp" />
+    <ClCompile Include="..\Private\WayFinder.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />
     <ClCompile Include="..\Public\UIItemIndicator.cpp" />
     <ClCompile Include="Client.cpp" />
@@ -318,6 +330,7 @@
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_UI.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimMesh.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxEffectMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxHumanAnimMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl" />

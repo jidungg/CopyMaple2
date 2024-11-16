@@ -61,7 +61,9 @@ private:
 
 	CBuildPreview* m_pPreview = { nullptr };
 	XMVECTOR m_vPreviewOffset = XMVectorSet(0, 0.5f, 0, 1);
-	int m_iBuildData = 0;
+	_int m_iBuildData = 0;
+	_float m_fBuildData = 5.f;
+	_float m_fBuildDataDelta = 0.1f;
 	XMVECTOR m_vMoveDir = XMVectorSet(0, 0, 0, 0);
 public:
 	static CBuilder* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -89,8 +89,9 @@ HRESULT CUIHomeDialog::Ready_Childs(HOMEDIALOG_DESC* pDesc)
 	ButtonDesc.ePivotType = CORNOR_TYPE::RIGHT_TOP;
 	ButtonDesc.fXOffset = -50;
 	ButtonDesc.fYOffset = 0;
-	ButtonDesc.fSizeX = 50;
-	ButtonDesc.fSizeY =50;
+	ButtonDesc.fSizeX = 24;
+	ButtonDesc.fSizeY =24;
+	ButtonDesc.vBorder = { 2,2,2,2 };
 	ButtonDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_HOME, TEXT("UI_Texture_Magnifier"), nullptr));
 
 	CUIObject* pButton = CUIButton::Create(m_pDevice,m_pContext);
@@ -116,8 +117,7 @@ HRESULT CUIHomeDialog::Ready_Childs(HOMEDIALOG_DESC* pDesc)
 	ListDesc.eHighlighterTexProtoLev = LEVEL_HOME;
 	ListDesc.szHighlighterTexProtoTag = TEXT("UI_Texture_HighlightBorder");
 	ListDesc.listData = pDesc->listData;
-
-	
+	ListDesc.vBorder = { 4,4,4,4 };
 
 	m_pItemList = static_cast<CUIListSelector*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_UIList"), &ListDesc));
 	Add_Child(m_pItemList);

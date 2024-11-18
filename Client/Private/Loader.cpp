@@ -46,6 +46,7 @@
 #include "MonsterSpawner.h"
 #include "PortalTerrainObject.h"
 #include "Portal.h"
+#include "WayFinder.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -95,7 +96,7 @@ HRESULT CLoader::Loading()
 	case LEVEL_LOGO:
 		hr = Loading_Level_Logo();
 		break;
-	case LEVEL_GAMEPLAY:
+	case LEVEL_HENESYS:
 		hr = Loading_Level_GamePlay();
 		break;
 	case LEVEL_HOME:
@@ -209,6 +210,7 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 #pragma endregion
 
+
 	lstrcpy(m_szLoadingText, TEXT("모델 로드."));
 #pragma region Model
 	/* For.Prototype_Component_VIBuffer_Rect */
@@ -238,9 +240,9 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Mimic"), CModel::TYPE_MIMIC, matPretransform)))
 		return E_FAIL;
-	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
-		TEXT("../Bin/resources/FBXs/MAP/"), matPretransform)))
-		return E_FAIL;
+	//if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
+	//	TEXT("../Bin/resources/FBXs/MAP/"), matPretransform)))
+	//	return E_FAIL;
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/MAP/Field/"), matPretransform)))
 		return E_FAIL;
@@ -352,7 +354,7 @@ HRESULT CLoader::Loading_Level_GamePlay()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스처."));
 	/* For.Prototype_Component_Texture_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"),
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HENESYS, TEXT("Prototype_Component_Texture_Terrain"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/resources/Textures/Terrain/Tile0.jpg"), 1))))
 		return E_FAIL;
 
@@ -361,20 +363,20 @@ HRESULT CLoader::Loading_Level_GamePlay()
 
 	XMMATRIX matPretransform = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
 	matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(Load_Dirctory_Models(LEVEL_GAMEPLAY,
+	if (FAILED(Load_Dirctory_Models(LEVEL_HENESYS,
 		TEXT("../Bin/resources/FBXs/Anim/Boss"), CModel::TYPE_ANIM, matPretransform)))
 		return E_FAIL;
-	if (FAILED(Load_Dirctory_Models(LEVEL_GAMEPLAY,
+	if (FAILED(Load_Dirctory_Models(LEVEL_HENESYS,
 		TEXT("../Bin/resources/FBXs/Anim/Monster"), CModel::TYPE_ANIM, matPretransform)))
 		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("객체 로드"));
 
 	/* For.Prototype_GameObject_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Henesys"),
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HENESYS, TEXT("Prototype_GameObject_Henesys"),
 		CCubeTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/Henesys.json")))))
 		return E_FAIL;
 	/* BAYAR */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_GameObject_Bayar"),
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HENESYS, TEXT("Prototype_GameObject_Bayar"),
 		CBayar::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 

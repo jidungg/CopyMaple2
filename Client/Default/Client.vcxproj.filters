@@ -193,6 +193,7 @@
     <ClInclude Include="..\Public\Interactable.h" />
     <ClInclude Include="..\Public\PortalTerrainObject.h" />
     <ClInclude Include="..\Public\WayFinder.h" />
+    <ClInclude Include="..\Public\Level_Henesys.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -325,6 +326,7 @@
     <ClCompile Include="..\Private\Interactable.cpp" />
     <ClCompile Include="..\Private\PortalTerrainObject.cpp" />
     <ClCompile Include="..\Private\WayFinder.cpp" />
+    <ClCompile Include="..\Private\Level_Henesys.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

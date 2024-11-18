@@ -1,6 +1,6 @@
 #pragma once
 #include "Client_Defines.h"
-#include "Level.h"
+#include "Level_GamePlay.h"
 #include "ItemDataBase.h"
 
 
@@ -11,34 +11,29 @@ class CCamera_Trace;
 class CPlayer;
 class CUIHomeDialog;
 class CLevel_Home final:
-    public CLevel
+	public CLevel_GamePlay
 {
 private:
 	explicit CLevel_Home(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual ~CLevel_Home() = default;
 
 public:
-	virtual HRESULT Initialize()override;
+	virtual HRESULT Initialize(void* pArg)override;
 	virtual void Update(_float fTimeDelta)override;
 	virtual HRESULT Render()override;
 
-	virtual void On_Start()override ;
+	virtual void On_Start(_uint iPrevLevelID)override ;
 
 
 	void On_BuildItemSelected(void*);
 	void Set_BuildItem(BUILD_ITEM_ID eID);
 private:
-	HRESULT Ready_Layer_BackGround(LAYERID eLayerId);
 	HRESULT Ready_Layer_UI(LAYERID eLayerId);
-	HRESULT Ready_Layer_Camera(LAYERID eLayerId);
-	HRESULT Ready_Lights();
-
 
 private:
-	CCubeTerrain* m_pCubeTerrain = { nullptr };
+
 	CBuilder* m_pBuilder = { nullptr };
 	CCamera_Trace* m_pCamera = { nullptr };
-	CPlayer* m_pPlayer = { nullptr };
 
 	map<_uint,  ITEM_DATA*>* m_pItemData = nullptr;
 	map<_uint,  ITEM_DATA*>::iterator m_pItemIter = {};
@@ -46,7 +41,7 @@ private:
 
 	CUIHomeDialog* m_pHomeDialog = { nullptr };
 public:
-	static CLevel_Home* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CLevel_Home* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg);
 	virtual void Free() override;
 };
 

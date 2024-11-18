@@ -77,7 +77,7 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 		for (int i = 0 ; i < iteration; i++)
 		{
 			desc.index = terrIdx + i;
-			desc.pos = IndexToPos(desc.index);
+			XMStoreFloat4(&desc.pos, IndexToPos(desc.index));
 			if(FAILED(Add_TerrainObject(desc)))
 				return E_FAIL;
 		}
@@ -217,8 +217,6 @@ _bool CCubeTerrain::RayCastXZ(const Ray& tRay, RaycastHit* pOut)
 	return false;
 }
 
-
-
 HRESULT CCubeTerrain::Save_To_Json(string strNewFilepath)
 {
 	json j;
@@ -226,50 +224,48 @@ HRESULT CCubeTerrain::Save_To_Json(string strNewFilepath)
 	json& jCells = j["cells"];
 	json jCurObj;
 	bool bFirst = true;
-	for (auto& cell : m_pChilds)
+	for (auto& cell : m_vecCells)
 	{
 		if (cell == nullptr) continue;
 		CTerrainObject* pTerrainObj = static_cast<CTerrainObject*>(cell);
 		if (bFirst)
 		{
 			jCurObj = pTerrainObj->ToJson();
-			jCells.push_back(jCurObj);
 			bFirst = false;
 			continue;
 		}
 		json jTemp = pTerrainObj->ToJson();
 		int curIdx = jCurObj["Index"];
 		int curIter = jCurObj["Iteration"];
+
 		if ( jCurObj["ItemId"] == jTemp["ItemId"]
 			&& jCurObj["IntData"] == jTemp["IntData"]
 			&& jCurObj["FloatData"] == jTemp["FloatData"]
-			&& jCurObj["Direction"] == jCurObj["Direction"]
+			&& jCurObj["Direction"] == jTemp["Direction"]
 			&& (curIdx +curIter) == jTemp["Index"])
 		{
-			jCells.back()["Iteration"] = jCells.back()["Iteration"] + 1;
+			jCurObj["Iteration"] = jCurObj["Iteration"] + 1;
 		}
 		else
 		{
-			jCells.push_back(jTemp);
+			jCells.push_back(jCurObj);
 			jCurObj = jTemp;
-
 		}
 
 	}
+	jCells.push_back(jCurObj);
 	j["size"] = { m_vSize.x,m_vSize.y,m_vSize.z };
 
 	CJsonParser::SaveJsonFile(strNewFilepath.c_str(),j);
 	return S_OK;
 }
 
-_float4 CCubeTerrain::IndexToPos(_uint Index)
+_vector CCubeTerrain::IndexToPos(_uint Index)
 {
-	_float4 pos;
-	pos.x = Index % m_vSize.x;
-	pos.z = Index / m_vSize.x % m_vSize.z;
-	pos.y = Index / (m_vSize.x * m_vSize.z);
-	pos.w = 1;
-	return pos;
+	return XMVectorSet(Index % m_vSize.x, 
+		Index / (m_vSize.x * m_vSize.z),
+		Index / m_vSize.x % m_vSize.z,
+		1);
 }
 
 _uint CCubeTerrain::PosToIndex(const _float4& Pos)
@@ -295,10 +291,16 @@ _int CCubeTerrain::PosToIndex(const _fvector& Pos)
 	return x + m_vSize.x * z + m_vSize.x * m_vSize.z * y;
 }
 
+XMUINT3 CCubeTerrain::SplitIndex(_uint iIdx)
+{
+	return XMUINT3{ iIdx % m_vSize.x ,iIdx / (m_vSize.x * m_vSize.z),iIdx / m_vSize.x % m_vSize.z, };
+}
+
 HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 {
 	if (m_vecCells[tDesc.index] != nullptr)
 		return E_FAIL;
+	tDesc.pCubeTerrain = this;
 	BUILD_ITEM_TYPE eType = static_cast<BUILD_ITEM_DATA*>(ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)tDesc.eID))->eBuildType;
 
 	CTerrainObject* pGameObject = nullptr;
@@ -318,6 +320,7 @@ HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 		switch (tDesc.eID)
 		{
 		case Client::BUILD_ITEM_ID::MONSTER_SPAWNER:
+
 			pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CMonsterSpawner::m_szProtoTag, &tDesc));
 			break;
 		case Client::BUILD_ITEM_ID::PLAYER_SPAWNER:
@@ -403,20 +406,123 @@ _float CCubeTerrain::Get_CelingHeight(_vector Pos)
 	return FLT_MAX;
 }
 
-void CCubeTerrain::Get_AdjCells(_uint Index, vector<CTerrainObject*>& vecAdjCells)
+void CCubeTerrain::Get_AdjCells(_uint Index, vector<_uint>& vecAdjCells)
 {
 	_uint iCellCount = m_vecCells.size();
 	assert(Index < iCellCount);
-	_uint iXIdx = Index % m_vSize.x;
-	_uint iZIdx = Index % m_vSize.z / m_vSize.x ;
-	_uint iYIdx = Index / (m_vSize.x * m_vSize.z);
+	XMUINT3 vSplitIdx = SplitIndex(Index);
 
 	_uint iAdjIdx = iCellCount;
 	_uint iXAdjIdx = iCellCount;
 	_uint iZAdjIdx = iCellCount;
 	_uint iYAdjIdx = iCellCount;
-	if (iXIdx - 1 >= 0)
-		iXAdjIdx = iXIdx -1;
+
+	for (_int iDy = -1; iDy <= 1; iDy++)
+	{
+		for (_int iDz = -1; iDz <= 1; iDz++)
+		{
+			for (_int iDx = -1; iDx <= 1; iDx++)
+			{
+				if (iDx == 0 && iDz == 0 && iDy == 0) continue;
+				iXAdjIdx = vSplitIdx.x + iDx;
+				iZAdjIdx = vSplitIdx.z + iDz;
+				iYAdjIdx = vSplitIdx.y + iDy;
+				if (iXAdjIdx < 0 || iXAdjIdx >= m_vSize.x) continue;
+				if (iZAdjIdx < 0 || iZAdjIdx >= m_vSize.z) continue;
+				if (iYAdjIdx < 1 || iYAdjIdx >= m_vSize.y) continue;
+				iAdjIdx = iXAdjIdx + m_vSize.x * iZAdjIdx + m_vSize.x * m_vSize.z * iYAdjIdx;
+				if (iAdjIdx >= iCellCount) continue;
+				//비어있다로 확인하면 안됨. if (m_vecCells[iAdjIdx] != nullptr) continue;
+				if (m_vecCells[iAdjIdx] != nullptr) 
+					if (m_vecCells[iAdjIdx]->Is_BlockingType())
+						continue;
+				_uint iFloorIdx = iXAdjIdx + m_vSize.x * iZAdjIdx + m_vSize.x * m_vSize.z * (iYAdjIdx - 1);
+				if (m_vecCells[iFloorIdx] == nullptr) continue;
+				if (false == m_vecCells[iFloorIdx]->Is_BlockingType()) continue;
+				vecAdjCells.push_back(iAdjIdx);
+			}
+		}
+	}
+}
+
+_float CCubeTerrain::Get_Distance(_uint StartIndex, _uint DestIndex)
+{
+	return XMVector4Length(IndexToPos(DestIndex) - IndexToPos(StartIndex)).m128_f32[0] ;
+}
+
+_float CCubeTerrain::Get_AdjDistance(_uint StartIndex, _uint DestIndex)
+{
+	CELL_RELATION eRelation = Get_AdjCell_Relation(StartIndex, DestIndex);
+	switch (eRelation)
+	{
+	case CELL_RELATION::STRAIGHT:
+		return STRAIGHT_DIST;
+	case CELL_RELATION::DIAG:
+		return DIAG_DIST;
+	case CELL_RELATION::TRIAG:
+		return TRIAG_DIST;
+	default:
+		return -1;
+	}
+}
+
+CCubeTerrain::CELL_RELATION CCubeTerrain::Get_AdjCell_Relation(_uint StartIndex, _uint DestIndex)
+{
+	_uint iXStart = StartIndex % m_vSize.x;
+	_uint iZStart = StartIndex / m_vSize.x % m_vSize.z;
+	_uint iYStart = StartIndex / (m_vSize.x * m_vSize.z);
+
+	_uint iXDest = DestIndex % m_vSize.x;
+	_uint iZDest = DestIndex / m_vSize.x % m_vSize.z;
+	_uint iYDest = DestIndex / (m_vSize.x * m_vSize.z);
+
+	_int iDiff = (_int)iXDest - (_int)iXStart;
+	_int iDist = iDiff > 0 ? iDiff : -iDiff;
+	iDiff = (_int)iZDest - (_int)iZStart;
+	iDist += iDiff > 0 ? iDiff : -iDiff;
+	iDiff = (_int)iYDest - (_int)iYStart;
+	iDist += iDiff > 0 ? iDiff : -iDiff;
+
+	switch (iDist)
+	{
+	case 0:
+		return CELL_RELATION::SAME;
+	case 1:
+		return CELL_RELATION::STRAIGHT;
+	case 2:
+		return CELL_RELATION::DIAG;
+	case 3:
+		return CELL_RELATION::TRIAG;
+	default:
+		assert(false);
+		return CELL_RELATION::LAST;
+	}
+	
+}
+
+CTerrainObject* CCubeTerrain::Get_Portal(LEVELID eLinkedLevel)
+{
+	for (auto& pCell : m_pChilds)
+	{
+		if (nullptr == pCell) continue;
+		CPortalTerrainObject* pTerrObj = static_cast<CPortalTerrainObject*>(pCell);
+		if (pTerrObj->Get_BuildItemID() == BUILD_ITEM_ID::PORTAL)
+			if (pTerrObj->Get_LinkedLevelID() == eLinkedLevel)
+				return pTerrObj;
+	}
+	return nullptr;
+}
+
+CTerrainObject* CCubeTerrain::Get_PlayerSpawn()
+{
+	for (auto& pCell : m_pChilds)
+	{
+		if (nullptr == pCell) continue;
+		CPortalTerrainObject* pTerrObj = static_cast<CPortalTerrainObject*>(pCell);
+		if (pTerrObj->Get_BuildItemID() == BUILD_ITEM_ID::PLAYER_SPAWNER)
+			return pTerrObj;
+	}
+	return nullptr;
 }
 
 

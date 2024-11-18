@@ -19,7 +19,7 @@ CUIItemIndicator::CUIItemIndicator(const CUIItemIndicator& Prototype)
 
 HRESULT CUIItemIndicator::Initialize_Prototype(LEVELID eBackTexProtoLev, const _tchar* szBackTexProtoTag)
 {
-	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxPosTex"),
+	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_UI"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
@@ -131,6 +131,7 @@ CGameObject* CUIItemIndicator::Clone(void* pArg)
 
 void CUIItemIndicator::Free()
 {
+	
 	__super::Free();
 	Safe_Release(m_pIconTexure);
 	Safe_Release(m_pIconTransform);

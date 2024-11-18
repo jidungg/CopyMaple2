@@ -181,6 +181,7 @@
     <ClInclude Include="..\Public\DeadObjEvent.h" />
     <ClInclude Include="..\Public\BasicAttack.h" />
     <ClInclude Include="..\Public\Interactable.h" />
+    <ClInclude Include="..\Public\Level_Henesys.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\MonsterDataBase.h" />
     <ClInclude Include="..\Public\MonsterSpawner.h" />
@@ -256,6 +257,7 @@
     <ClCompile Include="..\Private\DeadObjEvent.cpp" />
     <ClCompile Include="..\Private\BasicAttack.cpp" />
     <ClCompile Include="..\Private\Interactable.cpp" />
+    <ClCompile Include="..\Private\Level_Henesys.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\MonsterDataBase.cpp" />
     <ClCompile Include="..\Private\MonsterSpawner.cpp" />

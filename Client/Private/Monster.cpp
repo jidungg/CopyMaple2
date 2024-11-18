@@ -10,6 +10,7 @@
 #include "SkillManager.h"
 #include "DeadObjEvent.h"
 #include "Client_Utility.h"
+#include "WayFinder.h"
 
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CCharacter(pDevice, pContext)
@@ -68,6 +69,11 @@ HRESULT CMonster::Initialize(void* pArg)
 
 	m_pTransformCom->Scaling(m_pMonData->vScale.x, m_pMonData->vScale.y, m_pMonData->vScale.z);
 	Set_Position(m_vHomePos);
+
+	CWayFinder::WAYFINDER_DESC tDesc;
+	tDesc.pCubeTerrain = pDesc->pCubeTerrain;
+	m_pWayFinder = CWayFinder::Create(m_pDevice, m_pContext);
+	m_pWayFinder->Initialize(&tDesc);
 	return S_OK;
 }
 
@@ -272,6 +278,7 @@ void CMonster::To_NextSkill()
 	m_iCurrentSkillID = (_int)iter->first;
 }
 
+
 _bool CMonster::Use_Skill(CSkill* pSkill)
 {
 	if (pSkill == nullptr)
@@ -288,7 +295,6 @@ _bool CMonster::Use_Skill(CSkill* pSkill)
 	m_bAttack = true;
 	m_fAttackTimeAcc = 0.f;
 	m_pAnimStateMachine->Trigger_ConditionVariable(AC_ATTACKTRIGGER);
-	m_vMoveDirectionXZ = XMVectorZero(); // 멈춤
 	return true;
 }
 
@@ -317,74 +323,110 @@ void CMonster::On_CastingEnd(CSkill* pSkill)
 
 void CMonster::Priority_Update(_float fTimeDelta)
 {
+		//todo : 공격 시에 목표를 바라보지 않음, 집에 갈 때 뒷걸음으로 감
 	if (m_bHPZero)
 		return;
 	_vector vMyPos = Get_Position();
-	_vector vDestination;
 	_float fMoveSpeed = m_tStat.fRunSpeed;
 	_float fHomeDistance;
+	_vector vDestination = vMyPos;	
 	CGameObject* pTarget = Get_Target();
 	XMStoreFloat(&fHomeDistance, XMVector3Length(vMyPos - m_vHomePos));
+	//집 가는 중
 	if (m_bBackToHome)
 	{
 		if (fHomeDistance <= 0.1f)
 		{
 			m_bBackToHome = false;
 			m_bDetected = false;
-			Set_Target (nullptr);
+			Set_Target(nullptr);
 			m_fTargetDistance = FLT_MAX;
 			return;
 		}
-		fMoveSpeed = m_tStat.fRunSpeed *2;
-		vDestination = m_vHomePos;
+		if (XMVector4Length(m_vNextStation - vMyPos).m128_f32[0] <= 0.05f)
+		{
+			if (m_pWayFinder->FindWay(vMyPos, m_vHomePos, m_iSearchRange))
+				m_vNextStation = m_pWayFinder->Get_NextStation();
+		}
+		fMoveSpeed = m_tStat.fRunSpeed * 2;
+		vDestination = m_vNextStation;
 	}
+	//집에서 너무 멀리 떨어짐
 	else if (fHomeDistance > m_fHomeRange)
 	{
 		Set_Target(nullptr);
 		m_bDetected = false;
 		m_bBackToHome = true;
 		m_fTargetDistance = FLT_MAX;
-		vDestination = m_vHomePos;
+		if (false == m_pWayFinder->FindWay(vMyPos, m_vHomePos, 999))
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vHomePos);
+		else
+			m_vNextStation = m_pWayFinder->Get_NextStation();
+
 		Restore_HP();
 	}
-	else if(nullptr == pTarget || false == pTarget->Is_Active() || pTarget->Is_Dead())
+	//타겟이 없음 -> 랜덤움직임
+	else if (nullptr == pTarget || false == pTarget->Is_Valid())
 	{
 		Set_Target(nullptr);
 		m_bDetected = false;
 		m_fTargetDistance = FLT_MAX;
-		
+
 		if (m_fRandomMoveTime <= m_fRandomMoveTimeAcc)
 		{
 			m_bRandomMove = !m_bRandomMove;
 			m_fRandomMoveTime = m_pGameInstance->Get_RandomFloat(5, 10);
 			m_fRandomMoveTimeAcc = 0.f;
-			if(m_bRandomMove)
+			if (m_bRandomMove)
 			{
 				_float fX = m_pGameInstance->Get_RandomFloat(-2, 2);
 				_float fZ = m_pGameInstance->Get_RandomFloat(-2, 2);
 				m_vRandomHomePosition = { fX ,0, fZ ,1 };
 			}
-
-
 		}
 		m_fRandomMoveTimeAcc += fTimeDelta;
 		vDestination = m_vHomePos + m_vRandomHomePosition;
-		if(XMVectorGetX( XMVector3Length(vDestination - vMyPos)) <= 0.1f)
+		if (XMVectorGetX(XMVector3Length(vDestination - vMyPos)) <= 0.1f)
 			vDestination = vMyPos;
 		fMoveSpeed = m_tStat.fWalkSpeed;
 		m_bWalk = true;
 	}
+	//타겟이 있음.
 	else
-		vDestination = pTarget->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+	{
+		vDestination = pTarget->Get_Position();
+		//새로운 칸에 도착할 때마다 새로운 길을 찾음
+		if (XMVector4Length(m_vNextStation - vMyPos).m128_f32[0] <= 0.05f)
+		{
+			if (m_pWayFinder->FindWay(vMyPos, vDestination, m_iSearchRange))
+				m_vNextStation = m_pWayFinder->Get_NextStation();
+		}
+		XMStoreFloat(&m_fTargetDistance, XMVector3Length(vDestination - vMyPos));
+		vDestination = m_vNextStation;
+	}
 
 
-	m_vMoveDirectionXZ = vDestination - vMyPos;
-	m_vMoveDirectionXZ = XMVectorSetY(m_vMoveDirectionXZ, 0);
-	m_vMoveDirectionXZ = XMVectorSetW(m_vMoveDirectionXZ, 0);
-	XMStoreFloat(&m_fTargetDistance, XMVector3Length(m_vMoveDirectionXZ));
-	m_vMoveDirectionXZ = XMVector3Normalize(m_vMoveDirectionXZ);
-	m_vLookDirectionXZ = m_vMoveDirectionXZ;
-	m_vMoveDirectionXZ *= fMoveSpeed * fTimeDelta;
+
+	if (false == m_bAttack)
+	{
+		m_vMoveDirectionXZ = vDestination - vMyPos;
+		if (m_vMoveDirectionXZ.m128_f32[1] > 0 && 0 == m_fUpForce)
+		{
+			m_bOnFloor = false;
+			m_fUpForce += m_tStat.fJumpPower;
+		}
+
+		m_vMoveDirectionXZ = XMVectorSetY(m_vMoveDirectionXZ, 0);
+		m_vMoveDirectionXZ = XMVectorSetW(m_vMoveDirectionXZ, 0);
+		m_vMoveDirectionXZ = XMVector3Normalize(m_vMoveDirectionXZ);
+
+		m_vMoveDirectionXZ *= fMoveSpeed * fTimeDelta;
+	}
+	else
+	{
+		m_vMoveDirectionXZ = XMVectorZero();
+		
+	}
 
 	if (m_bBackToHome)
 		return;
@@ -401,6 +443,7 @@ void CMonster::Priority_Update(_float fTimeDelta)
 		if (m_fTargetDistance <= m_tStat.fAttackRange)
 		{
 			Use_Skill(Get_CurrentSkill());
+			m_vLookDirectionXZ = XMVector4Normalize(Get_Target()->Get_Position() - vMyPos);
 		}
 
 	}
@@ -423,14 +466,9 @@ void CMonster::Priority_Update(_float fTimeDelta)
 			m_vMoveDirectionXZ = XMVectorZero(); // 멈춤
 		}
 	}
-	
-	if (m_bAttack)
-	{
-		m_vMoveDirectionXZ = XMVectorZero(); // 멈춤
-		m_vLookDirectionXZ = XMVectorZero();
-	}
 
-
+	if ( false == XMVector3Equal(m_vMoveDirectionXZ, XMVectorZero()))
+		m_vLookDirectionXZ = XMVector4Normalize(m_vMoveDirectionXZ);
 	__super::Priority_Update(fTimeDelta);
 }
 
@@ -452,8 +490,6 @@ void CMonster::Update(_float fTimeDelta)
 
 _bool CMonster::Check_Collision(CGameObject* pOther)
 {
-
-
 	LAYERID eLayerID = (LAYERID)pOther->Get_LayerID();
 	switch (eLayerID)
 	{
@@ -464,7 +500,12 @@ _bool CMonster::Check_Collision(CGameObject* pOther)
 		_vector vPos = pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 		if (m_vecCollider[COLLIDER_DETECT]->Contains(vPos))
 		{
-			Set_Target(pOther);
+			if (Get_Target() == nullptr)
+			{
+				Set_Target(pOther);
+				if (m_pWayFinder->FindWay(Get_Position(), vPos, m_iSearchRange))
+					m_vNextStation = m_pWayFinder->Get_NextStation();
+			}
 			m_bDetected = true;
 			return true;
 		}
@@ -547,6 +588,7 @@ CGameObject* CMonster::Clone(void* pArg)
 void CMonster::Free()
 {
 	__super::Free();
+	Safe_Release(m_pWayFinder);
 }
 
 void CMonster::On_HPZero()

@@ -5,7 +5,7 @@
 #include "GameInstance.h"
 
 #include "Level_Logo.h"
-#include "Level_GamePlay.h"
+#include "Level_Henesys.h"
 #include "Level_Home.h"
 
 CLevel_Loading::CLevel_Loading(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -38,16 +38,20 @@ void CLevel_Loading::Update(_float fTimeDelta)
 			m_pGameInstance->Clear(m_ePrevLevelID);
 		}
 
+		CLevel_GamePlay::LEVEL_DESC tDesc{};
+		tDesc.iPrevLevelID = m_ePrevLevelID;
 		switch (m_eNextLevelID)
 		{
 		case LEVEL_LOGO:
 			pNewLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
 			break;
-		case LEVEL_GAMEPLAY:
-			pNewLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext);
+		case LEVEL_HENESYS:
+			tDesc.pCubeTerrainTag = TEXT("Prototype_GameObject_Henesys");
+			pNewLevel = CLevel_Henesys::Create(m_pDevice, m_pContext,&tDesc);
 			break;
 		case LEVEL_HOME:
-			pNewLevel = CLevel_Home::Create(m_pDevice, m_pContext);
+			tDesc.pCubeTerrainTag = TEXT("Prototype_GameObject_MyHome");
+			pNewLevel = CLevel_Home::Create(m_pDevice, m_pContext, &tDesc);
 			break;
 		}
 

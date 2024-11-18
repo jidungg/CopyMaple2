@@ -17,26 +17,23 @@
 
 
 CLevel_Home::CLevel_Home(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CLevel(pDevice, pContext)
+	: CLevel_GamePlay(pDevice, pContext)
 {
 	m_iLevelID = LEVEL_HOME;
 
 }
 
 
-HRESULT CLevel_Home::Initialize()
+HRESULT CLevel_Home::Initialize(void* pArg)
 {
-	//if(FAILED(Ready_Lights()))
-	//	return E_FAIL;
+	__super::Initialize(pArg);
 	m_pItemData = ITEMDB->GetItemMap(ITEM_TYPE::BUILD);
 	m_pItemIter = m_pItemData->begin();
 
-	if (FAILED(Ready_Layer_BackGround(LAYER_TERRAIN)))
-		return E_FAIL;
+	//CAMERA
+	m_pCamera = static_cast<CCamera_Trace*>(m_pGameInstance->Get_FirstGameObject(LEVEL_HOME, LAYER_CAMERA));;
 
-	if (FAILED(Ready_Layer_Camera(LAYER_CAMERA)))
-		return E_FAIL;
-	
+	//BUILDER
 	CBuilder::BUILDER_DESC BuilderDesc{};
 	BuilderDesc.fRotationPerSec = 10;
 	BuilderDesc.fSpeedPerSec = 4;
@@ -45,7 +42,6 @@ HRESULT CLevel_Home::Initialize()
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, LAYER_PLAYER, m_pBuilder)))
 		return E_FAIL;
 	m_pBuilder->Set_Active(false);
-
 
 	Set_BuildItem((BUILD_ITEM_ID)static_cast<BUILD_ITEM_DATA*>( m_pItemIter->second)->iItemID);
 
@@ -69,7 +65,7 @@ void CLevel_Home::Update(_float fTimeDelta)
 			XMVECTOR vPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 			_float4 fPos;
 			XMStoreFloat4(&fPos, vPos);
-			m_pBuilder->Set_Position(XMLoadFloat4(&m_pCubeTerrain->IndexToPos(m_pCubeTerrain->PosToIndex(fPos))));
+			m_pBuilder->Set_Position(m_pCubeTerrain->IndexToPos(m_pCubeTerrain->PosToIndex(fPos)));
 		}
 		else
 		{
@@ -98,7 +94,7 @@ void CLevel_Home::Update(_float fTimeDelta)
 				XMUINT3 iSize = m_pCubeTerrain->Get_Size();
 				iIndex += iSize.x * iSize.z;
 
-				m_pBuilder->Set_Position(XMLoadFloat4( &m_pCubeTerrain->IndexToPos(iIndex)));
+				m_pBuilder->Set_Position( m_pCubeTerrain->IndexToPos(iIndex));
 			}
 
 		}
@@ -134,8 +130,9 @@ HRESULT CLevel_Home::Render()
 	return S_OK;
 }
 
-void CLevel_Home::On_Start()
+void CLevel_Home::On_Start(_uint iPrevLevelID)
 {
+	__super::On_Start(iPrevLevelID);
 	Ready_Layer_UI(LAYER_UI);
 
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_PLAYER, LAYERID::LAYER_TERRAIN, true);
@@ -143,6 +140,8 @@ void CLevel_Home::On_Start()
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_MONSTER, LAYERID::LAYER_PLAYER, true);
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_MONSTER, LAYERID::LAYER_TERRAIN, true);
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_PLAYER, LAYERID::LAYER_INTERACTION, true);
+
+	
 }
 
 
@@ -157,17 +156,6 @@ void CLevel_Home::Set_BuildItem(BUILD_ITEM_ID eID)
 	m_pBuilder->Set_BuildItem(eID);
 }
 
-HRESULT CLevel_Home::Ready_Layer_BackGround(LAYERID eLayerId)
-{
-	m_pCubeTerrain = static_cast<CCubeTerrain*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_HOME, 
-		TEXT("Prototype_GameObject_MyHome"), nullptr));
-	if (nullptr == m_pCubeTerrain)
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, eLayerId, m_pCubeTerrain)))
-		return E_FAIL;
-
-	return S_OK;
-}
 
 HRESULT CLevel_Home::Ready_Layer_UI(LAYERID eLayerId)
 {
@@ -194,35 +182,12 @@ HRESULT CLevel_Home::Ready_Layer_UI(LAYERID eLayerId)
 	return S_OK; 
 }
 
-HRESULT CLevel_Home::Ready_Layer_Camera(LAYERID eLayerId)
-{
-	m_pPlayer  = static_cast<CPlayer*>(m_pGameInstance->Get_FirstGameObject(LEVEL_HOME, LAYER_PLAYER));;
-	m_pCamera = static_cast<CCamera_Trace*>(m_pGameInstance->Get_FirstGameObject(LEVEL_HOME, LAYER_CAMERA));;
-	return S_OK;
-}
-HRESULT CLevel_Home::Ready_Lights()
-{
-	LIGHT_DESC			LightDesc{};
 
-	ZeroMemory(&LightDesc, sizeof LightDesc);
-
-	LightDesc.eType = LIGHT_DESC::TYPE_DIRECTOINAL;
-	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
-	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-
-	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-CLevel_Home* CLevel_Home::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CLevel_Home* CLevel_Home::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg)
 {
 	CLevel_Home* pInstance = new CLevel_Home(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize()))
+	if (FAILED(pInstance->Initialize(pArg)))
 	{
 		MSG_BOX("Failed to Created : CLevel_Home");
 		Safe_Release(pInstance);

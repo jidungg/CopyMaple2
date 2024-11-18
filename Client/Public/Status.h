@@ -29,7 +29,7 @@ typedef struct Stat
 	_int iEXP { 0};
 	_int iGold { 0};
 
-	_float fJumpPower { 4.5f };
+	_float fJumpPower { 10.f };
 	_float fRunSpeed{ 2.5f };
 	_float fWalkSpeed{ 1.5f };
 	_float fAttackInterval{ 1.f };

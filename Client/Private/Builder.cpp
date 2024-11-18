@@ -138,7 +138,7 @@ void CBuilder::Receive_KeyInput(_float fTimeDelta)
 		_float4 pos;
 		XMStoreFloat4(&pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		desc.index = m_pCubeTerrain->PosToIndex(pos);
-		desc.pos = m_pCubeTerrain->IndexToPos(desc.index);
+		XMStoreFloat4(&desc.pos, m_pCubeTerrain->IndexToPos(desc.index));
 
 		m_pCubeTerrain->Add_TerrainObject(desc);
 	}

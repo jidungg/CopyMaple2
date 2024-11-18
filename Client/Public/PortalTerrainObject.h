@@ -17,6 +17,7 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 	virtual json ToJson();
+	LEVELID Get_LinkedLevelID() { return m_eLevelID; }
 private:
 	LEVELID m_eLevelID = { LEVELID::LAST };
 

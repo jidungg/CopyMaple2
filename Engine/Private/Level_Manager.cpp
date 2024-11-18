@@ -13,7 +13,7 @@ HRESULT CLevel_Manager::Open_Level(_int iLevelIndex, CLevel * pNewLevel)
 {
 	if(nullptr != m_pCurrentLevel)
 	{
-		m_pCurrentLevel->On_End();
+		m_pCurrentLevel->On_End(iLevelIndex);
 
 	}
 
@@ -21,8 +21,9 @@ HRESULT CLevel_Manager::Open_Level(_int iLevelIndex, CLevel * pNewLevel)
 
 	m_pCurrentLevel = pNewLevel;
 
+	_uint iPrevLevelID = m_iCurrentLevelID;
 	m_iCurrentLevelID = iLevelIndex;
-	m_pCurrentLevel->On_Start();
+	m_pCurrentLevel->On_Start(iPrevLevelID);
 	return S_OK;
 }
 

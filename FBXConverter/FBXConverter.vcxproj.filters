@@ -9,12 +9,10 @@
   <ItemGroup>
     <ClCompile Include="FBXToBinary.cpp" />
     <ClCompile Include="FBXConverter.cpp" />
-    <ClCompile Include="CNIFToBinary.cpp" />
     <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FBXToBinary.h" />
-    <ClInclude Include="CNIFToBinary.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>

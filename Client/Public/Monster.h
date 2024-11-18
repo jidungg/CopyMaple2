@@ -3,6 +3,8 @@
 #include "Status.h"
 
 BEGIN(Client)
+class CWayFinder;
+class CCubeTerrain;
 typedef struct MonsterData
 {
 	MonsterData() = default;
@@ -85,6 +87,7 @@ public:
 	{
 		MONSTER_ID eMonID;
 		_vector vHomePos = { 10.f,1.f,10.f };
+		CCubeTerrain* pCubeTerrain = { nullptr };
 	}MONSTER_DESC;
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_Monster";
 
@@ -146,6 +149,10 @@ protected:
 	_float m_fDeadIdleTime = { 3.f };
 	_float m_fDeadIdleTimeAcc = { 0.f };
 
+	CWayFinder* m_pWayFinder = { nullptr };
+	_uint m_iSearchRange = { 10 };
+	_vector m_vNextStation = { 0.f,0.f,0.f,1.f };
+	
 public:
 	static CMonster* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

@@ -145,7 +145,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CNIFToBinary.cpp" />
     <ClCompile Include="FBXToBinary.cpp" />
     <ClCompile Include="FBXConverter.cpp" />
     <ClCompile Include="pch.cpp">
@@ -154,7 +153,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CNIFToBinary.h" />
     <ClInclude Include="FBXToBinary.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="pch.h" />

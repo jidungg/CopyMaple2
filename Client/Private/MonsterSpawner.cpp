@@ -22,6 +22,7 @@ HRESULT CMonsterSpawner::Ready_SpawnObject(CSpawner::SPAWNER_DESC* pDesc)
 	CMonster::MONSTER_DESC tMonDesc;
 	tMonDesc.eMonID = (MONSTER_ID)m_iObjectId;
 	tMonDesc.vHomePos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	tMonDesc.pCubeTerrain =pDesc->pCubeTerrain;
 	if (tMonDesc.eMonID == MONSTER_ID::BAYAR)
 		m_pSpawnObject = static_cast<CMonster*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, Get_CurrentTrueLevel(), TEXT("Prototype_GameObject_Bayar"), &tMonDesc));
 	else

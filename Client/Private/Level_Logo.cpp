@@ -15,13 +15,10 @@ CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 		m_iLevelID = { LEVEL_LOGO };
 }
-
-HRESULT CLevel_Logo::Initialize()
+HRESULT CLevel_Logo::Initialize(void* pArg)
 {
-
-
 	if (FAILED(Ready_Layer_BackGround(LAYER_UI)))
-		return E_FAIL;	
+		return E_FAIL;
 	LIGHT_DESC			LightDesc{};
 
 	ZeroMemory(&LightDesc, sizeof LightDesc);
@@ -72,7 +69,7 @@ void CLevel_Logo::Update(_float fTimeDelta)
 {
 	if (GetKeyState(VK_RETURN) & 0x8000)
 	{
-		m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY));
+		m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HENESYS));
 	}
 
 }
@@ -124,7 +121,7 @@ CLevel_Logo * CLevel_Logo::Create(ID3D11Device * pDevice, ID3D11DeviceContext * 
 {
 	CLevel_Logo*	pInstance = new CLevel_Logo(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize()))
+	if (FAILED(pInstance->Initialize(nullptr)))
 	{
 		MSG_BOX("Failed to Created : CLevel_Logo");
 		Safe_Release(pInstance);

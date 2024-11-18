@@ -3,34 +3,27 @@
 #include "Level.h"
 
 BEGIN(Client)
-class CUIQuickSlot;
 class CPlayer;
-class CModelObject;
-class CLevel_GamePlay final : public CLevel
+class CCubeTerrain;
+class CLevel_GamePlay : public CLevel
 {
-private:
+public:
+	typedef struct LevelDesc
+	{
+		_uint iPrevLevelID = { 0 };
+		const _tchar* pCubeTerrainTag = { nullptr };
+	}LEVEL_DESC;
+protected:
 	CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual ~CLevel_GamePlay() = default;
 
 public:
-	virtual HRESULT Initialize() override;
-	virtual void Update(_float fTimeDelta) override;
-	virtual HRESULT Render() override;	
+	virtual HRESULT Initialize(void* pArg) override;
 
-	virtual void On_Start() override;
-private:
-	HRESULT Ready_Lights();
-	HRESULT Ready_Layer_BackGround(LAYERID eLayerID);
-	HRESULT Ready_Layer_UI(LAYERID eLayerID);
-	HRESULT Ready_Monster(LAYERID eLayerID);
-
-private:
-	CUIQuickSlot* m_pQuickSlot = { nullptr };
+	virtual void On_Start(_uint iPrevLevelID) override;
+protected:
+	CCubeTerrain* m_pCubeTerrain = { nullptr };
 	CPlayer* m_pPlayer = { nullptr };
-
-public:
-	static CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual void Free() override;
 };
 
 END

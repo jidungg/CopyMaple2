@@ -12,7 +12,7 @@ private:
 	virtual ~CLevel_Logo() = default;
 
 public:
-	virtual HRESULT Initialize() override;
+	virtual HRESULT Initialize(void* pArg) override;
 	HRESULT Ready_Camera(LAYERID eLayerID);
 	virtual void Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;

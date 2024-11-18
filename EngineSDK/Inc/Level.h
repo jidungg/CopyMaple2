@@ -11,12 +11,12 @@ protected:
 	virtual ~CLevel() = default;
 
 public:
-	virtual HRESULT Initialize();
+	virtual HRESULT Initialize(void* pArg);
 	virtual void Update(_float fTimeDelta);
 	virtual HRESULT Render();
 
-	virtual void On_Start();
-	virtual void On_End();
+	virtual void On_Start(_uint iPrevLevel);
+	virtual void On_End(_uint iNextLevel);
 	_int Get_LevelID() { return m_iLevelID; }
 protected:
 	ID3D11Device*				m_pDevice = { nullptr };

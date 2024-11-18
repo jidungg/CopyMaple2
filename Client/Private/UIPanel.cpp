@@ -16,9 +16,9 @@ CUIPanel::CUIPanel(const CUIPanel& Prototype)
 	m_pVIBufferCom{ Prototype.m_pVIBufferCom },
 	m_pShaderCom{ Prototype.m_pShaderCom }
 {
-	Safe_AddRef(m_pTextureCom);
-	Safe_AddRef(m_pVIBufferCom);
-	Safe_AddRef(m_pShaderCom);
+	//Safe_AddRef(m_pTextureCom);
+	//Safe_AddRef(m_pVIBufferCom);
+	//Safe_AddRef(m_pShaderCom);
 }
 
 HRESULT CUIPanel::Initialize_Prototype()

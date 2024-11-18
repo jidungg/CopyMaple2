@@ -12,7 +12,7 @@ CLevel::CLevel(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	Safe_AddRef(m_pDevice);
 }
 
-HRESULT CLevel::Initialize()
+HRESULT CLevel::Initialize(void* pArg)
 {
 	return S_OK;
 }
@@ -26,12 +26,12 @@ HRESULT CLevel::Render()
 	return S_OK;
 }
 
-void CLevel::On_Start()
+void CLevel::On_Start(_uint iPrevLevel)
 {
 
 }
 
-void CLevel::On_End()
+void CLevel::On_End(_uint iNextLevel)
 {
 	m_pGameInstance->Zero_CollisionMatrix();
 
@@ -39,7 +39,7 @@ void CLevel::On_End()
 
 void CLevel::Free()
 {
-	__super::Free();
+ 	__super::Free();
 
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pContext);

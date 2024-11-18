@@ -7,6 +7,7 @@ END
 
 BEGIN(Client)
 class CCharacter;
+class CCubeTerrain;
 class CTerrainObject :
 	public CModelObject
 {
@@ -18,6 +19,7 @@ public:
 		_uint index = 0;
 		vector<_int> vecIData ;
 		vector<_float> vecFData ;
+		CCubeTerrain* pCubeTerrain = { nullptr };
 	}TERRAINOBJ_DESC;
 public:
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_TerrainObject";

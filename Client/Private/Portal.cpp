@@ -27,7 +27,7 @@ HRESULT CPortal::Initialize(void* pArg)
 	PORTAL_DESC* pDesc = (PORTAL_DESC*)pArg;
 	m_eLevelID = pDesc->eLevelID;
 	pDesc->eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(pDesc->strModelProtoName, "eff_com_portal_a_activeout.model");
+	strcpy_s(pDesc->strModelProtoName, "he_fi_cubric_bush_a01.model");
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
@@ -51,7 +51,15 @@ void CPortal::Update(_float fTimeDelta)
 _bool CPortal::Check_Collision(CGameObject* pOther)
 {
 	m_vecCollider[0]->Update(XMLoadFloat4x4(&m_WorldMatrix));
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, this);
 	return m_vecCollider[0]->Intersects(pOther->Get_Collider(0));
+}
+
+HRESULT CPortal::Render()
+{
+
+	m_vecCollider[0]->Render();
+	return S_OK;
 }
 
 

@@ -714,11 +714,24 @@ _bool CPlayer::Check_Collision(CGameObject* pOther)
 				{
 					// 누가 더 가까운지 판단하기 -> 더 가까운 오브젝트로 교체
 					if (m_pInteractable->Get_Distance(this) > pOther->Get_Distance(this))
+					{
+						Safe_Release(m_pInteractable);
 						m_pInteractable = pInteractable;
+						Safe_AddRef(m_pInteractable);
+					}
 				}
 				else
+				{
+					Safe_Release(m_pInteractable);
 					m_pInteractable = pInteractable;
+					Safe_AddRef(m_pInteractable);
+				}
 			}
+		}
+		else
+		{
+			Safe_Release(m_pInteractable);
+			m_pInteractable = nullptr;
 		}
 	
 
@@ -1144,7 +1157,7 @@ void CPlayer::Free()
 {
 	__super::Free();
 	Safe_Release(m_pFaceStateMachine);
-
+	Safe_Release(m_pInteractable);
 }
 
 void CPlayer::On_HPZero()

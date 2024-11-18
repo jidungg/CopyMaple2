@@ -100,8 +100,7 @@ HRESULT CFbxToBinary::Write_Meshe(const aiMesh* pAIMesh, ofstream& outFile)
 		//cout << pAIMesh->mVertices[i].x << " " << pAIMesh->mVertices[i].y << " " << pAIMesh->mVertices[i].z << endl;
 		outFile.write(reinterpret_cast<const char*>(&pAIMesh->mNormals[i]), sizeof(_float3));
 		//cout << pAIMesh->mNormals[i].x << " " << pAIMesh->mNormals[i].y << " " << pAIMesh->mNormals[i].z << endl;
-		outFile.write(reinterpret_cast<const char*>(&pAIMesh->mTextureCoords[0][i]), sizeof(_float2));
-		//cout << pAIMesh->mTextureCoords[0][i].x << " " << pAIMesh->mTextureCoords[0][i].y << endl;
+		outFile.write(reinterpret_cast<const char*>(&pAIMesh->mTextureCoords[0][i]), sizeof(_float2));		//cout << pAIMesh->mTextureCoords[0][i].x << " " << pAIMesh->mTextureCoords[0][i].y << endl;
 		outFile.write(reinterpret_cast<const char*>(&pAIMesh->mTangents[i]), sizeof(_float3));
 		//cout << pAIMesh->mTangents[i].x << " " << pAIMesh->mTangents[i].y << " " << pAIMesh->mTangents[i].z << endl;
 	}

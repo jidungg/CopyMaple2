@@ -21,6 +21,7 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(_float fTimeDelta) override;
 	virtual _bool Check_Collision(CGameObject* pOther) override;
+	virtual HRESULT Render()override;
 
 	//Interactable
 	virtual void Interact(CPlayer* pActor) override;

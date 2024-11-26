@@ -121,8 +121,6 @@ HRESULT CMesh::Ready_VertexBuffer_For_NonAnim(ifstream& inFile, _fmatrix PreTran
 	m_BufferDesc.CPUAccessFlags = 0;
 	m_BufferDesc.MiscFlags = 0;
 
-
-
 	VTXMESH* pVertices = new VTXMESH[m_iNumVertices];
 	ZeroMemory(pVertices, sizeof(VTXMESH) * m_iNumVertices);
 	for (size_t i = 0; i < m_iNumVertices; i++)
@@ -198,6 +196,8 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(ifstream& inFile, CModel* pModel)
 		XMStoreFloat4x4(&OffsetMatrix, XMMatrixTranspose(XMLoadFloat4x4(&OffsetMatrix)));
 		m_BoneOffsetMatrices.push_back(OffsetMatrix);
 
+
+		//정점마다 어떤 본에 얼마만큼 영향받는지 정보를 읽어온다.
 		_uint iNumVertices;
 		inFile.read(reinterpret_cast<char*>(&iNumVertices), sizeof(_uint));
 		for (_uint curBoneVertex = 0; curBoneVertex < iNumVertices; curBoneVertex++)
@@ -207,6 +207,8 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(ifstream& inFile, CModel* pModel)
 			inFile.read(reinterpret_cast<char*>(&iVertexIdx), sizeof(_uint));
 			_float fWeight = 0.f;
 			inFile.read(reinterpret_cast<char*>(&fWeight), sizeof(_float));
+			//하나의 정점이 영향받을 수 있는 본의 갯수가 최대 4개라고 정함.
+			//아무 정보도 들어가지 않으면 0이므로, x부터 0임을 확인하고 순서대로 채워넣는다.
 			if (0 == pVertices[iVertexIdx].vBlendWeights.x)
 			{
 				pVertices[iVertexIdx].vBlendIndices.x = curMeshBoneIdx;

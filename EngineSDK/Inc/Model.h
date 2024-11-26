@@ -69,7 +69,7 @@ protected:
 	_uint						m_iNumAnimations = {};
 	vector<class CAnimation*>	m_vecAnimation;
 
-	map<_uint, KEYFRAME> m_mapAnimTransLeftFrame;
+	map<_uint, TRANSFORM_KEYFRAME> m_mapAnimTransLeftFrame;
 protected:
 	HRESULT Ready_Bones(ifstream& inFile, _uint iParentBoneIndex);
 	HRESULT Ready_Meshes(ifstream& inFile);

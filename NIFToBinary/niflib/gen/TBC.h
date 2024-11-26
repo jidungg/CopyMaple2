@@ -1,5 +1,9 @@
 /* Copyright (c) 2006, NIF File Format Library and Tools
-All rights reserved.  Please see niflib.h for licence. */
+All rights reserved.  Please see niflib.h for license. */
+
+//---THIS FILE WAS AUTOMATICALLY GENERATED.  DO NOT EDIT---//
+
+//To change this file, alter the niftools/docsys/gen_niflib.py Python script.
 
 #ifndef _TBC_H_
 #define _TBC_H_
@@ -9,26 +13,24 @@ All rights reserved.  Please see niflib.h for licence. */
 namespace Niflib {
 
 
-/*!
- * Tension, bias, continuity.
- */
-struct NIFLIB_API TBC {
+/*! Tension, bias, continuity. */
+struct TBC {
 	/*! Default Constructor */
-	TBC();
+	NIFLIB_API TBC();
 	/*! Default Destructor */
-	~TBC();
-	/*!
-	 * Tension.
-	 */
+	NIFLIB_API ~TBC();
+	/*! Copy Constructor */
+	NIFLIB_API TBC( const TBC & src );
+	/*! Copy Operator */
+	NIFLIB_API TBC & operator=( const TBC & src );
+	/*! Tension. */
 	float t;
-	/*!
-	 * Bias.
-	 */
+	/*! Bias. */
 	float b;
-	/*!
-	 * Continuity.
-	 */
+	/*! Continuity. */
 	float c;
+	//--BEGIN MISC CUSTOM CODE--//
+	//--END CUSTOM CODE--//
 };
 
 }

@@ -1,8 +1,17 @@
 /* Copyright (c) 2006, NIF File Format Library and Tools
-All rights reserved.  Please see niflib.h for licence. */
+All rights reserved.  Please see niflib.h for license. */
+
+//-----------------------------------NOTICE----------------------------------//
+// Some of this file is automatically filled in by a Python script.  Only    //
+// add custom code in the designated areas or it will be overwritten during  //
+// the next update.                                                          //
+//-----------------------------------NOTICE----------------------------------//
 
 #ifndef _NILOOKATINTERPOLATOR_H_
 #define _NILOOKATINTERPOLATOR_H_
+
+//--BEGIN FILE HEAD CUSTOM CODE--//
+//--END CUSTOM CODE--//
 
 #include "NiInterpolator.h"
 
@@ -10,69 +19,131 @@ All rights reserved.  Please see niflib.h for licence. */
 #include "../Ref.h"
 namespace Niflib {
 
-// Forward define of referenced blocks
+// Forward define of referenced NIF objects
 class NiNode;
 class NiPoint3Interpolator;
 class NiFloatInterpolator;
-
-#include "../gen/obj_defines.h"
-
 class NiLookAtInterpolator;
 typedef Ref<NiLookAtInterpolator> NiLookAtInterpolatorRef;
 
-/*!
- * NiLookAtInterpolator - Unknown.
- */
-
-class NIFLIB_API NiLookAtInterpolator : public NI_LOOK_AT_INTERPOLATOR_PARENT {
+/*! Unknown. */
+class NiLookAtInterpolator : public NiInterpolator {
 public:
-	NiLookAtInterpolator();
-	~NiLookAtInterpolator();
-	//Run-Time Type Information
-	static const Type & TypeConst() { return TYPE; }
-private:
-	static const Type TYPE;
-public:
-	virtual void Read( istream& in, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	virtual void Write( ostream& out, map<NiObjectRef,uint> link_map, unsigned int version, unsigned int user_version ) const;
-	virtual string asString( bool verbose = false ) const;
-	virtual void FixLinks( const map<unsigned,NiObjectRef> & objects, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	virtual list<NiObjectRef> GetRefs() const;
-	virtual const Type & GetType() const;
+	/*! Constructor */
+	NIFLIB_API NiLookAtInterpolator();
+
+	/*! Destructor */
+	NIFLIB_API virtual ~NiLookAtInterpolator();
 
 	/*!
-	 * Refers to a Node to focus on.
+	 * A constant value which uniquly identifies objects of this type.
 	 */
-	Ref<NiNode > GetLookAt() const;
-	void SetLookAt( Ref<NiNode > value );
+	NIFLIB_API static const Type TYPE;
 
 	/*!
-	 * Translate.
+	 * A factory function used during file reading to create an instance of this type of object.
+	 * \return A pointer to a newly allocated instance of this type of object.
 	 */
-	Vector3 GetTranslation() const;
-	void SetTranslation( Vector3 value );
+	NIFLIB_API static NiObject * Create();
 
 	/*!
-	 * Rotation.
+	 * Summarizes the information contained in this object in English.
+	 * \param[in] verbose Determines whether or not detailed information about large areas of data will be printed out.
+	 * \return A string containing a summary of the information within the object in English.  This is the function that Niflyze calls to generate its analysis, so the output is the same.
 	 */
-	Quaternion GetRotation() const;
-	void SetRotation( Quaternion value );
+	NIFLIB_API virtual string asString( bool verbose = false ) const;
 
 	/*!
-	 * Scale.
+	 * Used to determine the type of a particular instance of this object.
+	 * \return The type constant for the actual type of the object.
 	 */
-	float GetScale() const;
-	void SetScale( float value );
+	NIFLIB_API virtual const Type & GetType() const;
 
+	//--BEGIN MISC CUSTOM CODE--//
+
+	/*!
+	 * Retrieves the node that this interpolator is focused on.
+	 * \return The node that this interpolator is focused on.
+	 */
+	NIFLIB_API Ref<NiNode> GetLookAt() const;
+
+	/*!
+	 * Sets the node that this interpolator will focus on.
+	 * \return The new node that the interpolator will focus on, or NULL to clear the current one.
+	 */
+	NIFLIB_API void SetLookAt( Ref<NiNode> value );
+
+	/*!
+	 * Gets the translation of the interpolator.  Could be the necessary value to point at the referenced node in the current pose.
+	 * \return The translation of the interpolator.
+	 */
+	NIFLIB_API Vector3 GetTranslation() const;
+
+	/*!
+	 * Sets the translation of the interpolator.  Could be the necessary value to point at the referenced node in the current pose.
+	 * \param[in] value The new translation for the interpolator.
+	 */
+	NIFLIB_API void SetTranslation( Vector3 value );
+
+	/*!
+	 * Gets the rotation of the interpolator.  Could be the necessary value to point at the referenced node in the current pose.
+	 * \return The rotation of the interpolator.
+	 */
+	NIFLIB_API Quaternion GetRotation() const;
+
+	/*!
+	 * Sets the rotation of the interpolator.  Could be the necessary value to point at the referenced node in the current pose.
+	 * \param[in] value The new rotation for the interpolator.
+	 */
+	NIFLIB_API void SetRotation( Quaternion value );
+
+	/*!
+	 * Gets the scale of the interpolator.  Could be the necessary value to point at the referenced node in the current pose.
+	 * \return The scale of the interpolator.
+	 */
+	NIFLIB_API float GetScale() const;
+
+	/*!
+	 * Sets the scale of the interpolator.  Could be the necessary value to point at the referenced node in the current pose.
+	 * \param[in] value The new scale for the interpolator.
+	 */
+	NIFLIB_API void SetScale( float value );
+
+	//--END CUSTOM CODE--//
 protected:
-	NI_LOOK_AT_INTERPOLATOR_MEMBERS
-private:
-	void InternalRead( istream& in, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	void InternalWrite( ostream& out, map<NiObjectRef,uint> link_map, unsigned int version, unsigned int user_version ) const;
-	string InternalAsString( bool verbose ) const;
-	void InternalFixLinks( const map<unsigned,NiObjectRef> & objects, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	list<NiObjectRef> InternalGetRefs() const;
+	/*! Unknown. */
+	unsigned short unknownShort;
+	/*! Refers to a Node to focus on. */
+	NiNode * lookAt;
+	/*! Target node name. */
+	IndexString target;
+	/*! Translate. */
+	Vector3 translation;
+	/*! Rotation. */
+	Quaternion rotation;
+	/*! Scale. */
+	float scale;
+	/*! Refers to NiPoint3Interpolator. */
+	Ref<NiPoint3Interpolator > unknownLink1;
+	/*! Refers to a NiFloatInterpolator. */
+	Ref<NiFloatInterpolator > unknownLink2;
+	/*! Refers to a NiFloatInterpolator. */
+	Ref<NiFloatInterpolator > unknownLink3;
+public:
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void Read( istream& in, list<unsigned int> & link_stack, const NifInfo & info );
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void Write( ostream& out, const map<NiObjectRef,unsigned int> & link_map, list<NiObject *> & missing_link_stack, const NifInfo & info ) const;
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void FixLinks( const map<unsigned int,NiObjectRef> & objects, list<unsigned int> & link_stack, list<NiObjectRef> & missing_link_stack, const NifInfo & info );
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual list<NiObjectRef> GetRefs() const;
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual list<NiObject *> GetPtrs() const;
 };
 
-}
+//--BEGIN FILE FOOT CUSTOM CODE--//
+//--END CUSTOM CODE--//
+
+} //End Niflib namespace
 #endif

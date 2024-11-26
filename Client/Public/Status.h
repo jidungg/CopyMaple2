@@ -34,6 +34,7 @@ typedef struct Stat
 	_float fWalkSpeed{ 1.5f };
 	_float fAttackInterval{ 1.f };
 	_float fAttackRange{ 2.f };
+	_float fBodyHeight{ 1.f };
 }STATUS;
 
 END

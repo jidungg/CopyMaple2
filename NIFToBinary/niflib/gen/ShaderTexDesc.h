@@ -1,5 +1,9 @@
 /* Copyright (c) 2006, NIF File Format Library and Tools
-All rights reserved.  Please see niflib.h for licence. */
+All rights reserved.  Please see niflib.h for license. */
+
+//---THIS FILE WAS AUTOMATICALLY GENERATED.  DO NOT EDIT---//
+
+//To change this file, alter the niftools/docsys/gen_niflib.py Python script.
 
 #ifndef _SHADERTEXDESC_H_
 #define _SHADERTEXDESC_H_
@@ -11,26 +15,24 @@ All rights reserved.  Please see niflib.h for licence. */
 namespace Niflib {
 
 
-/*!
- * An extended texture description for shader textures.
- */
-struct NIFLIB_API ShaderTexDesc {
+/*! An extended texture description for shader textures. */
+struct ShaderTexDesc {
 	/*! Default Constructor */
-	ShaderTexDesc();
+	NIFLIB_API ShaderTexDesc();
 	/*! Default Destructor */
-	~ShaderTexDesc();
-	/*!
-	 * Is it used?
-	 */
+	NIFLIB_API ~ShaderTexDesc();
+	/*! Copy Constructor */
+	NIFLIB_API ShaderTexDesc( const ShaderTexDesc & src );
+	/*! Copy Operator */
+	NIFLIB_API ShaderTexDesc & operator=( const ShaderTexDesc & src );
+	/*! Is it used? */
 	bool isUsed;
-	/*!
-	 * The texture data.
-	 */
+	/*! The texture data. */
 	TexDesc textureData;
-	/*!
-	 * Unknown.
-	 */
-	uint unknownInt;
+	/*! Map Index */
+	unsigned int mapIndex;
+	//--BEGIN MISC CUSTOM CODE--//
+	//--END CUSTOM CODE--//
 };
 
 }

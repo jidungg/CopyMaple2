@@ -21,9 +21,9 @@ HRESULT CChannel::Initialize(ifstream& inFile, const CModel* pModel)
 
 	for (_uint i = 0; i < m_iNumKeyFrames; i++)
 	{
-		KEYFRAME		tKeyFrame = {};
+		TRANSFORM_KEYFRAME		tKeyFrame = {};
 
-		inFile.read(reinterpret_cast<char*>(&tKeyFrame), sizeof(KEYFRAME));
+		inFile.read(reinterpret_cast<char*>(&tKeyFrame), sizeof(TRANSFORM_KEYFRAME));
 
 		m_KeyFrames.push_back(tKeyFrame);
 	}
@@ -36,11 +36,11 @@ void CChannel::Update_TransformationMatrix(_float fCurrentTrackPosition, _uint* 
 	if (0.f == fCurrentTrackPosition)
 		*pKeyFrameIndex = 0;
 
-	KEYFRAME& tKeyFrame = Get_Frame(fCurrentTrackPosition, pKeyFrameIndex);
+	TRANSFORM_KEYFRAME& tKeyFrame = Get_Frame(fCurrentTrackPosition, pKeyFrameIndex);
 	Bones[m_iBoneIndex]->Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&tKeyFrame.vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMLoadFloat4(&tKeyFrame.vRotation), XMVectorSetW(XMLoadFloat3(&tKeyFrame.vPosition), 1.f)));
 }
 
-KEYFRAME CChannel::Get_Frame(_float fTrackPos, _uint* pOutCurrentKeyFrameIdx) const
+TRANSFORM_KEYFRAME CChannel::Get_Frame(_float fTrackPos, _uint* pOutCurrentKeyFrameIdx) const
 {
 
 	*pOutCurrentKeyFrameIdx = Get_KeyFrameIndex(fTrackPos, *pOutCurrentKeyFrameIdx);
@@ -66,7 +66,7 @@ _uint CChannel::Get_KeyFrameIndex(_float fTrackPos, _uint iStartKeyFrameIdx) con
 }
 
 
-void CChannel::Get_Frame(_float fTrackPos, map<_uint, KEYFRAME>* pOutKeyFrames) const
+void CChannel::Get_Frame(_float fTrackPos, map<_uint, TRANSFORM_KEYFRAME>* pOutKeyFrames) const
 {
 	_uint iCurrentKeyFrameIdx = 0;
 	(*pOutKeyFrames)[m_iBoneIndex] = Get_Frame(fTrackPos, &iCurrentKeyFrameIdx);

@@ -194,6 +194,16 @@
     <ClInclude Include="..\Public\PortalTerrainObject.h" />
     <ClInclude Include="..\Public\WayFinder.h" />
     <ClInclude Include="..\Public\Level_Henesys.h" />
+    <ClInclude Include="..\Public\EffectObject.h" />
+    <ClInclude Include="..\Public\EffModel.h" />
+    <ClInclude Include="..\Public\EffMaterialProperty.h" />
+    <ClInclude Include="..\Public\EffTexturingProperty.h" />
+    <ClInclude Include="..\Public\EffBone.h" />
+    <ClInclude Include="..\Public\EffMesh.h" />
+    <ClInclude Include="..\Public\EffController.h" />
+    <ClInclude Include="..\Public\EffTexture.h" />
+    <ClInclude Include="..\public\EffConcreteController.h" />
+    <ClInclude Include="..\Public\EffControllable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -327,6 +337,16 @@
     <ClCompile Include="..\Private\PortalTerrainObject.cpp" />
     <ClCompile Include="..\Private\WayFinder.cpp" />
     <ClCompile Include="..\Private\Level_Henesys.cpp" />
+    <ClCompile Include="..\Private\EffectObject.cpp" />
+    <ClCompile Include="..\Private\EffModel.cpp" />
+    <ClCompile Include="..\Private\EffMaterialProperty.cpp" />
+    <ClCompile Include="..\Private\EffTexturingProperty.cpp" />
+    <ClCompile Include="..\Private\EffBone.cpp" />
+    <ClCompile Include="..\Private\EffMesh.cpp" />
+    <ClCompile Include="..\Private\EffController.cpp" />
+    <ClCompile Include="..\Private\EffTexture.cpp" />
+    <ClCompile Include="..\private\EffConcreteController.cpp" />
+    <ClCompile Include="..\Private\EffControllable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

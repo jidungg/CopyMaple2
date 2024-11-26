@@ -35,7 +35,7 @@ HRESULT CBullet_MagicClaw::Initialize(void* pArg)
 void CBullet_MagicClaw::Update(_float fTimeDelta)
 {
 	if (false == m_bInvoke) return;
-
+	__super::Update(fTimeDelta);
 	if (m_fTimeAcc >= m_fAttackTime[m_iAttackCount])
 	{
 		m_iAttackCount++;
@@ -49,10 +49,10 @@ void CBullet_MagicClaw::Update(_float fTimeDelta)
 	}
 	else
 	{
-		CGameObject* pTarget = Get_Target();
+		CCharacter* pTarget = static_cast<CCharacter*>( Get_Target());
 		if (nullptr  != pTarget&& pTarget->Is_Valid())
 		{
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, pTarget->Get_Position());
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, pTarget->Get_Hitpoint());
 			m_pCollider->Update(m_pTransformCom->Get_WorldMatrix());
 		}
 
@@ -61,7 +61,7 @@ void CBullet_MagicClaw::Update(_float fTimeDelta)
 	{
 		m_bInvoke = false;
 		m_iAttackCount = 0;
-		Set_Active(false);
+		//Set_Active(false);
 	}
 	m_fTimeAcc += fTimeDelta;
 }

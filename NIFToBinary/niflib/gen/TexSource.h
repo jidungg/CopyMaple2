@@ -1,5 +1,9 @@
 /* Copyright (c) 2006, NIF File Format Library and Tools
-All rights reserved.  Please see niflib.h for licence. */
+All rights reserved.  Please see niflib.h for license. */
+
+//---THIS FILE WAS AUTOMATICALLY GENERATED.  DO NOT EDIT---//
+
+//To change this file, alter the niftools/docsys/gen_niflib.py Python script.
 
 #ifndef _TEXSOURCE_H_
 #define _TEXSOURCE_H_
@@ -10,48 +14,39 @@ All rights reserved.  Please see niflib.h for licence. */
 #include "../Ref.h"
 namespace Niflib {
 
-// Forward define of referenced blocks
+// Forward define of referenced NIF objects
 class NiObject;
 class NiPixelData;
 
-/*!
- * A texture source.
- */
-struct NIFLIB_API TexSource {
+/*! A texture source. */
+struct TexSource {
 	/*! Default Constructor */
-	TexSource();
+	NIFLIB_API TexSource();
 	/*! Default Destructor */
-	~TexSource();
-	/*!
-	 * Is the texture external?
-	 */
+	NIFLIB_API ~TexSource();
+	/*! Copy Constructor */
+	NIFLIB_API TexSource( const TexSource & src );
+	/*! Copy Operator */
+	NIFLIB_API TexSource & operator=( const TexSource & src );
+	/*! Is the texture external? */
 	byte useExternal;
 	/*!
-	 * The external texture file name.              Note: all original
-	 * morrowind nifs use name.ext only for addressing the textures, but most
-	 * mods use something like textures/[subdir/]name.ext. This is due to a
-	 * feature in Morrowind resource manager: it loads name.ext,
-	 * textures/name.ext and textures/subdir/name.ext but NOT
-	 * subdir/name.ext.
+	 * The external texture file name.
+	 * 
+	 *             Note: all original morrowind nifs use name.ext only for addressing
+	 * the textures, but most mods use something like textures/[subdir/]name.ext. This
+	 * is due to a feature in Morrowind resource manager: it loads name.ext,
+	 * textures/name.ext and textures/subdir/name.ext but NOT subdir/name.ext.
 	 */
-	string fileName;
-	/*!
-	 * Unknown.
-	 */
+	IndexString fileName;
+	/*! Unknown. */
 	Ref<NiObject > unknownLink;
-	/*!
-	 * Unknown.
-	 */
+	/*! Unknown. */
 	byte unknownByte;
-	/*!
-	 * The original source filename of the image embedded by the referred
-	 * NiPixelData object.
-	 */
-	string originalFileName_;
-	/*!
-	 * Pixel data object index.
-	 */
+	/*! Pixel data object index. */
 	Ref<NiPixelData > pixelData;
+	//--BEGIN MISC CUSTOM CODE--//
+	//--END CUSTOM CODE--//
 };
 
 }

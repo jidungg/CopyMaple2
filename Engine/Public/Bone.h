@@ -41,6 +41,7 @@ protected:
 
 	_int				m_iParentBoneIndex = { -1 };
 
+	_bool m_bBillboard = { false };
 public:
 	static CBone* Create(ifstream& inFile, _int iParentBoneIndex);
 	virtual CBone* Clone();

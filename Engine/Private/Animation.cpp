@@ -83,7 +83,7 @@ bool CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones
 	return false;
 }
 
-bool CAnimation::Update_AnimTransition(const vector<class CBone*>& Bones, _float fTimeDelta, const map<_uint, KEYFRAME>& mapAnimTransLeftFrame)
+bool CAnimation::Update_AnimTransition(const vector<class CBone*>& Bones, _float fTimeDelta, const map<_uint, TRANSFORM_KEYFRAME>& mapAnimTransLeftFrame)
 {
 	float _fAnimTransitionTrackPos = m_fAnimTransitionTime * m_fTickPerSecond;
 	if (m_fCurrentTrackPosition >= _fAnimTransitionTrackPos)
@@ -94,11 +94,11 @@ bool CAnimation::Update_AnimTransition(const vector<class CBone*>& Bones, _float
 	m_fCurrentTrackPosition += m_fTickPerSecond* fTimeDelta;
 
 	_float			fRatio = m_fCurrentTrackPosition  / _fAnimTransitionTrackPos;
-	KEYFRAME tFrame ;
+	TRANSFORM_KEYFRAME tFrame ;
 	for (_uint channel = 0; channel < m_iNumChannels; channel++)
 	{
 		_uint iBoneIdx = m_vecChannel[channel]->Get_BoneIndex();
-		KEYFRAME tLeftKey;
+		TRANSFORM_KEYFRAME tLeftKey;
 		if (mapAnimTransLeftFrame.find(iBoneIdx) == mapAnimTransLeftFrame.end())
 			tLeftKey = m_vecChannel[channel]->Get_KeyFrame(0);
 		else
@@ -118,7 +118,7 @@ void CAnimation::Reset_CurrentTrackPosition()
 		tEvnt.bIsTriggered = false;
 }
 
-void CAnimation::Get_CurrentFrame(map<_uint, KEYFRAME>* pOutKeyFrames) const
+void CAnimation::Get_CurrentFrame(map<_uint, TRANSFORM_KEYFRAME>* pOutKeyFrames) const
 {
 	for (auto& channel : m_vecChannel)
 		channel->Get_Frame(m_fCurrentTrackPosition, pOutKeyFrames);
@@ -134,7 +134,7 @@ bool CAnimation::Is_AnimChangeable()
 	return m_fDuration * m_fPostDelayPercentage <= m_fCurrentTrackPosition;
 }
 
-void CAnimation::Get_Frame(_float fTrackPos, map<_uint, KEYFRAME>* pOutKeyFrames) const
+void CAnimation::Get_Frame(_float fTrackPos, map<_uint, TRANSFORM_KEYFRAME>* pOutKeyFrames) const
 {
 	for (auto& channel : m_vecChannel)
 		channel->Get_Frame(fTrackPos, pOutKeyFrames);

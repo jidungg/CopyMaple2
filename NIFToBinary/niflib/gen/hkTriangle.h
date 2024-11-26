@@ -1,5 +1,9 @@
 /* Copyright (c) 2006, NIF File Format Library and Tools
-All rights reserved.  Please see niflib.h for licence. */
+All rights reserved.  Please see niflib.h for license. */
+
+//---THIS FILE WAS AUTOMATICALLY GENERATED.  DO NOT EDIT---//
+
+//To change this file, alter the niftools/docsys/gen_niflib.py Python script.
 
 #ifndef _HKTRIANGLE_H_
 #define _HKTRIANGLE_H_
@@ -9,27 +13,24 @@ All rights reserved.  Please see niflib.h for licence. */
 namespace Niflib {
 
 
-/*!
- * A triangle with extra data used for physics.
- */
-struct NIFLIB_API hkTriangle {
+/*! A triangle with extra data used for physics. */
+struct hkTriangle {
 	/*! Default Constructor */
-	hkTriangle();
+	NIFLIB_API hkTriangle();
 	/*! Default Destructor */
-	~hkTriangle();
-	/*!
-	 * The triangle.
-	 */
+	NIFLIB_API ~hkTriangle();
+	/*! Copy Constructor */
+	NIFLIB_API hkTriangle( const hkTriangle & src );
+	/*! Copy Operator */
+	NIFLIB_API hkTriangle & operator=( const hkTriangle & src );
+	/*! The triangle. */
 	Triangle triangle;
-	/*!
-	 * Another short, doesn't look like a vertex index.
-	 */
-	ushort unknownShort;
-	/*!
-	 * This appears to be a normalized vector, so probably it is a normal or
-	 * a tangent vector or something like that.
-	 */
+	/*! Additional havok information on how triangles are welded. */
+	unsigned short weldingInfo;
+	/*! This is the triangle's normal. */
 	Vector3 normal;
+	//--BEGIN MISC CUSTOM CODE--//
+	//--END CUSTOM CODE--//
 };
 
 }

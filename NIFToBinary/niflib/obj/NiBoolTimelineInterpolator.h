@@ -1,64 +1,75 @@
 /* Copyright (c) 2006, NIF File Format Library and Tools
-All rights reserved.  Please see niflib.h for licence. */
+All rights reserved.  Please see niflib.h for license. */
+
+//-----------------------------------NOTICE----------------------------------//
+// Some of this file is automatically filled in by a Python script.  Only    //
+// add custom code in the designated areas or it will be overwritten during  //
+// the next update.                                                          //
+//-----------------------------------NOTICE----------------------------------//
 
 #ifndef _NIBOOLTIMELINEINTERPOLATOR_H_
 #define _NIBOOLTIMELINEINTERPOLATOR_H_
 
-#include "NiInterpolator.h"
+//--BEGIN FILE HEAD CUSTOM CODE--//
+//--END CUSTOM CODE--//
 
-// Include structures
-#include "../Ref.h"
+#include "NiBoolInterpolator.h"
 namespace Niflib {
-
-// Forward define of referenced blocks
-class NiBoolData;
-
-#include "../gen/obj_defines.h"
 
 class NiBoolTimelineInterpolator;
 typedef Ref<NiBoolTimelineInterpolator> NiBoolTimelineInterpolatorRef;
 
-/*!
- * NiBoolTimelineInterpolator - Unknown.
- */
+/*! Unknown. */
+class NiBoolTimelineInterpolator : public NiBoolInterpolator {
+public:
+	/*! Constructor */
+	NIFLIB_API NiBoolTimelineInterpolator();
 
-class NIFLIB_API NiBoolTimelineInterpolator : public NI_BOOL_TIMELINE_INTERPOLATOR_PARENT {
-public:
-	NiBoolTimelineInterpolator();
-	~NiBoolTimelineInterpolator();
-	//Run-Time Type Information
-	static const Type & TypeConst() { return TYPE; }
-private:
-	static const Type TYPE;
-public:
-	virtual void Read( istream& in, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	virtual void Write( ostream& out, map<NiObjectRef,uint> link_map, unsigned int version, unsigned int user_version ) const;
-	virtual string asString( bool verbose = false ) const;
-	virtual void FixLinks( const map<unsigned,NiObjectRef> & objects, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	virtual list<NiObjectRef> GetRefs() const;
-	virtual const Type & GetType() const;
+	/*! Destructor */
+	NIFLIB_API virtual ~NiBoolTimelineInterpolator();
 
 	/*!
-	 * The interpolated bool?
+	 * A constant value which uniquly identifies objects of this type.
 	 */
-	byte GetBoolValue() const;
-	void SetBoolValue( byte value );
+	NIFLIB_API static const Type TYPE;
 
 	/*!
-	 * The bool data.
+	 * A factory function used during file reading to create an instance of this type of object.
+	 * \return A pointer to a newly allocated instance of this type of object.
 	 */
-	Ref<NiBoolData > GetData() const;
-	void SetData( Ref<NiBoolData > value );
+	NIFLIB_API static NiObject * Create();
 
-protected:
-	NI_BOOL_TIMELINE_INTERPOLATOR_MEMBERS
-private:
-	void InternalRead( istream& in, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	void InternalWrite( ostream& out, map<NiObjectRef,uint> link_map, unsigned int version, unsigned int user_version ) const;
-	string InternalAsString( bool verbose ) const;
-	void InternalFixLinks( const map<unsigned,NiObjectRef> & objects, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	list<NiObjectRef> InternalGetRefs() const;
+	/*!
+	 * Summarizes the information contained in this object in English.
+	 * \param[in] verbose Determines whether or not detailed information about large areas of data will be printed out.
+	 * \return A string containing a summary of the information within the object in English.  This is the function that Niflyze calls to generate its analysis, so the output is the same.
+	 */
+	NIFLIB_API virtual string asString( bool verbose = false ) const;
+
+	/*!
+	 * Used to determine the type of a particular instance of this object.
+	 * \return The type constant for the actual type of the object.
+	 */
+	NIFLIB_API virtual const Type & GetType() const;
+
+	//--BEGIN MISC CUSTOM CODE--//
+
+	//--END CUSTOM CODE--//
+public:
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void Read( istream& in, list<unsigned int> & link_stack, const NifInfo & info );
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void Write( ostream& out, const map<NiObjectRef,unsigned int> & link_map, list<NiObject *> & missing_link_stack, const NifInfo & info ) const;
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void FixLinks( const map<unsigned int,NiObjectRef> & objects, list<unsigned int> & link_stack, list<NiObjectRef> & missing_link_stack, const NifInfo & info );
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual list<NiObjectRef> GetRefs() const;
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual list<NiObject *> GetPtrs() const;
 };
 
-}
+//--BEGIN FILE FOOT CUSTOM CODE--//
+//--END CUSTOM CODE--//
+
+} //End Niflib namespace
 #endif

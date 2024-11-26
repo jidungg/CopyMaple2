@@ -1,15 +1,15 @@
 #pragma once
-#include "ModelObject.h"
+#include "EffectObject.h"
 BEGIN(Engine)
 class CColliderBase;
 END
 BEGIN(Client)
 class CCharacter;
 class CBullet abstract :
-    public CModelObject
+    public CEffectObject
 {
 public:
-	typedef struct BulletDesc : CModelObject::MODELOBJ_DESC
+	typedef struct BulletDesc : CEffectObject::EFFECTOBJ_DESC
 	{
 		CGameObject* pShooter = { nullptr };
 	}BULLET_DESC;
@@ -21,7 +21,6 @@ protected:
 public:
 	virtual HRESULT Initialize_Prototype()override;
 	virtual HRESULT Initialize(void* pArg)override;
-	virtual HRESULT Ready_Components(void* pArg);
 	virtual _bool Check_Collision(CGameObject* pOther)override;
 
 	virtual void Invoke(_float fDamg, _vector vPosition);

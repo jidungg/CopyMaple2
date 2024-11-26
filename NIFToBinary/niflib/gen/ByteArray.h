@@ -1,5 +1,9 @@
 /* Copyright (c) 2006, NIF File Format Library and Tools
-All rights reserved.  Please see niflib.h for licence. */
+All rights reserved.  Please see niflib.h for license. */
+
+//---THIS FILE WAS AUTOMATICALLY GENERATED.  DO NOT EDIT---//
+
+//To change this file, alter the niftools/docsys/gen_niflib.py Python script.
 
 #ifndef _BYTEARRAY_H_
 #define _BYTEARRAY_H_
@@ -9,22 +13,22 @@ All rights reserved.  Please see niflib.h for licence. */
 namespace Niflib {
 
 
-/*!
- * An array of bytes.
- */
-struct NIFLIB_API ByteArray {
+/*! An array of bytes. */
+struct ByteArray {
 	/*! Default Constructor */
-	ByteArray();
+	NIFLIB_API ByteArray();
 	/*! Default Destructor */
-	~ByteArray();
-	/*!
-	 * The number of bytes in this array
-	 */
-	mutable uint dataSize;
-	/*!
-	 * The bytes which make up the array
-	 */
+	NIFLIB_API ~ByteArray();
+	/*! Copy Constructor */
+	NIFLIB_API ByteArray( const ByteArray & src );
+	/*! Copy Operator */
+	NIFLIB_API ByteArray & operator=( const ByteArray & src );
+	/*! The number of bytes in this array */
+	mutable unsigned int dataSize;
+	/*! The bytes which make up the array */
 	vector<byte > data;
+	//--BEGIN MISC CUSTOM CODE--//
+	//--END CUSTOM CODE--//
 };
 
 }

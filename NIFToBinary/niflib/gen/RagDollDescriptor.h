@@ -1,70 +1,90 @@
 /* Copyright (c) 2006, NIF File Format Library and Tools
-All rights reserved.  Please see niflib.h for licence. */
+All rights reserved.  Please see niflib.h for license. */
+
+//---THIS FILE WAS AUTOMATICALLY GENERATED.  DO NOT EDIT---//
+
+//To change this file, alter the niftools/docsys/gen_niflib.py Python script.
 
 #ifndef _RAGDOLLDESCRIPTOR_H_
 #define _RAGDOLLDESCRIPTOR_H_
 
 #include "../NIF_IO.h"
 
+// Include structures
+#include "MotorDescriptor.h"
 namespace Niflib {
 
 
 /*!
- * 
+ * This constraint defines a cone in which an object can rotate. The shape of the
+ * cone can be controlled in two (orthogonal) directions.
  */
-struct NIFLIB_API RagDollDescriptor {
+struct RagdollDescriptor {
 	/*! Default Constructor */
-	RagDollDescriptor();
+	NIFLIB_API RagdollDescriptor();
 	/*! Default Destructor */
-	~RagDollDescriptor();
+	NIFLIB_API ~RagdollDescriptor();
+	/*! Copy Constructor */
+	NIFLIB_API RagdollDescriptor( const RagdollDescriptor & src );
+	/*! Copy Operator */
+	NIFLIB_API RagdollDescriptor & operator=( const RagdollDescriptor & src );
+	/*! The point where the constraint is attached to its parent rigidbody. */
+	Vector4 pivotA;
 	/*!
-	 * Unknown.
+	 * Defines the orthogonal plane in which the body can move, the orthogonal
+	 * directions in which the shape can be controlled (the direction orthogonal on
+	 * this one and Twist A).
 	 */
-	Float4 pivotA;
+	Vector4 planeA;
 	/*!
-	 * Unknown.
+	 * Central directed axis of the cone in which the object can rotate. Orthogonal on
+	 * Plane A.
 	 */
-	Float4 planeA;
+	Vector4 twistA;
+	/*! The point where the constraint is attached to the other rigidbody. */
+	Vector4 pivotB;
 	/*!
-	 * Unknown.
+	 * Defines the orthogonal plane in which the shape can be controlled (the direction
+	 * orthogonal on this one and Twist B).
 	 */
-	Float4 twistA;
+	Vector4 planeB;
 	/*!
-	 * Unknown.
+	 * Central directed axis of the cone in which the object can rotate. Orthogonal on
+	 * Plane B.
 	 */
-	Float4 pivotB;
+	Vector4 twistB;
 	/*!
-	 * Unknown.
+	 * Defines the orthogonal directions in which the shape can be controlled (namely
+	 * in this direction, and in the direction orthogonal on this one and Twist A).
 	 */
-	Float4 planeB;
+	Vector4 motorA;
 	/*!
-	 * Unknown.
+	 * Defines the orthogonal directions in which the shape can be controlled (namely
+	 * in this direction, and in the direction orthogonal on this one and Twist A).
 	 */
-	Float4 twistB;
+	Vector4 motorB;
 	/*!
-	 * Unknown.
+	 * Maximum angle the object can rotate around the vector orthogonal on Plane A and
+	 * Twist A relative to the Twist A vector. Note that Cone Min Angle is not stored,
+	 * but is simply minus this angle.
 	 */
-	float coneMinAngle;
-	/*!
-	 * Unknown.
-	 */
+	float coneMaxAngle;
+	/*! Minimum angle the object can rotate around Plane A, relative to Twist A. */
 	float planeMinAngle;
-	/*!
-	 * Unknown.
-	 */
+	/*! Maximum angle the object can rotate around Plane A, relative to Twist A. */
 	float planeMaxAngle;
-	/*!
-	 * Unknown.
-	 */
+	/*! Minimum angle the object can rotate around Twist A, relative to Plane A. */
 	float twistMinAngle;
-	/*!
-	 * Unknown.
-	 */
+	/*! Maximum angle the object can rotate around Twist A, relative to Plane A. */
 	float twistMaxAngle;
-	/*!
-	 * Unknown.
-	 */
+	/*! Maximum friction, typically 0 or 10. In Fallout 3, typically 100. */
 	float maxFriction;
+	/*! Unknown */
+	bool enableMotor;
+	/*! Unknown. */
+	MotorDescriptor motor;
+	//--BEGIN MISC CUSTOM CODE--//
+	//--END CUSTOM CODE--//
 };
 
 }

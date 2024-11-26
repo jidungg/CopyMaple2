@@ -18,7 +18,7 @@ private:
 	vector < CTexture* > m_vecTexture;
 public:
 	static CMaterial* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath, ifstream& inFile);
-	CComponent* Clone(void* pArg) override;
+	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };
 

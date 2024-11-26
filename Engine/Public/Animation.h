@@ -16,13 +16,13 @@ private:
 public:
 	HRESULT Initialize(ifstream& inFile, const class CModel* pModel);
 	bool Update_TransformationMatrices(const vector<class CBone*>& Bones, _float fTimeDelta);
-	bool Update_AnimTransition(const vector<class CBone*>& Bones, _float fTimeDelta,const map<_uint, KEYFRAME>& m_mapAnimTransLeftFrame);
+	bool Update_AnimTransition(const vector<class CBone*>& Bones, _float fTimeDelta,const map<_uint, TRANSFORM_KEYFRAME>& m_mapAnimTransLeftFrame);
 
 	void Reset_CurrentTrackPosition();
 
 	float Get_AnimTime() { return m_fDuration; }
-	void Get_Frame(_float fTrackPos, map<_uint, KEYFRAME>* pOutKeyFrames) const;
-	void Get_CurrentFrame(map<_uint, KEYFRAME>* pOutKeyFrames) const;
+	void Get_Frame(_float fTrackPos, map<_uint, TRANSFORM_KEYFRAME>* pOutKeyFrames) const;
+	void Get_CurrentFrame(map<_uint, TRANSFORM_KEYFRAME>* pOutKeyFrames) const;
 	_float Get_Progress() ;
 	bool Is_AnimChangeable();
 

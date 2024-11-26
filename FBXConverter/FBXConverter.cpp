@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 
     for (const auto& entry : recursive_directory_iterator(path)) {
         if (entry.path().extension() == ".fbx") {
-            //cout << entry.path().string() << endl;
+            cout << entry.path().string() << "=========================================="<< endl;
 			modelConverter.FbxToBinary( entry.path().string());
         }
     }

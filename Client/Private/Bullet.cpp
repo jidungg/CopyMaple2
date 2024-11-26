@@ -5,12 +5,12 @@
 #include "GameInstance.h"
 
 CBullet::CBullet(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CModelObject(pDevice, pContext)
+	: CEffectObject(pDevice, pContext)
 {
 }
 
 CBullet::CBullet(const CBullet& Prototype)
-	: CModelObject(Prototype)
+	: CEffectObject(Prototype)
 {
 }
 
@@ -30,28 +30,6 @@ HRESULT CBullet::Initialize(void* pArg)
 	return S_OK;
 }
 
-HRESULT CBullet::Ready_Components(void* pArg)
-{
-
-	MODELOBJ_DESC* pDesc = (MODELOBJ_DESC*)pArg;
-	/* Com_VIBuffer */
-	string tmp = pDesc->strModelProtoName;
-	wstring wtmp = wstring(tmp.begin(), tmp.end());
-	CModel::ModelDesc modelDesc;
-	modelDesc.pMimicTarget = pDesc->pMimicTarget;
-	m_pModelCom = static_cast<CModel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, pDesc->eModelProtoLevelID, wtmp, &modelDesc));
-	if (FAILED(Add_Component(m_pModelCom, TEXT("Com_Model"))))
-		return E_FAIL;
-
-	m_eModelType = m_pModelCom->Get_Type();
-
-	/* Com_Shader */
-	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxEffectMesh"),
-		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-		return E_FAIL;
-	//m_pTransformCom->LookToward(Get_Direction_Vector(pDesc->direction));
-	return S_OK;
-}
 
 
 _bool CBullet::Check_Collision(CGameObject* pOther)
@@ -85,7 +63,7 @@ void CBullet::Invoke(_float fDamg, CGameObject* pTarget)
 {
 	m_iDamage = fDamg;
 	Set_Target(pTarget);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, Get_Target()->Get_Position()                                                                                                                                                                                                                                                                                                                                                                                                                    );
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, static_cast<CCharacter*>(pTarget)->Get_Hitpoint());
 	m_bInvoke = true;
 	m_fTimeAcc = 0.f;
 	Set_Active(true);

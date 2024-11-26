@@ -47,6 +47,8 @@
 #include "PortalTerrainObject.h"
 #include "Portal.h"
 #include "WayFinder.h"
+#include "EffModel.h"
+#include "EffectObject.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -138,6 +140,7 @@ HRESULT CLoader::Loading_Level_Logo()
 
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드."));
 	/* For.Prototype_Component_Texture_Logo */
+	//히ㅏ다보니까 다 STatic 됨
    
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_Logo"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_henesys_a.dds"), 1))))
@@ -206,7 +209,7 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	/* For.Prototype_Component_Shader_EffectLMesh*/
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxEffectMesh"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_VtxEffectMesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_VtxEffectMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
 		return E_FAIL;
 #pragma endregion
 
@@ -226,13 +229,11 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Anim/Equip"), CModel::TYPE_ANIM, matPretransform)))
 		return E_FAIL;
-	//if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
-	//	TEXT("../Bin/resources/FBXs/Effect"), CModel::TYPE_ANIM, matPretransform)))
-	//	return E_FAIL;
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("eff_wizard_magicclaw_remain_01_a.model"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, ("../Bin/resources/FBXs/Effect/eff_wizard_magicclaw_remain_01_a.model"), matPretransform))))
-	//	return E_FAIL;
+
 	matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(Load_Dirctory_EffModels(LEVEL_LOADING,
+		TEXT("../Bin/resources/FBXs/Effect"), matPretransform)))
+		return E_FAIL;
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Anim/Player"),CModel::TYPE_ANIM,matPretransform)))
 		return E_FAIL;
@@ -240,15 +241,10 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Mimic"), CModel::TYPE_MIMIC, matPretransform)))
 		return E_FAIL;
-	//if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
-	//	TEXT("../Bin/resources/FBXs/MAP/"), matPretransform)))
-	//	return E_FAIL;
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/MAP/Field/"), matPretransform)))
 		return E_FAIL;
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("EmptyModel.model"),
-	//	CModel::Create(m_pDevice, m_pContext, ("../Bin/resources/FBXs/NonAnim/EmptyModel.model"), matPretransform))))
-	//	return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_Sphere::m_szProtoTag,
 		CCollider_Sphere::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -261,7 +257,7 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_Frustum::m_szProtoTag,
 		CCollider_Frustum::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
+	//지금 LEVEL_LOADING을 static으로 쓰고있음 그냥 안없어짐 ㅋㅋ
 
 
 #pragma endregion
@@ -270,6 +266,9 @@ HRESULT CLoader::Loading_Level_Logo()
 	//ModelObject
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CModelObject::m_szProtoTag,
 		CModelObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CEffectObject::m_szProtoTag,
+		CEffectObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBoneModelObject::m_szProtoTag,
 		CBoneModelObject::Create(m_pDevice, m_pContext))))
@@ -457,6 +456,22 @@ HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId,  const _tchar* szDirPath,C
 
 			if (FAILED(m_pGameInstance->Add_Prototype(eLevId, entry.path().filename(),
 				CModel::Create(m_pDevice, m_pContext, eType, entry.path().string().c_str(), PreTransformMatrix))))
+				return E_FAIL;
+		}
+	}
+	return S_OK;
+}
+
+HRESULT CLoader::Load_Dirctory_EffModels(LEVELID eLevId, const _tchar* szDirPath, _fmatrix PreTransformMatrix)
+{
+	fs::path path;
+	path = szDirPath;
+	for (const auto& entry : recursive_directory_iterator(path)) {
+		if (entry.path().extension() == ".effmodel") {
+			//cout << entry.path().string() << endl;
+
+			if (FAILED(m_pGameInstance->Add_Prototype(eLevId, entry.path().filename(),
+				CEffModel::Create(m_pDevice, m_pContext, entry.path().string().c_str(), PreTransformMatrix))))
 				return E_FAIL;
 		}
 	}

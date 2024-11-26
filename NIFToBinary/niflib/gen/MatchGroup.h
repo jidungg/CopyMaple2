@@ -1,5 +1,9 @@
 /* Copyright (c) 2006, NIF File Format Library and Tools
-All rights reserved.  Please see niflib.h for licence. */
+All rights reserved.  Please see niflib.h for license. */
+
+//---THIS FILE WAS AUTOMATICALLY GENERATED.  DO NOT EDIT---//
+
+//To change this file, alter the niftools/docsys/gen_niflib.py Python script.
 
 #ifndef _MATCHGROUP_H_
 #define _MATCHGROUP_H_
@@ -9,22 +13,22 @@ All rights reserved.  Please see niflib.h for licence. */
 namespace Niflib {
 
 
-/*!
- * Group of vertex indices of vertices that match.
- */
-struct NIFLIB_API MatchGroup {
+/*! Group of vertex indices of vertices that match. */
+struct MatchGroup {
 	/*! Default Constructor */
-	MatchGroup();
+	NIFLIB_API MatchGroup();
 	/*! Default Destructor */
-	~MatchGroup();
-	/*!
-	 * Number of vertices in this group.
-	 */
-	mutable ushort numVertices;
-	/*!
-	 * The vertex indices.
-	 */
-	vector<ushort > vertexIndices;
+	NIFLIB_API ~MatchGroup();
+	/*! Copy Constructor */
+	NIFLIB_API MatchGroup( const MatchGroup & src );
+	/*! Copy Operator */
+	NIFLIB_API MatchGroup & operator=( const MatchGroup & src );
+	/*! Number of vertices in this group. */
+	mutable unsigned short numVertices;
+	/*! The vertex indices. */
+	vector<unsigned short > vertexIndices;
+	//--BEGIN MISC CUSTOM CODE--//
+	//--END CUSTOM CODE--//
 };
 
 }

@@ -18,15 +18,19 @@ HRESULT CFbxToBinary::FbxToBinary(const string& inFilePath)
 
 
 	m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
-//	m_bAnim = true;
-	m_bAnim = m_pAIScene->HasAnimations();
-	
-	if (m_bAnim == false)
-	{
-		iFlag |= aiProcess_PreTransformVertices;
 
-		m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
-	}
+	//m_bAnim = m_pAIScene->HasAnimations();
+	//
+	//if (m_bAnim == false)
+	//{
+	// 
+	//	iFlag |= aiProcess_PreTransformVertices;
+
+	//	m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
+	//}
+
+	//Mimic 모델의 경우 무조건 m_bAnim을 true로 할 것.
+	m_bAnim = true;
 
 	if (0 == m_pAIScene)
 		return E_FAIL;
@@ -46,11 +50,13 @@ HRESULT CFbxToBinary::FbxToBinary(const string& inFilePath)
 	}
 	outFile.write(reinterpret_cast<const char*>(&m_bAnim), 1);
 
+	cout << "---------Bones-------------------" << endl;
 	if (FAILED(Write_Bone(m_pAIScene->mRootNode, outFile)))
 		return E_FAIL;
 
 
 
+	cout << "---------Meshes-------------------" << endl;
 	outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mNumMeshes), sizeof(_uint));
 	//cout << m_pAIScene->mNumMeshes << endl;
 	for (size_t meshIdx = 0; meshIdx < m_pAIScene->mNumMeshes; meshIdx++)
@@ -60,6 +66,7 @@ HRESULT CFbxToBinary::FbxToBinary(const string& inFilePath)
 
 	}
 
+	cout << "---------Materials-------------------" << endl;
 	_uint iNumMaterials = m_pAIScene->mNumMaterials;
 	outFile.write(reinterpret_cast<const char*>(&iNumMaterials), sizeof(_uint));
 	//cout << iNumMaterials << endl;
@@ -70,6 +77,7 @@ HRESULT CFbxToBinary::FbxToBinary(const string& inFilePath)
 			return E_FAIL;
 	}
 
+	cout << "---------Animations-------------------" << endl;
 	outFile.write(reinterpret_cast<const char*>(&m_pAIScene->mNumAnimations), sizeof(_uint));
 	//cout << m_pAIScene->mNumAnimations << endl;
 	for (size_t i = 0; i < m_pAIScene->mNumAnimations; i++)
@@ -129,7 +137,7 @@ HRESULT CFbxToBinary::Write_Meshe(const aiMesh* pAIMesh, ofstream& outFile)
 			for (size_t j = 0; j < pAIBone->mNumWeights; j++)
 			{
 				outFile.write(reinterpret_cast<const char*>(&pAIBone->mWeights[j].mVertexId), sizeof(_uint));
-				//cout << pAIBone->mWeights[j].mVertexId << endl;
+				//cout << pAIBone->mWeights[j].mVerte xId << endl;
 				outFile.write(reinterpret_cast<const char*>(&pAIBone->mWeights[j].mWeight), sizeof(_float));
 				//cout << pAIBone->mWeights[j].mWeight << endl;
 			}
@@ -174,18 +182,21 @@ HRESULT CFbxToBinary::Write_Material(const aiMaterial* pAIMaterial, ofstream& ou
 
 HRESULT CFbxToBinary::Write_Bone(const aiNode* pAINode, ofstream& outFile)
 {
+
 	outFile.write(reinterpret_cast<const char*>(&pAINode->mName.length), sizeof(_uint));
 	//cout << pAINode->mName.length << endl;
 	outFile.write(pAINode->mName.data, pAINode->mName.length);
-	//cout << pAINode->mName.data << endl;
+	cout << pAINode->mName.data << endl;
 
+	//bool bBiiboard = false;
+	//outFile.write(reinterpret_cast<const char*>(&bBiiboard), 1);
 	outFile.write(reinterpret_cast<const char*>(&pAINode->mTransformation), sizeof(_float4x4));
 	//cout << pAINode->mTransformation.a1 << " " << pAINode->mTransformation.a2 << " " << pAINode->mTransformation.a3 << " " << pAINode->mTransformation.a4 << endl;
 	//cout << pAINode->mTransformation.b1 << " " << pAINode->mTransformation.b2 << " " << pAINode->mTransformation.b3 << " " << pAINode->mTransformation.b4 << endl;
 	//cout << pAINode->mTransformation.c1 << " " << pAINode->mTransformation.c2 << " " << pAINode->mTransformation.c3 << " " << pAINode->mTransformation.c4 << endl;
 	//cout << pAINode->mTransformation.d1 << " " << pAINode->mTransformation.d2 << " " << pAINode->mTransformation.d3 << " " << pAINode->mTransformation.d4 << endl;
 	outFile.write(reinterpret_cast<const char*>(&pAINode->mNumChildren), sizeof(_uint));
-	//cout << pAINode->mNumChildren << endl;
+	cout << pAINode->mNumChildren << endl;
 	for (size_t i = 0; i < pAINode->mNumChildren; ++i)
 	{
 		Write_Bone(pAINode->mChildren[i], outFile);
@@ -198,7 +209,7 @@ HRESULT CFbxToBinary::Write_Animation(const aiAnimation* pAIAnim, ofstream& outF
 	outFile.write(reinterpret_cast<const char*>(&pAIAnim->mName.length), sizeof(_uint));
 	//cout << pAIAnim->mName.length << endl;
 	outFile.write(pAIAnim->mName.data, pAIAnim->mName.length);
-	//cout << pAIAnim->mName.data << endl;
+	cout << pAIAnim->mName.data << endl;
 
 	outFile.write(reinterpret_cast<const char*>(&pAIAnim->mDuration), sizeof(double));
 	//cout << pAIAnim->mDuration << endl;
@@ -206,7 +217,7 @@ HRESULT CFbxToBinary::Write_Animation(const aiAnimation* pAIAnim, ofstream& outF
 	//cout << pAIAnim->mTicksPerSecond << endl;
 
 	outFile.write(reinterpret_cast<const char*>(&pAIAnim->mNumChannels), sizeof(_uint));
-	//cout << pAIAnim->mNumChannels << endl;
+	cout << pAIAnim->mNumChannels << endl;
 
 	for (size_t i = 0; i < pAIAnim->mNumChannels; i++)
 	{

@@ -1,5 +1,5 @@
 /* Copyright (c) 2006, NIF File Format Library and Tools
-All rights reserved.  Please see niflib.h for licence. */
+All rights reserved.  Please see niflib.h for license. */
 
 #ifndef _NIFLIB_REF_H_
 #define _NIFLIB_REF_H_
@@ -7,12 +7,14 @@ All rights reserved.  Please see niflib.h for licence. */
 #include <ostream>
 namespace Niflib {
 
+using namespace std;
+
 /**
  * Smart Pointer Template
  */
 
 template<class T> class Ref;
-template<class T> std::ostream & operator<<(std::ostream &, const Ref<T> &);
+template<class T> ostream & operator<<(ostream &, const Ref<T> &);
 
 template <class T> class Ref {
 public:
@@ -21,7 +23,7 @@ public:
 
 #ifdef USE_NIFLIB_TEMPLATE_HELPERS
    template<typename U> Ref( const Ref<U>& other ) { 
-      if ( (NULL != other._object) && other._object->IsDerivedType(T::TypeConst()) ) {
+      if ( (NULL != other._object) && other._object->IsDerivedType(T::TYPE) ) {
          _object = static_cast<T*>(other._object);
          if ( _object != NULL )
             _object->AddRef();
@@ -34,8 +36,6 @@ public:
 	~Ref();
 
 	T& operator*() const;
-	
-	T* Ptr() const;
 
 	bool operator<(const Ref & ref) const;
 
@@ -44,14 +44,11 @@ public:
 	bool operator==(const Ref & ref) const;
 	bool operator!=(const Ref & ref) const;
 
-	//These operators generate problems in SWIG
-#ifndef SWIG
-   friend std::ostream & operator<< <T>(std::ostream & os, const Ref & ref);
+   friend ostream & operator<< <T>(ostream & os, const Ref & ref);
 	Ref & operator=( T * object );
 	Ref & operator=( const Ref & ref );
 	operator T*() const;
 	T* operator->() const;
-#endif
 
 protected:
 #ifdef USE_NIFLIB_TEMPLATE_HELPERS
@@ -99,14 +96,6 @@ T* Ref<T>::operator->() const {
 }
 
 template <class T>
-T* Ref<T>::Ptr() const {
-	return _object;
-}
-
-//These operators generate warnings in SWIG
-#ifndef SWIG
-
-template <class T>
 T& Ref<T>::operator*() const {
 	return *_object;
 }
@@ -123,7 +112,7 @@ Ref<T> & Ref<T>::operator=( T * object ) {
 		object->AddRef();
 	}
 
-	//Decriment reference count on previously referenced object, if any
+	//Decrement reference count on previously referenced object, if any
 	if ( _object != NULL ) {
 		_object->SubtractRef();
 	}
@@ -147,7 +136,7 @@ Ref<T> & Ref<T>::operator=( const Ref & ref ) {
 		ref._object->AddRef();
 	}
 
-	//Decriment reference count on previously referenced object, if any
+	//Decrement reference count on previously referenced object, if any
 	if ( _object != NULL ) {
 		_object->SubtractRef();
 	}
@@ -157,7 +146,6 @@ Ref<T> & Ref<T>::operator=( const Ref & ref ) {
 
 	return *this;
 }
-#endif
 
 //Template functions must be in the header file
 
@@ -190,16 +178,15 @@ bool Ref<T>::operator!=(const Ref & ref) const {
 	return ( _object != ref._object );
 }
 
-#ifndef SWIG
 template <class T>
-std::ostream & operator<<(std::ostream & os, const Ref<T> & ref) {
-	if (ref._object)
+ostream & operator<<(ostream & os, const Ref<T> & ref) {
+	if (ref._object) {
 		os << ref->GetIDString();
-	else
+	} else {
 		os << "NULL";
+	}
 	return os;
 }
-#endif
 
 }
 

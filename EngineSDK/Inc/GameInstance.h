@@ -30,7 +30,7 @@ public: /* For.timer_Manager */
 	void Update_TimeDelta(const _wstring& strTimerTag);
 
 public://For Utility
-	KEYFRAME Lerp_Frame(const KEYFRAME& Frame1, const KEYFRAME& Frame2, _float fRatio);
+	TRANSFORM_KEYFRAME Lerp_Frame(const TRANSFORM_KEYFRAME& Frame1, const TRANSFORM_KEYFRAME& Frame2, _float fRatio);
 	_float Get_RandomFloat(_float fMin, _float fMax);
 public: /* For.Renderer */
 	HRESULT Add_RenderObject(CRenderer::RENDERGROUP eRenderGroup, class CGameObject* pRenderObject);

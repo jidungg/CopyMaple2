@@ -1,77 +1,156 @@
 /* Copyright (c) 2006, NIF File Format Library and Tools
-All rights reserved.  Please see niflib.h for licence. */
+All rights reserved.  Please see niflib.h for license. */
+
+//-----------------------------------NOTICE----------------------------------//
+// Some of this file is automatically filled in by a Python script.  Only    //
+// add custom code in the designated areas or it will be overwritten during  //
+// the next update.                                                          //
+//-----------------------------------NOTICE----------------------------------//
 
 #ifndef _BHKCAPSULESHAPE_H_
 #define _BHKCAPSULESHAPE_H_
 
+//--BEGIN FILE HEAD CUSTOM CODE--//
+//--END CUSTOM CODE--//
+
 #include "bhkConvexShape.h"
 namespace Niflib {
-
-
-#include "../gen/obj_defines.h"
 
 class bhkCapsuleShape;
 typedef Ref<bhkCapsuleShape> bhkCapsuleShapeRef;
 
-/*!
- * bhkCapsuleShape - A capsule.
- */
-
-class NIFLIB_API bhkCapsuleShape : public BHK_CAPSULE_SHAPE_PARENT {
+/*! A capsule. */
+class bhkCapsuleShape : public bhkConvexShape {
 public:
-	bhkCapsuleShape();
-	~bhkCapsuleShape();
-	//Run-Time Type Information
-	static const Type & TypeConst() { return TYPE; }
-private:
-	static const Type TYPE;
-public:
-	virtual void Read( istream& in, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	virtual void Write( ostream& out, map<NiObjectRef,uint> link_map, unsigned int version, unsigned int user_version ) const;
-	virtual string asString( bool verbose = false ) const;
-	virtual void FixLinks( const map<unsigned,NiObjectRef> & objects, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	virtual list<NiObjectRef> GetRefs() const;
-	virtual const Type & GetType() const;
+	/*! Constructor */
+	NIFLIB_API bhkCapsuleShape();
+
+	/*! Destructor */
+	NIFLIB_API virtual ~bhkCapsuleShape();
 
 	/*!
-	 * Apparently the capsule's radius.
+	 * A constant value which uniquly identifies objects of this type.
 	 */
-	float GetRadius() const;
-	void SetRadius( float value );
+	NIFLIB_API static const Type TYPE;
 
 	/*!
-	 * First point on the capsule's axis.
+	 * A factory function used during file reading to create an instance of this type of object.
+	 * \return A pointer to a newly allocated instance of this type of object.
 	 */
-	Vector3 GetFirstPoint() const;
-	void SetFirstPoint( const Vector3 & value );
+	NIFLIB_API static NiObject * Create();
 
 	/*!
-	 * Matches first capsule radius.
+	 * Summarizes the information contained in this object in English.
+	 * \param[in] verbose Determines whether or not detailed information about large areas of data will be printed out.
+	 * \return A string containing a summary of the information within the object in English.  This is the function that Niflyze calls to generate its analysis, so the output is the same.
 	 */
-	float GetRadius1() const;
-	void SetRadius1( float value );
+	NIFLIB_API virtual string asString( bool verbose = false ) const;
 
 	/*!
-	 * Second point on the capsule's axis.
+	 * Used to determine the type of a particular instance of this object.
+	 * \return The type constant for the actual type of the object.
 	 */
-	Vector3 GetSecondPoint() const;
-	void SetSecondPoint( const Vector3 & value );
+	NIFLIB_API virtual const Type & GetType() const;
+
+	//--BEGIN MISC CUSTOM CODE--//
 
 	/*!
-	 * Matches second capsule radius.
+	 * Gets the capsule's radius.
+	 * \return The radius of the capsule.
 	 */
-	float GetRadius2() const;
-	void SetRadius2( float value );
+	NIFLIB_API float GetRadius() const;
 
+	/*!
+	 * Sets the capsule's radius.
+	 * \param[in] value The new radius for the capsule.
+	 */
+	NIFLIB_API void SetRadius( float value );
+
+	/*!
+	 * Gets the first point on the capsule's axis.
+	 * \return The first point on the capsule's axis.
+	 */
+	NIFLIB_API Vector3 GetFirstPoint() const;
+
+	/*!
+	 * Sets the first point on the capsule's axis.
+	 * \return The new first point on the capsule's axis.
+	 */
+	NIFLIB_API void SetFirstPoint( const Vector3 & value );
+
+	/*!
+	 * Gets the second capsule radius.  Seems to match the first capsule radius.
+	 * \return The second capsule radius.
+	 */
+	NIFLIB_API float GetRadius1() const;
+
+	/*!
+	 * Sets the second capsule radius.  Seems to match the first capsule radius.
+	 * \param[in] value The new second capsule radius.
+	 */
+	NIFLIB_API void SetRadius1( float value );
+
+	/*!
+	 * Gets the second point on the capsule's axis.
+	 * \return The second point on the capsule's axis.
+	 */
+	NIFLIB_API Vector3 GetSecondPoint() const;
+
+	/*!
+	 * Sets the second point on the capsule's axis.
+	 * \return The new second point on the capsule's axis.
+	 */
+	NIFLIB_API void SetSecondPoint( const Vector3 & value );
+
+	/*!
+	 * Gets the third capsule radius.  Seems to match the second capsule radius.
+	 * \return The third capsule radius.
+	 */
+	NIFLIB_API float GetRadius2() const;
+
+	/*!
+	 * Sets the third capsule radius.  Seems to match the second capsule radius.
+	 * \param[in] value The new third capsule radius.
+	 */
+	NIFLIB_API void SetRadius2( float value );
+
+	/*! Helper routine for calculating mass properties.
+	*  \param[in]  density Uniform density of object
+	*  \param[in]  solid Determines whether the object is assumed to be solid or not
+	*  \param[out] mass Calculated mass of the object
+	*  \param[out] center Center of mass
+	*  \param[out] inertia Mass Inertia Tensor
+	*  \return Return mass, center, and inertia tensor.
+	*/
+	NIFLIB_API virtual void CalcMassProperties(float density, bool solid, float &mass, float &volume, Vector3 &center, InertiaMatrix& inertia);
+
+	//--END CUSTOM CODE--//
 protected:
-	BHK_CAPSULE_SHAPE_MEMBERS
-private:
-	void InternalRead( istream& in, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	void InternalWrite( ostream& out, map<NiObjectRef,uint> link_map, unsigned int version, unsigned int user_version ) const;
-	string InternalAsString( bool verbose ) const;
-	void InternalFixLinks( const map<unsigned,NiObjectRef> & objects, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	list<NiObjectRef> InternalGetRefs() const;
+	/*! Unknown. */
+	array<8,byte > unknown8Bytes;
+	/*! First point on the capsule's axis. */
+	Vector3 firstPoint;
+	/*! Matches first capsule radius. */
+	float radius1;
+	/*! Second point on the capsule's axis. */
+	Vector3 secondPoint;
+	/*! Matches second capsule radius. */
+	float radius2;
+public:
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void Read( istream& in, list<unsigned int> & link_stack, const NifInfo & info );
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void Write( ostream& out, const map<NiObjectRef,unsigned int> & link_map, list<NiObject *> & missing_link_stack, const NifInfo & info ) const;
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void FixLinks( const map<unsigned int,NiObjectRef> & objects, list<unsigned int> & link_stack, list<NiObjectRef> & missing_link_stack, const NifInfo & info );
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual list<NiObjectRef> GetRefs() const;
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual list<NiObject *> GetPtrs() const;
 };
 
-}
+//--BEGIN FILE FOOT CUSTOM CODE--//
+//--END CUSTOM CODE--//
+
+} //End Niflib namespace
 #endif

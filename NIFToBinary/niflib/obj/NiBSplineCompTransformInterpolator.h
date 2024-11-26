@@ -1,143 +1,212 @@
 /* Copyright (c) 2006, NIF File Format Library and Tools
-All rights reserved.  Please see niflib.h for licence. */
+All rights reserved.  Please see niflib.h for license. */
+
+//-----------------------------------NOTICE----------------------------------//
+// Some of this file is automatically filled in by a Python script.  Only    //
+// add custom code in the designated areas or it will be overwritten during  //
+// the next update.                                                          //
+//-----------------------------------NOTICE----------------------------------//
 
 #ifndef _NIBSPLINECOMPTRANSFORMINTERPOLATOR_H_
 #define _NIBSPLINECOMPTRANSFORMINTERPOLATOR_H_
 
-#include "NiBSplineInterpolator.h"
+//--BEGIN FILE HEAD CUSTOM CODE--//
+//--END CUSTOM CODE--//
 
-// Include structures
-#include "../Ref.h"
+#include "NiBSplineTransformInterpolator.h"
 namespace Niflib {
-
-#include "../gen/obj_defines.h"
 
 class NiBSplineCompTransformInterpolator;
 typedef Ref<NiBSplineCompTransformInterpolator> NiBSplineCompTransformInterpolatorRef;
 
 /*!
- * NiBSplineCompTransformInterpolator
+ * An interpolator for storing transform keyframes via a compressed
+ *         B-spline (that is, using shorts rather than floats in the B-spline
+ *         data).
  */
-class NIFLIB_API NiBSplineCompTransformInterpolator : public NI_B_SPLINE_COMP_TRANSFORM_INTERPOLATOR_PARENT {
+class NiBSplineCompTransformInterpolator : public NiBSplineTransformInterpolator {
 public:
-	NiBSplineCompTransformInterpolator();
-	~NiBSplineCompTransformInterpolator();
-	//Run-Time Type Information
-	static const Type & TypeConst() { return TYPE; }
-private:
-	static const Type TYPE;
-public:
-	virtual void Read( istream& in, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	virtual void Write( ostream& out, map<NiObjectRef,uint> link_map, unsigned int version, unsigned int user_version ) const;
-	virtual string asString( bool verbose = false ) const;
-	virtual void FixLinks( const map<unsigned,NiObjectRef> & objects, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	virtual list<NiObjectRef> GetRefs() const;
-	virtual const Type & GetType() const;
+	/*! Constructor */
+	NIFLIB_API NiBSplineCompTransformInterpolator();
+
+	/*! Destructor */
+	NIFLIB_API virtual ~NiBSplineCompTransformInterpolator();
 
 	/*!
-	 * Base translation when translate curve not defined.
+	 * A constant value which uniquly identifies objects of this type.
 	 */
-	Vector3 GetTranslation() const;
-	void SetTranslation( Vector3 value );
+	NIFLIB_API static const Type TYPE;
 
 	/*!
-	 * Base rotation when rotation curve not defined.
+	 * A factory function used during file reading to create an instance of this type of object.
+	 * \return A pointer to a newly allocated instance of this type of object.
 	 */
-	Quaternion GetRotation() const;
-	void SetRotation( Quaternion value );
+	NIFLIB_API static NiObject * Create();
 
 	/*!
-	 * Base scale when scale curve not defined.
+	 * Summarizes the information contained in this object in English.
+	 * \param[in] verbose Determines whether or not detailed information about large areas of data will be printed out.
+	 * \return A string containing a summary of the information within the object in English.  This is the function that Niflyze calls to generate its analysis, so the output is the same.
 	 */
-	float GetScale() const;
-	void SetScale( float value );
+	NIFLIB_API virtual string asString( bool verbose = false ) const;
 
 	/*!
-	 * Translate Bias
+	 * Used to determine the type of a particular instance of this object.
+	 * \return The type constant for the actual type of the object.
 	 */
-	float GetTranslateBias() const;
-	void SetTranslateBias( float value );
+	NIFLIB_API virtual const Type & GetType() const;
+
+	//--BEGIN MISC CUSTOM CODE--//
 
 	/*!
-	 * Translate Multiplier
+	 * Gets translate bias.
+	 * \return The translate bias.
 	 */
-	float GetTranslateMultiplier() const;
-	void SetTranslateMultiplier( float value );
+	NIFLIB_API float GetTranslateBias() const;
 
 	/*!
-	 * Rotation Bias
+	 * Sets translate bias.
+	 * \param[in] value The new translate bias.
 	 */
-	float GetRotationBias() const;
-	void SetRotationBias( float value );
+	NIFLIB_API void SetTranslateBias( float value );
 
 	/*!
-	 * Rotation Multiplier
+	 * Gets translate multiplier.
+	 * \return The translate bias.
 	 */
-	float GetRotationMultiplier() const;
-	void SetRotationMultiplier( float value );
+	NIFLIB_API float GetTranslateMultiplier() const;
 
 	/*!
-	 * Scale Bias
+	 * Sets translate multiplier.
+	 * \param[in] value The new translate bias.
 	 */
-	float GetScaleBias() const;
-	void SetScaleBias( float value );
+	NIFLIB_API void SetTranslateMultiplier( float value );
 
 	/*!
-	 * Scale Multiplier
+	 * Gets rotation bias.
+	 * \return The rotation bias.
 	 */
-	float GetScaleMultiplier() const;
-	void SetScaleMultiplier( float value );
+	NIFLIB_API float GetRotationBias() const;
 
-   /*! Retrieves the control quaternion rotation data.
-   * \return A vector containing control Quaternion data which specify rotation over time.
-   */
-   vector< Quaternion > GetQuatRotateControlData() const;
+	/*!
+	 * Sets rotation bias.
+	 * \param[in] value The new rotation bias.
+	 */
+	NIFLIB_API void SetRotationBias( float value );
 
-   /*! Retrieves the control translation data.
-   * \return A vector containing control Vector3 data which specify translation over time.
-   */
-   vector< Vector3 > GetTranslateControlData() const;
+	/*!
+	 * Gets rotation multiplier.
+	 * \return The translate bias.
+	 */
+	NIFLIB_API float GetRotationMultiplier() const;
 
-   /*! Retrieves the scale key data.
-   * \return A vector containing control float data which specify scale over time.
-   */
-   vector< float > GetScaleControlData() const;
+	/*!
+	 * Sets rotation multiplier.
+	 * \param[in] value The new translate bias.
+	 */
+	NIFLIB_API void SetRotationMultiplier( float value );
 
-   /*! Retrieves the sampled quaternion rotation key data between start and stop time.
-   * \param npoints The number of data points to sample between start and stop time.
-   * \param degree N-th order degree of polynomial used to fit the data.
-   * \return A vector containing Key<Quaternion> data which specify rotation over time.
-   */
-   vector< Key<Quaternion> > SampleQuatRotateKeys(int npoints, int degree) const;
+	/*!
+	 * Gets scale bias.
+	 * \return The scale bias.
+	 */
+	NIFLIB_API float GetScaleBias() const;
 
-   /*! Retrieves the sampled scale key data between start and stop time.
-   * \param npoints The number of data points to sample between start and stop time.
-   * \param degree N-th order degree of polynomial used to fit the data.
-   * \return A vector containing Key<Vector3> data which specify translation over time.
-   */
-   vector< Key<Vector3> > SampleTranslateKeys(int npoints, int degree) const;
+	/*!
+	 * Sets scale bias.
+	 * \param[in] value The new scale bias.
+	 */
+	NIFLIB_API void SetScaleBias( float value );
 
-   /*! Retrieves the sampled scale key data between start and stop time.
-   * \param npoints The number of data points to sample between start and stop time.
-   * \param degree N-th order degree of polynomial used to fit the data.
-   * \return A vector containing Key<float> data which specify scale over time.
-   */
-   vector< Key<float> > SampleScaleKeys(int npoints, int degree) const;
+	/*!
+	 * Gets scale multiplier.
+	 * \return The scale multiplier.
+	 */
+	NIFLIB_API float GetScaleMultiplier() const;
 
-   /*! Retrieves the number of control points used in the spline curve.
-   * \return The number of control points used in the spline curve.
-   */
-   int GetNumControlPt() const;
+	/*!
+	 * Sets scale multiplier.
+	 * \param[in] value The new scale multiplier.
+	 */
+	NIFLIB_API void SetScaleMultiplier( float value );
 
+	/*!
+	 * Retrieves the control quaternion rotation data.
+	 * \return A vector containing control Quaternion data which specify rotation over time.
+	 */
+	NIFLIB_API vector< Quaternion > GetQuatRotateControlData() const;
+
+	/*!
+	 * Retrieves the control translation data.
+	 * \return A vector containing control Vector3 data which specify translation over time.
+	 */
+	NIFLIB_API vector< Vector3 > GetTranslateControlData() const;
+
+	/*!
+	 * Retrieves the scale key data.
+	 * \return A vector containing control float data which specify scale over time.
+	 */
+	NIFLIB_API vector< float > GetScaleControlData() const;
+
+	/*!
+	 * Retrieves the sampled quaternion rotation key data between start and stop time.
+	 * \param npoints The number of data points to sample between start and stop time.
+	 * \param degree N-th order degree of polynomial used to fit the data.
+	 * \return A vector containing Key<Quaternion> data which specify rotation over time.
+	 */
+	NIFLIB_API vector< Key<Quaternion> > SampleQuatRotateKeys(int npoints, int degree) const;
+
+	/*!
+	 * Retrieves the sampled scale key data between start and stop time.
+	 * \param npoints The number of data points to sample between start and stop time.
+	 * \param degree N-th order degree of polynomial used to fit the data.
+	 * \return A vector containing Key<Vector3> data which specify translation over time.
+	 */
+	NIFLIB_API vector< Key<Vector3> > SampleTranslateKeys(int npoints, int degree) const;
+
+	/*!
+	 * Retrieves the sampled scale key data between start and stop time.
+	 * \param npoints The number of data points to sample between start and stop time.
+	 * \param degree N-th order degree of polynomial used to fit the data.
+	 * \return A vector containing Key<float> data which specify scale over time.
+	 */
+	NIFLIB_API vector< Key<float> > SampleScaleKeys(int npoints, int degree) const;
+
+	/*!
+	 * Retrieves the number of control points used in the spline curve.
+	 * \return The number of control points used in the spline curve.
+	 */
+	NIFLIB_API int GetNumControlPoints() const;
+
+	//--END CUSTOM CODE--//
 protected:
-	NI_B_SPLINE_COMP_TRANSFORM_INTERPOLATOR_MEMBERS
-private:
-	void InternalRead( istream& in, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	void InternalWrite( ostream& out, map<NiObjectRef,uint> link_map, unsigned int version, unsigned int user_version ) const;
-	string InternalAsString( bool verbose ) const;
-	void InternalFixLinks( const map<unsigned,NiObjectRef> & objects, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	list<NiObjectRef> InternalGetRefs() const;
+	/*! Translation Bias */
+	float translationBias;
+	/*! Translation Multiplier */
+	float translationMultiplier;
+	/*! Rotation Bias */
+	float rotationBias;
+	/*! Rotation Multiplier */
+	float rotationMultiplier;
+	/*! Scale Bias */
+	float scaleBias;
+	/*! Scale Multiplier */
+	float scaleMultiplier;
+public:
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void Read( istream& in, list<unsigned int> & link_stack, const NifInfo & info );
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void Write( ostream& out, const map<NiObjectRef,unsigned int> & link_map, list<NiObject *> & missing_link_stack, const NifInfo & info ) const;
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void FixLinks( const map<unsigned int,NiObjectRef> & objects, list<unsigned int> & link_stack, list<NiObjectRef> & missing_link_stack, const NifInfo & info );
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual list<NiObjectRef> GetRefs() const;
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual list<NiObject *> GetPtrs() const;
 };
 
-}
+//--BEGIN FILE FOOT CUSTOM CODE--//
+//--END CUSTOM CODE--//
+
+} //End Niflib namespace
 #endif

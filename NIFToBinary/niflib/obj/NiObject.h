@@ -1,9 +1,23 @@
 /* Copyright (c) 2006, NIF File Format Library and Tools
-All rights reserved.  Please see niflib.h for licence. */
+All rights reserved.  Please see niflib.h for license. */
+
+//-----------------------------------NOTICE----------------------------------//
+// Some of this file is automatically filled in by a Python script.  Only    //
+// add custom code in the designated areas or it will be overwritten during  //
+// the next update.                                                          //
+//-----------------------------------NOTICE----------------------------------//
 
 #ifndef _NIOBJECT_H_
 #define _NIOBJECT_H_
 
+//--BEGIN FILE HEAD CUSTOM CODE--//
+
+//--END CUSTOM CODE--//
+
+#include "../RefObject.h"
+#include "../Type.h"
+#include "../Ref.h"
+#include "../nif_basic_types.h"
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -12,65 +26,46 @@ All rights reserved.  Please see niflib.h for licence. */
 #include <list>
 #include <map>
 #include <vector>
-#include "../NIF_IO.h"
-#include "../Ref.h"
-#include "../Type.h"
-#include "../gen/obj_defines.h"
 namespace Niflib {
-
 using namespace std;
-
-
-
-/**
- * NiObject - Base Object class from which all other objects derive
- */
 
 class NiObject;
 typedef Ref<NiObject> NiObjectRef;
 
-class NiObject {
+/*! Abstract object type. */
+class NiObject : public RefObject {
 public:
+	/*! Constructor */
 	NIFLIB_API NiObject();
+
+	/*! Destructor */
 	NIFLIB_API virtual ~NiObject();
-	//Run-Time Type Information
-	NIFLIB_API static const Type & TypeConst() { return TYPE; }
-private:	
-	static const Type TYPE;
-public:
 
 	/*!
-	 * Used to determine an object's type.  These type strings are the same as the class names of the blocks in the <a href = "http://www.niftools.org/docsys/">NIF File Format Browser</a>.
-	 * \return A string containing the type of the object.  Ex. NiNode, NiTriShapeData, NiParticleSystemController, etc.
-	 * 
-	 * <b>Example:</b> 
-	 * \code
-	 * blk_ref my_block = ReadNifTree("test_in.nif");
-	 * cout << my_block->GetType();
-	 * \endcode
-	 * 
-	 * <b>In Python:</b>
-	 * \code
-	 * my_block = ReadNifTree("test_in.nif")
-	 * print block.GetType()
-	 * \endcode
+	 * A constant value which uniquly identifies objects of this type.
 	 */
-	NIFLIB_API virtual const Type & GetType() const { return TYPE; };
+	NIFLIB_API static const Type TYPE;
 
-	NIFLIB_API bool IsSameType( const Type & compare_to ) const;
-	NIFLIB_API bool IsSameType( const NiObject * object ) const;
-	NIFLIB_API bool IsDerivedType (const Type & compare_to ) const;
-	NIFLIB_API bool IsDerivedType( const NiObject * objct ) const;
+	/*!
+	 * A factory function used during file reading to create an instance of this type of object.
+	 * \return A pointer to a newly allocated instance of this type of object.
+	 */
+	NIFLIB_API static NiObject * Create();
 
-	//Streaming Functions
-	NIFLIB_HIDDEN virtual void Read( istream& in, list<uint> & link_stack, unsigned int version, unsigned int user_version ) {}
-	NIFLIB_HIDDEN virtual void Write( ostream& out, map<NiObjectRef,uint> link_map, unsigned int version, unsigned int user_version ) const {}
-	NIFLIB_HIDDEN virtual void FixLinks( const map<unsigned,NiObjectRef> & objects, list<uint> & link_stack, unsigned int version, unsigned int user_version ) {}
+	/*!
+	 * Summarizes the information contained in this object in English.
+	 * \param[in] verbose Determines whether or not detailed information about large areas of data will be printed out.
+	 * \return A string containing a summary of the information within the object in English.  This is the function that Niflyze calls to generate its analysis, so the output is the same.
+	 */
+	NIFLIB_API virtual string asString( bool verbose = false ) const;
 
-	//Reference Counting
-	NIFLIB_API void AddRef() const; //Should not be called directly
-	NIFLIB_API void SubtractRef() const; //Should not be called directly
-	NIFLIB_API unsigned int GetNumRefs() { return _ref_count; }
+	/*!
+	 * Used to determine the type of a particular instance of this object.
+	 * \return The type constant for the actual type of the object.
+	 */
+	NIFLIB_API virtual const Type & GetType() const;
+
+	//--BEGIN MISC CUSTOM CODE--//
 
 	/*! Returns A new object that contains all the same data that this object does,
 	 * but occupies a different part of memory.  The data stored in a NIF file varies
@@ -81,142 +76,87 @@ public:
 	 * \param[in] user_version The game-specific version number extention.
 	 * \return A cloned copy of this object as a new object.
 	 */
-	NIFLIB_API NiObjectRef Clone( unsigned int version = 0xFFFFFFFF, unsigned int user_version = 0 );
-
-	/*!
-	 * Summarizes the information contained in this object in English.
-	 * \param[in] verbose Determines whether or not detailed information about large areas of data will be printed out.
-	 * \return A string containing a summary of the information within the block in English.  This is the function that Niflyze calls to generate its analysis, so the output is the same.
-	 * 
-	 * <b>Example:</b> 
-	 * \code
-	 * blk_ref my_block = ReadNifTree("test_in.nif");
-	 * cout << my_block->asString();
-	 * \endcode
-	 * 
-	 * <b>In Python:</b>
-	 * \code
-	 * my_block = ReadNifTree("test_in.nif")
-	 * print block.asString()
-	 * \endcode
-	 * 
-	 * \sa IAttr::asString, SetVerboseMode
-	 */
-	NIFLIB_API virtual string asString( bool verbose = false ) const;
-
-	/*!
-	 * Formats a human readable string that includes the type of the object
-	 * \return A string in the form:  address(type)
-	 */
-	NIFLIB_API virtual string GetIDString() const;
-
-	/*!
-	 * Used to retrieve all blocks that the current block is linked to through <i>all</i> attributes.
-	 * \return A list of references to blocks that this attribute links its owner block to.
-	 * 
-	 * <b>Example:</b> 
-	 * \code
-	 * blk_ref my_block = ReadNifTree("test_in.nif");
-	 * list<blk_ref> attr_list = my_block->GetRefs();
-	 * \endcode
-	 * 
-	 * <b>In Python:</b>
-	 * \code
-	 * my_block = ReadNifTree("test_in.nif")
-	 * attr_list = my_block.GetRefs()
-	 * \endcode
-	 */
-	NIFLIB_API virtual list<NiObjectRef> GetRefs() const;
+	NIFLIB_API Ref<NiObject> Clone( unsigned int version = 0xFFFFFFFF, unsigned int user_version = 0 );
 	
-	// Python Operator Overloads
-	NIFLIB_API string __str__() const {
-		return asString();
-	};
+public:
+	/*! Block number in the nif file. Only set when you read
+            blocks from the file. */
+	int internal_block_number;
 
-	NIFLIB_API virtual void RemoveCrossRef( NiObject * block_to_remove );
-
-	NIFLIB_API void IncCrossRef( NiObject * block );
-	NIFLIB_API void DecCrossRef( NiObject* block );
-	NIFLIB_API virtual void ReassignCrossRefs( const map<string,NiObjectRef> & name_map );
-	
-	NIFLIB_API static unsigned int NumObjectsInMemory();
-private:
-	mutable unsigned int _ref_count;
-	list<NiObject*> _cross_refs;
-	static unsigned int objectsInMemory;
-private:
-	void InternalRead( istream& in, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	void InternalWrite( ostream& out, map<NiObjectRef,uint> link_map, unsigned int version, unsigned int user_version ) const;
-	string InternalAsString( bool verbose ) const;
-	void InternalFixLinks( const map<unsigned,NiObjectRef> & objects, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	list<NiObjectRef> InternalGetRefs() const;
+	//--END CUSTOM CODE--//
+public:
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void Read( istream& in, list<unsigned int> & link_stack, const NifInfo & info );
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void Write( ostream& out, const map<NiObjectRef,unsigned int> & link_map, list<NiObject *> & missing_link_stack, const NifInfo & info ) const;
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void FixLinks( const map<unsigned int,NiObjectRef> & objects, list<unsigned int> & link_stack, list<NiObjectRef> & missing_link_stack, const NifInfo & info );
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual list<NiObjectRef> GetRefs() const;
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual list<NiObject *> GetPtrs() const;
 };
 
+//--BEGIN FILE FOOT CUSTOM CODE--//
 
 /*
- * Casting Templates
- */
+* Casting Templates
+*/
 
 template <class T> Ref<T> StaticCast( NiObject * object ) {
 	return (T*)object;
 }
 
-//SWIG doesn't want two versions of the same thing
-#ifndef SWIG
 template <class T> Ref<const T> StaticCast (const NiObject * object) {
 	return (const T*)object;
 }
-#endif
 
 template <class T> Ref<T> DynamicCast( NiObject * object ) {
-	if ( object && object->IsDerivedType(T::TypeConst()) ) {
+	if ( object && object->IsDerivedType(T::TYPE) ) {
 		return (T*)object;
 	} else {
 		return NULL;
 	}
 }
 
-//SWIG doesn't want two versions of the same thing
-#ifndef SWIG
 template <class T> Ref<const T> DynamicCast( const NiObject * object ) {
-	if ( object && object->IsDerivedType(T::TypeConst()) ) {
+	if ( object && object->IsDerivedType(T::TYPE) ) {
 		return (const T*)object;
 	} else {
 		return NULL;
 	}
 }
-#endif
 
 #ifdef USE_NIFLIB_TEMPLATE_HELPERS
 template <typename T, typename U> Ref<T> StaticCast( Ref<U>& object ) {
-   return object;
+	return object;
 }
 
 template <typename T, typename U> Ref<T> DynamicCast( Ref<U>& object ) {
-   return object;
+	return object;
 }
 
 template <typename T, typename U> Ref<T> StaticCast( const Ref<U>& object ) {
-   return Ref<T>(object);
+	return Ref<T>(object);
 }
 
 template <typename T, typename U> Ref<T> DynamicCast( const Ref<U>& object ) {
-   return Ref<T>(object);
+	return Ref<T>(object);
 }
 
 /*!
- * Dynamically cast from a collection of objects to another collection
- * \param objs A collection of object references to be dynamically casted to the specified type.
- * \return A collection of objects that support the requested type.
- */
+* Dynamically cast from a collection of objects to another collection
+* \param objs A collection of object references to be dynamically casted to the specified type.
+* \return A collection of objects that support the requested type.
+*/
 template <typename U, typename T>
 inline vector<Ref<U> > DynamicCast( vector<Ref<T> > const & objs ) {
-   vector<Ref<U> > retval;
-   for (vector<Ref<T> >::const_iterator itr = objs.begin(), end = objs.end(); itr != end; ++itr) {
-      Ref<U> obj = DynamicCast<U>(*itr);
-      if (obj) retval.insert(retval.end(), obj);
-   }
-   return retval;
+	vector<Ref<U> > retval;
+	for (vector<Ref<T> >::const_iterator itr = objs.begin(), end = objs.end(); itr != end; ++itr) {
+		Ref<U> obj = DynamicCast<U>(*itr);
+		if (obj) retval.insert(retval.end(), obj);
+	}
+	return retval;
 }
 
 /*!
@@ -226,13 +166,17 @@ inline vector<Ref<U> > DynamicCast( vector<Ref<T> > const & objs ) {
 */
 template <typename U, typename T>
 inline list<Ref<U> > DynamicCast( list<Ref<T> > const & objs ) {
-   list<Ref<U> > retval;
-   for (list<Ref<T> >::const_iterator itr = objs.begin(), end = objs.end(); itr != end; ++itr) {
-      Ref<U> obj = DynamicCast<U>(*itr);
-      if (obj) retval.insert(retval.end(), obj);
-   }
-   return retval;
+	list<Ref<U> > retval;
+	for (list<Ref<T> >::const_iterator itr = objs.begin(), end = objs.end(); itr != end; ++itr) {
+		Ref<U> obj = DynamicCast<U>(*itr);
+		if (obj) retval.insert(retval.end(), obj);
+	}
+	return retval;
 }
 #endif
-}
+
+
+//--END CUSTOM CODE--//
+
+} //End Niflib namespace
 #endif

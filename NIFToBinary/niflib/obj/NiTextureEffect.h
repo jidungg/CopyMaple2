@@ -1,8 +1,17 @@
 /* Copyright (c) 2006, NIF File Format Library and Tools
-All rights reserved.  Please see niflib.h for licence. */
+All rights reserved.  Please see niflib.h for license. */
+
+//-----------------------------------NOTICE----------------------------------//
+// Some of this file is automatically filled in by a Python script.  Only    //
+// add custom code in the designated areas or it will be overwritten during  //
+// the next update.                                                          //
+//-----------------------------------NOTICE----------------------------------//
 
 #ifndef _NITEXTUREEFFECT_H_
 #define _NITEXTUREEFFECT_H_
+
+//--BEGIN FILE HEAD CUSTOM CODE--//
+//--END CUSTOM CODE--//
 
 #include "NiDynamicEffect.h"
 
@@ -10,111 +19,241 @@ All rights reserved.  Please see niflib.h for licence. */
 #include "../Ref.h"
 namespace Niflib {
 
-// Forward define of referenced blocks
+// Forward define of referenced NIF objects
+class NiImage;
 class NiSourceTexture;
-
-#include "../gen/obj_defines.h"
-
 class NiTextureEffect;
 typedef Ref<NiTextureEffect> NiTextureEffectRef;
 
 /*!
- * NiTextureEffect - Enables environment mapping. Should be in both the
- * children list and effects list of the NiTriShape block. For Morrowind:
- * the bump map can be used to bump the environment map (note that the
- * bump map is ignored if no NiTextureEffect block is present).
+ * Enables environment mapping. Should be in both the children list and effects
+ * list of the NiTriShape object. For Morrowind: the bump map can be used to bump
+ * the environment map (note that the bump map is ignored if no NiTextureEffect
+ * object is present).
  */
-
-class NIFLIB_API NiTextureEffect : public NI_TEXTURE_EFFECT_PARENT {
+class NiTextureEffect : public NiDynamicEffect {
 public:
-	NiTextureEffect();
-	~NiTextureEffect();
-	//Run-Time Type Information
-	static const Type & TypeConst() { return TYPE; }
-private:
-	static const Type TYPE;
-public:
-	virtual void Read( istream& in, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	virtual void Write( ostream& out, map<NiObjectRef,uint> link_map, unsigned int version, unsigned int user_version ) const;
-	virtual string asString( bool verbose = false ) const;
-	virtual void FixLinks( const map<unsigned,NiObjectRef> & objects, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	virtual list<NiObjectRef> GetRefs() const;
-	virtual const Type & GetType() const;
+	/*! Constructor */
+	NIFLIB_API NiTextureEffect();
+
+	/*! Destructor */
+	NIFLIB_API virtual ~NiTextureEffect();
 
 	/*!
-	 * Model projection matrix.  Always identity?
+	 * A constant value which uniquly identifies objects of this type.
 	 */
-	Matrix33 GetModelProjectionMatrix() const;
-	void SetModelProjectionMatrix( Matrix33 value );
+	NIFLIB_API static const Type TYPE;
 
 	/*!
-	 * Model projection transform.  Always (0,0,0)?
+	 * A factory function used during file reading to create an instance of this type of object.
+	 * \return A pointer to a newly allocated instance of this type of object.
 	 */
-	Vector3 GetModelProjectionTransform() const;
-	void SetModelProjectionTransform( Vector3 value );
+	NIFLIB_API static NiObject * Create();
 
 	/*!
-	 * 0: FILTER_NEAREST 1: FILTER_BILERP 2: FILTER_TRILERP (Usual value) 3:
-	 * FILTER_NEAREST_MIPNEAREST 4: FILTER_NEAREST_MIPLERP 5:
-	 * FILTER_BILERP_MIPNAREST
+	 * Summarizes the information contained in this object in English.
+	 * \param[in] verbose Determines whether or not detailed information about large areas of data will be printed out.
+	 * \return A string containing a summary of the information within the object in English.  This is the function that Niflyze calls to generate its analysis, so the output is the same.
 	 */
-	TexFilterMode GetTextureFiltering() const;
-	void SetTextureFiltering( TexFilterMode value );
+	NIFLIB_API virtual string asString( bool verbose = false ) const;
 
 	/*!
-	 * 0: CLAMP_S_CLAMP (Common value) 1: CLAMP_S_WRAP 2: WRAP_S_CLAMP_T 3:
-	 * WRAP_S_WRAP_T (Common value)
+	 * Used to determine the type of a particular instance of this object.
+	 * \return The type constant for the actual type of the object.
 	 */
-	TexClampMode GetTextureClamping() const;
-	void SetTextureClamping( TexClampMode value );
+	NIFLIB_API virtual const Type & GetType() const;
+
+	//--BEGIN MISC CUSTOM CODE--//
 
 	/*!
-	 * 0: PROJECTED_LIGHT 1: PROJECTED_SHADOW 2: ENVIRONMENT_MAP (Usual
-	 * value) 3: FOG_MAP
+	 * Retrives the model projection matrix of this effect.  This always seems to be set to the identity.
+	 * \return The model projection matrix.
 	 */
-	uint GetTextureType() const;
-	void SetTextureType( uint value );
+	NIFLIB_API Matrix33 GetModelProjectionMatrix() const;
 
 	/*!
-	 * 0: WORLD_PARALLEL 1: WORLD_PERSPECTIVE 2: SPHERE_MAP (Usual value) 3:
-	 * SPECULAR_CUBE_MAP 4: DIFFUSE_CUBE_MAP
+	 * Sets the model projection matrix of this effect.  This always seems to be set to the identity.
+	 * \param[in] value The new model projection matrix.
 	 */
-	uint GetCoordinateGenerationType() const;
-	void SetCoordinateGenerationType( uint value );
+	NIFLIB_API void SetModelProjectionMatrix( Matrix33 value );
 
 	/*!
-	 * Source texture index.
+	 * Retrieves the model projection transform of this effect.  This always seems to be set to (0,0,0).
+	 * \return The model projection transform.
 	 */
-	Ref<NiSourceTexture > GetSourceTexture() const;
-	void SetSourceTexture( Ref<NiSourceTexture > value );
+	NIFLIB_API Vector3 GetModelProjectionTransform() const;
 
 	/*!
-	 * 0: Disabled (Usual value) 1: Enabled
+	 * Sets the model projection transform of this effect.  This always seems to be set to (0,0,0).
+	 * \param[in] value The new model projection transform.
 	 */
-	byte GetClippingPlane() const;
-	void SetClippingPlane( byte value );
+	NIFLIB_API void SetModelProjectionTransform( Vector3 value );
 
 	/*!
-	 * 0?
+	 * Retrieves the texture filtering mode used by this effect.
+	 * \return The texture filtering mode.
 	 */
-	ushort GetPs2L() const;
-	void SetPs2L( ushort value );
+	NIFLIB_API TexFilterMode GetTextureFiltering() const;
 
 	/*!
-	 * 0xFFB5?
+	 * Sets the texture filtering mode used by this effect.
+	 * \param[in] value The new texture filtering mode.
 	 */
-	ushort GetPs2K() const;
-	void SetPs2K( ushort value );
+	NIFLIB_API void SetTextureFiltering( TexFilterMode value );
 
+	/*!
+	 * Retrieves the texture clamping mode used by this effect.
+	 * \return The texture clamping mode.
+	 */
+	NIFLIB_API TexClampMode GetTextureClamping() const;
+
+	/*!
+	 * Sets the texture clamping mode used by this effect.
+	 * \param[in] value The new texture clamping mode.
+	 */
+	NIFLIB_API void SetTextureClamping( TexClampMode value );
+
+	/*!
+	 * Retrieves the texture type used by this effect.  Valid values are:
+	 * 0: PROJECTED_LIGHT
+	 * 1: PROJECTED_SHADOW
+	 * 2: ENVIRONMENT_MAP (Usual value)
+	 * 3: FOG_MAP
+	 * \return The texture type.
+	 */
+	NIFLIB_API EffectType GetTextureType() const;
+
+	/*!
+	 * Sets the texture type used by this effect.  Valid values are:
+	 * 0: PROJECTED_LIGHT
+	 * 1: PROJECTED_SHADOW
+	 * 2: ENVIRONMENT_MAP (Usual value)
+	 * 3: FOG_MAP
+	 * \param[in] value The new texture type.
+	 */
+	NIFLIB_API void SetTextureType( EffectType value );
+
+	/*!
+	 * Retrieves the texture coordinate generation mode.  Valid values are:
+	 * 0: WORLD_PARALLEL
+	 * 1: WORLD_PERSPECTIVE
+	 * 2: SPHERE_MAP (Usual value)
+	 * 3: SPECULAR_CUBE_MAP
+	 * 4: DIFFUSE_CUBE_MAP
+	 * \return The texture coordinate generation mode.
+	 */
+	NIFLIB_API CoordGenType GetCoordinateGenerationType() const;
+
+	/*!
+	 * Sets the texture coordinate generation mode.  Valid values are:
+	 * 0: WORLD_PARALLEL
+	 * 1: WORLD_PERSPECTIVE
+	 * 2: SPHERE_MAP (Usual value)
+	 * 3: SPECULAR_CUBE_MAP
+	 * 4: DIFFUSE_CUBE_MAP
+	 * \return The new texture coordinate generation mode.
+	 */
+	NIFLIB_API void SetCoordinateGenerationType( CoordGenType value );
+
+	/*!
+	 * Retrieves the source texture index.
+	 * \return The source texture index.
+	 */
+	NIFLIB_API Ref<NiSourceTexture > GetSourceTexture() const;
+
+	/*!
+	 * Sets the source texture index.
+	 * \param[in] value The new source texture index.
+	 */
+	NIFLIB_API void SetSourceTexture( Ref<NiSourceTexture > value );
+
+	/*!
+	 * Retrieves the clipping plane behavior.  Valid values are:
+	 * 0: Disabled (Usual value)
+	 * 1: Enabled
+	 * \return The clipping plane behavior.
+	 */
+	NIFLIB_API byte GetClippingPlane() const;
+
+	/*!
+	 * Sets the clipping plane behavior.  Valid values are:
+	 * 0: Disabled (Usual value)
+	 * 1: Enabled
+	 * \param[in] value The new clipping plane behavior.
+	 */
+	NIFLIB_API void SetClippingPlane( byte value );
+
+	/*!
+	 * Retrieves a Playstation 2 - specific value.  Can just be left at the default of 0.
+	 * \return The PS2 L value.
+	 */
+	NIFLIB_API unsigned short GetPs2L() const;
+
+	/*!
+	 * Sets a Playstation 2 - specific value.  Can just be left at the default of 0.
+	 * \param[in] value The new PS2 L value.
+	 */
+	NIFLIB_API void SetPs2L( unsigned short value );
+
+	/*!
+	 * Retrieves a Playstation 2 - specific value.  Can just be left at the default of 0xFFB5.
+	 * \return The PS2 K value.
+	 */
+	NIFLIB_API unsigned short GetPs2K() const;
+
+	/*!
+	 * Sets a Playstation 2 - specific value.  Can just be left at the default of 0xFFB5.
+	 * \param[in] value The new PS2 K value.
+	 */
+	NIFLIB_API void SetPs2K( unsigned short value );
+
+	//--END CUSTOM CODE--//
 protected:
-	NI_TEXTURE_EFFECT_MEMBERS
-private:
-	void InternalRead( istream& in, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	void InternalWrite( ostream& out, map<NiObjectRef,uint> link_map, unsigned int version, unsigned int user_version ) const;
-	string InternalAsString( bool verbose ) const;
-	void InternalFixLinks( const map<unsigned,NiObjectRef> & objects, list<uint> & link_stack, unsigned int version, unsigned int user_version );
-	list<NiObjectRef> InternalGetRefs() const;
+	/*! Model projection matrix.  Always identity? */
+	Matrix33 modelProjectionMatrix;
+	/*! Model projection transform.  Always (0,0,0)? */
+	Vector3 modelProjectionTransform;
+	/*! Texture Filtering mode. */
+	TexFilterMode textureFiltering;
+	/*! Texture Clamp mode. */
+	TexClampMode textureClamping;
+	/*! Unknown. */
+	short unknown;
+	/*! The type of effect that the texture is used for. */
+	EffectType textureType;
+	/*! The method that will be used to generate UV coordinates for the texture effect. */
+	CoordGenType coordinateGenerationType;
+	/*! Image index. */
+	Ref<NiImage > image;
+	/*! Source texture index. */
+	Ref<NiSourceTexture > sourceTexture;
+	/*! Determines whether a clipping plane is used.  0 means that a plane is not used. */
+	byte clippingPlane;
+	/*! Unknown: (1,0,0)? */
+	Vector3 unknownVector;
+	/*! Unknown. 0? */
+	float unknownFloat;
+	/*! 0? */
+	short ps2L;
+	/*! -75? */
+	short ps2K;
+	/*! Unknown: 0. */
+	unsigned short unknownShort;
+public:
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void Read( istream& in, list<unsigned int> & link_stack, const NifInfo & info );
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void Write( ostream& out, const map<NiObjectRef,unsigned int> & link_map, list<NiObject *> & missing_link_stack, const NifInfo & info ) const;
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual void FixLinks( const map<unsigned int,NiObjectRef> & objects, list<unsigned int> & link_stack, list<NiObjectRef> & missing_link_stack, const NifInfo & info );
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual list<NiObjectRef> GetRefs() const;
+	/*! NIFLIB_HIDDEN function.  For internal use only. */
+	NIFLIB_HIDDEN virtual list<NiObject *> GetPtrs() const;
 };
 
-}
+//--BEGIN FILE FOOT CUSTOM CODE--//
+//--END CUSTOM CODE--//
+
+} //End Niflib namespace
 #endif

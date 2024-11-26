@@ -58,7 +58,7 @@ HRESULT CTexture::Initialize_Prototype(const _tchar * pTextureFilePath, _uint iN
 }
 
 //그냐이 FBX 파일이 있던 디렉토리
-HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle, TEXTURE_TYPE eTexType)
+HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle)
 {
 	inFIle.read(reinterpret_cast<char*>(&m_iNumSRVs), sizeof(_uint));
 	//cout << m_iNumSRVs << endl;
@@ -172,7 +172,7 @@ CTexture* CTexture::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext,
 {
 	CTexture* pInstance = new CTexture(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(szDirPath, inFIle, eTexType)))
+	if (FAILED(pInstance->Initialize_Prototype(szDirPath, inFIle)))
 	{
 		MSG_BOX("Failed to Created : CTexture");
 		Safe_Release(pInstance);

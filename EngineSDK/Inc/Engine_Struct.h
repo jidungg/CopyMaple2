@@ -131,13 +131,21 @@ namespace Engine
 
 	}RAYCASTHIT;
 
-	typedef struct
+	typedef struct Keyframe
 	{
-		XMFLOAT3		vScale;
-		XMFLOAT4		vRotation;
-		XMFLOAT3		vPosition;
-		float			fTrackPosition;
+		_float			fTrackPosition = { 0 };
 	}KEYFRAME;
+	typedef struct TransformKeyframe : public KEYFRAME
+	{
+		_float3		vScale = { 1,1,1 };
+		_float4		vRotation = { 0,0,0,0 };
+		_float3		vPosition = { 0,0,0 };
+
+	}TRANSFORM_KEYFRAME;
+	typedef struct FloatKeyframe
+	{
+		_float			fValue = { 0 };
+	}FLOAT_KEYFRAME;
 
 	typedef struct AnimEvent
 	{

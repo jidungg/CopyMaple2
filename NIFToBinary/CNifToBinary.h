@@ -21,10 +21,10 @@ public:
 	//HRESULT BinaryToModel(const string& file, TYPE type = TYPE_NONANIM);
 
 private:
-	//HRESULT Write_Meshe(const aiMesh* pAIMesh, ofstream& outFile);
-	//HRESULT Write_Material(const aiMaterial* pAIMaterial, ofstream& outFile);
-	//HRESULT Write_Bone(const aiNode* pAIBone, ofstream& outFile);
-	//HRESULT Write_Animation(const aiAnimation* pAIAnim, ofstream& outFile);
+	HRESULT Write_Meshe(const Ref<NiObject>& obj, ofstream& outFile);
+	HRESULT Write_Material(const Ref<NiObject>& obj, ofstream& outFile);
+	HRESULT Write_Bone(const Ref<NiObject>& obj, ofstream& outFile);
+	HRESULT Write_Animation(const Ref<NiObject>& obj, ofstream& outFile);
 private:
 
 };

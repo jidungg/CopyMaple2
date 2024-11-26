@@ -150,6 +150,11 @@ _bool CCharacter::Use_Skill(CSkill* pSkill)
 	return true;
 }
 
+_vector CCharacter::Get_Hitpoint()
+{
+	return Get_Position() + XMVectorSet(0, m_tStat.fBodyHeight,0,0);
+}
+
 _float CCharacter::Get_BodyCollisionRadius()
 {
 	return static_cast<CCollider_Sphere*>( Get_Collider(m_iBodyColliderIndex))->Get_Desc()->Radius;

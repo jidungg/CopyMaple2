@@ -378,6 +378,22 @@ namespace Client
 		{MON_STATE::M_AS_WALK, "AS_WALK"},
 		{MON_STATE::M_AS_LAST, "AS_LAST"}
 		});
+	enum EFF_TEX_TYPE
+	{
+		TT_BASE,
+		TT_DARK,
+		TT_DETAIL,
+		TT_GLOSS,
+		TT_GLOW,
+		TT_BUMPMAP,
+		TT_NORMAL,
+		TT_PARALLAX,
+		TT_DECAL0,
+		TT_DECAL1,
+		TT_DECAL2,
+		TT_DECAL3,
+		TT_LAST
+	};
 
 }
 

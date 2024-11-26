@@ -1,6 +1,230 @@
-﻿  Player.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp(1019,81): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-  (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
+﻿  stdafx.cpp
+  BackGround.cpp
+  Bayar.cpp
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Bayar.cpp(57,18): warning C4305: '=': 'double'에서 'Engine::_float'(으)로 잘립니다.
+  (소스 파일 '/Private/Bayar.cpp'을(를) 컴파일하는 중)
   
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp(1068,1): warning C4715: 'Client::CPlayer::Equip': 모든 제어 경로에서 값을 반환하지는 않습니다.
-  Client.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Client.exe
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Bayar.cpp(63,18): warning C4305: '=': 'double'에서 'Engine::_float'(으)로 잘립니다.
+  (소스 파일 '/Private/Bayar.cpp'을(를) 컴파일하는 중)
+  
+  BoneModelObject.cpp
+  Builder.cpp
+  BuildPreview.cpp
+  Bullet.cpp
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Bullet.cpp(46,30): warning C4244: '인수': 'Engine::_float'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Private/Bullet.cpp'을(를) 컴파일하는 중)
+  
+  Bullet_MagicClaw.cpp
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Bullet_MagicClaw.cpp(47,54): warning C4244: '인수': 'Engine::_float'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Private/Bullet_MagicClaw.cpp'을(를) 컴파일하는 중)
+  
+  Character.cpp
+  CreateObjEvent.cpp
+  DeadObjEvent.cpp
+  BasicAttack.cpp
+  EffConcreteController.cpp
+D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(20,50): error C2039: 'fTrackPosition': 'Engine::FloatKeyframe'의 멤버가 아닙니다.
+  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Engine_Struct.h(145,17):
+      'Engine::FloatKeyframe' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(33,39): error C2259: 'Client::CEffAlphaController': 추상 클래스를 인스턴스화할 수 없습니다.
+  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffConcreteController.h(13,7):
+      'Client::CEffAlphaController' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(33,39):
+      다음 멤버가 원인입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(33,39):
+      'Engine::KEYFRAME *Client::CEffController::Get_Frame(Engine::_float)': abstract입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffController.h(39,20):
+      'Client::CEffController::Get_Frame' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(33,58): error C2259: 'Client::CEffAlphaController': 추상 클래스를 인스턴스화할 수 없습니다.
+  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffConcreteController.h(13,7):
+      'Client::CEffAlphaController' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(33,58):
+      다음 멤버가 원인입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(33,58):
+      'Engine::KEYFRAME *Client::CEffController::Get_Frame(Engine::_float)': abstract입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffController.h(39,20):
+      'Client::CEffController::Get_Frame' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(44,16): error C2259: 'Client::CEffAlphaController': 추상 클래스를 인스턴스화할 수 없습니다.
+  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffConcreteController.h(13,7):
+      'Client::CEffAlphaController' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(44,16):
+      다음 멤버가 원인입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(44,16):
+      'Engine::KEYFRAME *Client::CEffController::Get_Frame(Engine::_float)': abstract입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffController.h(39,20):
+      'Client::CEffController::Get_Frame' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(66,50): error C2039: 'fTrackPosition': 'Engine::FloatKeyframe'의 멤버가 아닙니다.
+  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\Engine_Struct.h(145,17):
+      'Engine::FloatKeyframe' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(79,50): error C2259: 'Client::CEffTextureTransfromController': 추상 클래스를 인스턴스화할 수 없습니다.
+  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffConcreteController.h(30,7):
+      'Client::CEffTextureTransfromController' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(79,50):
+      다음 멤버가 원인입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(79,50):
+      'Engine::KEYFRAME *Client::CEffController::Get_Frame(Engine::_float)': abstract입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffController.h(39,20):
+      'Client::CEffController::Get_Frame' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(79,80): error C2259: 'Client::CEffTextureTransfromController': 추상 클래스를 인스턴스화할 수 없습니다.
+  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffConcreteController.h(30,7):
+      'Client::CEffTextureTransfromController' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(79,80):
+      다음 멤버가 원인입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(79,80):
+      'Engine::KEYFRAME *Client::CEffController::Get_Frame(Engine::_float)': abstract입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffController.h(39,20):
+      'Client::CEffController::Get_Frame' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(90,13): error C2259: 'Client::CEffTextureTransfromController': 추상 클래스를 인스턴스화할 수 없습니다.
+  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffConcreteController.h(30,7):
+      'Client::CEffTextureTransfromController' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(90,13):
+      다음 멤버가 원인입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(90,13):
+      'Engine::KEYFRAME *Client::CEffController::Get_Frame(Engine::_float)': abstract입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffController.h(39,20):
+      'Client::CEffController::Get_Frame' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(127,43): error C2259: 'Client::CEffTransformController': 추상 클래스를 인스턴스화할 수 없습니다.
+  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffConcreteController.h(49,7):
+      'Client::CEffTransformController' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(127,43):
+      다음 멤버가 원인입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(127,43):
+      'Engine::KEYFRAME *Client::CEffController::Get_Frame(Engine::_float)': abstract입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffController.h(39,20):
+      'Client::CEffController::Get_Frame' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(127,66): error C2259: 'Client::CEffTransformController': 추상 클래스를 인스턴스화할 수 없습니다.
+  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffConcreteController.h(49,7):
+      'Client::CEffTransformController' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(127,66):
+      다음 멤버가 원인입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(127,66):
+      'Engine::KEYFRAME *Client::CEffController::Get_Frame(Engine::_float)': abstract입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffController.h(39,20):
+      'Client::CEffController::Get_Frame' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(138,16): error C2259: 'Client::CEffTransformController': 추상 클래스를 인스턴스화할 수 없습니다.
+  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffConcreteController.h(49,7):
+      'Client::CEffTransformController' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(138,16):
+      다음 멤버가 원인입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(138,16):
+      'Engine::KEYFRAME *Client::CEffController::Get_Frame(Engine::_float)': abstract입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffController.h(39,20):
+      'Client::CEffController::Get_Frame' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(163,47): error C2259: 'Client::CEffMaterialColorController': 추상 클래스를 인스턴스화할 수 없습니다.
+  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffConcreteController.h(66,7):
+      'Client::CEffMaterialColorController' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(163,47):
+      다음 멤버가 원인입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(163,47):
+      'Engine::KEYFRAME *Client::CEffController::Get_Frame(Engine::_float)': abstract입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffController.h(39,20):
+      'Client::CEffController::Get_Frame' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(163,74): error C2259: 'Client::CEffMaterialColorController': 추상 클래스를 인스턴스화할 수 없습니다.
+  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffConcreteController.h(66,7):
+      'Client::CEffMaterialColorController' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(163,74):
+      다음 멤버가 원인입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(163,74):
+      'Engine::KEYFRAME *Client::CEffController::Get_Frame(Engine::_float)': abstract입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffController.h(39,20):
+      'Client::CEffController::Get_Frame' 선언을 참조하십시오.
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(174,16): error C2259: 'Client::CEffMaterialColorController': 추상 클래스를 인스턴스화할 수 없습니다.
+  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffConcreteController.h(66,7):
+      'Client::CEffMaterialColorController' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(174,16):
+      다음 멤버가 원인입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(174,16):
+      'Engine::KEYFRAME *Client::CEffController::Get_Frame(Engine::_float)': abstract입니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffController.h(39,20):
+      'Client::CEffController::Get_Frame' 선언을 참조하십시오.
+  
+  EffBone.cpp
+  EffControllable.cpp
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\EffControllable.cpp(1,1): error C1010: 미리 컴파일된 헤더를 찾는 동안 예기치 않은 파일의 끝이 나타났습니다. '#include "stdafx.h"'을(를) 소스에 추가하시겠습니까?
+  EffController.cpp
+  EffectObject.cpp
+  EffModel.cpp
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\EffModel.cpp(130,14): error C2664: 'void Client::CEffMaterialProperty::Update_Value(Engine::KEYFRAME *)': 인수 1을(를) 'std::vector<Client::CEffController *,std::allocator<Client::CEffController *>> *'에서 'Engine::KEYFRAME *'(으)로 변환할 수 없습니다.
+  (소스 파일 '/Private/EffModel.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Client\Private\EffModel.cpp(130,27):
+      가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 괄호가 있는 함수 스타일 캐스트가 필요합니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffMaterialProperty.h(15,7):
+      'Client::CEffMaterialProperty::Update_Value' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Private\EffModel.cpp(130,14):
+      인수 목록 '(std::vector<Client::CEffController *,std::allocator<Client::CEffController *>> *)'을(를) 일치시키는 동안
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\EffModel.cpp(132,21): error C2664: 'void Client::CEffTexturingProperty::Update_Value(Engine::KEYFRAME *)': 인수 1을(를) 'std::vector<Client::CEffController *,std::allocator<Client::CEffController *>> *'에서 'Engine::KEYFRAME *'(으)로 변환할 수 없습니다.
+  (소스 파일 '/Private/EffModel.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Client\Private\EffModel.cpp(132,34):
+      가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 괄호가 있는 함수 스타일 캐스트가 필요합니다.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffTexturingProperty.h(20,7):
+      'Client::CEffTexturingProperty::Update_Value' 선언을 참조하십시오.
+      D:\Workbench\Portfolio\CopyMaple2\Client\Private\EffModel.cpp(132,21):
+      인수 목록 '(std::vector<Client::CEffController *,std::allocator<Client::CEffController *>> *)'을(를) 일치시키는 동안
+  
+  EffMesh.cpp
+  EffTexture.cpp
+  Interactable.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  Level_Henesys.cpp
+  EffMaterialProperty.cpp
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\EffMaterialProperty.cpp(20,28): error C2511: 'void Client::CEffMaterialProperty::Update_Value(std::vector<CEffController *,std::allocator<CEffController *>> *)': 오버로드된 멤버 함수가 'Client::CEffMaterialProperty'에 없습니다.
+  (소스 파일 '/Private/EffMaterialProperty.cpp'을(를) 컴파일하는 중)
+      D:\Workbench\Portfolio\CopyMaple2\Client\Public\EffMaterialProperty.h(6,7):
+      'Client::CEffMaterialProperty' 선언을 참조하십시오.
+  
+  Monster.cpp
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Monster.cpp(230,16): warning C4267: '초기화 중': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Private/Monster.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Monster.cpp(240,18): warning C4267: '초기화 중': 'size_t'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Private/Monster.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Monster.cpp(252,43): warning C4267: '=': 'size_t'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Private/Monster.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Monster.cpp(153,39): warning C4101: 'pCondition' :참조되지 않은 지역 변수입니다.
+  (소스 파일 '/Private/Monster.cpp'을(를) 컴파일하는 중)
+  
+  MonsterDataBase.cpp
+  MonsterSpawner.cpp
+  Portal.cpp
+  PortalTerrainObject.cpp
+  Spawner.cpp
+  PlayerEquipSlot.cpp
+  PlayerInfo.cpp
+  InvenEquipSlot.cpp
+  Face.cpp
+  FaceTexture.cpp
+  HumanModelObject.cpp
+  InvenSlot.cpp
+  Inventory.cpp
+  ItemDataBase.cpp

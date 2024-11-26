@@ -13,14 +13,14 @@ protected:
 
 public:
 	virtual HRESULT Initialize_Prototype(const _tchar * pTextureFilePath, _uint iNumTexture);
-	virtual HRESULT Initialize_Prototype(const _char* szDirPath, ifstream& inFIle, TEXTURE_TYPE eTexType);
+	virtual HRESULT Initialize_Prototype(const _char* szDirPath, ifstream& inFIle);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
 	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName, _uint iSRVIndex = 0);
 	HRESULT Push_Texture(const _tchar* szPath);
 	HRESULT Push_Texture(ID3D11ShaderResourceView* pSRV);
-private:
+protected:
 	_uint										m_iNumSRVs = { 0 };
 	vector<ID3D11ShaderResourceView*>			m_SRVs;
 

@@ -153,7 +153,7 @@ void CGameInstance::Update_TimeDelta(const _wstring & strTimerTag)
 	return m_pTimer_Manager->Update_TimeDelta(strTimerTag);
 }
 
-KEYFRAME CGameInstance::Lerp_Frame(const KEYFRAME& Frame1, const KEYFRAME& Frame2, _float fRatio)
+TRANSFORM_KEYFRAME CGameInstance::Lerp_Frame(const TRANSFORM_KEYFRAME& Frame1, const TRANSFORM_KEYFRAME& Frame2, _float fRatio)
 {
 	return CEngineUtility::Lerp_Frame(Frame1, Frame2, fRatio);
 }

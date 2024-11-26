@@ -2,6 +2,7 @@
 #include "../../../EngineSDK/hlsl/Engine_Shader_Define.hlsli"
 
 float4x4		g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
+float4x4 g_BoneMatrices[512];
 
 vector			g_vLightDir = float4(1.f, -1.f, 1.f, 0.f);
 vector			g_vLightDiffuse = float4(1.f, 1.f, 1.f, 1.f);
@@ -21,6 +22,8 @@ struct VS_IN
 	float3		vNormal : NORMAL;
 	float2		vTexcoord : TEXCOORD0;	
 	float3		vTangent : TANGENT;
+    uint4		vBlendIndices : BLENDINDEX;
+    float4		vBlendWeights : BLENDWEIGHT;
 };
 
 struct VS_OUT
@@ -40,11 +43,20 @@ VS_OUT VS_MAIN(VS_IN In)
 
 	matWV = mul(g_WorldMatrix, g_ViewMatrix);
 	matWVP = mul(matWV, g_ProjMatrix);
+    float fWeightW = 1.f - (In.vBlendWeights.x + In.vBlendWeights.y + In.vBlendWeights.z);
 
-	Out.vPosition = mul(float4(In.vPosition, 1.f), matWVP);
-	Out.vNormal = normalize(mul(float4(In.vNormal, 0.f), g_WorldMatrix));
-	Out.vTexcoord = In.vTexcoord;
-	Out.vWorldPos = mul(float4(In.vPosition, 1.f), g_WorldMatrix);
+    matrix BoneMatrix = mul(g_BoneMatrices[In.vBlendIndices.x], In.vBlendWeights.x) +
+		mul(g_BoneMatrices[In.vBlendIndices.y], In.vBlendWeights.y) +
+		mul(g_BoneMatrices[In.vBlendIndices.z], In.vBlendWeights.z) +
+		mul(g_BoneMatrices[In.vBlendIndices.w], fWeightW);
+
+    vector vPosition = mul(float4(In.vPosition, 1.f), BoneMatrix);
+    vector vNormal = mul(float4(In.vNormal, 0.f), BoneMatrix);
+
+    Out.vPosition = mul(vPosition, matWVP);
+    Out.vNormal = normalize(mul(vNormal, g_WorldMatrix));
+    Out.vTexcoord = In.vTexcoord;
+    Out.vWorldPos = mul(float4(In.vPosition, 1.f), g_WorldMatrix);
 
 	return Out;
 }
@@ -92,7 +104,7 @@ technique11			DefaultTechnique
 	{
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
-        SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		PixelShader = compile ps_5_0 PS_MAIN();

@@ -43,21 +43,7 @@ CPlayer::CPlayer(const CPlayer& Prototype)
 	m_pBody = Prototype.m_pBody;
 	Safe_AddRef(m_pBody);
 	m_eTeam = TEAM::PLAYER;
-	//for (auto& pEquip : m_pEquipModels)
-	//{
-	//	pEquip = Prototype.m_pEquipModels[(&pEquip - &m_pEquipModels[0])];
-	//	Safe_AddRef(pEquip);
-	//}
-	//for (auto& pDeco : m_pDecoModels)
-	//{
-	//	pDeco = Prototype.m_pDecoModels[(&pDeco - &m_pDecoModels[0])];
-	//	Safe_AddRef(pDeco);
-	//}
-	//for (auto& pCustomize : m_pCustomizes)
-	//{
-	//	pCustomize = Prototype.m_pCustomizes[(&pCustomize - &m_pCustomizes[0])];
-	//	Safe_AddRef(pCustomize);
-	//}
+
 
 	m_fFloorHeight = Prototype.m_fFloorHeight;
 	m_fUpForce = Prototype.m_fUpForce;

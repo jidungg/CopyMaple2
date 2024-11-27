@@ -7,7 +7,7 @@ typedef struct
 	XMFLOAT4		vRotation;
 	XMFLOAT3		vPosition;
 	float			fKeyFramePosition;
-}KEYFRAME;
+}TRANSFORM_KEYFRAME;
 class CNifToBinary
 {
 public:

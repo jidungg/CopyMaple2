@@ -137,12 +137,12 @@ namespace Engine
 	}KEYFRAME;
 	typedef struct TransformKeyframe : public KEYFRAME
 	{
-		_float3		vScale = { 1,1,1 };
+ 		_float3		vScale = { 1,1,1 };
 		_float4		vRotation = { 0,0,0,0 };
 		_float3		vPosition = { 0,0,0 };
 
 	}TRANSFORM_KEYFRAME;
-	typedef struct FloatKeyframe
+	typedef struct FloatKeyframe : public KEYFRAME
 	{
 		_float			fValue = { 0 };
 	}FLOAT_KEYFRAME;

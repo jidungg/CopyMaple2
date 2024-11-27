@@ -1,13 +1,23 @@
 #pragma once
 
-
-typedef struct
+typedef struct Keyframe
 {
-	XMFLOAT3		vScale;
-	XMFLOAT4		vRotation;
-	XMFLOAT3		vPosition;
-	float			fKeyFramePosition;
+	_float			fTrackPosition = { 0 };
 }KEYFRAME;
+typedef struct  TransformKeyframe : public KEYFRAME
+{
+	_float3		vScale;
+	_float4		vRotation;
+	_float3		vPosition;
+}TRANSFORM_KEYFRAME;
+
+//typedef struct TransformKeyframe : public KEYFRAME
+//{
+//	_float3		vScale = { 1,1,1 };
+//	_float4		vRotation = { 0,0,0,0 };
+//	_float3		vPosition = { 0,0,0 };
+//
+//}TRANSFORM_KEYFRAME;
 class CFbxToBinary
 {
 public:

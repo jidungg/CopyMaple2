@@ -34,7 +34,7 @@ HRESULT CEffectObject::Initialize(void* pArg)
 
 void CEffectObject::Update(_float fTimeDelta)
 {
-	m_pModelCom->Update_Animation(fTimeDelta);
+	__super::Update(fTimeDelta);
 }
 
 HRESULT CEffectObject::Render()
@@ -45,6 +45,12 @@ HRESULT CEffectObject::Render()
 	if (FAILED(m_pModelCom->Render(m_pShaderCom)))
 		return E_FAIL;
 	return S_OK;
+}
+
+void CEffectObject::Play_Animation()
+{
+
+	m_pModelCom->Play_Animation();
 }
 
 HRESULT CEffectObject::Ready_Components(void* pArg)

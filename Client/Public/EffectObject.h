@@ -28,7 +28,7 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
-
+	void Play_Animation();
 private:
 	virtual HRESULT Ready_Components(void* pArg);
 	HRESULT Bind_ShaderResources(CShader* pShader);

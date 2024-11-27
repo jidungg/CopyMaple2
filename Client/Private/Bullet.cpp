@@ -61,12 +61,8 @@ void CBullet::Invoke(_float fDamg, _vector vPosition)
 
 void CBullet::Invoke(_float fDamg, CGameObject* pTarget)
 {
-	m_iDamage = fDamg;
 	Set_Target(pTarget);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, static_cast<CCharacter*>(pTarget)->Get_Hitpoint());
-	m_bInvoke = true;
-	m_fTimeAcc = 0.f;
-	Set_Active(true);
+	Invoke(fDamg, static_cast<CCharacter*>(pTarget)->Get_Hitpoint());
 }
 
 

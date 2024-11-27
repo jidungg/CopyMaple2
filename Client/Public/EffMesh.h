@@ -25,12 +25,13 @@ public:
 	HRESULT Ready_IndexBuffer(ifstream& inFile, class CEffModel* pModel, _uint iNumFaces);
 
 	_uint Get_MaterialIndex() const {return m_iMaterialIndex;}
+	_uint Get_TexturingIndex() const { return m_iTexturingIndex; }
 	_char* Get_Name()  {return m_szName;}
 private:
 	_int						m_iMaterialIndex = {-1};
-	vector<_uint>      m_iMaterialControllerIndex;
+	//vector<_uint>      m_iMaterialControllerIndex;
 	_int						m_iTexturingIndex = {-1};
-	vector<_uint>      m_iTextureTransformControllerIndex;
+	//vector<_uint>      m_iTextureTransformControllerIndex;
 
 	_char						m_szName[MAX_PATH] = "";
 	vector<_uint>				m_BoneIndices;

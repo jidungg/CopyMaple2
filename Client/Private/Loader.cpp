@@ -231,9 +231,7 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 
 	matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(Load_Dirctory_EffModels(LEVEL_LOADING,
-		TEXT("../Bin/resources/FBXs/Effect"), matPretransform)))
-		return E_FAIL;
+
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Anim/Player"),CModel::TYPE_ANIM,matPretransform)))
 		return E_FAIL;
@@ -244,7 +242,10 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/MAP/Field/"), matPretransform)))
 		return E_FAIL;
-
+	matPretransform = matPretransform * XMMatrixRotationX(XMConvertToRadians(90));
+	if (FAILED(Load_Dirctory_EffModels(LEVEL_LOADING,
+		TEXT("../Bin/resources/FBXs/Effect"), matPretransform)))
+		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_Sphere::m_szProtoTag,
 		CCollider_Sphere::Create(m_pDevice, m_pContext))))
 		return E_FAIL;

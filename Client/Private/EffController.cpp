@@ -6,6 +6,13 @@ CEffController::CEffController()
 }
 
 CEffController::CEffController(const CEffController& Prototype)
+	: m_eCtrlType(Prototype.m_eCtrlType)
+	, m_fStartPosition(Prototype.m_fStartPosition)
+	, m_fStopPosition(Prototype.m_fStopPosition)
+	, m_fSpeed(Prototype.m_fSpeed)
+	, m_fPhase(Prototype.m_fPhase)
+	, m_fCurrentTrackPos(Prototype.m_fCurrentTrackPos)
+	, m_iTargetIndex(Prototype.m_iTargetIndex)
 {
 }
 
@@ -15,23 +22,19 @@ HRESULT CEffController::Initialize_Prototype(ifstream& inFile, const CEffModel* 
 	inFile.read(reinterpret_cast<char*>(&m_fStopPosition), sizeof(_float));
 	inFile.read(reinterpret_cast<char*>(&m_fSpeed), sizeof(_float));
 	inFile.read(reinterpret_cast<char*>(&m_fPhase), sizeof(_float));
-
+	inFile.read(reinterpret_cast<char*>(&m_iTargetIndex), sizeof(_int));
 
     return S_OK;
 }
 
 _bool CEffController::Update_Controller(_float fTimeDelta)
 {
-	if (m_fCurrentTrackPos > m_fStopPosition)
-	{
-		return true;
-	}
-	if(Is_InTime(m_fCurrentTrackPos))
-	{
-		Update_InTime(m_fCurrentTrackPos);
-	}
-	m_fCurrentTrackPos += fTimeDelta * m_fSpeed + m_fPhase;
-	return false;
+	bool bEnd = false;
+	if(m_fCurrentTrackPos >= m_fStartPosition)
+		bEnd = Update_InTime(m_fCurrentTrackPos + m_fPhase);
+
+	m_fCurrentTrackPos += fTimeDelta * m_fSpeed ;
+	return bEnd;
 }
 
 void CEffController::Reset_CurrentTrackPosition()

@@ -5,7 +5,7 @@ BEGIN(Client)
 class IEffControllable
 {
 public:
-	virtual void Update_Value(KEYFRAME* pFrame) abstract;
+	virtual void Reset() abstract;
 };
 
 END

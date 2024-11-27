@@ -50,7 +50,7 @@ HRESULT CMagicClaw::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	m_pBullet->Set_Active(true);
 	return S_OK;
 }
-
+ 
 void CMagicClaw::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
@@ -71,6 +71,7 @@ void CMagicClaw::AnimEventFunc1()
 	{
 		_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
 		fDmg = m_pUser->Get_Stat().iATK * fDmg*0.01;
+		m_pBullet->Play_Animation();
 		m_pBullet->Invoke(fDmg, pTarget);
 	}
 }

@@ -9,9 +9,32 @@ vector			g_vLightDiffuse = float4(1.f, 1.f, 1.f, 1.f);
 vector			g_vLightAmbient = float4(1.f, 1.f, 1.f, 1.f);
 vector			g_vLightSpecular = float4(1.f, 1.f, 1.f, 1.f);
 
-texture2D		g_DiffuseTexture;
-vector			g_vMtrlAmbient = float4(0.3f, 0.3f, 0.3f, 1.f);
-vector			g_vMtrlSpecular = float4(0.f, 0.f, 0.f, 0.f);
+texture2D g_BaseTexture;
+texture2D g_DarkTexture;
+texture2D g_DetailTexture;
+texture2D g_GlossTexture;
+texture2D g_GlowTexture;
+texture2D g_BumpTexture;
+texture2D g_NormalTexture;
+texture2D g_ParallaxTexture;
+texture2D g_Decal0Texture;
+texture2D g_Decal1Texture;
+texture2D g_Decal2Texture;
+texture2D g_Decal3Texture;
+
+
+float3			g_vMaterialDiffuse = float3(0.3f, 0.3f, 0.3f);
+float3			g_vMaterialAmbient = float3(0.3f, 0.3f, 0.3f);
+float3			g_vMaterialSpecular = float3(0.f, 0.f, 0.f);
+float3			g_vMaterialEmissive = float3(0.f, 0.f, 0.f);
+float				g_fMaterialGlossiness = 0.f;
+float				g_fMaterialAlpha = 1.f;
+
+//texture2D	g_TextureArray[12];
+float2			g_vTexcoordScale[12] ;
+float				g_fTexcoordRotate[12] ;	//Radian
+float2			g_vTexcoordTranslate[12] ;	
+float2			g_vTexcoordCenter[12];	
 
 vector			g_vCamPosition;
 
@@ -56,6 +79,11 @@ VS_OUT VS_MAIN(VS_IN In)
     Out.vPosition = mul(vPosition, matWVP);
     Out.vNormal = normalize(mul(vNormal, g_WorldMatrix));
     Out.vTexcoord = In.vTexcoord;
+    Out.vTexcoord -= g_vTexcoordCenter[0];
+	Out.vTexcoord = Out.vTexcoord * g_vTexcoordScale[0];
+	Out.vTexcoord = float2(Out.vTexcoord.x * cos(g_fTexcoordRotate[0]) - Out.vTexcoord.y * sin(g_fTexcoordRotate[0]), Out.vTexcoord.x * sin(g_fTexcoordRotate[0]) + Out.vTexcoord.y * cos(g_fTexcoordRotate[0]));
+    Out.vTexcoord += g_vTexcoordTranslate[0] + g_vTexcoordCenter[0];
+    Out.vTexcoord = saturate(Out.vTexcoord);
     Out.vWorldPos = mul(float4(In.vPosition, 1.f), g_WorldMatrix);
 
 	return Out;
@@ -78,21 +106,35 @@ struct PS_OUT
 PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT			Out = (PS_OUT)0;
+	
+    float4 vBaseColor = g_BaseTexture.Sample(LinearSampler, In.vTexcoord);
+    float4 vGlowColor = g_GlowTexture.Sample(LinearSampler, In.vTexcoord);
+    float4 vDecal0Color = g_Decal0Texture.Sample(LinearSampler, In.vTexcoord);
+		
+   //float4 vBaseColor = g_TextureArray[0].Sample(LinearSampler, In.vTexcoord);
+   //float4 vGlowColor = g_TextureArray[3].Sample(LinearSampler, In.vTexcoord);
+   //float4 vDecal0Color = g_TextureArray[8].Sample(LinearSampler, In.vTexcoord);
+    float4 vGlow;
 
-	vector			vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vGlow = vGlowColor;
+    //vSpecular = vDecal0Texture;
+    
+    float4 vMtrlDiffuse = vBaseColor * float4(g_vMaterialDiffuse, g_fMaterialAlpha);
     if (vMtrlDiffuse.a < 0.1f)
         discard;
-
-	float4			vShade = saturate(max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
+    float4 vMtrlAmbient = (g_vMaterialAmbient, g_fMaterialAlpha);
+    float4 vMtrlSpecualr = (g_vMaterialSpecular, g_fMaterialAlpha);
+	
+    float4 vShade = saturate(max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f) + (g_vLightAmbient * vMtrlAmbient));
 	
 	float4			vReflect = reflect(normalize(g_vLightDir), normalize(In.vNormal));
 	float4			vLook = In.vWorldPos - g_vCamPosition;
 
 	float			fSpecular = pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f);
+	
 
-
-	Out.vColor = (g_vLightDiffuse * vMtrlDiffuse) * vShade + (g_vLightSpecular * g_vMtrlSpecular) * fSpecular;
-
+    Out.vColor = (g_vLightDiffuse * vMtrlDiffuse) * vShade + (g_vLightSpecular * vMtrlSpecualr) * fSpecular + vGlowColor;
+	
 	return Out;
 }
 

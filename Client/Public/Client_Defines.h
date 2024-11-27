@@ -394,7 +394,23 @@ namespace Client
 		TT_DECAL3,
 		TT_LAST
 	};
-
+	enum EFF_TEX_OPERATION_TYPE
+	{
+		TO_TRANSLATE_U,
+		TO_TRANSLATE_V,
+		TO_ROTATE,
+		TO_SCALE_U,
+		TO_SCALE_V,
+		TO_LAST
+	};
+	enum EFF_CTRL_TYPE
+	{
+		CT_TRANSFORM,
+		CT_ALPHA,
+		CT_MATERIAL_COLOR,
+		CT_TEXTURE_TRANSFORM,
+		CT_LAST
+	};
 }
 
 extern HINSTANCE g_hInst;

@@ -6,6 +6,15 @@ CEffBone::CEffBone()
 {
 }
 
+CEffBone::CEffBone(const CEffBone& Prototype)
+	:m_TransformationMatrix(Prototype.m_TransformationMatrix)
+	, m_DefaultTransformationMatrix(Prototype.m_DefaultTransformationMatrix)
+	, m_iParentBoneIndex(Prototype.m_iParentBoneIndex)
+{
+	strcpy_s(m_szName, Prototype.m_szName);
+	XMStoreFloat4x4(&m_CombindTransformationMatrix, XMMatrixIdentity());
+}
+
 HRESULT CEffBone::Initialize(ifstream& inFile, _int iParentBoneIndex)
 {
 	_uint iNameLength = 0;
@@ -15,13 +24,14 @@ HRESULT CEffBone::Initialize(ifstream& inFile, _int iParentBoneIndex)
 	m_szName[iNameLength] = '\0';
 	cout << " Bone Name : "<< m_szName << endl;
 
-	_uint iNumControls = 0;
-	inFile.read((char*)&iNumControls, sizeof(_uint));
-	m_vecTrasnformControlIndex.resize(iNumControls);
-	inFile.read((char*)m_vecTrasnformControlIndex.data(), sizeof(_uint) * iNumControls);
+	//_uint iNumControls = 0;
+	//inFile.read((char*)&iNumControls, sizeof(_uint));
+	//m_vecTrasnformControlIndex.resize(iNumControls);
+	//inFile.read((char*)m_vecTrasnformControlIndex.data(), sizeof(_uint) * iNumControls);
 
 	inFile.read((char*)&m_bBillboard, 1);
-	inFile.read(reinterpret_cast<char*>(&m_TransformationMatrix), sizeof(_float4x4));
+	inFile.read(reinterpret_cast<char*>(&m_DefaultTransformationMatrix), sizeof(_float4x4));
+	m_TransformationMatrix = m_DefaultTransformationMatrix;
 	if (m_bBillboard)
 	{
 		cout << "Billboard" << endl;
@@ -32,8 +42,7 @@ HRESULT CEffBone::Initialize(ifstream& inFile, _int iParentBoneIndex)
 
 	}
 
-	//XMStoreFloat4x4(&m_TransformationMatrix, XMMatrixTranspose(XMLoadFloat4x4(&m_TransformationMatrix)));
-	//XMStoreFloat4x4(&m_TransformationMatrix, XMMatrixTranspose(XMLoadFloat4x4(&m_TransformationMatrix)));
+	XMStoreFloat4x4(&m_TransformationMatrix, XMMatrixTranspose(XMLoadFloat4x4(&m_TransformationMatrix)));
 	XMStoreFloat4x4(&m_CombindTransformationMatrix, XMMatrixIdentity());
 
 	m_iParentBoneIndex = iParentBoneIndex;
@@ -56,11 +65,7 @@ void CEffBone::Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bone
 	}
 }
 
-void CEffBone::Update_Value(vector<class CEffController*>* pControllerList)
-{
-	TransformKeyframe tKeyFrame = *static_cast<TransformKeyframe*>((*pControllerList)[m_vecTrasnformControlIndex[0]]->Get_CurrentFrame());
-	XMStoreFloat4x4(&m_TransformationMatrix, XMMatrixAffineTransformation(XMLoadFloat3(&tKeyFrame.vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMLoadFloat4(&tKeyFrame.vRotation), XMVectorSetW(XMLoadFloat3(&tKeyFrame.vPosition), 1.f)));
-}
+
 
 CEffBone* CEffBone::Create(ifstream& inFile, _int iParentBoneIndex)
 {
@@ -82,4 +87,9 @@ CEffBone* CEffBone::Clone()
 void CEffBone::Free()
 {
 	__super::Free();
+}
+
+void CEffBone::Reset()
+{
+	m_TransformationMatrix = m_DefaultTransformationMatrix;
 }

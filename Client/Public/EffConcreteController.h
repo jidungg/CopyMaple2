@@ -1,6 +1,14 @@
 #pragma once
 #include "EffController.h"
+BEGIN(Engine)
+class CGameInstance;
+END
 BEGIN(Client)
+class CEffBone;
+class CEffTexture;
+class CEffMesh;
+class CEffTexturingProperty;
+class CEffMaterialProperty;
 
 typedef struct MaterialColorKeyframe : public KEYFRAME
 {
@@ -19,13 +27,15 @@ protected:
 
 public:
 	virtual HRESULT Initialize_Prototype(ifstream& inFile, const class CEffModel* pModel) override;
-	virtual _bool Update_Controller(_float fCurrentTrackPos) override;
-
+	virtual _bool Update_InTime(_float fTrackPos) override;
+	void Set_Target(vector<CEffMaterialProperty*>& vecMaterial);
 private:
 	vector<FLOAT_KEYFRAME> m_vecKeyFrame;
+	//CEffMaterialProperty* m_pTarget = { nullptr };
 public:
 	static CEffAlphaController* Create(ifstream& inFile, const class CEffModel* pModel);
 	virtual CEffAlphaController* Clone();
+
 };
 class CEffTextureTransfromController :
 	public CEffController
@@ -36,12 +46,13 @@ protected:
 
 public:
 	virtual HRESULT Initialize_Prototype(ifstream& inFile, const class CEffModel* pModel) override;
-	virtual _bool Update_Controller(_float fCurrentTrackPos) override;
-
+	virtual _bool Update_InTime(_float fTrackPos) override;
+	void Set_Target(vector<CEffTexturingProperty*>& vecTexturing);
 private:
 	EFF_TEX_TYPE m_eTexSlot = EFF_TEX_TYPE::TT_LAST;
 	EFF_TEX_OPERATION_TYPE m_eTexOperation = EFF_TEX_OPERATION_TYPE::TO_LAST;
 	vector< FLOAT_KEYFRAME> m_vecKeyFrame;
+	//CEffTexturingProperty* m_pTarget = { nullptr };
 public:
 	static CEffTextureTransfromController* Create(ifstream& inFile, const class CEffModel* pModel);
 	virtual CEffTextureTransfromController* Clone();
@@ -55,10 +66,13 @@ protected:
 
 public:
 	virtual HRESULT Initialize_Prototype(ifstream& inFile, const class CEffModel* pModel) override;
-	virtual _bool Update_Controller(_float fCurrentTrackPos)  override;
+	virtual _bool Update_InTime(_float fTrackPos) override;
 
+	void Set_Target(vector<CEffBone*>& vecBone);
 private:
 	vector<TRANSFORM_KEYFRAME> m_vecKeyFrame;
+	//CEffBone* m_pTarget = { nullptr };
+	CGameInstance* m_pGameInstance = { nullptr };
 public:
 	static CEffTransformController* Create(ifstream& inFile, const class CEffModel* pModel);
 	virtual CEffTransformController* Clone();
@@ -72,12 +86,15 @@ protected:
 
 public:
 	virtual HRESULT Initialize_Prototype(ifstream& inFile, const class CEffModel* pModel) override;
-	virtual _bool Update_Controller(_float fCurrentTrackPos) override;
 
+	virtual _bool Update_InTime(_float fTrackPos) override;
+	void Set_Target(vector<CEffMaterialProperty*>& vecMaterial);
 private:
 	vector< MATCOLOR_KEYFRAME> m_vecKeyFrame;
+	//CEffMaterialProperty* m_pTarget = { nullptr };
 public:
 	static CEffMaterialColorController* Create(ifstream& inFile, const class CEffModel* pModel);
 	virtual CEffMaterialColorController* Clone();
+
 };
 END

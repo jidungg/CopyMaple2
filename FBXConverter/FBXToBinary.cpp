@@ -236,12 +236,12 @@ HRESULT CFbxToBinary::Write_Animation(const aiAnimation* pAIAnim, ofstream& outF
 		_float4			vRotation;
 		for (size_t i = 0; i < m_iNumKeyFrames; i++)
 		{
-			KEYFRAME		KeyFrame = {};
+			TRANSFORM_KEYFRAME		KeyFrame = {};
 
 			if (i < pAIChannel->mNumScalingKeys)
 			{
 				memcpy(&vScale, &pAIChannel->mScalingKeys[i].mValue, sizeof(_float3));
-				KeyFrame.fKeyFramePosition = pAIChannel->mScalingKeys[i].mTime;
+				KeyFrame.fTrackPosition = pAIChannel->mScalingKeys[i].mTime;
 			}
 			if (i < pAIChannel->mNumRotationKeys)
 			{
@@ -249,19 +249,19 @@ HRESULT CFbxToBinary::Write_Animation(const aiAnimation* pAIAnim, ofstream& outF
 				vRotation.y = pAIChannel->mRotationKeys[i].mValue.y;
 				vRotation.z = pAIChannel->mRotationKeys[i].mValue.z;
 				vRotation.w = pAIChannel->mRotationKeys[i].mValue.w;
-				KeyFrame.fKeyFramePosition = (_float)pAIChannel->mRotationKeys[i].mTime;
+				KeyFrame.fTrackPosition = (_float)pAIChannel->mRotationKeys[i].mTime;
 			}
 			if (i < pAIChannel->mNumPositionKeys)
 			{
 				memcpy(&vPosition, &pAIChannel->mPositionKeys[i].mValue, sizeof(_float3));
-				KeyFrame.fKeyFramePosition =(_float) pAIChannel->mPositionKeys[i].mTime;
+				KeyFrame.fTrackPosition =(_float) pAIChannel->mPositionKeys[i].mTime;
 			}
 
 			KeyFrame.vScale = vScale;
 			KeyFrame.vRotation = vRotation;
 			KeyFrame.vPosition = vPosition;
 
-			outFile.write(reinterpret_cast<const char*>(&KeyFrame), sizeof(KEYFRAME));
+			outFile.write(reinterpret_cast<const char*>(&KeyFrame), sizeof(TRANSFORM_KEYFRAME));
 
 		}
 

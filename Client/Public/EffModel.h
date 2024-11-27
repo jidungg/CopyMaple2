@@ -13,7 +13,7 @@ enum  NODE_TYPE
     NT_LAST
 };
 
-class CEffModel  : public CComponent
+class CEffModel  : public CComponent 
 {
 
 protected:
@@ -28,12 +28,11 @@ public:
     virtual HRESULT Render(CShader* pShader);
 
 public:
-    HRESULT Bind_Texture( CShader* pShader, const _char* pConstantName, _uint iMeshIndex, EFF_TEX_TYPE eType, _uint iTextureIndex = 0);
-    HRESULT Bind_BoneMatrices( CShader* pShader, const _char* pConstantName, _uint iMeshIndex);
-    _bool Update_Animation(_float fTimeDelta);
 	void Play_Animation();
+    void Reset();
 
-
+private:
+   
 public:
     _uint Get_NumMeshes() const { return m_iNumMeshes; }
     _uint Get_BoneIndex(const _char* pBoneName) const;

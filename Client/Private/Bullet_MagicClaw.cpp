@@ -34,36 +34,36 @@ HRESULT CBullet_MagicClaw::Initialize(void* pArg)
 
 void CBullet_MagicClaw::Update(_float fTimeDelta)
 {
-	if (false == m_bInvoke) return;
+	//if (false == m_bInvoke) return;
 	__super::Update(fTimeDelta);
-	if (m_fTimeAcc >= m_fAttackTime[m_iAttackCount])
-	{
-		m_iAttackCount++;
-		//데미지 주기
-		cout << "AttackCount : " << m_iAttackCount << endl;
-		CGameObject* pTarget = Get_Target();
-		if (nullptr != pTarget && pTarget->Is_Valid())
-		{
-			static_cast<CCharacter*>(pTarget)->Hit(m_pShooter,m_iDamage);
-		}
-	}
-	else
-	{
-		CCharacter* pTarget = static_cast<CCharacter*>( Get_Target());
-		if (nullptr  != pTarget&& pTarget->Is_Valid())
-		{
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, pTarget->Get_Hitpoint());
-			m_pCollider->Update(m_pTransformCom->Get_WorldMatrix());
-		}
+	//if (m_fTimeAcc >= m_fAttackTime[m_iAttackCount])
+	//{
+	//	m_iAttackCount++;
+	//	//데미지 주기
+	//	cout << "AttackCount : " << m_iAttackCount << endl;
+	//	CGameObject* pTarget = Get_Target();
+	//	if (nullptr != pTarget && pTarget->Is_Valid())
+	//	{
+	//		//static_cast<CCharacter*>(pTarget)->Hit(m_pShooter,m_iDamage);
+	//	}
+	//}
+	//else
+	//{
+	//	CCharacter* pTarget = static_cast<CCharacter*>( Get_Target());
+	//	if (nullptr  != pTarget&& pTarget->Is_Valid())
+	//	{
+	//		m_pTransformCom->Set_State(CTransform::STATE_POSITION, pTarget->Get_Hitpoint());
+	//		m_pCollider->Update(m_pTransformCom->Get_WorldMatrix());
+	//	}
 
-	}
-	if (m_iAttackCount >= m_fAttackTime.size())
-	{
-		m_bInvoke = false;
-		m_iAttackCount = 0;
-		//Set_Active(false);
-	}
-	m_fTimeAcc += fTimeDelta;
+	//}
+	//if (m_iAttackCount >= m_fAttackTime.size())
+	//{
+	//	//m_bInvoke = false;
+	//	m_iAttackCount = 0;
+	//	//Set_Active(false);
+	//}
+	//m_fTimeAcc += fTimeDelta;
 }
 
 void CBullet_MagicClaw::Late_Update(_float fTimeDelta)

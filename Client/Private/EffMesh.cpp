@@ -14,20 +14,19 @@ HRESULT CEffMesh::Initialize_Prototype(CEffModel* pModel, ifstream& inFile, _fma
 	_uint iNumController = 0;
 
 	inFile.read(reinterpret_cast<char*>(&m_iMaterialIndex), sizeof(_int));
-	inFile.read(reinterpret_cast<char*>(&iNumController), sizeof(_uint));
-	m_iMaterialControllerIndex.resize(iNumController);
-	inFile.read(reinterpret_cast<char*>(m_iMaterialControllerIndex.data()), sizeof(_int) * iNumController);
-	
+	//inFile.read(reinterpret_cast<char*>(&iNumController), sizeof(_uint));
+	//m_iMaterialControllerIndex.resize(iNumController);
+	//inFile.read(reinterpret_cast<char*>(m_iMaterialControllerIndex.data()), sizeof(_int) * iNumController);
+
 	inFile.read(reinterpret_cast<char*>(&m_iTexturingIndex), sizeof(_int));
-	inFile.read(reinterpret_cast<char*>(&iNumController), sizeof(_uint));
-	m_iTextureTransformControllerIndex.resize(iNumController);
-	inFile.read(reinterpret_cast<char*>(m_iTextureTransformControllerIndex.data()), sizeof(_int) * iNumController);
+	//inFile.read(reinterpret_cast<char*>(&iNumController), sizeof(_uint));
+	//m_iTextureTransformControllerIndex.resize(iNumController);
+	//inFile.read(reinterpret_cast<char*>(m_iTextureTransformControllerIndex.data()), sizeof(_int) * iNumController);
 
 	_uint iNameLength = 0;
 	inFile.read(reinterpret_cast<char*>(&iNameLength), sizeof(_uint));
 	inFile.read(m_szName, iNameLength);
 	m_szName[iNameLength] = '\0';
-
 
 	m_iNumVertexBuffers = 1;
 	inFile.read(reinterpret_cast<char*>(&m_iNumVertices), sizeof(_uint));
@@ -58,10 +57,7 @@ HRESULT CEffMesh::Bind_BoneMatrices(CShader* pShader, const _char* pConstantName
 
 	for (auto& iBoneIndex : m_BoneIndices)
 	{
-		auto a = XMLoadFloat4x4(&m_BoneOffsetMatrices[iNumBones]);
-		auto b = Bones[iBoneIndex]->Get_CombinedTransformationMatrix();
-		auto s = a * b;
-		XMStoreFloat4x4(&m_BoneMatrices[iNumBones], s);
+		XMStoreFloat4x4(&m_BoneMatrices[iNumBones], XMLoadFloat4x4(&m_BoneOffsetMatrices[iNumBones]) * Bones[iBoneIndex]->Get_CombinedTransformationMatrix());
 		++iNumBones;
 	}
 
@@ -110,13 +106,15 @@ HRESULT CEffMesh::Ready_VertexBuffer(ifstream& inFile, CEffModel* pModel)
 
 	for (_uint curMeshBoneIdx = 0; curMeshBoneIdx < iNumBones; curMeshBoneIdx++)
 	{
-		_uint iNameLength = 0;
-		inFile.read(reinterpret_cast<char*>(&iNameLength), sizeof(_uint));
-		char szName[MAX_PATH] = "";
-		inFile.read(szName, iNameLength);
-		szName[iNameLength] = '\0';
+		//_uint iNameLength = 0;
+		//inFile.read(reinterpret_cast<char*>(&iNameLength), sizeof(_uint));
+		//char szName[MAX_PATH] = "";
+		//inFile.read(szName, iNameLength);
+		//szName[iNameLength] = '\0';
 		//cout << szName << endl;
-		m_BoneIndices.push_back(pModel->Get_BoneIndex(szName));
+		_uint iBoneIndex = 0;
+		inFile.read(reinterpret_cast<char*>(&iBoneIndex), sizeof(_uint));
+		m_BoneIndices.push_back(iBoneIndex);
 
 		_float4x4	OffsetMatrix = {};
 		inFile.read(reinterpret_cast<char*>(&OffsetMatrix), sizeof(_float4x4));

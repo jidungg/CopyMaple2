@@ -8,7 +8,7 @@ CBone::CBone()
 
 
 HRESULT CBone::Initialize(ifstream& inFile, _int iParentBoneIndex)
-{
+ {
 	_uint iNameLength = 0;
 	inFile.read((char*)&iNameLength, sizeof(_uint));
 	//cout << iNameLength << endl;

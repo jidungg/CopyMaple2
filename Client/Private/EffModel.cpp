@@ -40,7 +40,7 @@ CEffModel::CEffModel(const CEffModel& Prototype)
 HRESULT CEffModel::Initialize_Prototype(const _char* pModelFilePath, _fmatrix PreTransformMatrix)
 {
     XMStoreFloat4x4(&m_PreTransformMatrix, PreTransformMatrix);
-
+    //XMStoreFloat4x4(&m_PreTransformMatrix, XMMatrixScaling(1 , 1 , 1 ) * XMLoadFloat4x4(&m_PreTransformMatrix));
     std::ifstream inFile(pModelFilePath, std::ios::binary);
     if (!inFile) {
         string str = "파일을 열 수 없습니다.";
@@ -72,6 +72,29 @@ HRESULT CEffModel::Initialize_Prototype(const _char* pModelFilePath, _fmatrix Pr
 
 HRESULT CEffModel::Initialize(void* pArg)
 {
+    for (auto& pController : m_vecControl)
+    {
+        EFF_CTRL_TYPE eType = pController->Get_CtrlType();
+        switch (eType)
+        {
+        case Client::CT_TRANSFORM:
+            static_cast<CEffTransformController*>(pController)->Set_Target(m_vecBone);
+            break;
+        case Client::CT_ALPHA:
+            static_cast<CEffAlphaController*>(pController)->Set_Target(m_vecMaterial);
+            break;
+        case Client::CT_MATERIAL_COLOR:
+            static_cast<CEffMaterialColorController*>(pController)->Set_Target(m_vecMaterial);
+            break;
+        case Client::CT_TEXTURE_TRANSFORM:
+            static_cast<CEffTextureTransfromController*>(pController)->Set_Target(m_vecTexturing);
+            break;
+        case Client::CT_LAST:
+            break;
+        default:
+            break;
+        }
+    }
     return S_OK;
 }
 
@@ -79,8 +102,34 @@ void CEffModel::Update(_float fTimeDelta)
 {
     if (m_bPlay)
     {
-        //애니메이션이 끝나면 종료
-		m_bPlay = !Update_Animation(fTimeDelta);
+        _bool bAnimEnd = true;
+        //모든 컨트롤러가 끝나야 true. -> 하나라도 false면 안됨
+        //현재 프레임 계산
+        _uint iCOntrolIndex = 0;
+        for (auto& pController : m_vecControl)
+        {
+            bAnimEnd =   pController->Update_Controller(fTimeDelta) && bAnimEnd;
+            iCOntrolIndex++;
+        }
+      
+
+        if (bAnimEnd)
+        {
+            if (m_bLoop)
+                Reset();
+			else
+            {
+                m_bPlay = false;
+				Set_Active(false);
+            }
+        }
+
+        //뼈들의 합성변환행렬을 갱신
+        for (auto& pBone : m_vecBone)
+        {
+            pBone->Update_CombinedTransformationMatrix(m_vecBone, XMLoadFloat4x4(&m_PreTransformMatrix));
+        }
+
     }
 }
 
@@ -89,57 +138,48 @@ HRESULT CEffModel::Render(CShader* pShader)
 {
     for (_uint i = 0; i < m_iNumMeshes; i++)
     {
-        if (FAILED(Bind_Texture(pShader, "g_DiffuseTexture", i, EFF_TEX_TYPE::TT_BASE, 0)))
+        _uint iMaterialIdx = m_vecMesh[i]->Get_MaterialIndex();
+        if(iMaterialIdx != -1)
+            if (FAILED(m_vecMaterial[iMaterialIdx]->Bind_Material(pShader)))
+                return E_FAIL;
+        _uint iTexturingIdx = m_vecMesh[i]->Get_TexturingIndex();
+        if(iTexturingIdx != -1)
+            if (FAILED(m_vecTexturing[iTexturingIdx]->Bind_Texture(pShader)))
+                return E_FAIL;
+        if (FAILED(m_vecMesh[i]->Bind_BoneMatrices(pShader, "g_BoneMatrices", m_vecBone)))
             return E_FAIL;
 
-        if (FAILED(Bind_BoneMatrices(pShader, "g_BoneMatrices", i)))
+        if (FAILED(pShader->Begin(0)))
             return E_FAIL;
-
-        pShader->Begin(0);
-        m_vecMesh[i]->Bind_BufferDesc();
-        m_vecMesh[i]->Render();
+        if (FAILED(m_vecMesh[i]->Bind_BufferDesc()))
+            return E_FAIL;
+        if (FAILED((m_vecMesh[i]->Render())))
+            return E_FAIL;
     }
+
     return S_OK;
 }
 
-HRESULT CEffModel::Bind_Texture(CShader* pShader, const _char* pConstantName, _uint iMeshIndex, EFF_TEX_TYPE eType, _uint iTextureIndex)
-{
-    return m_vecTexturing[m_vecMesh[iMeshIndex]->Get_MaterialIndex()]->Bind_Texture(pShader, pConstantName, eType, iTextureIndex);
-}
 
-HRESULT CEffModel::Bind_BoneMatrices(CShader* pShader, const _char* pConstantName, _uint iMeshIndex)
-{
-    return m_vecMesh[iMeshIndex]->Bind_BoneMatrices(pShader, pConstantName, m_vecBone);
-}
-
-_bool CEffModel::Update_Animation(_float fTimeDelta)
-{
-    _bool bAnimEnd = true;
-    //모든 컨트롤러가 끝나야 true. -> 하나라도 false면 안됨
-	//현재 프레임 계산
-    for (auto& pController : m_vecControl)
-        bAnimEnd = bAnimEnd && pController->Update_Controller(&m_vecMaterial,fTimeDelta);
-
-    if(bAnimEnd && m_bLoop)
-        for (auto& pController : m_vecControl)
-            pController->Reset_CurrentTrackPosition();
-
-    //뼈들의 합성변환행렬을 갱신
-    for (auto& pBone : m_vecBone)
-    {
-        pBone->Update_CombinedTransformationMatrix(m_vecBone, XMLoadFloat4x4(&m_PreTransformMatrix));
-    }
-
-
-
-    return bAnimEnd;
-}
 
 void CEffModel::Play_Animation()
 {
 	m_bPlay = true;
+    Set_Active(true);
+    Reset();
+}
+
+void CEffModel::Reset()
+{
+    for (auto& pBone : m_vecBone)
+        pBone->Reset();
+    for (auto& pMaterial : m_vecMaterial)
+		pMaterial->Reset();
+	for (auto& pTexturing : m_vecTexturing)
+		pTexturing->Reset();
     for (auto& pController : m_vecControl)
         pController->Reset_CurrentTrackPosition();
+
 }
 
 _uint CEffModel::Get_BoneIndex(const _char* pBoneName) const
@@ -242,7 +282,7 @@ HRESULT CEffModel::Ready_Controls(ifstream& inFile)
     m_vecControl.resize(iNumControls);
     for (_uint i = 0; i < iNumControls; i++)
     {
-		CTRL_TYPE eCtrlType;
+		EFF_CTRL_TYPE eCtrlType;
 		inFile.read(reinterpret_cast<char*>(&eCtrlType), sizeof(_uint));
         CEffController* pMaterial = nullptr;
         switch (eCtrlType)

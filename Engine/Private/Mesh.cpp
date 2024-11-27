@@ -87,10 +87,7 @@ HRESULT CMesh::Bind_BoneMatrices(CShader* pShader, const _char* pConstantName, c
 
 	for (auto& iBoneIndex : m_BoneIndices)
 	{
-		auto a = XMLoadFloat4x4(&m_BoneOffsetMatrices[iNumBones]);
-		auto b = Bones[iBoneIndex]->Get_CombinedTransformationMatrix();
-		auto s =  a * b;
-		XMStoreFloat4x4(&m_BoneMatrices[iNumBones], s);
+		XMStoreFloat4x4(&m_BoneMatrices[iNumBones], XMLoadFloat4x4(&m_BoneOffsetMatrices[iNumBones]) * Bones[iBoneIndex]->Get_CombinedTransformationMatrix());
 		++iNumBones;
 
 	}

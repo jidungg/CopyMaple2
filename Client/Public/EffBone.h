@@ -1,6 +1,10 @@
 #pragma once
 #include "Base.h"
 #include "EffControllable.h"
+
+BEGIN(Engine)
+class CGameInstance;
+END
 BEGIN(Client)
 class CEffBone :
 	public CBase, public IEffControllable
@@ -40,6 +44,8 @@ protected:
 	//vector<_uint>		m_vecTrasnformControlIndex;
 
 	_bool m_bBillboard = { false };
+
+	CGameInstance* m_pGameInstance = { nullptr };
 public:
 	static CEffBone* Create(ifstream& inFile, _int iParentBoneIndex);
 	virtual CEffBone* Clone();

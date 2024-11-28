@@ -31,11 +31,11 @@ CEffTexturingProperty::CEffTexturingProperty(const CEffTexturingProperty& rhs)
 {
 	for (auto& pTexture : m_vecTexture)
 		Safe_AddRef(pTexture);
-	for (_uint i = 0; i < TT_LAST; ++i)
-	{
-		m_pSRV[i] = rhs.m_pSRV[i];
-		Safe_AddRef(m_pSRV[i]);
-	}
+	//for (_uint i = 0; i < TT_LAST; ++i)
+	//{
+	//	m_pSRV[i] = rhs.m_pSRV[i];
+	//	Safe_AddRef(m_pSRV[i]);
+	//}
 }
 
 HRESULT CEffTexturingProperty::Initialize_Prototype(const _char* szDirPath, ifstream& inFile)
@@ -51,13 +51,13 @@ HRESULT CEffTexturingProperty::Initialize_Prototype(const _char* szDirPath, ifst
 		CEffTexture* pTexture = CEffTexture::Create(m_pDevice, m_pContext, szDirPath, inFile, eTexType);
 		m_vecTexture[eTexType] = pTexture;
 	}
-	for (_uint i = 0; i < TT_LAST; ++i)
-	{
-		if (m_vecTexture[i] == nullptr)
-			m_pSRV[i] =  CreateEmptySRV();
-		else
-			m_pSRV[i] = m_vecTexture[i]->Get_SRV();
-	}
+	//for (_uint i = 0; i < TT_LAST; ++i)
+	//{
+	//	if (m_vecTexture[i] == nullptr)
+	//		m_pSRV[i] =  CreateEmptySRV();
+	//	else
+	//		m_pSRV[i] = m_vecTexture[i]->Get_SRV();
+	//}
 	return S_OK;
 }
 

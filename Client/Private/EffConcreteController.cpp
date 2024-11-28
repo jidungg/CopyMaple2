@@ -221,6 +221,8 @@ _bool CEffTransformController::Update_InTime(_float fTrackPos)
 	//GetCurrentKeyFrame : fTrackPos를 넘지 않는 가장 가까운 KeyFrame
 	_uint iCurrentKeyFrameIndex = 0;
 	_uint iNumFrame = m_vecKeyFrame.size();
+	if (iNumFrame == 0)
+		return true;
 	if (iNumFrame == 1)
 	{
 		TRANSFORM_KEYFRAME tKeyFrame = m_vecKeyFrame[0];

@@ -45,7 +45,7 @@ HRESULT CMagicClaw::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	CBullet::BULLET_DESC tBulletDesc;
 	tBulletDesc.eModelProtoLevelID = LEVEL_LOADING;
 	tBulletDesc.pShooter = m_pUser;
-	strcpy_s(tBulletDesc.strModelProtoName, "eff_wizard_magicclaw_remain_01_a.effmodel");
+	strcpy_s(tBulletDesc.strModelProtoName, "eff_wizard_firetornado_ball_01_a.effmodel");
 	m_pBullet = static_cast<CBullet_MagicClaw*>( m_pGameInstance->Clone_Proto_Object_Stock(CBullet_MagicClaw::m_szProtoTag, &tBulletDesc));
 	m_pBullet->Set_Active(true);
 	return S_OK;

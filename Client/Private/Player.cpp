@@ -357,6 +357,10 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_RUN, ANIM_STATE::AS_WALK);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WALK, CONDITION_TYPE::EQUAL, true);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_STAFF_RUN, ANIM_STATE::AS_RUN);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BATTLE, CONDITION_TYPE::EQUAL, false);
+	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_STAFF_RUN, ANIM_STATE::AS_RUN);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, false);
 
 	//CLIMB _SUB
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_CLIMB, ANIM_STATE::AS_CLIMB_IDLE);
@@ -548,6 +552,7 @@ HRESULT CPlayer::Ready_Skill(const json& jSkillData)
 	for (auto& eSkillID : vecSkillID)
 	{
 		m_mapSkill[eSkillID] = CSkill::Create(pSkillManager->Get_SkillData(eSkillID), this);
+
 		m_mapSkill[eSkillID]->Register_AnimEvent(m_pBody);
 	}
 
@@ -690,7 +695,7 @@ _bool CPlayer::Check_Collision(CGameObject* pOther)
 	}
 	case Client::LAYER_INTERACTION:
 	{
-		CInteractableObject* pInteractable = static_cast<CInteractableObject*>(pOther);
+		CInteractableObject* pInteractable = (CInteractableObject*)(pOther);
 		if (pInteractable->Check_Collision(this))
 		{
 			if (pInteractable->Is_InteractionPossible(this))

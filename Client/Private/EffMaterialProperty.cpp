@@ -7,6 +7,13 @@ CEffMaterialProperty::CEffMaterialProperty(ID3D11Device* pDevice, ID3D11DeviceCo
 {
 }
 
+CEffMaterialProperty::CEffMaterialProperty(const CEffMaterialProperty& other)
+	:CComponent(other)
+	, m_tMaterialData(other.m_tMaterialData)
+	, m_tDefaultMaterialData(other.m_tDefaultMaterialData)
+{
+}
+
 HRESULT CEffMaterialProperty::Initialize_Prototype( ifstream& inFile)
 {
 	inFile.read(reinterpret_cast<char*>(&m_tDefaultMaterialData.vAmbient), sizeof(_float3));

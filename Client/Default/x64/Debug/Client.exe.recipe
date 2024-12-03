@@ -21,12 +21,6 @@
     <ContentFile>
       <FullPath>D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Shader_VtxMesh.cso</FullPath>
     </ContentFile>
-    <ContentFile>
-      <FullPath>D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Shader_VtxNorTex.cso</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Shader_VtxPosTex.cso</FullPath>
-    </ContentFile>
   </ContentFiles>
   <SatelliteDlls />
   <NonRecipeFileRefs />

@@ -176,14 +176,19 @@ _float CCharacter::Get_AnimationProgress(_uint iAnimIdx)
 	return m_pBody->Get_AnimationProgress(iAnimIdx);
 }
 
+const _float4x4* CCharacter::Get_BoneMatrix(const _char* szBoneName)
+{
+	return m_pBody->Get_BoneMatrix(szBoneName);
+}
+
 void CCharacter::Move_Forward(_float fDist)
 {
 	m_vMoveDirectionXZ = XMVector3Normalize( m_pTransformCom->Get_State(CTransform::STATE_LOOK))* fDist;
 }
-void CCharacter::Hit(CGameObject* pFoe,_int fDamage)
+void CCharacter::Hit(CGameObject* pFoe,_int iDamage)
 {
-	m_tStat.iHP -= fDamage;
-	cout << "Hit : " << fDamage <<", Remain HP : "<< m_tStat.iHP << endl;
+	m_tStat.iHP -= iDamage;
+	cout << "Hit : " << iDamage <<", Remain HP : "<< m_tStat.iHP << endl;
 	Set_Target(pFoe);
 	if (m_tStat.iHP <= 0)
 	{

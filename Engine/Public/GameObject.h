@@ -33,6 +33,7 @@ public:
 	//*Release는 스스로 할 것.
 	virtual void Remove_Child(CGameObject* pChild);
 	class CComponent* Find_Component(const _wstring& strComponentTag);
+	virtual void Hit(CGameObject* pFoe, _int fDamage) {}
 
 	void Set_Active(bool bValue) { m_bActive = bValue; }
 	void Toggle_Active() { m_bActive = !m_bActive; }
@@ -41,6 +42,8 @@ public:
 	void Set_Target(CGameObject* pTaraget) { m_pTarget = pTaraget; }
 	void Set_DontDestroy(bool bValue) { m_bDontDestroy = bValue; }
 	void Set_LayerID(_uint iLayerID) { m_iLayerID = iLayerID; }
+	void Set_Transform(_vector vPos = { 0,0,0,1 }, _vector vRotation = { 0,0,0,0 }, _float fScale = 1);
+	void Set_Transform(CTransform* pTransform);
 
 	class CTransform* Get_Transform() { return m_pTransformCom; }
 	CGameObject* Get_Target() { return m_pTarget; }

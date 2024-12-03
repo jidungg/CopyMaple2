@@ -21,6 +21,7 @@ class CEffMaterialProperty :
 {
 protected:
 	CEffMaterialProperty(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CEffMaterialProperty(const CEffMaterialProperty& other);
 	virtual ~CEffMaterialProperty() = default;
 
 public:

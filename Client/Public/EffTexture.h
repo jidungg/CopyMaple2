@@ -21,6 +21,7 @@ protected:
     virtual ~CEffTexture() = default;
 
 public:
+	virtual HRESULT Initialize_Prototype(const _tchar* pTextureFilePath, EFF_TEX_TYPE iNumTexture);
 	HRESULT Initialize_Prototype(const _char* szDirPath, ifstream& inFIle);
 	void Reset();
 	const TextureTransformData& Get_TexTransformData() { return m_tTexTransformData; }
@@ -32,6 +33,7 @@ private:
 	TEX_TRANSFORM_DATA m_tDefaultTexTransformData;
 
 public:
+	static CEffTexture* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pTextureFilePath, EFF_TEX_TYPE eTexType);
 	static CEffTexture* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath, ifstream& inFIle, EFF_TEX_TYPE eTexType);
 	virtual CComponent* Clone(void* pArg);
 	virtual void Free() override;

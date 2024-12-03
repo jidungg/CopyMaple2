@@ -21,6 +21,8 @@ HRESULT CCollider_Sphere::Initialize_Prototype()
 
 HRESULT CCollider_Sphere::Initialize(void* pArg)
 {
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
 	const SPHERE_COLLIDER_DESC* pDesc = static_cast<const SPHERE_COLLIDER_DESC*>(pArg);
 
 	m_pOriginalBoundDesc = new BoundingSphere(pDesc->vCenter, pDesc->fRadius);

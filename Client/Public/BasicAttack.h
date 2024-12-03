@@ -10,12 +10,15 @@ private:
 	virtual ~CBasicAttack() = default;
 
 public:
-	void AnimEventFunc1();
-protected:
-    virtual void Initialzie_AnimEvent() override;
 
+protected:
+
+	virtual void On_Cast() override;
+	virtual void On_CastingEnd() override;
+	virtual void Fire() override;
 public:
 	static CBasicAttack* Create(SKILL_DATA* pSkillData, CCharacter* pUser);
+
 
 };
 

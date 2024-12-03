@@ -109,11 +109,15 @@ public:
 public:
 	HRESULT Ready_Components(CHARACTER_DESC* pDesc);
 	virtual HRESULT Ready_AnimStateMachine() override;
+	virtual void On_AnimEnd(_uint iAnimIdx) override;
 
+protected:
+		virtual void To_NextSkill();
 private:
 
 	vector<const XMFLOAT4X4*> m_vecPartsMatrix;
-
+	_uint m_iGatheringCount = { 0 };
+	_uint m_iMaxGatheringCount = { 5 };
 
 public:
 	static CBayar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

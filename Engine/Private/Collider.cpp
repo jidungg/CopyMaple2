@@ -45,6 +45,8 @@ HRESULT CColliderBase::Initialize_Prototype()
 
 HRESULT CColliderBase::Initialize(void* pArg)
 {
+	CColliderBase::COLLIDER_DESC* pDesc = static_cast<CColliderBase::COLLIDER_DESC*>(pArg);
+	m_vCenterOffset = pDesc->vCenter;
 
 	return S_OK;
 }

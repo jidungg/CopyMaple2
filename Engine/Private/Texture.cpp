@@ -84,21 +84,29 @@ HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle)
 		strcat_s(szFullPath, szFileName);
 		strcat_s(szFullPath, szExt);
 
-		_tchar		szPerfectPath[MAX_PATH] = TEXT("");
-		MultiByteToWideChar(CP_ACP, 0, szFullPath, (int)strlen(szFullPath), szPerfectPath, MAX_PATH);
+		_tchar		szWideFullPath[MAX_PATH] = TEXT("");
+		MultiByteToWideChar(CP_ACP, 0, szFullPath, (int)strlen(szFullPath), szWideFullPath, MAX_PATH);
 		
 		ID3D11ShaderResourceView* pSRV = { nullptr };
 		HRESULT		hr = {};
 		if (false == strcmp(szExt, ".dds"))
-			hr = CreateDDSTextureFromFile(m_pDevice, szPerfectPath, nullptr, &pSRV);
+			hr = CreateDDSTextureFromFile(m_pDevice, szWideFullPath, nullptr, &pSRV);
 		else if (false == strcmp(szExt, ".tga"))
 			return E_FAIL;
 		else
-			hr = CreateWICTextureFromFile(m_pDevice, szPerfectPath, nullptr, &pSRV);
-		if (FAILED(hr))
+			hr = CreateWICTextureFromFile(m_pDevice, szWideFullPath, nullptr, &pSRV);
+#ifdef _DEBUG
+	/*	if (FAILED(hr))
 		{
+			string strFileName = szFileName;
+			strFileName += szExt;
+			hr = Search_Copy("D:/Workbench/Portfolio/3DResources/MapleStroty2/RawData/Resource/", strFileName, szDirPath);
+			if(SUCCEEDED(hr))
+				hr = CreateDDSTextureFromFile(m_pDevice, szWideFullPath, nullptr, &pSRV);
+		}*/
+#endif
+		if(FAILED(hr))
 			hr = CreateDDSTextureFromFile(m_pDevice, TEXT("../Bin/Resources/Textures/Default.dds"), nullptr, &pSRV);
-		}
 
 		assert(SUCCEEDED(hr));
 
@@ -156,6 +164,45 @@ HRESULT CTexture::Push_Texture(ID3D11ShaderResourceView* pSRV)
 
 	return S_OK;
 }
+
+#ifdef _DEBUG
+HRESULT CTexture::Search_Copy(const fs::path& pathSourceDir, const std::string& strFileName, const fs::path& pathDestDir)
+{
+	// 디렉토리가 존재하지 않으면 실패
+	if (!fs::exists(pathDestDir)) {
+		return E_FAIL;
+	}
+
+	string strLowerFileName = strFileName;
+	std::transform(strLowerFileName.begin(), strLowerFileName.end(), strLowerFileName.begin(), [](unsigned char c) {
+		return std::tolower(c);
+		});
+	// 디렉토리 내의 파일 순회
+	for (const auto& entry : fs::recursive_directory_iterator(pathSourceDir)) {
+		if (entry.is_regular_file()) { // 파일인지 확인
+			const auto& strCurrentFilePath = entry.path();
+			const auto& strCurrentFileName = strCurrentFilePath.filename().string();
+
+			string strLowerCurrentFileName = strCurrentFileName;
+			std::transform(strLowerCurrentFileName.begin(), strLowerCurrentFileName.end(), strLowerCurrentFileName.begin(), [](unsigned char c) {
+				return std::tolower(c);
+				});
+
+			// 파일 이름이  일치하면 복사
+			if (strLowerFileName == strLowerCurrentFileName) {
+				fs::path target_path = pathDestDir / strLowerCurrentFileName;
+
+				// 파일 복사
+				fs::copy_file(strCurrentFilePath, target_path, fs::copy_options::overwrite_existing);
+
+				std::cout << "Copied: " << strCurrentFilePath << " to " << target_path << '\n';
+				return S_OK;
+			}
+		}
+	}
+	return E_FAIL;
+}
+#endif
 
 CTexture * CTexture::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar * pTextureFilePath, _uint iNumTextures)
 {

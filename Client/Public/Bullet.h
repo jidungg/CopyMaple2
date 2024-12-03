@@ -1,17 +1,18 @@
 #pragma once
-#include "EffectObject.h"
+#include "EffModelObject.h"
 BEGIN(Engine)
 class CColliderBase;
 END
 BEGIN(Client)
 class CCharacter;
 class CBullet abstract :
-    public CEffectObject
+    public CGameObject
 {
 public:
-	typedef struct BulletDesc : CEffectObject::EFFECTOBJ_DESC
+	typedef struct BulletDesc : CGameObject::GAMEOBJECT_DESC
 	{
 		CGameObject* pShooter = { nullptr };
+		const _char* szHitEffectTag = "";
 	}BULLET_DESC;
 protected:
 	explicit CBullet(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -21,17 +22,19 @@ protected:
 public:
 	virtual HRESULT Initialize_Prototype()override;
 	virtual HRESULT Initialize(void* pArg)override;
+	void SearchTarget(list<CGameObject*>* pOutList, LAYERID eLayerID);
 	virtual _bool Check_Collision(CGameObject* pOther)override;
 
-	virtual void Invoke(_float fDamg, _vector vPosition);
-	virtual void Invoke(_float fDamg, CGameObject* pTarget);
+	virtual void Launch(_float fDamage, CGameObject* pTarget);
+	virtual void Launch(_float fDamage, _fvector vPosition);
+	virtual void Launch(_float fDamage);
+
 protected:
 	TEAM m_eTeam = { TEAM::LAST };
 	CColliderBase* m_pCollider = { nullptr };
-	_float m_iDamage = { 0 };
-	_bool m_bInvoke = { false };
-	_float m_fTimeAcc = { 0.f };
+	_float m_fDamage = { 0 };
 	CGameObject* m_pShooter = { nullptr };
+	const _char* m_szHitEffectTag = "";
 public:
 
 	virtual void Free();

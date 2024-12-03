@@ -2,12 +2,6 @@
 
 #include "Base.h"
 
-/* �������� ���Ǵ� ���������� ���� ��, ��������� �����Ѵ�. */
-/* ������ɷ����������þƤӤ��� �������� �ʴ´�.(��ġ�� ����� �����Ѵ� �������.) */
-/* ī�޶� ��, ������ �����ϱ������� ������� �׻� ���������ο� �������ٰŴ�. */
-/* ������������ ���ؼ� ���� ������ ��, �������� ���� �� �ֵ��� �ϰڴ�. */
-/* Update�Լ��� ���ؼ� ��, ��������� ������� �������Ӹ��� �ѹ��� ���س��´�. */
-
 BEGIN(Engine)
 
 class CPipeLine final : public CBase
@@ -31,6 +25,13 @@ public:
 		return m_TransformMatrices[eState];
 	}
 
+	_float4x4 Get_TransformFloat4x4_Inverse(D3DTRANSFORMSTATE eState) {
+		return m_TransformInverseMatrices[eState];
+	}
+
+	_matrix Get_TransformMatrix_Inverse(D3DTRANSFORMSTATE eState) {
+		return XMLoadFloat4x4(&m_TransformInverseMatrices[eState]);
+	}
 	const _float4* Get_CamPosition() {return &m_vCamPosition;}
 public:
 	HRESULT Initialize();

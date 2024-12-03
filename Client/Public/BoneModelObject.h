@@ -22,7 +22,7 @@ protected:
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual void Compute_Matrix();
+	virtual void Compute_Matrix() override;
 
 	virtual HRESULT Render() override;
 

@@ -22,7 +22,7 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
-	// CUISlot을(를) 통해 상속됨
+
 	bool Has_Item() override;
 
 	virtual void On_MouseClick() override;

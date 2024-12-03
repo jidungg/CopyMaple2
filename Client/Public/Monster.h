@@ -118,7 +118,7 @@ protected:
 	HRESULT Ready_Components(MONSTER_DESC* pDesc);
 	HRESULT Ready_Parts(MONSTER_DESC* pDesc);
 	virtual HRESULT Ready_AnimStateMachine();
-	void To_NextSkill();
+	virtual void To_NextSkill();
 public:
 	_bool Is_AttackCoolReady() { return m_fAttackTimeAcc >= m_pMonData->tStat.fAttackInterval; }
 protected:

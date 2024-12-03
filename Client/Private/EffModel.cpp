@@ -67,6 +67,7 @@ HRESULT CEffModel::Initialize_Prototype(const _char* pModelFilePath, _fmatrix Pr
         return E_FAIL;
 
     inFile.close();
+
     return S_OK;
 }
 
@@ -94,49 +95,15 @@ HRESULT CEffModel::Initialize(void* pArg)
         default:
             break;
         }
+        m_fDuration = max(m_fDuration, pController->Get_Duration());
     }
     return S_OK;
-}
-
-void CEffModel::Update(_float fTimeDelta)
-{
-    if (m_bPlay)
-    {
-        _bool bAnimEnd = true;
-        //모든 컨트롤러가 끝나야 true. -> 하나라도 false면 안됨
-        //현재 프레임 계산
-        _uint iCOntrolIndex = 0;
-        for (auto& pController : m_vecControl)
-        {
-            bAnimEnd =   pController->Update_Controller(fTimeDelta) && bAnimEnd;
-            iCOntrolIndex++;
-        }
-      
-
-        if (bAnimEnd)
-        {
-            if (m_bLoop)
-                Reset();
-			else
-            {
-                m_bPlay = false;
-				Set_Active(false);
-            }
-        }
-
-        //뼈들의 합성변환행렬을 갱신
-        for (auto& pBone : m_vecBone)
-        {
-            pBone->Update_CombinedTransformationMatrix(m_vecBone, XMLoadFloat4x4(&m_PreTransformMatrix));
-        }
-
-    }
 }
 
 
 HRESULT CEffModel::Render(CShader* pShader)
 {
-    for (_uint i = 0; i < m_iNumMeshes; i++)
+    for (_int i = m_iNumMeshes -1; i >= 0 ; i--)
     {
         _uint iMaterialIdx = m_vecMesh[i]->Get_MaterialIndex();
         if(iMaterialIdx != -1)
@@ -162,11 +129,63 @@ HRESULT CEffModel::Render(CShader* pShader)
 
 
 
-void CEffModel::Play_Animation()
+void CEffModel::Update_Animation(_float fTimeDelta)
+{
+    if (m_bPlay)
+    {
+        _bool bAnimEnd = true;
+        //모든 컨트롤러가 끝나야 true. -> 하나라도 false면 안됨
+        //현재 프레임 계산
+        _uint iCOntrolIndex = 0;
+        for (auto& pController : m_vecControl)
+        {
+            bAnimEnd = pController->Update_Controller(fTimeDelta) && bAnimEnd;
+            iCOntrolIndex++;
+        }
+
+
+        if (bAnimEnd)
+        {
+            if (m_bLoop)
+                Reset();
+            else
+            {
+                Stop_Animation();
+            }
+        }
+
+        //뼈들의 합성변환행렬을 갱신
+        for (auto& pBone : m_vecBone)
+        {
+            pBone->Update_CombinedTransformationMatrix(m_vecBone, XMLoadFloat4x4(&m_PreTransformMatrix));
+        }
+        for (auto& tEvnt : m_listAnimEvent)
+        {
+            if (tEvnt.bIsTriggered)
+                continue;
+            if ((m_fCurrentTrackPosition / m_fDuration) >= tEvnt.fTime)
+            {
+                tEvnt.pFunc();
+                tEvnt.bIsTriggered = true;
+            }
+        }
+		m_fCurrentTrackPosition += fTimeDelta;
+    }
+}
+
+void CEffModel::Start_Animation()
 {
 	m_bPlay = true;
     Set_Active(true);
     Reset();
+}
+
+void CEffModel::Stop_Animation()
+{
+    for (auto& callback : m_listAnimEndCallBack)
+        callback(this);
+    m_bPlay = false;
+    Set_Active(false);
 }
 
 void CEffModel::Reset()
@@ -181,6 +200,12 @@ void CEffModel::Reset()
         pController->Reset_CurrentTrackPosition();
 
 }
+
+void CEffModel::Register_AnimEvent(ANIM_EVENT tAnimEvent)
+{
+    m_listAnimEvent.push_back(tAnimEvent);
+}
+
 
 _uint CEffModel::Get_BoneIndex(const _char* pBoneName) const
 {

@@ -121,9 +121,6 @@
     <ClInclude Include="..\Public\TerrainObject.h">
       <Filter>02.GameObjects\Terrain</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Terrain.h">
-      <Filter>02.GameObjects\Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="Client_Utility.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
@@ -194,7 +191,7 @@
     <ClInclude Include="..\Public\PortalTerrainObject.h" />
     <ClInclude Include="..\Public\WayFinder.h" />
     <ClInclude Include="..\Public\Level_Henesys.h" />
-    <ClInclude Include="..\Public\EffectObject.h" />
+    <ClInclude Include="..\Public\EffModelObject.h" />
     <ClInclude Include="..\Public\EffModel.h" />
     <ClInclude Include="..\Public\EffMaterialProperty.h" />
     <ClInclude Include="..\Public\EffTexturingProperty.h" />
@@ -204,6 +201,29 @@
     <ClInclude Include="..\Public\EffTexture.h" />
     <ClInclude Include="..\public\EffConcreteController.h" />
     <ClInclude Include="..\Public\EffControllable.h" />
+    <ClInclude Include="..\Public\HitEvent.h" />
+    <ClInclude Include="..\Public\EffectManager.h" />
+    <ClInclude Include="..\Public\Effect.h" />
+    <ClInclude Include="..\Public\FlameWave.h" />
+    <ClInclude Include="..\Public\Kindling.h" />
+    <ClInclude Include="..\Public\Bullet_Kindling.h" />
+    <ClInclude Include="..\public\FireTornado.h" />
+    <ClInclude Include="..\Public\Bullet_FireTornado.h" />
+    <ClInclude Include="..\Public\BBQParty.h" />
+    <ClInclude Include="..\Public\Bullet_BBQParty.h" />
+    <ClInclude Include="..\public\FakeMeteor.h" />
+    <ClInclude Include="..\Public\Bullet_FakeMeteor.h" />
+    <ClInclude Include="..\Public\WildFire.h" />
+    <ClInclude Include="..\public\Bullet_WildFire.h" />
+    <ClInclude Include="..\Public\SnailAttack.h" />
+    <ClInclude Include="..\Public\CrabAttack.h" />
+    <ClInclude Include="..\Public\StumpKick.h" />
+    <ClInclude Include="..\Public\BayarAttackA.h" />
+    <ClInclude Include="..\Public\BayarAttackB.h" />
+    <ClInclude Include="..\Public\Bullet_BayarAttackB.h" />
+    <ClInclude Include="..\Public\BayarAttackD.h" />
+    <ClInclude Include="..\public\Bullet_BayarAttackD.h" />
+    <ClInclude Include="..\Public\BayarAttackC.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -262,9 +282,6 @@
       <Filter>02.GameObjects\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TerrainObject.cpp">
-      <Filter>02.GameObjects\Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Terrain.cpp">
       <Filter>02.GameObjects\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="Client_Utility.cpp">
@@ -337,7 +354,7 @@
     <ClCompile Include="..\Private\PortalTerrainObject.cpp" />
     <ClCompile Include="..\Private\WayFinder.cpp" />
     <ClCompile Include="..\Private\Level_Henesys.cpp" />
-    <ClCompile Include="..\Private\EffectObject.cpp" />
+    <ClCompile Include="..\Private\EffModelObject.cpp" />
     <ClCompile Include="..\Private\EffModel.cpp" />
     <ClCompile Include="..\Private\EffMaterialProperty.cpp" />
     <ClCompile Include="..\Private\EffTexturingProperty.cpp" />
@@ -347,6 +364,29 @@
     <ClCompile Include="..\Private\EffTexture.cpp" />
     <ClCompile Include="..\private\EffConcreteController.cpp" />
     <ClCompile Include="..\Private\EffControllable.cpp" />
+    <ClCompile Include="..\Private\HitEvent.cpp" />
+    <ClCompile Include="..\Private\EffectManager.cpp" />
+    <ClCompile Include="..\Private\Effect.cpp" />
+    <ClCompile Include="..\Private\FlameWave.cpp" />
+    <ClCompile Include="..\Private\Kindling.cpp" />
+    <ClCompile Include="..\Private\Bullet_Kindling.cpp" />
+    <ClCompile Include="..\Private\FireTornado.cpp" />
+    <ClCompile Include="..\Private\Bullet_FireTornado.cpp" />
+    <ClCompile Include="..\Private\BBQParty.cpp" />
+    <ClCompile Include="..\Private\Bullet_BBQParty.cpp" />
+    <ClCompile Include="..\Private\FakeMeteor.cpp" />
+    <ClCompile Include="..\Private\Bullet_FakeMeteor.cpp" />
+    <ClCompile Include="..\Private\WildFire.cpp" />
+    <ClCompile Include="..\Private\Bullet_WildFire.cpp" />
+    <ClCompile Include="..\Private\SnailAttack.cpp" />
+    <ClCompile Include="..\Private\CrabAttack.cpp" />
+    <ClCompile Include="..\Private\StumpKick.cpp" />
+    <ClCompile Include="..\Private\BayarAttackA.cpp" />
+    <ClCompile Include="..\Private\BayarAttackB.cpp" />
+    <ClCompile Include="..\Private\Bullet_BayarAttackB.cpp" />
+    <ClCompile Include="..\Private\BayarAttackD.cpp" />
+    <ClCompile Include="..\Private\Bullet_BayarAttackD.cpp" />
+    <ClCompile Include="..\Private\BayarAttackC.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -367,12 +407,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>

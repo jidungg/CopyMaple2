@@ -12,7 +12,6 @@
 #include "Player.h"
 #include "RenderObject.h"
 #include "UIHomeDialog.h"
-#include "Terrain.h"
 #include "MeshCollider.h"
 #include "Builder.h"
 #include "ModelObject.h"
@@ -34,21 +33,31 @@
 
 #include "Engine_Defines.h"
 #include "UIInventory.h"
-#include "Collider_Sphere.h"
 #include "UIBundle.h"
 #include "UIQuickSlotBundle.h"
+#include "Collider_Sphere.h"
 #include "Collider_AABB.h"
 #include "Collider_Frustum.h"
+#include "Collider_Cylinder.h"
 #include "MonsterDataBase.h"
 #include "UIBar.h"
 
 #include "Bullet_MagicClaw.h"
+#include "Bullet_Kindling.h"
+#include "Bullet_FireTornado.h"
+#include "Bullet_BBQParty.h"
+#include "Bullet_FakeMeteor.h"
+#include "Bullet_WildFire.h"
+#include "Bullet_BayarAttackB.h"
+#include "Bullet_BayarAttackD.h"
+
 #include "MonsterSpawner.h"
 #include "PortalTerrainObject.h"
 #include "Portal.h"
 #include "WayFinder.h"
 #include "EffModel.h"
-#include "EffectObject.h"
+#include "EffModelObject.h"
+#include "EffectManager.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -211,6 +220,7 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxEffectMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_VtxEffectMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
 		return E_FAIL;
+
 #pragma endregion
 
 
@@ -230,7 +240,7 @@ HRESULT CLoader::Loading_Level_Logo()
 		TEXT("../Bin/resources/FBXs/Anim/Equip"), CModel::TYPE_ANIM, matPretransform)))
 		return E_FAIL;
 
-	matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
+	  matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
 
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Anim/Player"),CModel::TYPE_ANIM,matPretransform)))
@@ -242,9 +252,12 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/MAP/Field/"), matPretransform)))
 		return E_FAIL;
-	matPretransform = matPretransform * XMMatrixRotationX(XMConvertToRadians(90));
+	XMMATRIX matPretransform2 = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
+	matPretransform2 = matPretransform2 * XMMatrixRotationX(XMConvertToRadians(-90));
+	matPretransform2 = matPretransform2 * XMMatrixRotationY(XMConvertToRadians(180));
+	matPretransform2 = matPretransform2 * XMMatrixScaling(-1,1,1);
 	if (FAILED(Load_Dirctory_EffModels(LEVEL_LOADING,
-		TEXT("../Bin/resources/FBXs/Effect"), matPretransform)))
+		TEXT("../Bin/resources/FBXs/Effect"), matPretransform2)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_Sphere::m_szProtoTag,
 		CCollider_Sphere::Create(m_pDevice, m_pContext))))
@@ -258,6 +271,9 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_Frustum::m_szProtoTag,
 		CCollider_Frustum::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_Cylinder::m_szProtoTag,
+		CCollider_Cylinder::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	//지금 LEVEL_LOADING을 static으로 쓰고있음 그냥 안없어짐 ㅋㅋ
 
 
@@ -268,8 +284,8 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CModelObject::m_szProtoTag,
 		CModelObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CEffectObject::m_szProtoTag,
-		CEffectObject::Create(m_pDevice, m_pContext))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CEffModelObject::m_szProtoTag,
+		CEffModelObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBoneModelObject::m_szProtoTag,
 		CBoneModelObject::Create(m_pDevice, m_pContext))))
@@ -293,6 +309,27 @@ HRESULT CLoader::Loading_Level_Logo()
 	//BULLETS
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBullet_MagicClaw::m_szProtoTag,
 		CBullet_MagicClaw::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBullet_Kindling::m_szProtoTag,
+		CBullet_Kindling::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBullet_FireTornado::m_szProtoTag,
+		CBullet_FireTornado::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBullet_BBQParty::m_szProtoTag,
+		CBullet_BBQParty::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBullet_FakeMeteor::m_szProtoTag,
+		CBullet_FakeMeteor::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBullet_WildFire::m_szProtoTag,
+		CBullet_WildFire::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBullet_BayarAttackB::m_szProtoTag,
+		CBullet_BayarAttackB::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBullet_BayarAttackD::m_szProtoTag,
+		CBullet_BayarAttackD::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	/* For.Prototype_GameObject_BackGround */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIPanel::m_szProtoTag,
@@ -341,7 +378,8 @@ HRESULT CLoader::Loading_Level_Logo()
 
 
 
-
+	if (FAILED(EFFECT_MANAGER->Load_Data()))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로드 완료."));
 

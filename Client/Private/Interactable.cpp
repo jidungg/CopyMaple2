@@ -2,11 +2,12 @@
 #include "Interactable.h"
 
 CInteractableObject::CInteractableObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CModelObject(pDevice, pContext)
+	: CGameObject(pDevice, pContext)
 {
 }
 
-CInteractableObject::CInteractableObject(const CInteractableObject& prototype)
-	:CModelObject(prototype)
+
+CInteractableObject::CInteractableObject(const CInteractableObject& Prototype)
+	: CGameObject(Prototype)
 {
 }

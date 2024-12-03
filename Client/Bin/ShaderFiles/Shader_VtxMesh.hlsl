@@ -3,16 +3,8 @@
 
 float4x4		g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
-vector			g_vLightDir = float4(1.f, -1.f, 1.f, 0.f);
-vector			g_vLightDiffuse = float4(1.f, 1.f, 1.f, 1.f);
-vector			g_vLightAmbient = float4(1.f, 1.f, 1.f, 1.f);
-vector			g_vLightSpecular = float4(1.f, 1.f, 1.f, 1.f);
-
 texture2D		g_DiffuseTexture;
-vector			g_vMtrlAmbient = float4(0.3f, 0.3f, 0.3f, 1.f);
-vector			g_vMtrlSpecular = float4(0.f, 0.f, 0.f, 0.f);
 
-vector			g_vCamPosition;
 
 
 struct VS_IN
@@ -28,7 +20,7 @@ struct VS_OUT
 	float4		vPosition : SV_POSITION;
 	float4		vNormal : NORMAL;
 	float2		vTexcoord : TEXCOORD0;
-	float4		vWorldPos : TEXCOORD1;
+    float4		vProjPos : TEXCOORD1;
 };
 
 
@@ -44,8 +36,7 @@ VS_OUT VS_MAIN(VS_IN In)
 	Out.vPosition = mul(float4(In.vPosition, 1.f), matWVP);
 	Out.vNormal = normalize(mul(float4(In.vNormal, 0.f), g_WorldMatrix));
 	Out.vTexcoord = In.vTexcoord;
-	Out.vWorldPos = mul(float4(In.vPosition, 1.f), g_WorldMatrix);
-
+    Out.vProjPos = Out.vPosition;
 	return Out;
 }
 
@@ -54,12 +45,14 @@ struct PS_IN
 	float4		vPosition : SV_POSITION;
 	float4		vNormal : NORMAL;
 	float2		vTexcoord : TEXCOORD0;
-	float4		vWorldPos : TEXCOORD1;
+    float4		vProjPos : TEXCOORD1;
 };
 
 struct PS_OUT
 {
-	float4		vColor : SV_TARGET0;
+    float4 vDiffuse : SV_TARGET0;
+    float4 vNormal : SV_TARGET1;
+    float4 vDepth : SV_TARGET2;
 };
 
 /* PixelShader */
@@ -71,17 +64,13 @@ PS_OUT PS_MAIN(PS_IN In)
 	if (vMtrlDiffuse.a < 0.1f)
 		discard;
 
+    Out.vDiffuse = vMtrlDiffuse;
 
-	float4			vShade = saturate(max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
-	
-	float4			vReflect = reflect(normalize(g_vLightDir), normalize(In.vNormal));
-	float4			vLook = In.vWorldPos - g_vCamPosition;
-
-	float			fSpecular = pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f);
-
-
-	Out.vColor = (g_vLightDiffuse * vMtrlDiffuse) * vShade + (g_vLightSpecular * g_vMtrlSpecular) * fSpecular;
-
+	/* -1.f ~ 1.f -> 0.f ~ 1.f */
+    Out.vNormal = float4(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	//(,View z / Far ) -> ( NDC 상의 Z 값 , VizeZ)( ViewZ를 Far로 나눈 것은 UNORM으로 전달하기 위함.  Far로 나눠서 0~1로 만듦.)
+	//NDC 상의 Z 값  = 투영행렬이 곱해진 Z 값을 W로 나눈 값.
+    Out.vDepth = float4(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);
 	return Out;
 }
 
@@ -96,6 +85,7 @@ technique11			DefaultTechnique
         SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN();
 	}
 

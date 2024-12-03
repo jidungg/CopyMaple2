@@ -50,7 +50,7 @@ public:
 
 
 	void Move_Forward(_float fDist);
-	void Hit(CGameObject* pFoe,_int fDamage);
+	virtual void Hit(CGameObject* pFoe,_int fDamage) override;
 	void Restore_HP();
 	virtual void Respawn();
 	virtual _bool Is_Targetable();
@@ -70,6 +70,7 @@ public:
 	TEAM Get_Team() { return m_eTeam; }
 	Stat Get_Stat() { return m_tStat; }
 
+	const _float4x4* Get_BoneMatrix(const _char* szBoneName);
 protected:
 	class CModelObject* m_pBody = { nullptr };
 	CStateMachine* m_pAnimStateMachine = { nullptr };

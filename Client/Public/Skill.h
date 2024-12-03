@@ -4,6 +4,8 @@
 BEGIN(Engine)
 class CAnimation;
 class CGameInstance;
+class CColliderBase;
+class CGameObject;
 END
 BEGIN(Client)
 
@@ -29,7 +31,7 @@ typedef struct SkillData
 	vector<float> vecLevelUpData;
 	map<SKILL_ID, _uint> mapPreceding;
 	vector <_uint> vecAnimation;
-	map<_uint, _float> mapAnimEventTime;
+	map<_uint, list<pair<_float, SKILL_MOTION_EVENT>>> mapAnimEventTime;
 }SKILL_DATA;
 //use가 호출되면 vecAnimation 에 담긴 첫 번째 애니메이션을 Player에게 전달한다.
 // Player는 이 애니메이션을 실행하고 애니메이션 종료 시 마다 Skill에게 알림을 줌.
@@ -43,6 +45,12 @@ class CModelObject;
 class CSkill :
 	public CBase, public IQuickItem
 {
+public:
+	enum class SKILL_DATA_ID
+	{
+		DAMG,
+		LAST
+	};
 protected:
 	CSkill();
 	virtual ~CSkill() = default;
@@ -69,8 +77,15 @@ public:
 	virtual _bool Is_Available();
 
 protected:
-	virtual void Initialzie_AnimEvent() abstract;
+	virtual void Initialzie_AnimEvent() ;
+	virtual void On_Cast() abstract;
+	virtual void On_CastingEnd() abstract;
+	virtual void Fire();
+	virtual void On_AttackEnd();
 
+	void SearchTarget(list<CGameObject*>* pOutList, LAYERID eLayerID);
+	CCharacter* SearchTarget(LAYERID eLayerID);
+	virtual _bool Check_Collision(CGameObject* pOther);
 protected:
 	CGameInstance* m_pGameInstance = { nullptr };
 	SKILL_DATA* m_pSkillDesc = { nullptr };
@@ -78,7 +93,8 @@ protected:
 	_float m_fCastingRatio = { 0.f };
 	_float m_fCoolTimeAcc = { 0.f };
 	_bool m_bCastingComplete = { false };
-	map<_uint, ANIM_EVENT> m_mapAnimEvent;
+	map<_uint, list< ANIM_EVENT>> m_mapAnimEvent;
+	CColliderBase* m_pTargetSearcher = { nullptr };
 public:
 	static CSkill* Create(SKILL_DATA* pSkillData, CCharacter* pUser);
 	virtual void Free() override;

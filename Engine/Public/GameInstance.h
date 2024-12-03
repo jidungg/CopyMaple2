@@ -60,6 +60,8 @@ public: /* For.PipeLine */
 	void Set_Transform(CPipeLine::D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix);
 	_matrix Get_TransformMatrix(CPipeLine::D3DTRANSFORMSTATE eState);
 	_float4x4 Get_TransformFloat4x4(CPipeLine::D3DTRANSFORMSTATE eState);
+	_float4x4 Get_TransformFloat4x4_Inverse(CPipeLine::D3DTRANSFORMSTATE eState);
+	_matrix Get_TransformMatrix_Inverse(CPipeLine::D3DTRANSFORMSTATE eState);
 	const _float4* Get_CamPosition();
 
 public: //For Key Manager
@@ -75,6 +77,8 @@ public://For UI Manager
 public: /* Light_Manager */
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
 	const LIGHT_DESC* Get_LightDesc(_uint iIndex) const;
+	HRESULT Render_Lights(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
+
 
 public://For Controller
 	void Possess(CPawn* pPawn);
@@ -92,6 +96,23 @@ public://For CollisionManager
 	void Set_LayerCount(_uint iLayerCount);
 	void Set_CollisionMatrix(_uint eObjectLayer, _uint eSubjectLayer, bool bValue);
 	void Zero_CollisionMatrix();
+
+public: // Target_Manager 
+	HRESULT Add_RenderTarget(const _wstring& strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
+	HRESULT Add_MRT(const _wstring& strMRTTag, const _wstring& strTargetTag);
+	HRESULT Begin_MRT(const _wstring& strMRTTag);
+	HRESULT End_MRT();
+	HRESULT Bind_RT_ShaderResource(class CShader* pShader, const _char* pConstantName, const _wstring& strTargetTag);
+
+
+#ifdef _DEBUG
+public:
+	HRESULT Ready_RT_Debug(const _wstring& strTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);
+	HRESULT Render_RT_Debug(const _wstring& strMRTTag, class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
+
+
+#endif
+
 private:
 	class CGraphic_Device*				m_pGraphic_Device = { nullptr };
 	class CInput_Device*				m_pInput_Device = { nullptr };
@@ -107,6 +128,7 @@ private:
 	class CPhysics*						m_pPhysics = { nullptr };
 	class CEventManager*			m_pEventManager = { nullptr };
 	class CCollisionManager* m_pCollisionManager = { nullptr };
+	class CTarget_Manager* m_pTarget_Manager = { nullptr };
 public:
 	static void Release_Engine();
 

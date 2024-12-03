@@ -25,7 +25,6 @@ public:
 private:
 	vector < CEffTexture* > m_vecTexture;
 
-	ID3D11ShaderResourceView* m_pSRV[12];
 	_float2 m_f2TexcoordScale[12];
 	_float m_f2TexcoordRotate[12];
 	_float2 m_f2TexcoordTranslate[12];

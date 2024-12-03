@@ -39,6 +39,9 @@ HRESULT CBayar::Initialize(void* pArg)
 	if (FAILED(Ready_Components(pDesc)))
 		return E_FAIL;
 
+
+	//m_pBody->Set_AnimationLoop(AS_ATTACK_2_G, true);
+
 	m_vecPartsMatrix[PART_ID::BODY] = m_pBody->Get_BoneMatrix("Bip01 Spine");
 	m_vecPartsMatrix[PART_ID::RIGHT_ARM] = m_pBody->Get_BoneMatrix("02030008_N_SandstoneGiant24");
 	m_vecPartsMatrix[PART_ID::LEFT_ARM] = m_pBody->Get_BoneMatrix("02030008_N_SandstoneGiant22");
@@ -65,12 +68,6 @@ HRESULT CBayar::Ready_Components(CHARACTER_DESC* pDesc)
 	if (FAILED(Add_Component(LEVEL_LOADING, CCollider_Sphere::m_szProtoTag, TEXT("Com_Right_Arm_Collider"), (CComponent**)&m_vecCollider[PART_ID::RIGHT_ARM], &tDesc)))
 		return E_FAIL;
 
-	//BODY
-	//tDesc.fRadius = pDesc->fBodyCollisionRadius;
-	//tDesc.vCenter = pDesc->fBodyCollisionOffset;
-	//if (FAILED(Add_Component(LEVEL_LOADING, CCollider_Sphere::m_szProtoTag, TEXT("Com_Body_Collider"), (CComponent**)&m_vecCollider[PART_ID::BODY], &tDesc)))
-	//	return E_FAIL;
-	//TODO : Hand
 	return S_OK;
 }
 HRESULT CBayar::Ready_AnimStateMachine()
@@ -107,65 +104,27 @@ HRESULT CBayar::Ready_AnimStateMachine()
 
 	return __super::Ready_AnimStateMachine();
 }
+void CBayar::On_AnimEnd(_uint iAnimIdx)
+{
+	if (iAnimIdx == (_uint)STATE::AS_ATTACK_2_G && m_iGatheringCount < m_iMaxGatheringCount)
+	{
+		m_pBody->Switch_Animation((_uint)STATE::AS_ATTACK_2_G);
+		m_iGatheringCount++;
+	}
+	else
+	{
+		m_iGatheringCount = 0;
+		__super::On_AnimEnd(iAnimIdx);
+	}
+
+}
+void CBayar::To_NextSkill()
+{
+	//m_iCurrentSkillID = (_int)SKILL_ID::BAYAR_ATTACK_E;
+	__super::To_NextSkill();
+}
 void CBayar::Priority_Update(_float fTimeDelta)
 {
-//	if (nullptr == m_pTarget || false == m_pTarget->Is_Active() || m_pTarget->Is_Dead())
-//	{
-//		m_pTarget = nullptr;
-//		m_bDetected = false;
-//		m_fTargetDistance = FLT_MAX;
-//		return;
-//	}
-//	//타겟이 있음
-//
-//	//타겟까지 방향, 거ㅏ리 측정.
-//	XMVECTOR vPos = m_pTarget->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-//	m_vMoveDirectionXZ = vPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-//	m_vMoveDirectionXZ = XMVectorSetY(m_vMoveDirectionXZ, 0);
-//	XMStoreFloat(&m_fTargetDistance, XMVector3Length(m_vMoveDirectionXZ));
-//	m_vMoveDirectionXZ = XMVector3Normalize(m_vMoveDirectionXZ);
-//	m_vLookDirectionXZ = m_vMoveDirectionXZ;
-//	m_vMoveDirectionXZ *= m_tStat.fRunSpeed * fTimeDelta;
-//
-//
-//	if (Is_AttackCoolReady())
-//	{
-//
-//		if (m_fTargetDistance <= m_tStat.fAttackRange)
-//		{
-//			m_bAttack = true;
-//			m_bChase = false;
-//			m_fAttackTimeAcc = 0.f;
-//			m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_ATTACKTRIGGER);
-//			m_vMoveDirectionXZ = XMVectorZero(); // 멈춤
-//		}
-//
-//	}
-//	//공격 쿨임 : 추적상태면 쫒고 아니면 안쫒기
-//	else
-//	{
-//		// 추적상태가 아니다 -> 공격범위에 들어온 뒤로 추적범위 밖으로 나가지 않았음.
-//		if (false == m_bChase)
-//		{
-//			if (m_fTargetDistance > m_fChaseRange)//추적 범위 밖으로 나가면 추적
-//				m_bChase = true;
-//		}
-//		else //추적 상태다 -> 추적 범위 밖으로 나간 뒤 공격 범위 안으로 들어오지 않았음.
-//		{
-//			if (m_fTargetDistance <= m_tStat.fAttackRange)//공격 범위 안으로 들어올 때까지 추적
-//				m_bChase = false;
-//		}
-//		if (false == m_bChase)
-//			m_vMoveDirectionXZ = XMVectorZero(); // 멈춤
-//	}
-//	// 공격 범위 안임
-//
-//	if (m_bAttack)
-//	{
-//		m_vMoveDirectionXZ = XMVectorZero(); // 멈춤
-//		m_vLookDirectionXZ = XMVectorZero();
-//	}
-
 	__super::Priority_Update(fTimeDelta);
 }
 

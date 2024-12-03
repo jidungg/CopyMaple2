@@ -113,6 +113,7 @@ HRESULT CMonster::Ready_AnimStateMachine()
 	m_pBody->Set_AnimationLoop(m_mapAnimIdx[M_AS_IDLE].front(), true);
 	m_pBody->Set_AnimationLoop(m_mapAnimIdx[M_AS_ATTACK_IDLE].front(), true);
 
+
 	for (auto& i : m_mapAnimIdx[M_AS_STUN])
 		m_pBody->Set_AnimPostDelayPercent(i, 1);
 	for (auto& i : m_mapAnimIdx[M_AS_DEAD])
@@ -263,6 +264,8 @@ HRESULT CMonster::Ready_AnimStateMachine()
 	//STUN_SUB
 	pTransition = m_pAnimStateMachine->Add_SubTransition(M_BS_STUN, m_mapAnimIdx[M_AS_STUN].front());
 
+
+
 	m_pAnimStateMachine->Set_CurrentState(M_BS_BORN);
 
 	m_pBody->Set_Animation((_uint)m_mapAnimIdx[M_AS_REGEN].front());
@@ -282,6 +285,8 @@ void CMonster::To_NextSkill()
 _bool CMonster::Use_Skill(CSkill* pSkill)
 {
 	if (pSkill == nullptr)
+		return false;
+	if (m_bAttack)
 		return false;
 	if (false == Get_CurrentSkill()->Is_CastingComplete())
 		return false;
@@ -442,7 +447,7 @@ void CMonster::Priority_Update(_float fTimeDelta)
 
 		if (m_fTargetDistance <= m_tStat.fAttackRange)
 		{
-			Use_Skill(Get_CurrentSkill());
+			m_mapSkill[(SKILL_ID)m_iCurrentSkillID]->Use();
 			m_vLookDirectionXZ = XMVector4Normalize(Get_Target()->Get_Position() - vMyPos);
 		}
 

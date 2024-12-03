@@ -1,0 +1,110 @@
+#include "stdafx.h"
+#include "FireTornado.h"
+#include "Collider_Sphere.h"
+#include "GameInstance.h"
+#include "Character.h"
+#include "Player.h"
+#include "Bullet_FireTornado.h"
+#include "HitEvent.h"
+
+
+CFireTornado::CFireTornado()
+	:CSkill()
+{
+}
+
+HRESULT CFireTornado::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
+{
+	if (FAILED(__super::Initialize(pSkillData, pUser)))
+		return E_FAIL;
+
+
+	//Bullet
+	CBullet::BULLET_DESC tBulletDesc;
+	tBulletDesc.pShooter = m_pUser;
+	tBulletDesc.szHitEffectTag = "eff_wizard_firetornado_hit_01.effmodel";
+	m_pBullet = static_cast<CBullet_FireTornado*>(m_pGameInstance->Clone_Proto_Object_Stock(CBullet_FireTornado::m_szProtoTag, &tBulletDesc));
+	m_pBullet->Set_Active(false);
+
+	//CastEffect
+	CEffModelObject::EFFECTOBJ_DESC tCastEffDesc;
+	tCastEffDesc.eModelProtoLevelID = LEVEL_LOADING;
+	strcpy_s(tCastEffDesc.strModelProtoName, "eff_wizard_firetornad_cast_01.effmodel");
+	m_pCastEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
+	m_pCastEffect->Set_Active(false);
+	return S_OK;
+}
+
+void CFireTornado::Update(_float fTimeDelta)
+{
+	__super::Update(fTimeDelta);
+	if (m_pBullet->Is_Active())
+	{
+		m_pBullet->Update(fTimeDelta);
+	}
+	if (m_pCastEffect->Is_Active())
+	{
+		m_pCastEffect->Update(fTimeDelta);
+	}
+}
+
+void CFireTornado::Late_Update(_float fTimeDelta)
+{
+	__super::Late_Update(fTimeDelta);
+	if (m_pBullet->Is_Active())
+	{
+		m_pBullet->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect);
+	}
+	if (m_pCastEffect->Is_Active())
+	{
+		m_pCastEffect->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect);
+	}
+}
+
+void CFireTornado::On_Cast()
+{
+	m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
+	m_pCastEffect->Start_Animation();
+	m_pCastEffect->Set_Active(true);
+}
+
+void CFireTornado::On_CastingEnd()
+{
+
+}
+
+void CFireTornado::Fire()
+{
+	_uint iDamgID = (_uint)SKILL_DATA_ID::DAMG;
+
+	_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
+	fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
+
+	CTransform* pShooterTransform = m_pUser->Get_Transform();
+	_vector vPos = pShooterTransform->Get_State(CTransform::STATE_POSITION);
+	_vector vLook = pShooterTransform->Get_State(CTransform::STATE_LOOK);
+	vPos += vLook * 2.5f;
+
+	m_pBullet->Launch(fDmg, vPos);
+}
+
+
+CFireTornado* CFireTornado::Create(SKILL_DATA* pSkillData, CCharacter* pUser)
+{
+	CFireTornado* pInstance = new CFireTornado;
+	if (FAILED(pInstance->Initialize(pSkillData, pUser)))
+	{
+		MSG_BOX("CFireTornado Create Failed");
+		Safe_Release(pInstance);
+	}
+	return pInstance;
+}
+
+void CFireTornado::Free()
+{
+	__super::Free();
+	Safe_Release(m_pBullet);
+	Safe_Release(m_pCastEffect);
+}

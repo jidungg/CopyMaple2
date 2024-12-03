@@ -21,6 +21,7 @@ public:
 	void Register_AnimEvent(ANIM_EVENT tAnimEvent);
 
 	EFF_CTRL_TYPE Get_CtrlType() { return m_eCtrlType; }
+	_float Get_Duration() { return (m_fStopPosition - m_fStartPosition - m_fPhase)/m_fSpeed; }
 protected:
 	virtual _bool Update_InTime(_float fTrackPos) abstract;
 

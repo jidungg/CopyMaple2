@@ -11,6 +11,7 @@
 #include "PlayerInfo.h"
 #include "UIBundle.h"
 #include "MonsterDataBase.h"
+#include "EffectManager.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance { CGameInstance::GetInstance() }
@@ -98,6 +99,7 @@ void CMainApp::Free()
 	CUIBundle::DestroyInstance();
 	Safe_Release(m_pGameInstance);
 	CGameInstance::Release_Engine();
+	CEffectManager::DestroyInstance();
 
 }
 

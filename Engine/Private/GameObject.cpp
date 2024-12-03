@@ -202,6 +202,21 @@ _bool CGameObject::Check_Collision(const Ray& tRay, RaycastHit* pOut)
 }
 
 
+void CGameObject::Set_Transform(_vector vPos, _vector vRotation, _float fScale)
+{
+	m_pTransformCom->Scaling(fScale, fScale, fScale);
+	m_pTransformCom->Rotation({ vRotation.m128_f32[0],vRotation.m128_f32[1] ,vRotation.m128_f32[2] });
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+}
+
+void CGameObject::Set_Transform(CTransform* pTransform)
+{
+	_float3 fScale = pTransform->Compute_Scaled();
+	m_pTransformCom->Scaling(fScale.x, fScale.y, fScale.z);
+	m_pTransformCom->LookToward(pTransform->Get_State(CTransform::STATE_LOOK));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pTransform->Get_State(CTransform::STATE_POSITION));
+}
+
 _float CGameObject::Get_Distance(CGameObject* pOther)
 {
 	_vector vDist = pOther->Get_Position() - Get_Position();

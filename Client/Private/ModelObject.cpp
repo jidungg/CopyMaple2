@@ -178,24 +178,12 @@ HRESULT CModelObject::Bind_ShaderResources(CShader* pShader)
     if (FAILED(pShader->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
         return E_FAIL;
 
-    const LIGHT_DESC* pLightDesc = m_pGameInstance->Get_LightDesc(0);
-
-    if (FAILED(pShader->Bind_RawValue("g_vLightDir", &pLightDesc->vDirection, sizeof(_float4))))
-        return E_FAIL;
-    if (FAILED(pShader->Bind_RawValue("g_vLightDiffuse", &pLightDesc->vDiffuse, sizeof(_float4))))
-        return E_FAIL;
-    if (FAILED(pShader->Bind_RawValue("g_vLightAmbient", &pLightDesc->vAmbient, sizeof(_float4))))
-        return E_FAIL;
-    if (FAILED(pShader->Bind_RawValue("g_vLightSpecular", &pLightDesc->vSpecular, sizeof(_float4))))
-        return E_FAIL;
-
-    if (FAILED(pShader->Bind_RawValue("g_vCamPosition", m_pGameInstance->Get_CamPosition(), sizeof(_float4))))
-        return E_FAIL;
-
 
 
     return S_OK;
 }
+
+
 
 CModelObject* CModelObject::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

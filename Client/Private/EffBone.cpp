@@ -46,7 +46,7 @@ HRESULT CEffBone::Initialize(ifstream& inFile, _int iParentBoneIndex)
 
 	}
 
-	XMStoreFloat4x4(&m_TransformationMatrix, XMMatrixTranspose(XMLoadFloat4x4(&m_TransformationMatrix)));
+	//XMStoreFloat4x4(&m_TransformationMatrix, XMMatrixTranspose(XMLoadFloat4x4(&m_TransformationMatrix)));
 	XMStoreFloat4x4(&m_CombindTransformationMatrix, XMMatrixIdentity());
 
 	m_iParentBoneIndex = iParentBoneIndex;

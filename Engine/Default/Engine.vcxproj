@@ -117,6 +117,10 @@
       <Command>cd /d $(SolutionDir)
 call UpdateLib.bat</Command>
     </PostBuildEvent>
+    <FxCompile>
+      <ShaderType>Effect</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -161,6 +165,12 @@ call UpdateLib.bat</Command>
       <Command>cd /d $(SolutionDir)
 call UpdateLib.bat</Command>
     </PostBuildEvent>
+    <FxCompile>
+      <ShaderType>Effect</ShaderType>
+    </FxCompile>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Animation.h" />
@@ -171,6 +181,7 @@ call UpdateLib.bat</Command>
     <ClInclude Include="..\Public\Channel.h" />
     <ClInclude Include="..\Public\Collider.h" />
     <ClInclude Include="..\Public\Collider_AABB.h" />
+    <ClInclude Include="..\Public\Collider_Cylinder.h" />
     <ClInclude Include="..\Public\Collider_Frustum.h" />
     <ClInclude Include="..\Public\Collider_Sphere.h" />
     <ClInclude Include="..\Public\CollisionManager.h" />
@@ -206,6 +217,7 @@ call UpdateLib.bat</Command>
     <ClInclude Include="..\Public\MimicBone.h" />
     <ClInclude Include="..\Public\Model.h" />
     <ClInclude Include="..\Public\MultiAnimation.h" />
+    <ClInclude Include="..\Public\ObjectPool.h" />
     <ClInclude Include="..\public\Object_Manager.h" />
     <ClInclude Include="..\Public\Pawn.h" />
     <ClInclude Include="..\Public\Physics.h" />
@@ -213,6 +225,8 @@ call UpdateLib.bat</Command>
     <ClInclude Include="..\public\Prototype_Manager.h" />
     <ClInclude Include="..\Public\Rect_Transform.h" />
     <ClInclude Include="..\public\Renderer.h" />
+    <ClInclude Include="..\Public\RenderTarget.h" />
+    <ClInclude Include="..\Public\RenderTarget_Manager.h" />
     <ClInclude Include="..\public\Shader.h" />
     <ClInclude Include="..\Public\State.h" />
     <ClInclude Include="..\Public\StateMachine.h" />
@@ -237,6 +251,7 @@ call UpdateLib.bat</Command>
     <ClCompile Include="..\Private\Channel.cpp" />
     <ClCompile Include="..\Private\Collider.cpp" />
     <ClCompile Include="..\Private\Collider_AABB.cpp" />
+    <ClCompile Include="..\Private\Collider_Cylinder.cpp" />
     <ClCompile Include="..\Private\Collider_Frustum.cpp" />
     <ClCompile Include="..\Private\Collider_Sphere.cpp" />
     <ClCompile Include="..\Private\CollisionManager.cpp" />
@@ -264,6 +279,7 @@ call UpdateLib.bat</Command>
     <ClCompile Include="..\Private\MimicBone.cpp" />
     <ClCompile Include="..\Private\Model.cpp" />
     <ClCompile Include="..\Private\MultiAnimation.cpp" />
+    <ClCompile Include="..\Private\ObjectPool.cpp" />
     <ClCompile Include="..\private\Object_Manager.cpp" />
     <ClCompile Include="..\Private\Pawn.cpp" />
     <ClCompile Include="..\Private\Physics.cpp" />
@@ -271,6 +287,8 @@ call UpdateLib.bat</Command>
     <ClCompile Include="..\private\Prototype_Manager.cpp" />
     <ClCompile Include="..\Private\Rect_Transform.cpp" />
     <ClCompile Include="..\private\Renderer.cpp" />
+    <ClCompile Include="..\Private\RenderTarget.cpp" />
+    <ClCompile Include="..\Private\RenderTarget_Manager.cpp" />
     <ClCompile Include="..\private\Shader.cpp" />
     <ClCompile Include="..\Private\State.cpp" />
     <ClCompile Include="..\Private\StateMachine.cpp" />
@@ -292,6 +310,9 @@ call UpdateLib.bat</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Bin\ShaderFiles\Engine_Shader_Define.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Deferred.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

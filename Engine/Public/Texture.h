@@ -20,6 +20,11 @@ public:
 	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName, _uint iSRVIndex = 0);
 	HRESULT Push_Texture(const _tchar* szPath);
 	HRESULT Push_Texture(ID3D11ShaderResourceView* pSRV);
+
+#ifdef _DEBUG
+private:
+	HRESULT Search_Copy(const fs::path& pathSourceDir, const std::string& strFileName, const fs::path& pathDestDir);
+#endif
 protected:
 	_uint										m_iNumSRVs = { 0 };
 	vector<ID3D11ShaderResourceView*>			m_SRVs;

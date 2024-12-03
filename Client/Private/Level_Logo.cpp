@@ -9,6 +9,7 @@
 #include "Camera_Trace.h"
 #include "UIBundle.h"
 #include "Player.h"
+#include "EffectManager.h"
 
 CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -40,6 +41,8 @@ HRESULT CLevel_Logo::Initialize(void* pArg)
 	if (FAILED(PLAYERINIFO->Initialize(m_pDevice, m_pContext)))
 		return E_FAIL;
 	if (FAILED(Ready_Camera(LAYERID::LAYER_CAMERA)))
+		return E_FAIL;
+	if (FAILED(EFFECT_MANAGER->Initialize(m_pDevice, m_pContext)))
 		return E_FAIL;
 	return S_OK;
 }

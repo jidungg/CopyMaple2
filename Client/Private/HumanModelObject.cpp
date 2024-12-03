@@ -49,9 +49,9 @@ HRESULT CHumanModelObject::Ready_Components(void* pArg)
 	m_pFaceCom = static_cast<CFace*>(m_pGameInstance->Clone_Proto_Component_Stock(pDesc->szFaceProtoTag));
 	Add_Component(m_pFaceCom, TEXT("Com_Face"));
 
-	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxHumanAnimMesh"),
-		TEXT("Com_FaceShader"), reinterpret_cast<CComponent**>(&m_pFaceShaderCom))))
-		return E_FAIL;
+	//if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxHumanAnimMesh"),
+	//	TEXT("Com_FaceShader"), reinterpret_cast<CComponent**>(&m_pFaceShaderCom))))
+	//	return E_FAIL;
 	return S_OK;
 }
 
@@ -59,30 +59,33 @@ HRESULT CHumanModelObject::Render()
 {
 	if (FAILED(Bind_ShaderResources(m_pShaderCom)))
 		return E_FAIL;
-	if (FAILED(Bind_ShaderResources(m_pFaceShaderCom)))
-		return E_FAIL;
+	//if (FAILED(Bind_ShaderResources(m_pFaceShaderCom)))
+	//	return E_FAIL;
 
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 
 	CShader* pShader;
-	m_pFaceCom->Bind_FaceShaderResource(m_pFaceShaderCom, "g_FaceTexture");
+	//m_pFaceCom->Bind_FaceShaderResource(m_pFaceShaderCom, "g_FaceTexture");
+	m_pFaceCom->Bind_FaceShaderResource(m_pShaderCom, "g_FaceTexture");
 	for (_uint i = 0; i < iNumMeshes; i++)
 	{
 		if(false == m_pModelCom->Is_MeshActive(i))
 			continue;
 
-		if (i == m_mapMeshPartIdx[MESH_PART_ID::FACE])
-			pShader = m_pFaceShaderCom;
-		else
-			pShader = m_pShaderCom;
+		//if (i == m_mapMeshPartIdx[MESH_PART_ID::FACE])
+		//	pShader = m_pFaceShaderCom;
+		//else
+		//	pShader = m_pShaderCom;
 
-		if (FAILED(m_pModelCom->Bind_Material(pShader, "g_DiffuseTexture", i, TEXTURE_TYPE::DIFFUSE, 0)))
+		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", i, TEXTURE_TYPE::DIFFUSE, 0)))
 			return E_FAIL;
 		if (CModel::TYPE::TYPE_NONANIM != m_eModelType)
-			if (FAILED(m_pModelCom->Bind_BoneMatrices(pShader, "g_BoneMatrices", i)))
+			if (FAILED(m_pModelCom->Bind_BoneMatrices(m_pShaderCom, "g_BoneMatrices", i)))
 				return E_FAIL;
-
-		pShader->Begin(0);
+		if (i == m_mapMeshPartIdx[MESH_PART_ID::FACE])
+			m_pShaderCom->Begin(1);
+		else
+			m_pShaderCom->Begin(0);
 		m_pModelCom->Render(i);
 	}
 
@@ -123,5 +126,5 @@ void CHumanModelObject::Free()
 {
 	__super::Free();
 	Safe_Release(m_pFaceCom);
-	Safe_Release(m_pFaceShaderCom);
+	//Safe_Release(m_pFaceShaderCom);
 }

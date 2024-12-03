@@ -23,7 +23,7 @@
                 "RunSpeed": 1.5,
                 "WalkSpeed": 0.5,
                 "AttackInterval": 3,
-                "AttackRange": 1
+                "AttackRange":1
             },
             "AnimIdx": {
                 "ATTACK_IDLE": [ 1 ],
@@ -52,7 +52,7 @@
             "BodyCollisionOffset": [ 0, 0, 0 ],
             "Scale": [ 1, 1, 1 ],
             "Status": {
-                "HP": 1000,
+                "HP": 10000,
                 "SP": 10,
                 "EP": 1,
                 "ATK": 100,
@@ -63,7 +63,7 @@
                 "RunSpeed": 2.5,
                 "WalkSpeed": 1.5,
                 "AttackInterval": 3,
-                "AttackRange": 2
+                "AttackRange": 1
             },
             "AnimIdx": {
                 "ATTACK_IDLE": [ 1 ],
@@ -103,7 +103,7 @@
                 "RunSpeed": 2.5,
                 "WalkSpeed": 1.5,
                 "AttackInterval": 3.5,
-                "AttackRange": 2
+                "AttackRange": 1
             },
             "AnimIdx": {
                 "ATTACK_IDLE": [ 5 ],
@@ -163,10 +163,10 @@
                 "BAYAR_ATTACK_B",
                 "BAYAR_ATTACK_C",
                 "BAYAR_ATTACK_D",
-                "BAYAR_ATTACK_E",
-                "BAYAR_ATTACK_F",
-                "BAYAR_ATTACK_G",
-                "BAYAR_ATTACK_H"
+                "BAYAR_SKY_JUMP",
+                "BAYAR_KNOCK_OFF",
+                "BAYAR_STONE_SPIKE",
+                "BAYAR_PALM_STRIKE"
             ]
         }
     ]

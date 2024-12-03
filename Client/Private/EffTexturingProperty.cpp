@@ -12,7 +12,7 @@ const char* szTextureNames[TT_LAST] = {
 	"g_GlowTexture",
 	"g_BumpTexture",
 	"g_NormalTexture",
-	"g_ParallaxTextur",
+	"g_ParallaxTexture",
 	"g_Decal0Texture",
 	"g_Decal1Texture",
 	"g_Decal2Texture",
@@ -31,11 +31,7 @@ CEffTexturingProperty::CEffTexturingProperty(const CEffTexturingProperty& rhs)
 {
 	for (auto& pTexture : m_vecTexture)
 		Safe_AddRef(pTexture);
-	//for (_uint i = 0; i < TT_LAST; ++i)
-	//{
-	//	m_pSRV[i] = rhs.m_pSRV[i];
-	//	Safe_AddRef(m_pSRV[i]);
-	//}
+
 }
 
 HRESULT CEffTexturingProperty::Initialize_Prototype(const _char* szDirPath, ifstream& inFile)
@@ -51,13 +47,36 @@ HRESULT CEffTexturingProperty::Initialize_Prototype(const _char* szDirPath, ifst
 		CEffTexture* pTexture = CEffTexture::Create(m_pDevice, m_pContext, szDirPath, inFile, eTexType);
 		m_vecTexture[eTexType] = pTexture;
 	}
-	//for (_uint i = 0; i < TT_LAST; ++i)
-	//{
-	//	if (m_vecTexture[i] == nullptr)
-	//		m_pSRV[i] =  CreateEmptySRV();
-	//	else
-	//		m_pSRV[i] = m_vecTexture[i]->Get_SRV();
-	//}
+	for (_uint i = 0; i < TT_LAST; ++i)
+	{
+		if (m_vecTexture[i] == nullptr)
+		{
+			EFF_TEX_TYPE eTexType = (EFF_TEX_TYPE)i;
+			switch (eTexType)
+			{
+			case Client::TT_BASE:
+			case Client::TT_DARK:
+			case Client::TT_DETAIL:
+			case Client::TT_GLOSS:
+			case Client::TT_GLOW:
+			case Client::TT_BUMPMAP:
+			case Client::TT_NORMAL:
+			case Client::TT_PARALLAX:
+			m_vecTexture[i] = CEffTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Default.dds"), (EFF_TEX_TYPE)i);
+				break;
+			case Client::TT_DECAL0:
+			case Client::TT_DECAL1:
+			case Client::TT_DECAL2:
+			case Client::TT_DECAL3:
+			m_vecTexture[i] = CEffTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/DefaultZero.dds"), (EFF_TEX_TYPE)i);
+				break;
+			case Client::TT_LAST:
+				break;
+			default:
+				break;
+			}
+		}
+	}
 	return S_OK;
 }
 
@@ -85,7 +104,7 @@ HRESULT CEffTexturingProperty::Bind_Texture(CShader* pShader)
 		}
 		else
 		{
-			const TextureTransformData& tTexTransformData = m_vecTexture[0]->Get_TexTransformData();
+			const TextureTransformData& tTexTransformData = m_vecTexture[i]->Get_TexTransformData();
 
 			m_f2TexcoordScale[i] = tTexTransformData.f2Scale;
 			m_f2TexcoordRotate[i] = tTexTransformData.fRotation + XMConvertToRadians(0);
@@ -110,17 +129,9 @@ HRESULT CEffTexturingProperty::Bind_Texture(CShader* pShader)
 	{
 		if (m_vecTexture[i] == nullptr)
 			continue;
-		//const TextureTransformData& tTexTransformData = m_vecTexture[i]->Get_TexTransformData();
-		//if (FAILED(pShader->Bind_RawValue("g_vTexcoordScale", &tTexTransformData.f2Scale, sizeof(_float2))))
+		//if (FAILED())
 		//	return E_FAIL;
-		//if (FAILED(pShader->Bind_RawValue("g_fTexcoordRotate", &tTexTransformData.fRotation, sizeof(_float))))
-		//	return E_FAIL;
-		//if (FAILED(pShader->Bind_RawValue("g_vTexcoordTranslate", &tTexTransformData.f2Translation, sizeof(_float2))))
-		//	return E_FAIL;
-		//if (FAILED(pShader->Bind_RawValue("g_vTexcoordCenter", &tTexTransformData.f2Center, sizeof(_float2))))
-		//	return E_FAIL;
-		if (FAILED(m_vecTexture[i]->Bind_ShaderResource(pShader, szTextureNames[i], 0)))
-			return E_FAIL;
+		m_vecTexture[i]->Bind_ShaderResource(pShader, szTextureNames[i], 0);
 	}
 
 	return S_OK;

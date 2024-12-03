@@ -4,39 +4,35 @@ BEGIN(Engine)
 class CCollider_Frustum;
 END
 BEGIN(Client)
-class CBullet;
+class CEffModelObject;
+class CBullet_MagicClaw;
 class CMagicClaw :
     public CSkill
 {
-	enum class SKILL_DATA_ID
-	{
-		DAMG,
-		LAST
-	};
-
 private:
 	CMagicClaw();
 	virtual ~CMagicClaw() = default;
 
 public:
 	virtual HRESULT Initialize(SKILL_DATA* pSkillData, CCharacter* pUser) override;
-	void AnimEventFunc1();
+
 protected:
-	virtual void Initialzie_AnimEvent()override;
+
 	virtual void Update(_float fTimeDelta);
 	virtual void Late_Update(_float fTimeDelta);
-	virtual HRESULT Render_Collider();
+
+	void On_Cast() override;
+	void On_CastingEnd() override;
+	void Fire() override;
+private:
 
 private:
-	CCharacter* SearchTarget();
-	_bool Check_InRange(CCharacter* pOther);
-private:
-	CCollider_Frustum* m_pTargetSearcher = { nullptr };
-	CBullet* m_pBullet = { nullptr };
-
+	CBullet_MagicClaw* m_pBullet = { nullptr };
+	CEffModelObject* m_pCastEffect = { nullptr };
 public:
 	static CMagicClaw* Create(SKILL_DATA* pSkillData, CCharacter* pUser);
 	virtual void Free() override;
+
 };
 
 END

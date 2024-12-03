@@ -1,0 +1,22 @@
+{
+    "Effects": [
+        {
+            "Type": "MODEL",
+            "Id": "EFF_PORTAL",
+            "LevelProto" :  0,
+            "Model": "eff_com_portal_a.effmodel"
+        },
+        {
+            "Type": "MODEL",
+            "Id": "EFF_MAGICCLAW_CAST1A",
+            "LevelProto": 0,
+            "Model": "eff_wizard_magicclaw_cast_01_a.effmodel"
+        },
+        {
+            "Type": "MODEL",
+            "Id": "EFF_MAGICCLAW_REMAIN1A",
+            "LevelProto": 0,
+            "Model": "eff_wizard_magicclaw_remain_01_a.effmodel"
+        }
+    ]
+}

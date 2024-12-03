@@ -1,29 +1,61 @@
 #include "stdafx.h"
 #include "Teleport.h"
 #include "Character.h"
+#include "EffModelObject.h"
+#include "GameInstance.h"
 
 CTeleport::CTeleport()
 	:CSkill()
 {
 }
 
-
-void CTeleport::Initialzie_AnimEvent()
+HRESULT CTeleport::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 {
-	for (auto& eventTime : m_pSkillDesc->mapAnimEventTime)
+	if (FAILED(__super::Initialize(pSkillData, pUser)))
+		return E_FAIL;
+	//CastEffect
+	CEffModelObject::EFFECTOBJ_DESC tCastEffDesc;
+	tCastEffDesc.eModelProtoLevelID = LEVEL_LOADING;
+	strcpy_s(tCastEffDesc.strModelProtoName, "eff_wizard_teleport_cast_01_a.effmodel");
+	m_pCastEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
+	m_pCastEffect->Set_Active(false);
+	return S_OK;
+}
+
+void CTeleport::Update(_float fTimeDelta)
+{
+	__super::Update(fTimeDelta);
+	if (m_pCastEffect->Is_Active())
 	{
-		_uint iAnimIdx = m_pSkillDesc->vecAnimation[ eventTime.first];
-		ANIM_EVENT tAnimEvent;
-		tAnimEvent.fTime = eventTime.second;
-		tAnimEvent.pFunc = std::bind(&CTeleport::AnimEventFunc1, this);
-		m_mapAnimEvent.insert({ iAnimIdx, tAnimEvent });
+		m_pCastEffect->Update(fTimeDelta);
 	}
 }
-void CTeleport::AnimEventFunc1()
+
+void CTeleport::Late_Update(_float fTimeDelta)
 {
-	m_pUser->Move_Forward(m_pSkillDesc->vecData[m_pSkillDesc->iLevel-1]);
+	__super::Update(fTimeDelta);
+	if (m_pCastEffect->Is_Active())
+	{
+		m_pCastEffect->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect);
+	}
 }
 
+void CTeleport::Fire()
+{
+	m_pUser->Move_Forward(m_pSkillDesc->vecData[m_pSkillDesc->iLevel - 1]);
+	m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
+	m_pCastEffect->Start_Animation();
+	m_pCastEffect->Set_Active(true);
+}
+
+void CTeleport::On_Cast()
+{
+}
+
+void CTeleport::On_CastingEnd()
+{
+}
 CTeleport* CTeleport::Create(SKILL_DATA* pSkillData, CCharacter* pUser)
 {
 	CTeleport* pInstance = new CTeleport;
@@ -35,3 +67,8 @@ CTeleport* CTeleport::Create(SKILL_DATA* pSkillData, CCharacter* pUser)
 	return pInstance;
 }
 
+void CTeleport::Free()
+{
+	__super::Free();
+	Safe_Release(m_pCastEffect);
+}

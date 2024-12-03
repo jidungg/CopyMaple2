@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "Bullet_MagicClaw.h"
+#include "EffectManager.h"
 
 CMagicClaw::CMagicClaw()
     :CSkill()
@@ -16,17 +17,6 @@ CMagicClaw::CMagicClaw()
 
 }
 
-void CMagicClaw::Initialzie_AnimEvent()
-{
-	for (auto& eventTime : m_pSkillDesc->mapAnimEventTime)
-	{
-		_uint iAnimIdx = m_pSkillDesc->vecAnimation[eventTime.first];
-		ANIM_EVENT tAnimEvent;
-		tAnimEvent.fTime = eventTime.second;
-		tAnimEvent.pFunc = std::bind(&CMagicClaw::AnimEventFunc1, this);
-		m_mapAnimEvent.insert({ iAnimIdx, tAnimEvent });
-	}
-}
 HRESULT CMagicClaw::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 {
 	if (FAILED(__super::Initialize(pSkillData, pUser)))
@@ -43,74 +33,73 @@ HRESULT CMagicClaw::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 
 	//Bullet
 	CBullet::BULLET_DESC tBulletDesc;
-	tBulletDesc.eModelProtoLevelID = LEVEL_LOADING;
 	tBulletDesc.pShooter = m_pUser;
-	strcpy_s(tBulletDesc.strModelProtoName, "eff_wizard_firetornado_ball_01_a.effmodel");
 	m_pBullet = static_cast<CBullet_MagicClaw*>( m_pGameInstance->Clone_Proto_Object_Stock(CBullet_MagicClaw::m_szProtoTag, &tBulletDesc));
-	m_pBullet->Set_Active(true);
+	m_pBullet->Set_Active(false);
+
+	//CastEffect
+	CEffModelObject::EFFECTOBJ_DESC tCastEffDesc;
+	tCastEffDesc.eModelProtoLevelID = LEVEL_LOADING;
+	strcpy_s(tCastEffDesc.strModelProtoName, "eff_wizard_magicclaw_cast_01_a.effmodel");
+	m_pCastEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
+	m_pCastEffect->Set_Active(false);
 	return S_OK;
 }
  
 void CMagicClaw::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
-	m_pBullet->Update(fTimeDelta); 
+	if (m_pBullet->Is_Active())
+	{
+		m_pBullet->Update(fTimeDelta);
+	}
+	if (m_pCastEffect->Is_Active())
+	{
+		m_pCastEffect->Update(fTimeDelta);
+	}
 }
 void CMagicClaw::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
-	m_pBullet->Late_Update(fTimeDelta);
+	if (m_pBullet->Is_Active())
+	{
+		m_pBullet->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pBullet);
+	}
+	if (m_pCastEffect->Is_Active())
+	{
+		m_pCastEffect->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect);
+	}
 }
-void CMagicClaw::AnimEventFunc1()
+
+
+void CMagicClaw::On_Cast()
+{
+	m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
+	m_pCastEffect->Start_Animation();
+	m_pCastEffect->Set_Active(true);
+}
+
+void CMagicClaw::On_CastingEnd()
+{
+}
+
+
+void CMagicClaw::Fire()
 {
 	//SearchTarget :FustumCollider 켜기
 	m_pTargetSearcher->Update(XMMatrixTranslation(0, m_pUser->Get_BodyCollisionOffset().y, -1) * m_pUser->Get_Transform()->Get_WorldMatrix());
-	CCharacter* pTarget =  SearchTarget();
+	CCharacter* pTarget = SearchTarget(LAYERID::LAYER_MONSTER);
 	_uint iDamgID = (_uint)SKILL_DATA_ID::DAMG;
-	if(pTarget)
+	if (pTarget)
 	{
 		_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
-		fDmg = m_pUser->Get_Stat().iATK * fDmg*0.01;
-		m_pBullet->Play_Animation();
-		m_pBullet->Invoke(fDmg, pTarget);
+		fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
+
+		m_pBullet->Launch(fDmg, pTarget);
+
 	}
-}
-CCharacter* CMagicClaw::SearchTarget()
-{
-	auto listMonster= m_pGameInstance->Get_GameObjectList(LAYERID::LAYER_MONSTER);
-	_float fMinDistance = FLT_MAX;
-	CCharacter* pReturn = nullptr;
-	for (auto& pMonster : *listMonster)
-	{
-		CCharacter* pTmpCharacter = static_cast<CCharacter*>(pMonster);
-		if (false == pTmpCharacter->Is_Targetable())
-			continue;
-		if (Check_InRange(pTmpCharacter))
-		{
-			_float fTmpDistance = XMVectorGetX(XMVector3Length(pTmpCharacter->Get_Position() - m_pUser->Get_Position()));
-			if (fTmpDistance < fMinDistance)
-			{
-				fMinDistance = fTmpDistance;
-				pReturn = pTmpCharacter;
-			}
-		}
-	}
-	return pReturn;
-}
-_bool CMagicClaw::Check_InRange(CCharacter* pOther)
-{
-	if (pOther->Get_Team() == m_pUser->Get_Team())
-		return false;
-
-	auto p =pOther->Get_Collider(0);
-	return m_pTargetSearcher->Intersects((CColliderBase*)p);
-
-}
-
-
-HRESULT CMagicClaw::Render_Collider()
-{
-	return m_pTargetSearcher->Render();
 }
 
 
@@ -128,6 +117,7 @@ CMagicClaw* CMagicClaw::Create(SKILL_DATA* pSkillData, CCharacter* pUser)
 void CMagicClaw::Free()
 {
 	__super::Free();
-	Safe_Release(m_pTargetSearcher);
 	Safe_Release(m_pBullet);
+	Safe_Release(m_pCastEffect);
 }
+

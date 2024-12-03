@@ -17,7 +17,8 @@
                 [ "BASIC_ATTACK", 0 ]
             ],
             "Animation": [ 0 ],
-            "EventTime": [ [ 0 ,0] ]
+            "EventTime": [ [ 0, 0, "FIRE" ] ]
+
         },
         {
             "Id": "TELEPORT",
@@ -36,7 +37,7 @@
                 [ "TELEPORT", 0 ]
             ],
             "Animation": [ 126 ],
-            "EventTime": [ [ 0, 0.2 ] ]
+            "EventTime": [ [ 0, 0.15, "FIRE" ] ]
         },
         {
             "Id": "MAGIC_CLAW",
@@ -55,7 +56,9 @@
                 [ "MAGIC_CLAW", 0 ]
             ],
             "Animation": [ 82 ],
-            "EventTime": [ [ 0, 0.4 ] ]
+            "EventTime": [
+                [ 0, 0.4, "FIRE" ]
+            ]
         },
         {
             "Id": "FLAME_WAVE",
@@ -74,7 +77,9 @@
                 [ "FLAME_WAVE", 0 ]
             ],
             "Animation": [ 47 ],
-            "EventTime": [ [ 0, 0 ] ]
+            "EventTime": [
+                [ 0, 0.4, "FIRE" ]
+            ]
         },
         {
             "Id": "FIRE_TORNADO",
@@ -93,7 +98,7 @@
                 [ "FLAME_WAVE", 0 ]
             ],
             "Animation": [ 39 ],
-            "EventTime": [ [ 0, 0 ] ]
+            "EventTime": [ [ 0, 0, "FIRE" ] ]
         },
         {
             "Id": "KINDLING",
@@ -112,7 +117,7 @@
                 [ "FLAME_WAVE", 0 ]
             ],
             "Animation": [ 66, 67 ],
-            "EventTime": [ [ 1, 0 ] ]
+            "EventTime": [ [ 1, 0.2, "FIRE" ] ]
         },
         {
             "Id": "KINDLING2",
@@ -131,7 +136,7 @@
                 [ "FLAME_WAVE", 0 ]
             ],
             "Animation": [ 68, 69 ],
-            "EventTime": [ [ 1, 0 ] ]
+            "EventTime": [ [ 0, 0, "FIRE" ] ]
         },
         {
             "Id": "BBQ_PARTY",
@@ -150,7 +155,7 @@
                 [ "KINDLING", 3 ]
             ],
             "Animation": [ 2, 3 ],
-            "EventTime": [ [ 1, 0 ] ]
+            "EventTime": [ [ 1, 0.2, "FIRE" ] ]
         },
         {
             "Id": "FAKE_METEOR",
@@ -169,7 +174,7 @@
                 [ "BBQ_PARTY", 3 ]
             ],
             "Animation": [ 37, 38 ],
-            "EventTime": [ [ 1, 0 ] ]
+            "EventTime": [ [ 1, 0.2, "FIRE" ] ]
         },
         {
             "Id": "WILD_FIRE",
@@ -189,7 +194,7 @@
                 [ "FAKE_METEOR", 5 ]
             ],
             "Animation": [ 130 ],
-            "EventTime": [ [ 0, 0 ] ]
+            "EventTime": [ [ 0, 0.5, "FIRE" ] ]
         },
         {
             "Id": "WILD_FIRE2",
@@ -208,7 +213,7 @@
                 [ "BBQ_PARTY", 3 ]
             ],
             "Animation": [ 126 ],
-            "EventTime": [ [ 0, 0 ] ]
+            "EventTime": [ [ 0, 0, "FIRE" ] ]
         },
         {
             "Id": "SNAIL_ATTACK",
@@ -227,7 +232,7 @@
                 [ "SNAIL_ATTACK", 0 ]
             ],
             "Animation": [ 0 ],
-            "EventTime": [ [ 0, 0 ] ]
+            "EventTime": [ [ 0, 0, "FIRE" ] ]
         },
         {
             "Id": "CRAB_ATTACK",
@@ -245,7 +250,7 @@
             "Preceding": [
             ],
             "Animation": [ 0 ],
-            "EventTime": [ [ 0, 0 ] ]
+            "EventTime": [ [ 0, 0.17, "FIRE" ] ]
         },
         {
             "Id": "STUMP_CHARGE_ATTACK",
@@ -263,7 +268,7 @@
             "Preceding": [
             ],
             "Animation": [ 1 ],
-            "EventTime": [ [ 0, 0 ] ]
+            "EventTime": [ [ 0, 0, "FIRE" ] ]
         },
         {
             "Id": "STUMP_KICK",
@@ -282,7 +287,7 @@
 
             ],
             "Animation": [ 2 ],
-            "EventTime": [ [ 0, 0 ] ]
+            "EventTime": [ [ 0, 0.2, "FIRE" ] ]
         },
         {
             "Id": "STUMP_BUNTING",
@@ -301,7 +306,7 @@
 
             ],
             "Animation": [ 3, 4 ],
-            "EventTime": [ [ 1, 0 ] ]
+            "EventTime": [ [ 1, 0.1, "FIRE" ] ]
         },
         {
             "Id": "BAYAR_ATTACK_A",
@@ -320,7 +325,7 @@
 
             ],
             "Animation": [ 1, 9 ],
-            "EventTime": [ [ 1, 0 ] ]
+            "EventTime": [ [ 1, 0.1, "FIRE" ] ]
         },
         {
             "Id": "BAYAR_ATTACK_B",
@@ -339,7 +344,10 @@
 
             ],
             "Animation": [ 2, 10 ],
-            "EventTime": [ [ 1, 0 ] ]
+            "EventTime": [
+                [ 1, 0, "FIRE" ],
+                [ 1, 0.317, "ATTACK_END" ]
+            ]
         },
         {
             "Id": "BAYAR_ATTACK_C",
@@ -358,7 +366,10 @@
 
             ],
             "Animation": [ 3, 11 ],
-            "EventTime": [ [ 1, 0 ] ]
+            "EventTime": [
+                [ 1, 0, "FIRE" ],
+                [ 1, 0.317, "ATTACK_END" ]
+            ]
         },
         {
             "Id": "BAYAR_ATTACK_D",
@@ -377,70 +388,13 @@
 
             ],
             "Animation": [ 4, 12 ],
-            "EventTime": [ [ 1, 0 ] ]
-        },
-        {
-            "Id": "BAYAR_ATTACK_E",
-            "CastType": "CHARGING",
-            "Name": "",
-            "Desc": "",
-            "Level": 1,
-            "MaxLevel": 10,
-            "CostType": "NONE",
-            "Cost": 0,
-            "CoolTime": 0,
-            "IconImg": "10300291.png",
-            "Data": [ 397.0 ],
-            "LevelUpData": [ 45.0 ],
-            "Preceding": [
-
-            ],
-            "Animation": [ 5, 13, 16 ],
-            "EventTime": [ [ 2, 0 ] ]
-        },
-        {
-            "Id": "BAYAR_ATTACK_F",
-            "CastType": "CHARGING",
-            "Name": "",
-            "Desc": "",
-            "Level": 1,
-            "MaxLevel": 10,
-            "CostType": "NONE",
-            "Cost": 0,
-            "CoolTime": 0,
-            "IconImg": "10300291.png",
-            "Data": [ 397.0 ],
-            "LevelUpData": [ 45.0 ],
-            "Preceding": [
-
-            ],
-            "Animation": [ 5, 6 ],
-            "EventTime": [ [ 1, 0 ] ]
-        },
-        {
-            "Id": "BAYAR_ATTACK_G",
-            "CastType": "CHARGING",
-            "Name": "",
-            "Desc": "",
-            "Level": 1,
-            "MaxLevel": 10,
-            "CostType": "NONE",
-            "Cost": 0,
-            "CoolTime": 0,
-            "IconImg": "10300291.png",
-            "Data": [ 397.0 ],
-            "LevelUpData": [ 45.0 ],
-            "Preceding": [
-
-            ],
-            "Animation": [ 7, 14, 17, 19 ],
             "EventTime": [
-                [ 1, 0 ],
-                [ 2, 0 ]
+                [ 1, 0, "FIRE" ],
+                [ 1, 0.317, "ATTACK_END" ]
             ]
         },
         {
-            "Id": "BAYAR_ATTACK_H",
+            "Id": "BAYAR_SKY_JUMP",
             "CastType": "CHARGING",
             "Name": "",
             "Desc": "",
@@ -455,8 +409,66 @@
             "Preceding": [
 
             ],
-            "Animation": [ 8, 15, 18 ],
-            "EventTime": [ [ 1, 0 ] ]
+            "Animation": [ 33, 13, 16 ],
+            "EventTime": []
+        },
+        {
+            "Id": "BAYAR_KNOCK_OFF",
+            "CastType": "CHARGING",
+            "Name": "",
+            "Desc": "",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Data": [ 397.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+
+            ],
+            "Animation": [ 33, 6 ],
+            "EventTime": []
+        },
+        {
+            "Id": "BAYAR_STONE_SPIKE",
+            "CastType": "CHARGING",
+            "Name": "",
+            "Desc": "",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Data": [ 397.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+
+            ],
+            "Animation": [ 7, 14, 19 ],
+            "EventTime": []
+        },
+        {
+            "Id": "BAYAR_PALM_STRIKE",
+            "CastType": "CHARGING",
+            "Name": "",
+            "Desc": "",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Data": [ 397.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+
+            ],
+            "Animation": [ 8, 15, 18],
+            "EventTime": []
         }
+
     ]
 }

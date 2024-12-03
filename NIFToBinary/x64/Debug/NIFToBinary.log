@@ -1,1 +1,7 @@
-﻿
+﻿  pch.cpp
+  CNifToBinary.cpp
+D:\Workbench\Portfolio\CopyMaple2\NIFToBinary\CNifToBinary.cpp(3,10): error C1083: 포함 파일을 열 수 없습니다. 'NiTriShape.h': No such file or directory
+  (소스 파일 '/CNifToBinary.cpp'을(를) 컴파일하는 중)
+  
+  main.cpp
+  코드를 생성하고 있습니다...

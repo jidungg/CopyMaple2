@@ -3,14 +3,15 @@
 #include "Character.h"
 #include "Collider_Sphere.h"
 #include "GameInstance.h"
+#include "HitEvent.h"
 
 CBullet::CBullet(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CEffectObject(pDevice, pContext)
+	: CGameObject(pDevice, pContext)
 {
 }
 
 CBullet::CBullet(const CBullet& Prototype)
-	: CEffectObject(Prototype)
+	: CGameObject(Prototype)
 {
 }
 
@@ -27,9 +28,22 @@ HRESULT CBullet::Initialize(void* pArg)
 		return E_FAIL;
 	BulletDesc* pDesc =static_cast< BulletDesc*>(pArg);
 	m_pShooter = pDesc->pShooter;
+	m_szHitEffectTag = pDesc->szHitEffectTag;
 	return S_OK;
 }
 
+void CBullet::SearchTarget(list<CGameObject*>* pOutList, LAYERID eLayerID)
+{
+	auto listMonster = m_pGameInstance->Get_GameObjectList(eLayerID);
+	for (auto& pMonster : *listMonster)
+	{
+		CCharacter* pTmpCharacter = static_cast<CCharacter*>(pMonster);
+		if (false == pTmpCharacter->Is_Targetable())
+			continue;
+		if(Check_Collision(pTmpCharacter))
+			pOutList->push_back(pTmpCharacter);
+	}
+}
 
 
 _bool CBullet::Check_Collision(CGameObject* pOther)
@@ -37,33 +51,41 @@ _bool CBullet::Check_Collision(CGameObject* pOther)
 	CCharacter* pCharacter = dynamic_cast<CCharacter*>(pOther);
 	if (nullptr == pCharacter)
 		return false;
+	if (false == pCharacter->Is_Valid())
+		return false;
 	if (pCharacter->Get_Team() == m_eTeam)
 		return false;
 
-	CCollider_Sphere* pCollider =  static_cast<CCollider_Sphere*>( pCharacter->Get_Collider(0));
-	if(pCollider->Intersects(m_pCollider))
-	{
-		pCharacter->Hit(m_pShooter,m_iDamage);
-		return true;
-	}
-	return false;
+	return m_pCollider->Intersects(pCharacter->Get_Collider(0)) ;
 }
 
 
-void CBullet::Invoke(_float fDamg, _vector vPosition)
+void CBullet::Launch(_float fDamage, CGameObject* pTarget)
 {
-	m_iDamage = fDamg;
+	m_fDamage = fDamage;
+	Set_Active(true);
+	if (pTarget)
+	{
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, pTarget->Get_Position());
+		Set_Target(pTarget);
+	}
+}
+
+void CBullet::Launch(_float fDamage, _fvector vPosition)
+{
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	m_bInvoke = true;
-	m_fTimeAcc = 0.f;
+	m_fDamage = fDamage;
 	Set_Active(true);
 }
 
-void CBullet::Invoke(_float fDamg, CGameObject* pTarget)
+void CBullet::Launch(_float fDamage)
 {
-	Set_Target(pTarget);
-	Invoke(fDamg, static_cast<CCharacter*>(pTarget)->Get_Hitpoint());
+	m_fDamage = fDamage;
+	Set_Active(true);
 }
+
+
+
 
 
 

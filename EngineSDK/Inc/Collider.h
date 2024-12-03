@@ -22,6 +22,7 @@ public:
 		FRUSTUM,
 		MESH,
 		CAPSULE,
+		CYLINDER,
 		LAST
 	};
 	typedef struct ColliderDesc
@@ -45,7 +46,9 @@ public:
 
 	COLLIDER_TYPE Get_ColliderType() const {return m_eType;}
 	_uint Get_ID() { return m_iID; }
+	_float3 Get_Center() { return m_vCenterOffset; }
 protected:
+	_float3 m_vCenterOffset = { 0,0,0 };
 	COLLIDER_TYPE m_eType = COLLIDER_TYPE::LAST;
 	_bool m_bCollide = false;
 	_uint m_iID = 0;

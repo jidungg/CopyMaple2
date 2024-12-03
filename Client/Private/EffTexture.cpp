@@ -16,6 +16,14 @@ CEffTexture::CEffTexture(const CEffTexture& Prototype)
 	m_tTexTransformData = m_tDefaultTexTransformData;
 }
 
+HRESULT CEffTexture::Initialize_Prototype(const _tchar* pTextureFilePath, EFF_TEX_TYPE iNumTexture)
+{
+	if (FAILED(CTexture::Initialize_Prototype(pTextureFilePath, 1)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 HRESULT CEffTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle)
 {
 	if (FAILED(__super::Initialize_Prototype(szDirPath, inFIle)))
@@ -61,6 +69,18 @@ void CEffTexture::Set_TextureTransformData(EFF_TEX_OPERATION_TYPE eOpType, _floa
 }
 
 
+
+CEffTexture* CEffTexture::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pTextureFilePath, EFF_TEX_TYPE eTexType)
+{
+	CEffTexture* pInstance = new CEffTexture(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype(pTextureFilePath, eTexType)))
+	{
+		MSG_BOX("Failed to Created : CEffTexture");
+		Safe_Release(pInstance);
+	}
+	return pInstance;
+}
 
 CEffTexture* CEffTexture::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath, ifstream& inFIle, EFF_TEX_TYPE eTexType)
 {

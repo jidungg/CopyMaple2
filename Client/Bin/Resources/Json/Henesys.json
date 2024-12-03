@@ -1705,6 +1705,14 @@
             "Iteration": 1
         },
         {
+            "IntData": [3 ],
+            "FloatData": [ 5.0 ],
+            "Direction": 0,
+            "Index": 530,
+            "ItemId": "MONSTER_SPAWNER",
+            "Iteration": 1
+        },
+        {
             "IntData": [ 3 ],
             "FloatData": [],
             "Direction": 0,

@@ -24,20 +24,23 @@ protected:
 public:
     virtual HRESULT Initialize_Prototype(const _char* pModelFilePath, _fmatrix PreTransformMatrix);
     virtual HRESULT Initialize(void* pArg) override;
-	virtual void Update(_float fTimeDelta) override;
     virtual HRESULT Render(CShader* pShader);
 
 public:
-	void Play_Animation();
+    void Update_Animation(_float fTimeDelta);
+	void Start_Animation();
+	void Stop_Animation();
     void Reset();
 
-private:
-   
+    void Register_OnAnimEndCallBack(const function<void(CEffModel*)>& fCallback) { m_listAnimEndCallBack.push_back(fCallback); }
+    void Register_AnimEvent(ANIM_EVENT tAnimEvent);
 public:
     _uint Get_NumMeshes() const { return m_iNumMeshes; }
     _uint Get_BoneIndex(const _char* pBoneName) const;
 
     void Set_Loop(bool bLoop) { m_bLoop = bLoop; }
+
+
 protected:
     HRESULT Ready_Bones(ifstream& inFile, _uint iParentBoneIndex);
     HRESULT Ready_Meshes(ifstream& inFile);
@@ -63,6 +66,12 @@ private:
 
     _bool m_bPlay = { false };
     _bool m_bLoop = { false };
+
+    list<function<void(CEffModel*)>> m_listAnimEndCallBack;
+    list< ANIM_EVENT>m_listAnimEvent;
+
+	_float m_fDuration = { 0.f };
+	_float m_fCurrentTrackPosition = { 0.f };
 public:
     static CEffModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* pModelFilePath, _fmatrix PreTransformMatrix);
     virtual CComponent* Clone(void* pArg) override;

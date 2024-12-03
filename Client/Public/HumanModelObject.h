@@ -47,7 +47,7 @@ private:
 
 private:
 	CFace* m_pFaceCom = { nullptr };
-	CShader* m_pFaceShaderCom = { nullptr };
+	//CShader* m_pFaceShaderCom = { nullptr };
 	unordered_map<MESH_PART_ID, _uint> m_mapMeshPartIdx;
 public:
 	static CHumanModelObject* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

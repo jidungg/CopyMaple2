@@ -171,6 +171,7 @@
   <ItemGroup>
     <ClInclude Include="..\Public\BayarAttackC.h" />
     <ClInclude Include="..\Public\BayarKnockOff.h" />
+    <ClInclude Include="..\Public\BayarPalmStrike.h" />
     <ClInclude Include="..\Public\BayarSkyJump.h" />
     <ClInclude Include="..\Public\BayarStoneSpike.h" />
     <ClInclude Include="..\public\Bullet_BayarAttackD.h" />
@@ -288,6 +289,7 @@
     <ClCompile Include="..\Private\BayarAttackC.cpp" />
     <ClCompile Include="..\Private\BayarAttackD.cpp" />
     <ClCompile Include="..\Private\BayarKnockOff.cpp" />
+    <ClCompile Include="..\Private\BayarPalmStrike.cpp" />
     <ClCompile Include="..\Private\BayarSkyJump.cpp" />
     <ClCompile Include="..\Private\BayarStoneSpike.cpp" />
     <ClCompile Include="..\Private\BBQParty.cpp" />

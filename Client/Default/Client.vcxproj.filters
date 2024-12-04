@@ -228,6 +228,7 @@
     <ClInclude Include="..\Public\BayarKnockOff.h" />
     <ClInclude Include="..\Public\BayarStoneSpike.h" />
     <ClInclude Include="..\Public\Bullet_BayarStoneSpike.h" />
+    <ClInclude Include="..\Public\BayarPalmStrike.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -395,6 +396,7 @@
     <ClCompile Include="..\Private\BayarKnockOff.cpp" />
     <ClCompile Include="..\Private\BayarStoneSpike.cpp" />
     <ClCompile Include="..\Private\Bullet_BayarStoneSpike.cpp" />
+    <ClCompile Include="..\Private\BayarPalmStrike.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

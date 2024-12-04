@@ -31,6 +31,8 @@ HRESULT CBayarAttackA::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	m_pCastEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pCastEffect->Set_Active(false);
 	m_pUser->Add_Child(m_pCastEffect);
+	m_pCastEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, 0.1f, 0.f,1.f });
+	m_pCastEffect->Get_Transform()->Scaling(1, 1, 1);
 
 	return S_OK;
 }

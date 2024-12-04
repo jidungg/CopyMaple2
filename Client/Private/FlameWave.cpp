@@ -2,7 +2,6 @@
 #include "FlameWave.h"
 #include "Collider_Frustum.h"
 #include "GameInstance.h"
-#include "Character.h"
 #include "Player.h"
 #include "Bullet_MagicClaw.h"
 #include "HitEvent.h"

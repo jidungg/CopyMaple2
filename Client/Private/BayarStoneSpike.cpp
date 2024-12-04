@@ -8,8 +8,6 @@
 #include "Client_Utility.h"
 #include "CubeTerrain.h"
 
-_int dX[5] = { 0,1,0,-1,0 };
-_int dZ[5] = { 0,0,1,0,-1 };
 
 CBayarStoneSpike::CBayarStoneSpike()
 	:CSkill()
@@ -66,8 +64,16 @@ void CBayarStoneSpike::Late_Update(_float fTimeDelta)
 
 		for (auto& pTarget : listTarget)
 		{
-			Launch_Bullets(pTarget->Get_Position());
+			_uint iDamgID = (_uint)SKILL_DATA_ID::DAMG;
+			_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
+			fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
 
+			CBullet* pBullet = m_pBulletPool->Get_Object();
+			_vector vTargetPos = pTarget->Get_Position();
+
+			vTargetPos = XMVectorSetY(vTargetPos, m_pTerrain->Get_FloorHeight(vTargetPos));
+			m_pTerrain->Get_ContainedCellPosition(vTargetPos);
+			pBullet->Launch(fDmg, vTargetPos);
 		}
 
 	}
@@ -85,52 +91,13 @@ void CBayarStoneSpike::On_CastingEnd()
 
 void CBayarStoneSpike::Fire()
 {
+	m_pTerrain = static_cast<CCubeTerrain*>(m_pGameInstance->Get_FirstGameObject(Get_CurrentTrueLevel(), LAYERID::LAYER_TERRAIN));
 	m_bAttack = true;
 }
 
 void CBayarStoneSpike::On_AttackEnd()
 {
 	m_bAttack = false;
-}
-
-void CBayarStoneSpike::Launch_Bullets(_vector vTargetPos)
-{
-	m_pBulletPool->Retrive_Object([](CBullet_BayarStoneSpike* pObj) ->_bool
-		{
-			return pObj->Is_Valid();
-		});
-	m_pTerrain = static_cast<CCubeTerrain*>(m_pGameInstance->Get_FirstGameObject(Get_CurrentTrueLevel(), LAYERID::LAYER_TERRAIN));
-
-	_vector vTargetFloorPos = vTargetPos;
-	_float fFloorHeight = m_pTerrain->Get_FloorHeight(vTargetPos);
-	if (fFloorHeight < 0) return;
-
-	_uint iDamgID = (_uint)SKILL_DATA_ID::DAMG;
-	_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
-	fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
-
-	vTargetFloorPos= XMVectorSetY( vTargetFloorPos, fFloorHeight);
-	_uint iCenterIndex =  m_pTerrain->PosToIndex(vTargetFloorPos);
-	_vector vCenterPos = m_pTerrain->Get_ContainedCellPosition(vTargetFloorPos);
-
-	CBullet_BayarStoneSpike* pBullet = m_pBulletPool->Get_Object();
-	pBullet->Launch(fDmg, vCenterPos);
-
-	XMUINT3 i3CenterIdex = m_pTerrain->SplitIndex(iCenterIndex);
-
-	for (_uint i = 0; i < 5; i++)
-	{
-		XMUINT3 i3CurrentIdx = i3CenterIdex;
-		i3CurrentIdx.x += dX[i];
-		i3CurrentIdx.z += dZ[i];
-		if (m_pTerrain->Is_ValidIndex(i3CurrentIdx) == false)
-			continue;
-		_uint iCurrentIndex = m_pTerrain->CombineIndex(i3CurrentIdx);
-		_vector vCurrentPos = m_pTerrain->IndexToPos(iCurrentIndex);
-		pBullet = m_pBulletPool->Get_Object();
-		pBullet->Launch(fDmg, vCurrentPos);
-	}
-	
 }
 
 CBayarStoneSpike* CBayarStoneSpike::Create(SKILL_DATA* pSkillData, CCharacter* pUser)

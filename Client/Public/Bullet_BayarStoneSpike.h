@@ -24,7 +24,7 @@ public:
 	virtual void Launch(_float fDamage, _vector vPosition) override;
 
 private:
-
+	_vector m_vCenterPos = { 0.f,0.f,0.f,1.f };
 	_bool m_bSpiked = { false };
 	CEffModelObject* m_pPrecursorEffect = { nullptr };
 	CEffModelObject* m_pRockCubeEffect = { nullptr };

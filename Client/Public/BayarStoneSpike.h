@@ -24,9 +24,6 @@ protected:
 	virtual void Fire() override;
 	virtual void On_AttackEnd() override;
 
-
-private:
-	void Launch_Bullets(_vector vTargetPos);
 private:
 	CObjectPool<CBullet_BayarStoneSpike>* m_pBulletPool = { nullptr };
 	_bool m_bAttack = { false };

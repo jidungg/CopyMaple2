@@ -120,7 +120,7 @@ void CBayar::On_AnimEnd(_uint iAnimIdx)
 }
 void CBayar::To_NextSkill()
 {
-	m_iCurrentSkillID = (_int)SKILL_ID::BAYAR_STONE_SPIKE;
+	m_iCurrentSkillID = (_int)SKILL_ID::BAYAR_PALM_STRIKE;
 	//__super::To_NextSkill();
 }
 void CBayar::Priority_Update(_float fTimeDelta)

@@ -249,7 +249,6 @@ _bool CEffTransformController::Update_InTime(_float fTrackPos)
 		/ (tRightKeyFrame.fTrackPosition - tLeftKeyFrame.fTrackPosition);
 	TRANSFORM_KEYFRAME tKeyFrame = m_pGameInstance->Lerp_Frame(tLeftKeyFrame, tRightKeyFrame, fRatio);
 
-	cout << "Scale : " << tKeyFrame.vScale.x << " " << tKeyFrame.vScale.y << " " << tKeyFrame.vScale.z << endl;
 	pTarget->Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&tKeyFrame.vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMLoadFloat4(&tKeyFrame.vRotation), XMVectorSetW(XMLoadFloat3(&tKeyFrame.vPosition), 1.f)));
 	return false;
 }

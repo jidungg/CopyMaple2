@@ -24,6 +24,7 @@
 #include "BayarSkyJump.h"
 #include "BayarKnockOff.h"
 #include "BayarStoneSpike.h"
+#include "BayarPalmStrike.h"
 #include "Collider.h"
 
 CSkill::CSkill()
@@ -336,6 +337,7 @@ CSkill* CSkill::Create(SKILL_DATA* pSkillData, CCharacter* pUser)
 		pInstance = CBayarStoneSpike::Create(pSkillData, pUser);
 		break;
 	case Client::SKILL_ID::BAYAR_PALM_STRIKE:
+		pInstance = CBayarPalmStrike::Create(pSkillData, pUser);
 
 		break;
 	case Client::SKILL_ID::LAST:

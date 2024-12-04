@@ -476,7 +476,11 @@
 
             ],
             "Animation": [ 8, 15, 18],
-            "EventTime": []
+            "EventTime": [
+                [ 1, 0.1, "FIRE" ],
+                [ 1, 0.58, "FIRE" ],
+                [ 2, 0.27, "FIRE" ]
+            ]
         }
 
     ]

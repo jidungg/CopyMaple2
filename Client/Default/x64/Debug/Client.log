@@ -1,5 +1,10 @@
-﻿  BayarStoneSpike.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\BayarStoneSpike.cpp(110,41): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/BayarStoneSpike.cpp'을(를) 컴파일하는 중)
+﻿  BayarAttackA.cpp
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\BayarAttackA.cpp(81,42): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Private/BayarAttackA.cpp'을(를) 컴파일하는 중)
   
+  BayarPalmStrike.cpp
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\BayarPalmStrike.cpp(104,42): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Private/BayarPalmStrike.cpp'을(를) 컴파일하는 중)
+  
+  코드를 생성하고 있습니다...
   Client.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Client.exe

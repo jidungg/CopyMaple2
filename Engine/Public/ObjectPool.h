@@ -11,8 +11,11 @@ private:
 	virtual ~CObjectPool() = default;
 
 public:
+	void Retrive_Object(_bool(*func)(T* ));
 	T* Get_Object();
 	void Return_Object(T* pGameObject);
+	void Update_LentObject(_float fTimeDelta);
+	void LateUpdate_LentObject(_float fTimeDelta);
 protected:
 	T* m_pOriginal = { nullptr };
 	void* m_pArg = { nullptr };
@@ -36,30 +39,44 @@ template<class T>
 inline CObjectPool<T>::CObjectPool(T* pOriginal, void* pArg, _uint iCloneCount)
 {
 	m_pOriginal = pOriginal;
-	Safe_AddRef(m_pOriginal);
 	m_iCloneCOunt = iCloneCount;
 	m_pArg = pArg;
 	for (_uint i = 0; i < m_iCloneCOunt; ++i)
 	{
 		T* pClone = static_cast<T*>(m_pOriginal->Clone(m_pArg));
 		m_queStockObject.push(pClone);
-		Safe_AddRef(pClone);
+	}
+}
+
+
+
+template<class T>
+inline void CObjectPool<T>::Retrive_Object(_bool(*func)(T*))
+{
+	for (auto& iter = m_listLentObject.begin(); iter != m_listLentObject.end(); )
+	{
+		if (false == func(*iter))
+		{
+			m_queStockObject.push(*iter);
+			iter = m_listLentObject.erase(iter);
+			//cout << "Retrieved. Stock :" << m_queStockObject.size() << ", Lent :" << m_listLentObject.size() << endl;
+		}
+		else
+		{
+			++iter;
+		}
 	}
 }
 
 template<class T>
 inline T* CObjectPool<T>::Get_Object()
 {
-	if (m_queStockObject.empty())
-	{
-		T* pClone = static_cast<T*>(m_pOriginal->Clone(m_pArg));
-		m_queStockObject.push(pClone);
-		Safe_AddRef(pClone);
-	}
+	assert(false == m_queStockObject.empty());
+
 	T* pObject = m_queStockObject.front();
 	m_queStockObject.pop();
 	m_listLentObject.push_back(pObject);
-
+	//cout << "Lented. Stock :" << m_queStockObject.size() << ", Lent :" << m_listLentObject.size() << endl;
 	return pObject;
 }
 
@@ -72,6 +89,26 @@ inline void CObjectPool<T>::Return_Object(T* pGameObject)
 
 	m_queStockObject.push(*iter);
 	m_listLentObject.erase(iter);
+}
+
+template<class T>
+inline void CObjectPool<T>::Update_LentObject(_float fTimeDelta)
+{
+	for (auto& pObj : m_listLentObject)
+	{
+		if(pObj->Is_Valid())
+			pObj->Update(fTimeDelta);
+	}
+}
+
+template<class T>
+inline void CObjectPool<T>::LateUpdate_LentObject(_float fTimeDelta)
+{
+	for (auto& pObj : m_listLentObject)
+	{
+		if (pObj->Is_Valid())
+			pObj->Late_Update(fTimeDelta);
+	}
 }
 
 
@@ -92,4 +129,5 @@ inline void CObjectPool<T>::Free()
 	m_listLentObject.clear();
 	Safe_Release(m_pOriginal);
 }
+
 END

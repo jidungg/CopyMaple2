@@ -74,6 +74,7 @@ HRESULT CBullet_MagicClaw::Render()
 
 void CBullet_MagicClaw::Launch(_float fDamage, CGameObject* pTarget)
 {
+	
 	m_fDamage = fDamage;
 	Set_Target(pTarget);
 	Set_Transform(Get_Target()->Get_Position());

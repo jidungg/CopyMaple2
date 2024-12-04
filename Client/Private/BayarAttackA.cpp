@@ -27,10 +27,10 @@ HRESULT CBayarAttackA::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	//CastEffect
 	CEffModelObject::EFFECTOBJ_DESC tCastEffDesc;
 	tCastEffDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tCastEffDesc.strModelProtoName, "eff_sandstonebiggiant_attack_02_h_a.effmodel");
+	strcpy_s(tCastEffDesc.strModelProtoName, "eff_sandstonegiant_attack_01_a.effmodel");
 	m_pCastEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pCastEffect->Set_Active(false);
-
+	m_pUser->Add_Child(m_pCastEffect);
 
 	return S_OK;
 }
@@ -38,21 +38,14 @@ HRESULT CBayarAttackA::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 void CBayarAttackA::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
-	if (m_pCastEffect->Is_Active())
-	{
-		m_pCastEffect->Update(fTimeDelta);
-	}
+
 	
 }
 
 void CBayarAttackA::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
-	if (m_pCastEffect->Is_Active())
-	{
-		m_pCastEffect->Late_Update(fTimeDelta);
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect);
-	}
+
 }
 
 void CBayarAttackA::On_Cast()
@@ -65,15 +58,17 @@ void CBayarAttackA::On_CastingEnd()
 
 void CBayarAttackA::Fire()
 {
-	CTransform* pShooterTransform = m_pUser->Get_Transform();
-	_vector vPos = pShooterTransform->Get_State(CTransform::STATE_POSITION);
-	_vector vLook = pShooterTransform->Get_State(CTransform::STATE_LOOK);
-	vPos += vLook * 1.f;
+
 
 	m_pCastEffect->Set_Active(true);
 	m_pCastEffect->Start_Animation();
-	m_pCastEffect->Set_Transform(vPos);
+	//m_pCastEffect->Set_Transform(vPos);
 	
+
+}
+
+void CBayarAttackA::On_AttackEnd()
+{
 	m_pTargetSearcher->Update(m_pUser->Get_Transform()->Get_WorldMatrix());
 	list<CGameObject*> listTarget;
 	SearchTarget(&listTarget, LAYERID::LAYER_PLAYER);
@@ -103,5 +98,5 @@ CBayarAttackA* CBayarAttackA::Create(SKILL_DATA* pSkillData, CCharacter* pUser)
 void CBayarAttackA::Free()
 {
 	__super::Free();
-	Safe_Release(m_pCastEffect);
+	//Safe_Release(m_pCastEffect);
 }

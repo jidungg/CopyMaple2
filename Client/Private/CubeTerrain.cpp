@@ -296,6 +296,11 @@ XMUINT3 CCubeTerrain::SplitIndex(_uint iIdx)
 	return XMUINT3{ iIdx % m_vSize.x ,iIdx / (m_vSize.x * m_vSize.z),iIdx / m_vSize.x % m_vSize.z, };
 }
 
+_uint CCubeTerrain::CombineIndex(XMUINT3 i3Idx)
+{
+	return i3Idx.x + m_vSize.x * i3Idx.z + m_vSize.x * m_vSize.z * i3Idx.y;
+}
+
 HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 {
 	if (m_vecCells[tDesc.index] != nullptr)
@@ -525,6 +530,15 @@ CTerrainObject* CCubeTerrain::Get_PlayerSpawn()
 	return nullptr;
 }
 
+_vector CCubeTerrain::Get_ContainedCellPosition(const _fvector& Pos)
+{
+	if (false == Is_InSide(Pos))
+		return {-1,-1,-1,-1};
+
+	_int iIdx = PosToIndex(Pos);
+	return IndexToPos(iIdx);
+}
+
 
 
 
@@ -538,6 +552,17 @@ _bool CCubeTerrain::Is_InSide(_vector vPos)
 	if (fPos.z < -0.5 || fPos.z >= m_vSize.z - 0.5)
 		return false;
 	if (fPos.y < 0 || fPos.y >= m_vSize.y )
+		return false;
+	return true;
+}
+
+_bool CCubeTerrain::Is_ValidIndex(XMUINT3 i3Index)
+{
+	if (i3Index.x < 0 || i3Index.x >= m_vSize.x)
+		return false;
+	if (i3Index.y < 0 || i3Index.y >= m_vSize.y)
+		return false;
+	if (i3Index.z < 0 || i3Index.z >= m_vSize.z)
 		return false;
 	return true;
 }

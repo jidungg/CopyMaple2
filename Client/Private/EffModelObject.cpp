@@ -85,14 +85,19 @@ void CEffModelObject::Compute_Matrix()
 		__super::Compute_Matrix();
 }
 
-void CEffModelObject::Start_Animation(_float fStartDealy, _bool bLoop, _float fDuration)
+void CEffModelObject::Start_Animation(_float fStartDealy, _bool bLoop, _float fDuration, _float fSpeed)
 {
 	m_fStartDelay = fStartDealy;
 	m_fDuration = fDuration;
 	m_pModelCom->Set_Loop(bLoop);
+	if (fSpeed > 0)
+		m_pModelCom->Set_AnimSpeed(fSpeed);
 	On_EffectAnimStart(m_pModelCom);
 	m_pModelCom->Start_Animation();
 }
+
+
+
 
 
 
@@ -104,6 +109,11 @@ void CEffModelObject::Register_OnAnimEndCallBack(const function<void(CEffModel*)
 void CEffModelObject::Register_AnimEvent(ANIM_EVENT tAnimEvent)
 {
 	m_pModelCom->Register_AnimEvent(tAnimEvent);
+}
+
+void CEffModelObject::Set_AnimSpeed(_float fSpd)
+{
+	m_pModelCom->Set_AnimSpeed(fSpd);
 }
 
 HRESULT CEffModelObject::Ready_Components(void* pArg)

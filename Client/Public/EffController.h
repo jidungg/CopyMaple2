@@ -22,6 +22,7 @@ public:
 
 	EFF_CTRL_TYPE Get_CtrlType() { return m_eCtrlType; }
 	_float Get_Duration() { return (m_fStopPosition - m_fStartPosition - m_fPhase)/m_fSpeed; }
+	void Set_Speed(_float fSpeed) { m_fSpeed = fSpeed; }
 protected:
 	virtual _bool Update_InTime(_float fTrackPos) abstract;
 

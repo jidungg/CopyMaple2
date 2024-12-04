@@ -170,6 +170,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\BayarAttackC.h" />
+    <ClInclude Include="..\Public\BayarKnockOff.h" />
+    <ClInclude Include="..\Public\BayarSkyJump.h" />
+    <ClInclude Include="..\Public\BayarStoneSpike.h" />
     <ClInclude Include="..\public\Bullet_BayarAttackD.h" />
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\BayarAttackA.h" />
@@ -181,6 +184,7 @@
     <ClInclude Include="..\Public\Builder.h" />
     <ClInclude Include="..\Public\BuildPreview.h" />
     <ClInclude Include="..\Public\Bullet_BayarAttackB.h" />
+    <ClInclude Include="..\Public\Bullet_BayarStoneSpike.h" />
     <ClInclude Include="..\Public\Bullet_BBQParty.h" />
     <ClInclude Include="..\Public\Bullet_FakeMeteor.h" />
     <ClInclude Include="..\Public\Bullet_FireTornado.h" />
@@ -283,12 +287,16 @@
     <ClCompile Include="..\Private\BayarAttackB.cpp" />
     <ClCompile Include="..\Private\BayarAttackC.cpp" />
     <ClCompile Include="..\Private\BayarAttackD.cpp" />
+    <ClCompile Include="..\Private\BayarKnockOff.cpp" />
+    <ClCompile Include="..\Private\BayarSkyJump.cpp" />
+    <ClCompile Include="..\Private\BayarStoneSpike.cpp" />
     <ClCompile Include="..\Private\BBQParty.cpp" />
     <ClCompile Include="..\Private\BoneModelObject.cpp" />
     <ClCompile Include="..\Private\Builder.cpp" />
     <ClCompile Include="..\Private\BuildPreview.cpp" />
     <ClCompile Include="..\Private\Bullet_BayarAttackB.cpp" />
     <ClCompile Include="..\Private\Bullet_BayarAttackD.cpp" />
+    <ClCompile Include="..\Private\Bullet_BayarStoneSpike.cpp" />
     <ClCompile Include="..\Private\Bullet_BBQParty.cpp" />
     <ClCompile Include="..\Private\Bullet_FakeMeteor.cpp" />
     <ClCompile Include="..\Private\Bullet_FireTornado.cpp" />

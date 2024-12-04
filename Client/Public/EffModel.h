@@ -39,8 +39,8 @@ public:
     _uint Get_BoneIndex(const _char* pBoneName) const;
 
     void Set_Loop(bool bLoop) { m_bLoop = bLoop; }
-
-
+    void Set_AnimSpeed(_float fSpeed);
+; 
 protected:
     HRESULT Ready_Bones(ifstream& inFile, _uint iParentBoneIndex);
     HRESULT Ready_Meshes(ifstream& inFile);

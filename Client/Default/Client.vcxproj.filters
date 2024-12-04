@@ -224,6 +224,10 @@
     <ClInclude Include="..\Public\BayarAttackD.h" />
     <ClInclude Include="..\public\Bullet_BayarAttackD.h" />
     <ClInclude Include="..\Public\BayarAttackC.h" />
+    <ClInclude Include="..\Public\BayarSkyJump.h" />
+    <ClInclude Include="..\Public\BayarKnockOff.h" />
+    <ClInclude Include="..\Public\BayarStoneSpike.h" />
+    <ClInclude Include="..\Public\Bullet_BayarStoneSpike.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -387,6 +391,10 @@
     <ClCompile Include="..\Private\BayarAttackD.cpp" />
     <ClCompile Include="..\Private\Bullet_BayarAttackD.cpp" />
     <ClCompile Include="..\Private\BayarAttackC.cpp" />
+    <ClCompile Include="..\Private\BayarSkyJump.cpp" />
+    <ClCompile Include="..\Private\BayarKnockOff.cpp" />
+    <ClCompile Include="..\Private\BayarStoneSpike.cpp" />
+    <ClCompile Include="..\Private\Bullet_BayarStoneSpike.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

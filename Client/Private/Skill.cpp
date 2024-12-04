@@ -21,6 +21,9 @@
 #include "BayarAttackB.h"
 #include "BayarAttackC.h"
 #include "BayarAttackD.h"
+#include "BayarSkyJump.h"
+#include "BayarKnockOff.h"
+#include "BayarStoneSpike.h"
 #include "Collider.h"
 
 CSkill::CSkill()
@@ -324,12 +327,13 @@ CSkill* CSkill::Create(SKILL_DATA* pSkillData, CCharacter* pUser)
 		pInstance = CBayarAttackD::Create(pSkillData, pUser);
 		break;
 	case Client::SKILL_ID::BAYAR_SKY_JUMP:
-
+		pInstance = CBayarSkyJump::Create(pSkillData, pUser);
 		break;
 	case Client::SKILL_ID::BAYAR_KNOCK_OFF:
+		pInstance = CBayarKnockOff::Create(pSkillData, pUser);
 		break;
 	case Client::SKILL_ID::BAYAR_STONE_SPIKE:
-
+		pInstance = CBayarStoneSpike::Create(pSkillData, pUser);
 		break;
 	case Client::SKILL_ID::BAYAR_PALM_STRIKE:
 

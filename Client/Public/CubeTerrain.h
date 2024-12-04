@@ -44,8 +44,10 @@ public:
 	_uint PosToIndex(const _float4& Pos);
 	_int PosToIndex(const _fvector& Pos);
 	XMUINT3 SplitIndex(_uint iIdx);
+	_uint CombineIndex(XMUINT3 i3Idx);
 
 	_bool Is_InSide(_vector Pos);
+	_bool Is_ValidIndex(XMUINT3 i3Index);
 	XMUINT3 Get_Size() { return m_vSize; }
 	CTerrainObject* Get_TerrainObject(_uint Index);
 	_float Get_FloorHeight(_vector Pos);
@@ -56,6 +58,7 @@ public:
 	CELL_RELATION Get_AdjCell_Relation(_uint StartIndex, _uint DestIndex);
 	CTerrainObject* Get_Portal(LEVELID eLinkedLevel);
 	CTerrainObject* Get_PlayerSpawn();
+	_vector Get_ContainedCellPosition(const _fvector& Pos);
 
 
 	HRESULT Save_To_Json(string strNewFilepath);

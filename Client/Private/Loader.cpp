@@ -50,6 +50,7 @@
 #include "Bullet_WildFire.h"
 #include "Bullet_BayarAttackB.h"
 #include "Bullet_BayarAttackD.h"
+#include "Bullet_BayarStoneSpike.h"
 
 #include "MonsterSpawner.h"
 #include "PortalTerrainObject.h"
@@ -259,6 +260,7 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_EffModels(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Effect"), matPretransform2)))
 		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CCollider_Sphere::m_szProtoTag,
 		CCollider_Sphere::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -330,6 +332,9 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBullet_BayarAttackD::m_szProtoTag,
 		CBullet_BayarAttackD::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBullet_BayarStoneSpike::m_szProtoTag,
+		CBullet_BayarStoneSpike::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	/* For.Prototype_GameObject_BackGround */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIPanel::m_szProtoTag,

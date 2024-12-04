@@ -39,12 +39,12 @@ public:
 	virtual HRESULT Render() override;
 
 	virtual void Compute_Matrix() override;
-	void Start_Animation(_float fStartDealy = 0, _bool bLoop = false, _float fDuration = -1);
-
+	void Start_Animation(_float fStartDealy = 0,_bool bLoop = false, _float fDuration = -1, _float fSpeed = -1);
 
 	void Register_OnAnimEndCallBack(const function<void(CEffModel*)>& fCallback);
 	void Register_AnimEvent(ANIM_EVENT tAnimEvent);
 
+	void Set_AnimSpeed(_float fSpd);
 protected:
 	virtual void On_EffectAnimEnd(CEffModel* pModel) { Set_Active(false); }
 	virtual void On_EffectAnimStart(CEffModel* pModel) { Set_Active(true); }

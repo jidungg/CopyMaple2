@@ -228,6 +228,12 @@ _uint CEffModel::Get_BoneIndex(const _char* pBoneName) const
     return iBoneIndex;
 }
 
+void CEffModel::Set_AnimSpeed(_float fSpeed)
+{
+	for (auto& pController : m_vecControl)
+		pController->Set_Speed(fSpeed);
+}
+
 HRESULT CEffModel::Ready_Bones(ifstream& inFile, _uint iParentBoneIndex)
 {
     CEffBone* pBone;

@@ -130,14 +130,14 @@ PS_OUT PS_MAIN(PS_IN In)
     float4 vMtrlAmbient = (g_vMaterialAmbient, g_fMaterialAlpha);
     float4 vMtrlSpecualr = (g_vMaterialSpecular, g_fMaterialAlpha);
 	
-    //float4 vShade = saturate(max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f) + (g_vLightAmbient * vMtrlAmbient));
+    float4 vShade = saturate(max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f) + (g_vLightAmbient * vMtrlAmbient));
     //float4 vReflect = reflect(normalize(g_vLightDir), normalize(In.vNormal));
     //float4 vLook = In.vWorldPos - g_vCamPosition;
 
     //float fSpecular = pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f);
 	
 
-    Out.vColor = ( /*g_vLightDiffuse **/vMtrlDiffuse) /** saturate(vShade) *//*+ (g_vLightSpecular * vMtrlSpecualr) * fSpecular*/;
+    Out.vColor = ( /*g_vLightDiffuse **/vMtrlDiffuse) * saturate(vShade) /*+ (g_vLightSpecular * vMtrlSpecualr) * fSpecular*/;
 
 	//데칼 블렌딩
     //Out.vColor.rgb = (1 - vDecal0Color.a) * Out.vColor.rgb + vDecal0Color.a * vDecal0Color.rgb;

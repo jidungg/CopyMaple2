@@ -325,7 +325,10 @@
 
             ],
             "Animation": [ 1, 9 ],
-            "EventTime": [ [ 1, 0.1, "FIRE" ] ]
+            "EventTime": [
+                [ 0, 0.6, "FIRE" ],
+                [ 1, 0.13, "ATTACK_END" ]
+            ]
         },
         {
             "Id": "BAYAR_ATTACK_B",
@@ -410,7 +413,7 @@
 
             ],
             "Animation": [ 33, 13, 16 ],
-            "EventTime": []
+            "EventTime": [ [ 1, 0.5, "FIRE" ] ]
         },
         {
             "Id": "BAYAR_KNOCK_OFF",
@@ -429,7 +432,10 @@
 
             ],
             "Animation": [ 33, 6 ],
-            "EventTime": []
+            "EventTime": [
+                [ 1, 0.18, "FIRE" ],
+                [ 1, 1, "ATTACK_END" ]
+            ]
         },
         {
             "Id": "BAYAR_STONE_SPIKE",
@@ -448,7 +454,10 @@
 
             ],
             "Animation": [ 7, 14, 19 ],
-            "EventTime": []
+            "EventTime": [
+                [ 0, 1, "FIRE" ],
+                [2,0,"ATTACK_END"]
+            ]
         },
         {
             "Id": "BAYAR_PALM_STRIKE",

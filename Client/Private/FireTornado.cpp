@@ -2,7 +2,6 @@
 #include "FireTornado.h"
 #include "Collider_Sphere.h"
 #include "GameInstance.h"
-#include "Character.h"
 #include "Player.h"
 #include "Bullet_FireTornado.h"
 #include "HitEvent.h"

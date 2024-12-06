@@ -225,7 +225,7 @@ public:
 	virtual void Attach_To(CAttachableBodyPart* pAttachablePart);
 	virtual void Detach_From();
 	virtual void Compute_Matrix() override;
-
+	virtual _bool Is_Targetable() override;
 public:
 
 	HRESULT Ready_Parts();

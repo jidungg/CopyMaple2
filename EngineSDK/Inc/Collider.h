@@ -46,7 +46,7 @@ public:
 
 	COLLIDER_TYPE Get_ColliderType() const {return m_eType;}
 	_uint Get_ID() { return m_iID; }
-	_float3 Get_Center() { return m_vCenterOffset; }
+	_float3 Get_CenterOffset() { return m_vCenterOffset; }
 protected:
 	_float3 m_vCenterOffset = { 0,0,0 };
 	COLLIDER_TYPE m_eType = COLLIDER_TYPE::LAST;

@@ -16,9 +16,13 @@ CAttachableBodyPart::CAttachableBodyPart(const CInteractableObject& Prototype)
 
 HRESULT CAttachableBodyPart::Initialize(void* pArg)
 {
+	ATTACHABLE_BODYPART_DESC* pDesc = (ATTACHABLE_BODYPART_DESC*)pArg;
+
+	pDesc->fRotationPerSec = XMConvertToRadians(90.f);
+
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-	ATTACHABLE_BODYPART_DESC* pDesc = (ATTACHABLE_BODYPART_DESC*)pArg;
+	
 
 	m_pParentMatrix = pDesc->pParentMatrix;
 	m_pSocketMatrix = pDesc->pSocketMatrix;
@@ -61,6 +65,10 @@ void CAttachableBodyPart::RemovePlayer(CPlayer* pPlayer)
 _float CAttachableBodyPart::Get_Radius()
 {
 	return static_cast<CCollider_Sphere*>(m_vecCollider[0])->Get_Desc()->Radius;
+}
+_bool CAttachableBodyPart::Is_Attached(CPlayer* pPlayer)
+{
+	return m_setAttachedPlayer.find(pPlayer) != m_setAttachedPlayer.end();
 }
 _bool CAttachableBodyPart::Is_InteractionPossible(CPlayer* pActor)
 {

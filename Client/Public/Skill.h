@@ -27,6 +27,7 @@ typedef struct SkillData
 	_uint iCost = { 0 };
 	_float fCoolTime = { 0.f };
 	_char strIconImageTag[MAX_PATH] = ("");
+	_float fRange = { 1.f };
 	vector<float> vecData;
 	vector<float> vecLevelUpData;
 	map<SKILL_ID, _uint> mapPreceding;

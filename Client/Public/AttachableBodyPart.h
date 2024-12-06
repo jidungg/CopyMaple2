@@ -30,9 +30,12 @@ public:
 
 	void Detach_Players();
 	void RemovePlayer(CPlayer* pPlayer);
+
 	const XMFLOAT4X4* Get_ParentMatrix() const { return m_pParentMatrix; }
 	const XMFLOAT4X4* Get_SocketMatrix() const { return m_pSocketMatrix; }
 	_float Get_Radius();
+	_bool Is_Attached(CPlayer* pPlayer);
+
 private:
 	const XMFLOAT4X4* m_pSocketMatrix = { nullptr };
 	set<CPlayer*> m_setAttachedPlayer;

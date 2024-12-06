@@ -5,6 +5,7 @@
 #include "HitEvent.h"
 #include "Collider_Sphere.h"
 #include "EffModelObject.h"
+#include "Bayar.h"
 
 CBayarSkyJump::CBayarSkyJump()
 	: CSkill()
@@ -83,6 +84,8 @@ void CBayarSkyJump::Fire()
 	SearchTarget(&listTarget, LAYERID::LAYER_PLAYER);
 	for (auto& pTarget : listTarget)
 	{
+		if(static_cast<CBayar*>( m_pUser)->Is_Attached(static_cast<CPlayer*>(pTarget)))
+			continue;
 		_uint iDamgID = (_uint)SKILL_DATA_ID::DAMG;
 		_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
 		fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;

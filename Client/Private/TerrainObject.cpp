@@ -60,7 +60,7 @@ HRESULT CTerrainObject::Ready_Components(TERRAINOBJ_DESC* pDesc)
 
 	switch (m_eBuildItemType)
 	{
-	case Client::BUILD_ITEM_TYPE::CUBE:
+	case Client::BUILD_ITEM_TYPE::GROUND:
 	case Client::BUILD_ITEM_TYPE::FILED_BLOCK:
 	{
 		CCollider_AABB::AABB_COLLIDER_DESC tDesc{};
@@ -238,7 +238,7 @@ _float CTerrainObject::Get_TopHeight(_vector Pos)
 {
 	switch (m_eBuildItemType)
 	{
-	case Client::BUILD_ITEM_TYPE::CUBE:
+	case Client::BUILD_ITEM_TYPE::GROUND:
 		return m_WorldMatrix.m[3][1] + 1.0f;
 		break;
 
@@ -272,7 +272,7 @@ _float CTerrainObject::Get_BottomHeight(_vector Pos)
 {
 	switch (m_eBuildItemType)
 	{
-	case Client::BUILD_ITEM_TYPE::CUBE:
+	case Client::BUILD_ITEM_TYPE::GROUND:
 		return m_WorldMatrix.m[3][1];
 		break;
 

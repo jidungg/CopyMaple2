@@ -385,6 +385,7 @@ SkillData::SkillData(const json& jData)
 	fCoolTime = jData["CoolTime"];
 	str = jData["IconImg"];
 	std::copy(str.begin(), str.end(),strIconImageTag);
+	fRange = jData["Range"];
 	for (auto& data : jData["Data"])
 		vecData.push_back(data);
 	for (auto& data : jData["LevelUpData"])

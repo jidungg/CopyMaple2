@@ -399,7 +399,7 @@ HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 	CTerrainObject* pGameObject = nullptr;
 	switch (eType)
 	{
-	case Client::BUILD_ITEM_TYPE::CUBE:
+	case Client::BUILD_ITEM_TYPE::GROUND:
 	case Client::BUILD_ITEM_TYPE::FILED_BLOCK:
 	case Client::BUILD_ITEM_TYPE::FILED_NON_BLOCK:
 		pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CTerrainObject::m_szProtoTag, &tDesc));

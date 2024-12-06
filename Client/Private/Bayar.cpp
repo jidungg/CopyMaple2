@@ -2,11 +2,11 @@
 #include "Bayar.h"
 #include "ModelObject.h"
 #include "GameInstance.h"
+#include "AttachableBodyPart.h"
+#include "Collider_Sphere.h"
 #include "StateMachine.h"
 #include "SkillManager.h"
-#include "Collider_Sphere.h"
 #include "CubeTerrain.h"
-#include "AttachableBodyPart.h"
 #include "Client_Utility.h"
 #include "WayFinder.h"
 
@@ -56,15 +56,15 @@ HRESULT CBayar::Ready_AttacableParts(CHARACTER_DESC* pDesc)
 
 	//BODY
 	tColliderDesc.fRadius = 0.5;
-	tColliderDesc.vCenter = { 0,0, -0.5 };
+	tColliderDesc.vCenter = { 0,0.5, 0 };
 	tDesc.tColliderDesc = tColliderDesc;
-	tDesc.pSocketMatrix = m_pBody->Get_BoneMatrix("Bip01");
+	tDesc.pSocketMatrix = m_pBody->Get_BoneMatrix("Back_Bone01");
 	m_vecAttachablePart[PART_ID::BODY] = static_cast<CAttachableBodyPart*>(m_pGameInstance->Clone_Proto_Object_Stock(CAttachableBodyPart::m_szProtoTag, &tDesc));
 	Safe_AddRef(m_vecAttachablePart[PART_ID::BODY]);
 	m_pGameInstance->Add_GameObject_ToLayer(Get_CurrentTrueLevel(), LAYER_INTERACTION, m_vecAttachablePart[PART_ID::BODY]);
 
 	//LEFTARM
-	tColliderDesc.fRadius = 0.4;
+	tColliderDesc.fRadius = 0.3;
 	tColliderDesc.vCenter = { 0,0, 0 };
 	tDesc.tColliderDesc = tColliderDesc;
 	tDesc.pSocketMatrix = m_pBody->Get_BoneMatrix("02030008_N_SandstoneGiant22");
@@ -74,7 +74,7 @@ HRESULT CBayar::Ready_AttacableParts(CHARACTER_DESC* pDesc)
 
 
 	//RIGHTARM
-	tColliderDesc.fRadius = 0.4;
+	tColliderDesc.fRadius = 0.3;
 	tColliderDesc.vCenter = { 0,0, 0 };
 	tDesc.pSocketMatrix = m_pBody->Get_BoneMatrix("02030008_N_SandstoneGiant24");
 	m_vecAttachablePart[PART_ID::RIGHT_ARM] = static_cast<CAttachableBodyPart*>(m_pGameInstance->Clone_Proto_Object_Stock(CAttachableBodyPart::m_szProtoTag, &tDesc));
@@ -131,6 +131,15 @@ void CBayar::On_AnimEnd(_uint iAnimIdx)
 		__super::On_AnimEnd(iAnimIdx);
 	}
 
+}
+
+_bool CBayar::Is_Attached(CPlayer* pPlayer)
+{
+	for (auto& pAttachable : m_vecAttachablePart)
+	{
+		if(pAttachable->Is_Attached(pPlayer)) return true;
+	}
+	return false;
 }
 
 void CBayar::To_NextSkill()

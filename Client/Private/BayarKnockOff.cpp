@@ -5,6 +5,7 @@
 #include "HitEvent.h"
 #include "Collider_Sphere.h"
 #include "EffModelObject.h"
+#include "Bayar.h"
 
 CBayarKnockOff::CBayarKnockOff()
 	:CSkill()
@@ -62,6 +63,9 @@ void CBayarKnockOff::Late_Update(_float fTimeDelta)
 			SearchTarget(&listTarget, LAYER_PLAYER);
 			for (auto& pTarget : listTarget)
 			{
+				CPlayer* pTargetPlayer = static_cast<CPlayer*>(pTarget);
+				if (static_cast<CBayar*>(m_pUser)->Is_Attached(pTargetPlayer))
+					pTargetPlayer->Detach_From();
 				_uint iDamgID = (_uint)SKILL_DATA_ID::DAMG;
 				_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
 				fDmg = m_pUser->Get_Stat().iATK * fDmg *0.3* 0.01;

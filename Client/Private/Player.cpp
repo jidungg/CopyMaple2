@@ -694,17 +694,23 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Attach_To(CAttachableBodyPart* pAttachablePart)
 {
+	//매달린 순간 
+	//   충돌체의 중심을 바라보고
+	//   충돌체로부터 Radius 만큼 떨어져있고
+	//   Y 축 방향으로는 서있고
 	m_bAttached = true;
 	m_pAttachedObject = pAttachablePart;
+	_vector vAttachableObjPosition =  pAttachablePart->Get_WorldPosition() + XMLoadFloat3(&pAttachablePart->Get_Collider(0)->Get_CenterOffset());
+	_vector vLook = XMVector3Normalize(vAttachableObjPosition - Get_Hitpoint());
+	_vector vRight = XMVector3Cross(XMVectorSet(0, 1, 0, 0),vLook);
+	_vector vUp = XMVector3Cross( vLook, vRight);
 
-	_vector vLook = XMVector3Normalize( pAttachablePart->Get_WorldPosition() - Get_Hitpoint());
-	_vector vRight = XMVector3Cross(vLook, XMVectorSet(0, 1, 0, 0));
-	_vector vUp = XMVector3Cross(vRight, vLook);
-
+	_vector vAttachOffsetPosition = XMVectorSetW(-vLook * pAttachablePart->Get_Radius() * 0.5f, 1);
+	vAttachOffsetPosition -= vUp * m_tStat.fBodyHeight;
 	m_matAttachOffset.r[0] = vRight;
 	m_matAttachOffset.r[1] = vUp;
 	m_matAttachOffset.r[2] = vLook;
-	m_matAttachOffset.r[3]= XMVectorSetW( -vLook* pAttachablePart->Get_Radius() *0.5f , 1);
+	m_matAttachOffset.r[3] = vAttachOffsetPosition;
 	m_pParentMatrix = pAttachablePart->Get_WorldMatrix();
 }
 
@@ -713,7 +719,7 @@ void CPlayer::Detach_From()
 {
 	m_pAttachedObject->RemovePlayer(this);
 	_matrix matWorld = XMLoadFloat4x4(&m_WorldMatrix);
-	_vector vLook = matWorld.r[3];
+	_vector vLook = matWorld.r[2];
 	vLook.m128_f32[1] = 0;
 	m_pTransformCom->Set_WorldMatrix(matWorld);
 	m_pTransformCom->LookToward(vLook);
@@ -742,6 +748,11 @@ void CPlayer::Compute_Matrix()
 	else
 		XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix());
 
+}
+
+_bool CPlayer::Is_Targetable()
+{
+	return Is_Valid() && (false == m_bHPZero);
 }
 
 _bool CPlayer::Check_Collision(CGameObject* pOther)

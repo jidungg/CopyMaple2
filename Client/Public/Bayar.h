@@ -12,7 +12,7 @@ class CFace;
 class CInventory;
 class CAttachableBodyPart;
 class CItemObjet;
-
+class CPlayer;
 class CBayar :
     public CMonster
 {
@@ -111,7 +111,7 @@ public:
 	HRESULT Ready_AttacableParts(CHARACTER_DESC* pDesc);
 	virtual HRESULT Ready_AnimStateMachine() override;
 	virtual void On_AnimEnd(_uint iAnimIdx) override;
-
+	_bool Is_Attached(CPlayer* pPlayer);
 
 protected:
 		virtual void To_NextSkill() override;

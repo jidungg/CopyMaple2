@@ -577,21 +577,13 @@ _bool CMonster::Check_Collision(CGameObject* pOther)
 	case Client::LAYER_PLAYER:
 	{
 		if (m_bHPZero)
-		{
 			break;
-		}
 		if(m_bBackToHome)
-		{
 			break;
-		}
-		if (false == pOther->Is_Valid())
-		{
+		if (false == static_cast<CCharacter*>(pOther)->Is_Targetable())
 			break;
-		}
 		if (false == pOther->Get_Collider(0)->Is_Active())
-		{
 			break;
-		}
 		_vector vPos = pOther->Get_WorldPosition();
 		if (m_vecCollider[COLLIDER_DETECT]->Contains(vPos))
 		{

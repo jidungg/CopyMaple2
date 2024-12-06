@@ -44,7 +44,7 @@ public:
 	_float Get_TopHeight(_vector Pos);
 	_float Get_BottomHeight(_vector Pos);
 	_float Get_BuildItemType() { return (_float)m_eBuildItemType; }
-	_bool Is_BlockingType() { return m_eBuildItemType == BUILD_ITEM_TYPE::CUBE || m_eBuildItemType == BUILD_ITEM_TYPE::FILED_BLOCK; }
+	_bool Is_BlockingType() { return m_eBuildItemType == BUILD_ITEM_TYPE::GROUND || m_eBuildItemType == BUILD_ITEM_TYPE::FILED_BLOCK; }
 	_bool RayCast(const Ray& tRay, RaycastHit* pOut);
 
 	void Set_TerrainDir(DIRECTION eDir) { m_eTerrainDir = eDir; }

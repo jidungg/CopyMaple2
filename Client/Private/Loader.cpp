@@ -184,7 +184,7 @@ HRESULT CLoader::Loading_Level_Logo()
 		TEXT("../Bin/Resources/Textures/"), TEXT(".dds"))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
-		TEXT("../Bin/resources/FBXs/NonAnim/Cube/"), TEXT(".dds"))))
+		TEXT("../Bin/resources/FBXs/MAP/Cube/"), TEXT(".dds"))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/MAP/Field/"), TEXT(".dds"))))
@@ -235,24 +235,27 @@ HRESULT CLoader::Loading_Level_Logo()
 
 	///* For.Prototype_Component_CModel*/
 	XMMATRIX matPretransform = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
-	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/NonAnim"), CModel::TYPE_NONANIM, matPretransform)))
 		return E_FAIL;
-	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Anim/Equip"), CModel::TYPE_ANIM, matPretransform)))
 		return E_FAIL;
 
 	  matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
 
-	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Anim/Player"),CModel::TYPE_ANIM,matPretransform)))
 		return E_FAIL;
 
-	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Mimic"), CModel::TYPE_MIMIC, matPretransform)))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/MAP/Field/"), matPretransform)))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
+		TEXT("../Bin/resources/FBXs/MAP/Cube/"), matPretransform)))
 		return E_FAIL;
 	XMMATRIX matPretransform2 = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
 	matPretransform2 = matPretransform2 * XMMatrixRotationX(XMConvertToRadians(-90));
@@ -408,10 +411,10 @@ HRESULT CLoader::Loading_Level_GamePlay()
 
 	XMMATRIX matPretransform = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
 	matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(Load_Dirctory_Models(LEVEL_HENESYS,
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_HENESYS,
 		TEXT("../Bin/resources/FBXs/Anim/Boss"), CModel::TYPE_ANIM, matPretransform)))
 		return E_FAIL;
-	if (FAILED(Load_Dirctory_Models(LEVEL_HENESYS,
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_HENESYS,
 		TEXT("../Bin/resources/FBXs/Anim/Monster"), CModel::TYPE_ANIM, matPretransform)))
 		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("객체 로드"));
@@ -458,7 +461,7 @@ HRESULT CLoader::Loading_Level_MyHome()
 	lstrcpy(m_szLoadingText, TEXT("모델 로드."));
 	XMMATRIX matPretransform = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
 	matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(Load_Dirctory_Models(LEVEL_HOME,
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_HOME,
 		TEXT("../Bin/resources/FBXs/Anim/DuckyBall"), CModel::TYPE_ANIM, matPretransform)))
 		return E_FAIL;
 
@@ -492,7 +495,7 @@ HRESULT CLoader::Loading_Level_MyHome()
 }
 
 
-HRESULT CLoader::Load_Dirctory_Models(LEVELID eLevId,  const _tchar* szDirPath,CModel::TYPE eType ,_fmatrix PreTransformMatrix)
+HRESULT CLoader::Load_Dirctory_Models_Recursive(LEVELID eLevId,  const _tchar* szDirPath,CModel::TYPE eType ,_fmatrix PreTransformMatrix)
 {
 	fs::path path;
 	path = szDirPath;
@@ -603,6 +606,7 @@ HRESULT CLoader::Load_Dirctory_Textures(LEVELID eLevId, const _tchar* szDirPath,
 
 	return S_OK;
 }
+
 
 CLoader * CLoader::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, LEVELID eNextLevelID)
 {

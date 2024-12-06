@@ -39,7 +39,7 @@ void CCollider_Cylinder::Update(_fmatrix WorldMatrix)
 
 _bool CCollider_Cylinder::Intersects(CColliderBase* pOther)
 {
-	_vector vPos = XMLoadFloat3( &pOther->Get_Center());
+	_vector vPos = XMLoadFloat3( &pOther->Get_CenterOffset());
 	return Contains(vPos);
 }
 

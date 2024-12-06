@@ -11,6 +11,7 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10000011.png",
+            "Range": 1,
             "Data": [ 100.0 ],
             "LevelUpData": [ 0.0 ],
             "Preceding": [
@@ -31,6 +32,7 @@
             "Cost": 1,
             "CoolTime": 0,
             "IconImg": "Teleport.png",
+            "Range": 2.5,
             "Data": [ 2.5 ],
             "LevelUpData": [ 0.0 ],
             "Preceding": [
@@ -52,6 +54,7 @@
             "IconImg": "MagicClaw.png",
             "Data": [ 77.0 ],
             "LevelUpData": [ 6.0 ],
+            "Range": 8,
             "Preceding": [
                 [ "MAGIC_CLAW", 0 ]
             ],
@@ -71,6 +74,7 @@
             "Cost": 25,
             "CoolTime": 0,
             "IconImg": "FlameWave.png",
+            "Range": 6,
             "Data": [ 200.0 ],
             "LevelUpData": [ 21.0 ],
             "Preceding": [
@@ -92,6 +96,7 @@
             "Cost": 40,
             "CoolTime": 16,
             "IconImg": "FireTornado.png",
+            "Range": 5,
             "Data": [ 155.0 ],
             "LevelUpData": [ 17.0 ],
             "Preceding": [
@@ -111,6 +116,7 @@
             "Cost": 20,
             "CoolTime": 0,
             "IconImg": "Kindling.png",
+            "Range": 8,
             "Data": [ 689.0 ],
             "LevelUpData": [ 78.0 ],
             "Preceding": [
@@ -130,6 +136,7 @@
             "Cost": 20,
             "CoolTime": 0,
             "IconImg": "Kindling.png",
+            "Range": 8,
             "Data": [ 689.0 ],
             "LevelUpData": [ 78.0 ],
             "Preceding": [
@@ -149,6 +156,7 @@
             "Cost": 40,
             "CoolTime": 8,
             "IconImg": "BBQParty.png",
+            "Range": 8,
             "Data": [ 935.0 ],
             "LevelUpData": [ 141.0 ],
             "Preceding": [
@@ -168,6 +176,7 @@
             "Cost": 60,
             "CoolTime": 30,
             "IconImg": "FakeMeteor.png",
+            "Range": 8,
             "Data": [ 3710.0 ],
             "LevelUpData": [ 508.0 ],
             "Preceding": [
@@ -187,6 +196,7 @@
             "Cost": 0,
             "CoolTime": 30,
             "IconImg": "10300291.png",
+            "Range": 20,
             "Data": [ 3763.0 ],
             "LevelUpData": [ 433.0 ],
             "Preceding": [
@@ -207,6 +217,7 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10300291.png",
+            "Range": 1,
             "Data": [ 397.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
@@ -226,6 +237,7 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10300291.png",
+            "Range": 1,
             "Data": [ 397.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
@@ -245,6 +257,7 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10300291.png",
+            "Range": 1,
             "Data": [ 397.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
@@ -263,6 +276,7 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10300291.png",
+            "Range": 1,
             "Data": [ 397.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
@@ -281,6 +295,7 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10300291.png",
+            "Range": 1,
             "Data": [ 397.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
@@ -300,6 +315,7 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10300291.png",
+            "Range": 1,
             "Data": [ 397.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
@@ -319,6 +335,7 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10300291.png",
+            "Range": 1.5,
             "Data": [ 397.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
@@ -341,6 +358,7 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10300291.png",
+            "Range": 2,
             "Data": [ 397.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
@@ -363,6 +381,7 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10300291.png",
+            "Range": 2,
             "Data": [ 397.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
@@ -385,6 +404,7 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10300291.png",
+            "Range": 4,
             "Data": [ 397.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
@@ -407,6 +427,7 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10300291.png",
+            "Range": 10,
             "Data": [ 397.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
@@ -426,6 +447,7 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10300291.png",
+            "Range": 1,
             "Data": [ 397.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
@@ -448,6 +470,7 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10300291.png",
+            "Range": 10,
             "Data": [ 397.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
@@ -456,7 +479,7 @@
             "Animation": [ 7, 14, 19 ],
             "EventTime": [
                 [ 0, 1, "FIRE" ],
-                [2,0,"ATTACK_END"]
+                [ 2, 0, "ATTACK_END" ]
             ]
         },
         {
@@ -470,6 +493,7 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10300291.png",
+            "Range" :  10,
             "Data": [ 397.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [

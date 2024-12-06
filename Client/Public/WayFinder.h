@@ -31,10 +31,13 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 
-	_bool	FindWay(_vector& vStart, _vector& vGoal, _uint iSearchRange);
-	_vector Get_NextStation();
+	_bool	FindWay(_vector& vStart, _vector& vGoal, _uint iSearchRange, _bool bXZOnly = false);
+	_bool Get_NextStation(_vector& vOutStation);
+	_bool Get_FirstStation(_vector& vOutStation);
+	_bool Is_EmptyRoute() { return m_listRoute.empty(); }
+	_bool Is_LastStation() { return m_listRoute.end() == m_iterRoute; }
 private:
-	_bool MakeAStarRoute(_uint iStartIdx, _uint iDestIdx);
+	_bool MakeAStarRoute(_uint iStartIdx, _uint iDestIdx, _bool bXZOnly = false);
 
 private:
 

@@ -48,7 +48,7 @@ void CBullet_Kindling::Update(_float fTimeDelta)
 	CGameObject* pTarget =  Get_Target();
 	if (pTarget)
 	{
-		m_pTransformCom->LookAt(pTarget->Get_Position());
+		m_pTransformCom->LookAt(pTarget->Get_TransformPosition());
 	}
 
 	m_pTransformCom->Go_Straight(fTimeDelta);

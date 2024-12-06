@@ -38,12 +38,12 @@ HRESULT CLevel_GamePlay::Initialize(void* pArg)
 	m_pPlayer->Get_Transform()->Set_State(CTransform::STATE_POSITION, XMVectorSet(0,1,0,1));
 	auto pPortal = m_pCubeTerrain->Get_Portal((LEVELID)pDesc->iPrevLevelID);
 	if (nullptr != pPortal)
-		m_pPlayer->Set_Position(pPortal->Get_Position());
+		m_pPlayer->Set_Position(pPortal->Get_TransformPosition());
 	else
 	{
 		auto pSpawn = m_pCubeTerrain->Get_PlayerSpawn();
 		if (nullptr != pSpawn)
-			m_pPlayer->Set_Position(pSpawn->Get_Position());
+			m_pPlayer->Set_Position(pSpawn->Get_TransformPosition());
 		else
 			m_pPlayer->Set_Position(XMVectorSet(0, 1, 0, 1));
 	}

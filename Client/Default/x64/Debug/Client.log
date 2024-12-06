@@ -1,10 +1,14 @@
-﻿  BayarAttackA.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\BayarAttackA.cpp(81,42): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/BayarAttackA.cpp'을(를) 컴파일하는 중)
+﻿  Monster.cpp
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Monster.cpp(233,16): warning C4267: '초기화 중': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Private/Monster.cpp'을(를) 컴파일하는 중)
   
-  BayarPalmStrike.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\BayarPalmStrike.cpp(104,42): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/BayarPalmStrike.cpp'을(를) 컴파일하는 중)
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Monster.cpp(243,18): warning C4267: '초기화 중': 'size_t'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Private/Monster.cpp'을(를) 컴파일하는 중)
   
-  코드를 생성하고 있습니다...
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Monster.cpp(255,43): warning C4267: '=': 'size_t'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/Private/Monster.cpp'을(를) 컴파일하는 중)
+  
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Monster.cpp(156,39): warning C4101: 'pCondition' :참조되지 않은 지역 변수입니다.
+  (소스 파일 '/Private/Monster.cpp'을(를) 컴파일하는 중)
+  
   Client.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Client.exe

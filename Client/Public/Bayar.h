@@ -10,15 +10,16 @@ class CBoneModelObject;
 class CMimicBoneModelObject;
 class CFace;
 class CInventory;
+class CAttachableBodyPart;
 class CItemObjet;
 
 class CBayar :
     public CMonster
 {
+public:
 	enum PART_ID
 	{
 		BODY,
-		DETECTION,
 		LEFT_ARM,
 		RIGHT_ARM,
 		PART_LAST
@@ -107,15 +108,16 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	HRESULT Ready_Components(CHARACTER_DESC* pDesc);
+	HRESULT Ready_AttacableParts(CHARACTER_DESC* pDesc);
 	virtual HRESULT Ready_AnimStateMachine() override;
 	virtual void On_AnimEnd(_uint iAnimIdx) override;
 
-protected:
-		virtual void To_NextSkill();
-private:
 
-	vector<const XMFLOAT4X4*> m_vecPartsMatrix;
+protected:
+		virtual void To_NextSkill() override;
+		virtual _bool FindWay(_vector& vStart, _vector& vGoal, _uint iSearchRange) override;
+private:
+	vector< CAttachableBodyPart*> m_vecAttachablePart;
 	_uint m_iGatheringCount = { 0 };
 	_uint m_iMaxGatheringCount = { 5 };
 

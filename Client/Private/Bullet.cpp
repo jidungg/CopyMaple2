@@ -66,7 +66,7 @@ void CBullet::Launch(_float fDamage, CGameObject* pTarget)
 	Set_Active(true);
 	if (pTarget)
 	{
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, pTarget->Get_Position());
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, pTarget->Get_TransformPosition());
 		Set_Target(pTarget);
 	}
 }

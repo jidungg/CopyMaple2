@@ -49,9 +49,11 @@ public:
 	CGameObject* Get_Target() { return m_pTarget; }
 	_uint Get_LayerID() { return m_iLayerID; }
 	_uint Get_ObjID() { return m_iObjID; }
-	_vector Get_Position() { return m_pTransformCom->Get_State(CTransform::STATE_POSITION); }
+	_vector Get_TransformPosition() { return m_pTransformCom->Get_State(CTransform::STATE_POSITION); }
+	_vector Get_WorldPosition();
 	_float Get_Distance(CGameObject* pOther);
 	CColliderBase* Get_Collider(_uint iColliderIndex);
+	const _float4x4* Get_WorldMatrix() { return &m_WorldMatrix; }
 
 	bool Is_Active() { return m_bActive; }
 	bool Is_Dead() { return m_bDead; }

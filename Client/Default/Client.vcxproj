@@ -169,6 +169,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\AttachableBodyPart.h" />
     <ClInclude Include="..\Public\BayarAttackC.h" />
     <ClInclude Include="..\Public\BayarKnockOff.h" />
     <ClInclude Include="..\Public\BayarPalmStrike.h" />
@@ -282,6 +283,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\AttachableBodyPart.cpp" />
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\BayarAttackA.cpp" />
     <ClCompile Include="..\Private\Bayar.cpp" />

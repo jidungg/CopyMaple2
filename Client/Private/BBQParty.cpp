@@ -141,7 +141,7 @@ CCharacter* CBBQParty::SearchTarget()
 		CColliderBase* pCollider = pTmpCharacter->Get_Collider(0);
 		if (m_pTargetSearcher->Intersects(pCollider))
 		{
-			_float fTmpDistance = XMVectorGetX(XMVector3Length(pTmpCharacter->Get_Position() - m_pUser->Get_Position()));
+			_float fTmpDistance = XMVectorGetX(XMVector3Length(pTmpCharacter->Get_TransformPosition() - m_pUser->Get_TransformPosition()));
 			if (fTmpDistance < fMinDistance)
 			{
 				fMinDistance = fTmpDistance;

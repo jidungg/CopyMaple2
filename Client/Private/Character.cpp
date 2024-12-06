@@ -54,6 +54,7 @@ void CCharacter::Update(_float fTimeDelta)
 		Get_CurrentSkill()->Update_CastingTime(fTimeDelta);
 
 	 Get_CurrentSkill()->Update(fTimeDelta);
+	 Update_Collider();
 	__super::Update(fTimeDelta);
 }
 
@@ -72,9 +73,9 @@ _bool CCharacter::Check_Collision(CGameObject* pOther)
 {
 	XMStoreFloat(&m_fMoveDistanceXZ, XMVector3Length(m_vMoveDirectionXZ));
 	m_vMoveDirectionXZ = XMVector4Normalize(m_vMoveDirectionXZ);
-	m_bMove = false == XMVector4Equal(m_vMoveDirectionXZ, XMVectorSet(0, 0, 0, 0));
-	m_bRotate = false == XMVector4Equal(m_vLookDirectionXZ, XMVectorSet(0, 0, 0, 0));
-	Update_Collider();
+	m_bMove = false == XMVector4Equal(m_vMoveDirectionXZ, XMVectorZero());
+	m_bRotate = false == XMVector4Equal(m_vLookDirectionXZ, XMVectorZero());
+
 	LAYERID eLayerID = (LAYERID)pOther->Get_LayerID();
 	switch (eLayerID)
 	{
@@ -84,7 +85,11 @@ _bool CCharacter::Check_Collision(CGameObject* pOther)
 		CCubeTerrain* pTerrain = static_cast<CCubeTerrain*>(pOther);
 		m_vNextPos = vPos;
 		if(m_bMove)
+		{
 			m_vNextPos = pTerrain->BlockXZ(this);
+			m_vMoveDirectionXZ = XMVector3Normalize(m_vNextPos - vPos);
+			m_fMoveDistanceXZ = XMVector3Length(m_vNextPos - vPos).m128_f32[0];
+		}
 
 		m_fFloorHeight = pTerrain->Get_FloorHeight(m_vNextPos);
 		m_fCelingHeight = pTerrain->Get_CelingHeight(m_vNextPos);
@@ -126,7 +131,9 @@ void CCharacter::Late_Update(_float fTimeDelta)
 		m_fUpForce -= fTimeDelta * 9.8f * 3;
 	}
 	if(m_bRotate)
+	{
 		m_pTransformCom->LookToward(XMVectorSetY(m_vLookDirectionXZ, 0));
+	}
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vNextPos);
 
 	m_fMoveDistanceXZ = 0.f;
@@ -152,7 +159,7 @@ _bool CCharacter::Use_Skill(CSkill* pSkill)
 
 _vector CCharacter::Get_Hitpoint()
 {
-	return Get_Position() + XMVectorSet(0, m_tStat.fBodyHeight,0,0);
+	return Get_WorldPosition() + XMVectorSet(0, m_tStat.fBodyHeight,0,0);
 }
 
 _float CCharacter::Get_BodyCollisionRadius()
@@ -212,6 +219,19 @@ void CCharacter::Respawn()
 _bool CCharacter::Is_Targetable()
 {
 	return 	Is_Valid();
+}
+_vector CCharacter::BlockXZ(_vector vPrev, _vector vNext, _float fRadius)
+{
+	_vector vMyPosition = Get_WorldPosition();
+	_float fMyRadius = Get_BodyCollisionRadius();
+	_float fDist = XMVector3Length(vNext - vMyPosition).m128_f32[0];
+	if (fDist >= fMyRadius + fRadius)
+	{
+		return vNext;
+	}
+	_vector vCollisionNormal = XMVector3Normalize(vNext - vMyPosition);
+	_float fCollisionDepth = fMyRadius + fRadius - fDist;
+	return vNext + vCollisionNormal * fCollisionDepth;
 }
 void CCharacter::Free()
 {

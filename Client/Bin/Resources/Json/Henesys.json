@@ -1697,15 +1697,15 @@
             "Iteration": 1
         },
         {
-            "IntData": [ 1 ],
-            "FloatData": [ 5.0 ],
             "Direction": 0,
-            "Index": 550,
-            "ItemId": "MONSTER_SPAWNER",
+            "FloatData": [],
+            "Index": 508,
+            "IntData": [],
+            "ItemId": "GRASS_1",
             "Iteration": 1
         },
         {
-            "IntData": [3 ],
+            "IntData": [ 3 ],
             "FloatData": [ 5.0 ],
             "Direction": 0,
             "Index": 530,

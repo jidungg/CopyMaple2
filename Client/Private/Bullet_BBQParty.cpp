@@ -132,7 +132,7 @@ HRESULT CBullet_BBQParty::Render()
 _bool CBullet_BBQParty::Check_Collision(CGameObject* pOther)
 {
 	
-	return static_cast<CCollider_Cylinder*>( m_pCollider)->Contains(pOther->Get_Position());
+	return static_cast<CCollider_Cylinder*>( m_pCollider)->Contains(pOther->Get_TransformPosition());
 }
 
 void CBullet_BBQParty::Launch(_float fDamage, _fvector vPosition)
@@ -150,7 +150,7 @@ void CBullet_BBQParty::Launch(_float fDamage, _fvector vPosition)
 
 void CBullet_BBQParty::Launch(_float fDamage, CGameObject* pTarget)
 {
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pTarget->Get_Position());
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pTarget->Get_TransformPosition());
 	m_fDamage = fDamage;
 	m_pKeepEffect->Start_Animation(0, true, m_fMaxDuration);
 	m_pKeepEffect->Set_Active(true);

@@ -64,11 +64,11 @@ void CPortal::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, this);
+	m_vecCollider[0]->Update(XMLoadFloat4x4(&m_WorldMatrix));
 }
 
 _bool CPortal::Check_Collision(CGameObject* pOther)
 {
-	m_vecCollider[0]->Update(XMLoadFloat4x4(&m_WorldMatrix));
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, this);
 	return m_vecCollider[0]->Intersects(pOther->Get_Collider(0));
 }

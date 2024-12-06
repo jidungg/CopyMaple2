@@ -42,7 +42,7 @@ void CCamera_Trace::Update(_float fTimeDelta)
 
 void CCamera_Trace::Late_Update(_float fTimeDelta)
 {
-	_vector vAt = Get_Target()->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+	_vector vAt = Get_Target()->Get_WorldPosition();
 	_vector vEye = vAt + XMLoadFloat3(&m_vArm);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(vEye, 1.f));

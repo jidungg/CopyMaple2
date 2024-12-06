@@ -304,6 +304,8 @@ _bool CTerrainObject::RayCast(const Ray& tRay, RaycastHit* pOut)
 {
 	if (nullptr == m_pCubeColliderCom)
 		return false;
+	if (m_eBuildItemType == BUILD_ITEM_TYPE::FILED_NON_BLOCK) 
+		return false;
 	m_pCubeColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
 
 	return m_pCubeColliderCom->RayCast(tRay, pOut);

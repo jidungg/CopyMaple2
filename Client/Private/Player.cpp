@@ -16,6 +16,10 @@
 #include "Collider_Sphere.h"
 #include "DeadObjEvent.h"
 #include "Interactable.h"
+#include "Monster.h"	
+#include "Bayar.h"
+#include "AttachableBodyPart.h"
+#include "Engine_Utility.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -570,7 +574,18 @@ HRESULT CPlayer::Ready_Stat(const json& jStatData)
 
 void CPlayer::Receive_KeyInput(_float fTimeDelta)
 {
-
+	if (m_bHPZero)
+	{
+		return;
+	}
+	if (m_bAttached)
+	{
+		if (m_pGameInstance->GetKeyState(KEY::SPACE) == KEY_STATE::DOWN)
+		{
+			Detach_From();
+		}
+		return;
+	}
 	ANIM_STATE eCurrentState = ANIM_STATE(m_pAnimStateMachine->Get_CurrentState());
 
 
@@ -653,6 +668,7 @@ void CPlayer::Receive_KeyInput(_float fTimeDelta)
 			if (m_pInteractable)
 				m_pInteractable->Interact(this);
 		}
+
 	}
 	else
 	{
@@ -665,22 +681,73 @@ void CPlayer::Receive_KeyInput(_float fTimeDelta)
 		m_vLookDirectionXZ = vAddDir;
 	else
 		m_vLookDirectionXZ = -m_vBodyWallNormal;
+
+
 }
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
-	
+	Safe_Release(m_pInteractable);
+	m_pInteractable = nullptr;
 	__super::Priority_Update(fTimeDelta);
 }
+
+
+void CPlayer::Attach_To(CAttachableBodyPart* pAttachablePart)
+{
+	m_bAttached = true;
+	m_pAttachedObject = pAttachablePart;
+
+	_vector vLook = XMVector3Normalize( pAttachablePart->Get_WorldPosition() - Get_Hitpoint());
+	_vector vRight = XMVector3Cross(vLook, XMVectorSet(0, 1, 0, 0));
+	_vector vUp = XMVector3Cross(vRight, vLook);
+
+	m_matAttachOffset.r[0] = vRight;
+	m_matAttachOffset.r[1] = vUp;
+	m_matAttachOffset.r[2] = vLook;
+	m_matAttachOffset.r[3]= XMVectorSetW( -vLook* pAttachablePart->Get_Radius() *0.5f , 1);
+	m_pParentMatrix = pAttachablePart->Get_WorldMatrix();
+}
+
+
+void CPlayer::Detach_From()
+{
+	m_pAttachedObject->RemovePlayer(this);
+	_matrix matWorld = XMLoadFloat4x4(&m_WorldMatrix);
+	_vector vLook = matWorld.r[3];
+	vLook.m128_f32[1] = 0;
+	m_pTransformCom->Set_WorldMatrix(matWorld);
+	m_pTransformCom->LookToward(vLook);
+
+	m_bAttached = false;
+	m_pParentMatrix = nullptr;
+}
+
+
 void CPlayer::Update(_float fTimeDelta)
 {
 
-	__super::Update(fTimeDelta);
+ 	__super::Update(fTimeDelta);
 }
 
+void CPlayer::Compute_Matrix()
+{
 
+	if (m_bAttached)
+	{
+		_matrix matWorld = m_matAttachOffset * XMLoadFloat4x4(m_pParentMatrix);
+		_float3 vScale = m_pTransformCom->Compute_Scaled();
+		CEngineUtility::Scale_Matrix(matWorld, vScale.x, vScale.y, vScale.z);
+		XMStoreFloat4x4(&m_WorldMatrix, matWorld);
+	}
+	else
+		XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix());
+
+}
 
 _bool CPlayer::Check_Collision(CGameObject* pOther)
 {
+	if (m_bAttached)
+		return false;
 	assert(pOther->Is_Active());
 	assert(false == pOther->Is_Dead());
 
@@ -691,12 +758,25 @@ _bool CPlayer::Check_Collision(CGameObject* pOther)
 	{
 	case Client::LAYER_MONSTER:
 	{
+		CMonster* pMonster = static_cast<CMonster*>(pOther);
+		if (false == pMonster->Is_Valid())
+			break;
+		if (MONSTER_ID::BAYAR == pMonster->Get_MonsterID())
+		{
+			if (m_bMove)
+			{
+				_vector vPos = Get_WorldPosition();
+				m_vNextPos = pMonster->BlockXZ(vPos, m_vNextPos, Get_BodyCollisionRadius()/2);
+			}
+
+		}
 		break;
 	}
 	case Client::LAYER_INTERACTION:
 	{
-		CInteractableObject* pInteractable = (CInteractableObject*)(pOther);
-		if (pInteractable->Check_Collision(this))
+		CInteractableObject* pInteractable = static_cast<CInteractableObject*>(pOther);
+		CColliderBase* pCollider = pInteractable->Get_Collider(0);
+		if (m_vecCollider[0]->Intersects(pCollider))
 		{
 			if (pInteractable->Is_InteractionPossible(this))
 			{
@@ -704,7 +784,7 @@ _bool CPlayer::Check_Collision(CGameObject* pOther)
 				if (m_pInteractable && m_pInteractable != pInteractable)
 				{
 					// 누가 더 가까운지 판단하기 -> 더 가까운 오브젝트로 교체
-					if (m_pInteractable->Get_Distance(this) > pOther->Get_Distance(this))
+					if (Get_Distance( m_pInteractable)> Get_Distance(pOther))
 					{
 						Safe_Release(m_pInteractable);
 						m_pInteractable = pInteractable;
@@ -719,20 +799,13 @@ _bool CPlayer::Check_Collision(CGameObject* pOther)
 				}
 			}
 		}
-		else
-		{
-			Safe_Release(m_pInteractable);
-			m_pInteractable = nullptr;
-		}
-	
-
 		break;
 	}
 	case Client::LAYER_TERRAIN:
 	{
 
 		CCubeTerrain* pTerrain = static_cast<CCubeTerrain*>(pOther);
-		_vector vFootPos = Get_Position();
+		_vector vFootPos = Get_TransformPosition();
 		_vector vBodyPos = XMVectorSetY(vFootPos, vFootPos.m128_f32[1] + Get_BodyCollisionOffset().y);
 		_float fCollisionRadius = Get_BodyCollisionRadius();
 		Ray tBodyRay(vBodyPos, m_vLookDirectionXZ, fCollisionRadius);
@@ -757,15 +830,21 @@ _bool CPlayer::Check_Collision(CGameObject* pOther)
 	default:
 		break;
 	}
-	return S_OK;
+	return false;
 }
-
 void CPlayer::Late_Update(_float fTimeDelta)
 {
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_fMoveDistanceXZ = 0.f;
+	m_vMoveDirectionXZ = XMVectorSet(0, 0, 0, 0);
+	Get_CurrentSkill()->Late_Update(fTimeDelta);
+
+	//매달려있는 경우 오로지 매달린 물체에 의해 움직임.
+	if(m_bAttached)
+		return;
+
 
 	m_iRandomCondition = rand() % 100;
-
-
 	if (m_pAnimStateMachine->Get_CurrentState() == ANIM_STATE::AS_IDLE)
 		m_fIdleTime += fTimeDelta;
 	if (m_bBattle)
@@ -780,8 +859,6 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	m_bPostDelayEnd = m_pBody->Is_AnimPostDelayEnd();
 
 	//이하 Character 로직
-
-
 	m_vNextPos = XMVectorSetY(m_vNextPos, XMVectorGetY(m_vNextPos) + m_fUpForce * fTimeDelta);
 	_float fFootHeight = XMVectorGetY(m_vNextPos);
 	_float fColliderHeight = Get_BodyCollisionOffset().y;
@@ -864,12 +941,11 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vNextPos);
 
-	m_fMoveDistanceXZ = 0.f;
-	m_vMoveDirectionXZ = XMVectorSet(0, 0, 0, 0);
-	Get_CurrentSkill()->Late_Update(fTimeDelta);
+
 	CPawn::Late_Update(fTimeDelta);
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+
 }
+
 void CPlayer::On_StateChange(_uint iState)
 {
 	if (iState == ANIM_STATE::AS_IDLE)
@@ -912,6 +988,8 @@ void CPlayer::On_FaceStateChange(_uint iState)
 {
 	static_cast<CHumanModelObject*>(m_pBody)->Set_FaceState((CFace::FACE_STATE)iState);
 }
+
+
 
 HRESULT CPlayer::Render()
 {
@@ -1156,4 +1234,6 @@ void CPlayer::On_HPZero()
 	//데드 애님 재생
 	//
 	m_bHPZero = true;
+	m_vecCollider[0]->Set_Active(false);
+	if(m_bAttached) Detach_From();
 }

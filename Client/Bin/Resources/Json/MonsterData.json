@@ -130,8 +130,8 @@
             "Model": "Bayar.model",
             "DetectionRange": 4,
             "ChaseRange": 3,
-            "BodyCollisionRadius": 0.5,
-            "BodyCollisionOffset": [ 0.15, 0, 0 ],
+            "BodyCollisionRadius": 0.4,
+            "BodyCollisionOffset": [ 0, 0.5, 0 ],
             "Scale": [ 2, 2, 2 ],
             "Status": {
                 "HP": 10000,

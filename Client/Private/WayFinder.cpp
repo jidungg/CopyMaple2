@@ -40,20 +40,61 @@ void CWayFinder::Late_Update(_float fTimeDelta)
 {
 }
 
-_bool CWayFinder::FindWay(_vector& vStart, _vector& vGoal, _uint iSearchRange)
+
+_bool CWayFinder::FindWay(_vector& vStart, _vector& vGoal, _uint iSearchRange, _bool bXZOnly)
 {
 	_uint iStartIdx = m_pCubeTerrain->PosToIndex(vStart);
-	if( -1 ==iStartIdx)
+	if (-1 == iStartIdx)
 		return false;
 	vGoal.m128_f32[1] = m_pCubeTerrain->Get_FloorHeight(vGoal);
 	_uint iGoalIdx = m_pCubeTerrain->PosToIndex(vGoal);
-	if(-1 == iGoalIdx)
+	if (-1 == iGoalIdx)
 		return false;
 
-	return MakeAStarRoute(iStartIdx, iGoalIdx);
+
+	m_listRoute.clear();
+	_float fDist = XMVectorGetX(XMVector3Length(vGoal - vStart));
+	fDist = min(fDist, iSearchRange);
+	_vector vDirection = XMVector4Normalize(vGoal - vStart);
+	Ray tRay(vStart, vDirection, fDist);
+	RaycastHit tHit;
+	if (false == m_pCubeTerrain->RayCast(tRay, &tHit))
+	{
+		m_listRoute.push_back(vGoal);
+		m_iterRoute = m_listRoute.begin();
+		return true;
+	}
+
+	if (iStartIdx == iGoalIdx)
+	{
+		m_listRoute.push_back(vGoal);
+		m_iterRoute = m_listRoute.begin();
+		return true;
+	}
+	return MakeAStarRoute(iStartIdx, iGoalIdx, bXZOnly);
 }
 
-_bool CWayFinder::MakeAStarRoute(_uint iStartIdx, _uint iDestIdx)
+_bool CWayFinder::Get_NextStation(_vector& vOutStation)
+{
+	if (Is_EmptyRoute())
+		return false;
+	auto tmpIter = m_iterRoute;
+	if (++tmpIter == m_listRoute.end())
+		return false;
+	vOutStation = *(++m_iterRoute);
+	return true;
+}
+
+_bool CWayFinder::Get_FirstStation(_vector& vOutStation)
+{
+	if (Is_EmptyRoute())
+		return false;
+	m_iterRoute = m_listRoute.begin();
+	vOutStation = *m_iterRoute;
+	return true;
+}
+
+_bool CWayFinder::MakeAStarRoute(_uint iStartIdx, _uint iDestIdx, _bool bXZOnly)
 {
 	//AStart 알고리즘
 	// 주변의 갈 수 있는 노드를 찾음.
@@ -72,7 +113,7 @@ _bool CWayFinder::MakeAStarRoute(_uint iStartIdx, _uint iDestIdx)
 	m_mapAStarCell.clear();
 	m_listOpenList.clear();
 	m_listCloseList.clear();
-	m_listRoute.clear();
+
 	m_iterRoute = m_listRoute.end();
 	ASTARCELL iCurrentCell = {};
 	iCurrentCell.iIdx = iStartIdx;
@@ -98,7 +139,10 @@ _bool CWayFinder::MakeAStarRoute(_uint iStartIdx, _uint iDestIdx)
 		m_listCloseList.push_back(iCurrentIdx);
 		iCurrentCell = m_mapAStarCell[iCurrentIdx];
 		vecAdjCells.clear();
-		m_pCubeTerrain->Get_AdjCells(iCurrentIdx, vecAdjCells);
+		if(bXZOnly)
+			m_pCubeTerrain->Get_XZAdjCells(iCurrentIdx, vecAdjCells);
+		else
+			m_pCubeTerrain->Get_AdjCells(iCurrentIdx, vecAdjCells); 
 
 		//인접 노드들 OpenList에 넣음
 		for (auto& iAdjIdx : vecAdjCells)
@@ -156,14 +200,6 @@ _bool CWayFinder::MakeAStarRoute(_uint iStartIdx, _uint iDestIdx)
 		m_iterRoute = m_listRoute.begin();
 	}
 	return bFind;
-}
-_vector CWayFinder::Get_NextStation()
-{
-	if (m_iterRoute != m_listRoute.end())
-	{
-		++m_iterRoute;
-		return (*m_iterRoute);
-	}
 }
 
 

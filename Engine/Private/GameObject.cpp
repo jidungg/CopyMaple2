@@ -2,6 +2,8 @@
 #include "GameInstance.h"
 #include "Transform.h"
 #include "Collider.h"
+#include "Engine_Utility.h"
+
 _uint CGameObject::m_iObjCount = 0;
 CGameObject::CGameObject(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -82,7 +84,9 @@ void CGameObject::Compute_Matrix()
 {
 
 	if (m_pParentMatrix != nullptr)
-		XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * XMLoadFloat4x4(m_pParentMatrix));
+	{
+		XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix()* XMLoadFloat4x4(m_pParentMatrix));
+	}
 	else
 		XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix());
 
@@ -137,7 +141,8 @@ void CGameObject::Add_Child(CGameObject* pChild)
 	if (pChild == nullptr)
 		return;
 	m_pChilds.push_back(pChild);
-	pChild->m_pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
+	pChild->m_pParentMatrix =Get_WorldMatrix();
+	//pChild->m_pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
 	pChild->Get_Transform()->Set_Parent(m_pTransformCom);
 	pChild->Set_LayerID(m_iLayerID);
 }
@@ -217,9 +222,15 @@ void CGameObject::Set_Transform(CTransform* pTransform)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pTransform->Get_State(CTransform::STATE_POSITION));
 }
 
+
+_vector CGameObject::Get_WorldPosition()
+{
+	return _vector{ m_WorldMatrix.m[3][0], m_WorldMatrix.m[3][1], m_WorldMatrix.m[3][2], m_WorldMatrix.m[3][3] };
+}
+
 _float CGameObject::Get_Distance(CGameObject* pOther)
 {
-	_vector vDist = pOther->Get_Position() - Get_Position();
+	_vector vDist = pOther->Get_TransformPosition() - Get_TransformPosition();
 	return XMVector3Length(vDist).m128_f32[0];
 }
 

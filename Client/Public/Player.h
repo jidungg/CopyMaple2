@@ -13,6 +13,8 @@ class CInventory;
 class CItemObjet;
 class CTerrainObject;
 class CInteractableObject;
+class CAttachableBodyPart;
+class CBayar;
 class CPlayer :
 	public CCharacter
 {
@@ -220,6 +222,9 @@ public:
 	virtual void On_CastingEnd(CSkill* pSkill) override;
 	virtual void On_HPZero() override;
 	void On_FaceStateChange(_uint iState);
+	virtual void Attach_To(CAttachableBodyPart* pAttachablePart);
+	virtual void Detach_From();
+	virtual void Compute_Matrix() override;
 
 public:
 
@@ -277,6 +282,11 @@ protected:
 	_vector m_vBodyWallNormal{ 0.f, 0.f, 0.f ,0.f};
 	_vector m_vBodyWallPoint{ 0.f, 0.f, 0.f ,0.f };
 	_float m_fBodyWallHeight{ 0.f };
+
+	//ATTACH
+	_bool m_bAttached = { false };
+	CAttachableBodyPart* m_pAttachedObject = { false };
+	_matrix m_matAttachOffset;
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

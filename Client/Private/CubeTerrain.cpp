@@ -88,7 +88,7 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 //MoveDir 는 Normalized 된 상태로 들어와야 함.
 _vector CCubeTerrain::BlockXZ(CCharacter* pCharacter)
 {
-	_vector vPos = pCharacter->Get_Position();
+	_vector vPos = pCharacter->Get_TransformPosition();
 	_vector vMoveDir = pCharacter->Get_MoveDirection();
 	_float fBodyCollisionRadius = pCharacter->Get_BodyCollisionRadius();
 	_float3 fBodyCollisionOffset = pCharacter->Get_BodyCollisionOffset();
@@ -202,6 +202,94 @@ _bool CCubeTerrain::RayCastXZ(const Ray& tRay, RaycastHit* pOut)
 		//X축이 더 빨리 도달
 		else
 			vCurrentPos += tRay.vDirection * fXReqTime;
+		_vector vRealPos = vCurrentPos;
+		vRealPos -= XMVectorSet(0.5, 0, 0.5, 0);
+		_int iIdx = PosToIndex(vRealPos);
+		if (iIdx < 0)
+			return false;
+		fCurrentDistance = XMVectorGetX(XMVector3Length(vRealPos - tRay.vOrigin));
+		if (nullptr != m_vecCells[iIdx] && m_vecCells[iIdx]->RayCast(tRay, pOut))
+			return true;
+
+	}
+
+
+	return false;
+}
+
+_bool CCubeTerrain::RayCast(const Ray& tRay, RaycastHit* pOut)
+{
+	_vector vCurrentPos = tRay.vOrigin;
+	vCurrentPos += XMVectorSet(0.5, 0, 0.5, 0);
+	_float fXDir = XMVectorGetX(tRay.vDirection);
+	_float fYDir = XMVectorGetY(tRay.vDirection);
+	_float fZDir = XMVectorGetZ(tRay.vDirection);
+	//가장 가까운 정수값이 되기 위해 필요한 값 찾기
+	_float fX = XMVectorGetX(vCurrentPos);
+	_float fY = XMVectorGetY(vCurrentPos);
+	_float fZ = XMVectorGetZ(vCurrentPos);
+	_float fXRequire = 0;
+	_float fYRequire = 0;
+	_float fZRequire = 0;
+	_float fCurrentDistance = 0;
+
+	while (fCurrentDistance < tRay.fDist)
+	{
+		if (fXDir > 0)
+		{
+			fXRequire = ceilf(fX) - fX;
+			if (fXRequire == 0)
+				fXRequire += 1;
+		}
+		else if (fXDir < 0)
+		{
+			fXRequire = floorf(fX) - fX;
+			if (fXRequire == 0)
+				fXRequire -= 1;
+		}
+		else
+			fXRequire = FLT_MAX;
+		if (fYDir > 0)
+		{
+			fYRequire = ceilf(fY) - fY;
+			if (fYRequire == 0)
+				fYRequire += 1;
+		}
+		else if (fYDir < 0)
+		{
+			fYRequire = floorf(fY )- fY;
+			if (fYRequire == 0)
+				fYRequire -= 1;
+		}
+		else
+			fZRequire = FLT_MAX;
+		if (fZDir > 0)
+		{
+			fZRequire = ceilf(fZ) - fZ;
+			if (fZRequire == 0)
+				fZRequire += 1;
+		}
+		else if (fZDir < 0)
+		{
+			fZRequire = floorf(fZ) - fZ;
+			if (fZRequire == 0)
+				fZRequire -= 1;
+		}
+		else
+			fZRequire = FLT_MAX;
+
+
+		_float fXReqTime = (fXRequire + 1e-6f) / (fXDir + 1e-6f);
+		_float fYReqTime = (fYRequire + 1e-6f) / (fYDir + 1e-6f);
+		_float fZReqTime = (fZRequire + 1e-6f) / (fZDir + 1e-6f);
+		//가장 빨리 도달하는 축 찾기
+		if (fXReqTime > fZReqTime && fYReqTime > fZReqTime)
+			vCurrentPos += tRay.vDirection * fZReqTime;
+		else if (fZReqTime > fXReqTime && fYReqTime > fXReqTime)
+			vCurrentPos += tRay.vDirection * fXReqTime;
+		else
+			vCurrentPos += tRay.vDirection * fYReqTime;
+
 		_vector vRealPos = vCurrentPos;
 		vRealPos -= XMVectorSet(0.5, 0, 0.5, 0);
 		_int iIdx = PosToIndex(vRealPos);
@@ -448,6 +536,40 @@ void CCubeTerrain::Get_AdjCells(_uint Index, vector<_uint>& vecAdjCells)
 			}
 		}
 	}
+}
+
+void CCubeTerrain::Get_XZAdjCells(_uint Index, vector<_uint>& vecAdjCells)
+{
+	_uint iCellCount = m_vecCells.size();
+	assert(Index < iCellCount);
+	XMUINT3 vSplitIdx = SplitIndex(Index);
+
+	_uint iAdjIdx = iCellCount;
+	_uint iXAdjIdx = iCellCount;
+	_uint iZAdjIdx = iCellCount;
+
+	for (_int iDz = -1; iDz <= 1; iDz++)
+	{
+		for (_int iDx = -1; iDx <= 1; iDx++)
+		{
+			if (iDx == 0 && iDz == 0 ) continue;
+			iXAdjIdx = vSplitIdx.x + iDx;
+			iZAdjIdx = vSplitIdx.z + iDz;
+			if (iXAdjIdx < 0 || iXAdjIdx >= m_vSize.x) continue;
+			if (iZAdjIdx < 0 || iZAdjIdx >= m_vSize.z) continue;
+			iAdjIdx = iXAdjIdx + m_vSize.x * iZAdjIdx + m_vSize.x * m_vSize.z * vSplitIdx.y;
+			if (iAdjIdx >= iCellCount) continue;
+			//비어있다로 확인하면 안됨. if (m_vecCells[iAdjIdx] != nullptr) continue;
+			if (m_vecCells[iAdjIdx] != nullptr)
+				if (m_vecCells[iAdjIdx]->Is_BlockingType())
+					continue;
+			_uint iFloorIdx = iXAdjIdx + m_vSize.x * iZAdjIdx + m_vSize.x * m_vSize.z * (vSplitIdx.y - 1);
+			if (m_vecCells[iFloorIdx] == nullptr) continue;
+			if (false == m_vecCells[iFloorIdx]->Is_BlockingType()) continue;
+			vecAdjCells.push_back(iAdjIdx);
+		}
+	}
+	
 }
 
 _float CCubeTerrain::Get_Distance(_uint StartIndex, _uint DestIndex)

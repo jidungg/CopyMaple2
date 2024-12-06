@@ -6,19 +6,21 @@
 #include "SkillManager.h"
 #include "Collider_Sphere.h"
 #include "CubeTerrain.h"
+#include "AttachableBodyPart.h"
+#include "Client_Utility.h"
+#include "WayFinder.h"
 
 CBayar::CBayar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
 {
-	m_vecCollider.resize(PART_LAST);
-	m_vecPartsMatrix.resize(PART_LAST);
+	m_vecCollider.resize(1);
+
 }
 
 CBayar::CBayar(const CBayar& Prototype)
 	: CMonster(Prototype)
 {
-	m_vecCollider.resize(PART_LAST);
-	m_vecPartsMatrix.resize(PART_LAST);
+	m_vecCollider.resize(1);
 }
 
 HRESULT CBayar::Initialize_Prototype()
@@ -36,37 +38,49 @@ HRESULT CBayar::Initialize(void* pArg)
 	pDesc->eMonID = MONSTER_ID::BAYAR;
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-	if (FAILED(Ready_Components(pDesc)))
+	if (FAILED(Ready_AttacableParts(pDesc)))
 		return E_FAIL;
-
-
-	//m_pBody->Set_AnimationLoop(AS_ATTACK_2_G, true);
-
-	m_vecPartsMatrix[PART_ID::BODY] = m_pBody->Get_BoneMatrix("Bip01 Spine");
-	m_vecPartsMatrix[PART_ID::RIGHT_ARM] = m_pBody->Get_BoneMatrix("02030008_N_SandstoneGiant24");
-	m_vecPartsMatrix[PART_ID::LEFT_ARM] = m_pBody->Get_BoneMatrix("02030008_N_SandstoneGiant22");
-
 
 	m_pTransformCom->Scaling(2.f, 2.f, 2.f);
 
 	return S_OK;
 }
 
-HRESULT CBayar::Ready_Components(CHARACTER_DESC* pDesc)
+HRESULT CBayar::Ready_AttacableParts(CHARACTER_DESC* pDesc)
 {
-	m_vecCollider.resize(PART_LAST);
-	CCollider_Sphere::SPHERE_COLLIDER_DESC tDesc = {};
+	m_vecAttachablePart.resize(PART_ID::PART_LAST);
+
+	CAttachableBodyPart::ATTACHABLE_BODYPART_DESC tDesc = {};
+	tDesc.pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
+	CCollider_Sphere::SPHERE_COLLIDER_DESC tColliderDesc = {};
+
+	//BODY
+	tColliderDesc.fRadius = 0.5;
+	tColliderDesc.vCenter = { 0,0, -0.5 };
+	tDesc.tColliderDesc = tColliderDesc;
+	tDesc.pSocketMatrix = m_pBody->Get_BoneMatrix("Bip01");
+	m_vecAttachablePart[PART_ID::BODY] = static_cast<CAttachableBodyPart*>(m_pGameInstance->Clone_Proto_Object_Stock(CAttachableBodyPart::m_szProtoTag, &tDesc));
+	Safe_AddRef(m_vecAttachablePart[PART_ID::BODY]);
+	m_pGameInstance->Add_GameObject_ToLayer(Get_CurrentTrueLevel(), LAYER_INTERACTION, m_vecAttachablePart[PART_ID::BODY]);
+
 	//LEFTARM
-	tDesc.fRadius = 0.3;
-	tDesc.vCenter = { 0,0, 0 };
-	if (FAILED(Add_Component(LEVEL_LOADING, CCollider_Sphere::m_szProtoTag, TEXT("Com_LeftArm_Collider"), (CComponent**)&m_vecCollider[PART_ID::LEFT_ARM], &tDesc)))
-		return E_FAIL;
+	tColliderDesc.fRadius = 0.4;
+	tColliderDesc.vCenter = { 0,0, 0 };
+	tDesc.tColliderDesc = tColliderDesc;
+	tDesc.pSocketMatrix = m_pBody->Get_BoneMatrix("02030008_N_SandstoneGiant22");
+	m_vecAttachablePart[PART_ID::LEFT_ARM] = static_cast<CAttachableBodyPart*>(m_pGameInstance->Clone_Proto_Object_Stock(CAttachableBodyPart::m_szProtoTag, &tDesc));
+	Safe_AddRef(m_vecAttachablePart[PART_ID::LEFT_ARM]);
+	m_pGameInstance->Add_GameObject_ToLayer(Get_CurrentTrueLevel(), LAYER_INTERACTION, m_vecAttachablePart[PART_ID::LEFT_ARM]);
+
 
 	//RIGHTARM
-	tDesc.fRadius = 0.3;
-	tDesc.vCenter = { 0,0, 0 };
-	if (FAILED(Add_Component(LEVEL_LOADING, CCollider_Sphere::m_szProtoTag, TEXT("Com_Right_Arm_Collider"), (CComponent**)&m_vecCollider[PART_ID::RIGHT_ARM], &tDesc)))
-		return E_FAIL;
+	tColliderDesc.fRadius = 0.4;
+	tColliderDesc.vCenter = { 0,0, 0 };
+	tDesc.pSocketMatrix = m_pBody->Get_BoneMatrix("02030008_N_SandstoneGiant24");
+	m_vecAttachablePart[PART_ID::RIGHT_ARM] = static_cast<CAttachableBodyPart*>(m_pGameInstance->Clone_Proto_Object_Stock(CAttachableBodyPart::m_szProtoTag, &tDesc));
+	Safe_AddRef(m_vecAttachablePart[PART_ID::RIGHT_ARM]);
+	m_pGameInstance->Add_GameObject_ToLayer(Get_CurrentTrueLevel(), LAYER_INTERACTION, m_vecAttachablePart[PART_ID::RIGHT_ARM]);
+
 
 	return S_OK;
 }
@@ -118,14 +132,21 @@ void CBayar::On_AnimEnd(_uint iAnimIdx)
 	}
 
 }
+
 void CBayar::To_NextSkill()
 {
-	m_iCurrentSkillID = (_int)SKILL_ID::BAYAR_PALM_STRIKE;
-	//__super::To_NextSkill();
+	//m_iCurrentSkillID = (_int)SKILL_ID::BAYAR_PALM_STRIKE;
+	__super::To_NextSkill();
+}
+_bool CBayar::FindWay(_vector& vStart, _vector& vGoal, _uint iSearchRange)
+{
+	return m_pWayFinder->FindWay(vStart, vGoal, m_iSearchRange,true);
 }
 void CBayar::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
+	m_bOnFloor = true;
+	m_fUpForce = 0;
 }
 
 void CBayar::Update(_float fTimeDelta)
@@ -136,20 +157,21 @@ void CBayar::Update(_float fTimeDelta)
 
 void CBayar::Update_Collider()
 {
-	_matrix		SocketMatrix;
-	for (_uint i = 0; i < PART_LAST; i++)
-	{
+	//_matrix		SocketMatrix;
+	//for (_uint i = 0; i < PART_LAST; i++)
+	//{
 
-		if (i == DETECTION)
-			m_vecCollider[i]->Update(m_pTransformCom->Get_WorldMatrix());
-		else
-		{
-			SocketMatrix = XMLoadFloat4x4(m_vecPartsMatrix[i]);
-			for (size_t i = 0; i < 3; i++)
-				SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
-			m_vecCollider[i]->Update(SocketMatrix * m_pTransformCom->Get_WorldMatrix());
-		}
-	}
+	//	if (i == DETECTION)
+	//		m_vecCollider[i]->Update(m_pTransformCom->Get_WorldMatrix());
+	//	else
+	//	{
+	//		SocketMatrix = XMLoadFloat4x4(m_vecPartsMatrix[i]);
+	//		for (size_t i = 0; i < 3; i++)
+	//			SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+	//		m_vecCollider[i]->Update(SocketMatrix * m_pTransformCom->Get_WorldMatrix());
+	//	}
+	//}
+	__super::Update_Collider();
 }
 
 _bool CBayar::Check_Collision(CGameObject* pOther)
@@ -171,11 +193,11 @@ HRESULT CBayar::Render()
 		if (child->Is_Active() && child->Is_Dead() == false)
 			child->Render();
 	}
-	for (auto& pCollider : m_vecCollider)
-	{
-		if (pCollider->Is_Active())
-			pCollider->Render();
-	}
+	//for (auto& pCollider : m_vecCollider)
+	//{
+	//	if (pCollider->Is_Active())
+	//		pCollider->Render();
+	//}
 	return S_OK;
 }
 
@@ -209,5 +231,10 @@ CGameObject* CBayar::Clone(void* pArg)
 void CBayar::Free()
 {
 	__super::Free();
+	for (auto& pAttachable : m_vecAttachablePart)
+	{
+		Safe_Release(pAttachable);
+	}
+	m_vecAttachablePart.clear();
 }
 

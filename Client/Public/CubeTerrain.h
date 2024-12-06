@@ -53,6 +53,7 @@ public:
 	_float Get_FloorHeight(_vector Pos);
 	_float Get_CelingHeight(_vector Pos);
 	void Get_AdjCells(_uint Index, vector<_uint>& vecAdjCells);
+	void Get_XZAdjCells(_uint Index, vector<_uint>& vecAdjCells);
 	_float Get_Distance(_uint StartIndex, _uint DestIndex);
 	_float Get_AdjDistance(_uint StartIndex, _uint DestIndex);
 	CELL_RELATION Get_AdjCell_Relation(_uint StartIndex, _uint DestIndex);
@@ -65,6 +66,7 @@ public:
 	HRESULT Load_From_Json(string strJsonFilePath);
 	_vector BlockXZ(CCharacter* pCharacter);
 	_bool RayCastXZ(const Ray& tRay, RaycastHit* pOut);
+	_bool RayCast(const Ray& tRay, RaycastHit* pOut);
 
 private:
 	string m_strJsonFilePath;

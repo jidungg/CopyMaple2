@@ -59,6 +59,7 @@
 #include "EffModel.h"
 #include "EffModelObject.h"
 #include "EffectManager.h"
+#include "AttachableBodyPart.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -377,8 +378,9 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CMonsterSpawner::m_szProtoTag,
 		CMonsterSpawner::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
-
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CAttachableBodyPart::m_szProtoTag,
+		CAttachableBodyPart::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 

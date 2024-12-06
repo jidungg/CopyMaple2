@@ -34,7 +34,7 @@ HRESULT CPortalTerrainObject::Initialize(void* pArg)
 	tPortalDesc.eLevelID = m_eLevelID;
 	CPortal* pPortal = static_cast<CPortal*>( m_pGameInstance->Clone_Proto_Object_Stock(CPortal::m_szProtoTag ,&tPortalDesc));
 	m_pGameInstance->Add_GameObject_ToLayer(Get_CurrentTrueLevel(),LAYER_INTERACTION,pPortal);
-	pPortal->Get_Transform()->Set_State(CTransform::STATE_POSITION, Get_Position());
+	pPortal->Get_Transform()->Set_State(CTransform::STATE_POSITION, Get_TransformPosition());
 
     return S_OK;
 }

@@ -1,6 +1,7 @@
 #include "Collider_Sphere.h"
 #include "GameInstance.h"
 #include "DebugDraw.h"
+#include "Collider_AABB.h"
 
 CCollider_Sphere::CCollider_Sphere(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CColliderBase(pDevice, pContext)
@@ -45,6 +46,9 @@ _bool CCollider_Sphere::Intersects(CColliderBase* pOther)
 		//TODO :AABB OBB MESH
 	case COLLIDER_TYPE::SPHERE:
 		m_bCollide = m_pBoundDesc->Intersects(*static_cast<CCollider_Sphere*>(pOther)->Get_Desc());
+		break;
+	case COLLIDER_TYPE::AABB:
+		m_bCollide = m_pBoundDesc->Intersects(*static_cast<CCollider_AABB*>(pOther)->Get_Desc());
 		break;
 	default:
 		assert(false);

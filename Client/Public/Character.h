@@ -54,6 +54,7 @@ public:
 	void Restore_HP();
 	virtual void Respawn();
 	virtual _bool Is_Targetable();
+	_vector BlockXZ(_vector vPrev, _vector vNext, _float fRadius);
 
 	_vector Get_MoveDirection() { return m_vMoveDirectionXZ; }
 	_vector Get_LookDirection() { return m_vLookDirectionXZ; }
@@ -81,9 +82,9 @@ protected:
 	//실 객체 클래스에서 직접 업데이트 해주어야 하는 속성.
 	_vector m_vMoveDirectionXZ{ XMVectorSet(0, 0, 0, 0) };
 	_vector m_vLookDirectionXZ{ XMVectorSet(0,0,0,0) };
+	_float m_fMoveSpeed{0.f };
 	//중력은 자동 적용됨. 점프, 에어본 등 필요 시에만 수정해주기.
 	_float m_fUpForce{ 0.f };
-	
 	//자동으로 업데이트 됨.
 	_float m_fMoveDistanceXZ{ 0.f };
 	_vector m_vNextPos{ 0.f, 0.f, 0.f };

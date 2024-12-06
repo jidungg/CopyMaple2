@@ -23,3 +23,10 @@ _float CEngineUtility::Get_RandomFloat(_float fMin, _float fMax)
 	float random = static_cast<float>(rand()) / static_cast<float>(RAND_MAX); 
 	return fMin + random * (fMax - fMin);
 }
+
+void CEngineUtility::Scale_Matrix(_matrix& outmatSrc, _float fX, _float fY, _float fZ)
+{
+	outmatSrc.r[0] = XMVector3Normalize(outmatSrc.r[0]) * fX;
+	outmatSrc.r[1] = XMVector3Normalize(outmatSrc.r[1]) * fY;
+	outmatSrc.r[2] = XMVector3Normalize(outmatSrc.r[2]) * fZ;
+}

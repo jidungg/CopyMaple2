@@ -114,11 +114,20 @@ public:
 	virtual void Respawn();
 
 	virtual _bool Is_Targetable() override;
+
+	MONSTER_ID Get_MonsterID() { return m_pMonData->eMonID; }
 protected:
 	HRESULT Ready_Components(MONSTER_DESC* pDesc);
 	HRESULT Ready_Parts(MONSTER_DESC* pDesc);
 	virtual HRESULT Ready_AnimStateMachine();
 	virtual void To_NextSkill();
+
+	void GoTo_Home(_float fTimeDelta);
+	void Move_Random(_float fTimeDelta);
+	void Move_To_Target(_float fTimeDelta);
+	void Chase_Target(_float fTimeDelta);
+	virtual _bool FindWay(_vector& vStart, _vector& vGoal, _uint iSearchRange);
+
 public:
 	_bool Is_AttackCoolReady() { return m_fAttackTimeAcc >= m_pMonData->tStat.fAttackInterval; }
 protected:
@@ -131,7 +140,6 @@ protected:
 	_bool m_bStun = { false };
 
 	_float m_fAttackTimeAcc{ 5.f };
-	_float m_fTargetDistance = { FLT_MAX };
 
 	_float m_fDetectionRange{ 4.f };
 	_float m_fHomeRange{ 6.f };
@@ -153,6 +161,8 @@ protected:
 	_uint m_iSearchRange = { 10 };
 	_vector m_vNextStation = { 0.f,0.f,0.f,1.f };
 	
+	CCubeTerrain* m_pCubeTerrain = { nullptr };
+	_int m_iTargetCubeIndex = { -1 } ;
 public:
 	static CMonster* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

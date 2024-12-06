@@ -91,14 +91,14 @@ HRESULT CBullet_FakeMeteor::Render()
 
 _bool CBullet_FakeMeteor::Check_Collision(CGameObject* pOther)
 {
-	return static_cast<CCollider_Cylinder*>(m_pCollider)->Contains(pOther->Get_Position());
+	return static_cast<CCollider_Cylinder*>(m_pCollider)->Contains(pOther->Get_TransformPosition());
 }
 
 
 
 void CBullet_FakeMeteor::Launch(_float fDamage, CGameObject* pTarget)
 {
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pTarget->Get_Position());
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pTarget->Get_TransformPosition());
 	m_fDamage = fDamage;
 	m_pSplashCastEffect->Start_Animation(0, true, m_fInvokeDelay);
 	m_pSplashCastEffect->Set_Active(true);

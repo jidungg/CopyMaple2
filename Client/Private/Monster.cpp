@@ -11,6 +11,7 @@
 #include "DeadObjEvent.h"
 #include "Client_Utility.h"
 #include "WayFinder.h"
+#include "CubeTerrain.h"
 
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CCharacter(pDevice, pContext)
@@ -71,7 +72,8 @@ HRESULT CMonster::Initialize(void* pArg)
 	Set_Position(m_vHomePos);
 
 	CWayFinder::WAYFINDER_DESC tDesc;
-	tDesc.pCubeTerrain = pDesc->pCubeTerrain;
+	m_pCubeTerrain = pDesc->pCubeTerrain;
+	tDesc.pCubeTerrain = m_pCubeTerrain;
 	m_pWayFinder = CWayFinder::Create(m_pDevice, m_pContext);
 	m_pWayFinder->Initialize(&tDesc);
 	return S_OK;
@@ -296,8 +298,6 @@ _bool CMonster::Use_Skill(CSkill* pSkill)
 	if (pDesc->eCastingType == SKILL_CASTING_TYPE::CASTING && false == m_bOnFloor)
 		return false;
 	m_iCurrentSkillID = (_int)pDesc->eID;
-	m_bChase = false;
-	m_bAttack = true;
 	m_fAttackTimeAcc = 0.f;
 	m_pAnimStateMachine->Trigger_ConditionVariable(AC_ATTACKTRIGGER);
 	return true;
@@ -326,117 +326,182 @@ void CMonster::On_CastingEnd(CSkill* pSkill)
 {
 }
 
+//MoveDir, LookDir 정하기
 void CMonster::Priority_Update(_float fTimeDelta)
 {
 		//todo : 공격 시에 목표를 바라보지 않음, 집에 갈 때 뒷걸음으로 감
 	if (m_bHPZero)
 		return;
-	_vector vMyPos = Get_Position();
-	_float fMoveSpeed = m_tStat.fRunSpeed;
-	_float fHomeDistance;
-	_vector vDestination = vMyPos;	
+	if (m_bAttack)
+		return;
+
+	_vector vMyPos = Get_TransformPosition();
 	CGameObject* pTarget = Get_Target();
-	XMStoreFloat(&fHomeDistance, XMVector3Length(vMyPos - m_vHomePos));
+
 	//집 가는 중
 	if (m_bBackToHome)
 	{
-		if (fHomeDistance <= 0.1f)
-		{
-			m_bBackToHome = false;
-			m_bDetected = false;
-			Set_Target(nullptr);
-			m_fTargetDistance = FLT_MAX;
-			return;
-		}
-		if (XMVector4Length(m_vNextStation - vMyPos).m128_f32[0] <= 0.05f)
-		{
-			if (m_pWayFinder->FindWay(vMyPos, m_vHomePos, m_iSearchRange))
-				m_vNextStation = m_pWayFinder->Get_NextStation();
-		}
-		fMoveSpeed = m_tStat.fRunSpeed * 2;
-		vDestination = m_vNextStation;
+		GoTo_Home(fTimeDelta);
 	}
 	//집에서 너무 멀리 떨어짐
-	else if (fHomeDistance > m_fHomeRange)
+	else if (XMVector3Length(vMyPos - m_vHomePos).m128_f32[0] > m_fHomeRange)
 	{
 		Set_Target(nullptr);
 		m_bDetected = false;
 		m_bBackToHome = true;
-		m_fTargetDistance = FLT_MAX;
-		if (false == m_pWayFinder->FindWay(vMyPos, m_vHomePos, 999))
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vHomePos);
+		m_bAttack = false;
+		m_bChase = false; 
+		if(FindWay(vMyPos, m_vHomePos,999))
+			m_pWayFinder->Get_FirstStation(m_vNextStation);
 		else
-			m_vNextStation = m_pWayFinder->Get_NextStation();
-
+			m_vNextStation = m_vHomePos;
+		GoTo_Home(fTimeDelta);
 		Restore_HP();
 	}
-	//타겟이 없음 -> 랜덤움직임
-	else if (nullptr == pTarget || false == pTarget->Is_Valid())
+	else
 	{
-		Set_Target(nullptr);
-		m_bDetected = false;
-		m_fTargetDistance = FLT_MAX;
-
-		if (m_fRandomMoveTime <= m_fRandomMoveTimeAcc)
-		{
-			m_bRandomMove = !m_bRandomMove;
-			m_fRandomMoveTime = m_pGameInstance->Get_RandomFloat(5, 10);
-			m_fRandomMoveTimeAcc = 0.f;
-			if (m_bRandomMove)
-			{
-				_float fX = m_pGameInstance->Get_RandomFloat(-2, 2);
-				_float fZ = m_pGameInstance->Get_RandomFloat(-2, 2);
-				m_vRandomHomePosition = { fX ,0, fZ ,1 };
-			}
-		}
-		m_fRandomMoveTimeAcc += fTimeDelta;
-		vDestination = m_vHomePos + m_vRandomHomePosition;
-		if (XMVectorGetX(XMVector3Length(vDestination - vMyPos)) <= 0.1f)
-			vDestination = vMyPos;
-		fMoveSpeed = m_tStat.fWalkSpeed;
-		m_bWalk = true;
+		//타겟이 없음 -> 랜덤움직임
+		if(nullptr == pTarget || false == pTarget->Is_Valid())
+			Move_Random(fTimeDelta);
+		else
+			Chase_Target(fTimeDelta);
 	}
 	//타겟이 있음.
-	else
+
+
+	//목적지가 높은 곳이면
+	if (m_vMoveDirectionXZ.m128_f32[1] > 0 && 0 == m_fUpForce)
 	{
-		vDestination = pTarget->Get_Position();
-		//새로운 칸에 도착할 때마다 새로운 길을 찾음
-		if (XMVector4Length(m_vNextStation - vMyPos).m128_f32[0] <= 0.05f)
-		{
-			if (m_pWayFinder->FindWay(vMyPos, vDestination, m_iSearchRange))
-				m_vNextStation = m_pWayFinder->Get_NextStation();
-		}
-		XMStoreFloat(&m_fTargetDistance, XMVector3Length(vDestination - vMyPos));
-		vDestination = m_vNextStation;
+		m_bOnFloor = false;
+		m_fUpForce += m_tStat.fJumpPower;
 	}
 
+	m_vMoveDirectionXZ = XMVectorSetY(m_vMoveDirectionXZ, 0);
+	m_vMoveDirectionXZ = XMVectorSetW(m_vMoveDirectionXZ, 0);
+	m_vMoveDirectionXZ = XMVector3Normalize(m_vMoveDirectionXZ);
 
+	m_vMoveDirectionXZ *=m_fMoveSpeed * fTimeDelta;
+	m_vLookDirectionXZ = XMVectorSetW(m_vLookDirectionXZ, 0);
 
-	if (false == m_bAttack)
+	__super::Priority_Update(fTimeDelta);
+}
+
+void CMonster::GoTo_Home(_float fTimeDelta)
+{
+	assert(false == m_bAttack);
+	_vector vMyPos = Get_WorldPosition();
+	_float fHomeDistance;
+	_vector vDestination = m_vHomePos;
+	XMStoreFloat(&fHomeDistance, XMVector3Length(vMyPos - m_vHomePos));
+	Set_Target(nullptr);
+	if (fHomeDistance <= 0.1f)
 	{
-		m_vMoveDirectionXZ = vDestination - vMyPos;
-		if (m_vMoveDirectionXZ.m128_f32[1] > 0 && 0 == m_fUpForce)
-		{
-			m_bOnFloor = false;
-			m_fUpForce += m_tStat.fJumpPower;
-		}
+		m_bBackToHome = false;
+		m_bDetected = false;
+		Set_Target(nullptr);
 
-		m_vMoveDirectionXZ = XMVectorSetY(m_vMoveDirectionXZ, 0);
-		m_vMoveDirectionXZ = XMVectorSetW(m_vMoveDirectionXZ, 0);
-		m_vMoveDirectionXZ = XMVector3Normalize(m_vMoveDirectionXZ);
-
-		m_vMoveDirectionXZ *= fMoveSpeed * fTimeDelta;
-	}
-	else
-	{
-		m_vMoveDirectionXZ = XMVectorZero();
-		
-	}
-
-	if (m_bBackToHome)
+		__super::Priority_Update(fTimeDelta);
 		return;
-	if (nullptr == pTarget)
+	}
+	_uint iCurTerrIndex = m_pCubeTerrain->PosToIndex(vMyPos);
+	_uint iNextStationIndex = m_pCubeTerrain->PosToIndex(m_vNextStation);
+	if (iCurTerrIndex == iNextStationIndex) 
+	{
+		if (false == m_pWayFinder->Get_NextStation(m_vNextStation))
+			m_vNextStation = m_vHomePos;
+	}
+	m_fMoveSpeed = m_tStat.fRunSpeed * 2;
+
+	m_vMoveDirectionXZ = m_vNextStation - vMyPos;
+	m_vLookDirectionXZ = XMVector4Normalize(m_vNextStation - vMyPos);
+
+	return;
+}
+
+void CMonster::Move_Random(_float fTimeDelta)
+{
+	assert(false == m_bAttack);
+	_vector vMyPos = Get_WorldPosition();
+	m_bDetected = false;
+
+	if (m_fRandomMoveTime <= m_fRandomMoveTimeAcc)
+	{
+		m_bRandomMove = !m_bRandomMove;
+		m_fRandomMoveTime = m_pGameInstance->Get_RandomFloat(5, 10);
+		m_fRandomMoveTimeAcc = 0.f;
+		if (m_bRandomMove)
+		{
+			_float fX = m_pGameInstance->Get_RandomFloat(-2, 2);
+			_float fZ = m_pGameInstance->Get_RandomFloat(-2, 2);
+			m_vRandomHomePosition = { fX ,0, fZ ,1 };
+		}
+	}
+	m_fRandomMoveTimeAcc += fTimeDelta;
+	m_vNextStation = m_vHomePos + m_vRandomHomePosition;
+	XMVectorSetW(m_vNextStation, 1);
+	if (XMVectorGetX(XMVector3Length(m_vNextStation - vMyPos)) <= 0.1f)
+		m_vNextStation = vMyPos;
+
+	m_vMoveDirectionXZ = m_vNextStation - vMyPos;
+	m_vLookDirectionXZ = XMVector3Normalize(m_vNextStation - vMyPos);
+
+	m_fMoveSpeed = m_tStat.fWalkSpeed;
+	m_bWalk = true;
+	return;
+}
+
+void CMonster::Move_To_Target(_float fTimeDelta)
+{
+	assert(false == m_bAttack);
+	_vector vMyPos = Get_WorldPosition();
+	_vector vTargetPos = Get_Target()->Get_WorldPosition();
+	_vector vLookPos = m_vNextStation;
+	_float fTargetDistance = XMVector4Length(vTargetPos - vMyPos).m128_f32[0];
+	//m_vNextStation = vTargetPos;
+	_int iNewTargetCubeIndex = m_pCubeTerrain->PosToIndex(vTargetPos);
+	//타겟 위치가 바뀌면 경로 다시계산.
+	if (m_iTargetCubeIndex != iNewTargetCubeIndex)
+	{
+		m_iTargetCubeIndex = iNewTargetCubeIndex;
+		if (FindWay(vMyPos, vTargetPos, m_iSearchRange))
+		{
+			if (false == m_pWayFinder->Get_FirstStation(m_vNextStation))
+			{
+				m_vNextStation = vMyPos;
+				vLookPos = vTargetPos;
+			}
+		}
+		else
+			m_vNextStation = vMyPos;
+	}
+	//새로운 칸에 도착할 때마다 다음 지점 얻음.
+	else if (m_pCubeTerrain->PosToIndex(vMyPos) == m_pCubeTerrain->PosToIndex(m_vNextStation))
+	{
+		if (false == m_pWayFinder->Get_NextStation(m_vNextStation))
+		{
+			m_vNextStation = vMyPos;
+			vLookPos = vTargetPos;
+		}
+	}
+	m_vMoveDirectionXZ = m_vNextStation - vMyPos;
+	m_vLookDirectionXZ = XMVector4Normalize(vLookPos - vMyPos);
+
+	m_fMoveSpeed = m_tStat.fRunSpeed ;
+}
+
+void CMonster::Chase_Target(_float fTimeDelta)
+{
+	if (m_bAttack)
+	{
+		m_vMoveDirectionXZ = XMVectorZero(); // 멈춤
+		m_vLookDirectionXZ = XMVectorZero();
 		return;
+	}
+	_vector vMyPos = Get_WorldPosition();
+	CGameObject* pTarget = Get_Target();
+	assert(pTarget);
+	_vector vTargetPos = pTarget->Get_WorldPosition();
+	_float fTargetDistance =XMVector4Length(vTargetPos - vMyPos).m128_f32[0];
 	m_bWalk = false;
 	//공격 쿨이 다 됐으면 공격 범위 안까지 추적
 	//공격 쿨이 안됐으면
@@ -444,37 +509,47 @@ void CMonster::Priority_Update(_float fTimeDelta)
 	//추적 상태가 아닐 경우 추적범위 밖에 있지 않으면 안추적
 	if (Is_AttackCoolReady())
 	{
-
-		if (m_fTargetDistance <= m_tStat.fAttackRange)
+		
+		if (fTargetDistance <= m_tStat.fAttackRange)
 		{
-			m_mapSkill[(SKILL_ID)m_iCurrentSkillID]->Use();
-			m_vLookDirectionXZ = XMVector4Normalize(Get_Target()->Get_Position() - vMyPos);
+			if (false == m_bAttack)
+			{			
+				m_mapSkill[(SKILL_ID)m_iCurrentSkillID]->Use();
+				m_bChase = false;
+				m_bAttack = true;
+			}
 		}
+		else
+			Move_To_Target(fTimeDelta);
 
 	}
 	//공격 쿨임 : 추적상태면 쫒고 아니면 안쫒기
 	else
 	{
 		// 추적상태가 아니다 -> 공격범위에 들어온 뒤로 추적범위 밖으로 나가지 않았음.
-		if (false ==  m_bChase) 
+		if (false == m_bChase)
 		{
-			if(m_fTargetDistance > m_fChaseRange)//추적 범위 밖으로 나가면 추적
+			if (fTargetDistance > m_fChaseRange)//추적 범위 밖으로 나가면 추적
 				m_bChase = true;
 		}
 		else //추적 상태다 -> 추적 범위 밖으로 나간 뒤 공격 범위 안으로 들어오지 않았음.
 		{
-			if (m_fTargetDistance <= m_tStat.fAttackRange)//공격 범위 안으로 들어올 때까지 추적
+			if (fTargetDistance <= m_tStat.fAttackRange)//공격 범위 안으로 들어올 때까지 추적
 				m_bChase = false;
 		}
 		if (false == m_bChase)
 		{
 			m_vMoveDirectionXZ = XMVectorZero(); // 멈춤
 		}
+		else
+			Move_To_Target(fTimeDelta);
 	}
 
-	if ( false == XMVector3Equal(m_vMoveDirectionXZ, XMVectorZero()))
-		m_vLookDirectionXZ = XMVector4Normalize(m_vMoveDirectionXZ);
-	__super::Priority_Update(fTimeDelta);
+}
+
+_bool CMonster::FindWay(_vector& vStart, _vector& vGoal, _uint iSearchRange)
+{
+	return m_pWayFinder->FindWay(vStart, vGoal, m_iSearchRange);
 }
 
 void CMonster::Update(_float fTimeDelta)
@@ -491,6 +566,7 @@ void CMonster::Update(_float fTimeDelta)
 		else
 			m_fDeadIdleTimeAcc += fTimeDelta;
 	}
+
 }
 
 _bool CMonster::Check_Collision(CGameObject* pOther)
@@ -501,15 +577,31 @@ _bool CMonster::Check_Collision(CGameObject* pOther)
 	case Client::LAYER_PLAYER:
 	{
 		if (m_bHPZero)
+		{
 			break;
-		_vector vPos = pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		}
+		if(m_bBackToHome)
+		{
+			break;
+		}
+		if (false == pOther->Is_Valid())
+		{
+			break;
+		}
+		if (false == pOther->Get_Collider(0)->Is_Active())
+		{
+			break;
+		}
+		_vector vPos = pOther->Get_WorldPosition();
 		if (m_vecCollider[COLLIDER_DETECT]->Contains(vPos))
 		{
 			if (Get_Target() == nullptr)
 			{
 				Set_Target(pOther);
-				if (m_pWayFinder->FindWay(Get_Position(), vPos, m_iSearchRange))
-					m_vNextStation = m_pWayFinder->Get_NextStation();
+				if (FindWay(Get_TransformPosition(), vPos, m_iSearchRange))
+					 m_pWayFinder->Get_FirstStation(m_vNextStation);
+				else
+					m_vNextStation = Get_WorldPosition();
 			}
 			m_bDetected = true;
 			return true;

@@ -5,7 +5,7 @@
             "FloatData": [],
             "Index": 0,
             "IntData": [],
-            "ItemId": "GRASS_1",
+            "ItemId": 0,
             "Iteration": 400
         },
         {
@@ -13,7 +13,7 @@
             "FloatData": [],
             "Index": 465,
             "IntData": [],
-            "ItemId": "GRASS_1",
+            "ItemId": 0,
             "Iteration": 2
         },
         {
@@ -21,7 +21,7 @@
             "FloatData": [],
             "Index": 467,
             "IntData": [],
-            "ItemId": "GRASS_1",
+            "ItemId": 0,
             "Iteration": 2
         },
         {
@@ -29,7 +29,7 @@
             "FloatData": [],
             "Index": 469,
             "IntData": [],
-            "ItemId": "GRASS_1",
+            "ItemId": 0,
             "Iteration": 1
         },
         {
@@ -37,7 +37,7 @@
             "FloatData": [],
             "Index": 869,
             "IntData": [],
-            "ItemId": "GRASS_1",
+            "ItemId":0,
             "Iteration": 1
         },
         {
@@ -45,7 +45,7 @@
             "FloatData": [],
             "Index": 868,
             "IntData": [],
-            "ItemId": "GRASS_1",
+            "ItemId": 0,
             "Iteration": 1
         },
         {
@@ -53,7 +53,7 @@
             "FloatData": [],
             "Index": 848,
             "IntData": [],
-            "ItemId": "GRASS_1",
+            "ItemId": 0,
             "Iteration": 2
         },
         {
@@ -61,7 +61,7 @@
             "FloatData": [],
             "Index": 829,
             "IntData": [],
-            "ItemId": "GRASS_1",
+            "ItemId": 0,
             "Iteration": 1
         },
         {
@@ -69,7 +69,7 @@
             "FloatData": [],
             "Index": 828,
             "IntData": [],
-            "ItemId": "GRASS_1",
+            "ItemId": 0,
             "Iteration": 1
         },
         {
@@ -77,7 +77,7 @@
             "FloatData": [],
             "Index": 486,
             "IntData": [],
-            "ItemId": "GRASS_1",
+            "ItemId": 0,
             "Iteration": 2
         },
         {
@@ -85,7 +85,7 @@
             "FloatData": [],
             "Index": 488,
             "IntData": [],
-            "ItemId": "GRASS_1",
+            "ItemId": 0,
             "Iteration": 2
         },
         {
@@ -93,7 +93,7 @@
             "FloatData": [],
             "Index": 427,
             "IntData": [],
-            "ItemId": "GRASS_1",
+            "ItemId": 0,
             "Iteration": 2
         },
         {
@@ -101,7 +101,7 @@
             "FloatData": [],
             "Index": 429,
             "IntData": [],
-            "ItemId": "GRASS_1",
+            "ItemId":0,
             "Iteration": 1
         },
         {
@@ -109,7 +109,7 @@
             "FloatData": [],
             "Index": 508,
             "IntData": [],
-            "ItemId": "GRASS_1",
+            "ItemId": 0,
             "Iteration": 1
         },
         {
@@ -117,7 +117,7 @@
             "FloatData": [ 5.0 ],
             "Direction": 0,
             "Index": 530,
-            "ItemId": "MONSTER_SPAWNER",
+            "ItemId": 10000,
             "Iteration": 1
         },
         {
@@ -125,7 +125,7 @@
             "FloatData": [],
             "Direction": 0,
             "Index": 519,
-            "ItemId": "PORTAL",
+            "ItemId": 10002,
             "Iteration": 1
         }
     ],

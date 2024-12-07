@@ -5,43 +5,10 @@
             "FloatData": [],
             "Index": 0,
             "IntData": [],
-            "ItemId": "GRASS_1",
+            "ItemId": 0,
             "Iteration": 400
-        },
-        {
-            "Direction": 0,
-            "FloatData": [],
-            "Index": 442,
-            "IntData": [],
-            "ItemId": "FLOWER_1",
-            "Iteration": 3
-        },
-        {
-            "Direction": 0,
-            "FloatData": [],
-            "Index": 460,
-            "IntData": [
-                2
-            ],
-            "ItemId": "PORTAL",
-            "Iteration": 1
-        },
-        {
-            "Direction": 0,
-            "FloatData": [],
-            "Index": 461,
-            "IntData": [],
-            "ItemId": "FLOWER_1",
-            "Iteration": 3
-        },
-        {
-            "Direction": 0,
-            "FloatData": [],
-            "Index": 482,
-            "IntData": [],
-            "ItemId": "FLOWER_1",
-            "Iteration": 1
         }
+      
     ],
     "size": [
         20,

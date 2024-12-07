@@ -1,9 +1,9 @@
 {
     "items": [
         {
-            "BuildItemType": "SPAWN",
-            "BuildItemBlockType" : "NON_BLOCK",
-            "ItemId": "MONSTER_SPAWNER",
+            "BuildItemType": "MONSTER_SPAWNER",
+            "BuildItemBlockType": "NON_BLOCK",
+            "ItemId": 10000,
             "ItemGrade": "MYTHIC",
             "Name": "몬스터 스포너",
             "Desc": "몬스터 스포너",
@@ -12,9 +12,9 @@
             "Model": "EmptyModel.model"
         },
         {
-            "BuildItemType": "SPAWN",
+            "BuildItemType": "PLAYER_SPAWNER",
             "BuildItemBlockType": "NON_BLOCK",
-            "ItemId": "PLAYER_SPAWNER",
+            "ItemId": 10001,
             "ItemGrade": "MYTHIC",
             "Name": "플레이어 스포너",
             "Desc": "플레이어 스포너",
@@ -23,9 +23,9 @@
             "Model": "EmptyModel.model"
         },
         {
-            "BuildItemType": "INTERACTABLE",
+            "BuildItemType": "PORTAL",
             "BuildItemBlockType": "NON_BLOCK",
-            "ItemId": "PORTAL",
+            "ItemId": 10002,
             "ItemGrade": "NORMAL",
             "Name": "포탈",
             "Desc": "포탈",

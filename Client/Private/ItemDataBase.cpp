@@ -10,9 +10,21 @@ CItemDataBase::CItemDataBase()
 
 HRESULT CItemDataBase::Load_Data()
 {
+
+	fs::path path;
+	path = TEXT("../Bin/resources/FBXs/MAP");
+	_uint iItemID = 0;
+	for (const auto& entry : recursive_directory_iterator(path)) {
+		if (entry.path().extension() == ".model") {
+			BUILD_ITEM_DATA* pItemDesc = new BUILD_ITEM_DATA(entry.path().filename().string());
+			pItemDesc->iItemID = iItemID++;
+			Insert_Data(pItemDesc);
+		}
+	}
+
 	json j;
 	ITEM_DATA* pItemDesc;
-	if (FAILED(CJsonParser::ReadJsonFile("../Bin/Resources/Json/BuildItemData.json", &j)))
+	if (FAILED(CJsonParser::ReadJsonFile("../Bin/Resources/Json/ETCBuildItemData.json", &j)))
 		return E_FAIL;
 	for (auto& item : j["items"])
 	{

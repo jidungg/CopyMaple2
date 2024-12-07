@@ -22,7 +22,7 @@ typedef struct ItemData : public UIListItemData
 	}
 	ITEM_TYPE eITemType = ITEM_TYPE::LAST;
 	ITEM_GRADE eItemGrade = ITEM_GRADE::LAST;
-	_uint iItemID = 0;
+	_uint iItemID = { UINT_MAX };
 	_char strItemName[MAX_PATH] = ("");
 	_char strItemDesc[MAX_PATH] = ("");
 	_char strIconImageTag[MAX_PATH] = ("");
@@ -33,13 +33,13 @@ typedef struct ItemData : public UIListItemData
 typedef struct BuildItemData : public ItemData
 {
 	BuildItemData() = default;
+	BuildItemData(string strFileName);
 	BuildItemData(json& js)
 	{
 		eITemType = ITEM_TYPE::BUILD;
 		eBuildType = js["BuildItemType"];
 		eBlockType = js["BuildItemBlockType"];
-		ETC_BUILD_ITEM_ID eId = js["ItemId"];
-		iItemID = (_uint)eId;
+		iItemID = js["ItemId"];
 
 		string str = js["IconImg"];
 		std::copy(str.begin(), str.end(), strIconImageTag);

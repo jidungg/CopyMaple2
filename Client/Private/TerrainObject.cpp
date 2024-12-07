@@ -43,7 +43,8 @@ HRESULT CTerrainObject::Initialize(void* pArg)
 
 	pDesc->fRotationPerSec = 5.f;
 	pDesc->fSpeedPerSec = 1.f;
-	m_iBuildItemID = pDesc->eID;
+	m_iBuildItemID = pDesc->iID;
+	m_eBlockType = static_cast<BUILD_ITEM_DATA*>(ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)m_iBuildItemID))->eBlockType;
 	m_eBuildItemType= static_cast<BUILD_ITEM_DATA*>( ITEMDB->Get_Data(ITEM_TYPE::BUILD,(_uint)m_iBuildItemID))->eBuildType;
 	m_eTerrainDir = pDesc->direction;
 	m_iIndex = pDesc->index;
@@ -101,6 +102,19 @@ void CTerrainObject::Update(_float fTimeDelta)
 }
 
 
+json CTerrainObject::ToJson()
+{
+	json j;
+	j["ItemId"] = m_iBuildItemID;
+	list<_int> iData;
+	j["IntData"] = iData;
+	list<_float> fData;
+	j["FloatData"] = fData;
+	j["Iteration"] = 1;
+	j["Direction"] = m_eTerrainDir;
+	j["Index"] = m_iIndex;
+	return j;
+}
 void CTerrainObject::Rotate()
 {
 	m_eTerrainDir = (DIRECTION)(((_uint)m_eTerrainDir + 1) % (_uint)DIRECTION::XMZP);
@@ -242,7 +256,6 @@ _float CTerrainObject::Get_TopHeight(_vector Pos)
 	case Client::BUILD_ITEM_TYPE::FUNCT:
 	case Client::BUILD_ITEM_TYPE::NATURE:
 	case Client::BUILD_ITEM_TYPE::PROP:
-	case Client::BUILD_ITEM_TYPE::ETC:
 	case Client::BUILD_ITEM_TYPE::LAST:
 	default:
 		return -1;
@@ -251,7 +264,7 @@ _float CTerrainObject::Get_TopHeight(_vector Pos)
 
 	return -1;
 }
-
+//바닥높이
 _float CTerrainObject::Get_BottomHeight(_vector Pos)
 {
 	switch (m_eBuildItemType)
@@ -274,11 +287,6 @@ _float CTerrainObject::Get_BottomHeight(_vector Pos)
 		}
 		break;
 	}
-	case Client::BUILD_ITEM_TYPE::FUNCT:
-	case Client::BUILD_ITEM_TYPE::PROP:
-	case Client::BUILD_ITEM_TYPE::NATURE:
-	case Client::BUILD_ITEM_TYPE::ETC:
-	case Client::BUILD_ITEM_TYPE::LAST:
 	default:
 		return FLT_MAX;
 		break;

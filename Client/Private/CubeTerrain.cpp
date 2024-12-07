@@ -69,7 +69,7 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 		desc.fSpeedPerSec = 1.f;
 		strcpy_s(desc.strModelProtoName, pBuildItemDesc->strModelTag);
 		desc.eModelProtoLevelID = LEVEL_LOADING;
-		desc.eID = eId;
+		desc.iID = eId;
 		desc.direction = item["Direction"];
 		desc.vecIData = item["IntData"].get<vector<_int>>();
 		desc.vecFData = item["FloatData"].get<vector<_float>>();
@@ -394,41 +394,32 @@ HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 	if (m_vecCells[tDesc.index] != nullptr)
 		return E_FAIL;
 	tDesc.pCubeTerrain = this;
-	BUILD_ITEM_TYPE eType = static_cast<BUILD_ITEM_DATA*>(ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)tDesc.eID))->eBuildType;
+	BUILD_ITEM_TYPE eType = static_cast<BUILD_ITEM_DATA*>(ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)tDesc.iID))->eBuildType;
 
 	CTerrainObject* pGameObject = nullptr;
 	switch (eType)
 	{
 	case Client::BUILD_ITEM_TYPE::GROUND:
-	case Client::BUILD_ITEM_TYPE::FILED_BLOCK:
-	case Client::BUILD_ITEM_TYPE::FILED_NON_BLOCK:
+	case Client::BUILD_ITEM_TYPE::CUBRIC:
+	case Client::BUILD_ITEM_TYPE::FUNCT:
+	case Client::BUILD_ITEM_TYPE::NATURE:
+	case Client::BUILD_ITEM_TYPE::PROP:
+	case Client::BUILD_ITEM_TYPE::STRUC:
 		pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CTerrainObject::m_szProtoTag, &tDesc));
 		break;
-	case Client::BUILD_ITEM_TYPE::INTERACTABLE:
-		if (tDesc.eID == Client::BUILD_ITEM_ID::PORTAL)
-			pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CPortalTerrainObject::m_szProtoTag, &tDesc));
+	case Client::BUILD_ITEM_TYPE::MONSTER_SPAWNER:
+		pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CMonsterSpawner::m_szProtoTag, &tDesc));
 		break;
-	case Client::BUILD_ITEM_TYPE::SPAWN:
-	{
-		switch (tDesc.eID)
-		{
-		case Client::BUILD_ITEM_ID::MONSTER_SPAWNER:
-
-			pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CMonsterSpawner::m_szProtoTag, &tDesc));
-			break;
-		case Client::BUILD_ITEM_ID::PLAYER_SPAWNER:
-			//pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CMonsterSpawner::m_szProtoTag, &tDesc));
-			break;
-		default:
-			break;
-		}
+	case Client::BUILD_ITEM_TYPE::PLAYER_SPAWNER:
 		break;
-	}
+	case Client::BUILD_ITEM_TYPE::PORTAL:
+		pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CPortalTerrainObject::m_szProtoTag, &tDesc));
+		break;
 	case Client::BUILD_ITEM_TYPE::LAST:
-		break;
 	default:
 		break;
 	}
+	
 	if(nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
@@ -633,7 +624,7 @@ CTerrainObject* CCubeTerrain::Get_Portal(LEVELID eLinkedLevel)
 	{
 		if (nullptr == pCell) continue;
 		CPortalTerrainObject* pTerrObj = static_cast<CPortalTerrainObject*>(pCell);
-		if (pTerrObj->Get_BuildItemID() == BUILD_ITEM_ID::PORTAL)
+		if (pTerrObj->Get_BuildItemType() == BUILD_ITEM_TYPE::PORTAL)
 			if (pTerrObj->Get_LinkedLevelID() == eLinkedLevel)
 				return pTerrObj;
 	}
@@ -646,7 +637,7 @@ CTerrainObject* CCubeTerrain::Get_PlayerSpawn()
 	{
 		if (nullptr == pCell) continue;
 		CPortalTerrainObject* pTerrObj = static_cast<CPortalTerrainObject*>(pCell);
-		if (pTerrObj->Get_BuildItemID() == BUILD_ITEM_ID::PLAYER_SPAWNER)
+		if (pTerrObj->Get_BuildItemType() == BUILD_ITEM_TYPE::PLAYER_SPAWNER)
 			return pTerrObj;
 	}
 	return nullptr;

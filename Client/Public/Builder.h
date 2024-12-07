@@ -47,7 +47,7 @@ public:
 	virtual void Receive_KeyInput(_float fTimeDelta)  override;
 	virtual void Late_Update(_float fTimeDelta) override;
 
-	void Set_BuildItem(BUILD_ITEM_ID eID);
+	void Set_BuildItem(_uint eID);
 	void Move_To(const _vector& vPos);
 
 private:

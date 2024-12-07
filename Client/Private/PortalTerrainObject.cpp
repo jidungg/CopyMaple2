@@ -42,7 +42,7 @@ HRESULT CPortalTerrainObject::Initialize(void* pArg)
 json CPortalTerrainObject::ToJson()
 {
 	json j;
-	j["ItemId"] = m_eBuildItemID;
+	j["ItemId"] = m_iBuildItemID;
 	list<_int> iData;
 	iData.push_back(m_eLevelID);
 	j["IntData"] = iData;

@@ -90,7 +90,10 @@ HRESULT CUIItemIndicator::On_ListItemDataSet(const UIListItemData* data)
 	string strProtoItemIconTag = m_pItemDesc->strIconImageTag;
 	wstring wstrItemIconTag(strProtoItemIconTag.begin(), strProtoItemIconTag.end());
 	m_pIconTexure = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, wstrItemIconTag, nullptr));
+	if (nullptr == m_pIconTexure)
+		m_pIconTexure = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("Default.dds"), nullptr));
 }
+
 
 
 

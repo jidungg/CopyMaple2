@@ -26,7 +26,7 @@ public:
 
 
 	void On_BuildItemSelected(void*);
-	void Set_BuildItem(BUILD_ITEM_ID eID);
+	void Set_BuildItem(_uint iID);
 private:
 	HRESULT Ready_Layer_UI(LAYERID eLayerId);
 

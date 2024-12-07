@@ -116,6 +116,7 @@ HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle)
 	return S_OK;
 }
 
+
 HRESULT CTexture::Initialize(void * pArg)
 {
 
@@ -220,6 +221,17 @@ CTexture* CTexture::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext,
 	CTexture* pInstance = new CTexture(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype(szDirPath, inFIle)))
+	{
+		MSG_BOX("Failed to Created : CTexture");
+		Safe_Release(pInstance);
+	}
+	return pInstance;
+}
+CTexture* CTexture::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath, const _char* szFileName, TEXTURE_TYPE eTexType)
+{
+	CTexture* pInstance = new CTexture(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype(szDirPath, szFileName)))
 	{
 		MSG_BOX("Failed to Created : CTexture");
 		Safe_Release(pInstance);

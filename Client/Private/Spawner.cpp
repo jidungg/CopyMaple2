@@ -67,7 +67,7 @@ HRESULT CSpawner::Render()
 json CSpawner::ToJson()
 {
 	json j;
-	j["ItemId"] = m_eBuildItemID;
+	j["ItemId"] = m_iBuildItemID;
 	vector<_int> iData = {(_int)m_iObjectId};
 	j["IntData"] = iData;
 	vector<_float> fData = {fSpawnTime};

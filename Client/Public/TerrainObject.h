@@ -14,9 +14,9 @@ class CTerrainObject :
 public:
 	typedef struct TerrainObjDesc: public CModelObject::MODELOBJ_DESC
 	{
-		BUILD_ITEM_ID eID = BUILD_ITEM_ID::LAST;
+		_uint iID = { UINT_MAX };
 		_float4 pos = {0,0,0,1};
-		_uint index = 0;
+		_uint index = { UINT_MAX };
 		vector<_int> vecIData ;
 		vector<_float> vecFData ;
 		CCubeTerrain* pCubeTerrain = { nullptr };
@@ -39,12 +39,12 @@ public:
 
 	_uint Get_Index() { return m_iIndex; }
 	DIRECTION Get_Direction() { return m_eTerrainDir; }
-	BUILD_ITEM_ID Get_BuildItemID() { return m_eBuildItemID; }
+	_uint Get_BuildItemID() { return m_iBuildItemID; }
 	_vector BolckXZ(_vector vPosition, _vector vDirection, _float fMoveDistance, _float fCollisionRadius, _float fCollisionHeight);
 	_float Get_TopHeight(_vector Pos);
 	_float Get_BottomHeight(_vector Pos);
-	_float Get_BuildItemType() { return (_float)m_eBuildItemType; }
-	_bool Is_BlockingType() { return m_eBuildItemType == BUILD_ITEM_TYPE::GROUND || m_eBuildItemType == BUILD_ITEM_TYPE::FILED_BLOCK; }
+	BUILD_ITEM_TYPE Get_BuildItemType() { return m_eBuildItemType; }
+	_bool Is_BlockingType() { return m_eBlockType == BUILD_ITEM_BLOCK_TYPE::BLOCK; }
 	_bool RayCast(const Ray& tRay, RaycastHit* pOut);
 
 	void Set_TerrainDir(DIRECTION eDir) { m_eTerrainDir = eDir; }
@@ -52,9 +52,10 @@ private:
 	HRESULT Ready_Components(TERRAINOBJ_DESC* pDesc);
 
 protected:
-	BUILD_ITEM_ID m_eBuildItemID = BUILD_ITEM_ID::LAST;
-	BUILD_ITEM_TYPE m_eBuildItemType = BUILD_ITEM_TYPE::LAST;
-	_uint m_iIndex = 0;
+	_uint m_iBuildItemID = { UINT_MAX };
+	BUILD_ITEM_BLOCK_TYPE m_eBlockType = { BUILD_ITEM_BLOCK_TYPE::LAST };
+	BUILD_ITEM_TYPE m_eBuildItemType = { BUILD_ITEM_TYPE::LAST };
+	_uint m_iIndex = { UINT_MAX };
 	DIRECTION m_eTerrainDir = DIRECTION::LAST;
 	CColliderBase* m_pCubeColliderCom = {nullptr};
 	CColliderBase* m_pMeshColliderCom = {nullptr};

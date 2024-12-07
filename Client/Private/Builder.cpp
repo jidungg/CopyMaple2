@@ -62,7 +62,7 @@ HREFTYPE CBuilder::Ready_Preview(BUILD_ITEM_DATA* pDesc)
 	CTerrainObject::TERRAINOBJ_DESC tTerrObjDesc;
 	tTerrObjDesc.fRotationPerSec = 5.f;
 	tTerrObjDesc.fSpeedPerSec = 1.f;
-	tTerrObjDesc.eID = (BUILD_ITEM_ID)pDesc->iItemID;
+	tTerrObjDesc.iID =pDesc->iItemID;
 	tTerrObjDesc.eModelProtoLevelID = LEVEL_LOADING;
 	strcpy_s(tTerrObjDesc.strModelProtoName, pDesc->strModelTag);
 	XMStoreFloat4(&tTerrObjDesc.pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_vPreviewOffset);
@@ -129,7 +129,7 @@ void CBuilder::Receive_KeyInput(_float fTimeDelta)
 		CTerrainObject::TERRAINOBJ_DESC desc;
 		desc.fRotationPerSec = 5.f;
 		desc.fSpeedPerSec = 1.f;
-		desc.eID = m_pPreview->Get_BuildItemID();
+		desc.iID = m_pPreview->Get_BuildItemID();
 		desc.eModelProtoLevelID = LEVEL_LOADING;
 		strcpy_s(desc.strModelProtoName, itemdesc->strModelTag);
 		desc.direction = m_pPreview->Get_Direction();
@@ -172,7 +172,7 @@ void CBuilder::Late_Update(_float fTimeDelta)
 
 
 
-void CBuilder::Set_BuildItem(BUILD_ITEM_ID eID)
+void CBuilder::Set_BuildItem(_uint eID)
 {
 	BUILD_ITEM_DATA* tItemDesc = static_cast<BUILD_ITEM_DATA*>(ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)eID));
 

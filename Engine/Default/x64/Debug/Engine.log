@@ -1,90 +1,6 @@
-﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\Workbench\Portfolio\CopyMaple2\Engine\Bin\Shader_Deferred.cso
-  Animation.cpp
-  Base.cpp
-  Bone.cpp
-  Camera.cpp
-  Camera_UI.cpp
-  Channel.cpp
-  Collider.cpp
-  Collider_AABB.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Collider_AABB.cpp(79,67): warning C4244: '인수': 'Engine::_int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Collider_AABB.cpp(79,51): warning C4244: '인수': 'Engine::_int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\Private\Collider_AABB.cpp(79,35): warning C4244: '인수': 'Engine::_int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Collider_Cylinder.cpp
-  Collider_Frustum.cpp
-  Collider_Sphere.cpp
-  CollisionManager.cpp
-  Component.cpp
-  Condition.cpp
-  ContainerObject.cpp
-  Controller.cpp
-  DebugDraw.cpp
-  Event.cpp
-  EventHandlerWrapperInterface.cpp
-  EventManager.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  GameInstance.cpp
-  GameObject.cpp
-  Graphic_Device.cpp
-  Input_Device.cpp
-  JsonParser.cpp
-  Layer.cpp
-  Level.cpp
-  Level_Manager.cpp
-  Light.cpp
-  Light_Manager.cpp
-  Engine_Utility.cpp
-  Mesh.cpp
-  MeshCollider.cpp
-  MimicBone.cpp
-  Model.cpp
-  MultiAnimation.cpp
-  ObjectPool.cpp
-  Object_Manager.cpp
-  Pawn.cpp
-  Physics.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  PipeLine.cpp
-  Prototype_Manager.cpp
-  Rect_Transform.cpp
-  Renderer.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\Renderer.cpp(23,6): warning C4244: '인수': 'FLOAT'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\Renderer.cpp(27,6): warning C4244: '인수': 'FLOAT'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\Renderer.cpp(31,6): warning C4244: '인수': 'FLOAT'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\Renderer.cpp(35,6): warning C4244: '인수': 'FLOAT'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\Renderer.cpp(39,6): warning C4244: '인수': 'FLOAT'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  RenderTarget.cpp
-  RenderTarget_Manager.cpp
-  Shader.cpp
-  State.cpp
-  StateMachine.cpp
-  Texture.cpp
-  Timer.cpp
-  Timer_Manager.cpp
-  Transition.cpp
-  Transform.cpp
-  UIManager.cpp
-  UIObject.cpp
-  VIBuffer.cpp
-  VIBuffer_Rect.cpp
-  VIBuffer_Terrain.cpp
-  Engine_Struct.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  Material.cpp
-  코드를 생성하고 있습니다...
-DirectXTKd.lib(PrimitiveBatch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(PrimitiveBatch.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTKd.lib(BasicEffect.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(BasicEffect.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTKd.lib(VertexTypes.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(VertexTypes.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTKd.lib(DDSTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(DDSTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTKd.lib(WICTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(WICTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTKd.lib(EffectCommon.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(EffectCommon.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-     ../Bin/Engine.lib 라이브러리 및 ../Bin/Engine.exp 개체를 생성하고 있습니다.
+﻿  UIObject.cpp
+D:\Workbench\Portfolio\CopyMaple2\Engine\private\UIObject.cpp(174,57): warning C4244: '=': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Workbench\Portfolio\CopyMaple2\Engine\private\UIObject.cpp(178,57): warning C4244: '=': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Engine.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Engine\Bin\Engine.dll
   .\Engine\Bin\Engine.dll
   1 File(s) copied
@@ -113,6 +29,7 @@ DirectXTKd.lib(EffectCommon.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(Ef
   .\Engine\Public\ContainerObject.h
   .\Engine\Public\Controller.h
   .\Engine\Public\DebugDraw.h
+  .\Engine\Public\DragableUI.h
   .\Engine\Public\Engine_Defines.h
   .\Engine\Public\Engine_Function.h
   .\Engine\Public\Engine_Macro.h
@@ -188,7 +105,7 @@ DirectXTKd.lib(EffectCommon.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(Ef
   .\Engine\Public\DirectXTK\XboxDDSTextureLoader.h
   .\Engine\Public\Effects11\d3dx11effect.h
   .\Engine\Public\Effects11\d3dxGlobal.h
-  93 File(s) copied
+  94 File(s) copied
   .\Engine\Bin\ShaderFiles\Engine_Shader_Define.hlsli
   .\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl
   2 File(s) copied

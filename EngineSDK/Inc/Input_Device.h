@@ -35,6 +35,10 @@ public:
 	{
 		return m_tMousePos;
 	}
+	DIMOUSESTATE Get_MouseState()
+	{
+		return m_tMouseState;
+	}
 private:
 
 private:

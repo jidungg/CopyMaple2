@@ -190,6 +190,7 @@ call UpdateLib.bat</Command>
     <ClInclude Include="..\Public\ContainerObject.h" />
     <ClInclude Include="..\Public\Controller.h" />
     <ClInclude Include="..\Public\DebugDraw.h" />
+    <ClInclude Include="..\Public\DragableUI.h" />
     <ClInclude Include="..\Public\Engine_Defines.h" />
     <ClInclude Include="..\Public\Engine_Function.h" />
     <ClInclude Include="..\Public\Engine_Macro.h" />
@@ -260,6 +261,7 @@ call UpdateLib.bat</Command>
     <ClCompile Include="..\Private\ContainerObject.cpp" />
     <ClCompile Include="..\Private\Controller.cpp" />
     <ClCompile Include="..\Private\DebugDraw.cpp" />
+    <ClCompile Include="..\Private\DragableUI.cpp" />
     <ClCompile Include="..\Private\Event.cpp" />
     <ClCompile Include="..\Private\EventHandlerWrapperInterface.cpp" />
     <ClCompile Include="..\Private\EventManager.cpp" />

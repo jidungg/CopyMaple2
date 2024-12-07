@@ -20,10 +20,6 @@ CUISlot::CUISlot(const CUISlot& Prototype)
 }
 
 
-HRESULT CUISlot::Initialize_Prototype()
-{
-    return S_OK;
-}
 
 HRESULT CUISlot::Initialize(void* pArg)
 {

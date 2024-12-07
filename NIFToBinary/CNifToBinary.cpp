@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "CNifToBinary.h"
-#include "NiTriShape.h"
-#include "NiNode.h"
 
 CNifToBinary::CNifToBinary()
 {

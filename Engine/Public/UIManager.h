@@ -23,10 +23,11 @@ public:
 	void Register_DeontDestroy_UIObject(CUIObject* pUIObject);
 	void Clear();
 
-	bool Consume_MouseLButtonDown();
+	bool Consume_MouseLButtonDown(const POINT& tMousePoint);
 	bool Consume_MouseLButtonUp();
 	bool Consume_MouseRButtonDown();
 	bool Consume_MouseRButtonUp();
+	bool Consume_MouseMove(const POINT& tMousePoint,const DIMOUSESTATE& tState);
 private:
 	list<CUIObject*> m_UIObjectList;
 	list<CUIObject*> m_DontDestroyUIObjectList;

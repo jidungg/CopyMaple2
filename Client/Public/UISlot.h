@@ -16,7 +16,6 @@ protected:
 	virtual ~CUISlot() = default;
 
 public:
-	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render()override;
 	virtual bool Has_Item() abstract;

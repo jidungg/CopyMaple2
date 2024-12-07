@@ -74,13 +74,14 @@ void CUIManager::Clear()
 		Safe_Release(pUIObject);
 	m_UIObjectList.clear();
 }
-bool CUIManager::Consume_MouseLButtonDown()
+
+bool CUIManager::Consume_MouseLButtonDown(const POINT& tMousePoint)
 {
     if (m_pFocusedUI != nullptr)
     {
-		m_pPressedUI = m_pFocusedUI;
+        m_pPressedUI = m_pFocusedUI;
         m_pPressedUI->Increase_Priority();
-        m_pPressedUI->On_MouseLButtonDown();
+        m_pPressedUI->On_MouseLButtonDown(tMousePoint);
         return true;
     }
     else
@@ -145,6 +146,17 @@ bool CUIManager::Consume_MouseRButtonUp()
     m_pRightPressedUI = nullptr;
     return bConsume;
 }
+
+bool CUIManager::Consume_MouseMove(const POINT& tMousePoint,const DIMOUSESTATE& tState)
+{
+    if (m_pPressedUI == nullptr)
+        return false;
+
+    m_pPressedUI->On_MouseMove(tMousePoint,tState);
+
+    return false;
+}
+
 
 
 CUIManager* CUIManager::Create()

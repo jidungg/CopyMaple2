@@ -120,7 +120,7 @@ void CRect_Transform::Move(_float fX, _float fY)
 {
 	_vector		vPosition = Get_State(STATE_POSITION);
 	_vector		vLook = XMVectorSet(fX, fY, 0, 0);
-	vPosition += XMVector3Normalize(vLook);
+	vPosition += (vLook);
 	Set_State(STATE_POSITION, vPosition);
 }
 

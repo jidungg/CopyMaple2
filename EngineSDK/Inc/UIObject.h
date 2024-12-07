@@ -13,6 +13,8 @@ class ENGINE_DLL CUIObject  : public CGameObject
 public:
 	typedef struct UIObjectDesc: public CRect_Transform::RECTTRANSFORM_DESC
 	{
+		_bool bDraggableX = { false };
+		_bool bDraggableY = { false };
 	}UIOBJECT_DESC;
 protected:
 	CUIObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -23,8 +25,6 @@ public:
 	virtual HRESULT Initialize_Prototype()override;
 	virtual HRESULT Initialize(void* pArg)override;
 	virtual void Update(_float fTimeDelta) override;
-
-
 
 	virtual void Add_Child(CGameObject* pChild) override;
 	virtual void Remove_Child(CGameObject* pChild);
@@ -41,13 +41,15 @@ public:
 	virtual void On_MouseOver();
 	virtual void On_MouseEnter();
 	virtual void On_MouseExit();
-	virtual void On_MouseLButtonDown();
+	virtual void On_MouseLButtonDown(const POINT& tMousePoint);
 	virtual void On_MouseLButtonUp();
 	virtual void On_MouseRButtonDown();
 	virtual void On_MouseRButtonUp();
 	virtual void On_MouseClick();
 	virtual void On_MouseRightClick();
+	virtual void On_MouseMove(const POINT& tMousePoint, const DIMOUSESTATE& tState);
 
+	virtual _bool Is_GrabbablePoint(const POINT& tScreenMousePoint);
 	CUIObject* Find_FocusedUI(POINT fPos);
 protected:
 
@@ -57,10 +59,17 @@ protected:
 	_uint					m_iPriority = {};
 	_uint					m_iSRVIndex= 0;		
 
-
 	CGameObject* m_pParent = { nullptr };
+
+	_bool m_bDraggableX = { false };
+	_bool m_bDraggableY = { false };
+	// 그랩됐을 당시 자신의 위치.
+	POINT m_tGrabbedOffset = { 0,0 };
+	// 그랩 됐을 당시 마우스의 위치.
+	POINT m_tGrabbedMousePos = { 0,0 };
+	_bool m_bGrabbed = { false };
 private:
-	bool m_bMouseOver = false;
+	bool m_bMouseOver = { false };
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;

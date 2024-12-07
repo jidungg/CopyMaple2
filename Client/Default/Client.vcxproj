@@ -273,6 +273,7 @@
     <ClInclude Include="..\Public\UIListItemEntry.h" />
     <ClInclude Include="..\Public\UIPanel.h" />
     <ClInclude Include="..\Public\UIScrollBar.h" />
+    <ClInclude Include="..\Public\UIScrollButton.h" />
     <ClInclude Include="..\Public\UISlot.h" />
     <ClInclude Include="..\Public\WayFinder.h" />
     <ClInclude Include="..\Public\Weapon.h" />
@@ -386,6 +387,7 @@
     <ClCompile Include="..\Private\UIListItemEntry.cpp" />
     <ClCompile Include="..\Private\UIPanel.cpp" />
     <ClCompile Include="..\Private\UIScrollBar.cpp" />
+    <ClCompile Include="..\Private\UIScrollButton.cpp" />
     <ClCompile Include="..\Private\UISlot.cpp" />
     <ClCompile Include="..\Private\WayFinder.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />

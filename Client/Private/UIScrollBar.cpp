@@ -11,6 +11,30 @@ CUIScrollBar::CUIScrollBar(const CUIPanel& Prototype)
 {
 }
 
+HRESULT CUIScrollBar::Initialize_Prototype()
+{
+	return E_NOTIMPL;
+}
+
+HRESULT CUIScrollBar::Initialize(void* pArg)
+{
+	return E_NOTIMPL;
+}
+
+HRESULT CUIScrollBar::Render()
+{
+	return E_NOTIMPL;
+}
+
+
+void CUIScrollBar::On_MouseLButtonDown(const POINT& tMousePoint)
+{
+}
+
+void CUIScrollBar::On_MouseLButtonUp()
+{
+}
+
 CUIScrollBar* CUIScrollBar::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CUIScrollBar* pInstance = new CUIScrollBar(pDevice, pContext);

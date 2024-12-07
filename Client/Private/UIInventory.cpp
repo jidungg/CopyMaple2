@@ -22,6 +22,8 @@ HRESULT CUIInventory::Initialize_Prototype()
 HRESULT CUIInventory::Initialize(void* pArg)
 {
 	UIINVENTORY_DESC* pInvenDesc = static_cast<UIINVENTORY_DESC*>(pArg);
+	pInvenDesc->bDraggableX = true;
+	pInvenDesc->bDraggableY = true;
 	pInvenDesc->eAnchorType = CORNOR_TYPE::CENTER;
 	pInvenDesc->ePivotType = CORNOR_TYPE::CENTER;
 	pInvenDesc->fSizeX =400 ;

@@ -27,7 +27,8 @@ HRESULT CUIObject::Initialize(void * pArg)
 	UIOBJECT_DESC*	pDesc = static_cast<UIOBJECT_DESC*>(pArg);
 	if (nullptr != pDesc)
 	{
-
+		m_bDraggableX = pDesc->bDraggableX;
+		m_bDraggableY = pDesc->bDraggableY;
 	}
 
 
@@ -124,13 +125,21 @@ void CUIObject::On_MouseExit()
 {
 }
 
-void CUIObject::On_MouseLButtonDown()
+void CUIObject::On_MouseLButtonDown(const POINT& tMousePoint)
 {
-	return ;
+	if(Is_GrabbablePoint(tMousePoint))
+	{
+		m_bGrabbed = true;
+		_float2 vCurrentOffset = static_cast<CRect_Transform*>(m_pTransformCom)->Get_Offset();
+		m_tGrabbedOffset = { (_long)vCurrentOffset.x, (_long)vCurrentOffset .y};
+		m_tGrabbedMousePos = tMousePoint;
+	}
 }
+
 
 void CUIObject::On_MouseLButtonUp()
 {
+	m_bGrabbed = false;
 	return;
 }
 
@@ -154,9 +163,34 @@ void CUIObject::On_MouseRightClick()
 	return ;
 }
 
+void CUIObject::On_MouseMove(const POINT& tMousePoint, const DIMOUSESTATE& tState)
+{
+	if (m_bGrabbed == false)
+		return;
+	CRect_Transform* pTransform = static_cast<CRect_Transform*>(m_pTransformCom);
+	_float2 vMovedPosition = pTransform->Get_Offset();
+	if (m_bDraggableX)
+	{
+		vMovedPosition.x = m_tGrabbedOffset.x + tMousePoint.x - m_tGrabbedMousePos.x;
+	}
+	if (m_bDraggableY)
+	{
+		vMovedPosition.y = m_tGrabbedOffset.y + tMousePoint.y - m_tGrabbedMousePos.y;
+	}
+	static_cast<CRect_Transform*>(m_pTransformCom)->Set_Offset(vMovedPosition.x, vMovedPosition.y);
+
+	Compute_Matrix_Recursive();
+	return;
+}
+
 bool CUIObject::Check_MouseOver(POINT fPos)
 {
 	return static_cast<CRect_Transform*>( m_pTransformCom)->Is_InRect(_float2((float)fPos.x, (float)fPos.y));
+}
+
+_bool CUIObject::Is_GrabbablePoint(const POINT& tScreenMousePoint)
+{
+	return true;
 }
 
 CUIObject* CUIObject::Find_FocusedUI(POINT fPos)

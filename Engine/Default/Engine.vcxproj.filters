@@ -274,6 +274,7 @@
     <ClInclude Include="..\Public\RenderTarget_Manager.h" />
     <ClInclude Include="..\Public\ObjectPool.h" />
     <ClInclude Include="..\Public\Collider_Cylinder.h" />
+    <ClInclude Include="..\Public\DragableUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -435,6 +436,7 @@
     <ClCompile Include="..\Private\RenderTarget_Manager.cpp" />
     <ClCompile Include="..\Private\ObjectPool.cpp" />
     <ClCompile Include="..\Private\Collider_Cylinder.cpp" />
+    <ClCompile Include="..\Private\DragableUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc" />

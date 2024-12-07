@@ -1,85 +1,17 @@
-﻿  stdafx.cpp
-  AttachableBodyPart.cpp
-  BBQParty.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\BBQParty.cpp(111,41): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/BBQParty.cpp'을(를) 컴파일하는 중)
-  
-  BasicAttack.cpp
-  Bayar.cpp
+﻿  Bayar.cpp
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Bayar.cpp(67,26): warning C4305: '=': 'double'에서 'Engine::_float'(으)로 잘립니다.
   (소스 파일 '/Private/Bayar.cpp'을(를) 컴파일하는 중)
   
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Bayar.cpp(77,26): warning C4305: '=': 'double'에서 'Engine::_float'(으)로 잘립니다.
   (소스 파일 '/Private/Bayar.cpp'을(를) 컴파일하는 중)
   
-  BayarAttackA.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\BayarAttackA.cpp(81,42): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/BayarAttackA.cpp'을(를) 컴파일하는 중)
-  
-  BayarAttackB.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\BayarAttackB.cpp(70,41): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/BayarAttackB.cpp'을(를) 컴파일하는 중)
-  
-  BayarAttackC.cpp
-  BayarAttackD.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\BayarAttackD.cpp(87,41): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/BayarAttackD.cpp'을(를) 컴파일하는 중)
-  
-  BayarKnockOff.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\BayarKnockOff.cpp(71,48): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/BayarKnockOff.cpp'을(를) 컴파일하는 중)
-  
-  BayarPalmStrike.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\BayarPalmStrike.cpp(103,42): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/BayarPalmStrike.cpp'을(를) 컴파일하는 중)
-  
-  BayarSkyJump.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\BayarSkyJump.cpp(91,42): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/BayarSkyJump.cpp'을(를) 컴파일하는 중)
-  
   BayarStoneSpike.cpp
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\BayarStoneSpike.cpp(69,43): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   (소스 파일 '/Private/BayarStoneSpike.cpp'을(를) 컴파일하는 중)
   
-  BoneModelObject.cpp
-  BuildPreview.cpp
   Builder.cpp
-  Bullet.cpp
-  Bullet_BBQParty.cpp
-  Bullet_BayarAttackB.cpp
-  Bullet_BayarAttackD.cpp
-  Bullet_BayarStoneSpike.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\Bullet_BayarStoneSpike.cpp(45,56): warning C4305: '인수': 'double'에서 'Engine::_float'(으)로 잘립니다.
-  (소스 파일 '/Private/Bullet_BayarStoneSpike.cpp'을(를) 컴파일하는 중)
-  
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\Bullet_BayarStoneSpike.cpp(45,51): warning C4305: '인수': 'double'에서 'Engine::_float'(으)로 잘립니다.
-  (소스 파일 '/Private/Bullet_BayarStoneSpike.cpp'을(를) 컴파일하는 중)
-  
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\Bullet_BayarStoneSpike.cpp(45,46): warning C4305: '인수': 'double'에서 'Engine::_float'(으)로 잘립니다.
-  (소스 파일 '/Private/Bullet_BayarStoneSpike.cpp'을(를) 컴파일하는 중)
-  
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\Bullet_BayarStoneSpike.cpp(82,72): warning C4244: '인수': 'Engine::_float'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/Bullet_BayarStoneSpike.cpp'을(를) 컴파일하는 중)
-  
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  Bullet_FakeMeteor.cpp
-  Bullet_FireTornado.cpp
-  Bullet_Kindling.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\Bullet_Kindling.cpp(83,18): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-  (소스 파일 '/Private/Bullet_Kindling.cpp'을(를) 컴파일하는 중)
-  
-  Bullet_MagicClaw.cpp
-  Bullet_WildFire.cpp
-  Camera_Free.cpp
-  Camera_Trace.cpp
   Canvas.cpp
   Character.cpp
-  CrabAttack.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\CrabAttack.cpp(81,42): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/CrabAttack.cpp'을(를) 컴파일하는 중)
-  
-  CreateObjEvent.cpp
   CubeTerrain.cpp
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\CubeTerrain.cpp(119,10): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   (소스 파일 '/Private/CubeTerrain.cpp'을(를) 컴파일하는 중)
@@ -114,61 +46,11 @@ D:\Workbench\Portfolio\CopyMaple2\Client\Private\CubeTerrain.cpp(495,19): warnin
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\CubeTerrain.cpp(534,19): warning C4267: '초기화 중': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   (소스 파일 '/Private/CubeTerrain.cpp'을(를) 컴파일하는 중)
   
-  DeadObjEvent.cpp
-  EffBone.cpp
-  EffControllable.cpp
-  EffController.cpp
-  EffMaterialProperty.cpp
-  EffMesh.cpp
-  EffModel.cpp
-  EffModelObject.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  EffTexture.cpp
-  EffTexturingProperty.cpp
-  Effect.cpp
-  EffectManager.cpp
-  Face.cpp
-  FaceTexture.cpp
-  FakeMeteor.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\FakeMeteor.cpp(111,41): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/FakeMeteor.cpp'을(를) 컴파일하는 중)
-  
-  FireTornado.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\FireTornado.cpp(82,41): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/FireTornado.cpp'을(를) 컴파일하는 중)
-  
-  FlameWave.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\FlameWave.cpp(84,42): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/FlameWave.cpp'을(를) 컴파일하는 중)
-  
-  HitEvent.cpp
-  HumanModelObject.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\HumanModelObject.cpp(67,11): warning C4101: 'pShader' :참조되지 않은 지역 변수입니다.
-  (소스 파일 '/Private/HumanModelObject.cpp'을(를) 컴파일하는 중)
-  
-  Interactable.cpp
-  InvenEquipSlot.cpp
   InvenSlot.cpp
   Inventory.cpp
-  Item.cpp
-  ItemDataBase.cpp
-  Kindling.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\Kindling.cpp(112,41): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/Kindling.cpp'을(를) 컴파일하는 중)
-  
-  LevelChangeEvent.cpp
   Level_GamePlay.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  Level_Henesys.cpp
   Level_Home.cpp
   Level_Logo.cpp
-  MagicClaw.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\MagicClaw.cpp(98,42): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/MagicClaw.cpp'을(를) 컴파일하는 중)
-  
-  ModelObject.cpp
   Monster.cpp
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Monster.cpp(233,16): warning C4267: '초기화 중': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   (소스 파일 '/Private/Monster.cpp'을(를) 컴파일하는 중)
@@ -182,17 +64,10 @@ D:\Workbench\Portfolio\CopyMaple2\Client\Private\Monster.cpp(255,43): warning C4
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Monster.cpp(156,39): warning C4101: 'pCondition' :참조되지 않은 지역 변수입니다.
   (소스 파일 '/Private/Monster.cpp'을(를) 컴파일하는 중)
   
-  MonsterDataBase.cpp
-  MonsterSpawner.cpp
-  MyTransform.cpp
   Player.cpp
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp(1099,81): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
   (소스 파일 '/Private/Player.cpp'을(를) 컴파일하는 중)
   
-  PlayerEquipSlot.cpp
-  PlayerInfo.cpp
-  Portal.cpp
-  PortalTerrainObject.cpp
   Skill.cpp
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Skill.cpp(143,30): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
   (소스 파일 '/Private/Skill.cpp'을(를) 컴파일하는 중)
@@ -200,32 +75,17 @@ D:\Workbench\Portfolio\CopyMaple2\Client\Private\Skill.cpp(143,30): warning C401
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\Skill.cpp(145,30): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
   (소스 파일 '/Private/Skill.cpp'을(를) 컴파일하는 중)
   
-  SkillManager.cpp
-  SlotItem.cpp
-  SnailAttack.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\SnailAttack.cpp(65,43): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/SnailAttack.cpp'을(를) 컴파일하는 중)
-  
-  Spawner.cpp
-  Status.cpp
-  코드를 생성하고 있습니다...
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp(1148,1): warning C4715: 'Client::CPlayer::Equip': 모든 제어 경로에서 값을 반환하지는 않습니다.
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\ModelObject.cpp(165,1): warning C4715: 'Client::CModelObject::Replace_Model': 모든 제어 경로에서 값을 반환하지는 않습니다.
-  컴파일하고 있습니다...
-  StumpKick.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\StumpKick.cpp(78,42): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/StumpKick.cpp'을(를) 컴파일하는 중)
-  
-  Teleport.cpp
-  TerrainObject.cpp
   UIBar.cpp
   UIBundle.cpp
   UIButton.cpp
   UIContainer.cpp
   UIHomeDialog.cpp
   UIInvenSlot.cpp
+  코드를 생성하고 있습니다...
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\Player.cpp(1148,1): warning C4715: 'Client::CPlayer::Equip': 모든 제어 경로에서 값을 반환하지는 않습니다.
+  컴파일하고 있습니다...
   UIInventory.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIInventory.cpp(55,20): warning C4267: '초기화 중': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIInventory.cpp(57,20): warning C4267: '초기화 중': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   (소스 파일 '/Private/UIInventory.cpp'을(를) 컴파일하는 중)
   
   UIList.cpp
@@ -235,7 +95,6 @@ D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIList.cpp(67,19): warning C424
 D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIList.cpp(68,19): warning C4244: '초기화 중': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   (소스 파일 '/Private/UIList.cpp'을(를) 컴파일하는 중)
   
-  UIListItemEntry.cpp
   UIListSelector.cpp
   UIPanel.cpp
   UIQuickSlot.cpp
@@ -244,28 +103,11 @@ D:\Workbench\Portfolio\CopyMaple2\Client\Private\UIQuickSlotBundle.cpp(34,19): w
   (소스 파일 '/Private/UIQuickSlotBundle.cpp'을(를) 컴파일하는 중)
   
   UIScrollBar.cpp
+  UIScrollButton.cpp
   UISlot.cpp
   WayFinder.cpp
-  Weapon.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  WildFire.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\Private\WildFire.cpp(86,41): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/Private/WildFire.cpp'을(를) 컴파일하는 중)
-  
   UIItemIndicator.cpp
   BackGround.cpp
-  EffConcreteController.cpp
-D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(61,18): warning C4267: '초기화 중': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
-  
-D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(150,18): warning C4267: '초기화 중': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
-  
-D:\Workbench\Portfolio\CopyMaple2\Client\private\EffConcreteController.cpp(223,18): warning C4267: '초기화 중': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/private/EffConcreteController.cpp'을(를) 컴파일하는 중)
-  
-  Level_Loading.cpp
   Loader.cpp
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\xutility(4689,18): warning C4244: '=': 'wchar_t'에서 'char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   (소스 파일 '/private/Loader.cpp'을(를) 컴파일하는 중)
@@ -301,8 +143,6 @@ C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.3412
           ]
   
   MainApp.cpp
-  Client.cpp
-  Client_Utility.cpp
   코드를 생성하고 있습니다...
 D:\Workbench\Portfolio\CopyMaple2\Client\Public\UIItemIndicator.cpp(95,1): warning C4715: 'Client::CUIItemIndicator::On_ListItemDataSet': 모든 제어 경로에서 값을 반환하지는 않습니다.
   Client.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Client.exe

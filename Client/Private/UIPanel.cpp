@@ -87,7 +87,8 @@ HRESULT CUIPanel::Bind_ShaderResources()
 
 HRESULT CUIPanel::Ready_Components()
 {
-	/* Com_Shader */
+	/* Com_Shader  그냥 셰이더 컴포넌트 만들기인데 만들고 나면 m_pShaderCom여기에 퐈인터가 저장돼야함*/
+	//근데 nullptr임 보삼.
 	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_UI"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;

@@ -22,9 +22,10 @@ HRESULT CController::Initialize()
 void CController::Update(_float fTimeDelta)
 {
 	POINT tPosition = m_pInput_Device->Get_MousePos();
+	DIMOUSESTATE tMouseState = m_pInput_Device->Get_MouseState();
 
 	if (m_pInput_Device->GetMouseKeyState(MOUSE_KEY::LB) == KEY_STATE::DOWN)
-		 m_pUIManager->Consume_MouseLButtonDown();
+		 m_pUIManager->Consume_MouseLButtonDown(tPosition);
 	else if (m_pInput_Device->GetMouseKeyState(MOUSE_KEY::LB) == KEY_STATE::UP)
 	{
 		if (false == m_pUIManager->Consume_MouseLButtonUp())
@@ -42,7 +43,7 @@ void CController::Update(_float fTimeDelta)
 		m_pUIManager->Consume_MouseRButtonDown();
 	else if (m_pInput_Device->GetMouseKeyState(MOUSE_KEY::RB) == KEY_STATE::UP)
 		m_pUIManager->Consume_MouseRButtonUp();
-
+	m_pUIManager->Consume_MouseMove(tPosition,tMouseState);
 	if (m_pCurrentPawn)
 	{
 		m_pCurrentPawn->Receive_KeyInput(fTimeDelta);

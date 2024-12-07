@@ -1,0 +1,27 @@
+{
+    "items": [
+        {
+            "BuildItemType": "SPAWN",
+            "BuildItemBlockType" : "NON_BLOCK",
+            "ItemId": "MONSTER_SPAWNER",
+            "IconImg": "Monster.dds",
+            "Model": "EmptyModel.model"
+        },
+        {
+            "BuildItemType": "SPAWN",
+            "BuildItemBlockType": "NON_BLOCK",
+            "ItemId": "PLAYER_SPAWNER",
+            "IconImg": "Player.dds",
+            "Model": "EmptyModel.model"
+        },
+        {
+            "BuildItemType": "INTERACTABLE",
+            "BuildItemBlockType": "NON_BLOCK",
+            "ItemId": "PORTAL",
+            "IconImg": "aura_mix_uo5.dds",
+            "Model": "EmptyModel.model"
+        }
+
+
+    ]
+}

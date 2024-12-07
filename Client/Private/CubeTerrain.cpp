@@ -59,7 +59,7 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 	m_vSize = { j["size"][0],j["size"][1],j["size"][2] };
 	m_vecCells.resize(m_vSize.x * m_vSize.y * m_vSize.z, nullptr);
 	for (const auto& item : j["cells"]) {
-		BUILD_ITEM_ID eId =  item["ItemId"];
+		_int eId =  item["ItemId"];
 		size_t iteration = item["Iteration"];
 		_uint terrIdx = item["Index"];
 		BUILD_ITEM_DATA* pBuildItemDesc = static_cast<BUILD_ITEM_DATA*>( pDB->Get_Data(ITEM_TYPE::BUILD,(_uint)eId));

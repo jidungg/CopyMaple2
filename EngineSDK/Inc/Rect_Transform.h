@@ -8,9 +8,12 @@ class ENGINE_DLL CRect_Transform :
 public:
 	typedef struct RectTranformDesc: public CTransform::TRANSFORM_DESC
 	{
-		_float		fXOffset, fYOffset, fSizeX, fSizeY;
-		CORNOR_TYPE ePivotType = CORNOR_TYPE::CENTER;
-		CORNOR_TYPE eAnchorType = CORNOR_TYPE::CENTER;
+		_float fXOffset = { 0 };
+		_float fYOffset = { 0 };
+		_float fSizeX = { 1 };
+		_float fSizeY = { 1 };
+		CORNOR_TYPE ePivotType = { CORNOR_TYPE::CENTER };
+		CORNOR_TYPE eAnchorType = {CORNOR_TYPE::CENTER};
 	}RECTTRANSFORM_DESC;
 protected:
 	CRect_Transform(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

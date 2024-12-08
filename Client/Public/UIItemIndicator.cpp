@@ -4,12 +4,12 @@
 #include "GameInstance.h"
 
 
-CUIItemIndicator::CUIItemIndicator(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CUIButtonItemIndicator::CUIButtonItemIndicator(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIButton(pDevice, pContext)
 {
 }
 
-CUIItemIndicator::CUIItemIndicator(const CUIItemIndicator& Prototype)
+CUIButtonItemIndicator::CUIButtonItemIndicator(const CUIButtonItemIndicator& Prototype)
 	: CUIButton(Prototype), m_pItemDesc(Prototype.m_pItemDesc)
 	, m_pIconTexure(Prototype.m_pIconTexure)
 	, m_pIconTransform(Prototype.m_pIconTransform)
@@ -17,8 +17,10 @@ CUIItemIndicator::CUIItemIndicator(const CUIItemIndicator& Prototype)
 }
 
 
-HRESULT CUIItemIndicator::Initialize_Prototype(LEVELID eBackTexProtoLev, const _tchar* szBackTexProtoTag)
+HRESULT CUIButtonItemIndicator::Initialize_Prototype(LEVELID eBackTexProtoLev, const _tchar* szBackTexProtoTag)
 {
+	__super::Initialize_Prototype();
+
 	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_UI"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
@@ -35,46 +37,10 @@ HRESULT CUIItemIndicator::Initialize_Prototype(LEVELID eBackTexProtoLev, const _
 	return S_OK;
 }
 
-HRESULT CUIItemIndicator::Initialize(void* pArg)
+HRESULT CUIButtonItemIndicator::Initialize(void* pArg)
 {
 	if(FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-
-
-	/* Com_Texture */
-
-	return S_OK;
-}
-
-HRESULT CUIItemIndicator::Render()
-{
-	if(FAILED(__super::Render()))
-		return E_FAIL;
-
-	if (FAILED(m_pIconTransform->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-		return E_FAIL;
-	if (FAILED(m_pIconTexure->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_BorderSize", &m_vIconBorder, sizeof(XMUINT4))))
-		return E_FAIL;
-	_float4 vMinMax = static_cast<CRect_Transform*>(m_pIconTransform)->Get_MinMax();
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_MinMax", &vMinMax, sizeof(XMUINT4))))
-		return E_FAIL;
-	if (m_pShaderCom)
-		m_pShaderCom->Begin(0);
-	if (m_pVIBufferCom)
-	{
-		m_pVIBufferCom->Bind_BufferDesc();
-		m_pVIBufferCom->Render();
-	}
-	return S_OK;
-}
-
-HRESULT CUIItemIndicator::On_ListItemDataSet(const UIListItemData* data)
-{
-	if (nullptr == data)
-		return E_FAIL;
-	m_pItemDesc = static_cast<const ITEM_DATA*>(data);
 
 	CRect_Transform::RECTTRANSFORM_DESC tRectDesc{};
 	tRectDesc.eAnchorType = CORNOR_TYPE::CENTER;
@@ -84,20 +50,85 @@ HRESULT CUIItemIndicator::On_ListItemDataSet(const UIListItemData* data)
 	_float3 fSize = m_pTransformCom->Compute_Scaled();
 	tRectDesc.fSizeX = fSize.x - 12;
 	tRectDesc.fSizeY = fSize.y - 12;
-	m_pIconTransform = static_cast<CRect_Transform*>( CRect_Transform::Create(m_pDevice, m_pContext));
+	m_pIconTransform = static_cast<CRect_Transform*>(CRect_Transform::Create(m_pDevice, m_pContext));
 	m_pIconTransform->Set_Parent(m_pTransformCom);
 	m_pIconTransform->Initialize(&tRectDesc);
+	/* Com_Texture */
+	return S_OK;
+}
+
+void CUIButtonItemIndicator::Update(_float fTimeDelta)
+{
+	__super::Update(fTimeDelta);
+	m_pIconTransform->Compute_Matrix();
+}
+
+HRESULT CUIButtonItemIndicator::Render()
+{
+ 	if(FAILED(__super::Render()))
+		return E_FAIL;
+
+	if (m_pItemDesc)
+	{
+		if (FAILED(m_pIconTransform->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+			return E_FAIL;
+		if (m_pIconTexure)
+			if (FAILED(m_pIconTexure->Bind_ShaderResource(m_pShaderCom, "g_Texture", 0)))
+				return E_FAIL;
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_BorderSize", &m_vIconBorder, sizeof(XMUINT4))))
+			return E_FAIL;
+		_float4 vMinMax = static_cast<CRect_Transform*>(m_pIconTransform)->Get_MinMax();
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_MinMax", &vMinMax, sizeof(XMUINT4))))
+			return E_FAIL;
+		if (m_pShaderCom)
+			m_pShaderCom->Begin(0);
+		if (m_pVIBufferCom)
+		{
+			m_pVIBufferCom->Bind_BufferDesc();
+			m_pVIBufferCom->Render();
+		}
+	}
+
+	return S_OK;
+}
+
+HRESULT CUIButtonItemIndicator::Render_ListEntry()
+{
+	if (Is_Valid())
+		return Render();
+	return E_FAIL;
+}
+
+HRESULT CUIButtonItemIndicator::On_ListItemDataSet(const UIListItemData* data)
+{
+	if (nullptr == data)
+		return E_FAIL;
+	m_pItemDesc = static_cast<const ITEM_DATA*>(data);
+
 	string strProtoItemIconTag = m_pItemDesc->strIconImageTag;
 	wstring wstrItemIconTag(strProtoItemIconTag.begin(), strProtoItemIconTag.end());
+	Safe_Release(m_pIconTexure);
 	m_pIconTexure = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, wstrItemIconTag, nullptr));
 	if (nullptr == m_pIconTexure)
 		m_pIconTexure = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("Default.dds"), nullptr));
+	Set_Disable(false);
+}
+
+void CUIButtonItemIndicator::On_CreateListItemEntry(CUIList* pList, _uint iIndex)
+{
+	__super::On_CreateListItemEntry(pList, iIndex);
+	Set_Disable(true);
+}
+
+void CUIButtonItemIndicator::Set_ListItemEntryActive(_bool bActive)
+{
+	Set_Active(bActive);
 }
 
 
 
 
-void CUIItemIndicator::Call_Callback(const ButtonCallback& fCallback)
+void CUIButtonItemIndicator::Call_Callback(const ButtonCallback& fCallback)
 {
 	fCallback(this);
 }
@@ -106,9 +137,9 @@ void CUIItemIndicator::Call_Callback(const ButtonCallback& fCallback)
 
 
 
-CUIItemIndicator* CUIItemIndicator::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eBackTexProtoLev, const _tchar* szBackTexProtoTag)
+CUIButtonItemIndicator* CUIButtonItemIndicator::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eBackTexProtoLev, const _tchar* szBackTexProtoTag)
 {
-	CUIItemIndicator* pInstance = new CUIItemIndicator(pDevice, pContext);
+	CUIButtonItemIndicator* pInstance = new CUIButtonItemIndicator(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype(eBackTexProtoLev, szBackTexProtoTag)))
 	{
@@ -119,9 +150,9 @@ CUIItemIndicator* CUIItemIndicator::Create(ID3D11Device* pDevice, ID3D11DeviceCo
 	return pInstance;
 }
 
-CGameObject* CUIItemIndicator::Clone(void* pArg)
+CGameObject* CUIButtonItemIndicator::Clone(void* pArg)
 {
-	CUIItemIndicator* pInstance = new CUIItemIndicator(*this);
+	CUIButtonItemIndicator* pInstance = new CUIButtonItemIndicator(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
@@ -132,7 +163,7 @@ CGameObject* CUIItemIndicator::Clone(void* pArg)
 	return pInstance;
 }
 
-void CUIItemIndicator::Free()
+void CUIButtonItemIndicator::Free()
 {
 	
 	__super::Free();

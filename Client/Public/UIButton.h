@@ -10,6 +10,9 @@ class CUIButton :
     public CUIPanel
 {
 public:
+	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_CUIButton";
+
+public:
 	enum BUTTON_STATE { BS_NORMAL, BS_HIGHLIGHTED, BS_PRESSED, BS_DISABLED };
 public:
 	typedef struct ButtonDesc: public CUIPanel::PANEL_DESC
@@ -28,14 +31,15 @@ public:
 private:
 	HRESULT Ready_Components();
 public:
-	virtual void On_MouseOver();
-	virtual void On_MouseEnter();
-	virtual void On_MouseExit();
-	virtual void On_MouseLButtonDown();
-	virtual void On_MouseLButtonUp();
-	virtual void On_MouseClick();
+	virtual void On_MouseOver()override;
+	virtual void On_MouseEnter()override;
+	virtual void On_MouseExit()override;
+	virtual void On_MouseLButtonDown(const POINT& tMousePoint) override;
+	virtual void On_MouseLButtonUp()override;
+	virtual void On_MouseClick()override;
 
 	void Register_OnClickCallback(const function<void(void*)>& fCallback) { m_listCallback.push_back(fCallback); }
+	void Set_Disable(_bool bValue);
 	//void Remove_OnClickCallback(function<void(CBase&, void*)> fCallback)
 	//{
 	//	auto it = std::remove_if(m_listCallback.begin(), m_listCallback.end(), compareFunction);
@@ -44,6 +48,7 @@ public:
 protected:
 	virtual void Call_Callback(const function<void(void*)>& fCallback);
 	list<function<void(void*)> > m_listCallback;
+	_bool m_bDisabled = { false };
 public:
 	static CUIButton* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

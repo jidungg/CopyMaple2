@@ -230,7 +230,7 @@
     <ClInclude Include="..\Public\Bullet_BayarStoneSpike.h" />
     <ClInclude Include="..\Public\BayarPalmStrike.h" />
     <ClInclude Include="..\Public\AttachableBodyPart.h" />
-    <ClInclude Include="..\Public\UIScrollBar.h" />
+    <ClInclude Include="..\Public\UIScroller.h" />
     <ClInclude Include="..\Public\UIScrollButton.h" />
   </ItemGroup>
   <ItemGroup>
@@ -401,7 +401,7 @@
     <ClCompile Include="..\Private\Bullet_BayarStoneSpike.cpp" />
     <ClCompile Include="..\Private\BayarPalmStrike.cpp" />
     <ClCompile Include="..\Private\AttachableBodyPart.cpp" />
-    <ClCompile Include="..\Private\UIScrollBar.cpp" />
+    <ClCompile Include="..\Private\UIScroller.cpp" />
     <ClCompile Include="..\Private\UIScrollButton.cpp" />
   </ItemGroup>
   <ItemGroup>

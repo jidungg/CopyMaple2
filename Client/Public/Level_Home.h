@@ -25,7 +25,7 @@ public:
 	virtual void On_Start(_uint iPrevLevelID)override ;
 
 
-	void On_BuildItemSelected(void*);
+	void On_UIBuildItemSelected(void*);
 	void Set_BuildItem(_uint iID);
 private:
 	HRESULT Ready_Layer_UI(LAYERID eLayerId);

@@ -47,7 +47,7 @@ public:
 	virtual void On_MouseRButtonUp();
 	virtual void On_MouseClick();
 	virtual void On_MouseRightClick();
-	virtual void On_MouseMove(const POINT& tMousePoint, const DIMOUSESTATE& tState);
+	virtual void On_MouseDrag(const POINT& tMousePoint, const DIMOUSESTATE& tState);
 
 	virtual _bool Is_GrabbablePoint(const POINT& tScreenMousePoint);
 	CUIObject* Find_FocusedUI(POINT fPos);

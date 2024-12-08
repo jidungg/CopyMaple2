@@ -15,7 +15,7 @@ CUIButton::CUIButton(const CUIButton& Prototype)
 
 HRESULT CUIButton::Initialize_Prototype()
 {
-	return S_OK;
+	return __super::Initialize_Prototype();
 }
 
 HRESULT CUIButton::Initialize(void* pArg)
@@ -43,32 +43,44 @@ HRESULT CUIButton::Ready_Components()
 
 void CUIButton::On_MouseOver()
 {
+	if (m_bDisabled)return;
+	__super::On_MouseOver();
 }
 
 void CUIButton::On_MouseEnter()
 {
+	if (m_bDisabled)return;
+	__super::On_MouseEnter();
 	m_iSRVIndex = BS_HIGHLIGHTED;
 }
 
 void CUIButton::On_MouseExit()
 {
+	if (m_bDisabled)return;
+	__super::On_MouseExit();
 	m_iSRVIndex = BS_NORMAL;
 		
 }
 
-void CUIButton::On_MouseLButtonDown()
+void CUIButton::On_MouseLButtonDown(const POINT& tMousePoint)
 {
+	if (m_bDisabled)return;
+	__super::On_MouseLButtonDown(tMousePoint);
 	m_iSRVIndex = BS_PRESSED;
-	return ;
+	return;
 }
 
 void CUIButton::On_MouseLButtonUp()
 {
+	if (m_bDisabled)return;
+	__super::On_MouseLButtonUp();
 	m_iSRVIndex = BS_NORMAL;
 }
 
 void CUIButton::On_MouseClick()
 {
+	if (m_bDisabled)return;
+	__super::On_MouseClick();
 	m_iSRVIndex = BS_HIGHLIGHTED;
 
 	for (auto& func : m_listCallback)
@@ -78,8 +90,22 @@ void CUIButton::On_MouseClick()
 	return ;
 }
 
+void CUIButton::Set_Disable(_bool bValue)
+{
+	m_bDisabled = bValue;
+	if (m_bDisabled)
+	{
+		m_iSRVIndex = BS_DISABLED;
+	}
+	else
+	{
+		m_iSRVIndex = BS_NORMAL;
+	}
+}
+
 void CUIButton::Call_Callback(const function<void(void*)>& fCallback)
 {
+	if (m_bDisabled)return;
 	fCallback(this);
 }
 

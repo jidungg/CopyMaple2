@@ -163,7 +163,7 @@ void CUIObject::On_MouseRightClick()
 	return ;
 }
 
-void CUIObject::On_MouseMove(const POINT& tMousePoint, const DIMOUSESTATE& tState)
+void CUIObject::On_MouseDrag(const POINT& tMousePoint, const DIMOUSESTATE& tState)
 {
 	if (m_bGrabbed == false)
 		return;

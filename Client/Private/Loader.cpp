@@ -1,27 +1,34 @@
 #include "stdafx.h"
 #include "..\Public\Loader.h"
-
+#include "Engine_Defines.h"
 #include "GameInstance.h"
 #include "JsonParser.h"
 
 #include "Camera_Free.h"
 #include "Camera_Trace.h"
-#include "UIPanel.h"
 #include "CubeTerrain.h"
 #include "TerrainObject.h"
 #include "Player.h"
 #include "RenderObject.h"
-#include "UIHomeDialog.h"
 #include "MeshCollider.h"
 #include "Builder.h"
 #include "ModelObject.h"
 #include "ItemDataBase.h"
+
+#include "UIHomeDialog.h"
+#include "UIPanel.h"
 #include "UIItemIndicator.h"
 #include "UIList.h"
-#include "StateMachine.h"
-
-#include "SkillManager.h"
 #include "UIQuickSlot.h"
+#include "UIBundle.h"
+#include "UIQuickSlotBundle.h"
+#include "UIBar.h"
+#include "UIInventory.h"
+#include "UIScroller.h"
+#include "UIScrollButton.h"
+
+#include "StateMachine.h"
+#include "SkillManager.h"
 #include "Character.h"
 #include "BuildPreview.h"
 #include "BoneModelObject.h"
@@ -31,16 +38,12 @@
 #include "HumanModelObject.h"
 #include "Bayar.h"
 
-#include "Engine_Defines.h"
-#include "UIInventory.h"
-#include "UIBundle.h"
-#include "UIQuickSlotBundle.h"
+
 #include "Collider_Sphere.h"
 #include "Collider_AABB.h"
 #include "Collider_Frustum.h"
 #include "Collider_Cylinder.h"
 #include "MonsterDataBase.h"
-#include "UIBar.h"
 
 #include "Bullet_MagicClaw.h"
 #include "Bullet_Kindling.h"
@@ -179,6 +182,18 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/UI/CastingBar/"), TEXT(".dds"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_CloseButton"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/close_button_%d.dds"), 4))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_ScrollUpButton"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/ScrollBar/scroll_up_button_%d.dds"), 4))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_ScrollDownButton"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/ScrollBar/scroll_down_button_%d.dds"), 4))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_ScrollButton"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/ScrollBar/scroll_button_%d.dds"), 4))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/"), TEXT(".dds"))))
@@ -359,8 +374,17 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIInvenSlot::m_szProtoTag,
 		CUIInvenSlot::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIButton::m_szProtoTag,
+		CUIButton::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIBar::m_szProtoTag,
 		CUIBar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIScroller::m_szProtoTag,
+		CUIScroller::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIScrollButton::m_szProtoTag,
+		CUIScrollButton::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,
@@ -481,7 +505,7 @@ HRESULT CLoader::Loading_Level_MyHome()
 		CBuildPreview::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialogBuildItemIndicator"),
-		CUIItemIndicator::Create(m_pDevice, m_pContext,LEVEL_HOME, TEXT("UI_Texture_HomeDialog")))))
+		CUIButtonItemIndicator::Create(m_pDevice, m_pContext,LEVEL_HOME, TEXT("UI_Texture_HomeDialog")))))
 		return E_FAIL;
 
 

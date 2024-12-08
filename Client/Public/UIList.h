@@ -1,23 +1,28 @@
 #pragma once
-#include "UIPanel.h"
+#include "UIContainer.h"
 #include "UIListItemEntry.h"
+#include "UIScroller.h"
 
 BEGIN(Client)
 
 class CUIList :
-    public CUIPanel
+    public CUIContainer
 {
 public:
-	typedef struct UIListDesc: public CUIPanel::PANEL_DESC
+	typedef struct UIListDesc: public CUIObject::UIOBJECT_DESC
 	{
 		float fItemHeight = 70;
 		float fItemWidth = 70;
 		float fItemMarginX = 5;
 		float fItemMarginY = 5;
+		_uint iColumnCount = 10;
+		_uint iRowCount = 10;
 
 		LEVELID eBackTexProtoLev;
 		const _tchar* szBackTexProtoTag;
 		list<UIListItemData*>* listData;
+
+		CUIScroller::SCROLLBAR_DESC tScrollerDesc = {};
 	}UILIST_DESC;
 
 protected:
@@ -28,16 +33,41 @@ protected:
 
 public:
 	virtual HRESULT Initialize(void* pArg) override;
+	virtual HRESULT Render()override;
+
+
+
+	void Set_YOffset(_float fYPos);
+	HRESULT Set_ItemData(list<UIListItemData*>* listData);
+	void Set_VisibleRowStart(_uint iRow) { m_iVisibleRowStart = iRow; }
+	void Set_VisibleRowCount(_uint iCount) { m_iVisibleRowCount = iCount; }
+
+	_bool Is_VisibleRow(_uint iRow);
+	_uint Get_ItemRow(_uint iIndex);
 	_float2 Get_ItemPos(_int iIndex);
+	_uint Get_ItemCount() { return m_iItemCount; }	
+	_uint Get_ColCount() { return m_iColCount; }
+	_uint Get_RowCount() { return m_iRowCount; }
+	_float Get_HeightPerItem() { return m_fItemHeight + m_fItemMarginY; }
+	_float Get_YOffset();
+	_float Get_YMargin() { return m_fItemMarginY; }
+
 private:
 	float m_fItemHeight = 70;
 	float m_fItemWidth = 70;
 	float m_fItemMarginX = 5;
 	float m_fItemMarginY = 5;
-	
+	_uint m_iItemCount = 0;
+	_uint m_iColCount = 10;
+	_uint m_iRowCount = 10;
+	_uint m_iVisibleRowStart = 0;
+	_uint m_iVisibleRowCount = 2;
+
 	LEVELID m_eBackTexProtoLev;
 	const _tchar* m_szBackTexProtoTag;
 
+	CUIScroller* m_pScrollBar = { nullptr };
+	vector<IUIListItemEntry*> m_vecUIItem;
 public:
 	static CUIList* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	{

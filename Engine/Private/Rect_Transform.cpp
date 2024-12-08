@@ -35,6 +35,7 @@ HRESULT CRect_Transform::Initialize(void* pArg)
 	m_fXOffset = pDesc->fXOffset;
 	m_fYOffset = pDesc->fYOffset;
 	m_fSizeX = pDesc->fSizeX;
+
 	m_fSizeY = pDesc->fSizeY;
 	m_fXPosition = 0;
 	m_fYPosition = 0;
@@ -73,7 +74,6 @@ void CRect_Transform::Compute_Matrix()
 
 	Scaling(m_fSizeX, m_fSizeY, 1.f);
 	Set_State(CTransform::STATE_POSITION, XMVectorSet(m_fXPosition - (_float)(m_iViewportWidth * 0.5), -m_fYPosition + (_float)(m_iViewportHeight * 0.5), 0.f, 1.f));
-
 }
 
 void CRect_Transform::Go_Straight(_float fTimeDelta)

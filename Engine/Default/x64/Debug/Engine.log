@@ -1,6 +1,28 @@
-﻿  UIObject.cpp
+﻿  Camera.cpp
+  Camera_UI.cpp
+  CollisionManager.cpp
+  ContainerObject.cpp
+  Controller.cpp
+  Event.cpp
+  MeshCollider.cpp
+  Pawn.cpp
+  Rect_Transform.cpp
+  UIManager.cpp
+  GameInstance.cpp
+  GameObject.cpp
+  Layer.cpp
+  Object_Manager.cpp
+  Prototype_Manager.cpp
+  Renderer.cpp
+D:\Workbench\Portfolio\CopyMaple2\Engine\private\Renderer.cpp(23,6): warning C4244: '인수': 'FLOAT'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Workbench\Portfolio\CopyMaple2\Engine\private\Renderer.cpp(27,6): warning C4244: '인수': 'FLOAT'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Workbench\Portfolio\CopyMaple2\Engine\private\Renderer.cpp(31,6): warning C4244: '인수': 'FLOAT'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Workbench\Portfolio\CopyMaple2\Engine\private\Renderer.cpp(35,6): warning C4244: '인수': 'FLOAT'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Workbench\Portfolio\CopyMaple2\Engine\private\Renderer.cpp(39,6): warning C4244: '인수': 'FLOAT'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  UIObject.cpp
 D:\Workbench\Portfolio\CopyMaple2\Engine\private\UIObject.cpp(174,57): warning C4244: '=': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 D:\Workbench\Portfolio\CopyMaple2\Engine\private\UIObject.cpp(178,57): warning C4244: '=': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
   Engine.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Engine\Bin\Engine.dll
   .\Engine\Bin\Engine.dll
   1 File(s) copied

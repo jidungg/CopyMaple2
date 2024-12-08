@@ -152,7 +152,7 @@ bool CUIManager::Consume_MouseMove(const POINT& tMousePoint,const DIMOUSESTATE& 
     if (m_pPressedUI == nullptr)
         return false;
 
-    m_pPressedUI->On_MouseMove(tMousePoint,tState);
+    m_pPressedUI->On_MouseDrag(tMousePoint,tState);
 
     return false;
 }

@@ -30,8 +30,8 @@ HRESULT CUIListSelector::Initialize(void* pArg)
 	panelDesc.ePivotType = CORNOR_TYPE::LEFT_TOP;
 	panelDesc.fSizeX = pDesc->fItemWidth;
 	panelDesc.fSizeY = pDesc->fItemHeight;
-	panelDesc.fXOffset = pDesc->fItemMarginX/2;
-	panelDesc.fYOffset = pDesc->fItemMarginY/2;
+	panelDesc.fXOffset = 0;
+	panelDesc.fYOffset = 0;
 	panelDesc.pTextureCom = static_cast<CTexture*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, pDesc->eHighlighterTexProtoLev, pDesc->szHighlighterTexProtoTag));
 
 	m_pHighlighter = static_cast<CUIPanel*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING,CUIPanel::m_szProtoTag, &panelDesc));
@@ -40,6 +40,14 @@ HRESULT CUIListSelector::Initialize(void* pArg)
 
 	function<void(void*)> f = bind(&CUIListSelector::On_ClickItem, this, placeholders::_1);
 	Register_OnClickCallback(f);
+	return S_OK;
+}
+
+HRESULT CUIListSelector::Render()
+{
+	__super::Render();
+	if (Is_VisibleRow(Get_ItemRow(m_iSelectedIndex)) && m_pHighlighter->Is_Valid())
+		m_pHighlighter->Render();
 	return S_OK;
 }
 
@@ -55,9 +63,22 @@ void CUIListSelector::Register_OnClickCallback(const ButtonCallback& fCallback)
 
 void CUIListSelector::On_ClickItem(void* pArg)
 {
+	Select_Item(reinterpret_cast<CUIButtonItemIndicator*>(pArg)->Get_ListItemIndex());
+}
 
-	_float2 fPos = Get_ItemPos(reinterpret_cast<CUIItemIndicator*>(pArg)->m_iListItemIndex);
-
+void CUIListSelector::Select_Item(_uint iIndex)
+{
+	m_iSelectedIndex = iIndex;
+	_float2 fPos = Get_ItemPos((_int)m_iSelectedIndex);
 	static_cast<CRect_Transform*>(m_pHighlighter->Get_Transform())->Set_Offset(fPos.x, fPos.y);
 
+}
+
+_uint CUIListSelector::Select_NextItem()
+{
+	_uint iNextIndex = m_iSelectedIndex + 1;
+	if (iNextIndex >= Get_ItemCount())
+		iNextIndex = 0;
+	Select_Item(iNextIndex);
+	return iNextIndex;
 }

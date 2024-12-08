@@ -22,8 +22,12 @@ protected:
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
+	virtual HRESULT Render()override;
 	void Register_OnClickCallback(const ButtonCallback& fCallback);
 	void On_ClickItem(void* pArg);
+	void Select_Item(_uint iIndex);
+	_uint Select_NextItem();
+
 private:
 	_uint m_iSelectedIndex = 0;
 	CUIPanel* m_pHighlighter = nullptr;

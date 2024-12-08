@@ -45,7 +45,7 @@ HRESULT CLevel_Home::Initialize(void* pArg)
 
 	Set_BuildItem(static_cast<BUILD_ITEM_DATA*>( m_pItemIter->second)->iItemID);
 
-	
+	Ready_Layer_UI(LAYER_UI);
 return S_OK;
 }
 
@@ -105,8 +105,8 @@ void CLevel_Home::Update(_float fTimeDelta)
 			if (m_pItemIter == m_pItemData->end())
 				m_pItemIter = m_pItemData->begin();
 
-			m_pBuilder->Set_BuildItem(static_cast<BUILD_ITEM_DATA*>((*m_pItemIter).second)->iItemID);
-	
+			Set_BuildItem(m_pItemIter->first);
+			m_pHomeDialog->Select_NextItem();
 		}
 		//맵 저장
 		if (m_pGameInstance->GetKeyState(KEY::H) == KEY_STATE::DOWN)
@@ -133,7 +133,7 @@ HRESULT CLevel_Home::Render()
 void CLevel_Home::On_Start(_uint iPrevLevelID)
 {
 	__super::On_Start(iPrevLevelID);
-	Ready_Layer_UI(LAYER_UI);
+
 
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_PLAYER, LAYERID::LAYER_TERRAIN, true);
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_PLAYER, LAYERID::LAYER_MONSTER, true);
@@ -145,15 +145,18 @@ void CLevel_Home::On_Start(_uint iPrevLevelID)
 }
 
 
-void CLevel_Home::On_BuildItemSelected(void* pArg)
+void CLevel_Home::On_UIBuildItemSelected(void* pArg)
 {
-	const BUILD_ITEM_DATA* pDesc =static_cast<const BUILD_ITEM_DATA*>( reinterpret_cast<CUIItemIndicator*>(pArg)->Get_ItemDesc());
+	CUIButtonItemIndicator* pIndicator = reinterpret_cast<CUIButtonItemIndicator*>(pArg);
+	pIndicator->Get_ListItemIndex();
+	const BUILD_ITEM_DATA* pDesc = reinterpret_cast<const BUILD_ITEM_DATA*>(pIndicator->Get_ItemDesc());
 	Set_BuildItem((pDesc)->iItemID);
 }
 
 void CLevel_Home::Set_BuildItem(_uint iID)
 {
 	m_pBuilder->Set_BuildItem(iID);
+	m_pItemIter = m_pItemData->find(iID);
 }
 
 
@@ -164,8 +167,8 @@ HRESULT CLevel_Home::Ready_Layer_UI(LAYERID eLayerId)
 	homDialogDesc.ePivotType = CORNOR_TYPE::RIGHT_BOT;
 	homDialogDesc.fXOffset = 0;
 	homDialogDesc.fYOffset = 0;
-	homDialogDesc.fSizeX = g_iWinSizeX/2;
-	homDialogDesc.fSizeY = g_iWinSizeY/4;
+	//homDialogDesc.fSizeX = 594;
+	//homDialogDesc.fSizeY = 180;
 	homDialogDesc.vBorder = {3,3,3,3 };
 	homDialogDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, m_iLevelID, TEXT("UI_Texture_HomeDialog"), nullptr));
 	list<UIListItemData*> listData;
@@ -176,7 +179,7 @@ HRESULT CLevel_Home::Ready_Layer_UI(LAYERID eLayerId)
 	m_pHomeDialog = static_cast<CUIHomeDialog*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialog"), &homDialogDesc));
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVELID::LEVEL_HOME, eLayerId, m_pHomeDialog)))
 		return E_FAIL;
-	function<void(void*)> f = bind(&CLevel_Home::On_BuildItemSelected, this, placeholders::_1);
+	function<void(void*)> f = bind(&CLevel_Home::On_UIBuildItemSelected, this, placeholders::_1);
 	m_pHomeDialog->Register_OnClickCallback(f);
 	m_pHomeDialog->Set_Active(false);
 	return S_OK; 

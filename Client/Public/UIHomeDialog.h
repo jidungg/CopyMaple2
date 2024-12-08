@@ -4,7 +4,7 @@
 #include "UIItemIndicator.h"
 
 BEGIN(Client)
-
+class CUIScroller;
 class CUIHomeDialog :
     public CUIPanel
 {
@@ -13,6 +13,11 @@ public:
 public:
 	typedef struct PanelDesc: public CUIPanel::PANEL_DESC
 	{
+		_float fCommonPadding = 5;
+		_float fItemHeight = 50;
+		_float fItemWidth = 50;
+		_uint iItemXCount = 10;
+		_uint iItemYCount = 2;
 		list<UIListItemData*>* listData;
 	}HOMEDIALOG_DESC;
 
@@ -26,21 +31,22 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 
-
-	virtual void On_MouseEnter();
-	virtual void MouseOver();
-	virtual void On_MouseExit();
-	virtual void On_MouseLButtonDown();
-	virtual void On_MouseLButtonUp();
-	virtual void On_MouseRButtonDown();
-	virtual void On_MouseRButtonUp();
-	virtual void On_MouseClick();
-
 	void Register_OnClickCallback(const ButtonCallback& fCallback){m_pItemList->Register_OnClickCallback(fCallback);}
-
+	void Select_Item(_uint iID);
+	void Select_NextItem();
 private:
 	HRESULT Ready_Childs(HOMEDIALOG_DESC* pDesc);
-	CUIListSelector* m_pItemList = nullptr;
+	CUIPanel* m_pItemBackPanel = { nullptr };
+	CUIListSelector* m_pItemList = { nullptr };
+	CUIScroller* m_pScroller = { nullptr };
+
+	_float m_fCommonMargin = 5;
+	_float m_fCommonButtonSize = 24;
+	_float m_fItemHeight = 50;
+	_float m_fItemWidth = 50;
+	_uint m_iVisibleRowCount = 2;
+	_uint m_iVisibleColCount = 10;
+	_float m_fHeaderHeight = 40;
 public:
 	static CUIHomeDialog* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

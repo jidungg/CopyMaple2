@@ -19,6 +19,7 @@ public:
 		_uint iID = { UINT_MAX };
 		_float4 pos = {0,0,0,1};
 		_uint index = { UINT_MAX };
+		_uint iParentIndex = { UINT_MAX };
 		vector<_int> vecIData ;
 		vector<_float> vecFData ;
 		CCubeTerrain* pCubeTerrain = { nullptr };
@@ -46,7 +47,7 @@ public:
 	_float Get_TopHeight(_vector Pos);
 	_float Get_BottomHeight(_vector Pos);
 	BUILD_ITEM_TYPE Get_BuildItemType() { return m_eBuildItemType; }
-	_bool Is_BlockingType() { return m_eBlockType == BUILD_ITEM_BLOCK_TYPE::BLOCK; }
+	_bool Is_BlockingType() { return m_eBlockType != BUILD_ITEM_BLOCK_TYPE::NON_BLOCK; }
 	_bool RayCast(const Ray& tRay, RaycastHit* pOut);
 
 	void Set_TerrainDir(DIRECTION eDir) { m_eTerrainDir = eDir; }
@@ -58,6 +59,7 @@ protected:
 	BUILD_ITEM_BLOCK_TYPE m_eBlockType = { BUILD_ITEM_BLOCK_TYPE::LAST };
 	BUILD_ITEM_TYPE m_eBuildItemType = { BUILD_ITEM_TYPE::LAST };
 	_uint m_iIndex = { UINT_MAX };
+	_uint m_iParentIndex = { UINT_MAX };
 	DIRECTION m_eTerrainDir = DIRECTION::LAST;
 	CCollider_AABB* m_pCubeColliderCom = {nullptr};
 	CCollider_Mesh* m_pMeshColliderCom = {nullptr};

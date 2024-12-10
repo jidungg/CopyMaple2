@@ -55,6 +55,11 @@ _bool CCollider_AABB::Intersects(CColliderBase* pOther)
 	return m_bCollide;
 }
 
+_bool CCollider_AABB::Intersects(CColliderBase* pOther, _vector* vOutNormal, _float* fOutDepth)
+{
+	return _bool();
+}
+
 _bool CCollider_AABB::Contains(const FXMVECTOR& vPosition)
 {
 	return m_pBoundDesc->Contains(vPosition);

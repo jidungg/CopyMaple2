@@ -305,8 +305,9 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_MOVE, CONDITION_TYPE::EQUAL, true);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, true);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB, ANIM_STATE::BS_JUMP);
-	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, false);
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_JUMP_TRIGGER);
+	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB, ANIM_STATE::BS_JUMP);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, false);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB, ANIM_STATE::BS_CLIMB_LAND);
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_CLIMB_LAND_TRIGGER);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB, ANIM_STATE::BS_DEAD);
@@ -806,7 +807,11 @@ _bool CPlayer::Check_Collision(CGameObject* pOther)
 	assert(pOther->Is_Active());
 	assert(false == pOther->Is_Dead());
 
-	__super::Check_Collision(pOther);
+	XMStoreFloat(&m_fMoveDistanceXZ, XMVector3Length(m_vMoveDirectionXZ));
+	m_vMoveDirectionXZ = XMVector4Normalize(m_vMoveDirectionXZ);
+	m_bMove = false == XMVector4Equal(m_vMoveDirectionXZ, XMVectorZero());
+	m_bRotate = false == XMVector4Equal(m_vLookDirectionXZ, XMVectorZero());
+
 
 	LAYERID eLayerID = (LAYERID)pOther->Get_LayerID();
 	switch (eLayerID)
@@ -858,8 +863,21 @@ _bool CPlayer::Check_Collision(CGameObject* pOther)
 	}
 	case Client::LAYER_TERRAIN:
 	{
-
+		_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		CCubeTerrain* pTerrain = static_cast<CCubeTerrain*>(pOther);
+		m_vNextPos = vPos;
+		if (m_bMove)
+		{
+			m_vNextPos = pTerrain->BlockXZ(this, 3);
+			m_vMoveDirectionXZ = XMVector3Normalize(m_vNextPos - vPos);
+			m_fMoveDistanceXZ = XMVector3Length(m_vNextPos - vPos).m128_f32[0];
+		}
+
+
+		m_fFloorHeight = pTerrain->Get_FloorHeight(m_vNextPos, 3);
+		m_fCelingHeight = pTerrain->Get_CelingHeight(m_vNextPos,3);
+
+
 		_vector vFootPos = Get_TransformPosition();
 		_vector vBodyPos = XMVectorSetY(vFootPos, vFootPos.m128_f32[1] + Get_BodyCollisionOffset().y);
 		_float fCollisionRadius = Get_BodyCollisionRadius();

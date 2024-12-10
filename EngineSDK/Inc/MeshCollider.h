@@ -23,6 +23,7 @@ public:
 	HRESULT Render() override;
 	virtual _bool Contains(const FXMVECTOR& vPos) override;
 	virtual _bool Intersects(CColliderBase* pOther) override;
+	virtual _bool Intersects(CColliderBase* pOther, _vector* vOutNormal, _float* fOutDepth) override;
 	bool RayCast(const Ray& tRay, RaycastHit* pOut) override;
 
 private:

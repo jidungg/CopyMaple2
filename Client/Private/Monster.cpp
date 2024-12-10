@@ -98,7 +98,11 @@ HRESULT CMonster::Ready_Parts(MONSTER_DESC* pDesc)
 	tModelDesc.fSpeedPerSec = 5.f;
 	//몬스터가 생성될 레벨을 가져와야 하느ㅏㄴ데,
 	// Create는 LoadingLevel에서 하기 때문에 CurrentLevel 하면 안됨.
-	tModelDesc.eModelProtoLevelID = Get_CurrentTrueLevel();
+	if (pDesc->eMonID == MONSTER_ID::BAYAR)
+		tModelDesc.eModelProtoLevelID = LEVEL_BAYARPEAK;
+	else
+		tModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+
 	strcpy_s(tModelDesc.strModelProtoName, m_pMonData->strModelTag);
 	m_pBody = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
 	Add_Child(m_pBody);

@@ -92,6 +92,7 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 
 	m_pController->Update(fTimeDelta);
 	m_pObject_Manager->Priority_Update(fTimeDelta);
+	m_pLevel_Manager->Update(fTimeDelta);
 	m_pObject_Manager->Update(fTimeDelta);
 	m_pCollisionManager->Update_Collision();
 	m_pObject_Manager->Late_Update(fTimeDelta);
@@ -100,7 +101,6 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 
 	m_pPipeLine->Update();
 
-	m_pLevel_Manager->Update(fTimeDelta);
 }
 
 HRESULT CGameInstance::Render_Begin(const _float4 & vClearColor)

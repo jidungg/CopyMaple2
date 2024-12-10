@@ -15,7 +15,7 @@ protected:
 	virtual ~CBase() = default;
 
 public:
-	_uint AddRef();
+	virtual _uint AddRef();
 	_uint Release();
 
 private:

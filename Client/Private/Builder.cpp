@@ -158,6 +158,7 @@ void CBuilder::Receive_KeyInput(_float fTimeDelta)
 		desc.vecIData.push_back(m_iBuildData);
 		desc.vecFData.push_back(m_fBuildData);
 		desc.index = iIndex;
+		desc.iParentIndex = iIndex;
 		XMStoreFloat4(&desc.pos, m_pCubeTerrain->IndexToPos(desc.index));
 
 		m_pCubeTerrain->Add_TerrainObject(desc);
@@ -274,4 +275,6 @@ CGameObject* CBuilder::Clone(void* pArg)
 void CBuilder::Free()
 {
 	__super::Free();
+	Safe_Release(m_pCubeMarkerEnable);
+	Safe_Release(m_pCubeMarkerDisable);
 }

@@ -1,7 +1,4 @@
-﻿  Model.cpp
-  StateMachine.cpp
-  GameObject.cpp
-  코드를 생성하고 있습니다...
+﻿  GameInstance.cpp
   Engine.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Engine\Bin\Engine.dll
   .\Engine\Bin\Engine.dll
   1 File(s) copied

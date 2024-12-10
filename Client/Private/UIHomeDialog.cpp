@@ -35,12 +35,24 @@ HRESULT CUIHomeDialog::Initialize(void* pArg)
 	return S_OK;
 }
 
+void CUIHomeDialog::Update(_float fTimeDelta)
+{
+	__super::Update(fTimeDelta);
+}
+
 void CUIHomeDialog::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 
 	
+}
+
+_uint CUIHomeDialog::AddRef()
+{
+	if (m_pGameInstance->GetKeyState(KEY::B) == KEY_STATE::DOWN)
+		int a = 0;
+	return __super::AddRef();
 }
 
 void CUIHomeDialog::Select_Item(_uint iID)

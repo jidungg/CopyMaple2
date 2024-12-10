@@ -35,8 +35,7 @@ HRESULT CTerrainObject::Initialize_Prototype()
 
 HRESULT CTerrainObject::Initialize(void* pArg)
 {
-	if (FAILED(__super::Initialize(pArg)))
-		return E_FAIL;
+
 
 
 	TERRAINOBJ_DESC* pDesc = (TERRAINOBJ_DESC*)pArg;
@@ -48,39 +47,54 @@ HRESULT CTerrainObject::Initialize(void* pArg)
 	m_eBuildItemType= static_cast<BUILD_ITEM_DATA*>( ITEMDB->Get_Data(ITEM_TYPE::BUILD,(_uint)m_iBuildItemID))->eBuildType;
 	m_eTerrainDir = pDesc->direction;
 	m_iIndex = pDesc->index;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(pDesc->pos.x, pDesc->pos.y, pDesc->pos.z,1));
-	m_pTransformCom->LookToward(Get_Direction_Vector(m_eTerrainDir));
-	if (FAILED(Ready_Components(pDesc)))
-		return E_FAIL;
+	m_iParentIndex = pDesc->iParentIndex;
+	if (m_iParentIndex == m_iIndex)
+	{
+		if (FAILED(__super::Initialize(pArg)))
+			return E_FAIL;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(pDesc->pos.x, pDesc->pos.y, pDesc->pos.z, 1));
+		m_pTransformCom->LookToward(Get_Direction_Vector(m_eTerrainDir));
+		if (FAILED(Ready_Components(pDesc)))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(CGameObject::Initialize(pArg)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
 
 HRESULT CTerrainObject::Ready_Components(TERRAINOBJ_DESC* pDesc)
 {
+	if (false == Is_BlockingType())
+		return S_OK;
 
+	CCollider_AABB::AABB_COLLIDER_DESC tDesc{};
+	tDesc.vCenter = { 0,0.5f,0 };
+	tDesc.vExtentes = { 0.5f,0.5f,0.5f };
+
+	if (FAILED(Add_Component(LEVEL_LOADING, CCollider_AABB::m_szProtoTag,
+		TEXT("Cube_Collider_Com"), reinterpret_cast<CComponent**>(&m_pCubeColliderCom), &tDesc)))
+		return E_FAIL;
+	m_vecCollider.push_back(m_pCubeColliderCom);
 	switch (m_eBuildItemType)
 	{
 	case Client::BUILD_ITEM_TYPE::FLOOR:
 	case Client::BUILD_ITEM_TYPE::WALL:
 	case Client::BUILD_ITEM_TYPE::GROUND:
 	{
-		CCollider_AABB::AABB_COLLIDER_DESC tDesc{};
-		tDesc.vCenter = { 0,0.5f,0 };
-		tDesc.vExtentes = { 0.5f,0.5f,0.5f };
 
-		if (FAILED(Add_Component(LEVEL_LOADING, CCollider_AABB::m_szProtoTag,
-			TEXT("Cube_Collider_Com"), reinterpret_cast<CComponent**>(&m_pCubeColliderCom), &tDesc)))
-			return E_FAIL;
-		m_vecCollider.push_back(m_pCubeColliderCom);
 		break;
 	}
 	case Client::BUILD_ITEM_TYPE::DEFORM:
-	case Client::BUILD_ITEM_TYPE::CUBRIC:
 	case Client::BUILD_ITEM_TYPE::STRUC:
 	case Client::BUILD_ITEM_TYPE::PROP:
 	case Client::BUILD_ITEM_TYPE::NATURE:
 	case Client::BUILD_ITEM_TYPE::FUNCT:
+	case Client::BUILD_ITEM_TYPE::CUBRIC:
 	{
 		CCollider_Mesh::MESH_COLLIDER_DESC tMeshDesc{};
 		tMeshDesc.pMesh = m_pModelCom->Get_Mesh(0);
@@ -120,6 +134,7 @@ json CTerrainObject::ToJson()
 	j["Iteration"] = 1;
 	j["Direction"] = m_eTerrainDir;
 	j["Index"] = m_iIndex;
+	j["ParentIndex"] = m_iParentIndex;
 	return j;
 }
 void CTerrainObject::Rotate()
@@ -147,22 +162,27 @@ _vector CTerrainObject::BolckXZ(_vector vCharacterPosition, _vector vMoveDirecti
 	//평면의 방정식에  CharPosition과 NextPosition을 대입해서 평면까지의 거리를 구한다.
 	//평면에서 각 점으로까지의 거리의 부호가 다른지 확인한다.
 
+	CColliderBase* pCollider;
 
-	CColliderBase* pCollider = Get_Collider(0);
+	if (m_eBlockType == BUILD_ITEM_BLOCK_TYPE::CUBECUBE || m_eBlockType == BUILD_ITEM_BLOCK_TYPE::CUBEMESH)
+		pCollider = m_pCubeColliderCom;
+	else
+		pCollider = m_pMeshColliderCom;
+
 	pCollider->Update(XMLoadFloat4x4(&m_WorldMatrix));
 	Ray ray(XMVectorSetY( vCharacterPosition, XMVectorGetY(vCharacterPosition) +fCollisionHeight), vMoveDirection, fMoveDistance);
 	RaycastHit hitInfo;
 	//평면의 Normal * (NextPosition에서 평면까지의 거리+ Radius) 만큼 이동
 	if (pCollider->RayCast(ray, &hitInfo))
 	{
-		_float fPlaneD = -XMVector3Dot(hitInfo.vNormal, hitInfo.vPoint).m128_f32[0];
+ 		_float fPlaneD = -XMVector3Dot(hitInfo.vNormal, hitInfo.vPoint).m128_f32[0];
 		_float fPlaneDistance = XMVector3Dot(hitInfo.vNormal, vNextPosition).m128_f32[0] + fPlaneD;
 		vNextPosition += hitInfo.vNormal * (fCollisionRadius + fabsf(fPlaneDistance));	
 		return vNextPosition;
 	}
-	else if(m_eBuildItemType == BUILD_ITEM_TYPE::GROUND)
+	else if (m_eBlockType == BUILD_ITEM_BLOCK_TYPE::CUBECUBE || m_eBlockType == BUILD_ITEM_BLOCK_TYPE::CUBEMESH)
 	{
-		BoundingBox* tBox = static_cast<CCollider_AABB*>( pCollider)->Get_Desc();
+		BoundingBox* tBox = m_pCubeColliderCom->Get_Desc();
 		_float3* pCorners = new _float3[8];
 		tBox->GetCorners(pCorners);
 		_vector vBlockCenter = XMLoadFloat3(&tBox->Center);
@@ -232,18 +252,17 @@ _vector CTerrainObject::BolckXZ(_vector vCharacterPosition, _vector vMoveDirecti
 }
 _float CTerrainObject::Get_TopHeight(_vector Pos)
 {
-	switch (m_eBuildItemType)
+	switch (m_eBlockType)
 	{
-	case Client::BUILD_ITEM_TYPE::GROUND:
-	case Client::BUILD_ITEM_TYPE::FLOOR:
-	case Client::BUILD_ITEM_TYPE::WALL:
+	case Client::BUILD_ITEM_BLOCK_TYPE::CUBECUBE:
+	case Client::BUILD_ITEM_BLOCK_TYPE::MESHCUBE:
+		if (Pos.m128_f32[0] < m_WorldMatrix.m[3][0] - 0.5f || Pos.m128_f32[0] > m_WorldMatrix.m[3][0] + 0.5f)
+			return -1;
+		if (Pos.m128_f32[2] < m_WorldMatrix.m[3][2] - 0.5f || Pos.m128_f32[2] > m_WorldMatrix.m[3][2] + 0.5f)
+			return -1;
 		return m_WorldMatrix.m[3][1] + 1.0f;
-		break;
-	case Client::BUILD_ITEM_TYPE::DEFORM:
-	case Client::BUILD_ITEM_TYPE::CUBRIC:
-	case Client::BUILD_ITEM_TYPE::STRUC:
-	case Client::BUILD_ITEM_TYPE::FUNCT:
-	case Client::BUILD_ITEM_TYPE::PROP:
+	case Client::BUILD_ITEM_BLOCK_TYPE::CUBEMESH:
+	case Client::BUILD_ITEM_BLOCK_TYPE::MESHMESH:
 	{
 		m_pMeshColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
 		RaycastHit hitInfo;
@@ -253,62 +272,67 @@ _float CTerrainObject::Get_TopHeight(_vector Pos)
 		if (m_pMeshColliderCom->RayCast(ray, &hitInfo))
 		{
 			//cout << XMVectorGetY(hitInfo.vPoint) << endl;
-			return XMVectorGetY(hitInfo.vPoint); 
+			return XMVectorGetY(hitInfo.vPoint);
 		}
-		break;
+		return -1;
 	}
-	case Client::BUILD_ITEM_TYPE::NATURE:
-	case Client::BUILD_ITEM_TYPE::LAST:
+	case Client::BUILD_ITEM_BLOCK_TYPE::NON_BLOCK:
+	case Client::BUILD_ITEM_BLOCK_TYPE::LAST:
 	default:
 		return -1;
-		break;
 	}
 
-	return -1;
+
 }
 //바닥높이
 _float CTerrainObject::Get_BottomHeight(_vector Pos)
 {
-	switch (m_eBuildItemType)
+	switch (m_eBlockType)
 	{
-	case Client::BUILD_ITEM_TYPE::GROUND:
-	case Client::BUILD_ITEM_TYPE::FLOOR:
-	case Client::BUILD_ITEM_TYPE::WALL:
+	case Client::BUILD_ITEM_BLOCK_TYPE::CUBECUBE:
+	case Client::BUILD_ITEM_BLOCK_TYPE::MESHCUBE:
+		if (Pos.m128_f32[0] < m_WorldMatrix.m[3][0] - 0.5f || Pos.m128_f32[0] > m_WorldMatrix.m[3][0] + 0.5f)
+			return -1;
+		if (Pos.m128_f32[2] < m_WorldMatrix.m[3][2] - 0.5f || Pos.m128_f32[2] > m_WorldMatrix.m[3][2] + 0.5f)
+			return -1;
 		return m_WorldMatrix.m[3][1];
-		break;
-
-	case Client::BUILD_ITEM_TYPE::DEFORM:
-	case Client::BUILD_ITEM_TYPE::CUBRIC:
-	case Client::BUILD_ITEM_TYPE::STRUC:
-	case Client::BUILD_ITEM_TYPE::FUNCT:
-	case Client::BUILD_ITEM_TYPE::PROP:
+	case Client::BUILD_ITEM_BLOCK_TYPE::CUBEMESH:
+	case Client::BUILD_ITEM_BLOCK_TYPE::MESHMESH:
 	{
 		CColliderBase* pCollider = Get_Collider(0);
 		pCollider->Update(XMLoadFloat4x4(&m_WorldMatrix));
 		RaycastHit hitInfo;
-		Pos = XMVectorSetY(Pos, XMVectorGetY(Pos) -1.f);
+		Pos = XMVectorSetY(Pos, XMVectorGetY(Pos) - 1.f);
 		Ray ray(Pos, XMVECTOR{ 0,1,0,0 });
 
 		if (pCollider->RayCast(ray, &hitInfo))
 		{
 			return XMVectorGetY(hitInfo.vPoint);
 		}
-		break;
+		return FLT_MAX;
 	}
+	case Client::BUILD_ITEM_BLOCK_TYPE::NON_BLOCK:
+	case Client::BUILD_ITEM_BLOCK_TYPE::LAST:
 	default:
 		return FLT_MAX;
-		break;
 	}
 
-	return FLT_MAX;
+
 }
 
 _bool CTerrainObject::RayCast(const Ray& tRay, RaycastHit* pOut)
 {
-	CColliderBase* pCollider = Get_Collider(0);
-	if (nullptr == pCollider)
-		return false;
 	if (false == Is_BlockingType()) 
+		return false;
+
+	CColliderBase* pCollider;
+	if (m_eBuildItemType == Client::BUILD_ITEM_TYPE::FLOOR ||
+		m_eBuildItemType == Client::BUILD_ITEM_TYPE::WALL ||
+		m_eBuildItemType == Client::BUILD_ITEM_TYPE::GROUND)
+		pCollider = m_pCubeColliderCom;
+	else
+		pCollider = m_pMeshColliderCom;
+	if (nullptr == pCollider)
 		return false;
 	pCollider->Update(XMLoadFloat4x4(&m_WorldMatrix));
 

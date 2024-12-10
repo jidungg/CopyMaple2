@@ -55,6 +55,11 @@ _bool CCollider_Mesh::Intersects(CColliderBase* pOther)
 	return _bool();
 }
 
+_bool CCollider_Mesh::Intersects(CColliderBase* pOther, _vector* vOutNormal, _float* fOutDepth)
+{
+	return _bool();
+}
+
 
 bool CCollider_Mesh::RayCast(const Ray& tRay, RaycastHit* pOut)
 {
@@ -160,5 +165,47 @@ HRESULT CCollider_Mesh::Render()
 
 _bool CCollider_Mesh::Contains(const FXMVECTOR& vPos)
 {
-	return false;
+	D3D11_MAPPED_SUBRESOURCE VB;
+	HRESULT hr = m_pContext->Map(m_pStagingVB, 0, D3D11_MAP_READ, 0, &VB);
+	if (FAILED(hr))
+	{
+		std::cerr << "Failed to map vertex buffer." << std::endl;
+		return false;
+	}
+	D3D11_MAPPED_SUBRESOURCE IB;
+	hr = m_pContext->Map(m_pStagingIB, 0, D3D11_MAP_READ, 0, &IB);
+	if (FAILED(hr))
+	{
+		std::cerr << "Failed to map Index buffer." << std::endl;
+		return false;
+	}
+	VTXMESH* vertices = static_cast<VTXMESH*>(VB.pData);
+	_uint* indices = static_cast<_uint*>(IB.pData);
+
+	_bool bContains = true;
+	XMVECTOR vMinNormal = { 0,0,0,0 };
+	XMMATRIX matWorld = m_pOwner->Get_Transform()->Get_WorldMatrix();
+	XMMATRIX matInverseWorld = XMMatrixInverse(nullptr, matWorld);
+	_vector vLocalPos = XMVector3TransformCoord(vPos, matInverseWorld);
+	for (size_t indexCount = 0; indexCount < m_iNumIndexes; )
+	{
+		XMVECTOR v0 = XMVectorSetW( XMLoadFloat3(&vertices[indices[indexCount++]].vPosition),1);
+		XMVECTOR v1 = XMVectorSetW(XMLoadFloat3(&vertices[indices[indexCount++]].vPosition), 1);
+		XMVECTOR v2 = XMVectorSetW(XMLoadFloat3(&vertices[indices[indexCount++]].vPosition), 1);
+
+		_float fDot = XMVectorGetX(XMPlaneDotCoord(XMPlaneFromPoints(v0, v1, v2), vLocalPos));
+		_float fDot2 = XMVectorGetX(XMPlaneDotCoord(XMPlaneFromPoints(v0, v1, v2), _vector{0,0,0}));
+
+		if (fDot > 0)
+		{
+			bContains = false;
+			break;
+		}
+
+	}
+
+	m_pContext->Unmap(m_pStagingVB, 0);
+	m_pContext->Unmap(m_pStagingIB, 0);
+
+	return bContains;
 }

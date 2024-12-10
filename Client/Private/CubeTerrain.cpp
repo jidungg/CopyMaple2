@@ -79,8 +79,9 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 		for (int i = 0 ; i < iteration; i++)
 		{
 			desc.index = terrIdx + i;
+			desc.iParentIndex = desc.index;
 			XMStoreFloat4(&desc.pos, IndexToPos(desc.index));
-			if(FAILED(Add_TerrainObject(desc)))
+ 			if(FAILED(Add_TerrainObject(desc)))
 				return E_FAIL;
 		}
 	}
@@ -88,7 +89,7 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 }
 
 //MoveDir 는 Normalized 된 상태로 들어와야 함.
-_vector CCubeTerrain::BlockXZ(CCharacter* pCharacter)
+_vector CCubeTerrain::BlockXZ(CCharacter* pCharacter, _uint iCheckRange)
 {
 	_vector vPos = pCharacter->Get_TransformPosition();
 	_vector vMoveDir = pCharacter->Get_MoveDirection();
@@ -98,7 +99,6 @@ _vector CCubeTerrain::BlockXZ(CCharacter* pCharacter)
 	_float fXForce = XMVectorGetX(vMoveDir);
 	_float fZForce = XMVectorGetZ(vMoveDir);
 	_float fYForce = XMVectorGetY(vMoveDir);
-	_uint iCheckRange = (_uint)floor(fBodyCollisionRadius + fMoveDistance)+1;
 	_int iIdx =  PosToIndex(vPos);
 	if (iIdx < 0)
 		return  vPos + vMoveDir * fMoveDistance;
@@ -108,15 +108,15 @@ _vector CCubeTerrain::BlockXZ(CCharacter* pCharacter)
 
 	_int iMinX = iXIdx, iMaxX = iXIdx, iMinZ = iZIdx, iMaxZ = iZIdx, iMinY = iYIdx, iMaxY = iYIdx;
 
-	if (fXForce > 0)
-		iMaxX += iCheckRange;
-	else if (fXForce < 0)
-		iMinX -= iCheckRange;
-	if (fZForce > 0)
-		iMaxZ += iCheckRange;
-	else if (fZForce < 0)
-		iMinZ -= iCheckRange;
+	iMaxX += iCheckRange;
+	iMinX -= iCheckRange;
+	iMaxZ += iCheckRange;
+	iMinZ -= iCheckRange;
 	iMaxY += iCheckRange;
+	//if (fXForce > 0)
+	//else if (fXForce < 0)
+	//if (fZForce > 0)
+	//else if (fZForce < 0)
 
 	iMaxX = min(iMaxX, m_vSize.x - 1);
 	iMinX = max(iMinX, 0);
@@ -132,12 +132,14 @@ _vector CCubeTerrain::BlockXZ(CCharacter* pCharacter)
 		{
 			for (_uint iX = iMinX; iX <= iMaxX; iX++)
 			{
-				_uint iIdx = iX + m_vSize.x * iZ + m_vSize.x * m_vSize.z * iY;
-				if (nullptr == m_vecCells[iIdx])
+				_uint iTmpIdx = iX + m_vSize.x * iZ + m_vSize.x * m_vSize.z * iY;
+				if (nullptr == m_vecCells[iTmpIdx])
 					continue;
-				if (false == m_vecCells[iIdx]->Is_BlockingType())
+				if (false == m_vecCells[iTmpIdx]->Is_BlockingType())
 					continue;
-				vNextPos = m_vecCells[iIdx]->BolckXZ(vPos, vMoveDir, fMoveDistance, fBodyCollisionRadius, fBodyCollisionOffset.y);
+				if (iTmpIdx == iIdx)
+					continue;
+				vNextPos = m_vecCells[iTmpIdx]->BolckXZ(vPos, vMoveDir, fMoveDistance, fBodyCollisionRadius, fBodyCollisionOffset.y);
 				_vector vTmp = vNextPos - vPos;
 				vMoveDir = XMVector4Normalize(vTmp);
 				fMoveDistance = XMVectorGetX(XMVector3Length(vTmp));
@@ -210,6 +212,8 @@ _bool CCubeTerrain::RayCastXZ(const Ray& tRay, RaycastHit* pOut)
 		if (iIdx < 0)
 			return false;
 		fCurrentDistance = XMVectorGetX(XMVector3Length(vRealPos - tRay.vOrigin));
+		if (fCurrentDistance == 0)
+			fCurrentDistance += 0.01;
 		if (nullptr != m_vecCells[iIdx] && m_vecCells[iIdx]->RayCast(tRay, pOut))
 			return true;
 
@@ -461,7 +465,7 @@ CTerrainObject* CCubeTerrain::Get_TerrainObject(_uint Index)
 	return nullptr;
 }
 
-_float CCubeTerrain::Get_FloorHeight(_vector Pos)
+_float CCubeTerrain::Get_FloorHeight(_vector Pos, _uint iCheckRange)
 {
 	_int index = PosToIndex(Pos);
 	if (index < 0)
@@ -470,21 +474,40 @@ _float CCubeTerrain::Get_FloorHeight(_vector Pos)
 	_uint iXIdx = index % m_vSize.x;
 	_uint iZIdx = index / m_vSize.x % m_vSize.z;
 	
+	_int iMinXIdx = iXIdx - iCheckRange;
+	_int iMaxXIdx = iXIdx + iCheckRange;
+	_int iMinZIdx = iZIdx - iCheckRange;
+	_int iMaxZIdx = iZIdx + iCheckRange;
+	iMinXIdx = max(iMinXIdx, 0);
+	iMaxXIdx = min(iMaxXIdx, (_int)m_vSize.x - 1);
+	iMinZIdx = max(iMinZIdx, 0);
+	iMaxZIdx = min(iMaxZIdx, (_int)m_vSize.z - 1);
+
 	for (_int yIdx = (_int)iYIdx; yIdx >= 0; yIdx--)
 	{
-		_uint iTmpIndex = iXIdx + m_vSize.x * iZIdx + m_vSize.x * m_vSize.z * yIdx;
-		if (m_vecCells[iTmpIndex] != nullptr)
+		for (_int zIdx = iMinZIdx; zIdx <= iMaxZIdx; zIdx++)
 		{
-			
-			if(m_vecCells[iTmpIndex]->Is_BlockingType())
-				return m_vecCells[iTmpIndex]->Get_TopHeight(Pos);
+			for (_int xIdx = iMinXIdx; xIdx <= iMaxXIdx; xIdx++)
+			{
+				_uint iTmpIndex = xIdx + m_vSize.x * zIdx + m_vSize.x * m_vSize.z * yIdx;
+				if (m_vecCells[iTmpIndex] != nullptr)
+				{
+					if (false == m_vecCells[iTmpIndex]->Is_BlockingType()) continue;
+
+					_float fHeight = m_vecCells[iTmpIndex]->Get_TopHeight(Pos);
+					if (fHeight < 0) continue;
+					return fHeight;
+				}
+			}
 		}
+
+
 		
 	}
 	return -1;
 }
 
-_float CCubeTerrain::Get_CelingHeight(_vector Pos)
+_float CCubeTerrain::Get_CelingHeight(_vector Pos, _uint iCheckRange)
 {
 	_int index = PosToIndex(Pos);
 	if (index < 0)
@@ -665,6 +688,18 @@ _vector CCubeTerrain::Get_ContainedCellPosition(const _fvector& Pos)
 
 	_int iIdx = PosToIndex(Pos);
 	return IndexToPos(iIdx);
+}
+
+void CCubeTerrain::Get_ContainingCells(CColliderBase* pCollider, list<_uint>& vecCells)
+{
+	_uint iCellCount = m_vecCells.size();
+	for (_uint i = 0; i < iCellCount; i++)
+	{
+		_vector vPos = IndexToPos(i);
+		vPos.m128_f32[1] += 0.5;
+		if (pCollider->Contains(vPos))
+			vecCells.push_back(i);
+	}
 }
 
 

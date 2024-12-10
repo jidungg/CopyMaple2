@@ -39,12 +39,16 @@ BuildItemData::BuildItemData(string strFileName, ID3D11Device* pDevice, ID3D11De
 	switch (eBuildType)
 	{
 	case Client::BUILD_ITEM_TYPE::GROUND:
-	case Client::BUILD_ITEM_TYPE::DEFORM:
 	case Client::BUILD_ITEM_TYPE::FLOOR:
 	case Client::BUILD_ITEM_TYPE::WALL:
+		eBlockType = BUILD_ITEM_BLOCK_TYPE::CUBECUBE;
+		break;
 	case Client::BUILD_ITEM_TYPE::CUBRIC:
+		eBlockType = BUILD_ITEM_BLOCK_TYPE::CUBEMESH;
+		break;
+	case Client::BUILD_ITEM_TYPE::DEFORM:
 	case Client::BUILD_ITEM_TYPE::STRUC:
-		eBlockType = BUILD_ITEM_BLOCK_TYPE::BLOCK;
+		eBlockType = BUILD_ITEM_BLOCK_TYPE::MESHMESH;
 		break;
 	default:
 		eBlockType = BUILD_ITEM_BLOCK_TYPE::NON_BLOCK;
@@ -55,6 +59,7 @@ BuildItemData::BuildItemData(string strFileName, ID3D11Device* pDevice, ID3D11De
 	std::copy(strFileName.begin(), strFileName.end(), strItemName);
 	std::copy(strFileName.begin(), strFileName.end(), strItemDesc);
 	std::copy(strFileName.begin(), strFileName.end(), strModelTag);
+
 	string strIconTag = strFileName.substr(0, strFileName.find_first_of("."));
 	strIconTag += "_icon";
 	std::copy(strIconTag.begin(), strIconTag.end(), strIconImageTag);

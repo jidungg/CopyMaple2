@@ -21,6 +21,7 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(_fmatrix WorldMatrix) override;
 	virtual _bool Intersects(CColliderBase* pOther) override;
+	virtual _bool Intersects(CColliderBase* pOther, _vector* vOutNormal, _float* fOutDepth) override;
 	virtual _bool Contains(const FXMVECTOR& vPosition)override;
 	virtual _bool RayCast(const Ray& tRay, RaycastHit* pOut) override;
 	virtual HRESULT  Render() override;

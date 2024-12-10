@@ -53,8 +53,8 @@ public:
 	_bool Is_ValidIndex(XMUINT3 i3Index);
 	XMUINT3 Get_Size() { return m_vSize; }
 	CTerrainObject* Get_TerrainObject(_uint Index);
-	_float Get_FloorHeight(_vector Pos);
-	_float Get_CelingHeight(_vector Pos);
+	_float Get_FloorHeight(_vector Pos, _uint iCheckRange = 0);
+	_float Get_CelingHeight(_vector Pos, _uint iCheckRange = 0);
 	void Get_AdjWayFinderCells(_uint Index, vector<_uint>& vecAdjCells);
 	void Get_XZAdjWayFinderCells(_uint Index, vector<_uint>& vecAdjCells);
 	_float Get_Distance(_uint StartIndex, _uint DestIndex);
@@ -63,11 +63,12 @@ public:
 	CTerrainObject* Get_Portal(LEVELID eLinkedLevel);
 	CTerrainObject* Get_PlayerSpawn();
 	_vector Get_ContainedCellPosition(const _fvector& Pos);
+	void Get_ContainingCells(CColliderBase* pCollider, list<_uint>& vecCells);
 
 
 	HRESULT Save_To_Json(string strNewFilepath);
 	HRESULT Load_From_Json(string strJsonFilePath);
-	_vector BlockXZ(CCharacter* pCharacter);
+	_vector BlockXZ(CCharacter* pCharacter, _uint iCheckRange =1);
 	_bool RayCastXZ(const Ray& tRay, RaycastHit* pOut);
 	_bool RayCast(const Ray& tRay, RaycastHit* pOut);
 

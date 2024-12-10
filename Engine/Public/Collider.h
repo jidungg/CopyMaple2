@@ -40,6 +40,7 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(_fmatrix WorldMatrix) abstract;
 	virtual _bool Intersects(CColliderBase* pOther)abstract;
+	virtual _bool Intersects(CColliderBase* pOther, _vector* vOutNormal, _float* fOutDepth) { return false; }
 	virtual _bool Contains(const FXMVECTOR& vPos)abstract;
 	virtual _bool RayCast(const Ray& tRay, RaycastHit* pOut) abstract;
 	virtual HRESULT Render() abstract;

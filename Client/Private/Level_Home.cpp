@@ -39,7 +39,7 @@ HRESULT CLevel_Home::Initialize(void* pArg)
 	BuilderDesc.fSpeedPerSec = 4;
 	BuilderDesc.pCubeTerrain = m_pCubeTerrain;
 	m_pBuilder = static_cast<CBuilder*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_HOME, CBuilder::m_szProtoTag, &BuilderDesc));
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, LAYER_PLAYER, m_pBuilder)))
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, LAYER_NONCOLLISION, m_pBuilder)))
 		return E_FAIL;
 	m_pBuilder->Set_Active(false);
 

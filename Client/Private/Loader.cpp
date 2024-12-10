@@ -121,6 +121,9 @@ HRESULT CLoader::Loading()
 	case LEVEL_HOME:
 		hr = Loading_Level_MyHome();
 		break;
+	case LEVEL_HUNTINGPLACE:
+		hr = Loading_Level_HuntingPlace();
+		break;
 	}
 
 	if (FAILED(hr))
@@ -253,12 +256,15 @@ HRESULT CLoader::Loading_Level_Logo()
 		TEXT("../Bin/resources/FBXs/Anim/Equip"), CModel::TYPE_ANIM, matPretransform)))
 		return E_FAIL;
 
+
 	  matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
 
 	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Anim/Player"),CModel::TYPE_ANIM,matPretransform)))
 		return E_FAIL;
-
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_LOADING,
+		TEXT("../Bin/resources/FBXs/Anim/Monster"), CModel::TYPE_ANIM, matPretransform)))
+		return E_FAIL;
 	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Mimic"), CModel::TYPE_MIMIC, matPretransform)))
 		return E_FAIL;
@@ -268,6 +274,7 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/MAP/Cube/"), matPretransform)))
 		return E_FAIL;
+
 	XMMATRIX matPretransform2 = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
 	matPretransform2 = matPretransform2 * XMMatrixRotationX(XMConvertToRadians(-90));
 	matPretransform2 = matPretransform2 * XMMatrixRotationY(XMConvertToRadians(180));
@@ -459,9 +466,7 @@ HRESULT CLoader::Loading_Level_BayarPeak()
 	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_BAYARPEAK,
 		TEXT("../Bin/resources/FBXs/Anim/Boss"), CModel::TYPE_ANIM, matPretransform)))
 		return E_FAIL;
-	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_BAYARPEAK,
-		TEXT("../Bin/resources/FBXs/Anim/Monster"), CModel::TYPE_ANIM, matPretransform)))
-		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("객체 로드."));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_BAYARPEAK, TEXT("Prototype_GameObject_BayarPeak"),
 		CCubeTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/BayarPeak.json")))))
@@ -528,6 +533,27 @@ HRESULT CLoader::Loading_Level_MyHome()
 		return E_FAIL;
 
 
+
+
+	lstrcpy(m_szLoadingText, TEXT("로드 완료."));
+
+	m_isFinished = true;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_Level_HuntingPlace()
+{
+	lstrcpy(m_szLoadingText, TEXT("텍스처 로드"));
+
+
+
+	lstrcpy(m_szLoadingText, TEXT("모델 로드."));
+
+	lstrcpy(m_szLoadingText, TEXT("객체 로드."));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HUNTINGPLACE, TEXT("Prototype_GameObject_HuntingPlace"),
+		CCubeTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/HuntingPlace.json")))))
+		return E_FAIL;
 
 
 	lstrcpy(m_szLoadingText, TEXT("로드 완료."));

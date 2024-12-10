@@ -305,13 +305,14 @@ _float CTerrainObject::Get_BottomHeight(_vector Pos)
 
 _bool CTerrainObject::RayCast(const Ray& tRay, RaycastHit* pOut)
 {
-	if (nullptr == m_pCubeColliderCom)
+	CColliderBase* pCollider = Get_Collider(0);
+	if (nullptr == pCollider)
 		return false;
 	if (false == Is_BlockingType()) 
 		return false;
-	m_pCubeColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
+	pCollider->Update(XMLoadFloat4x4(&m_WorldMatrix));
 
-	return m_pCubeColliderCom->RayCast(tRay, pOut);
+	return pCollider->RayCast(tRay, pOut);
 }
 
 

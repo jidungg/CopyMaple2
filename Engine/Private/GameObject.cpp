@@ -236,6 +236,8 @@ _float CGameObject::Get_Distance(CGameObject* pOther)
 
 CColliderBase* CGameObject::Get_Collider(_uint iColliderIndex)
 {
+	if (iColliderIndex >= m_vecCollider.size())
+		return nullptr;
 	return (m_vecCollider[iColliderIndex]);
 }
 

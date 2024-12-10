@@ -415,16 +415,16 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	
 	//JUMP SUB
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_JUMP_UP_A);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::GREATER, 0);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_RANDOM, CONDITION_TYPE::LESS, 50);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_JUMP_TRIGGER);
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_JUMP_UP_B);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_JUMP_TRIGGER);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::GREATER, 0);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_RANDOM, CONDITION_TYPE::EQUAL_GREATER, 50);
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_JUMP_DOWN_A);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_LESS, 0);
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_STAFF_JUMP_DOWN_A);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::EQUAL_LESS, 0);
-	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::LESS, 0);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
 
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_JUMP_UP_A, ANIM_STATE::AS_JUMP_DOWN_A);
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
@@ -434,11 +434,13 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_STAFF_JUMP_UP_A);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BATTLE, CONDITION_TYPE::EQUAL, true);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_JUMP_TRIGGER);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::GREATER, 0);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_RANDOM, CONDITION_TYPE::LESS, 50);
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::BS_JUMP, ANIM_STATE::AS_STAFF_JUMP_UP_B);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_WEAPON, CONDITION_TYPE::EQUAL, true);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_BATTLE, CONDITION_TYPE::EQUAL, true);
-	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_JUMP_TRIGGER);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_UPFORCE, CONDITION_TYPE::GREATER, 0);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_RANDOM, CONDITION_TYPE::EQUAL_GREATER, 50);
 
 	pTransition = m_pAnimStateMachine->Add_SubTransition(ANIM_STATE::AS_STAFF_JUMP_UP_A, ANIM_STATE::AS_STAFF_JUMP_DOWN_A);
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_ANIM_END_TRIGGER);
@@ -963,6 +965,7 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	{
 		if (m_bOnFloor)//그냥 바닥에 있는중
 		{
+			m_fUpForce -= fTimeDelta * 9.8f * 3;
 			if (m_fUpForce < 0)
 			{
 				m_fUpForce = 0;

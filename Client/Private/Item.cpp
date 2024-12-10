@@ -13,6 +13,12 @@ BuildItemData::BuildItemData(string strFileName, ID3D11Device* pDevice, ID3D11De
 	string strGroup = strTmp.substr(0, strTmp.find_first_of("_"));
 	if (strGroup == "ground")
 		eBuildType = BUILD_ITEM_TYPE::GROUND;
+	else	if (strGroup == "deform")
+		eBuildType = BUILD_ITEM_TYPE::DEFORM;
+	else	if (strGroup == "floor")
+		eBuildType = BUILD_ITEM_TYPE::FLOOR;
+	else if (strGroup == "wall")
+		eBuildType = BUILD_ITEM_TYPE::WALL;
 	else if (strGroup == "fi")
 	{
 		strTmp = strTmp.substr(strTmp.find_first_of("_") + 1);
@@ -33,6 +39,9 @@ BuildItemData::BuildItemData(string strFileName, ID3D11Device* pDevice, ID3D11De
 	switch (eBuildType)
 	{
 	case Client::BUILD_ITEM_TYPE::GROUND:
+	case Client::BUILD_ITEM_TYPE::DEFORM:
+	case Client::BUILD_ITEM_TYPE::FLOOR:
+	case Client::BUILD_ITEM_TYPE::WALL:
 	case Client::BUILD_ITEM_TYPE::CUBRIC:
 	case Client::BUILD_ITEM_TYPE::STRUC:
 		eBlockType = BUILD_ITEM_BLOCK_TYPE::BLOCK;

@@ -414,6 +414,9 @@ HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 	case Client::BUILD_ITEM_TYPE::GROUND:
 	case Client::BUILD_ITEM_TYPE::CUBRIC:
 	case Client::BUILD_ITEM_TYPE::FUNCT:
+	case Client::BUILD_ITEM_TYPE::DEFORM:
+	case Client::BUILD_ITEM_TYPE::FLOOR:
+	case Client::BUILD_ITEM_TYPE::WALL:
 	case Client::BUILD_ITEM_TYPE::NATURE:
 	case Client::BUILD_ITEM_TYPE::PROP:
 	case Client::BUILD_ITEM_TYPE::STRUC:

@@ -19,18 +19,18 @@ HRESULT CFbxToBinary::FbxToBinary(const string& inFilePath)
 
 	m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
 
-	//m_bAnim = m_pAIScene->HasAnimations();
-	//
-	//if (m_bAnim == false)
-	//{
-	// 
-	//	iFlag |= aiProcess_PreTransformVertices;
+	m_bAnim = m_pAIScene->HasAnimations();
+	
+	if (m_bAnim == false)
+	{
+	 
+		iFlag |= aiProcess_PreTransformVertices;
 
-	//	m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
-	//}
+		m_pAIScene = m_Importer.ReadFile(inFilePath, iFlag);
+	}
 
 	//Mimic 모델의 경우 무조건 m_bAnim을 true로 할 것.
-	m_bAnim = true;
+	//m_bAnim = true;
 
 	if (0 == m_pAIScene)
 		return E_FAIL;

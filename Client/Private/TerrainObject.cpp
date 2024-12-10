@@ -61,6 +61,8 @@ HRESULT CTerrainObject::Ready_Components(TERRAINOBJ_DESC* pDesc)
 
 	switch (m_eBuildItemType)
 	{
+	case Client::BUILD_ITEM_TYPE::FLOOR:
+	case Client::BUILD_ITEM_TYPE::WALL:
 	case Client::BUILD_ITEM_TYPE::GROUND:
 	{
 		CCollider_AABB::AABB_COLLIDER_DESC tDesc{};
@@ -73,6 +75,7 @@ HRESULT CTerrainObject::Ready_Components(TERRAINOBJ_DESC* pDesc)
 		m_vecCollider.push_back(m_pCubeColliderCom);
 		break;
 	}
+	case Client::BUILD_ITEM_TYPE::DEFORM:
 	case Client::BUILD_ITEM_TYPE::CUBRIC:
 	case Client::BUILD_ITEM_TYPE::STRUC:
 	case Client::BUILD_ITEM_TYPE::PROP:
@@ -136,7 +139,6 @@ _vector CTerrainObject::BolckXZ(_vector vCharacterPosition, _vector vMoveDirecti
 	_vector vNextPosition = vCharacterPosition + vMoveDirection * fMoveDistance;
 	if (false == DirectX::Internal::XMVector3IsUnit(vMoveDirection))
 		return vNextPosition;
-	m_pCubeColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
 
 
 
@@ -147,6 +149,7 @@ _vector CTerrainObject::BolckXZ(_vector vCharacterPosition, _vector vMoveDirecti
 
 
 	CColliderBase* pCollider = Get_Collider(0);
+	pCollider->Update(XMLoadFloat4x4(&m_WorldMatrix));
 	Ray ray(XMVectorSetY( vCharacterPosition, XMVectorGetY(vCharacterPosition) +fCollisionHeight), vMoveDirection, fMoveDistance);
 	RaycastHit hitInfo;
 	//평면의 Normal * (NextPosition에서 평면까지의 거리+ Radius) 만큼 이동
@@ -232,9 +235,11 @@ _float CTerrainObject::Get_TopHeight(_vector Pos)
 	switch (m_eBuildItemType)
 	{
 	case Client::BUILD_ITEM_TYPE::GROUND:
+	case Client::BUILD_ITEM_TYPE::FLOOR:
+	case Client::BUILD_ITEM_TYPE::WALL:
 		return m_WorldMatrix.m[3][1] + 1.0f;
 		break;
-
+	case Client::BUILD_ITEM_TYPE::DEFORM:
 	case Client::BUILD_ITEM_TYPE::CUBRIC:
 	case Client::BUILD_ITEM_TYPE::STRUC:
 	case Client::BUILD_ITEM_TYPE::FUNCT:
@@ -267,20 +272,24 @@ _float CTerrainObject::Get_BottomHeight(_vector Pos)
 	switch (m_eBuildItemType)
 	{
 	case Client::BUILD_ITEM_TYPE::GROUND:
+	case Client::BUILD_ITEM_TYPE::FLOOR:
+	case Client::BUILD_ITEM_TYPE::WALL:
 		return m_WorldMatrix.m[3][1];
 		break;
 
+	case Client::BUILD_ITEM_TYPE::DEFORM:
 	case Client::BUILD_ITEM_TYPE::CUBRIC:
 	case Client::BUILD_ITEM_TYPE::STRUC:
 	case Client::BUILD_ITEM_TYPE::FUNCT:
 	case Client::BUILD_ITEM_TYPE::PROP:
 	{
-		m_pCubeColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
+		CColliderBase* pCollider = Get_Collider(0);
+		pCollider->Update(XMLoadFloat4x4(&m_WorldMatrix));
 		RaycastHit hitInfo;
 		Pos = XMVectorSetY(Pos, XMVectorGetY(Pos) -1.f);
 		Ray ray(Pos, XMVECTOR{ 0,1,0,0 });
 
-		if (m_pCubeColliderCom->RayCast(ray, &hitInfo))
+		if (pCollider->RayCast(ray, &hitInfo))
 		{
 			return XMVectorGetY(hitInfo.vPoint);
 		}

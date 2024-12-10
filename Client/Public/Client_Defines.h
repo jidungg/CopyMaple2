@@ -88,6 +88,9 @@ namespace Client
 	enum class BUILD_ITEM_TYPE
 	{
 		GROUND, // 충돌, 큐브
+		DEFORM,
+		FLOOR,
+		WALL,
 		CUBRIC, // 충돌
 		FUNCT,
 		NATURE,

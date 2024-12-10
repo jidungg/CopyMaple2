@@ -72,7 +72,7 @@ void CBayarStoneSpike::Late_Update(_float fTimeDelta)
 			_vector vTargetPos = pTarget->Get_TransformPosition();
 
 			vTargetPos = XMVectorSetY(vTargetPos, m_pTerrain->Get_FloorHeight(vTargetPos));
-			m_pTerrain->Get_ContainedCellPosition(vTargetPos);
+			vTargetPos = m_pTerrain->Get_ContainedCellPosition(vTargetPos);
 			pBullet->Launch(fDmg, vTargetPos);
 		}
 

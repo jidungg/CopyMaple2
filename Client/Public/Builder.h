@@ -3,6 +3,7 @@
 #include "Pawn.h"
 #include "Item.h"
 
+
 BEGIN(Engine)
 
 class CShader;
@@ -14,7 +15,7 @@ END
 
 BEGIN(Client)
 class CModelObject;
-
+class CEffModelObject;
 class CCubeTerrain;
 class CTerrainObject;
 class CBuildPreview;
@@ -44,15 +45,18 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(_float fTimeDelta) override;
+	virtual HRESULT Render() override;
 	virtual void Receive_KeyInput(_float fTimeDelta)  override;
 	virtual void Late_Update(_float fTimeDelta) override;
 
 	void Set_BuildItem(_uint eID);
 	void Move_To(const _vector& vPos);
 
+
 private:
-	HREFTYPE Ready_Builder();
-	HREFTYPE Ready_Preview(BUILD_ITEM_DATA* pDesc);
+	HRESULT Ready_Builder();
+	HRESULT Ready_Preview(BUILD_ITEM_DATA* pDesc);
+	HRESULT Ready_Marker();
 private:
 	CCubeTerrain* m_pCubeTerrain = { nullptr };
 
@@ -65,6 +69,10 @@ private:
 	_float m_fBuildData = 5.f;
 	_float m_fBuildDataDelta = 0.1f;
 	XMVECTOR m_vMoveDir = XMVectorSet(0, 0, 0, 0);
+
+	_bool m_bBuildable = { true };
+	CEffModelObject* m_pCubeMarkerEnable = { nullptr };
+	CEffModelObject* m_pCubeMarkerDisable = { nullptr };
 public:
 	static CBuilder* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

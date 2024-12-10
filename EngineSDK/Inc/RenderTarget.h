@@ -4,7 +4,7 @@
 
 BEGIN(Engine)
 
-class CRenderTarget final : public CBase
+class ENGINE_DLL CRenderTarget final : public CBase
 {
 private:
 	CRenderTarget(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -14,7 +14,9 @@ public:
 	ID3D11RenderTargetView* Get_RTV() const {
 		return m_pRTV;
 	}
-
+	ID3D11ShaderResourceView* Get_SRV() const {
+		return m_pSRV;
+	}
 public:
 	HRESULT Initialize(_uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
 	HRESULT Clear();

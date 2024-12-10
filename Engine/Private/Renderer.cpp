@@ -290,10 +290,10 @@ HRESULT CRenderer::Render_Debug()
 	if (FAILED(m_pVIBuffer->Bind_BufferDesc()))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_GameObjects"), m_pShader, m_pVIBuffer)))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_LightAcc"), m_pShader, m_pVIBuffer)))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_GameObjects"), m_pShader, m_pVIBuffer)))
+	//	return E_FAIL;
+	//if (FAILED(m_pGameInstance->Render_RT_Debug(TEXT("MRT_LightAcc"), m_pShader, m_pVIBuffer)))
+	//	return E_FAIL;
 
 	return S_OK;
 }

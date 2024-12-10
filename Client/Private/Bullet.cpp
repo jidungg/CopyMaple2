@@ -35,6 +35,8 @@ HRESULT CBullet::Initialize(void* pArg)
 void CBullet::SearchTarget(list<CGameObject*>* pOutList, LAYERID eLayerID)
 {
 	auto listMonster = m_pGameInstance->Get_GameObjectList(eLayerID);
+	if (nullptr == listMonster )
+		return;
 	for (auto& pMonster : *listMonster)
 	{
 		CCharacter* pTmpCharacter = static_cast<CCharacter*>(pMonster);

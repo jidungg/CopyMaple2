@@ -113,7 +113,10 @@ HRESULT CLoader::Loading()
 		hr = Loading_Level_Logo();
 		break;
 	case LEVEL_HENESYS:
-		hr = Loading_Level_GamePlay();
+		hr = Loading_Level_Henesys();
+		break;
+	case LEVEL_BAYARPEAK:
+		hr = Loading_Level_BayarPeak();
 		break;
 	case LEVEL_HOME:
 		hr = Loading_Level_MyHome();
@@ -142,8 +145,7 @@ void CLoader::Show_Debug()
 
 HRESULT CLoader::Loading_Level_Logo()
 {
-	if (FAILED(ITEMDB->Load_Data()))
-		return E_FAIL;
+
 	if (FAILED(SKILLDB->Load_Data()))
 		return E_FAIL;
 	if (FAILED(MONSTERDB->Load_Data()))
@@ -197,12 +199,6 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/"), TEXT(".dds"))))
-		return E_FAIL;
-	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
-		TEXT("../Bin/resources/FBXs/MAP/Cube/"), TEXT(".dds"))))
-		return E_FAIL;
-	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
-		TEXT("../Bin/resources/FBXs/MAP/Field/"), TEXT(".dds"))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더 로드."));
@@ -411,7 +407,8 @@ HRESULT CLoader::Loading_Level_Logo()
 #pragma endregion
 
 
-
+	if (FAILED(ITEMDB->Load_Data()))
+		return E_FAIL;
 	if (FAILED(EFFECT_MANAGER->Load_Data()))
 		return E_FAIL;
 
@@ -422,7 +419,7 @@ HRESULT CLoader::Loading_Level_Logo()
 	return S_OK;
 }
 
-HRESULT CLoader::Loading_Level_GamePlay()
+HRESULT CLoader::Loading_Level_Henesys()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스처."));
 	/* For.Prototype_Component_Texture_Terrain */
@@ -433,26 +430,48 @@ HRESULT CLoader::Loading_Level_GamePlay()
 
 	lstrcpy(m_szLoadingText, TEXT("모델 로드"));
 
-	XMMATRIX matPretransform = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
-	matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_HENESYS,
-		TEXT("../Bin/resources/FBXs/Anim/Boss"), CModel::TYPE_ANIM, matPretransform)))
-		return E_FAIL;
-	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_HENESYS,
-		TEXT("../Bin/resources/FBXs/Anim/Monster"), CModel::TYPE_ANIM, matPretransform)))
-		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("객체 로드"));
 
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HENESYS, TEXT("Prototype_GameObject_Henesys"),
 		CCubeTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/Henesys.json")))))
 		return E_FAIL;
+
+
+	lstrcpy(m_szLoadingText, TEXT("로딩 완료"));
+
+	m_isFinished = true;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_Level_BayarPeak()
+{
+
+	lstrcpy(m_szLoadingText, TEXT("텍스처 로드"));
+
+
+
+	lstrcpy(m_szLoadingText, TEXT("모델 로드."));
+	XMMATRIX matPretransform = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
+	matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_BAYARPEAK,
+		TEXT("../Bin/resources/FBXs/Anim/Boss"), CModel::TYPE_ANIM, matPretransform)))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_BAYARPEAK,
+		TEXT("../Bin/resources/FBXs/Anim/Monster"), CModel::TYPE_ANIM, matPretransform)))
+		return E_FAIL;
+	lstrcpy(m_szLoadingText, TEXT("객체 로드."));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_BAYARPEAK, TEXT("Prototype_GameObject_BayarPeak"),
+		CCubeTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/BayarPeak.json")))))
+		return E_FAIL;
 	/* BAYAR */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HENESYS, TEXT("Prototype_GameObject_Bayar"),
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_BAYARPEAK, TEXT("Prototype_GameObject_Bayar"),
 		CBayar::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	lstrcpy(m_szLoadingText, TEXT("로딩 완료"));
+	lstrcpy(m_szLoadingText, TEXT("로드 완료."));
 
 	m_isFinished = true;
 

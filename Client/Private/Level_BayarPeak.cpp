@@ -1,17 +1,18 @@
 #include "stdafx.h"
-#include "Level_Henesys.h"
+#include "Level_BayarPeak.h"
 #include "GameInstance.h"
 #include "AttachableBodyPart.h"
 #include "Client_Utility.h"
 #include "Collider_Sphere.h"
 
-CLevel_Henesys::CLevel_Henesys(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CLevel_BayarPeak::CLevel_BayarPeak(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CLevel_GamePlay(pDevice, pContext)
 {
-	m_iLevelID = LEVEL_HENESYS;
+	m_iLevelID = LEVEL_BAYARPEAK;
 }
 
-void CLevel_Henesys::On_Start(_uint iPrevLevelID)
+
+void CLevel_BayarPeak::On_Start(_uint iPrevLevelID)
 {
 	__super::On_Start(iPrevLevelID);
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_MONSTER, LAYERID::LAYER_PLAYER, true);
@@ -24,13 +25,13 @@ void CLevel_Henesys::On_Start(_uint iPrevLevelID)
 
 }
 
-CLevel_Henesys* CLevel_Henesys::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg)
+CLevel_BayarPeak* CLevel_BayarPeak::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg)
 {
-	CLevel_Henesys* pInstance = new CLevel_Henesys(pDevice, pContext);
+	CLevel_BayarPeak* pInstance = new CLevel_BayarPeak(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Created : CLevel_Henesys");
+		MSG_BOX("Failed to Created : CLevel_BayarPeak");
 		Safe_Release(pInstance);
 	}
 

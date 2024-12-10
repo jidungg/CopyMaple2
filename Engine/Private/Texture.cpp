@@ -96,14 +96,14 @@ HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle)
 		else
 			hr = CreateWICTextureFromFile(m_pDevice, szWideFullPath, nullptr, &pSRV);
 #ifdef _DEBUG
-	/*	if (FAILED(hr))
-		{
-			string strFileName = szFileName;
-			strFileName += szExt;
-			hr = Search_Copy("D:/Workbench/Portfolio/3DResources/MapleStroty2/RawData/Resource/", strFileName, szDirPath);
-			if(SUCCEEDED(hr))
-				hr = CreateDDSTextureFromFile(m_pDevice, szWideFullPath, nullptr, &pSRV);
-		}*/
+		//if (FAILED(hr))
+		//{
+		//	string strFileName = szFileName;
+		//	strFileName += szExt;
+		//	hr = Search_Copy("D:/Workbench/Portfolio/3DResources/MapleStroty2/RawData/Resource/", strFileName, szDirPath);
+		//	if(SUCCEEDED(hr))
+		//		hr = CreateDDSTextureFromFile(m_pDevice, szWideFullPath, nullptr, &pSRV);
+		//}
 #endif
 		if(FAILED(hr))
 			hr = CreateDDSTextureFromFile(m_pDevice, TEXT("../Bin/Resources/Textures/Default.dds"), nullptr, &pSRV);
@@ -111,8 +111,19 @@ HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle)
 		assert(SUCCEEDED(hr));
 
 		m_SRVs.push_back(pSRV);
+
 		delete[] strTexturePath;
 	}
+	return S_OK;
+}
+
+HRESULT CTexture::Initialize_Prototype(ID3D11ShaderResourceView* pSRV)
+{
+	if (nullptr == pSRV)
+		return E_FAIL;
+	m_SRVs.push_back(pSRV);
+	m_iNumSRVs = 1;
+	//Safe_AddRef(pSRV);
 	return S_OK;
 }
 
@@ -204,6 +215,18 @@ HRESULT CTexture::Search_Copy(const fs::path& pathSourceDir, const std::string& 
 	return E_FAIL;
 }
 #endif
+
+CTexture* CTexture::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, ID3D11ShaderResourceView* pSRV)
+{
+	CTexture* pInstance = new CTexture(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype(pSRV)))
+	{
+		MSG_BOX("Failed to Created : CTexture");
+		Safe_Release(pInstance);
+	}
+	return pInstance;
+}
 
 CTexture * CTexture::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar * pTextureFilePath, _uint iNumTextures)
 {

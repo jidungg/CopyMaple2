@@ -33,7 +33,7 @@ typedef struct ItemData : public UIListItemData
 typedef struct BuildItemData : public ItemData
 {
 	BuildItemData() = default;
-	BuildItemData(string strFileName);
+	BuildItemData(string strFileName, ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	BuildItemData(json& js)
 	{
 		eITemType = ITEM_TYPE::BUILD;

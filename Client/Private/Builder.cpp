@@ -11,6 +11,7 @@
 #include "TerrainObject.h"
 #include "ItemDataBase.h"
 #include "BuildPreview.h"
+#include "EffModelObject.h"
 
 CBuilder::CBuilder(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPawn(pDevice, pContext)
@@ -40,9 +41,12 @@ HRESULT CBuilder::Initialize(void* pArg)
 ;
 	if (FAILED(Ready_Preview(static_cast<BUILD_ITEM_DATA*>( ITEMDB->Get_Data(ITEM_TYPE::BUILD, 0)))))
 		return E_FAIL;
+
+	if (FAILED(Ready_Marker()))
+		return E_FAIL;
 	return S_OK;
 }
-HREFTYPE CBuilder::Ready_Builder()
+HRESULT CBuilder::Ready_Builder()
 {
 	//DuckyBall
 	CModelObject::MODELOBJ_DESC tModelDesc;
@@ -57,7 +61,7 @@ HREFTYPE CBuilder::Ready_Builder()
 
 	return S_OK;
 }
-HREFTYPE CBuilder::Ready_Preview(BUILD_ITEM_DATA* pDesc)
+HRESULT CBuilder::Ready_Preview(BUILD_ITEM_DATA* pDesc)
 {
 	CTerrainObject::TERRAINOBJ_DESC tTerrObjDesc;
 	tTerrObjDesc.fRotationPerSec = 5.f;
@@ -71,6 +75,24 @@ HREFTYPE CBuilder::Ready_Preview(BUILD_ITEM_DATA* pDesc)
 	Add_Child(m_pPreview);
 	m_pPreview->Get_Transform()->Set_State(CTransform::STATE_POSITION, m_vPreviewOffset);
 	m_pPreview->Get_Transform()->Scaling(0.5f, 0.5f, 0.5f);
+	return S_OK;
+}
+
+HRESULT CBuilder::Ready_Marker()
+{
+	CEffModelObject::EFFECTOBJ_DESC tEffModelDesc;
+	strcpy_s( tEffModelDesc.strModelProtoName ,"eff_add_cube_mark_enable.effmodel");
+	tEffModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+	m_pCubeMarkerEnable = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tEffModelDesc));
+
+	strcpy_s(tEffModelDesc.strModelProtoName, "eff_add_cube_mark_disable.effmodel");
+	tEffModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+	m_pCubeMarkerDisable = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tEffModelDesc));
+
+
+	m_pCubeMarkerEnable->Start_Animation(0,true);
+	m_pCubeMarkerDisable->Start_Animation(0, true);
+
 	return S_OK;
 }
 
@@ -103,12 +125,14 @@ void CBuilder::Receive_KeyInput(_float fTimeDelta)
 	if (m_pGameInstance->GetKeyState(KEY::F2) == KEY_STATE::PRESSING)
 		m_fBuildData += m_fBuildDataDelta;
 #endif
+
+	_vector vPos;
+	vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_uint iIndex = m_pCubeTerrain->PosToIndex(vPos);
+	m_bBuildable = m_pCubeTerrain->Is_Buildable(vPos);
 	if (m_pGameInstance->GetKeyState(KEY::R) == KEY_STATE::DOWN)//ȸ��
 	{
-		_float4 pos;
-		XMStoreFloat4(&pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-		_uint index = m_pCubeTerrain->PosToIndex(pos);
-		CTerrainObject* pTerrObj = m_pCubeTerrain->Get_TerrainObject(index);
+		CTerrainObject* pTerrObj = m_pCubeTerrain->Get_TerrainObject(iIndex);
 		if (pTerrObj)
 			pTerrObj->Rotate();
 		else
@@ -116,13 +140,11 @@ void CBuilder::Receive_KeyInput(_float fTimeDelta)
 	}
 	if (m_pGameInstance->GetKeyState(KEY::E) == KEY_STATE::DOWN) // ȸ��
 	{
-		_float4 pos;
-		XMStoreFloat4(&pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-		_uint index = m_pCubeTerrain->PosToIndex(pos);
-		m_pCubeTerrain->Remove_TerrainObject(index);
+
+		m_pCubeTerrain->Remove_TerrainObject(iIndex);
 
 	}
-	if (m_pGameInstance->GetKeyState(KEY::SPACE) == KEY_STATE::DOWN) // ��ġ
+	if (m_bBuildable && m_pGameInstance->GetKeyState(KEY::SPACE) == KEY_STATE::PRESSING) // ��ġ
 	{
 		BUILD_ITEM_DATA* itemdesc =static_cast<BUILD_ITEM_DATA*>( ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)m_pPreview->Get_BuildItemID()));
 
@@ -135,12 +157,12 @@ void CBuilder::Receive_KeyInput(_float fTimeDelta)
 		desc.direction = m_pPreview->Get_Direction();
 		desc.vecIData.push_back(m_iBuildData);
 		desc.vecFData.push_back(m_fBuildData);
-		_float4 pos;
-		XMStoreFloat4(&pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-		desc.index = m_pCubeTerrain->PosToIndex(pos);
+		desc.index = iIndex;
 		XMStoreFloat4(&desc.pos, m_pCubeTerrain->IndexToPos(desc.index));
 
 		m_pCubeTerrain->Add_TerrainObject(desc);
+
+	
 	}
 }
 
@@ -154,13 +176,32 @@ void CBuilder::Update(_float fTimeDelta)
 	//m_pPreview->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPreviewPos);
 	if (false == XMVector4Equal(m_vMoveDir, XMVectorSet(0, 0, 0, 0)))
 	{
-		m_pTransformCom->Go_Direction(m_vMoveDir, fTimeDelta);
+	m_pTransformCom->Go_Direction(m_vMoveDir, fTimeDelta);
 
 		//m_pBird->Get_Transform()->LookToward(XMVectorSetY( m_vMoveDir,0));
 		m_pTransformCom->LookToward(XMVectorSetY(m_vMoveDir, 0));
 	}
+
+	_vector vSnapPos = m_pCubeTerrain->SnapPosition(vPos);
+	if (m_bBuildable)
+	{
+		m_pCubeMarkerDisable->Set_Active(false);
+		m_pCubeMarkerEnable->Set_Active(true);
+		m_pCubeMarkerEnable->Get_Transform()->Set_State(CTransform::STATE_POSITION, vSnapPos);
+		m_pCubeMarkerEnable->Update(fTimeDelta);
+	}
+	else
+	{
+		m_pCubeMarkerEnable->Set_Active(false);
+		m_pCubeMarkerEnable->Set_Active(true);
+		m_pCubeMarkerDisable->Get_Transform()->Set_State(CTransform::STATE_POSITION, vSnapPos);
+		m_pCubeMarkerDisable->Update(fTimeDelta);
+	}
+
 	__super::Update(fTimeDelta);
 }
+
+
 
 void CBuilder::Late_Update(_float fTimeDelta)
 {
@@ -168,8 +209,23 @@ void CBuilder::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 	m_vMoveDir = XMVectorSet(0, 0, 0, 0);
-}
 
+	if (m_bBuildable)
+		m_pCubeMarkerEnable->Late_Update(fTimeDelta);
+	else
+		m_pCubeMarkerDisable->Late_Update(fTimeDelta);
+
+}
+HRESULT CBuilder::Render()
+{
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+	if (m_bBuildable)
+		m_pCubeMarkerEnable->Render();
+	else
+		m_pCubeMarkerDisable->Render();
+	return S_OK;
+}
 
 
 void CBuilder::Set_BuildItem(_uint eID)

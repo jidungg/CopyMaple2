@@ -32,11 +32,6 @@ public:
 	virtual HRESULT Render();
 
 protected:
-	/* 마늗ㄹ어낸 뷰, 투영행를은 파이플아니에 저장ㅇㅇ으 ㄹ 하겠디 .*/
-	/* 뷰 투영ㅇ행렬을 만들엉ㄴ내기위한 데이터들을 보관해서 각행렬을 만들는 기능은 수행을해주자. */
-	/* 뷰 -> Transform대체하과 있다. */
-	/* 투영 -> x */
-
 	_float			m_fFovy = { 0.f };
 	_float			m_fAspect = { 0.f };
 	_float			m_fNear = { 0.f };

@@ -26,7 +26,6 @@ HRESULT CCamera::Initialize(void * pArg)
 
 	CAMERA_DESC*		pDesc = static_cast<CAMERA_DESC*>(pArg);
 		
-	/* ����Ŀ� ���� Ʈ������ ����ȭ �۾� �ʹ�. */
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&pDesc->vEye), 1.f));
 	m_pTransformCom->LookAt(XMVectorSetW(XMLoadFloat3(&pDesc->vAt), 1.f));
 

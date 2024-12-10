@@ -77,10 +77,6 @@ HRESULT CGraphic_Device::Clear_BackBuffer_View(_float4 vClearColor)
 	if (nullptr == m_pDeviceContext)
 		return E_FAIL;
 
-	/* DX9���� : Clear�Լ��� �����, ���̽��ٽǹ��۸� �Ѳ����� �����.  */
-	// m_pGraphic_Device->Clear(� ������ŭ �����, � �͵��� �����? , ���� ���ﰡ. );	
-
-	/* ����۸� �ʱ�ȭ�Ѵ�.  */
 	m_pDeviceContext->ClearRenderTargetView(m_pBackBufferRTV, (_float*)&vClearColor);
 
  	return S_OK;

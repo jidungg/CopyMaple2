@@ -4,7 +4,7 @@
 
 BEGIN(Engine)
 
-class CRenderer final : public CBase
+class  CRenderer final : public CBase
 {
 public:
 	enum RENDERGROUP { RG_PRIORITY, RG_NONBLEND, RG_NONLIGHT,RG_BLEND, RG_UI, RG_END };

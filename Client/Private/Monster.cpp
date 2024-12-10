@@ -517,6 +517,7 @@ void CMonster::Chase_Target(_float fTimeDelta)
 				m_mapSkill[(SKILL_ID)m_iCurrentSkillID]->Use();
 				m_bChase = false;
 				m_bAttack = true;
+				m_vLookDirectionXZ = XMVector4Normalize(vTargetPos - vMyPos);
 			}
 		}
 		else

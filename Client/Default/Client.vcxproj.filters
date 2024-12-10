@@ -232,6 +232,7 @@
     <ClInclude Include="..\Public\AttachableBodyPart.h" />
     <ClInclude Include="..\Public\UIScroller.h" />
     <ClInclude Include="..\Public\UIScrollButton.h" />
+    <ClInclude Include="..\Public\Level_BayarPeak.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -403,6 +404,7 @@
     <ClCompile Include="..\Private\AttachableBodyPart.cpp" />
     <ClCompile Include="..\Private\UIScroller.cpp" />
     <ClCompile Include="..\Private\UIScrollButton.cpp" />
+    <ClCompile Include="..\private\Level_BayarPeak.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

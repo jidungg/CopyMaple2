@@ -3,6 +3,8 @@
 
 BEGIN(Engine)
 class CColliderBase;
+class CCollider_AABB;
+class CCollider_Mesh;
 END
 
 BEGIN(Client)
@@ -57,8 +59,8 @@ protected:
 	BUILD_ITEM_TYPE m_eBuildItemType = { BUILD_ITEM_TYPE::LAST };
 	_uint m_iIndex = { UINT_MAX };
 	DIRECTION m_eTerrainDir = DIRECTION::LAST;
-	CColliderBase* m_pCubeColliderCom = {nullptr};
-	CColliderBase* m_pMeshColliderCom = {nullptr};
+	CCollider_AABB* m_pCubeColliderCom = {nullptr};
+	CCollider_Mesh* m_pMeshColliderCom = {nullptr};
 	_bool m_bRotating = false;
 public:
 	static CTerrainObject* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

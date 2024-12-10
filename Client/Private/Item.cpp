@@ -1,19 +1,21 @@
 #include "stdafx.h"
 #include "Item.h"
-
+#include "RenderTarget.h"
+#include "RenderTarget_Manager.h"
+#include "GameInstance.h"
 //
 
-BuildItemData::BuildItemData(string strFileName)
+BuildItemData::BuildItemData(string strFileName, ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	eITemType = ITEM_TYPE::BUILD;
 
-	string strTmp = strFileName.substr(strFileName.find_first_of("_")+1);
+	string strTmp = strFileName.substr(strFileName.find_first_of("_") + 1);
 	string strGroup = strTmp.substr(0, strTmp.find_first_of("_"));
 	if (strGroup == "ground")
 		eBuildType = BUILD_ITEM_TYPE::GROUND;
-	else if(strGroup == "fi")
+	else if (strGroup == "fi")
 	{
-		strTmp = strTmp.substr(strTmp.find_first_of("_")+1);
+		strTmp = strTmp.substr(strTmp.find_first_of("_") + 1);
 		string strType = strTmp.substr(0, strTmp.find_first_of("_"));
 		if (strType == "cubric")
 			eBuildType = BUILD_ITEM_TYPE::CUBRIC;
@@ -45,6 +47,6 @@ BuildItemData::BuildItemData(string strFileName)
 	std::copy(strFileName.begin(), strFileName.end(), strItemDesc);
 	std::copy(strFileName.begin(), strFileName.end(), strModelTag);
 	string strIconTag = strFileName.substr(0, strFileName.find_first_of("."));
-	strIconTag += ".dds";
+	strIconTag += "_icon";
 	std::copy(strIconTag.begin(), strIconTag.end(), strIconImageTag);
 }

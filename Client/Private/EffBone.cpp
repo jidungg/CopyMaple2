@@ -38,7 +38,6 @@ HRESULT CEffBone::Initialize(ifstream& inFile, _int iParentBoneIndex)
 	m_TransformationMatrix = m_DefaultTransformationMatrix;
 	if (m_bBillboard)
 	{
-		cout << "Billboard" << endl;
 		//cout << m_TransformationMatrix._11 << ", "<<m_TransformationMatrix._12 << ", " << m_TransformationMatrix._13 << ", " << m_TransformationMatrix._14 << endl;
 		//cout << m_TransformationMatrix._21 << ", " << m_TransformationMatrix._22 << ", " << m_TransformationMatrix._23 << ", " << m_TransformationMatrix._24 << endl;
 		//cout << m_TransformationMatrix._31 << ", " << m_TransformationMatrix._32 << ", " << m_TransformationMatrix._33 << ", " << m_TransformationMatrix._34 << endl;

@@ -44,7 +44,8 @@ private:
 
 private:
 	HRESULT Loading_Level_Logo();
-	HRESULT Loading_Level_GamePlay();
+	HRESULT Loading_Level_Henesys();
+	HRESULT Loading_Level_BayarPeak();
 	HRESULT Loading_Level_MyHome();
 
 	HRESULT Load_Dirctory_Models_Recursive(LEVELID eLevId, const _tchar* szDirPath, CModel::TYPE eType, _fmatrix PreTransformMatrix);

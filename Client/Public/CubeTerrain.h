@@ -43,17 +43,20 @@ public:
 	_vector IndexToPos(_uint Index);
 	_uint PosToIndex(const _float4& Pos);
 	_int PosToIndex(const _fvector& Pos);
+	_vector SnapPosition(_vector Pos);
 	XMUINT3 SplitIndex(_uint iIdx);
 	_uint CombineIndex(XMUINT3 i3Idx);
 
+	_bool Is_Buildable(_vector Pos);
 	_bool Is_InSide(_vector Pos);
+	_bool Is_ValidIndex(_uint iIndex);
 	_bool Is_ValidIndex(XMUINT3 i3Index);
 	XMUINT3 Get_Size() { return m_vSize; }
 	CTerrainObject* Get_TerrainObject(_uint Index);
 	_float Get_FloorHeight(_vector Pos);
 	_float Get_CelingHeight(_vector Pos);
-	void Get_AdjCells(_uint Index, vector<_uint>& vecAdjCells);
-	void Get_XZAdjCells(_uint Index, vector<_uint>& vecAdjCells);
+	void Get_AdjWayFinderCells(_uint Index, vector<_uint>& vecAdjCells);
+	void Get_XZAdjWayFinderCells(_uint Index, vector<_uint>& vecAdjCells);
 	_float Get_Distance(_uint StartIndex, _uint DestIndex);
 	_float Get_AdjDistance(_uint StartIndex, _uint DestIndex);
 	CELL_RELATION Get_AdjCell_Relation(_uint StartIndex, _uint DestIndex);

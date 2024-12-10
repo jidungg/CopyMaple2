@@ -14,6 +14,7 @@ protected:
 public:
 	virtual HRESULT Initialize_Prototype(const _tchar * pTextureFilePath, _uint iNumTexture);
 	virtual HRESULT Initialize_Prototype(const _char* szDirPath, ifstream& inFIle);
+	virtual HRESULT Initialize_Prototype(ID3D11ShaderResourceView* pSRV);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
@@ -30,6 +31,7 @@ protected:
 	vector<ID3D11ShaderResourceView*>			m_SRVs;
 
 public:
+	static CTexture* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, ID3D11ShaderResourceView* pSRV);
 	static CTexture* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pTextureFilePath, _uint iNumTextures = 1);
 	static CTexture* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath,  ifstream& inFIle, TEXTURE_TYPE eTexType);
 	virtual CComponent* Clone(void* pArg);

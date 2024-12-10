@@ -74,7 +74,23 @@ PS_OUT PS_MAIN(PS_IN In)
 	return Out;
 }
 
-
+struct PS_OUT_COLOR
+{
+    float4 vColor : SV_TARGET0;
+};
+/* PixelShader2*/
+PS_OUT_COLOR PS_MAIN_COLOR(PS_IN In)
+{
+    PS_OUT_COLOR Out = (PS_OUT_COLOR) 0;
+    vector vLightDir = float4(1.f, -1.f, 1.f, 0.f);
+    vector vLightDiffuse = float4(1.f, 1.f, 1.f, 1.f);
+    vector vLightAmbient = float4(0.3f, 0.3f, 0.3f, 0.3f);
+	
+    float4 vShade = saturate(max(dot(normalize(vLightDir) * -1.f, In.vNormal), 0.f) + vLightAmbient);
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord) * saturate(vShade);
+  
+	 return Out;
+}
 technique11			DefaultTechnique
 {
 	
@@ -88,6 +104,15 @@ technique11			DefaultTechnique
         GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN();
 	}
+    pass ColorPass
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_COLOR();
+    }
 
 }

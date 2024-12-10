@@ -20,6 +20,11 @@
 #include "Bayar.h"
 #include "AttachableBodyPart.h"
 #include "Engine_Utility.h"
+#include "UIBundle.h"
+#include "UIQuickSlotBundle.h"
+#include "LevelChangeEvent.h"
+#include "Level_Loading.h"
+#include "Level_Home.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -71,7 +76,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 {
 	if (nullptr == pArg)
 		return E_FAIL;
-
+	m_pQuickSlotBundle = UIBUNDLE->Get_QuckSlotBundle();
 	m_pInventory = INVENTORY;
 	PLAYER_DESC* desc = static_cast<PLAYER_DESC*>(pArg);
 	desc->fRotationPerSec = 5.f;
@@ -588,6 +593,8 @@ void CPlayer::Receive_KeyInput(_float fTimeDelta)
 	}
 	ANIM_STATE eCurrentState = ANIM_STATE(m_pAnimStateMachine->Get_CurrentState());
 
+	if (m_pGameInstance->GetKeyState(KEY::T) == KEY_STATE::DOWN)
+		m_pGameInstance->Push_Event(CLevelChangeEvent::Create(CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HOME)));
 
 	if (m_pGameInstance->GetKeyState(KEY::LSHIFT) == KEY_STATE::DOWN)
 		m_bWalk = true;
@@ -668,7 +675,36 @@ void CPlayer::Receive_KeyInput(_float fTimeDelta)
 			if (m_pInteractable)
 				m_pInteractable->Interact(this);
 		}
-
+		{
+			if (m_pGameInstance->GetKeyState(KEY::Q) == KEY_STATE::DOWN)
+				m_pQuickSlotBundle->Recevie_Input(KEY::Q);
+			if (m_pGameInstance->GetKeyState(KEY::W) == KEY_STATE::DOWN)
+				m_pQuickSlotBundle->Recevie_Input(KEY::W);
+			if (m_pGameInstance->GetKeyState(KEY::E) == KEY_STATE::DOWN)
+				m_pQuickSlotBundle->Recevie_Input(KEY::E);
+			if (m_pGameInstance->GetKeyState(KEY::R) == KEY_STATE::DOWN)
+				m_pQuickSlotBundle->Recevie_Input(KEY::R);
+			if (m_pGameInstance->GetKeyState(KEY::A) == KEY_STATE::DOWN)
+				m_pQuickSlotBundle->Recevie_Input(KEY::A);
+			if (m_pGameInstance->GetKeyState(KEY::S) == KEY_STATE::DOWN)
+				m_pQuickSlotBundle->Recevie_Input(KEY::S);
+			if (m_pGameInstance->GetKeyState(KEY::D) == KEY_STATE::DOWN)
+				m_pQuickSlotBundle->Recevie_Input(KEY::D);
+			if (m_pGameInstance->GetKeyState(KEY::F) == KEY_STATE::DOWN)
+				m_pQuickSlotBundle->Recevie_Input(KEY::F);
+			if (m_pGameInstance->GetKeyState(KEY::NUM1) == KEY_STATE::DOWN)
+				m_pQuickSlotBundle->Recevie_Input(KEY::NUM1);
+			if (m_pGameInstance->GetKeyState(KEY::NUM2) == KEY_STATE::DOWN)
+				m_pQuickSlotBundle->Recevie_Input(KEY::NUM2);
+			if (m_pGameInstance->GetKeyState(KEY::NUM3) == KEY_STATE::DOWN)
+				m_pQuickSlotBundle->Recevie_Input(KEY::NUM3);
+			if (m_pGameInstance->GetKeyState(KEY::NUM4) == KEY_STATE::DOWN)
+				m_pQuickSlotBundle->Recevie_Input(KEY::NUM4);
+			if (m_pGameInstance->GetKeyState(KEY::NUM5) == KEY_STATE::DOWN)
+				m_pQuickSlotBundle->Recevie_Input(KEY::NUM5);
+			if (m_pGameInstance->GetKeyState(KEY::NUM6) == KEY_STATE::DOWN)
+				m_pQuickSlotBundle->Recevie_Input(KEY::NUM6);
+		}
 	}
 	else
 	{

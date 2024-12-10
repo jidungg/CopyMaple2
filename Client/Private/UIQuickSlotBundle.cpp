@@ -52,6 +52,12 @@ HRESULT CUIQuickSlotBundle::Initialize(void* pArg)
 	return S_OK;
 }
 
+void CUIQuickSlotBundle::Recevie_Input(KEY eKey)
+{
+	if (m_mapQuickSlot.find(eKey) != m_mapQuickSlot.end())
+		m_mapQuickSlot[eKey]->Receive_Input();
+}
+
 void CUIQuickSlotBundle::Set_QuickItem(KEY eHotKey, IQuickItem* pItem)
 {
 	m_mapQuickSlot[eHotKey]->Set_QuickItem(pItem);

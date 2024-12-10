@@ -24,7 +24,8 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 
 	bool Has_Item() override;
-
+	
+	void Receive_Input();
 	virtual void On_MouseClick() override;
 
 	void Set_QuickItem(IQuickItem* pItem);

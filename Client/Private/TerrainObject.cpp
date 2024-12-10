@@ -62,26 +62,30 @@ HRESULT CTerrainObject::Ready_Components(TERRAINOBJ_DESC* pDesc)
 	switch (m_eBuildItemType)
 	{
 	case Client::BUILD_ITEM_TYPE::GROUND:
-	case Client::BUILD_ITEM_TYPE::CUBRIC:
-	case Client::BUILD_ITEM_TYPE::FUNCT:
 	{
 		CCollider_AABB::AABB_COLLIDER_DESC tDesc{};
 		tDesc.vCenter = { 0,0.5f,0 };
 		tDesc.vExtentes = { 0.5f,0.5f,0.5f };
 
 		if (FAILED(Add_Component(LEVEL_LOADING, CCollider_AABB::m_szProtoTag,
-			CColliderBase::m_szCompTag, reinterpret_cast<CComponent**>(&m_pCubeColliderCom), &tDesc)))
+			TEXT("Cube_Collider_Com"), reinterpret_cast<CComponent**>(&m_pCubeColliderCom), &tDesc)))
 			return E_FAIL;
-		if (Is_BlockingType())
-		{
-			CCollider_Mesh::MESH_COLLIDER_DESC tMeshDesc{};
-			tMeshDesc.pMesh = m_pModelCom->Get_Mesh(0);
+		m_vecCollider.push_back(m_pCubeColliderCom);
+		break;
+	}
+	case Client::BUILD_ITEM_TYPE::CUBRIC:
+	case Client::BUILD_ITEM_TYPE::STRUC:
+	case Client::BUILD_ITEM_TYPE::PROP:
+	case Client::BUILD_ITEM_TYPE::NATURE:
+	case Client::BUILD_ITEM_TYPE::FUNCT:
+	{
+		CCollider_Mesh::MESH_COLLIDER_DESC tMeshDesc{};
+		tMeshDesc.pMesh = m_pModelCom->Get_Mesh(0);
 
-			if (FAILED(Add_Component(LEVEL_LOADING, CCollider_Mesh::m_szProtoTag,
-				TEXT("Com_ModelCollider"), reinterpret_cast<CComponent**>(&m_pMeshColliderCom), &tMeshDesc)))
-				return E_FAIL;
-		}
-
+		if (FAILED(Add_Component(LEVEL_LOADING, CCollider_Mesh::m_szProtoTag,
+			TEXT("Mesh_Collider_Com"), reinterpret_cast<CComponent**>(&m_pMeshColliderCom), &tMeshDesc)))
+			return E_FAIL;
+		m_vecCollider.push_back(m_pMeshColliderCom);
 		break;
 	}
 	default:
@@ -124,25 +128,17 @@ void CTerrainObject::Rotate()
 
 _vector CTerrainObject::BolckXZ(_vector vCharacterPosition, _vector vMoveDirection, _float fMoveDistance, _float fCollisionRadius, _float fCollisionHeight)
 {
-	if (nullptr == m_pCubeColliderCom)
+	//if (nullptr == m_pCubeColliderCom)
+	//	return vCharacterPosition + vMoveDirection * fMoveDistance;
+	if(false == Is_BlockingType())
 		return vCharacterPosition + vMoveDirection * fMoveDistance;
-
 
 	_vector vNextPosition = vCharacterPosition + vMoveDirection * fMoveDistance;
 	if (false == DirectX::Internal::XMVector3IsUnit(vMoveDirection))
 		return vNextPosition;
 	m_pCubeColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
 
-	CCollider_AABB* pCollider = static_cast<CCollider_AABB*>(m_pCubeColliderCom);
-	BoundingBox* tBox = pCollider->Get_Desc();
-	_float3* pCorners = new _float3[8];
-	tBox->GetCorners(pCorners);
-	_vector vBlockCenter= XMLoadFloat3( &tBox->Center);
-	_vector vMin = XMLoadFloat3(&pCorners[4]);
-	_vector vMax = XMLoadFloat3(&pCorners[2]);
-	_float fBlockX = vMax.m128_f32[0] - vMin.m128_f32[0];
-	_float fBlockZ = vMax.m128_f32[2] - vMin.m128_f32[2];
-	delete[] pCorners;
+
 
 
 	//충돌한 평면을 찾는다
@@ -150,22 +146,29 @@ _vector CTerrainObject::BolckXZ(_vector vCharacterPosition, _vector vMoveDirecti
 	//평면에서 각 점으로까지의 거리의 부호가 다른지 확인한다.
 
 
+	CColliderBase* pCollider = Get_Collider(0);
 	Ray ray(XMVectorSetY( vCharacterPosition, XMVectorGetY(vCharacterPosition) +fCollisionHeight), vMoveDirection, fMoveDistance);
 	RaycastHit hitInfo;
 	//평면의 Normal * (NextPosition에서 평면까지의 거리+ Radius) 만큼 이동
 	if (pCollider->RayCast(ray, &hitInfo))
 	{
-		//_float fPlaneA = hitInfo.vNormal.m128_f32[0];
-		//_float fPlaneB = hitInfo.vNormal.m128_f32[1];
-		//_float fPlaneC = hitInfo.vNormal.m128_f32[2];
-		//fPlaneD = -(fPlaneA * hitInfo.vPoint.m128_f32[0] + fPlaneB * hitInfo.vPoint.m128_f32[1] + fPlaneC * hitInfo.vPoint.m128_f32[2]);
 		_float fPlaneD = -XMVector3Dot(hitInfo.vNormal, hitInfo.vPoint).m128_f32[0];
 		_float fPlaneDistance = XMVector3Dot(hitInfo.vNormal, vNextPosition).m128_f32[0] + fPlaneD;
 		vNextPosition += hitInfo.vNormal * (fCollisionRadius + fabsf(fPlaneDistance));	
 		return vNextPosition;
 	}
-	else
+	else if(m_eBuildItemType == BUILD_ITEM_TYPE::GROUND)
 	{
+		BoundingBox* tBox = static_cast<CCollider_AABB*>( pCollider)->Get_Desc();
+		_float3* pCorners = new _float3[8];
+		tBox->GetCorners(pCorners);
+		_vector vBlockCenter = XMLoadFloat3(&tBox->Center);
+		_vector vMin = XMLoadFloat3(&pCorners[4]);
+		_vector vMax = XMLoadFloat3(&pCorners[2]);
+		_float fBlockX = vMax.m128_f32[0] - vMin.m128_f32[0];
+		_float fBlockZ = vMax.m128_f32[2] - vMin.m128_f32[2];
+		delete[] pCorners;
+
 		_vector vClosestPoint = XMVectorClamp(vNextPosition, vMin, vMax);
 		_vector vCollisionDir = vNextPosition - vClosestPoint;
 		_float fDistance = XMVectorGetX(XMVector3Length(vCollisionDir));
@@ -217,12 +220,6 @@ _vector CTerrainObject::BolckXZ(_vector vCharacterPosition, _vector vMoveDirecti
 			}
 
 			_vector vVertical = vCollisionNormal * fCollisionDepth;
-			//_vector v11 = XMVector4Dot(vCollisionNormal, -fMoveDistance * vMoveDirection);
-			//_vector v1 = vCollisionNormal * XMVectorGetX(v11);
-			//_vector v2 = fMoveDistance * vMoveDirection ;
-			//_vector vHorizontal = XMVectorSetX(  v2,.0);//v1+v2
-			//_vector v2 = fMoveDistance * vMoveDirection;
-			//_vector vHorizontal = v1 + v2;
 			return  vNextPosition + vVertical;
 		}
 	}
@@ -240,6 +237,8 @@ _float CTerrainObject::Get_TopHeight(_vector Pos)
 
 	case Client::BUILD_ITEM_TYPE::CUBRIC:
 	case Client::BUILD_ITEM_TYPE::STRUC:
+	case Client::BUILD_ITEM_TYPE::FUNCT:
+	case Client::BUILD_ITEM_TYPE::PROP:
 	{
 		m_pMeshColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
 		RaycastHit hitInfo;
@@ -253,9 +252,7 @@ _float CTerrainObject::Get_TopHeight(_vector Pos)
 		}
 		break;
 	}
-	case Client::BUILD_ITEM_TYPE::FUNCT:
 	case Client::BUILD_ITEM_TYPE::NATURE:
-	case Client::BUILD_ITEM_TYPE::PROP:
 	case Client::BUILD_ITEM_TYPE::LAST:
 	default:
 		return -1;
@@ -275,6 +272,8 @@ _float CTerrainObject::Get_BottomHeight(_vector Pos)
 
 	case Client::BUILD_ITEM_TYPE::CUBRIC:
 	case Client::BUILD_ITEM_TYPE::STRUC:
+	case Client::BUILD_ITEM_TYPE::FUNCT:
+	case Client::BUILD_ITEM_TYPE::PROP:
 	{
 		m_pCubeColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
 		RaycastHit hitInfo;

@@ -140,9 +140,9 @@ _bool CWayFinder::MakeAStarRoute(_uint iStartIdx, _uint iDestIdx, _bool bXZOnly)
 		iCurrentCell = m_mapAStarCell[iCurrentIdx];
 		vecAdjCells.clear();
 		if(bXZOnly)
-			m_pCubeTerrain->Get_XZAdjCells(iCurrentIdx, vecAdjCells);
+			m_pCubeTerrain->Get_XZAdjWayFinderCells(iCurrentIdx, vecAdjCells);
 		else
-			m_pCubeTerrain->Get_AdjCells(iCurrentIdx, vecAdjCells); 
+			m_pCubeTerrain->Get_AdjWayFinderCells(iCurrentIdx, vecAdjCells); 
 
 		//인접 노드들 OpenList에 넣음
 		for (auto& iAdjIdx : vecAdjCells)

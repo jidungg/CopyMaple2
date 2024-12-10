@@ -27,6 +27,7 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 
+	void Recevie_Input(KEY eKey);
 	void Set_QuickItem(KEY eHotKey,  IQuickItem* pItem);
 
 private:

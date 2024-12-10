@@ -169,6 +169,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\Level_BayarPeak.h" />
     <ClInclude Include="..\Public\AttachableBodyPart.h" />
     <ClInclude Include="..\Public\BayarAttackC.h" />
     <ClInclude Include="..\Public\BayarKnockOff.h" />
@@ -331,6 +332,7 @@
     <ClCompile Include="..\Private\HitEvent.cpp" />
     <ClCompile Include="..\Private\Interactable.cpp" />
     <ClCompile Include="..\Private\Kindling.cpp" />
+    <ClCompile Include="..\private\Level_BayarPeak.cpp" />
     <ClCompile Include="..\Private\Level_Henesys.cpp" />
     <ClCompile Include="..\Private\EffMaterialProperty.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />

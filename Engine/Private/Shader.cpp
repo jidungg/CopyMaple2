@@ -75,9 +75,9 @@ HRESULT CShader::Begin(_uint iPassIndex)
 
 	ID3DX11EffectPass*	pPass = m_pEffect->GetTechniqueByIndex(0)->GetPassByIndex(iPassIndex);
 
-	pPass->Apply(0, m_pContext);
+	if (FAILED(pPass->Apply(0, m_pContext)))
+		return E_FAIL;
 
-	/* ���۸� ��ο��ϱ����� �ݵ�� ȣ��Ǿ���ϴ� �Լ���. */
 	m_pContext->IASetInputLayout(m_InputLayouts[iPassIndex]);
 
 	return S_OK;

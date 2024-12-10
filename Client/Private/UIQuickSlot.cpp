@@ -40,8 +40,6 @@ HRESULT CUIQuickSlot::Initialize(void* pArg)
 
 void CUIQuickSlot::Update(_float fTimeDelta)
 {
-	if (m_pGameInstance->GetKeyState(m_eHotKey) == KEY_STATE::DOWN)
-		On_MouseClick();
 	__super::Update(fTimeDelta);
 }
 
@@ -51,6 +49,12 @@ void CUIQuickSlot::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 }
 
+
+void CUIQuickSlot::Receive_Input()
+{
+	if (m_pQuickItem)
+		m_pQuickItem->Use();
+}
 
 void CUIQuickSlot::On_MouseClick()
 {

@@ -34,8 +34,10 @@ HRESULT CMainApp::Initialize()
 
 	if (FAILED(m_pGameInstance->Initialize_Engine(EngineDesc, &m_pDevice, &m_pContext, LAYERID::LAYER_LAST)))
 		return E_FAIL;
+
 	if (FAILED(SetUp_StartLevel(LEVEL_LOGO)))
 		return E_FAIL;
+
 
 	return S_OK;
 }

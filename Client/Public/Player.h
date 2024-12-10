@@ -15,6 +15,8 @@ class CTerrainObject;
 class CInteractableObject;
 class CAttachableBodyPart;
 class CBayar;
+class CUIBundle;
+class CUIQuickSlotBundle;
 class CPlayer :
 	public CCharacter
 {
@@ -248,6 +250,7 @@ public:
 
 
 protected:
+	CUIQuickSlotBundle* m_pQuickSlotBundle = { nullptr };
 	CInteractableObject* m_pInteractable = { nullptr };
 
 	CModelObject* m_pEquipModels[(_uint)EQUIP_ITEM_TYPE::LAST] = { nullptr, };

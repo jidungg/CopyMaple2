@@ -7,6 +7,8 @@
 #include "Character.h"
 #include "MonsterSpawner.h"
 #include "PortalTerrainObject.h"
+#include "Collider.h"
+
 
 CCubeTerrain::CCubeTerrain(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const char* szMapFileName)
 	: CGameObject { pDevice, pContext }
@@ -379,6 +381,14 @@ _int CCubeTerrain::PosToIndex(const _fvector& Pos)
 	return x + m_vSize.x * z + m_vSize.x * m_vSize.z * y;
 }
 
+_vector CCubeTerrain::SnapPosition(_vector Pos)
+{
+	Pos.m128_f32[0] = roundf(Pos.m128_f32[0]);
+	Pos.m128_f32[1] = floorf(Pos.m128_f32[1]);
+	Pos.m128_f32[2] = roundf(Pos.m128_f32[2]);
+	return Pos;
+}
+
 XMUINT3 CCubeTerrain::SplitIndex(_uint iIdx)
 {
 	return XMUINT3{ iIdx % m_vSize.x ,iIdx / (m_vSize.x * m_vSize.z),iIdx / m_vSize.x % m_vSize.z, };
@@ -391,6 +401,8 @@ _uint CCubeTerrain::CombineIndex(XMUINT3 i3Idx)
 
 HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 {
+	if (false == Is_ValidIndex(SplitIndex( tDesc.index)))
+		return E_FAIL;
 	if (m_vecCells[tDesc.index] != nullptr)
 		return E_FAIL;
 	tDesc.pCubeTerrain = this;
@@ -490,7 +502,7 @@ _float CCubeTerrain::Get_CelingHeight(_vector Pos)
 	return FLT_MAX;
 }
 
-void CCubeTerrain::Get_AdjCells(_uint Index, vector<_uint>& vecAdjCells)
+void CCubeTerrain::Get_AdjWayFinderCells(_uint Index, vector<_uint>& vecAdjCells)
 {
 	_uint iCellCount = m_vecCells.size();
 	assert(Index < iCellCount);
@@ -529,7 +541,7 @@ void CCubeTerrain::Get_AdjCells(_uint Index, vector<_uint>& vecAdjCells)
 	}
 }
 
-void CCubeTerrain::Get_XZAdjCells(_uint Index, vector<_uint>& vecAdjCells)
+void CCubeTerrain::Get_XZAdjWayFinderCells(_uint Index, vector<_uint>& vecAdjCells)
 {
 	_uint iCellCount = m_vecCells.size();
 	assert(Index < iCellCount);
@@ -656,6 +668,19 @@ _vector CCubeTerrain::Get_ContainedCellPosition(const _fvector& Pos)
 
 
 
+_bool CCubeTerrain::Is_Buildable(_vector Pos)
+{
+	if (false == Is_InSide(Pos))
+		return false;
+	_int iIdx = PosToIndex(Pos);
+	if (false  == Is_ValidIndex(iIdx))
+		return false;
+	if (m_vecCells[iIdx] != nullptr)
+		return false;
+
+	return true;
+}
+
 _bool CCubeTerrain::Is_InSide(_vector vPos)
 {
 	_float4 fPos;
@@ -667,6 +692,11 @@ _bool CCubeTerrain::Is_InSide(_vector vPos)
 	if (fPos.y < 0 || fPos.y >= m_vSize.y )
 		return false;
 	return true;
+}
+
+_bool CCubeTerrain::Is_ValidIndex(_uint iIndex)
+{
+	return iIndex >= 0 && iIndex < m_vecCells.size();
 }
 
 _bool CCubeTerrain::Is_ValidIndex(XMUINT3 i3Index)

@@ -10,6 +10,7 @@
 #include "UIBundle.h"
 #include "Player.h"
 #include "EffectManager.h"
+#include "ItemDatabase.h"
 
 CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -32,7 +33,8 @@ HRESULT CLevel_Logo::Initialize(void* pArg)
 
 	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;
-
+	if (FAILED(ITEMDB->Initialize(m_pDevice, m_pContext)))
+		return E_FAIL;
 	if (FAILED(Ready_UI()))
 		return E_FAIL;
 	if (FAILED(INVENTORY->Initialize(m_pDevice, m_pContext)))

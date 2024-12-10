@@ -7,6 +7,7 @@
 #include "Level_Logo.h"
 #include "Level_Henesys.h"
 #include "Level_Home.h"
+#include "Level_BayarPeak.h"
 
 CLevel_Loading::CLevel_Loading(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel { pDevice, pContext }
@@ -48,6 +49,10 @@ void CLevel_Loading::Update(_float fTimeDelta)
 		case LEVEL_HENESYS:
 			tDesc.pCubeTerrainTag = TEXT("Prototype_GameObject_Henesys");
 			pNewLevel = CLevel_Henesys::Create(m_pDevice, m_pContext,&tDesc);
+			break;
+		case LEVEL_BAYARPEAK:
+			tDesc.pCubeTerrainTag = TEXT("Prototype_GameObject_BayarPeak");
+			pNewLevel = CLevel_BayarPeak::Create(m_pDevice, m_pContext, &tDesc);
 			break;
 		case LEVEL_HOME:
 			tDesc.pCubeTerrainTag = TEXT("Prototype_GameObject_MyHome");

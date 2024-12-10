@@ -42,6 +42,7 @@ public:
 	_uint Get_CurrentState() { return m_iCurrentState; }
 	_uint Get_CurrentSubState() { return m_iCurrentSubState; }
 	void Set_CurrentState(_uint iState);
+	void Set_CurrentState(_uint iMainState, _uint iSubState);
 private:
 	_uint m_iCurrentState = { 0 };
 	_uint m_iCurrentSubState = { 0 };

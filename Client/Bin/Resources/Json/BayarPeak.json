@@ -3228,10 +3228,10 @@
         },
         {
             "Direction": 0,
-            "FloatData": [],
-            "Index": 63960,
-            "IntData": [],
-            "ItemId": 31,
+            "FloatData": [60],
+            "Index": 11429,
+            "IntData": [3],
+            "ItemId": 10000,
             "Iteration": 1
         }
     ],

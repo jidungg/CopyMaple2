@@ -736,18 +736,22 @@ void CPlayer::Attach_To(CAttachableBodyPart* pAttachablePart)
 	//   Y 축 방향으로는 서있고
 	m_bAttached = true;
 	m_pAttachedObject = pAttachablePart;
-	_vector vAttachableObjPosition =  pAttachablePart->Get_WorldPosition() + XMLoadFloat3(&pAttachablePart->Get_Collider(0)->Get_CenterOffset());
-	_vector vLook = XMVector3Normalize(vAttachableObjPosition - Get_Hitpoint());
-	_vector vRight = XMVector3Cross(XMVectorSet(0, 1, 0, 0),vLook);
-	_vector vUp = XMVector3Cross( vLook, vRight);
+	_vector vMyPos = Get_WorldPosition();
 
-	_vector vAttachOffsetPosition = XMVectorSetW(-vLook * pAttachablePart->Get_Radius() * 0.5f, 1);
-	vAttachOffsetPosition -= vUp * m_tStat.fBodyHeight;
+	m_pParentMatrix = pAttachablePart->Get_WorldMatrix();
+	_matrix matParentInv = XMMatrixInverse(nullptr, XMLoadFloat4x4(&*m_pParentMatrix));
+
+	_vector vLook = XMVector3Normalize(- XMVectorSetW(XMVectorSetY(XMVector3TransformCoord(vMyPos, matParentInv),0),0));
+	_vector vUp = XMVectorSet(0, 1, 0, 0);
+	_vector vRight = XMVector3Cross(vUp, vLook);
+ 	_vector vAtatchMyOffsetPos =- vLook * pAttachablePart->Get_Radius() * 0.5f;
+	vAtatchMyOffsetPos = XMVectorSetW(vAtatchMyOffsetPos, 1);
 	m_matAttachOffset.r[0] = vRight;
 	m_matAttachOffset.r[1] = vUp;
 	m_matAttachOffset.r[2] = vLook;
-	m_matAttachOffset.r[3] = vAttachOffsetPosition;
-	m_pParentMatrix = pAttachablePart->Get_WorldMatrix();
+	m_matAttachOffset.r[3] = vAtatchMyOffsetPos;
+	m_pAnimStateMachine->Set_CurrentState(ANIM_STATE::BS_CLIMB, ANIM_STATE::AS_CLIMB_IDLE);
+	
 }
 
 
@@ -762,6 +766,8 @@ void CPlayer::Detach_From()
 
 	m_bAttached = false;
 	m_pParentMatrix = nullptr;
+	m_pAnimStateMachine->Set_CurrentState(ANIM_STATE::BS_JUMP);
+
 }
 
 

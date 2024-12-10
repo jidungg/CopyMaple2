@@ -145,8 +145,33 @@ void CStateMachine::Remove_Condition(_uint iConditionID)
 
 void CStateMachine::Set_CurrentState(_uint iState)
 {
+	if (m_iCurrentState == iState)
+		return;
 	m_iCurrentState = iState;
+	for (auto& callback : m_listStateChangeCallback)
+		callback(m_iCurrentSubState);
 	m_iCurrentSubState = m_iCurrentState;
+	Late_Update(0);
+}
+
+void CStateMachine::Set_CurrentState(_uint iMainState, _uint iSubState)
+{
+	if (m_iCurrentState == iMainState  && m_iCurrentSubState == iSubState)
+	{
+		return;
+	}
+	if (m_iCurrentState != iMainState)
+	{
+		m_iCurrentState = iMainState;
+		for (auto& callback : m_listStateChangeCallback)
+			callback(m_iCurrentState);
+	}
+	if (m_iCurrentSubState != iSubState)
+	{
+		m_iCurrentSubState = iSubState;
+		for (auto& callback : m_listSubStateChangeCallback)
+			callback(m_iCurrentSubState);
+	}
 	Late_Update(0);
 }
 

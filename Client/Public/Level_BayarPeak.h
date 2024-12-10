@@ -12,7 +12,7 @@ private:
 public:
 	virtual void On_Start(_uint iPrevLevelID)override;
 
-
+	
 public:
 	static CLevel_BayarPeak* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg);
 

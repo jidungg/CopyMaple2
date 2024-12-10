@@ -24,7 +24,7 @@ HRESULT CMonsterSpawner::Ready_SpawnObject(CSpawner::SPAWNER_DESC* pDesc)
 	tMonDesc.vHomePos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	tMonDesc.pCubeTerrain =pDesc->pCubeTerrain;
 	if (tMonDesc.eMonID == MONSTER_ID::BAYAR)
-		m_pSpawnObject = static_cast<CMonster*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, Get_CurrentTrueLevel(), TEXT("Prototype_GameObject_Bayar"), &tMonDesc));
+		m_pSpawnObject = static_cast<CMonster*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_BAYARPEAK, TEXT("Prototype_GameObject_Bayar"), &tMonDesc));
 	else
 		m_pSpawnObject = static_cast<CMonster*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CMonster::m_szProtoTag,&tMonDesc));
 	m_pGameInstance->Add_GameObject_ToLayer(Get_CurrentTrueLevel(), LAYER_MONSTER, m_pSpawnObject);

@@ -64,19 +64,19 @@ HRESULT CBayar::Ready_AttacableParts(CHARACTER_DESC* pDesc)
 	m_pGameInstance->Add_GameObject_ToLayer(Get_CurrentTrueLevel(), LAYER_INTERACTION, m_vecAttachablePart[PART_ID::BODY]);
 
 	//LEFTARM
-	tColliderDesc.fRadius = 0.3;
+	tColliderDesc.fRadius = 0.4;
 	tColliderDesc.vCenter = { 0,0, 0 };
 	tDesc.tColliderDesc = tColliderDesc;
-	tDesc.pSocketMatrix = m_pBody->Get_BoneMatrix("02030008_N_SandstoneGiant22");
+	tDesc.pSocketMatrix = m_pBody->Get_BoneMatrix("02030008_N_SandstoneGiant22.001");
 	m_vecAttachablePart[PART_ID::LEFT_ARM] = static_cast<CAttachableBodyPart*>(m_pGameInstance->Clone_Proto_Object_Stock(CAttachableBodyPart::m_szProtoTag, &tDesc));
 	Safe_AddRef(m_vecAttachablePart[PART_ID::LEFT_ARM]);
 	m_pGameInstance->Add_GameObject_ToLayer(Get_CurrentTrueLevel(), LAYER_INTERACTION, m_vecAttachablePart[PART_ID::LEFT_ARM]);
 
 
 	//RIGHTARM
-	tColliderDesc.fRadius = 0.3;
+	tColliderDesc.fRadius = 0.4;
 	tColliderDesc.vCenter = { 0,0, 0 };
-	tDesc.pSocketMatrix = m_pBody->Get_BoneMatrix("02030008_N_SandstoneGiant24");
+	tDesc.pSocketMatrix = m_pBody->Get_BoneMatrix("02030008_N_SandstoneGiant24.001");
 	m_vecAttachablePart[PART_ID::RIGHT_ARM] = static_cast<CAttachableBodyPart*>(m_pGameInstance->Clone_Proto_Object_Stock(CAttachableBodyPart::m_szProtoTag, &tDesc));
 	Safe_AddRef(m_vecAttachablePart[PART_ID::RIGHT_ARM]);
 	m_pGameInstance->Add_GameObject_ToLayer(Get_CurrentTrueLevel(), LAYER_INTERACTION, m_vecAttachablePart[PART_ID::RIGHT_ARM]);

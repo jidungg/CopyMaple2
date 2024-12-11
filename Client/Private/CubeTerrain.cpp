@@ -45,7 +45,7 @@ HRESULT CCubeTerrain::Initialize(void * pArg)
 	m_pOctoTree = COctoTree::Create(m_vSize, iLBN, iRTF);
 	string strOctoTree;
 	m_pOctoTree->To_String(strOctoTree, 0);
-	cout << strOctoTree << endl;
+	//cout << strOctoTree << endl;
 	return S_OK;
 }
 
@@ -344,7 +344,7 @@ void CCubeTerrain::Culling(COctoTree* pOctoTree)
 			{
 				for (_uint i = 0; i < COctoTree::CORNER_END; i++)
 				{
-					if (nullptr != m_vecCells[pIndices[i]])
+					if (UINT_MAX != pIndices[i] &&nullptr != m_vecCells[pIndices[i]])
 					{
 						m_vecCells[pIndices[i]]->Culling(1.7);
 						XMUINT3 i2Pos = SplitIndex(pIndices[i]);
@@ -356,7 +356,7 @@ void CCubeTerrain::Culling(COctoTree* pOctoTree)
 			}
 			else if (1 >= iSIze)
 			{
-				if (nullptr != m_vecCells[pIndices[0]])
+				if (UINT_MAX != pIndices[0]  &&nullptr != m_vecCells[pIndices[0]])
 				{
 					m_vecCells[pIndices[0]]->Culling(1.7);
 					XMUINT3 i2Pos = SplitIndex(pIndices[0]);

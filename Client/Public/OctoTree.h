@@ -35,7 +35,7 @@ private:
 	XMUINT3 SplitIndex(XMUINT3 i3TotalSize, _uint iIndex);
 
 private:
-	_uint							m_iCorners[CORNER_END] = {};
+	_uint							m_iCorners[CORNER_END] = {UINT_MAX,};
 	_uint							m_iCenter = {};
 	COctoTree*				m_pChildren[CORNER_END] = { nullptr };
 	CGameInstance*		m_pGameInstance = { nullptr };

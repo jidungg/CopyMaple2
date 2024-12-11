@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "OctoTree.h"
 #include "GameInstance.h"
+#include "set"
 
 COctoTree::COctoTree()
 	: m_pGameInstance{ CGameInstance::GetInstance() }
@@ -11,12 +12,17 @@ COctoTree::COctoTree()
 
 HRESULT COctoTree::Initialize(XMUINT3 i3TotalSize, _uint iLBN, _uint iRTF)
 {
+	set<_uint> setIndex;
 	m_i3TotalSize = i3TotalSize;
-	m_iCorners[LBN] = iLBN;
-	m_iCorners[RTF] = iRTF;
 
-	XMUINT3 i3LBN  = SplitIndex(i3TotalSize,m_iCorners[LBN]);
-	XMUINT3 i3RTF = SplitIndex(i3TotalSize, m_iCorners[RTF]);
+	memset(m_iCorners, UINT_MAX, 8*sizeof(_uint));
+	m_iCorners[LBN] = iLBN;
+	setIndex.insert(iLBN);
+	if (setIndex.insert(iRTF).second)
+		m_iCorners[RTF] = iRTF;
+
+	XMUINT3 i3LBN  = SplitIndex(i3TotalSize, iLBN);
+	XMUINT3 i3RTF = SplitIndex(i3TotalSize, iRTF);
 	m_vSize.x= i3RTF.x - i3LBN.x + 1;
 	m_vSize.z = i3RTF.z - i3LBN.z + 1;
 	m_vSize.y = i3RTF.y - i3LBN.y + 1;
@@ -28,12 +34,24 @@ HRESULT COctoTree::Initialize(XMUINT3 i3TotalSize, _uint iLBN, _uint iRTF)
 	XMUINT3 i3RBF = { i3RTF.x, i3LBN.y, i3RTF.z };
 	XMUINT3 i3RBN = { i3RTF.x, i3LBN.y, i3LBN.z };
 
-	m_iCorners[LBF] = CombineIndex(i3TotalSize, i3LBF);
-	m_iCorners[RBF] = CombineIndex(i3TotalSize, i3RBF);
-	m_iCorners[RBN] = CombineIndex(i3TotalSize, i3RBN);
-	m_iCorners[LTF] = CombineIndex(i3TotalSize, i3LTF);
-	m_iCorners[RTN] = CombineIndex(i3TotalSize, i3RTN);
-	m_iCorners[LTN] = CombineIndex(i3TotalSize, i3LTN);
+	_uint  iTmp = CombineIndex(i3TotalSize, i3LBF);
+	if (setIndex.insert(iTmp).second)
+		m_iCorners[LBF] = iTmp;
+	iTmp = CombineIndex(i3TotalSize, i3RBF);
+	if (setIndex.insert(iTmp).second)
+		m_iCorners[RBF] = iTmp;
+	iTmp = CombineIndex(i3TotalSize, i3RBN);
+	if (setIndex.insert(iTmp).second)
+		m_iCorners[RBN] = iTmp;
+	iTmp = CombineIndex(i3TotalSize, i3LTF);
+	if (setIndex.insert(iTmp).second)
+		m_iCorners[LTF] = iTmp;
+	iTmp = CombineIndex(i3TotalSize, i3RTN);
+	if (setIndex.insert(iTmp).second)
+		m_iCorners[RTN] = iTmp;
+	iTmp = CombineIndex(i3TotalSize, i3LTN);
+	if (setIndex.insert(iTmp).second)
+		m_iCorners[LTN] = iTmp;
 
 
 	if (2 >= m_vSize.x && 2 >= m_vSize.y && 2 >= m_vSize.z)
@@ -42,7 +60,6 @@ HRESULT COctoTree::Initialize(XMUINT3 i3TotalSize, _uint iLBN, _uint iRTF)
 		return S_OK;
 	}
 
-
 	XMUINT3 i3Center = i3LBN;
 	i3Center.x += m_vSize.x / 2 -1;
 	i3Center.y += m_vSize.y / 2 -1;
@@ -50,7 +67,6 @@ HRESULT COctoTree::Initialize(XMUINT3 i3TotalSize, _uint iLBN, _uint iRTF)
 	m_iCenter = CombineIndex(i3TotalSize,i3Center);
 
 	XMUINT3 i3TmpLBN, i3TmpRTF;
-
 
 	//LBN
 	i3TmpLBN = i3LBN;

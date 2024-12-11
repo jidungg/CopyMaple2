@@ -275,6 +275,8 @@
     <ClInclude Include="..\Public\ObjectPool.h" />
     <ClInclude Include="..\Public\Collider_Cylinder.h" />
     <ClInclude Include="..\Public\DragableUI.h" />
+    <ClInclude Include="..\Public\FontManager.h" />
+    <ClInclude Include="..\Public\CustomFont.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -437,6 +439,8 @@
     <ClCompile Include="..\Private\ObjectPool.cpp" />
     <ClCompile Include="..\Private\Collider_Cylinder.cpp" />
     <ClCompile Include="..\Private\DragableUI.cpp" />
+    <ClCompile Include="..\Private\FontManager.cpp" />
+    <ClCompile Include="..\Private\CustomFont.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc" />

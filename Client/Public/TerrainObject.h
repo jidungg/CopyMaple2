@@ -49,6 +49,7 @@ public:
 	BUILD_ITEM_TYPE Get_BuildItemType() { return m_eBuildItemType; }
 	_bool Is_BlockingType() { return m_eBlockType != BUILD_ITEM_BLOCK_TYPE::NON_BLOCK; }
 	_bool RayCast(const Ray& tRay, RaycastHit* pOut);
+	void Culling(_float fRange = 0);
 
 	void Set_TerrainDir(DIRECTION eDir) { m_eTerrainDir = eDir; }
 private:

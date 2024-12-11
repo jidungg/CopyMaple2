@@ -1,10 +1,10 @@
 {
-    "Player": 
-        {
-            "Id": "PLAYER",
-            "Name": "플레이어",
-            "Desc": "플레이어",
-            "Model": "Female_Wizard.model",
+    "Player": {
+            "Custom": {
+                "BodyTag": "Female_Wizard.model",
+                "FaceTag": "Face_Face1",
+                "HairTag": "00200028_m_shortpigtailhair_p_a.model"
+            },
             "Status": {
                 "HP": 1000,
                 "SP": 100,
@@ -32,7 +32,5 @@
                 "WILD_FIRE",
                 "WILD_FIRE2"
             ]
-
-        }
-    
+    }
 }

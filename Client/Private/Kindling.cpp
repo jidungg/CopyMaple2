@@ -17,7 +17,7 @@ HRESULT CKindling::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 {
 	if (FAILED(__super::Initialize(pSkillData, pUser)))
 		return E_FAIL;
-
+	m_bNeedWeapon = true;
 	//TargetSearcher
 	CCollider_Frustum::FRUSTUM_COLLIDER_DESC tTargetSearcherDesc;
 	tTargetSearcherDesc.fDistance = 9.f;

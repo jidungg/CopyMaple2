@@ -12,7 +12,7 @@
             "BodyCollisionOffset": [ 0, 0, 0 ],
             "Scale": [ 1, 1, 1 ],
             "Status": {
-                "HP": 1000,
+                "HP": 100,
                 "SP": 10,
                 "EP": 1,
                 "ATK": 100,

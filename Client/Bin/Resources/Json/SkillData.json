@@ -238,7 +238,7 @@
             "CoolTime": 0,
             "IconImg": "10300291.png",
             "Range": 1,
-            "Data": [ 397.0 ],
+            "Data": [ 100.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
                 [ "SNAIL_ATTACK", 0 ]
@@ -258,7 +258,7 @@
             "CoolTime": 0,
             "IconImg": "10300291.png",
             "Range": 1,
-            "Data": [ 397.0 ],
+            "Data": [ 100.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
             ],
@@ -277,7 +277,7 @@
             "CoolTime": 0,
             "IconImg": "10300291.png",
             "Range": 1,
-            "Data": [ 397.0 ],
+            "Data": [ 100.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
             ],
@@ -296,7 +296,7 @@
             "CoolTime": 0,
             "IconImg": "10300291.png",
             "Range": 1,
-            "Data": [ 397.0 ],
+            "Data": [ 100.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
 
@@ -316,7 +316,7 @@
             "CoolTime": 0,
             "IconImg": "10300291.png",
             "Range": 1,
-            "Data": [ 397.0 ],
+            "Data": [ 100.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
 

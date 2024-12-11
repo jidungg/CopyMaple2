@@ -8,6 +8,7 @@
 #include "MonsterSpawner.h"
 #include "PortalTerrainObject.h"
 #include "Collider.h"
+#include "OctoTree.h"
 
 
 CCubeTerrain::CCubeTerrain(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const char* szMapFileName)
@@ -38,14 +39,26 @@ HRESULT CCubeTerrain::Initialize(void * pArg)
 
 	if (FAILED(Load_From_Json(m_strJsonFilePath)))
 		return E_FAIL;
+	_uint iLBN = 0;
+	_uint iRTF = m_vSize.x * m_vSize.y * m_vSize.z -1;
+
+	m_pOctoTree = COctoTree::Create(m_vSize, iLBN, iRTF);
+	string strOctoTree;
+	m_pOctoTree->To_String(strOctoTree, 0);
+	cout << strOctoTree << endl;
 	return S_OK;
 }
 
 
 void CCubeTerrain::Late_Update(_float fTimeDelta)
 {
-	//__super::Late_Update(fTimeDelta);
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	__super::Late_Update(fTimeDelta);
+	iTmpCellCount = 0;
+	//cout << "==================" << endl;
+	Culling(m_pOctoTree);
+	//cout <<"TotalCellCount: " << m_vecCells.size()<<"iTmpCellCount : " << iTmpCellCount << endl;
+	//m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	int a = 0;
 }
 
 
@@ -309,6 +322,68 @@ _bool CCubeTerrain::RayCast(const Ray& tRay, RaycastHit* pOut)
 
 
 	return false;
+}
+
+void CCubeTerrain::Culling(COctoTree* pOctoTree)
+{
+	if (nullptr == pOctoTree)
+		return;
+
+	_uint* pIndices = pOctoTree->Get_Corners();
+	_float		fRange = XMVectorGetX( XMVector3Length( IndexToPos( pOctoTree->Get_Center()) - IndexToPos(pIndices[COctoTree::RTF])));
+	_float fRange2 = pOctoTree->Get_Radius(1);
+
+	_vector vCenterPos = IndexToPos(pOctoTree->Get_Center());
+	if (true == m_pGameInstance->Frustum_Culling_World(vCenterPos, fRange + 1.7))
+	{
+		if (pOctoTree->Is_Leaf())
+		{
+			_uint iSIze = pOctoTree->Get_MaxSize();
+			iTmpCellCount += pOctoTree ->Get_CellCount();
+			if (2 == iSIze)
+			{
+				for (_uint i = 0; i < COctoTree::CORNER_END; i++)
+				{
+					if (nullptr != m_vecCells[pIndices[i]])
+					{
+						m_vecCells[pIndices[i]]->Culling(1.7);
+						XMUINT3 i2Pos = SplitIndex(pIndices[i]);
+						// << "POS : " << i2Pos.x << "," << i2Pos.z << "," << i2Pos.y << endl;
+
+					}
+
+				}
+			}
+			else if (1 >= iSIze)
+			{
+				if (nullptr != m_vecCells[pIndices[0]])
+				{
+					m_vecCells[pIndices[0]]->Culling(1.7);
+					XMUINT3 i2Pos = SplitIndex(pIndices[0]);
+					//cout << "POS : " << i2Pos.x << "," << i2Pos.z << "," << i2Pos.y << endl;
+				}
+			}
+			else if(iSIze <= 0)
+			{
+				int a = 0;
+			}
+			else
+			{
+				int a = 0;
+			}
+			return;
+		}
+		else
+		{
+			for (_uint i = 0; i < COctoTree::CORNER_END; i++)
+			{
+				COctoTree* pChild = pOctoTree->Get_Child((COctoTree::CORNER)i);
+				if (nullptr != pChild)
+					Culling(pChild);
+			}
+		}
+
+	}
 }
 
 HRESULT CCubeTerrain::Save_To_Json(string strNewFilepath)
@@ -778,4 +853,5 @@ CGameObject * CCubeTerrain::Clone(void * pArg)
 void CCubeTerrain::Free()
 {
 	__super::Free();
+	Safe_Release(m_pOctoTree);
 }

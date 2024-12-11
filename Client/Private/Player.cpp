@@ -88,7 +88,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Parts()))
+	if (FAILED(Ready_Parts(desc->jPlayerData["Custom"])))
 		return E_FAIL;
 	if (FAILED(Ready_AnimStateMachine()))
 		return E_FAIL;
@@ -140,14 +140,17 @@ HRESULT CPlayer::Initialize(void* pArg)
 	return S_OK;
 }
 
-HRESULT CPlayer::Ready_Parts()
+HRESULT CPlayer::Ready_Parts(const json& jCustomData)
 {
 	//Body
-	CHumanModelObject::HUMANMODELOBJ_DESC tHumanModelDesc = {};
+	CHumanModelObject::HUMANMODELOBJ_DESC tHumanModelDesc;
 
 	tHumanModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tHumanModelDesc.strModelProtoName, "Female_Wizard.model");
-	tHumanModelDesc.szFaceProtoTag = TEXT("Face_Face1");
+	string strTag = jCustomData["BodyTag"];
+	strcpy_s(tHumanModelDesc.strModelProtoName, strTag.c_str());
+	strTag = jCustomData["FaceTag"];
+	tHumanModelDesc.wstrFaceProtoTag = wstring(strTag.begin(), strTag.end());
+
 	m_pBody = static_cast<CHumanModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CHumanModelObject::m_szProtoTag, &tHumanModelDesc));
 	Add_Child(m_pBody);
 	m_pBody->Set_Animation(ANIM_STATE::AS_IDLE);
@@ -155,7 +158,8 @@ HRESULT CPlayer::Ready_Parts()
 	//Hair
 	CBoneModelObject::BONEMODELOBJ_DESC tBoneModelDesc = {};
 	tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tBoneModelDesc.strModelProtoName, "00200028_m_shortpigtailhair_p_a.model");
+	strTag = jCustomData["HairTag"];
+	strcpy_s(tBoneModelDesc.strModelProtoName, strTag.c_str());
 	tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("HR");//Bip01 HeadNub_end
 	m_pCustomizes[(_uint)CUSTOMIZE_PART::HAIR] = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
 	if (nullptr == m_pCustomizes[(_uint)CUSTOMIZE_PART::HAIR]) return E_FAIL;
@@ -163,14 +167,14 @@ HRESULT CPlayer::Ready_Parts()
 	m_pCustomizes[(_uint)CUSTOMIZE_PART::HAIR]->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
 
 
-	//FaceDeco
-	tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tBoneModelDesc.strModelProtoName, "01000001_c_lolipop.model");
-	tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Head");//Bip01 HeadNub_end
-	m_pDecoModels[(_uint)DECO_TYPE::FACE] = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
-	if (nullptr == m_pDecoModels[(_uint)DECO_TYPE::FACE]) return E_FAIL;
-	Add_Child(m_pDecoModels[(_uint)DECO_TYPE::FACE]);
-	m_pDecoModels[(_uint)DECO_TYPE::FACE]->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
+	////FaceDeco
+	//tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+	//strcpy_s(tBoneModelDesc.strModelProtoName, "01000001_c_lolipop.model");
+	//tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Head");//Bip01 HeadNub_end
+	//m_pDecoModels[(_uint)DECO_TYPE::FACE] = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
+	//if (nullptr == m_pDecoModels[(_uint)DECO_TYPE::FACE]) return E_FAIL;
+	//Add_Child(m_pDecoModels[(_uint)DECO_TYPE::FACE]);
+	//m_pDecoModels[(_uint)DECO_TYPE::FACE]->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
 
 
 

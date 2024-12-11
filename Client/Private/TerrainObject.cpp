@@ -339,6 +339,12 @@ _bool CTerrainObject::RayCast(const Ray& tRay, RaycastHit* pOut)
 	return pCollider->RayCast(tRay, pOut);
 }
 
+void CTerrainObject::Culling(_float fRange)
+{
+	if(m_pGameInstance->Frustum_Culling_World(Get_WorldPosition(), fRange))
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+}
+
 
 
 CTerrainObject* CTerrainObject::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

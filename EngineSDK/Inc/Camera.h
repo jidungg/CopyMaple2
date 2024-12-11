@@ -37,6 +37,7 @@ protected:
 	_float			m_fNear = { 0.f };
 	_float			m_fFar = { 0.f };
 
+
 protected:
 	void Compute_PipeLineMatrices();
 

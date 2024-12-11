@@ -35,6 +35,13 @@ HRESULT CCollider_Frustum::Initialize(void* pArg)
 	return S_OK;
 }
 
+HRESULT CCollider_Frustum::Initialize(_fmatrix matMatrix)
+{
+	m_pOriginalBoundDesc = new BoundingFrustum(matMatrix);
+	m_pBoundDesc = new BoundingFrustum(*m_pOriginalBoundDesc);
+	return S_OK;
+}
+
 void CCollider_Frustum::Update(_fmatrix WorldMatrix)
 {
 	m_pOriginalBoundDesc->Transform(*m_pBoundDesc, WorldMatrix);

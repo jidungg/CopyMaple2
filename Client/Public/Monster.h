@@ -48,9 +48,9 @@ typedef struct MonsterData
 	_float fBodyCollisionRadius;
 	_float3 fBodyCollisionOffset;
 	unordered_map<MON_STATE, vector<_uint>> mapAnimIdx;
+	_float3 vScale = { 1,1,1 };
 	STATUS tStat;
 	vector<SKILL_ID> vecSkillID;
-	_float3 vScale = { 1,1,1 };
 
 }MONSTER_DATA;
 

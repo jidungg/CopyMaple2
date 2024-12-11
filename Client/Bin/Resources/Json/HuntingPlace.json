@@ -1307,6 +1307,16 @@
         },
         {
             "Direction": 0,
+            "FloatData": [],
+            "Index": 409,
+            "IntData": [
+                2
+            ],
+            "ItemId": 10002,
+            "Iteration": 1
+        },
+        {
+            "Direction": 0,
             "FloatData": [
                 5.0
             ],

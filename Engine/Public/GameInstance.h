@@ -104,6 +104,10 @@ public: // Target_Manager
 	HRESULT End_MRT();
 	HRESULT Bind_RT_ShaderResource(class CShader* pShader, const _char* pConstantName, const _wstring& strTargetTag);
 
+public: /* Frustum */
+	_bool Frustum_Culling_World(_fvector vWorldPos, _float fRange = 0.f);
+
+
 
 #ifdef _DEBUG
 public:
@@ -129,6 +133,7 @@ private:
 	class CEventManager*			m_pEventManager = { nullptr };
 	class CCollisionManager* m_pCollisionManager = { nullptr };
 	class CTarget_Manager* m_pTarget_Manager = { nullptr };
+	class CCollider_Frustum* m_pFrustum = { nullptr };
 public:
 	static void Release_Engine();
 

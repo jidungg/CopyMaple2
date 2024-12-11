@@ -46,7 +46,7 @@ HRESULT CHumanModelObject::Ready_Components(void* pArg)
 	HUMANMODELOBJ_DESC* pDesc = (HUMANMODELOBJ_DESC*)pArg;
 
 	//FACE
-	m_pFaceCom = static_cast<CFace*>(m_pGameInstance->Clone_Proto_Component_Stock(pDesc->szFaceProtoTag));
+	m_pFaceCom = static_cast<CFace*>(m_pGameInstance->Clone_Proto_Component_Stock(pDesc->wstrFaceProtoTag));
 	Add_Component(m_pFaceCom, TEXT("Com_Face"));
 
 	//if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxHumanAnimMesh"),

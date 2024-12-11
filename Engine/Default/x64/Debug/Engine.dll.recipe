@@ -2,12 +2,12 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\Workbench\Project\CopyMapleStory2\CopyMaple2\Engine\Bin\Engine.dll</FullPath>
+      <FullPath>D:\Workbench\Portfolio\CopyMaple2\Engine\Bin\Engine.dll</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>D:\Workbench\Project\CopyMapleStory2\CopyMaple2\Engine\Bin\Shader_Deferred.cso</FullPath>
+      <FullPath>D:\Workbench\Portfolio\CopyMaple2\Engine\Bin\Shader_Deferred.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

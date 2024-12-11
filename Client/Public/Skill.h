@@ -96,6 +96,7 @@ protected:
 	_bool m_bCastingComplete = { false };
 	map<_uint, list< ANIM_EVENT>> m_mapAnimEvent;
 	CColliderBase* m_pTargetSearcher = { nullptr };
+	_bool m_bNeedWeapon = { false };
 public:
 	static CSkill* Create(SKILL_DATA* pSkillData, CCharacter* pUser);
 	virtual void Free() override;

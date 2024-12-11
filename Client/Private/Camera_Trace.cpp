@@ -32,16 +32,17 @@ HRESULT CCamera_Trace::Initialize(void* pArg)
 
 void CCamera_Trace::Priority_Update(_float fTimeDelta)
 {
-
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CCamera_Trace::Update(_float fTimeDelta)
 {
-
+	__super::Update(fTimeDelta);
 }
 
 void CCamera_Trace::Late_Update(_float fTimeDelta)
 {
+	__super::Late_Update(fTimeDelta);
 	_vector vAt = Get_Target()->Get_WorldPosition();
 	_vector vEye = vAt + XMLoadFloat3(&m_vArm);
 

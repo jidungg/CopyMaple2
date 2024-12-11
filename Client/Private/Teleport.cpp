@@ -13,6 +13,7 @@ HRESULT CTeleport::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 {
 	if (FAILED(__super::Initialize(pSkillData, pUser)))
 		return E_FAIL;
+	m_bNeedWeapon = true;
 	//CastEffect
 	CEffModelObject::EFFECTOBJ_DESC tCastEffDesc;
 	tCastEffDesc.eModelProtoLevelID = LEVEL_LOADING;

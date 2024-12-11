@@ -106,6 +106,7 @@ HRESULT CMonster::Ready_Parts(MONSTER_DESC* pDesc)
 	strcpy_s(tModelDesc.strModelProtoName, m_pMonData->strModelTag);
 	m_pBody = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
 	Add_Child(m_pBody);
+
 	return S_OK;
 }
 HRESULT CMonster::Ready_AnimStateMachine()
@@ -627,7 +628,8 @@ void CMonster::Late_Update(_float fTimeDelta)
 
 
 	__super::Late_Update(fTimeDelta);
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	if(m_pGameInstance->Frustum_Culling_World(Get_WorldPosition()))
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
 void CMonster::On_StateChange(_uint iState)

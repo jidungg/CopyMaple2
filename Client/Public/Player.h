@@ -230,7 +230,7 @@ public:
 	virtual _bool Is_Targetable() override;
 public:
 
-	HRESULT Ready_Parts();
+	HRESULT Ready_Parts(const json& jCustomData);
 	HRESULT Ready_AnimStateMachine();
 	HRESULT Ready_FaceStateMachine();
 	HRESULT Ready_Skill(const json& jSkillData);
@@ -247,7 +247,7 @@ public:
 	HRESULT Set_Deco(struct DECO_ITEM_DESC* pItem);
 	HRESULT Set_Customize(struct CUSTOMIZE_DESC* pItem);
 	void Set_BodyMeshActive(EQUIP_ITEM_TYPE eType, bool bActive);
-
+	_bool Is_Weapon() { return m_bWeapon; }
 
 protected:
 	CUIQuickSlotBundle* m_pQuickSlotBundle = { nullptr };

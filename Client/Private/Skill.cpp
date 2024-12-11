@@ -26,6 +26,7 @@
 #include "BayarStoneSpike.h"
 #include "BayarPalmStrike.h"
 #include "Collider.h"
+#include "Player.h"
 
 CSkill::CSkill()
 	:m_pGameInstance(CGameInstance::GetInstance())
@@ -165,6 +166,8 @@ _bool CSkill::Is_Available()
 		return false;
 	if (false == Is_EnoughCost())
 		return false;
+	if (m_bNeedWeapon)
+		return static_cast<CPlayer*>(m_pUser)->Is_Weapon();
 	return true;
 }
 

@@ -17,7 +17,7 @@ HRESULT CFireTornado::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	if (FAILED(__super::Initialize(pSkillData, pUser)))
 		return E_FAIL;
 
-
+	m_bNeedWeapon = true;
 	//Bullet
 	CBullet::BULLET_DESC tBulletDesc;
 	tBulletDesc.pShooter = m_pUser;

@@ -24,7 +24,7 @@ public:
 public:
 	typedef struct HumanModelObjDesc : public CModelObject::MODELOBJ_DESC
 	{
-		const _tchar* szFaceProtoTag = { nullptr };
+		wstring wstrFaceProtoTag;
 	}HUMANMODELOBJ_DESC;
 public:
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_HumanModelObject";

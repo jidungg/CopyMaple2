@@ -1,5 +1,6 @@
 #include "..\Public\Camera.h"
 #include "GameInstance.h"
+#include "Collider_Frustum.h"
 
 CCamera::CCamera(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject { pDevice, pContext }
@@ -45,7 +46,6 @@ void CCamera::Priority_Update(_float fTimeDelta)
 
 void CCamera::Update(_float fTimeDelta)
 {
-
 }
 
 void CCamera::Late_Update(_float fTimeDelta)

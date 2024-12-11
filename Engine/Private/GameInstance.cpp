@@ -15,6 +15,7 @@
 #include "CollisionManager.h"
 #include "Engine_Utility.h"
 #include "RenderTarget_Manager.h"
+#include "Collider_Frustum.h"
 
 
 IMPLEMENT_SINGLETON(CGameInstance)
@@ -81,6 +82,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	m_pEventManager = CEventManager::Create();
 	if (nullptr == m_pEventManager)
 		return E_FAIL;
+	
+
+	m_pFrustum = CCollider_Frustum::Create(*ppDevice, *ppContext);
+	m_pFrustum->Initialize(XMMatrixPerspectiveFovLH(XMConvertToRadians(60.f), (_float)1280 / 720, 0.1f, 1000.f));
 
 	return S_OK;
 }
@@ -92,6 +97,8 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 
 	m_pController->Update(fTimeDelta);
 	m_pObject_Manager->Priority_Update(fTimeDelta);
+	m_pPipeLine->Update();
+	m_pFrustum->Update(Get_TransformMatrix_Inverse(CPipeLine::D3DTS_VIEW));
 	m_pLevel_Manager->Update(fTimeDelta);
 	m_pObject_Manager->Update(fTimeDelta);
 	m_pCollisionManager->Update_Collision();
@@ -99,7 +106,6 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 	m_pObject_Manager->Final_Update();
 	m_pEventManager->DispatchEvent();
 
-	m_pPipeLine->Update();
 
 }
 
@@ -509,6 +515,13 @@ HRESULT CGameInstance::Bind_RT_ShaderResource(CShader* pShader, const _char* pCo
 {
 	return m_pTarget_Manager->Bind_ShaderResource(pShader, pConstantName, strTargetTag);
 }
+_bool CGameInstance::Frustum_Culling_World(_fvector vWorldPos, _float fRange)
+{
+	_float3 f3WorldPos;
+	XMStoreFloat3(&f3WorldPos, vWorldPos);
+	BoundingSphere tSphere(f3WorldPos, fRange);
+	return m_pFrustum->Get_Desc()->Intersects(tSphere);
+}
 #ifdef _DEBUG
 HRESULT CGameInstance::Ready_RT_Debug(const _wstring& strTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
 {
@@ -547,5 +560,5 @@ void CGameInstance::Free()
 	Safe_Release(m_pPhysics);
 	Safe_Release(m_pCollisionManager);
 	Safe_Release(m_pEventManager);
-
+	Safe_Release(m_pFrustum);
 }

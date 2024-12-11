@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Camera_Trace.h"
+#include "GameInstance.h"
 
 CCamera_Trace::CCamera_Trace(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCamera(pDevice, pContext)
@@ -25,8 +26,9 @@ HRESULT CCamera_Trace::Initialize(void* pArg)
 		return E_FAIL;
 
 	TRACECAMERA_DESC* pDesc = static_cast<TRACECAMERA_DESC*>(pArg);
-	m_vArm = pDesc->vArm;
-
+	m_vFarArm = pDesc->vFarArm;
+	m_vCloseArm = pDesc->vCloseArm;
+	m_fCurrentRatio = 0;
 	return S_OK;
 }
 
@@ -37,6 +39,10 @@ void CCamera_Trace::Priority_Update(_float fTimeDelta)
 
 void CCamera_Trace::Update(_float fTimeDelta)
 {
+	_float iMove = m_pGameInstance->Get_DIMouseMove(MOUSE_MOVE::Z);
+	m_fCurrentRatio += (iMove) * fTimeDelta * 0.05;
+	m_fCurrentRatio = clamp(m_fCurrentRatio,0.f, 1.f);
+
 	__super::Update(fTimeDelta);
 }
 
@@ -44,7 +50,9 @@ void CCamera_Trace::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	_vector vAt = Get_Target()->Get_WorldPosition();
-	_vector vEye = vAt + XMLoadFloat3(&m_vArm);
+	
+	_vector vEye = vAt + XMVectorLerp(m_vFarArm, m_vCloseArm, m_fCurrentRatio);
+
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(vEye, 1.f));
 	m_pTransformCom->LookAt(XMVectorSetW(vAt,1));

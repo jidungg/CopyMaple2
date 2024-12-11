@@ -9,7 +9,8 @@ class CCamera_Trace :
 public:
 	typedef struct TraceCamDesc: public CCamera::CAMERA_DESC
 	{
-		_float3			vArm = {};
+		_vector			vFarArm = {};
+		_vector			vCloseArm = {};
 	}TRACECAMERA_DESC;
 private:
 	explicit CCamera_Trace(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -22,9 +23,13 @@ public:
 	virtual void Priority_Update(_float fTimeDelta) override;
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
-
+	void Set_Ratio(_float fRatio) { m_fCurrentRatio = fRatio; }
 private:
-	_float3			m_vArm = {};
+	_vector			m_vFarArm = {};
+	_vector			m_vCloseArm = {};
+	//0이면 Far, 1이면 Close
+	_float				m_fCurrentRatio = { 0 };
+	
 public:
 	static CCamera_Trace* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

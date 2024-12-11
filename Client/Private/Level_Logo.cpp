@@ -62,7 +62,8 @@ HRESULT CLevel_Logo::Ready_Camera(LAYERID eLayerID)
 	CamDesc.fFar = 1000.f;
 	CamDesc.vEye = _float3(0.f, 3.f, 3.f);
 	CamDesc.vAt = _float3(0.f, 0.f, 0.f);
-	CamDesc.vArm = _float3(-3.f, 4.f, -3.f);
+	CamDesc.vFarArm = _vector{ -3.f, 5.f, -3.f, 1.f };
+	CamDesc.vCloseArm = _vector{ -1.5f, 0.5f, -1.5f, 1.f };
 	CamDesc.pTarget = static_cast<CPlayer*>(m_pGameInstance->Get_FirstGameObject(LEVEL_LOGO, LAYER_PLAYER));;
 
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOADING, TEXT("Prototype_GameObject_Camera_Trace"),

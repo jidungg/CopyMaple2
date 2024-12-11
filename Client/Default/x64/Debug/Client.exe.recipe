@@ -2,24 +2,24 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Client.exe</FullPath>
+      <FullPath>D:\Workbench\Project\CopyMapleStory2\CopyMaple2\Client\Bin\Client.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Shader_UI.cso</FullPath>
+      <FullPath>D:\Workbench\Project\CopyMapleStory2\CopyMaple2\Client\Bin\Shader_UI.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Shader_VtxAnimMesh.cso</FullPath>
+      <FullPath>D:\Workbench\Project\CopyMapleStory2\CopyMaple2\Client\Bin\Shader_VtxAnimMesh.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Shader_VtxEffectMesh.cso</FullPath>
+      <FullPath>D:\Workbench\Project\CopyMapleStory2\CopyMaple2\Client\Bin\Shader_VtxEffectMesh.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Shader_VtxHumanAnimMesh.cso</FullPath>
+      <FullPath>D:\Workbench\Project\CopyMapleStory2\CopyMaple2\Client\Bin\Shader_VtxHumanAnimMesh.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\Workbench\Portfolio\CopyMaple2\Client\Bin\Shader_VtxMesh.cso</FullPath>
+      <FullPath>D:\Workbench\Project\CopyMapleStory2\CopyMaple2\Client\Bin\Shader_VtxMesh.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

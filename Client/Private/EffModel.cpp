@@ -129,7 +129,7 @@ HRESULT CEffModel::Render(CShader* pShader)
 
 
 
-void CEffModel::Update_Animation(_float fTimeDelta)
+void CEffModel::Update_Animation(_float fTimeDelta, _fmatrix matWorld)
 {
     if (m_bPlay)
     {
@@ -157,7 +157,7 @@ void CEffModel::Update_Animation(_float fTimeDelta)
         //뼈들의 합성변환행렬을 갱신
         for (auto& pBone : m_vecBone)
         {
-            pBone->Update_CombinedTransformationMatrix(m_vecBone, XMLoadFloat4x4(&m_PreTransformMatrix));
+            pBone->Update_CombinedTransformationMatrix(m_vecBone, XMLoadFloat4x4(&m_PreTransformMatrix), matWorld);
         }
         for (auto& tEvnt : m_listAnimEvent)
         {

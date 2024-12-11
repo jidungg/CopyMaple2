@@ -57,7 +57,7 @@ HRESULT CPortal::Initialize(void* pArg)
 void CPortal::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
-	m_pEffModelCom->Update_Animation(fTimeDelta);
+	m_pEffModelCom->Update_Animation(fTimeDelta, XMLoadFloat4x4( &m_WorldMatrix));
 }
 
 void CPortal::Late_Update(_float fTimeDelta)

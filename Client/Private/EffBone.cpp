@@ -53,12 +53,12 @@ HRESULT CEffBone::Initialize(ifstream& inFile, _int iParentBoneIndex)
 	return S_OK;
 }
 
-void CEffBone::Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bones, _fmatrix PreTransformMatrix)
+void CEffBone::Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bones, _fmatrix matPreTransformMatrix, _fmatrix matWroldMatrix)
 {
 	//루트 본 인 경우 -> PreTransformMatrix 만 곱하기
 	if (-1 == m_iParentBoneIndex)
 	{
-		XMStoreFloat4x4(&m_CombindTransformationMatrix, XMLoadFloat4x4(&m_TransformationMatrix) * PreTransformMatrix);
+		XMStoreFloat4x4(&m_CombindTransformationMatrix, XMLoadFloat4x4(&m_TransformationMatrix) * matPreTransformMatrix * matWroldMatrix);
 	}
 	//루트가 아닌 경우 -> 부모 본의 CombindTransformationMatrix 와 현재 본의 TransformationMatrix 를 곱하기
 	else
@@ -68,16 +68,18 @@ void CEffBone::Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bone
 	}
 	if (m_bBillboard)
 	{
+		_vector vCamPos = XMLoadFloat4(&*m_pGameInstance->Get_CamPosition());
+		_vector vBonePos = XMLoadFloat4x4(&m_CombindTransformationMatrix).r[3];
+		_vector vLook = XMVector3Normalize(vCamPos - vBonePos );
+		vLook.m128_f32[3] = 0;
 
-		//_vector vLook = m_pGameInstance->Get_TransformMatrix(CPipeLine::D3DTS_VIEW).r[2];
-		//vLook = -vLook;
-		_vector vLook{ -1.f, 0, -1.f ,0};
-		vLook = XMVector4Normalize(vLook);
 		_vector vUp = { 0.f, 1.f, 0.f, 0.f };
 		_vector vRight = DirectX::XMVector4Normalize(DirectX::XMVector3Cross(vUp, vLook));
 		vRight.m128_f32[3] = 0;
 		vUp = DirectX::XMVector4Normalize(DirectX::XMVector3Cross(vLook, vRight));
 		vUp.m128_f32[3] = 0;
+
+		//_matrix matCombine = XMMatrixLookAtLH(vBonePos, vCamPos, vUp);
 
 		_float3 vScale =  _float3(DirectX::XMVectorGetX(DirectX::XMVector3Length(XMLoadFloat4x4(&m_CombindTransformationMatrix).r[0])),
 			DirectX::XMVectorGetX(DirectX::XMVector3Length(XMLoadFloat4x4(&m_CombindTransformationMatrix).r[1])),
@@ -89,7 +91,12 @@ void CEffBone::Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bone
 		memcpy( m_CombindTransformationMatrix.m[0] ,&vRight, sizeof(_float4));
 		memcpy( m_CombindTransformationMatrix.m[1] ,&vUp, sizeof(_float4));
 		memcpy( m_CombindTransformationMatrix.m[2] ,&vLook, sizeof(_float4));
-		
+		memcpy( m_CombindTransformationMatrix.m[3] ,&vBonePos, sizeof(_float4));
+		//matCombine.r[0] *= vScale.x;
+		//matCombine.r[1] *= vScale.y;
+		//matCombine.r[2] *= vScale.z;
+
+	//	XMStoreFloat4x4(&m_CombindTransformationMatrix, matCombine);
 	}
 }
 

@@ -51,7 +51,7 @@ void CEffModelObject::Update(_float fTimeDelta)
 	if (m_fStartDelay <= m_fTimeAcc)
 	{
 		__super::Update(fTimeDelta);
-		m_pModelCom->Update_Animation(fTimeDelta);
+		m_pModelCom->Update_Animation(fTimeDelta, XMLoadFloat4x4( &m_WorldMatrix));
 	}
 	m_fTimeAcc += fTimeDelta;
 }

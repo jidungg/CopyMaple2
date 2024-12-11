@@ -27,7 +27,7 @@ public:
     virtual HRESULT Render(CShader* pShader);
 
 public:
-    void Update_Animation(_float fTimeDelta);
+    void Update_Animation(_float fTimeDelta, _fmatrix matWorld);
 	void Start_Animation();
 	void Stop_Animation();
     void Reset();

@@ -16,7 +16,7 @@ protected:
 
 public:
 	HRESULT Initialize(ifstream& inFile, _int iParentBoneIndex);
-	virtual void Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bones, _fmatrix PreTransformMatrix);
+	virtual void Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bones, _fmatrix PreTransformMatrix, _fmatrix WroldMatrix);
 
 	void Reset() override;
 public:

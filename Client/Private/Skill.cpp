@@ -214,6 +214,7 @@ void CSkill::On_AttackEnd()
 void CSkill::SearchTarget(list<CGameObject*>* pOutList, LAYERID eLayerID)
 {
 	auto listMonster = m_pGameInstance->Get_GameObjectList(eLayerID);
+	if (nullptr == listMonster)return;
 	for (auto& pMonster : *listMonster)
 	{
 		CCharacter* pTmpCharacter = static_cast<CCharacter*>(pMonster);
@@ -227,6 +228,7 @@ void CSkill::SearchTarget(list<CGameObject*>* pOutList, LAYERID eLayerID)
 CCharacter* CSkill::SearchTarget(LAYERID eLayerID)
 {
 	auto listMonster = m_pGameInstance->Get_GameObjectList(eLayerID);
+	if (nullptr == listMonster) return nullptr;
 	_float fMinDistance = FLT_MAX;
 	CCharacter* pReturn = nullptr;
 	for (auto& pMonster : *listMonster)

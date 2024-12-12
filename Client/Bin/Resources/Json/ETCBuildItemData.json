@@ -1,0 +1,39 @@
+{
+    "items": [
+        {
+            "BuildItemType": "MONSTER_SPAWNER",
+            "BuildItemBlockType": "NON_BLOCK",
+            "ItemId": 10000,
+            "ItemGrade": "MYTHIC",
+            "Name": "몬스터 스포너",
+            "Desc": "몬스터 스포너",
+            "Price": 0,
+            "IconImg": "Monster.dds",
+            "Model": "EmptyModel.model"
+        },
+        {
+            "BuildItemType": "PLAYER_SPAWNER",
+            "BuildItemBlockType": "NON_BLOCK",
+            "ItemId": 10001,
+            "ItemGrade": "MYTHIC",
+            "Name": "플레이어 스포너",
+            "Desc": "플레이어 스포너",
+            "Price": 0,
+            "IconImg": "Player.dds",
+            "Model": "EmptyModel.model"
+        },
+        {
+            "BuildItemType": "PORTAL",
+            "BuildItemBlockType": "NON_BLOCK",
+            "ItemId": 10002,
+            "ItemGrade": "NORMAL",
+            "Name": "포탈",
+            "Desc": "포탈",
+            "Price": 0,
+            "IconImg": "aura_mix_uo5.dds",
+            "Model": "EmptyModel.model"
+        }
+
+
+    ]
+}

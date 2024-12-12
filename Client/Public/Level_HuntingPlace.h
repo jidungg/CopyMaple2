@@ -1,0 +1,19 @@
+#pragma once
+#include "Level_GamePlay.h"
+BEGIN(Client)
+class CLevel_HuntingPlace :
+    public CLevel_GamePlay
+{
+private:
+	explicit CLevel_HuntingPlace(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual ~CLevel_HuntingPlace() = default;
+
+public:
+	virtual void On_Start(_uint iPrevLevelID)override;
+
+
+public:
+	static CLevel_HuntingPlace* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg);
+};
+
+END

@@ -1,0 +1,511 @@
+{
+    "skills": [
+        {
+            "Id": "BASIC_ATTACK",
+            "CastType": "INSTANT",
+            "Name": "기본 공격",
+            "Desc": "기본 공격",
+            "Level": 1,
+            "MaxLevel": 1,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10000011.png",
+            "Range": 1,
+            "Data": [ 100.0 ],
+            "LevelUpData": [ 0.0 ],
+            "Preceding": [
+                [ "BASIC_ATTACK", 0 ]
+            ],
+            "Animation": [ 0 ],
+            "EventTime": [ [ 0, 0, "FIRE" ] ]
+
+        },
+        {
+            "Id": "TELEPORT",
+            "CastType": "INSTANT",
+            "Name": "텔레포트",
+            "Desc": "마법의 힘을 이용해 신체를 전방으로 이동시킨다.",
+            "Level": 1,
+            "MaxLevel": 1,
+            "CostType": "EP",
+            "Cost": 1,
+            "CoolTime": 0,
+            "IconImg": "Teleport.png",
+            "Range": 2.5,
+            "Data": [ 2.5 ],
+            "LevelUpData": [ 0.0 ],
+            "Preceding": [
+                [ "TELEPORT", 0 ]
+            ],
+            "Animation": [ 126 ],
+            "EventTime": [ [ 0, 0.15, "FIRE" ] ]
+        },
+        {
+            "Id": "MAGIC_CLAW",
+            "CastType": "INSTANT",
+            "Name": "매직 클로",
+            "Desc": "마력으로 생성한 날카로운 발톱을 휘둘러 공격한다,",
+            "Level": 1,
+            "MaxLevel": 5,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "MagicClaw.png",
+            "Data": [ 77.0 ],
+            "LevelUpData": [ 6.0 ],
+            "Range": 8,
+            "Preceding": [
+                [ "MAGIC_CLAW", 0 ]
+            ],
+            "Animation": [ 82 ],
+            "EventTime": [
+                [ 0, 0.4, "FIRE" ]
+            ]
+        },
+        {
+            "Id": "FLAME_WAVE",
+            "CastType": "INSTANT",
+            "Name": "플레임 웨이브",
+            "Desc": "스태프에 화염의 기운을 집중시킨 뒤 파도 형태로 날려보낸다.",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "SP",
+            "Cost": 25,
+            "CoolTime": 0,
+            "IconImg": "FlameWave.png",
+            "Range": 6,
+            "Data": [ 200.0 ],
+            "LevelUpData": [ 21.0 ],
+            "Preceding": [
+                [ "FLAME_WAVE", 0 ]
+            ],
+            "Animation": [ 47 ],
+            "EventTime": [
+                [ 0, 0.1, "FIRE" ]
+            ]
+        },
+        {
+            "Id": "FIRE_TORNADO",
+            "CastType": "INSTANT",
+            "Name": "플레임 웨이브",
+            "Desc": "스태프에 화염의 기운을 집중시킨 뒤 파도 형태로 날려보낸다.",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "SP",
+            "Cost": 40,
+            "CoolTime": 16,
+            "IconImg": "FireTornado.png",
+            "Range": 5,
+            "Data": [ 155.0 ],
+            "LevelUpData": [ 17.0 ],
+            "Preceding": [
+                [ "FLAME_WAVE", 0 ]
+            ],
+            "Animation": [ 39 ],
+            "EventTime": [ [ 0, 0, "FIRE" ] ]
+        },
+        {
+            "Id": "KINDLING",
+            "CastType": "CASTING",
+            "Name": "불씨",
+            "Desc": "작은 불덩이를 생성해 던진다.",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "SP",
+            "Cost": 20,
+            "CoolTime": 0,
+            "IconImg": "Kindling.png",
+            "Range": 8,
+            "Data": [ 689.0 ],
+            "LevelUpData": [ 78.0 ],
+            "Preceding": [
+                [ "FLAME_WAVE", 0 ]
+            ],
+            "Animation": [ 66, 67 ],
+            "EventTime": [ [ 1, 0.2, "FIRE" ] ]
+        },
+        {
+            "Id": "KINDLING2",
+            "CastType": "CASTING",
+            "Name": "강화 불씨",
+            "Desc": "작은 불덩이를 생성해 던진다.",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "SP",
+            "Cost": 20,
+            "CoolTime": 0,
+            "IconImg": "Kindling.png",
+            "Range": 8,
+            "Data": [ 689.0 ],
+            "LevelUpData": [ 78.0 ],
+            "Preceding": [
+                [ "FLAME_WAVE", 0 ]
+            ],
+            "Animation": [ 68, 69 ],
+            "EventTime": [ [ 0, 0, "FIRE" ] ]
+        },
+        {
+            "Id": "BBQ_PARTY",
+            "CastType": "CASTING",
+            "Name": "바베큐 파티",
+            "Desc": "지면에서 뜨거운 열기를 방출시켜 적을 통구이로 만든다.",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "SP",
+            "Cost": 40,
+            "CoolTime": 8,
+            "IconImg": "BBQParty.png",
+            "Range": 8,
+            "Data": [ 935.0 ],
+            "LevelUpData": [ 141.0 ],
+            "Preceding": [
+                [ "KINDLING", 3 ]
+            ],
+            "Animation": [ 2, 3 ],
+            "EventTime": [ [ 1, 0.2, "FIRE" ] ]
+        },
+        {
+            "Id": "FAKE_METEOR",
+            "CastType": "CASTING",
+            "Name": "리틀 메테오",
+            "Desc": "우주에 떠도는 작은 운석을 떨어트린다. ",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "SP",
+            "Cost": 60,
+            "CoolTime": 30,
+            "IconImg": "FakeMeteor.png",
+            "Range": 8,
+            "Data": [ 3710.0 ],
+            "LevelUpData": [ 508.0 ],
+            "Preceding": [
+                [ "BBQ_PARTY", 3 ]
+            ],
+            "Animation": [ 37, 38 ],
+            "EventTime": [ [ 1, 0.2, "FIRE" ] ]
+        },
+        {
+            "Id": "WILD_FIRE",
+            "CastType": "INSTANT",
+            "Name": "와일드 파이어",
+            "Desc": "순간이동으로 접근해 원형으로 뜨거운 불길을 방출하고 유유히 빠져나온다.",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 30,
+            "IconImg": "10300291.png",
+            "Range": 20,
+            "Data": [ 3763.0 ],
+            "LevelUpData": [ 433.0 ],
+            "Preceding": [
+                [ "BBQ_PARTY", 5 ],
+                [ "FAKE_METEOR", 5 ]
+            ],
+            "Animation": [ 130 ],
+            "EventTime": [ [ 0, 0.5, "FIRE" ] ]
+        },
+        {
+            "Id": "WILD_FIRE2",
+            "CastType": "INSTANT",
+            "Name": "와일드 파이어",
+            "Desc": "순간이동으로 접근해 원형으로 뜨거운 불길을 방출하고 유유히 빠져나온다.",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Range": 1,
+            "Data": [ 397.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+                [ "BBQ_PARTY", 3 ]
+            ],
+            "Animation": [ 126 ],
+            "EventTime": [ [ 0, 0, "FIRE" ] ]
+        },
+        {
+            "Id": "SNAIL_ATTACK",
+            "CastType": "INSTANT",
+            "Name": "부르르 떨기",
+            "Desc": "부르르 떨기",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Range": 1,
+            "Data": [ 100.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+                [ "SNAIL_ATTACK", 0 ]
+            ],
+            "Animation": [ 0 ],
+            "EventTime": [ [ 0, 0, "FIRE" ] ]
+        },
+        {
+            "Id": "CRAB_ATTACK",
+            "CastType": "INSTANT",
+            "Name": "집게 공격",
+            "Desc": "집게 공격",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Range": 1,
+            "Data": [ 100.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+            ],
+            "Animation": [ 0 ],
+            "EventTime": [ [ 0, 0.17, "FIRE" ] ]
+        },
+        {
+            "Id": "STUMP_CHARGE_ATTACK",
+            "CastType": "CASTING",
+            "Name": "",
+            "Desc": "",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Range": 1,
+            "Data": [ 100.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+            ],
+            "Animation": [ 1 ],
+            "EventTime": [ [ 0, 0, "FIRE" ] ]
+        },
+        {
+            "Id": "STUMP_KICK",
+            "CastType": "INSTANT",
+            "Name": "",
+            "Desc": "",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Range": 1,
+            "Data": [ 100.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+
+            ],
+            "Animation": [ 2 ],
+            "EventTime": [ [ 0, 0.2, "FIRE" ] ]
+        },
+        {
+            "Id": "STUMP_BUNTING",
+            "CastType": "INSTANT",
+            "Name": "",
+            "Desc": "",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Range": 1,
+            "Data": [ 100.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+
+            ],
+            "Animation": [ 3, 4 ],
+            "EventTime": [ [ 1, 0.1, "FIRE" ] ]
+        },
+        {
+            "Id": "BAYAR_ATTACK_A",
+            "CastType": "INSTANT",
+            "Name": "",
+            "Desc": "",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Range": 1.5,
+            "Data": [ 397.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+
+            ],
+            "Animation": [ 1, 9 ],
+            "EventTime": [
+                [ 0, 0.6, "FIRE" ],
+                [ 1, 0.13, "ATTACK_END" ]
+            ]
+        },
+        {
+            "Id": "BAYAR_ATTACK_B",
+            "CastType": "INSTANT",
+            "Name": "",
+            "Desc": "",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Range": 2,
+            "Data": [ 397.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+
+            ],
+            "Animation": [ 2, 10 ],
+            "EventTime": [
+                [ 1, 0, "FIRE" ],
+                [ 1, 0.317, "ATTACK_END" ]
+            ]
+        },
+        {
+            "Id": "BAYAR_ATTACK_C",
+            "CastType": "INSTANT",
+            "Name": "",
+            "Desc": "",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Range": 2,
+            "Data": [ 397.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+
+            ],
+            "Animation": [ 3, 11 ],
+            "EventTime": [
+                [ 1, 0, "FIRE" ],
+                [ 1, 0.317, "ATTACK_END" ]
+            ]
+        },
+        {
+            "Id": "BAYAR_ATTACK_D",
+            "CastType": "CHARGING",
+            "Name": "",
+            "Desc": "",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Range": 4,
+            "Data": [ 397.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+
+            ],
+            "Animation": [ 4, 12 ],
+            "EventTime": [
+                [ 1, 0, "FIRE" ],
+                [ 1, 0.317, "ATTACK_END" ]
+            ]
+        },
+        {
+            "Id": "BAYAR_SKY_JUMP",
+            "CastType": "CHARGING",
+            "Name": "",
+            "Desc": "",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Range": 10,
+            "Data": [ 397.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+
+            ],
+            "Animation": [ 33, 13, 16 ],
+            "EventTime": [ [ 1, 0.5, "FIRE" ] ]
+        },
+        {
+            "Id": "BAYAR_KNOCK_OFF",
+            "CastType": "CHARGING",
+            "Name": "",
+            "Desc": "",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Range": 1,
+            "Data": [ 397.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+
+            ],
+            "Animation": [ 33, 6 ],
+            "EventTime": [
+                [ 1, 0.18, "FIRE" ],
+                [ 1, 1, "ATTACK_END" ]
+            ]
+        },
+        {
+            "Id": "BAYAR_STONE_SPIKE",
+            "CastType": "CHARGING",
+            "Name": "",
+            "Desc": "",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Range": 10,
+            "Data": [ 397.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+
+            ],
+            "Animation": [ 7, 14, 19 ],
+            "EventTime": [
+                [ 0, 1, "FIRE" ],
+                [ 2, 0, "ATTACK_END" ]
+            ]
+        },
+        {
+            "Id": "BAYAR_PALM_STRIKE",
+            "CastType": "CHARGING",
+            "Name": "",
+            "Desc": "",
+            "Level": 1,
+            "MaxLevel": 10,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10300291.png",
+            "Range" :  10,
+            "Data": [ 397.0 ],
+            "LevelUpData": [ 45.0 ],
+            "Preceding": [
+
+            ],
+            "Animation": [ 8, 15, 18],
+            "EventTime": [
+                [ 1, 0.1, "FIRE" ],
+                [ 1, 0.58, "FIRE" ],
+                [ 2, 0.27, "FIRE" ]
+            ]
+        }
+
+    ]
+}

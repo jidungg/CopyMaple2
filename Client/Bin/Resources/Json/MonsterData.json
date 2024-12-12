@@ -1,0 +1,173 @@
+{
+    "monsters": [
+        {
+            "Id": "SNAIL",
+            "Grade" :  "NORMAL",
+            "Name": "파란 달팽이",
+            "Desc": "귀엽지만 사나운 달팽이.",
+            "Model": "Snail.model",
+            "DetectionRange": 4,
+            "ChaseRange": 3,
+            "BodyCollisionRadius": 0.2,
+            "BodyCollisionOffset": [ 0, 0, 0 ],
+            "Scale": [ 1, 1, 1 ],
+            "Status": {
+                "HP": 100,
+                "SP": 10,
+                "EP": 1,
+                "ATK": 100,
+                "DEF": 1,
+                "EXP": 1,
+                "Gold": 1,
+                "JumpPower": 10,
+                "RunSpeed": 1.5,
+                "WalkSpeed": 0.5,
+                "AttackInterval": 3,
+                "AttackRange":1
+            },
+            "AnimIdx": {
+                "ATTACK_IDLE": [ 1 ],
+                "BORE": [ 2 ],
+                "DAMG": [ 3, 4 ],
+                "DEAD": [ 5, 6 ],
+                "IDLE": [ 7 ],
+                "REGEN": [ 8 ],
+                "RUN": [ 9 ],
+                "STUN": [ 10 ],
+                "WALK": [ 11 ]
+            },
+            "Skill": [
+                "SNAIL_ATTACK"
+            ]
+        },
+        {
+            "Id": "CRAB",
+            "Grade": "NORMAL",
+            "Name": "돌 게",
+            "Desc": "돌 처럼 생긴 게.",
+            "Model": "blackcarapace.model",
+            "DetectionRange": 4,
+            "ChaseRange": 3,
+            "BodyCollisionRadius": 0.2,
+            "BodyCollisionOffset": [ 0, 0, 0 ],
+            "Scale": [ 1, 1, 1 ],
+            "Status": {
+                "HP": 10000,
+                "SP": 10,
+                "EP": 1,
+                "ATK": 100,
+                "DEF": 1,
+                "EXP": 1,
+                "Gold": 1,
+                "JumpPower": 10,
+                "RunSpeed": 2.5,
+                "WalkSpeed": 1.5,
+                "AttackInterval": 3,
+                "AttackRange": 1
+            },
+            "AnimIdx": {
+                "ATTACK_IDLE": [ 1 ],
+                "BORE": [ 2, 3 ],
+                "DAMG": [ 4, 5 ],
+                "DEAD": [ 6, 7 ],
+                "IDLE": [ 8 ],
+                "REGEN": [ 9 ],
+                "RUN": [ 10 ],
+                "STUN": [ 11 ],
+                "WALK": [ 12 ]
+            },
+            "Skill": [
+                "CRAB_ATTACK"
+            ]
+        },
+        {
+            "Id": "STUMP",
+            "Grade": "NORMAL",
+            "Name": "스텀프",
+            "Desc": "귀신 들린 나무.",
+            "Model": "Stump.model",
+            "DetectionRange": 4,
+            "ChaseRange": 3,
+            "BodyCollisionRadius": 0.2,
+            "BodyCollisionOffset": [ 0, 0, 0 ],
+            "Scale": [ 1.5, 1.5, 1.5 ],
+            "Status": {
+                "HP": 1000,
+                "SP": 10,
+                "EP": 1,
+                "ATK": 100,
+                "DEF": 1,
+                "EXP": 1,
+                "Gold": 1,
+                "JumpPower": 10,
+                "RunSpeed": 2.5,
+                "WalkSpeed": 1.5,
+                "AttackInterval": 3.5,
+                "AttackRange": 1
+            },
+            "AnimIdx": {
+                "ATTACK_IDLE": [ 5 ],
+                "BORE": [ 6 ],
+                "DAMG": [ 7, 8 ],
+                "DEAD": [ 9 ],
+                "IDLE": [ 10 ],
+                "REGEN": [ 11 ],
+                "RUN": [ 12 ],
+                "STUN": [ 13 ],
+                "WALK": [ 14 ]
+            },
+            "Skill": [
+                "STUMP_CHARGE_ATTACK",
+                "STUMP_KICK",
+                "STUMP_BUNTING"
+            ]
+        },
+        {
+            "Id": "BAYAR",
+            "Grade": "BOSS",
+            "Name": "최후의 바야르",
+            "Desc": "돌 수호병.",
+            "Model": "Bayar.model",
+            "DetectionRange": 4,
+            "ChaseRange": 3,
+            "BodyCollisionRadius": 0.4,
+            "BodyCollisionOffset": [ 0, 0.5, 0 ],
+            "Scale": [ 2, 2, 2 ],
+            "Status": {
+                "HP": 10000,
+                "SP": 10,
+                "EP": 1,
+                "ATK": 100,
+                "DEF": 1,
+                "EXP": 1,
+                "Gold": 1,
+                "JumpPower": 0,
+                "RunSpeed": 2.5,
+                "WalkSpeed": 1.5,
+                "AttackInterval": 1,
+                "AttackRange": 2
+            },
+            "AnimIdx": {
+                "ATTACK_IDLE": [ 20 ],
+                "BORE": [ 21 ],
+                "DAMG": [ 22, 23 ],
+                "DEAD": [ 24, 25 ],
+                "IDLE": [ 0 ],
+                "REGEN": [ 35 ],
+                "RUN": [ 36 ],
+                "STUN": [ 37 ],
+                "WALK": [ 38 ]
+            },
+            "Skill": [
+                "BAYAR_ATTACK_A",
+                "BAYAR_ATTACK_B",
+                "BAYAR_ATTACK_C",
+                "BAYAR_ATTACK_D",
+                "BAYAR_SKY_JUMP",
+                "BAYAR_KNOCK_OFF",
+                "BAYAR_STONE_SPIKE",
+                "BAYAR_PALM_STRIKE"
+            ]
+        }
+    ]
+}

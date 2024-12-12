@@ -1,0 +1,134 @@
+{
+    "items": [
+        {
+            "EquipItemType": "SHOES",
+            "ItemId": "BASIC_SHOES",
+            "ItemGrade": "NORMAL",
+            "Name": "솜 신발",
+            "Desc": "따듯한 솜 신발.",
+            "Price": 100,
+            "IconImg": "11700009.png",
+            "Model": "11700009_f_quiltshoes.model"
+        },
+        {
+            "EquipItemType": "SUIT",
+            "ItemId": "BASIC_SUIT",
+            "ItemGrade": "NORMAL",
+            "Name": "솜 로브",
+            "Desc": "따듯한 솜 로브.",
+            "Price": 200,
+            "IconImg": "12200007.png",
+            "Model": "12200007_f_clpasuperiorcoat.model"
+        },
+        {
+            "EquipItemType": "HAT",
+            "ItemId": "BASIC_HAT",
+            "ItemGrade": "NORMAL",
+            "Name": "솜 모자",
+            "Desc": "따듯한 솜 모자.",
+            "Price": 100,
+            "IconImg": "11300024.png",
+            "Model": "11300024_c_cpsuperiorhat_c.model"
+        },
+        {
+            "EquipItemType": "WEAPON",
+            "ItemId": "BASIC_STAFF",
+            "ItemGrade": "NORMAL",
+            "Name": "나무 지팡이",
+            "Desc": "마법을 쓰기 좋은 막대기.",
+            "Price": 100,
+            "IconImg": "15200053.png",
+            "Model": "15400005_bentstaff.model"
+        },
+        {
+            "EquipItemType": "WEAPON",
+            "ItemId": "EVILWINGS",
+            "ItemGrade": "EXCELENT",
+            "Name": "이블 윙즈",
+            "Desc": "악마의 날개가 달린 지팡이.",
+            "Price": 300,
+            "IconImg": "15200025.png",
+            "Model": "15200025_evilwings.model"
+        },
+        {
+            "EquipItemType": "CAPE",
+            "ItemId": "FIREPRISM_CAPE",
+            "ItemGrade": "MYTHIC",
+            "Name": "파이어 프리즘 망토",
+            "Desc": "준내게 쎈 망토.",
+            "Price": 1000,
+            "IconImg": "11800149.png",
+            "Model": "11800149_c_mtfireprism_idle_a.model"
+        },
+        {
+            "EquipItemType": "EAR",
+            "ItemId": "FIREPRISM_EAR",
+            "ItemGrade": "MYTHIC",
+            "Name": "파이어 프리즘 귀고리",
+            "Desc": "준내게 쎈 귀고리.",
+            "Price": 1000,
+            "IconImg": "11200105.png",
+            "Model": "11200105_f_eafireprism.model"
+        },
+        {
+            "EquipItemType": "SHOES",
+            "ItemId": "FIREPRISM_SHOES",
+            "ItemGrade": "MYTHIC",
+            "Name": "파이어 프리즘 신발",
+            "Desc": "준내게 쎈 신발.",
+            "Price": 1000,
+            "IconImg": "11701261.png",
+            "Model": "11701261_f_shfireprism.model"
+        },
+        {
+            "EquipItemType": "GLOVES",
+            "ItemId": "FIREPRISM_GLOVE",
+            "ItemGrade": "MYTHIC",
+            "Name": "파이어 프리즘 장갑",
+            "Desc": "준내게 쎈 장갑.",
+            "Price": 1000,
+            "IconImg": "11601166.png",
+            "Model": "11601166_f_glfireprism.model"
+        },
+        {
+            "EquipItemType": "TOP",
+            "ItemId": "FIREPRISM_TOP",
+            "ItemGrade": "MYTHIC",
+            "Name": "파이어 프리즘 상의",
+            "Desc": "준내게 쎈 상의.",
+            "Price": 1000,
+            "IconImg": "11401084.png",
+            "Model": "11401084_f_clfireprism.model"
+        },
+        {
+            "EquipItemType": "BOTTOM",
+            "ItemId": "FIREPRISM_BOTTOM",
+            "ItemGrade": "MYTHIC",
+            "Name": "파이어 프리즘 하의",
+            "Desc": "준내게 쎈 하의.",
+            "Price": 1000,
+            "IconImg": "11500977.png",
+            "Model": "11500977_f_pafireprism.model"
+        },
+        {
+            "EquipItemType": "HAT",
+            "ItemId": "FIREPRISM_HAT",
+            "ItemGrade": "MYTHIC",
+            "Name": "파이어 프리즘 모자",
+            "Desc": "준내게 쎈 모자.",
+            "Price": 1000,
+            "IconImg": "11301280.png",
+            "Model": "11301280_c_cpfireprism_f.model"
+        },
+        {
+            "EquipItemType": "WEAPON",
+            "ItemId": "FIREPRISM_STAFF",
+            "ItemGrade": "MYTHIC",
+            "Name": "파이어 프리즘 스태프",
+            "Desc": "준내게 쎈 지팡이.",
+            "Price": 1000,
+            "IconImg": "15200268.png",
+            "Model": "15200268_fireprismstaff.model"
+        }
+    ]
+}

@@ -1,0 +1,36 @@
+{
+    "Player": {
+            "Custom": {
+                "BodyTag": "Female_Wizard.model",
+                "FaceTag": "Face_Face1",
+                "HairTag": "00200028_m_shortpigtailhair_p_a.model"
+            },
+            "Status": {
+                "HP": 1000,
+                "SP": 100,
+                "EP": 1,
+                "ATK": 100,
+                "DEF": 1,
+                "EXP": 1,
+                "Gold": 1,
+                "JumpPower": 10,
+                "RunSpeed": 2.5,
+                "WalkSpeed": 1.5,
+                "AttackInterval": 1,
+                "AttackRange": 2
+            },
+            "Skill": [
+                "BASIC_ATTACK",
+                "TELEPORT",
+                "MAGIC_CLAW",
+                "FLAME_WAVE",
+                "FIRE_TORNADO",
+                "KINDLING",
+                "KINDLING2",
+                "BBQ_PARTY",
+                "FAKE_METEOR",
+                "WILD_FIRE",
+                "WILD_FIRE2"
+            ]
+    }
+}

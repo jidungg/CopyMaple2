@@ -5,6 +5,7 @@
 #include "GameInstance.h"
 #include "Client_Utility.h"
 #include "EffectManager.h"
+#include "UIDamgCount.h"
 
 CHitEvent::CHitEvent(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, EFF_MODEL_ID eHitEffect)
 	: m_pAttacker(pAttacker)
@@ -26,6 +27,7 @@ void CHitEvent::Exec()
 {
 	m_pVictim->Hit(m_pAttacker,m_iDamage);
 	EFFECT_MANAGER->Play_EffectModel(m_eHitEffect,static_cast<CCharacter*>( m_pVictim)->Get_Hitpoint());
+
 }
 
 void CHitEvent::Free()

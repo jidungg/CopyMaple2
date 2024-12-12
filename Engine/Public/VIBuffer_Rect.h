@@ -6,6 +6,8 @@ BEGIN(Engine)
 
 class ENGINE_DLL CVIBuffer_Rect final : public CVIBuffer
 {
+public:
+	static constexpr _tchar* m_szPrptotypeTag = L"Prototype_Component_VIBuffer_Rect";
 private:
 	CVIBuffer_Rect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CVIBuffer_Rect(const CVIBuffer_Rect& Prototype);

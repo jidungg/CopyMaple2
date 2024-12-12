@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "ObjectPool.h"
 #include "Client_Utility.h"
+#include "UIDamgCount.h"
 
 IMPLEMENT_SINGLETON(CEffectManager)
 
@@ -19,6 +20,18 @@ HRESULT CEffectManager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* p
 	{
 		m_mapEffectModel.insert(std::make_pair((EFF_MODEL_ID)i, nullptr));
 	}
+
+	CUIDamgCount:: UIDMGCOUNT_DESC tUIDamgCountDesc;
+	tUIDamgCountDesc.fLifeTime = 1.f;
+	tUIDamgCountDesc.fRisingSpeed = 0.5f;
+	tUIDamgCountDesc.iDamg = 0;
+	for (_uint i = 0; i < (_uint)DAMG_TYPE::LAST; i++)
+	{
+		tUIDamgCountDesc.eDamgType = DAMG_TYPE(i);
+		CUIDamgCount* pDmgCount = static_cast<CUIDamgCount*>( m_pGameInstance->Clone_Proto_Object_Stock(CUIDamgCount::m_szProtoTag, &tUIDamgCountDesc));
+		m_DmgCountPool[i] = CObjectPool<CUIDamgCount>::Create(pDmgCount, &tUIDamgCountDesc, 20);
+	}
+
 	return S_OK;
 }
 void CEffectManager::Update(_float fTimeDelta)
@@ -87,16 +100,18 @@ void CEffectManager::Play_EffectModel(EFF_MODEL_ID eID, _vector vPos, _vector vR
 	pObj->Start_Animation();
 }
 
-//void CEffectManager::Play_EffectModel(EFF_MODEL_ID eID, CGameObject* pTarget, _vector vPos, _vector vRotation, _float fScale)
-//{
-//	if (nullptr == m_mapEffectModel[eID])
-//		return;
-//		
-//	CEffModelObject* pObj = static_cast<CEffModelObject*>(m_mapEffectModel[eID]->Get_Object());
-//	pObj->Set_Transform(vPos, vRotation, fScale);
-//	pObj->Start_Animation();
-//
-//}
+void CEffectManager::Play_DamgCount(DAMG_TYPE eID, _int iDamg, _vector vPos, _vector vRotation, _float fScale)
+{
+	if (nullptr == m_DmgCountPool[(_uint)eID])
+		return;
+	CUIDamgCount* pObj = m_DmgCountPool[(_uint)eID]->Get_Object();
+	m_listPlayingDamgCount.push_back({ eID,pObj });
+	pObj->Set_Transform(vPos, vRotation, fScale);
+	pObj->Set_Damge(iDamg);
+	pObj->Start();
+}
+
+
 
 void CEffectManager::Free()
 {

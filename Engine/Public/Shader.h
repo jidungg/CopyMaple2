@@ -24,6 +24,7 @@ public:
 	HRESULT Bind_Matrices(const _char* pConstantName, const _float4x4* pMatrix, _uint iNumMatrices);
 	HRESULT Bind_FloatArray(const _char* pConstantName, const _float* pMatrix, _uint iSize);
 	HRESULT Bind_FloatVectorArray(const _char* pConstantName, const _float2* pMatrix, _uint iSize);
+	HRESULT Bind_IntArray(const _char* pConstantName, const _int* pMatrix, _uint iSize);
 
 private:
 	ID3DX11Effect*				m_pEffect = { nullptr };

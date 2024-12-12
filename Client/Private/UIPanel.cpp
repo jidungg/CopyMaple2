@@ -94,7 +94,7 @@ HRESULT CUIPanel::Ready_Components()
 		return E_FAIL;
 
 	/* Com_VIBuffer */
-	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_VIBuffer_Rect"),
+	if (FAILED(Add_Component(LEVEL_LOADING, CVIBuffer_Rect::m_szPrptotypeTag,
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 

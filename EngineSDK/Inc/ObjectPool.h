@@ -116,7 +116,7 @@ template<class T>
 inline void CObjectPool<T>::Free()
 {
 	__super::Free();
- 	while (!m_queStockObject.empty())
+	while (!m_queStockObject.empty())
 	{
 		Safe_Release(m_queStockObject.front());
 		m_queStockObject.pop();

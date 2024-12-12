@@ -167,9 +167,21 @@ HRESULT CShader::Bind_FloatVectorArray(const _char* pConstantName, const _float2
 	ID3DX11EffectVectorVariable* pScalarVariable = pVariable->AsVector();
 	if (nullptr == pScalarVariable)
 		return E_FAIL;
-
 	return pScalarVariable->SetFloatVectorArray(reinterpret_cast<const _float*>(pMatrix), 0, iSize);;
 
+}
+
+HRESULT CShader::Bind_IntArray(const _char* pConstantName, const _int* pMatrix, _uint iSize)
+{
+	ID3DX11EffectVariable* pVariable = m_pEffect->GetVariableByName(pConstantName);
+	if (nullptr == pVariable)
+		return E_FAIL;
+
+	ID3DX11EffectScalarVariable* pScalarVariable = pVariable->AsScalar();
+	if (nullptr == pScalarVariable)
+		return E_FAIL;
+
+	return pScalarVariable->SetIntArray(pMatrix, 0, iSize);
 }
 
 CShader * CShader::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar * pShaderFilePath, const D3D11_INPUT_ELEMENT_DESC* pElements, _uint iNumElements)

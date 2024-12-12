@@ -68,9 +68,14 @@ void CEffBone::Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bone
 	}
 	if (m_bBillboard)
 	{
-		_vector vCamPos = XMLoadFloat4(&*m_pGameInstance->Get_CamPosition());
-		_vector vBonePos = XMLoadFloat4x4(&m_CombindTransformationMatrix).r[3];
-		_vector vLook = XMVector3Normalize(vCamPos - vBonePos );
+		//카메라 처다보는 룩벡터
+		//_vector vCamPos = XMLoadFloat4(&*m_pGameInstance->Get_CamPosition());
+		//_vector vBonePos = XMLoadFloat4x4(&m_CombindTransformationMatrix).r[3];
+		//_vector vLook = XMVector3Normalize(vCamPos - vBonePos );
+
+		//카메라의 반대방향을 보는 룩벡터
+		_vector vLook = XMVector3Normalize(m_pGameInstance->Get_TransformMatrix_Inverse(CPipeLine::D3DTS_VIEW).r[2]);
+
 		vLook.m128_f32[3] = 0;
 
 		_vector vUp = { 0.f, 1.f, 0.f, 0.f };
@@ -78,8 +83,6 @@ void CEffBone::Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bone
 		vRight.m128_f32[3] = 0;
 		vUp = DirectX::XMVector4Normalize(DirectX::XMVector3Cross(vLook, vRight));
 		vUp.m128_f32[3] = 0;
-
-		//_matrix matCombine = XMMatrixLookAtLH(vBonePos, vCamPos, vUp);
 
 		_float3 vScale =  _float3(DirectX::XMVectorGetX(DirectX::XMVector3Length(XMLoadFloat4x4(&m_CombindTransformationMatrix).r[0])),
 			DirectX::XMVectorGetX(DirectX::XMVector3Length(XMLoadFloat4x4(&m_CombindTransformationMatrix).r[1])),
@@ -91,12 +94,6 @@ void CEffBone::Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bone
 		memcpy( m_CombindTransformationMatrix.m[0] ,&vRight, sizeof(_float4));
 		memcpy( m_CombindTransformationMatrix.m[1] ,&vUp, sizeof(_float4));
 		memcpy( m_CombindTransformationMatrix.m[2] ,&vLook, sizeof(_float4));
-		memcpy( m_CombindTransformationMatrix.m[3] ,&vBonePos, sizeof(_float4));
-		//matCombine.r[0] *= vScale.x;
-		//matCombine.r[1] *= vScale.y;
-		//matCombine.r[2] *= vScale.z;
-
-	//	XMStoreFloat4x4(&m_CombindTransformationMatrix, matCombine);
 	}
 }
 

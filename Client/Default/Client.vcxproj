@@ -250,6 +250,7 @@
     <ClInclude Include="..\Public\EffTexturingProperty.h" />
     <ClInclude Include="..\Public\UIBar.h" />
     <ClInclude Include="..\Public\UIBundle.h" />
+    <ClInclude Include="..\Public\UIDamgCount.h" />
     <ClInclude Include="..\Public\UIQuickSlotBundle.h" />
     <ClInclude Include="..\Public\SlotItem.h" />
     <ClInclude Include="..\Public\UIContainer.h" />
@@ -281,6 +282,7 @@
     <ClInclude Include="..\Public\WayFinder.h" />
     <ClInclude Include="..\Public\Weapon.h" />
     <ClInclude Include="..\Public\WildFire.h" />
+    <ClInclude Include="..\Public\WorldUIObject.h" />
     <ClInclude Include="Client_Utility.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
@@ -368,6 +370,7 @@
     <ClCompile Include="..\Private\EffTexturingProperty.cpp" />
     <ClCompile Include="..\Private\UIBar.cpp" />
     <ClCompile Include="..\Private\UIBundle.cpp" />
+    <ClCompile Include="..\Private\UIDamgCount.cpp" />
     <ClCompile Include="..\Private\UIQuickSlotBundle.cpp" />
     <ClCompile Include="..\Private\SlotItem.cpp" />
     <ClCompile Include="..\Private\UIContainer.cpp" />
@@ -398,6 +401,7 @@
     <ClCompile Include="..\Private\WayFinder.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />
     <ClCompile Include="..\Private\WildFire.cpp" />
+    <ClCompile Include="..\Private\WorldUIObject.cpp" />
     <ClCompile Include="..\Public\UIItemIndicator.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Client_Utility.cpp" />
@@ -421,6 +425,8 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxEffectMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxHumanAnimMesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxMesh.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

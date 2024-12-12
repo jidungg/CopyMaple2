@@ -1,6 +1,0 @@
-﻿  CNifToBinary.cpp
-  main.cpp
-  pch.cpp
-CNifToBinary.obj : error LNK2001: 확인할 수 없는 외부 기호 "class Niflib::Ref<class Niflib::NiObject> __cdecl Niflib::ReadNifTree(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,struct Niflib::NifInfo *)" (?ReadNifTree@Niflib@@YA?AV?$Ref@VNiObject@Niflib@@@1@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAUNifInfo@1@@Z)
-CNifToBinary.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: void __thiscall Niflib::NiObject::SubtractRef(void)const " (?SubtractRef@NiObject@Niflib@@QBEXXZ)
-D:\Workbench\Portfolio\CopyMaple2\Release\NIFToBinary.exe : fatal error LNK1120: 2개의 확인할 수 없는 외부 참조입니다.

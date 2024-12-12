@@ -83,7 +83,7 @@ void CBullet_FireTornado::Late_Update(_float fTimeDelta)
 		SearchTarget(&listTarget, LAYER_MONSTER);
 		for (auto& pTarget : listTarget)
 		{
-			m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, m_szHitEffectTag));
+			m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, m_eHitEffect));
 		}
 	}
 }

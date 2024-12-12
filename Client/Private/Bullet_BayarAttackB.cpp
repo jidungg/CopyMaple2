@@ -51,7 +51,7 @@ void CBullet_BayarAttackB::Late_Update(_float fTimeDelta)
 		if (m_setHitObject.find(pTarget) != m_setHitObject.end())
 			continue;
 		m_setHitObject.insert(pTarget);
-		m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, m_szHitEffectTag));
+		m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, m_eHitEffect));
 	}
 
 

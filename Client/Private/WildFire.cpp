@@ -20,7 +20,7 @@ HRESULT CWildFire::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	//Bullet
 	CBullet::BULLET_DESC tBulletDesc;
 	tBulletDesc.pShooter = m_pUser;
-	tBulletDesc.szHitEffectTag = "eff_wizard_flameburst_hit_01_a.effmodel";
+	tBulletDesc.eHitEffect = EFF_MODEL_ID::HIT_FLAME_BURST_A;
 	m_pBullet = static_cast<CBullet_WildFire*>(m_pGameInstance->Clone_Proto_Object_Stock(CBullet_WildFire::m_szProtoTag, &tBulletDesc));
 	m_pBullet->Set_Active(false);
 

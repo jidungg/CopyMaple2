@@ -268,7 +268,6 @@
     <ClInclude Include="..\Public\Collider_Sphere.h" />
     <ClInclude Include="..\Public\DebugDraw.h" />
     <ClInclude Include="..\Public\CollisionManager.h" />
-    <ClInclude Include="..\Public\MultiAnimation.h" />
     <ClInclude Include="..\Public\Collider_Frustum.h" />
     <ClInclude Include="..\Public\RenderTarget.h" />
     <ClInclude Include="..\Public\RenderTarget_Manager.h" />
@@ -432,7 +431,6 @@
     <ClCompile Include="..\Private\Collider_Sphere.cpp" />
     <ClCompile Include="..\Private\DebugDraw.cpp" />
     <ClCompile Include="..\Private\CollisionManager.cpp" />
-    <ClCompile Include="..\Private\MultiAnimation.cpp" />
     <ClCompile Include="..\Private\Collider_Frustum.cpp" />
     <ClCompile Include="..\Private\RenderTarget.cpp" />
     <ClCompile Include="..\Private\RenderTarget_Manager.cpp" />

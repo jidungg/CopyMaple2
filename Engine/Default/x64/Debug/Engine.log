@@ -1,20 +1,17 @@
-﻿  Renderer.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\Renderer.cpp(23,6): warning C4244: '인수': 'FLOAT'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\Renderer.cpp(27,6): warning C4244: '인수': 'FLOAT'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\Renderer.cpp(31,6): warning C4244: '인수': 'FLOAT'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\Renderer.cpp(35,6): warning C4244: '인수': 'FLOAT'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\Renderer.cpp(39,6): warning C4244: '인수': 'FLOAT'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  UIObject.cpp
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\UIObject.cpp(174,57): warning C4244: '=': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\Workbench\Portfolio\CopyMaple2\Engine\private\UIObject.cpp(178,57): warning C4244: '=': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+﻿  CustomFont.cpp
+  FontManager.cpp
   코드를 생성하고 있습니다...
 DirectXTKd.lib(PrimitiveBatch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(PrimitiveBatch.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTKd.lib(BasicEffect.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(BasicEffect.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTKd.lib(VertexTypes.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(VertexTypes.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTKd.lib(SpriteBatch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(SpriteBatch.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTKd.lib(SpriteFont.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(SpriteFont.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTKd.lib(DDSTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(DDSTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTKd.lib(WICTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(WICTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTKd.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(pch.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTKd.lib(EffectCommon.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(EffectCommon.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTKd.lib(CommonStates.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(CommonStates.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTKd.lib(BinaryReader.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(BinaryReader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
      ../Bin/Engine.lib 라이브러리 및 ../Bin/Engine.exp 개체를 생성하고 있습니다.
   Engine.vcxproj -> D:\Workbench\Portfolio\CopyMaple2\Engine\Bin\Engine.dll
   .\Engine\Bin\Engine.dll
@@ -43,6 +40,7 @@ DirectXTKd.lib(EffectCommon.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(Ef
   .\Engine\Public\Condition.h
   .\Engine\Public\ContainerObject.h
   .\Engine\Public\Controller.h
+  .\Engine\Public\CustomFont.h
   .\Engine\Public\DebugDraw.h
   .\Engine\Public\DragableUI.h
   .\Engine\Public\Engine_Defines.h
@@ -56,6 +54,7 @@ DirectXTKd.lib(EffectCommon.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(Ef
   .\Engine\Public\EventHandlerWrapper.h
   .\Engine\Public\EventHandlerWrapperInterface.h
   .\Engine\Public\EventManager.h
+  .\Engine\Public\FontManager.h
   .\Engine\Public\GameInstance.h
   .\Engine\Public\GameObject.h
   .\Engine\Public\Graphic_Device.h
@@ -120,7 +119,7 @@ DirectXTKd.lib(EffectCommon.obj) : warning LNK4099: '' PDB를 'DirectXTKd.lib(Ef
   .\Engine\Public\DirectXTK\XboxDDSTextureLoader.h
   .\Engine\Public\Effects11\d3dx11effect.h
   .\Engine\Public\Effects11\d3dxGlobal.h
-  94 File(s) copied
+  96 File(s) copied
   .\Engine\Bin\ShaderFiles\Engine_Shader_Define.hlsli
   .\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl
   2 File(s) copied

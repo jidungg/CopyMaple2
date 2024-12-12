@@ -65,7 +65,7 @@ void CBullet_Kindling::Late_Update(_float fTimeDelta)
 	CGameObject* pTarget = Get_Target();
 	if (Check_Collision(Get_Target()))
 	{
-		m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, m_szHitEffectTag));
+		m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, m_eHitEffect));
 		Set_Active(false);
 	}
 }
@@ -94,7 +94,7 @@ void CBullet_Kindling::On_Collision(CGameObject* pOther)
 {
 	if (pOther == Get_Target())
 	{
-		m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pOther, (_int)m_fDamage, ("hit")));
+		m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pOther, (_int)m_fDamage, EFF_MODEL_ID::HIT_KINDLING));
 		Set_Active(false);
 	}
 }

@@ -77,7 +77,7 @@ void CStumpKick::Fire()
 		_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
 		fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
 
-		m_pGameInstance->Push_Event(CHitEvent::Create(m_pUser, pTarget, (_int)fDmg, "eff_npc_attack_hit_01_a.effmodel"));
+		m_pGameInstance->Push_Event(CHitEvent::Create(m_pUser, pTarget, (_int)fDmg, EFF_MODEL_ID::HIT_A));
 	}
 }
 

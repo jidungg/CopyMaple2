@@ -3,6 +3,7 @@
 #include "Effect.h"
 #include "GameInstance.h"
 #include "ObjectPool.h"
+#include "Client_Utility.h"
 
 IMPLEMENT_SINGLETON(CEffectManager)
 
@@ -20,7 +21,27 @@ HRESULT CEffectManager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* p
 	}
 	return S_OK;
 }
+void CEffectManager::Update(_float fTimeDelta)
+{
+	auto& iterEnd = m_listPlayingEffect.end();
+	for (auto& iter = m_listPlayingEffect.begin(); iter != iterEnd;)
+	{
+		EFF_MODEL_ID eID = iter->first;
+		CEffModelObject* pObj = iter->second;
+		if (pObj->Is_Active())
+		{
+			pObj->Update(fTimeDelta);
+			m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, pObj);
+			++iter;
+		}
+		else
+		{
+			m_mapEffectModel[eID]->Return_Object(pObj);
+			iter = m_listPlayingEffect.erase(iter);
+		}
+	}
 
+}
 HRESULT CEffectManager::Load_Data()
 {
 	json j;
@@ -33,11 +54,11 @@ HRESULT CEffectManager::Load_Data()
 		{
 		case Client::EFF_TYPE::MODEL:
 		{
-			//CEffModelObject::EFFECTOBJ_DESC tDesc(jData);
-			//LEVELID eLevel = jData["LevelProto"];
-			//CEffModelObject* pObj = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, (_uint)eLevel, CEffModelObject::m_szProtoTag, &tDesc));
-			//m_mapEffectModel[jData["Id"]] =CObjectPool< CEffModelObject>::Create(pObj, &tDesc,1);
-			//break;
+			CEffModelObject::EFFECTOBJ_DESC tDesc(jData);
+			LEVELID eLevel = jData["LevelProto"];
+			CEffModelObject* pObj = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, (_uint)eLevel, CEffModelObject::m_szProtoTag, &tDesc));
+			m_mapEffectModel[jData["Id"]] =CObjectPool< CEffModelObject>::Create(pObj, &tDesc,20);
+			break;
 		}
 		case Client::EFF_TYPE::SOUND:
 			break;
@@ -60,20 +81,22 @@ void CEffectManager::Play_EffectModel(EFF_MODEL_ID eID, _vector vPos, _vector vR
 	if (nullptr == m_mapEffectModel[eID])
 		return;
 	CEffModelObject* pObj =static_cast<CEffModelObject*>(m_mapEffectModel[eID]->Get_Object());
-	pObj->Set_Transform(vPos, vRotation, fScale);
+	//m_pGameInstance->Add_GameObject_ToLayer(Get_CurrentTrueLevel(), LAYERID::LAYER_NONCOLLISION, pObj);
+	m_listPlayingEffect.push_back({ eID,pObj });
+ 	pObj->Set_Transform(vPos, vRotation, fScale);
 	pObj->Start_Animation();
 }
 
-void CEffectManager::Play_EffectModel(EFF_MODEL_ID eID, CGameObject* pTarget, _vector vPos, _vector vRotation, _float fScale)
-{
-	if (nullptr == m_mapEffectModel[eID])
-		return;
-		
-	CEffModelObject* pObj = static_cast<CEffModelObject*>(m_mapEffectModel[eID]->Get_Object());
-	pObj->Set_Transform(vPos, vRotation, fScale);
-	pObj->Start_Animation();
-
-}
+//void CEffectManager::Play_EffectModel(EFF_MODEL_ID eID, CGameObject* pTarget, _vector vPos, _vector vRotation, _float fScale)
+//{
+//	if (nullptr == m_mapEffectModel[eID])
+//		return;
+//		
+//	CEffModelObject* pObj = static_cast<CEffModelObject*>(m_mapEffectModel[eID]->Get_Object());
+//	pObj->Set_Transform(vPos, vRotation, fScale);
+//	pObj->Start_Animation();
+//
+//}
 
 void CEffectManager::Free()
 {

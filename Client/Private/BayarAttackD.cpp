@@ -21,7 +21,7 @@ HRESULT CBayarAttackD::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	//Bullet
 	CBullet::BULLET_DESC tBulletDesc;
 	tBulletDesc.pShooter = m_pUser;
-	tBulletDesc.szHitEffectTag = "eff_sandstonebiggiant_attack_02_b_hit.effmodel";
+	tBulletDesc.eHitEffect = EFF_MODEL_ID::HIT_NPC;
 	m_pBullet = static_cast<CBullet_BayarAttackD*>(m_pGameInstance->Clone_Proto_Object_Stock(CBullet_BayarAttackD::m_szProtoTag, &tBulletDesc));
 	m_pBullet->Set_Active(false);
 	m_pUser->Add_Child(m_pBullet);

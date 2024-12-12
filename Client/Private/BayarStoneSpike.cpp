@@ -31,7 +31,7 @@ HRESULT CBayarStoneSpike::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	//Bullet
 	CBullet::BULLET_DESC tBulletDesc;
 	tBulletDesc.pShooter = m_pUser;
-	tBulletDesc.szHitEffectTag = "eff_sandstonebiggiant_attack_02_b_hit.effmodel";
+	tBulletDesc.eHitEffect = EFF_MODEL_ID::HIT_A;
 	CBullet_BayarStoneSpike* pBullet = static_cast<CBullet_BayarStoneSpike*>(m_pGameInstance->Clone_Proto_Object_Stock(CBullet_BayarStoneSpike::m_szProtoTag, &tBulletDesc));
 	pBullet->Set_Active(false);
 	m_pBulletPool = CObjectPool<CBullet_BayarStoneSpike>::Create(pBullet, &tBulletDesc,25);

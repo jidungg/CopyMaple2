@@ -8,7 +8,7 @@ class CGameInstance;
 END
 
 BEGIN(Client)
-
+class CEffectManager;
 class CMainApp final : public CBase
 {
 private:
@@ -22,6 +22,7 @@ public:
 
 private:
 	CGameInstance*				m_pGameInstance = { nullptr };
+	CEffectManager* m_pEffectManager = { nullptr };
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
 

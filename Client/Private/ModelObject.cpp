@@ -13,12 +13,12 @@ CModelObject::CModelObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 }
 
 CModelObject::CModelObject(const CModelObject& Prototype)
-	: CGameObject(Prototype),
-    m_pModelCom{ Prototype.m_pModelCom },
-    m_pShaderCom{ Prototype.m_pShaderCom }
+	: CGameObject(Prototype)
+    //m_pModelCom{ Prototype.m_pModelCom },
+   // m_pShaderCom{ Prototype.m_pShaderCom }
 {
-    Safe_AddRef(m_pModelCom);
-    Safe_AddRef(m_pShaderCom);
+    //Safe_AddRef(m_pModelCom);
+    //Safe_AddRef(m_pShaderCom);
 }
 
 HRESULT CModelObject::Initialize_Prototype()

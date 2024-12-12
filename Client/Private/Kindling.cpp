@@ -30,7 +30,7 @@ HRESULT CKindling::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	//Bullet
 	CBullet::BULLET_DESC tBulletDesc;
 	tBulletDesc.pShooter = m_pUser;
-	tBulletDesc.szHitEffectTag = "eff_wizard_kindling_hit_01.effmodel";
+	tBulletDesc.eHitEffect = EFF_MODEL_ID::HIT_KINDLING;
 	m_pBullet = static_cast<CBullet_Kindling*>(m_pGameInstance->Clone_Proto_Object_Stock(CBullet_Kindling::m_szProtoTag, &tBulletDesc));
 	m_pBullet->Set_Active(false);
 

@@ -113,7 +113,7 @@ void CBullet_BBQParty::Late_Update(_float fTimeDelta)
 				m_pSplashInvokeEffect->Start_Animation(0,false, 1);
 				for (auto& pTarget : listTarget)
 				{
-					m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, m_szHitEffectTag));
+					m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, EFF_MODEL_ID::HIT_KINDLING));
 				}
 			}
 		}

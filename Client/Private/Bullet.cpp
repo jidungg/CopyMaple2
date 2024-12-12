@@ -28,7 +28,7 @@ HRESULT CBullet::Initialize(void* pArg)
 		return E_FAIL;
 	BulletDesc* pDesc =static_cast< BulletDesc*>(pArg);
 	m_pShooter = pDesc->pShooter;
-	m_szHitEffectTag = pDesc->szHitEffectTag;
+	m_eHitEffect = pDesc->eHitEffect;
 	return S_OK;
 }
 

@@ -11,12 +11,17 @@ CEffModelObject::CEffModelObject(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 }
 
 CEffModelObject::CEffModelObject(const CEffModelObject& Prototype)
-	:CGameObject(Prototype),
-	m_pModelCom{ Prototype.m_pModelCom },
-	m_pShaderCom{ Prototype.m_pShaderCom }
+	:CGameObject(Prototype)
+	//m_pModelCom{ Prototype.m_pModelCom },
+	//m_pShaderCom{ Prototype.m_pShaderCom }
 {
-	Safe_AddRef(m_pModelCom);
-	Safe_AddRef(m_pShaderCom);
+	//Prototype은 modelCOm. ShaderCom 등이 아직 생성되지 않아서 nullptr임
+	//Prototype을 Clone 하면 nullptr을 복사해서 아무것도 안됨.
+	// 그런데 이미 Clone된 애를 또 Clone하면 이미 생성된 Component가 복사되고, AddRefㅎ됨.
+	// 그런데 이후에 Initialize에서 또 만들어줘서 포인터를 잃은 객체가 생김.
+	// 
+	//Safe_AddRef(m_pModelCom);
+	//Safe_AddRef(m_pShaderCom);
 }
 
 HRESULT CEffModelObject::Initialize_Prototype()
@@ -191,4 +196,6 @@ void CEffModelObject::Free()
 	__super::Free();
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
+	int a = 0;
 }
+ 

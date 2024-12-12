@@ -31,7 +31,7 @@ HRESULT CBBQParty::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	//Bullet
 	CBullet::BULLET_DESC tBulletDesc;
 	tBulletDesc.pShooter = m_pUser;
-	tBulletDesc.szHitEffectTag = "eff_wizard_firetornado_hit_01.effmodel";
+	tBulletDesc.eHitEffect = EFF_MODEL_ID::HIT_A;
 	m_pBullet = static_cast<CBullet_BBQParty*>(m_pGameInstance->Clone_Proto_Object_Stock(CBullet_BBQParty::m_szProtoTag, &tBulletDesc));
 	m_pBullet->Set_Active(false);
 
@@ -105,7 +105,7 @@ void CBBQParty::Fire()
 	m_pCastEffect2->Set_Active(true);
 
 	m_pTargetSearcher->Update(XMMatrixTranslation(0, m_pUser->Get_BodyCollisionOffset().y, -1) * m_pUser->Get_Transform()->Get_WorldMatrix());
-	CCharacter* pTarget = SearchTarget();
+	CCharacter* pTarget = SearchTarget(LAYER_MONSTER);
 	_uint iDamgID = (_uint)SKILL_DATA_ID::DAMG;
 	_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
 	fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
@@ -124,32 +124,6 @@ void CBBQParty::Fire()
 		m_pBullet->Launch(fDmg, vPos);
 	}
 
-}
-
-CCharacter* CBBQParty::SearchTarget()
-{
-	auto listMonster = m_pGameInstance->Get_GameObjectList(LAYERID::LAYER_MONSTER);
-	_float fMinDistance = FLT_MAX;
-	CCharacter* pReturn = nullptr;
-	for (auto& pMonster : *listMonster)
-	{
-		CCharacter* pTmpCharacter = static_cast<CCharacter*>(pMonster);
-		if (false == pTmpCharacter->Is_Targetable())
-			continue;
-		if (pTmpCharacter->Get_Team() == m_pUser->Get_Team())
-			continue;
-		CColliderBase* pCollider = pTmpCharacter->Get_Collider(0);
-		if (m_pTargetSearcher->Intersects(pCollider))
-		{
-			_float fTmpDistance = XMVectorGetX(XMVector3Length(pTmpCharacter->Get_TransformPosition() - m_pUser->Get_TransformPosition()));
-			if (fTmpDistance < fMinDistance)
-			{
-				fMinDistance = fTmpDistance;
-				pReturn = pTmpCharacter;
-			}
-		}
-	}
-	return pReturn;
 }
 
 CBBQParty* CBBQParty::Create(SKILL_DATA* pSkillData, CCharacter* pUser)

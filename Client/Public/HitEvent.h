@@ -12,18 +12,18 @@ class CHitEvent :
     public CEvent
 {
 private:
-	explicit CHitEvent(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, const _char* szEffectTag);
+	explicit CHitEvent(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, EFF_MODEL_ID eHitEffect);
 	virtual ~CHitEvent() {}
 
 public:
-	static CHitEvent* Create(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, const _char* szEffectTag);
+	static CHitEvent* Create(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, EFF_MODEL_ID eHitEffect);
 	void Exec() override;
 
 private:
 	CGameObject* m_pAttacker = { nullptr };
 	CGameObject* m_pVictim = { nullptr };
 	_int m_iDamage = { 0 };
-	const _char* m_szEffectTag = { "" } ;
+	EFF_MODEL_ID m_eHitEffect = { EFF_MODEL_ID::LAST };
 private:
 	void Free() override;
 

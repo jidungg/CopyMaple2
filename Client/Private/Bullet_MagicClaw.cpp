@@ -53,7 +53,7 @@ void CBullet_MagicClaw::Update(_float fTimeDelta)
 		CGameObject* pTarget = Get_Target();
 		if (nullptr != pTarget && pTarget->Is_Valid())
 		{
-			m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, ("hit")));
+			m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, EFF_MODEL_ID::HIT_A));
 		}
 	}
 

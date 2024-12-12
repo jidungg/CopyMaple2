@@ -21,7 +21,7 @@ HRESULT CFireTornado::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	//Bullet
 	CBullet::BULLET_DESC tBulletDesc;
 	tBulletDesc.pShooter = m_pUser;
-	tBulletDesc.szHitEffectTag = "eff_wizard_firetornado_hit_01.effmodel";
+	tBulletDesc.eHitEffect = EFF_MODEL_ID::HIT_FIRETORNADO_A;
 	m_pBullet = static_cast<CBullet_FireTornado*>(m_pGameInstance->Clone_Proto_Object_Stock(CBullet_FireTornado::m_szProtoTag, &tBulletDesc));
 	m_pBullet->Set_Active(false);
 

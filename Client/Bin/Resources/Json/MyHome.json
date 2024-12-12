@@ -6,8 +6,422 @@
             "Index": 0,
             "IntData": [],
             "ItemId": 90,
-            "Iteration": 1000,
+            "Iteration": 100,
             "ParentIndex": 0
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 109,
+            "IntData": [],
+            "ItemId": 129,
+            "Iteration": 1,
+            "ParentIndex": 109
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 119,
+            "IntData": [],
+            "ItemId": 129,
+            "Iteration": 1,
+            "ParentIndex": 119
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 129,
+            "IntData": [],
+            "ItemId": 129,
+            "Iteration": 1,
+            "ParentIndex": 129
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 139,
+            "IntData": [],
+            "ItemId": 129,
+            "Iteration": 1,
+            "ParentIndex": 139
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 149,
+            "IntData": [],
+            "ItemId": 129,
+            "Iteration": 1,
+            "ParentIndex": 149
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 159,
+            "IntData": [],
+            "ItemId": 129,
+            "Iteration": 1,
+            "ParentIndex": 159
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 169,
+            "IntData": [],
+            "ItemId": 129,
+            "Iteration": 1,
+            "ParentIndex": 169
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 179,
+            "IntData": [],
+            "ItemId": 129,
+            "Iteration": 1,
+            "ParentIndex": 179
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 189,
+            "IntData": [],
+            "ItemId": 129,
+            "Iteration": 1,
+            "ParentIndex": 189
+        },
+        {
+            "Direction": 3,
+            "FloatData": [],
+            "Index": 190,
+            "IntData": [],
+            "ItemId": 129,
+            "Iteration": 9,
+            "ParentIndex": 190
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 199,
+            "IntData": [],
+            "ItemId": 129,
+            "Iteration": 1,
+            "ParentIndex": 199
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 209,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 209
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 219,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 219
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 229,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 229
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 239,
+            "IntData": [],
+            "ItemId": 138,
+            "Iteration": 1,
+            "ParentIndex": 239
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 249,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 249
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 259,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 259
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 269,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 269
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 279,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 279
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 289,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 289
+        },
+        {
+            "Direction": 3,
+            "FloatData": [],
+            "Index": 290,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 3,
+            "ParentIndex": 290
+        },
+        {
+            "Direction": 3,
+            "FloatData": [],
+            "Index": 293,
+            "IntData": [],
+            "ItemId": 139,
+            "Iteration": 1,
+            "ParentIndex": 293
+        },
+        {
+            "Direction": 3,
+            "FloatData": [],
+            "Index": 294,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 5,
+            "ParentIndex": 294
+        },
+        {
+            "Direction": 3,
+            "FloatData": [],
+            "Index": 299,
+            "IntData": [],
+            "ItemId": 142,
+            "Iteration": 1,
+            "ParentIndex": 299
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 309,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 309
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 319,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 319
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 329,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 329
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 339,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 339
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 349,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 349
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 359,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 359
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 369,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 369
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 379,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 379
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 389,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 1,
+            "ParentIndex": 389
+        },
+        {
+            "Direction": 3,
+            "FloatData": [],
+            "Index": 390,
+            "IntData": [],
+            "ItemId": 128,
+            "Iteration": 9,
+            "ParentIndex": 390
+        },
+        {
+            "Direction": 3,
+            "FloatData": [],
+            "Index": 399,
+            "IntData": [],
+            "ItemId": 142,
+            "Iteration": 1,
+            "ParentIndex": 399
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 409,
+            "IntData": [],
+            "ItemId": 127,
+            "Iteration": 1,
+            "ParentIndex": 409
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 419,
+            "IntData": [],
+            "ItemId": 127,
+            "Iteration": 1,
+            "ParentIndex": 419
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 429,
+            "IntData": [],
+            "ItemId": 127,
+            "Iteration": 1,
+            "ParentIndex": 429
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 439,
+            "IntData": [],
+            "ItemId": 127,
+            "Iteration": 1,
+            "ParentIndex": 439
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 449,
+            "IntData": [],
+            "ItemId": 127,
+            "Iteration": 1,
+            "ParentIndex": 449
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 459,
+            "IntData": [],
+            "ItemId": 127,
+            "Iteration": 1,
+            "ParentIndex": 459
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 469,
+            "IntData": [],
+            "ItemId": 127,
+            "Iteration": 1,
+            "ParentIndex": 469
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 479,
+            "IntData": [],
+            "ItemId": 127,
+            "Iteration": 1,
+            "ParentIndex": 479
+        },
+        {
+            "Direction": 2,
+            "FloatData": [],
+            "Index": 489,
+            "IntData": [],
+            "ItemId": 127,
+            "Iteration": 1,
+            "ParentIndex": 489
+        },
+        {
+            "Direction": 3,
+            "FloatData": [],
+            "Index": 490,
+            "IntData": [],
+            "ItemId": 127,
+            "Iteration": 9,
+            "ParentIndex": 490
+        },
+        {
+            "Direction": 3,
+            "FloatData": [],
+            "Index": 499,
+            "IntData": [],
+            "ItemId": 130,
+            "Iteration": 1,
+            "ParentIndex": 499
         }
     ],
     "size": [

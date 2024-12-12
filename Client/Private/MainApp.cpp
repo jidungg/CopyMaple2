@@ -38,6 +38,7 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(SetUp_StartLevel(LEVEL_LOGO)))
 		return E_FAIL;
 
+	m_pEffectManager = CEffectManager::GetInstance();
 
 	return S_OK;
 }
@@ -45,7 +46,10 @@ HRESULT CMainApp::Initialize()
 void CMainApp::Update(_float fTimeDelta)
 {
 	if (nullptr != m_pGameInstance)
+	{
+		m_pEffectManager->Update(fTimeDelta);
 		m_pGameInstance->Update_Engine(fTimeDelta);
+	}
 }
 
 HRESULT CMainApp::Render()

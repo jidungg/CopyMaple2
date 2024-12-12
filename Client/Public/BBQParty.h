@@ -29,8 +29,6 @@ protected:
 	void Fire() override;
 
 private:
-	CCharacter* SearchTarget();
-private:
 
 	CCollider_Frustum* m_pTargetSearcher = { nullptr };
 	CBullet_BBQParty* m_pBullet = { nullptr };

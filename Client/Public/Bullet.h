@@ -12,7 +12,7 @@ public:
 	typedef struct BulletDesc : CGameObject::GAMEOBJECT_DESC
 	{
 		CGameObject* pShooter = { nullptr };
-		const _char* szHitEffectTag = "";
+		EFF_MODEL_ID eHitEffect = { EFF_MODEL_ID::LAST };
 	}BULLET_DESC;
 protected:
 	explicit CBullet(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -34,7 +34,7 @@ protected:
 	CColliderBase* m_pCollider = { nullptr };
 	_float m_fDamage = { 0 };
 	CGameObject* m_pShooter = { nullptr };
-	const _char* m_szHitEffectTag = "";
+	EFF_MODEL_ID m_eHitEffect = { EFF_MODEL_ID::LAST };
 public:
 
 	virtual void Free();

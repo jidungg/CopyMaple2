@@ -113,7 +113,9 @@ void CBullet_BBQParty::Late_Update(_float fTimeDelta)
 				m_pSplashInvokeEffect->Start_Animation(0,false, 1);
 				for (auto& pTarget : listTarget)
 				{
-					m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, EFF_MODEL_ID::HIT_KINDLING));
+					_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
+					m_fDamage *= bCrit ? 1.5 : 1.f;
+					m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, bCrit,true, EFF_MODEL_ID::HIT_KINDLING));
 				}
 			}
 		}

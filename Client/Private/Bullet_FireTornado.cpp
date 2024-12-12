@@ -83,7 +83,9 @@ void CBullet_FireTornado::Late_Update(_float fTimeDelta)
 		SearchTarget(&listTarget, LAYER_MONSTER);
 		for (auto& pTarget : listTarget)
 		{
-			m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, m_eHitEffect));
+			_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
+			m_fDamage *= bCrit ? 1.5 : 1.f;
+			m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, bCrit, true,m_eHitEffect));
 		}
 	}
 }

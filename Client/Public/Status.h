@@ -11,6 +11,7 @@ typedef struct Stat
 		iSP = js["SP"];
 		iEP = js["EP"];
 		iATK = js["ATK"];
+		fCrit = js["CRIT"];
 		iDEF = js["DEF"];
 		iEXP = js["EXP"];
 		iGold = js["Gold"];
@@ -25,6 +26,7 @@ typedef struct Stat
 	_int iSP { 0};
 	_int iEP { 0};
 	_int iATK { 0}; 
+	_float fCrit{ 0 };
 	_int iDEF { 0};
 	_int iEXP { 0};
 	_int iGold { 0};

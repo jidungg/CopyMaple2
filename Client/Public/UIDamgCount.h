@@ -42,7 +42,6 @@ protected:
 
 private:
 	DAMG_TYPE m_eDamgType = { DAMG_TYPE::LAST };
-	_int m_iValue = { 0 };
 	vector<_char> m_vecNumbers;
 	_int m_iDigitCount = { 0 };
 
@@ -54,6 +53,7 @@ private:
 	_int m_iNumTextureStride= { 54 };
 
 	CTexture* m_pTextureCom = { nullptr };
+	_int* m_arrNumTextureWidth;
 public:
 	static CUIDamgCount* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;

@@ -7,7 +7,7 @@
 #include "EffectManager.h"
 #include "UIDamgCount.h"
 
-CHitEvent::CHitEvent(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, EFF_MODEL_ID eHitEffect)
+CHitEvent::CHitEvent(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, _bool bCrit, _bool bPlayer, EFF_MODEL_ID eHitEffect)
 	: m_pAttacker(pAttacker)
 	, m_pVictim(pVictim)
 	, m_iDamage(iDamage)
@@ -18,16 +18,18 @@ CHitEvent::CHitEvent(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage,
 	m_eEventID = (_uint)EVENT_ID::HIT;
 }
 
-CHitEvent* CHitEvent::Create(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, EFF_MODEL_ID eHitEffect)
+CHitEvent* CHitEvent::Create(CGameObject* pAttacker, CGameObject* pVictim, _int iDamg, _bool bCrit, _bool bPlayer, EFF_MODEL_ID eHitEffect)
 {
-	return new CHitEvent(pAttacker, pVictim, iDamage, eHitEffect);
+	return new CHitEvent(pAttacker, pVictim, iDamg, bCrit, bPlayer, eHitEffect);
 }
 
 void CHitEvent::Exec()
 {
+	CEffectManager* pEffMgr = EFFECT_MANAGER;
+	_vector vPos = static_cast<CCharacter*>(m_pVictim)->Get_Hitpoint();
 	m_pVictim->Hit(m_pAttacker,m_iDamage);
-	EFFECT_MANAGER->Play_EffectModel(m_eHitEffect,static_cast<CCharacter*>( m_pVictim)->Get_Hitpoint());
-
+	pEffMgr->Play_EffectModel(m_eHitEffect,static_cast<CCharacter*>( m_pVictim)->Get_Hitpoint());
+	pEffMgr->Play_DamgCount(m_bCrit,m_bPlayer, m_iDamage, vPos);
 }
 
 void CHitEvent::Free()

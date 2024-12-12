@@ -36,8 +36,8 @@ HRESULT CEffectManager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* p
 }
 void CEffectManager::Update(_float fTimeDelta)
 {
-	auto& iterEnd = m_listPlayingEffect.end();
-	for (auto& iter = m_listPlayingEffect.begin(); iter != iterEnd;)
+	auto& iterEffEnd = m_listPlayingEffect.end();
+	for (auto& iter = m_listPlayingEffect.begin(); iter != iterEffEnd;)
 	{
 		EFF_MODEL_ID eID = iter->first;
 		CEffModelObject* pObj = iter->second;
@@ -53,6 +53,24 @@ void CEffectManager::Update(_float fTimeDelta)
 			iter = m_listPlayingEffect.erase(iter);
 		}
 	}
+	auto& iterDmgCountEnd = m_listPlayingDamgCount.end();
+	for (auto& iter = m_listPlayingDamgCount.begin(); iter != iterDmgCountEnd;)
+	{
+		DAMG_TYPE eID = iter->first;
+		CUIDamgCount* pObj = iter->second;
+		if (pObj->Is_Active())
+		{
+			pObj->Update(fTimeDelta);
+			m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, pObj);
+			++iter;
+		}
+		else
+		{
+			m_DmgCountPool[(_uint)eID]->Return_Object(pObj);
+			iter = m_listPlayingDamgCount.erase(iter);
+		}
+	}
+
 
 }
 HRESULT CEffectManager::Load_Data()
@@ -109,6 +127,28 @@ void CEffectManager::Play_DamgCount(DAMG_TYPE eID, _int iDamg, _vector vPos, _ve
 	pObj->Set_Transform(vPos, vRotation, fScale);
 	pObj->Set_Damge(iDamg);
 	pObj->Start();
+}
+
+void CEffectManager::Play_DamgCount(_bool bCrit, _bool bPlayer, _int iDamg, _vector vPos, _vector vRotation, _float fScale)
+{
+	DAMG_TYPE eType;
+	if (bCrit)
+	{
+		if (bPlayer)
+			eType = DAMG_TYPE::PLAYER_CRITICAL;
+		else
+			eType = DAMG_TYPE::MONSTER_CRITICAL;
+
+	}
+	else
+	{
+		if (bPlayer)
+			eType = DAMG_TYPE::PLAYER_NORMAL;
+		else
+			eType = DAMG_TYPE::MONSTER_NORMAL;
+
+	}
+	Play_DamgCount(eType, iDamg, vPos, vRotation, fScale);
 }
 
 

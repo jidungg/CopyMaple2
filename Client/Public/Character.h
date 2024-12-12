@@ -70,6 +70,7 @@ public:
 	_float Get_AnimationProgress(_uint iAnimIdx);
 	TEAM Get_Team() { return m_eTeam; }
 	Stat Get_Stat() { return m_tStat; }
+	_bool Judge_Critical();
 
 	const _float4x4* Get_BoneMatrix(const _char* szBoneName);
 protected:

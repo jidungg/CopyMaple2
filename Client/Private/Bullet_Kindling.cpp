@@ -65,7 +65,9 @@ void CBullet_Kindling::Late_Update(_float fTimeDelta)
 	CGameObject* pTarget = Get_Target();
 	if (Check_Collision(Get_Target()))
 	{
-		m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, m_eHitEffect));
+		_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
+		m_fDamage *= bCrit * 1.5f;
+		m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, bCrit, true, m_eHitEffect));
 		Set_Active(false);
 	}
 }
@@ -94,7 +96,9 @@ void CBullet_Kindling::On_Collision(CGameObject* pOther)
 {
 	if (pOther == Get_Target())
 	{
-		m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pOther, (_int)m_fDamage, EFF_MODEL_ID::HIT_KINDLING));
+		_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
+		m_fDamage *= bCrit ? 1.5 : 1.f;
+		m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pOther, (_int)m_fDamage, bCrit, true,EFF_MODEL_ID::HIT_KINDLING));
 		Set_Active(false);
 	}
 }

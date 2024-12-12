@@ -126,7 +126,9 @@ void CBullet_FakeMeteor::On_MeteorImpact()
 	SearchTarget(&listTarget, LAYER_MONSTER);
 	for (auto& pTarget : listTarget)
 	{
-		m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, m_eHitEffect));
+		_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
+		m_fDamage *= bCrit ? 1.5 : 1.f;
+		m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage,bCrit, true, m_eHitEffect));
 	}
 	m_pSplashInvokeEffectB->Start_Animation();
 	m_pSplashInvokeEffectB->Set_Active(true);

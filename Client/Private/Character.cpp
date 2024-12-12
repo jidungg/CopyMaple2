@@ -6,6 +6,8 @@
 #include "CubeTerrain.h"
 #include "Collider_Sphere.h"
 #include "Skill.h"
+#include "Engine_Utility.h"
+
 CCharacter::CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPawn(pDevice, pContext)
 {
@@ -181,6 +183,11 @@ _uint CCharacter::Get_CurrentAnimIdx()
 _float CCharacter::Get_AnimationProgress(_uint iAnimIdx)
 {
 	return m_pBody->Get_AnimationProgress(iAnimIdx);
+}
+
+_bool CCharacter::Judge_Critical()
+{
+	return CEngineUtility::Get_RandomFloat(0, 1) <= m_tStat.fCrit;
 }
 
 const _float4x4* CCharacter::Get_BoneMatrix(const _char* szBoneName)

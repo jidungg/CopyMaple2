@@ -82,8 +82,7 @@ PS_OUT PS_MAIN(PS_IN In)
 
     Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord);
 
-    Out.vColor.gb = 0.f;
-
+    //Out.vColor.gb = 0.f;
     return Out;
 }
 /* PixelShader */
@@ -113,14 +112,16 @@ PS_OUT PS_DMGCOUNT_MAIN(PS_IN In)
     }
     float fCurrentNumberCoord = (fPrintingPosition - fStart) / (fEnd - fStart);
     float fCurrentNumberCoordStart = iPrintingNumber / 10;
-    float fCurrentNumberCoordEnd = (iPrintingNumber * g_NumberTextureSize + g_arrDigitWidth[iPrintingNumber]) / (g_NumberTextureSize * 10);
+    float fCurrentNumberCoordEnd = (iPrintingNumber * g_NumberTextureStride + g_arrDigitWidth[iPrintingNumber]) / (g_NumberTextureStride * 10);
     float fResultCoord = (fCurrentNumberCoordStart - fCurrentNumberCoordEnd) * fCurrentNumberCoord ;
     Out.vColor = g_Texture.Sample(LinearSampler, float2(fResultCoord, In.vTexcoord.y));
 
     if(Out.vColor.a <= 0.1f)
     {
-        discard;
+
+
     }
+    Out.vColor = (1, 1, 1, 1);
     return Out;
 }
 

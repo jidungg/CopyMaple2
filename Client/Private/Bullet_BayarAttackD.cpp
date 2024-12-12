@@ -50,7 +50,9 @@ void CBullet_BayarAttackD::Late_Update(_float fTimeDelta)
 		if (m_setHitObject.find(pTarget) != m_setHitObject.end())
 			continue;
 		m_setHitObject.insert(pTarget);
-		m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, m_eHitEffect));
+		_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
+		m_fDamage *= bCrit ? 1.5 : 1.f;
+		m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, bCrit, false, m_eHitEffect));
 	}
 
 }

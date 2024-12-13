@@ -60,7 +60,7 @@ HRESULT CFlameWave::Render_Collider()
     return E_NOTIMPL;
 }
 
-void CFlameWave::On_Cast()
+void CFlameWave::On_SkillUsed()
 {
 	m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect->Start_Animation();

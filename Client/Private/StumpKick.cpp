@@ -53,7 +53,7 @@ void CStumpKick::Late_Update(_float fTimeDelta)
 	}
 }
 
-void CStumpKick::On_Cast()
+void CStumpKick::On_SkillUsed()
 {
 }
 

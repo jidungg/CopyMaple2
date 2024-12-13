@@ -74,7 +74,7 @@ void CMagicClaw::Late_Update(_float fTimeDelta)
 }
 
 
-void CMagicClaw::On_Cast()
+void CMagicClaw::On_SkillUsed()
 {
 	m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect->Start_Animation();

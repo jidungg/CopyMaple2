@@ -17,7 +17,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta);
 protected:
 
-	void On_Cast() override;
+	void On_SkillUsed() override;
 	void On_CastingEnd() override;
 	void Fire() override;
 private:

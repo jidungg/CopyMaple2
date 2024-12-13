@@ -59,6 +59,7 @@ public:
 	_vector Get_MoveDirection() { return m_vMoveDirectionXZ; }
 	_vector Get_LookDirection() { return m_vLookDirectionXZ; }
 	_vector Get_Hitpoint();
+	_vector Get_OverHeadPoint();
 
 	_float Get_BodyCollisionRadius();
 	_float3 Get_BodyCollisionOffset();

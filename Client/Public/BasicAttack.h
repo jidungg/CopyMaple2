@@ -13,7 +13,7 @@ public:
 
 protected:
 
-	virtual void On_Cast() override;
+	virtual void On_SkillUsed() override;
 	virtual void On_CastingEnd() override;
 	virtual void Fire() override;
 public:

@@ -87,7 +87,7 @@ void CFakeMeteor::Late_Update(_float fTimeDelta)
 	}
 }
 
-void CFakeMeteor::On_Cast()
+void CFakeMeteor::On_SkillUsed()
 {
 	m_pCastEffect1->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect1->Start_Animation();

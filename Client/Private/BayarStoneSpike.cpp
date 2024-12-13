@@ -81,7 +81,7 @@ void CBayarStoneSpike::Late_Update(_float fTimeDelta)
 
 }
 
-void CBayarStoneSpike::On_Cast()
+void CBayarStoneSpike::On_SkillUsed()
 {
 }
 

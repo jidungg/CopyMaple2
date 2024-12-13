@@ -48,7 +48,7 @@ _bool CCollider_Cylinder::Contains(const FXMVECTOR& vPosition)
 	m_bCollide = false;
 	_vector vXZPos = XMVectorSet(XMVectorGetX(vPosition), 0, XMVectorGetZ(vPosition), 1);
 	_vector vXZCenter = XMVectorSet(XMVectorGetX(m_vWorldCenter), 0, XMVectorGetZ(m_vWorldCenter), 1);
-	if (XMVector2Length(vXZPos - vXZCenter).m128_f32[0] < m_fRadius)
+	if (XMVector3Length(vXZPos - vXZCenter).m128_f32[0] < m_fRadius)
 	{
 		_float fY = XMVectorGetY(vPosition);
 		_float fYCenter = XMVectorGetY(m_vWorldCenter);

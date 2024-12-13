@@ -24,7 +24,7 @@ protected:
 
 
 
-	void On_Cast() override;
+	void On_SkillUsed() override;
 	void On_CastingEnd() override;
 	void Fire() override;
 

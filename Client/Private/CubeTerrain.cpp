@@ -55,9 +55,9 @@ void CCubeTerrain::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 	iTmpCellCount = 0;
 	//cout << "==================" << endl;
-	Culling(m_pOctoTree);
+	//Culling(m_pOctoTree);
 	//cout <<"TotalCellCount: " << m_vecCells.size()<<"iTmpCellCount : " << iTmpCellCount << endl;
-	//m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	int a = 0;
 }
 

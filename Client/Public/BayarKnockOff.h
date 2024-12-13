@@ -16,7 +16,7 @@ public:
 	virtual void Update(_float fTimeDelta);
 	virtual void Late_Update(_float fTimeDelta);
 
-	virtual void On_Cast() override;
+	virtual void On_SkillUsed() override;
 	virtual void On_CastingEnd() override;
 	virtual void Fire() override;
 	virtual void On_AttackEnd() override;

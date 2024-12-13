@@ -87,7 +87,7 @@ void CKindling::Late_Update(_float fTimeDelta)
 	}
 }
 
-void CKindling::On_Cast()
+void CKindling::On_SkillUsed()
 {
 	m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect->Start_Animation();

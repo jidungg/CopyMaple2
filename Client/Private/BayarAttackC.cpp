@@ -30,9 +30,9 @@ HRESULT CBayarAttackC::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
     return S_OK;
 }
 
-void CBayarAttackC::On_Cast()
+void CBayarAttackC::On_SkillUsed()
 {
-	__super::On_Cast();
+	__super::On_SkillUsed();
 	m_pChargeEffect->Set_Active(true);
 	m_pChargeEffect->Start_Animation(0, true);
 }

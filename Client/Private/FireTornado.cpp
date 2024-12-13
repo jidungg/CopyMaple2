@@ -62,7 +62,7 @@ void CFireTornado::Late_Update(_float fTimeDelta)
 	}
 }
 
-void CFireTornado::On_Cast()
+void CFireTornado::On_SkillUsed()
 {
 	m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect->Start_Animation();

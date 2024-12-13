@@ -50,7 +50,7 @@ void CTeleport::Fire()
 	m_pCastEffect->Set_Active(true);
 }
 
-void CTeleport::On_Cast()
+void CTeleport::On_SkillUsed()
 {
 }
 

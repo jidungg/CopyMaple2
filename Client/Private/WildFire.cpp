@@ -65,7 +65,7 @@ void CWildFire::Late_Update(_float fTimeDelta)
 
 }
 
-void CWildFire::On_Cast()
+void CWildFire::On_SkillUsed()
 {
 	m_pCastEffect1->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect1->Start_Animation();

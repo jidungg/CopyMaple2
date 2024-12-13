@@ -23,7 +23,7 @@ void CBasicAttack::Fire()
 {
 }
 
-void CBasicAttack::On_Cast()
+void CBasicAttack::On_SkillUsed()
 {
 }
 

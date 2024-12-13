@@ -45,10 +45,10 @@ HRESULT CBullet_Kindling::Initialize(void* pArg)
 
 void CBullet_Kindling::Update(_float fTimeDelta)
 {
-	CGameObject* pTarget =  Get_Target();
+	CCharacter* pTarget =  static_cast<CCharacter*>( Get_Target());
 	if (pTarget)
 	{
-		m_pTransformCom->LookAt(pTarget->Get_TransformPosition());
+		m_pTransformCom->LookAt(pTarget->Get_Hitpoint());
 	}
 
 	m_pTransformCom->Go_Straight(fTimeDelta);
@@ -63,10 +63,10 @@ void CBullet_Kindling::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pCollider->Update(m_pTransformCom->Get_WorldMatrix());
 	CGameObject* pTarget = Get_Target();
-	if (Check_Collision(Get_Target()))
+	if (Check_Collision(pTarget))
 	{
 		_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
-		m_fDamage *= bCrit * 1.5f;
+		m_fDamage *= bCrit ? 1.f : 1.5f;
 		m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, bCrit, true, m_eHitEffect));
 		Set_Active(false);
 	}

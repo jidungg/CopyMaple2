@@ -50,7 +50,7 @@ void CBayarAttackB::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 }
 
-void CBayarAttackB::On_Cast()
+void CBayarAttackB::On_SkillUsed()
 {
 }
 

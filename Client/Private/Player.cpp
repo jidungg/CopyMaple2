@@ -611,6 +611,7 @@ void CPlayer::Receive_KeyInput(_float fTimeDelta)
 
 	_vector vAddDir{ 0,0,0,0 };
 	_float vMoveSpeed = m_tStat.fRunSpeed;
+
 	if (m_bClimb  )
 	{
 		if (m_pBody->Is_AnimPostDelayEnd())
@@ -648,14 +649,19 @@ void CPlayer::Receive_KeyInput(_float fTimeDelta)
 	}
 	else
 	{
-		if (m_pGameInstance->GetKeyState(KEY::RIGHT) == KEY_STATE::PRESSING)
+		CSkill* pCurSkill = Get_CurrentSkill();
+		_bool bCasting = pCurSkill->Is_CastingComplete();
+		KEY_STATE eKeyStateCondition = bCasting ? KEY_STATE::PRESSING : KEY_STATE::DOWN;
+		if (m_pGameInstance->GetKeyState(KEY::RIGHT) == eKeyStateCondition)
 			vAddDir += Get_Direction_Vector(DIR_E);
-		if (m_pGameInstance->GetKeyState(KEY::LEFT) == KEY_STATE::PRESSING)
+		if (m_pGameInstance->GetKeyState(KEY::LEFT) == eKeyStateCondition)
 			vAddDir += Get_Direction_Vector(DIR_W);
-		if (m_pGameInstance->GetKeyState(KEY::UP) == KEY_STATE::PRESSING)
+		if (m_pGameInstance->GetKeyState(KEY::UP) == eKeyStateCondition)
 			vAddDir += Get_Direction_Vector(DIR_N);
-		if (m_pGameInstance->GetKeyState(KEY::DOWN) == KEY_STATE::PRESSING)
+		if (m_pGameInstance->GetKeyState(KEY::DOWN) == eKeyStateCondition)
 			vAddDir += Get_Direction_Vector(DIR_S);
+		if (bCasting && false == XMVector4Equal(vAddDir, XMVectorZero()))
+			pCurSkill->Cancel_Casting();
 	}
 
 
@@ -1014,7 +1020,7 @@ void CPlayer::Late_Update(_float fTimeDelta)
 		else
 			m_pTransformCom->LookToward(XMVectorSetY(m_vLookDirectionXZ, 0));
 
-		Get_CurrentSkill()->Cancel_Casting();
+
 	}
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vNextPos);

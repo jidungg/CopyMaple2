@@ -176,7 +176,7 @@
             "Cost": 60,
             "CoolTime": 30,
             "IconImg": "FakeMeteor.png",
-            "Range": 8,
+            "Range": 4.5,
             "Data": [ 3710.0 ],
             "LevelUpData": [ 508.0 ],
             "Preceding": [
@@ -196,7 +196,7 @@
             "Cost": 0,
             "CoolTime": 30,
             "IconImg": "10300291.png",
-            "Range": 20,
+            "Range": 5,
             "Data": [ 3763.0 ],
             "LevelUpData": [ 433.0 ],
             "Preceding": [

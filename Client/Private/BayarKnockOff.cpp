@@ -80,7 +80,7 @@ void CBayarKnockOff::Late_Update(_float fTimeDelta)
 
 
 
-void CBayarKnockOff::On_Cast()
+void CBayarKnockOff::On_SkillUsed()
 {
 	m_pJumpReadyEffect->Set_Active(true);
 	m_pJumpReadyEffect->Start_Animation();

@@ -164,6 +164,11 @@ _vector CCharacter::Get_Hitpoint()
 	return Get_WorldPosition() + XMVectorSet(0, m_tStat.fBodyHeight,0,0);
 }
 
+_vector CCharacter::Get_OverHeadPoint()
+{
+	return Get_WorldPosition() + XMVectorSet(0, m_tStat.fBodyHeight *2, 0, 0);;
+}
+
 _float CCharacter::Get_BodyCollisionRadius()
 {
 	return static_cast<CCollider_Sphere*>( Get_Collider(m_iBodyColliderIndex))->Get_Desc()->Radius;

@@ -75,11 +75,12 @@ public:
 	_bool Is_CastingComplete();
 	_bool Is_CoolReady();
 	_bool Is_EnoughCost();
+	_bool Is_CastingType();
 	virtual _bool Is_Available();
 
 protected:
 	virtual void Initialzie_AnimEvent() ;
-	virtual void On_Cast() abstract;
+	virtual void On_SkillUsed() abstract;
 	virtual void On_CastingEnd() abstract;
 	virtual void Fire();
 	virtual void On_AttackEnd();
@@ -97,6 +98,7 @@ protected:
 	map<_uint, list< ANIM_EVENT>> m_mapAnimEvent;
 	CColliderBase* m_pTargetSearcher = { nullptr };
 	_bool m_bNeedWeapon = { false };
+	class CUIBundle* m_pUIBundle = { nullptr };
 public:
 	static CSkill* Create(SKILL_DATA* pSkillData, CCharacter* pUser);
 	virtual void Free() override;

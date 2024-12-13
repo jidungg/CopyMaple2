@@ -29,7 +29,7 @@ public:
 private:
 	CEffModelObject* m_pCastEffect2 = { nullptr };
 	_bool m_bExpanding = { false };
-	_float m_fMaxRange = {20.f };
+	_float m_fMaxRange = {8.f };
 	_float m_fMinRange = { 0.f };
 	_float m_fCurrentRange = { 0.f };
 	_float m_fExpandSpeed = { 10.f };

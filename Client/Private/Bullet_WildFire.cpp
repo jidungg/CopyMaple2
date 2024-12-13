@@ -80,7 +80,7 @@ HRESULT CBullet_WildFire::Render()
 
 _bool CBullet_WildFire::Check_Collision(CGameObject* pOther)
 {
-	return static_cast<CCollider_Cylinder*>(m_pCollider)->Contains(pOther->Get_TransformPosition());
+	return static_cast<CCollider_Cylinder*>(m_pCollider)->Contains(pOther->Get_WorldPosition());
 }
 
 void CBullet_WildFire::Launch(_float fDamage, _fvector vPosition)

@@ -60,7 +60,7 @@ void CBayarSkyJump::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 }
 
-void CBayarSkyJump::On_Cast()
+void CBayarSkyJump::On_SkillUsed()
 {
 	m_pJumpReadyEffect->Set_Active(true);
 	m_pJumpReadyEffect->Start_Animation();

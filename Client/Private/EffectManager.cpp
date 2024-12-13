@@ -161,4 +161,9 @@ void CEffectManager::Free()
 		Safe_Release(pair.second);
 	}
 	m_mapEffectModel.clear();
+	for (auto& pair : m_DmgCountPool)
+	{
+		Safe_Release(pair);
+	}
+	m_listPlayingEffect.clear();
 }

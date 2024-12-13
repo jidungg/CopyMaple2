@@ -61,7 +61,7 @@ void CBayarAttackD::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 }
 
-void CBayarAttackD::On_Cast()
+void CBayarAttackD::On_SkillUsed()
 {
 	m_pChargeEffect->Set_Active(true);
 	m_pChargeEffect->Start_Animation(0,true);

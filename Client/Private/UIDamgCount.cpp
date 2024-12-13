@@ -187,3 +187,9 @@ CGameObject* CUIDamgCount::Clone(void* pArg)
 
 	return pInstance;
 }
+
+void CUIDamgCount::Free()
+{
+	__super::Free();
+	Safe_Release(m_pTextureCom);
+}

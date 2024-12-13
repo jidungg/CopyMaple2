@@ -68,7 +68,7 @@ void CBayarPalmStrike::Late_Update(_float fTimeDelta)
 	}
 }
 
-void CBayarPalmStrike::On_Cast()
+void CBayarPalmStrike::On_SkillUsed()
 {
 	m_iAttackCount = 0;
 }

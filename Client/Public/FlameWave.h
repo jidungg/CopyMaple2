@@ -25,7 +25,7 @@ protected:
 	virtual void Late_Update(_float fTimeDelta);
 	virtual HRESULT Render_Collider();
 
-	void On_Cast() override;
+	void On_SkillUsed() override;
 	void On_CastingEnd() override;
 	void Fire() override;
 

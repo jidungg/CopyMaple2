@@ -54,7 +54,7 @@ void CCrabAttack::Late_Update(_float fTimeDelta)
 
 }
 
-void CCrabAttack::On_Cast()
+void CCrabAttack::On_SkillUsed()
 {
 }
 

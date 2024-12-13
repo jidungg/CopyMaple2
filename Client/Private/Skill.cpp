@@ -39,8 +39,9 @@ HRESULT CSkill::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	m_pSkillDesc = pSkillData;
 
 	m_pUser = pUser;
-	m_fCoolTimeAcc = pSkillData->fCoolTime;
-        	Initialzie_AnimEvent();
+	m_fCoolTimeAcc = m_pSkillDesc->fCoolTime;
+    Initialzie_AnimEvent();
+	m_pUIBundle = UIBUNDLE;
 	return S_OK;
 }
 void CSkill::Update_CoolTime(_float fDeltaTime)
@@ -51,15 +52,18 @@ void CSkill::Update_CoolTime(_float fDeltaTime)
 
 void CSkill::Update_CastingTime(_float fDeltaTime)
 {
+	if (false == Is_CastingType())
+		return;
 	if (m_bCastingComplete)
 		return;
 	m_fCastingRatio = m_pUser->Get_AnimationProgress(m_pSkillDesc->vecAnimation[0]);
-	UIBUNDLE->Update_CastingRatio(m_fCastingRatio);
+	m_pUIBundle->Update_CastingRatio(m_fCastingRatio);
 	if (m_fCastingRatio >= 1)
 	{
 		m_bCastingComplete = true;
 		On_CastingEnd();
 		m_pUser->On_CastingEnd(this);
+		m_fCastingRatio = 0.f;
 		m_fCoolTimeAcc = 0.f;
 	}
 }
@@ -79,9 +83,15 @@ void CSkill::Use()
 		return;
 	if (m_pUser->Use_Skill(this))
 	{
-		m_bCastingComplete = false;
-		On_Cast();
-		UIBUNDLE->Update_CastingRatio(0);
+		if (Is_CastingType())
+		{
+			m_bCastingComplete = false;
+			UIBUNDLE->Update_CastingRatio(0);
+		}
+		else
+			m_fCoolTimeAcc = 0;
+		On_SkillUsed();
+
 	}
 }
 
@@ -151,6 +161,11 @@ _bool CSkill::Is_EnoughCost()
 	return false;
 }
 
+_bool CSkill::Is_CastingType()
+{
+	return m_pSkillDesc->eCastingType == SKILL_CASTING_TYPE::CASTING;
+}
+
 _bool CSkill::Is_CastingComplete()
 {
 	if (m_pSkillDesc->eCastingType != SKILL_CASTING_TYPE::CASTING)
@@ -184,7 +199,7 @@ void CSkill::Initialzie_AnimEvent()
 			switch (eEvent)
 			{
 			case Client::SKILL_MOTION_EVENT::CAST:
-				tAnimEvent.pFunc = std::bind(&CSkill::On_Cast, this);
+				tAnimEvent.pFunc = std::bind(&CSkill::On_SkillUsed, this);
 				break;
 			case Client::SKILL_MOTION_EVENT::FIRE:
 				tAnimEvent.pFunc = std::bind(&CSkill::Fire, this);

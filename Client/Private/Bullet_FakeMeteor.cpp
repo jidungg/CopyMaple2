@@ -22,7 +22,7 @@ HRESULT CBullet_FakeMeteor::Initialize(void* pArg)
 		return E_FAIL;
 
 	CCollider_Cylinder::CYLINDER_COLLIDER_DESC tDesc;
-	tDesc.fRadius = 10.f;
+	tDesc.fRadius = 5.f;
 	tDesc.vCenter = { 0.f,3.f,0.f };
 	tDesc.fHeight = 6.f;
 	m_pCollider = static_cast<CCollider_Cylinder*>(m_pGameInstance->Clone_Proto_Component_Stock(CCollider_Cylinder::m_szProtoTag, &tDesc));

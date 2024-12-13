@@ -11,7 +11,7 @@ private:
 public:
 	virtual HRESULT Initialize(SKILL_DATA* pSkillData, CCharacter* pUser) override;
 
-	virtual void On_Cast() override;
+	virtual void On_SkillUsed() override;
 	virtual void On_CastingEnd() override;
 	virtual void Fire() override;
 	virtual void On_AttackEnd() override;

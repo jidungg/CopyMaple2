@@ -66,12 +66,13 @@ void CBullet_BayarStoneSpike::Late_Update(_float fTimeDelta)
 				return;
 			}
 			list<CGameObject*> listTarget;
-			XMMATRIX matWorld = m_pTransformCom->Get_WorldMatrix();
+			XMMATRIX matWorld = XMLoadFloat4x4( &m_WorldMatrix);
 			for (_uint i = 0; i < 5; i++)
 			{
 				_vector vPos = m_vCenterPos+ _vector{ dX[i], 0, dZ[i], 1 };
 				matWorld.r[3] = XMVectorSet(vPos.m128_f32[0], vPos.m128_f32[1], vPos.m128_f32[2], 1);
 				m_pCollider->Update(matWorld);
+				m_pCollider->Render();
 				SearchTarget(&listTarget, LAYER_PLAYER);
 			}
 			for (auto& pTarget : listTarget)
@@ -106,9 +107,8 @@ HRESULT CBullet_BayarStoneSpike::Render()
 		m_pPrecursorEffect->Compute_Matrix();
 		m_pCollider->Render();
 		__super::Render();
+
 	}
-
-
 	return S_OK;
 }
 void CBullet_BayarStoneSpike::Launch(_float fDamage, _vector vPosition)

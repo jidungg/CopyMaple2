@@ -66,7 +66,9 @@ VS_OUT VS_MAIN(VS_IN In)
     matrix matWV, matWVP;
 
     //matWV = mul(g_WorldMatrix, g_ViewMatrix);
-    matWVP = mul(g_ViewMatrix, g_ProjMatrix);
+   // matWVP = mul(g_ViewMatrix, g_ProjMatrix);
+    matWV = mul(g_WorldMatrix, g_ViewMatrix);
+    matWVP = mul(matWV, g_ProjMatrix);
     float fWeightW = 1.f - (In.vBlendWeights.x + In.vBlendWeights.y + In.vBlendWeights.z);
 
     matrix BoneMatrix = mul(g_BoneMatrices[In.vBlendIndices.x], In.vBlendWeights.x) +

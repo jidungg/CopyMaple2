@@ -51,6 +51,9 @@ void CBayarStoneSpike::Update(_float fTimeDelta)
 void CBayarStoneSpike::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
+	m_pBulletPool->Retrive_False_Object([](CBullet_BayarStoneSpike* pBullet)->_bool{
+		return pBullet->Is_Active();
+	});
 	m_pBulletPool->LateUpdate_LentObject(fTimeDelta);
 
 	if (false == m_bAttack)
@@ -69,10 +72,10 @@ void CBayarStoneSpike::Late_Update(_float fTimeDelta)
 			fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
 
 			CBullet* pBullet = m_pBulletPool->Get_Object();
-			_vector vTargetPos = pTarget->Get_TransformPosition();
+			_vector vTargetPos = pTarget->Get_WorldPosition();
 
-			vTargetPos = XMVectorSetY(vTargetPos, m_pTerrain->Get_FloorHeight(vTargetPos));
 			vTargetPos = m_pTerrain->Get_ContainedCellPosition(vTargetPos);
+			vTargetPos = XMVectorSetY(vTargetPos, m_pTerrain->Get_FloorHeight(vTargetPos));
 			pBullet->Launch(fDmg, vTargetPos);
 		}
 

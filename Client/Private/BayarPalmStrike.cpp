@@ -99,10 +99,8 @@ void CBayarPalmStrike::Fire()
 	_uint iDamgID = (_uint)SKILL_DATA_ID::DAMG;
 	for (auto& pTarget : listTarget)
 	{
-		_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
-		fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
-		_bool bCrit = m_pUser->Judge_Critical();
-		fDmg *= bCrit ? 1.5 : 1.f;
+		_bool bCrit; 
+		_float fDmg = Calc_Damg(bCrit);
 		m_pGameInstance->Push_Event(CHitEvent::Create(m_pUser, pTarget, (_int)fDmg, bCrit,false, EFF_MODEL_ID::HIT_A));
 	}
 }

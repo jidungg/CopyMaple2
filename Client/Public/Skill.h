@@ -77,6 +77,7 @@ public:
 	_bool Is_EnoughCost();
 	_bool Is_CastingType();
 	virtual _bool Is_Available();
+	_float Calc_Damg(_bool& bOutCritical);
 
 protected:
 	virtual void Initialzie_AnimEvent() ;

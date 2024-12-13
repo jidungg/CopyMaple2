@@ -242,6 +242,7 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_BODYWALL), &m_bBodyWall);
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_FOOTWALL), &m_bFootWall);
 	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_HPZERO), &m_bHPZero);
+	m_pAnimStateMachine->Add_ConditionVariable(_uint(ANIM_CONDITION::AC_ATTACHED), &m_bAttached);
 
 
 	//STATE
@@ -310,8 +311,10 @@ HRESULT CPlayer::Ready_AnimStateMachine()
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, true);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB, ANIM_STATE::BS_JUMP);
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_JUMP_TRIGGER);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_ATTACHED, CONDITION_TYPE::EQUAL, false);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB, ANIM_STATE::BS_JUMP);
 	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_CLIMB, CONDITION_TYPE::EQUAL, false);
+	m_pAnimStateMachine->Bind_Condition(pTransition, ANIM_CONDITION::AC_ATTACHED, CONDITION_TYPE::EQUAL, false);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB, ANIM_STATE::BS_CLIMB_LAND);
 	m_pAnimStateMachine->Bind_TriggerCondition(pTransition, ANIM_CONDITION::AC_CLIMB_LAND_TRIGGER);
 	pTransition = m_pAnimStateMachine->Add_Transition(ANIM_STATE::BS_CLIMB, ANIM_STATE::BS_DEAD);
@@ -1041,6 +1044,7 @@ void CPlayer::On_StateChange(_uint iState)
 
 void CPlayer::On_SubStateChange(_uint iSubState)
 {
+
 	m_pBody->Switch_Animation(iSubState);
 
 }
@@ -1082,7 +1086,7 @@ HRESULT CPlayer::Render()
 		if (child->Is_Active() && child->Is_Dead() == false)
 			child->Render();
 	}
-	Get_CurrentSkill()->Render_Collider();
+
 	return S_OK;
 }
 

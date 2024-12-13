@@ -11,7 +11,7 @@ private:
 	virtual ~CObjectPool() = default;
 
 public:
-	void Retrive_Object(_bool(*func)(T* ));
+	void Retrive_False_Object(_bool(*func)(T* ));
 	T* Get_Object();
 	void Return_Object(T* pGameObject);
 	void Update_LentObject(_float fTimeDelta);
@@ -51,7 +51,7 @@ inline CObjectPool<T>::CObjectPool(T* pOriginal, void* pArg, _uint iCloneCount)
 
 
 template<class T>
-inline void CObjectPool<T>::Retrive_Object(_bool(*func)(T*))
+inline void CObjectPool<T>::Retrive_False_Object(_bool(*func)(T*))
 {
 	for (auto& iter = m_listLentObject.begin(); iter != m_listLentObject.end(); )
 	{

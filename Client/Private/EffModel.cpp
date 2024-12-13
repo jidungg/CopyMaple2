@@ -116,9 +116,9 @@ HRESULT CEffModel::Render(CShader* pShader)
         if (FAILED(m_vecMesh[i]->Bind_BoneMatrices(pShader, "g_BoneMatrices", m_vecBone)))
             return E_FAIL;
 
-        if (FAILED(pShader->Begin(0)))
-            return E_FAIL;
         if (FAILED(m_vecMesh[i]->Bind_BufferDesc()))
+            return E_FAIL;
+        if (FAILED(pShader->Begin(0)))
             return E_FAIL;
         if (FAILED((m_vecMesh[i]->Render())))
             return E_FAIL;

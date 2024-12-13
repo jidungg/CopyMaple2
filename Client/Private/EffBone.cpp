@@ -68,25 +68,19 @@ void CEffBone::Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bone
 	}
 	if (m_bBillboard)
 	{
-		//카메라 처다보는 룩벡터
-		//_vector vCamPos = XMLoadFloat4(&*m_pGameInstance->Get_CamPosition());
-		//_vector vBonePos = XMLoadFloat4x4(&m_CombindTransformationMatrix).r[3];
-		//_vector vLook = XMVector3Normalize(vCamPos - vBonePos );
-
 		//카메라의 반대방향을 보는 룩벡터
 		_vector vLook = XMVector3Normalize(m_pGameInstance->Get_TransformMatrix_Inverse(CPipeLine::D3DTS_VIEW).r[2]);
-
 		vLook.m128_f32[3] = 0;
-
 		_vector vUp = { 0.f, 1.f, 0.f, 0.f };
 		_vector vRight = DirectX::XMVector4Normalize(DirectX::XMVector3Cross(vUp, vLook));
 		vRight.m128_f32[3] = 0;
 		vUp = DirectX::XMVector4Normalize(DirectX::XMVector3Cross(vLook, vRight));
 		vUp.m128_f32[3] = 0;
 
-		_float3 vScale =  _float3(DirectX::XMVectorGetX(DirectX::XMVector3Length(XMLoadFloat4x4(&m_CombindTransformationMatrix).r[0])),
-			DirectX::XMVectorGetX(DirectX::XMVector3Length(XMLoadFloat4x4(&m_CombindTransformationMatrix).r[1])),
-			DirectX::XMVectorGetX(DirectX::XMVector3Length(XMLoadFloat4x4(&m_CombindTransformationMatrix).r[2])));
+		_matrix matCombined = XMLoadFloat4x4(&m_CombindTransformationMatrix);
+		_float3 vScale =  _float3(DirectX::XMVectorGetX(DirectX::XMVector3Length(matCombined.r[0])),
+			DirectX::XMVectorGetX(DirectX::XMVector3Length(matCombined.r[1])),
+			DirectX::XMVectorGetX(DirectX::XMVector3Length(matCombined.r[2])));
 		vRight = vRight * vScale.x;
 		vUp = vUp * vScale.y;
 		vLook = vLook * vScale.z;
@@ -94,25 +88,11 @@ void CEffBone::Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bone
 		memcpy( m_CombindTransformationMatrix.m[0] ,&vRight, sizeof(_float4));
 		memcpy( m_CombindTransformationMatrix.m[1] ,&vUp, sizeof(_float4));
 		memcpy( m_CombindTransformationMatrix.m[2] ,&vLook, sizeof(_float4));
-/*
-		_vector vLook{ -1.f, 0, -1.f ,0 };
-		vLook = XMVector4Normalize(vLook);
-		_vector vUp = { 0.f, 1.f, 0.f, 0.f };
-		_vector vRight = DirectX::XMVector4Normalize(DirectX::XMVector3Cross(vUp, vLook));
-		vRight.m128_f32[3] = 0;
-		vUp = DirectX::XMVector4Normalize(DirectX::XMVector3Cross(vLook, vRight));
-		vUp.m128_f32[3] = 0;
 
-		_float3 vScale = _float3(DirectX::XMVectorGetX(DirectX::XMVector3Length(XMLoadFloat4x4(&m_CombindTransformationMatrix).r[0])),
-			DirectX::XMVectorGetX(DirectX::XMVector3Length(XMLoadFloat4x4(&m_CombindTransformationMatrix).r[1])),
-			DirectX::XMVectorGetX(DirectX::XMVector3Length(XMLoadFloat4x4(&m_CombindTransformationMatrix).r[2])));
-		vRight = vRight * vScale.x;
-		vUp = vUp * vScale.y;
-		vLook = vLook * vScale.z;
-
-		memcpy(m_CombindTransformationMatrix.m[0], &vRight, sizeof(_float4));
-		memcpy(m_CombindTransformationMatrix.m[1], &vUp, sizeof(_float4));
-		memcpy(m_CombindTransformationMatrix.m[2], &vLook, sizeof(_float4));*/
+		_matrix matWorldInverse = XMMatrixInverse(nullptr, matWroldMatrix);
+		matWorldInverse.r[3] = _vector{ 0,0,0,1 };
+		matCombined =XMLoadFloat4x4(&m_CombindTransformationMatrix) * matWorldInverse;
+		XMStoreFloat4x4(&m_CombindTransformationMatrix, matCombined);
 
 	}
 }

@@ -70,7 +70,7 @@ void CBullet_BayarStoneSpike::Late_Update(_float fTimeDelta)
 			for (_uint i = 0; i < 5; i++)
 			{
 				_vector vPos = m_vCenterPos+ _vector{ dX[i], 0, dZ[i], 1 };
-				matWorld.r[3] = XMVectorSet(vPos.m128_f32[0], vPos.m128_f32[1], vPos.m128_f32[2], 1);
+				matWorld.r[3] = XMVectorSetW(vPos,1);
 				m_pCollider->Update(matWorld);
 				m_pCollider->Render();
 				SearchTarget(&listTarget, LAYER_PLAYER);
@@ -119,7 +119,7 @@ void CBullet_BayarStoneSpike::Launch(_float fDamage, _vector vPosition)
 	m_pRockCubeEffect->Set_Active(false);
 	m_fTimeAcc = 0.f;
 	m_bSpiked = false;
-	m_pCollider->Update(m_pTransformCom->Get_WorldMatrix());
+	m_vCenterPos = vPosition;
 	m_setHitObject.clear();
 }
 CBullet_BayarStoneSpike* CBullet_BayarStoneSpike::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

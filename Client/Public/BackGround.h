@@ -2,7 +2,7 @@
 
 #include "Client_Defines.h"
 #include "UIPanel.h"
-#include "D:\Workbench\Portfolio\CopyMaple2\EngineSDK\Inc\GameObject.h"
+#include "GameObject.h"
 
 
 BEGIN(Client)

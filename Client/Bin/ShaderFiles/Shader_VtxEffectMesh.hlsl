@@ -66,6 +66,7 @@ VS_OUT VS_MAIN(VS_IN In)
     matrix matWV, matWVP;
 
     //matWV = mul(g_WorldMatrix, g_ViewMatrix);
+    //CPU에서 루트 본에 미리 WorldMatrix를 곱해서 넘겼을 때
    // matWVP = mul(g_ViewMatrix, g_ProjMatrix);
     matWV = mul(g_WorldMatrix, g_ViewMatrix);
     matWVP = mul(matWV, g_ProjMatrix);

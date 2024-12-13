@@ -29,8 +29,6 @@ protected:
 	void Fire() override;
 
 private:
-
-	CCollider_Frustum* m_pTargetSearcher = { nullptr };
 	CBullet_BBQParty* m_pBullet = { nullptr };
 	CEffModelObject* m_pCastEffect1 = { nullptr };
 	CEffModelObject* m_pCastEffect2 = { nullptr };

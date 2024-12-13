@@ -19,7 +19,7 @@ HRESULT CPipeLine::Initialize()
 
 	/* ����Ƣ���� ���� ���, �����ร�� �������. */
 	XMStoreFloat4x4(&m_TransformMatrices[D3DTS_UI_VIEW], XMMatrixIdentity());
-	XMStoreFloat4x4(&m_TransformMatrices[D3DTS_UI_PROJ], XMMatrixOrthographicLH(ViewportDesc.Width, ViewportDesc.Height, 0.f, 1.f));
+	XMStoreFloat4x4(&m_TransformMatrices[D3DTS_UI_PROJ], XMMatrixOrthographicLH(ViewportDesc.Width, ViewportDesc.Height, 0.f, 1000.f));
 
 	return S_OK;
 }

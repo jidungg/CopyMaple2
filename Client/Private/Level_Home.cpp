@@ -15,6 +15,8 @@
 #include "TerrainObject.h"
 #include "ItemDataBase.h"
 
+#include "EffectManager.h"
+
 
 CLevel_Home::CLevel_Home(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel_GamePlay(pDevice, pContext)
@@ -46,6 +48,7 @@ HRESULT CLevel_Home::Initialize(void* pArg)
 	Set_BuildItem(static_cast<BUILD_ITEM_DATA*>( m_pItemIter->second)->iItemID);
 
 	Ready_Layer_UI(LAYER_UI);
+	EFFECT_MANAGER->Play_DamgCount(DAMG_TYPE::PLAYER_NORMAL, 123);
 return S_OK;
 }
 

@@ -12,6 +12,8 @@ CHitEvent::CHitEvent(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage,
 	, m_pVictim(pVictim)
 	, m_iDamage(iDamage)
 	, m_eHitEffect(eHitEffect)
+	,m_bCrit(bCrit)
+	,m_bPlayer(bPlayer)
 {
 	Safe_AddRef(m_pAttacker);
 	Safe_AddRef(m_pVictim);
@@ -28,7 +30,7 @@ void CHitEvent::Exec()
 	CEffectManager* pEffMgr = EFFECT_MANAGER;
 	_vector vPos = static_cast<CCharacter*>(m_pVictim)->Get_Hitpoint();
 	m_pVictim->Hit(m_pAttacker,m_iDamage);
-	pEffMgr->Play_EffectModel(m_eHitEffect,static_cast<CCharacter*>( m_pVictim)->Get_Hitpoint());
+	pEffMgr->Play_EffectModel(m_eHitEffect,static_cast<CCharacter*>( m_pVictim)->Get_WorldPosition());
 	pEffMgr->Play_DamgCount(m_bCrit,m_bPlayer, m_iDamage, vPos);
 }
 

@@ -5,12 +5,13 @@
 #include "GameInstance.h"
 
 
-_int arrDigitWidthCritical[10] = { 54, 54,54,54,54,54, 54,54,54,54 };
-_int arrDigitWidth[10] = { 34, 22,32,32,33,32, 32,32,35,32 };
+_int arrDigitWidthCritical[10] = { 41, 29,40,40,42,40, 41,41,45,40 };
+_int arrDigitWidth[10] = { 34, 25,35,33,33,33, 33,33,35,33 };
 
 CUIDamgCount::CUIDamgCount(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWorldUIObject(pDevice, pContext)
 {
+
 }
 
 CUIDamgCount::CUIDamgCount(const CUIDamgCount& Prototype)
@@ -20,24 +21,24 @@ CUIDamgCount::CUIDamgCount(const CUIDamgCount& Prototype)
 
 HRESULT CUIDamgCount::Initialize_Prototype()
 {
-	
+
 	return S_OK;
 }
 
 HRESULT CUIDamgCount::Initialize(void* pArg)
 {
+	UIDMGCOUNT_DESC* pDesc = (UIDMGCOUNT_DESC*)pArg;
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components(pArg)))
 		return E_FAIL;
-	UIDMGCOUNT_DESC* pDesc = (UIDMGCOUNT_DESC*)pArg;
 
 	m_fLifeTime = pDesc->fLifeTime;
 	m_fLifeTimeAcc = m_fLifeTime;
-	m_fRisingSpeed = pDesc->fRisingSpeed;
+	m_fRisingSpeed = pDesc->fSpeedPerSec;
 	m_eDamgType = pDesc->eDamgType;
-
+	
 	wstring wstrTexture = L"";
 	switch (m_eDamgType)
 	{
@@ -88,7 +89,7 @@ void CUIDamgCount::Update(_float fTimeDelta)
 		return;
 	}
 	m_fLifeTimeAcc -= fTimeDelta;
-	m_pTransformCom->Go_Direction(_vector{ 0.f, 1.f, 0.f ,0.f}, fTimeDelta * m_fRisingSpeed);
+	m_pTransformCom->Go_Direction(_vector{ 0.f, 1.f, 0.f ,0.f}, fTimeDelta );
 	__super::Update(fTimeDelta);
 }
 
@@ -98,7 +99,7 @@ HRESULT CUIDamgCount::Render()
 		return E_FAIL;
 
 	if (m_pShaderCom)
-		if (FAILED(m_pShaderCom->Begin(0)))
+		if (FAILED(m_pShaderCom->Begin(1)))
 			return E_FAIL;
 
 	if (m_pVIBufferCom)

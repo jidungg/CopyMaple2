@@ -15,7 +15,6 @@ public:
 	typedef struct UIDmgCountDesc : public CWorldUIObject::WorldUIObjDesc
 	{
 		_int iDamg = { 0 };
-		_float fRisingSpeed = { 0.5f };
 		_float fLifeTime = { 1.f };
 		DAMG_TYPE eDamgType = DAMG_TYPE::LAST;
 	}UIDMGCOUNT_DESC;
@@ -45,7 +44,7 @@ private:
 	vector<_char> m_vecNumbers;
 	_int m_iDigitCount = { 0 };
 
-	_float m_fRisingSpeed = { 0.5f };
+	_float m_fRisingSpeed = { 10.f };
 	_float m_fLifeTime = { 1.f };
 	_float m_fLifeTimeAcc = { 0.f };
 

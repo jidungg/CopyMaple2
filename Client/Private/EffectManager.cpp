@@ -23,7 +23,7 @@ HRESULT CEffectManager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* p
 
 	CUIDamgCount:: UIDMGCOUNT_DESC tUIDamgCountDesc;
 	tUIDamgCountDesc.fLifeTime = 1.f;
-	tUIDamgCountDesc.fRisingSpeed = 0.5f;
+	tUIDamgCountDesc.fSpeedPerSec = 0.5f;
 	tUIDamgCountDesc.iDamg = 0;
 	for (_uint i = 0; i < (_uint)DAMG_TYPE::LAST; i++)
 	{

@@ -1,15 +1,15 @@
 #pragma once
-#include "GameObject.h"
+#include "UIObject.h"
 BEGIN(Engine)
 class CVIBuffer_Rect;
 class CTexture;
 END
 BEGIN(Client)
 class CWorldUIObject :
-    public CGameObject
+    public CUIObject
 {
 public:
-	typedef struct WorldUIObjDesc
+	typedef struct WorldUIObjDesc : public CUIObject::UIOBJECT_DESC
 	{
 
 	}WORLDUIOBJ_DESC;
@@ -22,6 +22,7 @@ protected:
 public:
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render() override;
+	virtual void Compute_Matrix() override;
 protected:
 	virtual HRESULT Bind_ShaderResources(CShader* pShader);
     HRESULT Ready_Components(void* pArg);

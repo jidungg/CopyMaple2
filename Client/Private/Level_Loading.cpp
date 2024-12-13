@@ -48,19 +48,23 @@ void CLevel_Loading::Update(_float fTimeDelta)
 			pNewLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
 			break;
 		case LEVEL_HENESYS:
-			tDesc.pCubeTerrainTag = TEXT("Prototype_GameObject_Henesys");
+			tDesc.szCubeTerrainTag = TEXT("Prototype_GameObject_Henesys");
+			tDesc.szBackGroundImgTag = TEXT("bg_henesys_a.dds");
 			pNewLevel = CLevel_Henesys::Create(m_pDevice, m_pContext,&tDesc);
 			break;
 		case LEVEL_BAYARPEAK:
-			tDesc.pCubeTerrainTag = TEXT("Prototype_GameObject_BayarPeak");
+			tDesc.szCubeTerrainTag = TEXT("Prototype_GameObject_BayarPeak");
+			tDesc.szBackGroundImgTag = TEXT("bg_perion_c.dds");
 			pNewLevel = CLevel_BayarPeak::Create(m_pDevice, m_pContext, &tDesc);
 			break;
 		case LEVEL_HOME:
-			tDesc.pCubeTerrainTag = TEXT("Prototype_GameObject_MyHome");
+			tDesc.szCubeTerrainTag = TEXT("Prototype_GameObject_MyHome");
+			tDesc.szBackGroundImgTag = TEXT("bg_indoor_a.dds");
 			pNewLevel = CLevel_Home::Create(m_pDevice, m_pContext, &tDesc);
 			break;
 		case LEVEL_HUNTINGPLACE:
-			tDesc.pCubeTerrainTag = TEXT("Prototype_GameObject_HuntingPlace");
+			tDesc.szCubeTerrainTag = TEXT("Prototype_GameObject_HuntingPlace");
+			tDesc.szBackGroundImgTag = TEXT("bg_henesys_b.dds");
 			pNewLevel = CLevel_HuntingPlace::Create(m_pDevice, m_pContext, &tDesc);
 			break;
 		}

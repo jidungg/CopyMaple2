@@ -13,6 +13,7 @@
 #include "ModelObject.h"
 #include "CubeTerrain.h"
 #include "Client_Utility.h"
+#include "BackGround.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel { pDevice, pContext }
@@ -25,7 +26,7 @@ HRESULT CLevel_GamePlay::Initialize(void* pArg)
 	LevelDesc* pDesc = static_cast<LevelDesc*>( pArg);
 	//TERRAIN
 	m_pCubeTerrain = static_cast<CCubeTerrain*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, m_iLevelID,
-		pDesc->pCubeTerrainTag, nullptr));
+		pDesc->szCubeTerrainTag, nullptr));
 	if (nullptr == m_pCubeTerrain)
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(m_iLevelID, LAYER_TERRAIN, m_pCubeTerrain)))
@@ -48,6 +49,13 @@ HRESULT CLevel_GamePlay::Initialize(void* pArg)
 			m_pPlayer->Set_Position(XMVectorSet(0, 1, 0, 1));
 	}
 
+
+	CBackGround::BACKGROUND_DESC tBGDesc{};
+	tBGDesc.pPlayer = m_pPlayer;
+	tBGDesc.pTerrain = m_pCubeTerrain;
+	tBGDesc.szBackGroundImgTag = pDesc->szBackGroundImgTag;
+	CBackGround* pBackGround = static_cast<CBackGround*>(m_pGameInstance->Clone_Proto_Object_Stock(CBackGround::m_szProtoTag, &tBGDesc));
+	m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_NONCOLLISION, pBackGround);
 
 return S_OK;
 }

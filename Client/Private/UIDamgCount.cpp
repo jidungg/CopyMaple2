@@ -28,6 +28,7 @@ HRESULT CUIDamgCount::Initialize_Prototype()
 HRESULT CUIDamgCount::Initialize(void* pArg)
 {
 	UIDMGCOUNT_DESC* pDesc = (UIDMGCOUNT_DESC*)pArg;
+	pDesc->bRegisterUIManager = false;
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 

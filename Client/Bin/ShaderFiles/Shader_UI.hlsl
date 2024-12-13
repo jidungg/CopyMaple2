@@ -178,6 +178,16 @@ PS_OUT PS_MAIN(PS_IN In)
 	return Out;
 }
 
+/* PixelShader */
+PS_OUT PS_NOBORDER_MAIN(PS_NOBORDER_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+	
+    Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord);
+
+    return Out;
+}
+
 
 technique11 DefaultTechnique
 {
@@ -203,5 +213,15 @@ technique11 DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_DMGCOUNT_MAIN();
     }
+    pass BackGroundPass
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
+
+        VertexShader = compile vs_5_0 VS_NOBORDER_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_NOBORDER_MAIN();
+    }
 }

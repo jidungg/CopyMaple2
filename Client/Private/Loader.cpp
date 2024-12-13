@@ -27,6 +27,7 @@
 #include "UIScroller.h"
 #include "UIScrollButton.h"
 #include "UIDamgCount.h"
+#include "BackGround.h"
 
 #include "StateMachine.h"
 #include "SkillManager.h"
@@ -162,9 +163,6 @@ HRESULT CLoader::Loading_Level_Logo()
 	/* For.Prototype_Component_Texture_Logo */
 	//히ㅏ다보니까 다 STatic 됨
    
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_Logo"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_henesys_a.dds"), 1))))
-		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Texture_QuickSlot_Normal"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/QuickSlot_Normal.dds"), 1))))
 		return E_FAIL;
@@ -174,6 +172,7 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Face_Face1"),
 		CFace::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Face/00300011/")))))
 		return E_FAIL;
+
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/Icon/Skill/"), TEXT(".png"))))
 		return E_FAIL;
@@ -372,8 +371,12 @@ HRESULT CLoader::Loading_Level_Logo()
 		CBullet_BayarStoneSpike::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	/* For.Prototype_GameObject_BackGround */
+
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIPanel::m_szProtoTag,
 		CUIPanel::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBackGround::m_szProtoTag,
+		CBackGround::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_GameObject_UIList"),
 		CUIListSelector::Create(m_pDevice, m_pContext))))
@@ -446,8 +449,8 @@ HRESULT CLoader::Loading_Level_Henesys()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스처."));
 	/* For.Prototype_Component_Texture_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HENESYS, TEXT("Prototype_Component_Texture_Terrain"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/resources/Textures/Terrain/Tile0.jpg"), 1))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("bg_henesys_a.dds"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_henesys_a.dds"), 1))))
 		return E_FAIL;
 
 
@@ -473,6 +476,9 @@ HRESULT CLoader::Loading_Level_BayarPeak()
 {
 
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드"));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("bg_perion_c.dds"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_perion_c.dds"), 1))))
+		return E_FAIL;
 
 
 
@@ -519,6 +525,10 @@ HRESULT CLoader::Loading_Level_MyHome()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_SelectedYellow"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_Mat_SelectedYellow.dds"), 1))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("bg_indoor_a.dds"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_indoor_a.dds"), 1))))
+		return E_FAIL;
+
 
 
 
@@ -561,7 +571,9 @@ HRESULT CLoader::Loading_Level_MyHome()
 HRESULT CLoader::Loading_Level_HuntingPlace()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드"));
-
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("bg_henesys_b.dds"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_henesys_b.dds"), 1))))
+		return E_FAIL;
 
 
 	lstrcpy(m_szLoadingText, TEXT("모델 로드."));

@@ -20,6 +20,7 @@ CUIBundle::CUIBundle()
 
 HRESULT CUIBundle::Initialize(void* pArg)
 {
+
 	UIBUNDLE_DESC* pDesc = static_cast<UIBUNDLE_DESC*>(pArg);
 	m_pDevice = pDesc->pDevice;
 	m_pContext = pDesc->pContext;

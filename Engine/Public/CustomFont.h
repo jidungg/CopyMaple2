@@ -4,7 +4,7 @@
 
 BEGIN(Engine)
 
-class CCustomFont final : public CBase
+class ENGINE_DLL CCustomFont final : public CBase
 {
 private:
 	CCustomFont(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

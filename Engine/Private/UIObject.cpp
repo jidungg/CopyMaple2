@@ -29,6 +29,7 @@ HRESULT CUIObject::Initialize(void * pArg)
 	{
 		m_bDraggableX = pDesc->bDraggableX;
 		m_bDraggableY = pDesc->bDraggableY;
+		m_bRegisterUIManager = pDesc->bRegisterUIManager;
 	}
 
 

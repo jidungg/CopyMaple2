@@ -21,7 +21,8 @@ public:
 	HRESULT Equip(CInvenEquipSlot* pInvenSlot);
 	HRESULT UnEquip(EQUIP_ITEM_TYPE eType);
 	void Toggle_UI();
-	
+	CPlayer* Get_Player() { return m_pPlayer; }
+
 private:
 	CPlayerEquipSlot* m_pEquipSlots[(_uint)EQUIP_ITEM_TYPE::LAST] = { nullptr, };
 	class CUIPlayerInfo* m_pPlayerInfoUI = { nullptr };

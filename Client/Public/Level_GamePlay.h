@@ -5,13 +5,15 @@
 BEGIN(Client)
 class CPlayer;
 class CCubeTerrain;
+class CBackGround;
 class CLevel_GamePlay : public CLevel
 {
 public:
 	typedef struct LevelDesc
 	{
 		_uint iPrevLevelID = { 0 };
-		const _tchar* pCubeTerrainTag = { nullptr };
+		const _tchar* szCubeTerrainTag = { nullptr };
+		const _tchar* szBackGroundImgTag = { nullptr };
 	}LEVEL_DESC;
 protected:
 	CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -24,6 +26,7 @@ public:
 protected:
 	CCubeTerrain* m_pCubeTerrain = { nullptr };
 	CPlayer* m_pPlayer = { nullptr };
+	CBackGround* m_pBackGround = { nullptr };
 };
 
 END

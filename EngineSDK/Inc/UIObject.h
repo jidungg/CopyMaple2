@@ -15,6 +15,7 @@ public:
 	{
 		_bool bDraggableX = { false };
 		_bool bDraggableY = { false };
+		_bool bRegisterUIManager = { true };
 	}UIOBJECT_DESC;
 protected:
 	CUIObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -50,6 +51,7 @@ public:
 	virtual void On_MouseDrag(const POINT& tMousePoint, const DIMOUSESTATE& tState);
 
 	virtual _bool Is_GrabbablePoint(const POINT& tScreenMousePoint);
+	_bool Is_RegisterUIManager() { return m_bRegisterUIManager; }
 	CUIObject* Find_FocusedUI(POINT fPos);
 protected:
 
@@ -68,6 +70,7 @@ protected:
 	// 그랩 됐을 당시 마우스의 위치.
 	POINT m_tGrabbedMousePos = { 0,0 };
 	_bool m_bGrabbed = { false };
+	_bool m_bRegisterUIManager = { true };
 private:
 	bool m_bMouseOver = { false };
 public:

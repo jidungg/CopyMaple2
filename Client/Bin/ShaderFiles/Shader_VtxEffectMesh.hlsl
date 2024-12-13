@@ -38,6 +38,20 @@ float2 g_vTexcoordCenter[12];
 
 vector g_vCamPosition;
 
+uint g_TexFlags = 0;
+
+#define BASE_TEX 1<<0
+#define DARK_TEX 1<<1
+#define DETAIL_TEX 1<<2
+#define GLOSS_TEX 1<<3
+#define GLOW_TEX 1<<4
+#define BUMP_TEX 1<<5
+#define NORMAL_TEX 1<<6
+#define PAALLAX_TEX 1<<7
+#define DECAL0_TEX 1<<8
+#define DECAL1_TEX 1<<9
+#define DECAL2_TEX 1<<10
+#define DECAL3_TEX 1<<11
 
 struct VS_IN
 {

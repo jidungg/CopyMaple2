@@ -16,6 +16,7 @@
 #include "ItemDataBase.h"
 
 #include "EffectManager.h"
+#include "EffModelObject.h"
 
 
 CLevel_Home::CLevel_Home(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -48,14 +49,26 @@ HRESULT CLevel_Home::Initialize(void* pArg)
 	Set_BuildItem(static_cast<BUILD_ITEM_DATA*>( m_pItemIter->second)->iItemID);
 
 	Ready_Layer_UI(LAYER_UI);
-	EFFECT_MANAGER->Play_DamgCount(DAMG_TYPE::PLAYER_NORMAL, 123);
+
+	CEffModelObject::EFFECTOBJ_DESC tEffDesc;
+	tEffDesc.eModelProtoLevelID = LEVEL_LOADING;
+	strcpy_s(tEffDesc.strModelProtoName, "eff_wizard_magicclaw_remain_01_a.effmodel");
+	 m_pEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tEffDesc));
+	m_pEffect->Set_Active(false);
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, LAYER_NONCOLLISION, m_pEffect)))
+		return E_FAIL;
+	//m_pEffect->Set_Transform(_vector{0,1,0}, _vector{0,0,0}, 1 / 150);
 return S_OK;
 }
 
 void CLevel_Home::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
-
+	//TMP----------------------------------------------
+	if (m_pGameInstance->GetKeyState(KEY::F1) == KEY_STATE::DOWN)
+		m_pEffect->Start_Animation(0,false,-1,0.2);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pEffect);
+	//----------------------------------------------
 	if (m_pGameInstance->GetKeyState(KEY::B) == KEY_STATE::DOWN)
 	{
 		m_bBuildMode = !m_bBuildMode;

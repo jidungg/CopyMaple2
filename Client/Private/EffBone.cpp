@@ -36,16 +36,8 @@ HRESULT CEffBone::Initialize(ifstream& inFile, _int iParentBoneIndex)
 	inFile.read((char*)&m_bBillboard, 1);
 	inFile.read(reinterpret_cast<char*>(&m_DefaultTransformationMatrix), sizeof(_float4x4));
 	m_TransformationMatrix = m_DefaultTransformationMatrix;
-	if (m_bBillboard)
-	{
-		//cout << m_TransformationMatrix._11 << ", "<<m_TransformationMatrix._12 << ", " << m_TransformationMatrix._13 << ", " << m_TransformationMatrix._14 << endl;
-		//cout << m_TransformationMatrix._21 << ", " << m_TransformationMatrix._22 << ", " << m_TransformationMatrix._23 << ", " << m_TransformationMatrix._24 << endl;
-		//cout << m_TransformationMatrix._31 << ", " << m_TransformationMatrix._32 << ", " << m_TransformationMatrix._33 << ", " << m_TransformationMatrix._34 << endl;
-		//cout << m_TransformationMatrix._41 << ", " << m_TransformationMatrix._42 << ", " << m_TransformationMatrix._43 << ", " << m_TransformationMatrix._44 << endl;
 
-	}
 
-	//XMStoreFloat4x4(&m_TransformationMatrix, XMMatrixTranspose(XMLoadFloat4x4(&m_TransformationMatrix)));
 	XMStoreFloat4x4(&m_CombindTransformationMatrix, XMMatrixIdentity());
 
 	m_iParentBoneIndex = iParentBoneIndex;

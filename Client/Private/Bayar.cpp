@@ -145,8 +145,8 @@ _bool CBayar::Is_Attached(CPlayer* pPlayer)
 
 void CBayar::To_NextSkill()
 {
-	m_iCurrentSkillID = (_int)SKILL_ID::BAYAR_STONE_SPIKE;
-	//__super::To_NextSkill();
+	//m_iCurrentSkillID = (_int)SKILL_ID::BAYAR_STONE_SPIKE;
+	__super::To_NextSkill();
 }
 _bool CBayar::FindWay(_vector& vStart, _vector& vGoal, _uint iSearchRange)
 {

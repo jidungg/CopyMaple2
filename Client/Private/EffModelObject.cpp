@@ -196,6 +196,6 @@ void CEffModelObject::Free()
 	__super::Free();
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
-	int a = 0;
+
 }
  

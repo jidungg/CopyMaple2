@@ -4,6 +4,20 @@
 #include "Shader.h"
 #include "EffConcreteController.h"
 
+
+#define BASE_TEX 1<<0
+#define DARK_TEX 1<<1
+#define DETAIL_TEX 1<<2
+#define GLOSS_TEX 1<<3
+#define GLOW_TEX 1<<4
+#define BUMP_TEX 1<<5
+#define NORMAL_TEX 1<<6
+#define PAALLAX_TEX 1<<7
+#define DECAL0_TEX 1<<8
+#define DECAL1_TEX 1<<9
+#define DECAL2_TEX 1<<10
+#define DECAL3_TEX 1<<11
+
 const char* szTextureNames[TT_LAST] = {
 	"g_BaseTexture",
 	"g_DarkTexture",
@@ -19,7 +33,6 @@ const char* szTextureNames[TT_LAST] = {
 	"g_Decal3Texture",
 };
 
-
 CEffTexturingProperty::CEffTexturingProperty(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CComponent(pDevice, pContext)
 {
@@ -28,6 +41,7 @@ CEffTexturingProperty::CEffTexturingProperty(ID3D11Device* pDevice, ID3D11Device
 CEffTexturingProperty::CEffTexturingProperty(const CEffTexturingProperty& rhs)
 	:CComponent(rhs)
 	, m_vecTexture(rhs.m_vecTexture)
+	, m_iTextureFlags(rhs.m_iTextureFlags)
 {
 	for (auto& pTexture : m_vecTexture)
 		Safe_AddRef(pTexture);
@@ -47,35 +61,14 @@ HRESULT CEffTexturingProperty::Initialize_Prototype(const _char* szDirPath, ifst
 		CEffTexture* pTexture = CEffTexture::Create(m_pDevice, m_pContext, szDirPath, inFile, eTexType);
 		m_vecTexture[eTexType] = pTexture;
 	}
+	m_iTextureFlags = 0;
 	for (_uint i = 0; i < TT_LAST; ++i)
 	{
-		if (m_vecTexture[i] == nullptr)
-		{
-			EFF_TEX_TYPE eTexType = (EFF_TEX_TYPE)i;
-			switch (eTexType)
-			{
-			case Client::TT_BASE:
-			case Client::TT_DARK:
-			case Client::TT_DETAIL:
-			case Client::TT_GLOSS:
-			case Client::TT_GLOW:
-			case Client::TT_BUMPMAP:
-			case Client::TT_NORMAL:
-			case Client::TT_PARALLAX:
-			m_vecTexture[i] = CEffTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Default.dds"), (EFF_TEX_TYPE)i);
-				break;
-			case Client::TT_DECAL0:
-			case Client::TT_DECAL1:
-			case Client::TT_DECAL2:
-			case Client::TT_DECAL3:
-			m_vecTexture[i] = CEffTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/DefaultZero.dds"), (EFF_TEX_TYPE)i);
-				break;
-			case Client::TT_LAST:
-				break;
-			default:
-				break;
-			}
-		}
+		if (nullptr != m_vecTexture[i])
+			m_iTextureFlags |= 1 << i;
+		else
+			m_iTextureFlags &= ~(1 << i);
+
 	}
 	return S_OK;
 }
@@ -121,18 +114,16 @@ HRESULT CEffTexturingProperty::Bind_Texture(CShader* pShader)
 		return E_FAIL;
 	if (FAILED(pShader->Bind_FloatVectorArray("g_vTexcoordCenter", m_f2TexcoordCenter, 12)))
 		return E_FAIL;
-	//if (FAILED(pShader->Bind_SRVArray("g_TextureArray", m_pSRV,12)))
-	//	return E_FAIL;
-	//return S_OK;
+
 
 	for (_uint i = 0; i < TT_LAST; ++i)
 	{
 		if (m_vecTexture[i] == nullptr)
 			continue;
-		//if (FAILED())
-		//	return E_FAIL;
 		m_vecTexture[i]->Bind_ShaderResource(pShader, szTextureNames[i], 0);
 	}
+	if (FAILED(pShader->Bind_RawValue("g_TexFlags", &m_iTextureFlags, sizeof(_uint))))
+		return E_FAIL;
 
 	return S_OK;
 }

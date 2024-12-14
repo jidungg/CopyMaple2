@@ -10,6 +10,7 @@ class CCubeTerrain;
 class CCamera_Trace;
 class CPlayer;
 class CUIHomeDialog;
+class CEffModelObject;
 class CLevel_Home final:
 	public CLevel_GamePlay
 {
@@ -40,6 +41,9 @@ private:
 	bool m_bBuildMode = false;
 
 	CUIHomeDialog* m_pHomeDialog = { nullptr };
+
+	//TM<P
+	CEffModelObject* m_pEffect;
 public:
 	static CLevel_Home* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg);
 	virtual void Free() override;

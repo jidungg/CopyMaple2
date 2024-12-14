@@ -34,7 +34,7 @@ HRESULT CEffMaterialProperty::Bind_Material(CShader* pShader)
 		return E_FAIL;
 	if (FAILED(pShader->Bind_RawValue("g_vMaterialSpecular", &m_tMaterialData.vSpecular, sizeof(_float3))))
 		return E_FAIL;
-	if (FAILED(pShader->Bind_RawValue("g_vMaterialEmissive", &m_tMaterialData.vSpecular, sizeof(_float3))))
+	if (FAILED(pShader->Bind_RawValue("g_vMaterialEmissive", &m_tMaterialData.vEmissive, sizeof(_float3))))
 		return E_FAIL;
 	if (FAILED(pShader->Bind_RawValue("g_fMaterialGlossiness", &m_tMaterialData.fGlossiness, sizeof(_float))))
 		return E_FAIL;

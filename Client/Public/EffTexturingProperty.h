@@ -29,6 +29,8 @@ private:
 	_float m_f2TexcoordRotate[12];
 	_float2 m_f2TexcoordTranslate[12];
 	_float2 m_f2TexcoordCenter[12];
+
+	_uint m_iTextureFlags = { 0 };
 public:
 	static CEffTexturingProperty* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath, ifstream& inFile);
 	CComponent* Clone(void* pArg) override;

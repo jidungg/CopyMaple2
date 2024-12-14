@@ -103,6 +103,7 @@ HRESULT CEffModel::Initialize(void* pArg)
 
 HRESULT CEffModel::Render(CShader* pShader)
 {
+
     for (_int i = m_iNumMeshes -1; i >= 0 ; i--)
     {
         _uint iMaterialIdx = m_vecMesh[i]->Get_MaterialIndex();
@@ -118,9 +119,13 @@ HRESULT CEffModel::Render(CShader* pShader)
 
         if (FAILED(m_vecMesh[i]->Bind_BufferDesc()))
             return E_FAIL;
+        if (FAILED(m_vecMesh[i]->Set_BlendState()))
+            return E_FAIL;
         if (FAILED(pShader->Begin(0)))
             return E_FAIL;
         if (FAILED((m_vecMesh[i]->Render())))
+            return E_FAIL;
+        if (FAILED(m_vecMesh[i]->Unset_BlendState()))
             return E_FAIL;
     }
 

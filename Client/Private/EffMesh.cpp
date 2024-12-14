@@ -4,6 +4,24 @@
 #include "EffBone.h"
 #include "Shader.h"
 
+#define ALPHA_ENABLE_MASK			0b0000000000000001
+#define SRC_BLEND_MASK					0b0000000000011110
+#define DST_BLEND_MASK					0b0000000111100000
+#define ALPHA_TEST_ENABLE_MASK	0b0000001000000000
+#define ALPHA_TEST_MASK					0b0001110000000000
+
+#define BLEND_ONE								0b0000
+#define BLEND_ZERO							0b0001
+#define BLEND_SRC_COLOR					0b0010
+#define BLEND_INV_SRC_COLOR			0b0011
+#define BLEND_DST_COLOR					0b0100
+#define BLEND_INV_DST_COLOR			0b0101
+#define BLEND_SRC_ALPHA					0b0110
+#define BLEND_INV_SRC_ALPHA			0b0111
+#define BLEND_DST_ALPHA					0b1000
+#define BLEND_INV_DST_ALPHA			0b1001
+
+
 CEffMesh::CEffMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CVIBuffer(pDevice, pContext)
 {
@@ -39,6 +57,15 @@ HRESULT CEffMesh::Initialize_Prototype(CEffModel* pModel, ifstream& inFile, _fma
 
 	Ready_VertexBuffer(inFile, pModel);
 	Ready_IndexBuffer(inFile, pModel, iNumFaces);
+
+	_ushort sAlphaFlags = 0;
+	inFile.read(reinterpret_cast<char*>(&sAlphaFlags), sizeof(_ushort));
+
+	m_tBlendDesc = Read_BlendDescFromFlags(sAlphaFlags);
+
+	HRESULT hr = m_pDevice->CreateBlendState(&m_tBlendDesc, &m_pBlendState);
+	if (FAILED(hr))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -71,6 +98,21 @@ void CEffMesh::ReSet_OffsetMarix()
 	{
 		XMStoreFloat4x4(&i, XMMatrixIdentity());
 	}
+}
+
+HRESULT CEffMesh::Set_BlendState()
+{
+	//m_pContext->OMGetBlendState(&m_pOriginalBlendState, m_arrOriginalBlendFactor, m_pOriginalBlendMask);
+
+	m_pContext->OMSetBlendState(m_pBlendState, m_arrBlendFactor, m_iSampleMask);
+	return S_OK;
+}
+
+HRESULT CEffMesh::Unset_BlendState()
+{
+	//m_pContext->OMSetBlendState(m_pOriginalBlendState, m_arrOriginalBlendFactor, *m_pOriginalBlendMask);
+
+	return S_OK;
 }
 
 HRESULT CEffMesh::Ready_VertexBuffer(ifstream& inFile, CEffModel* pModel)
@@ -219,6 +261,69 @@ HRESULT CEffMesh::Ready_IndexBuffer(ifstream& inFile, CEffModel* pModel, _uint i
 	return S_OK;
 }
 
+D3D11_BLEND_DESC CEffMesh::Read_BlendDescFromFlags(_ushort& Flags)
+{
+	D3D11_BLEND_DESC tBlendDesc = {};
+
+	tBlendDesc.AlphaToCoverageEnable = FALSE;
+	tBlendDesc.IndependentBlendEnable = TRUE;
+	tBlendDesc.RenderTarget[0].BlendEnable = Flags & ALPHA_ENABLE_MASK;
+	Flags >>= 1;
+	tBlendDesc.RenderTarget[0].SrcBlend = Read_BlendModeFromFlags(Flags);
+	tBlendDesc.RenderTarget[0].DestBlend = Read_BlendModeFromFlags(Flags);
+	tBlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	tBlendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	tBlendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	tBlendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	tBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+
+	return tBlendDesc;
+}
+
+D3D11_BLEND CEffMesh::Read_BlendModeFromFlags(_ushort& Flag)
+{
+	_ushort tmpFlag = Flag & 0b00001111;
+	D3D11_BLEND tBlend = D3D11_BLEND_ONE;
+	switch (tmpFlag)
+	{
+	case BLEND_ONE:
+		tBlend= D3D11_BLEND_ONE;
+		break;
+	case BLEND_ZERO:
+		tBlend = D3D11_BLEND_ZERO;
+		break;
+	case BLEND_SRC_COLOR:
+		tBlend = D3D11_BLEND_SRC_COLOR;
+		break;
+	case BLEND_INV_SRC_COLOR:
+		tBlend = D3D11_BLEND_INV_SRC_COLOR;
+		break;
+	case BLEND_DST_COLOR:
+		tBlend = D3D11_BLEND_DEST_COLOR;
+		break;
+	case BLEND_INV_DST_COLOR:
+		tBlend = D3D11_BLEND_INV_DEST_COLOR;
+		break;
+	case BLEND_SRC_ALPHA:
+		tBlend = D3D11_BLEND_SRC_ALPHA;
+		break;
+	case BLEND_INV_SRC_ALPHA:
+		tBlend = D3D11_BLEND_INV_SRC_ALPHA;
+		break;
+	case BLEND_DST_ALPHA:
+		tBlend = D3D11_BLEND_DEST_ALPHA;
+		break;
+	case BLEND_INV_DST_ALPHA:
+		tBlend = D3D11_BLEND_INV_DEST_ALPHA;
+		break;
+	default:
+		tBlend = D3D11_BLEND_ONE;
+	}
+	Flag >>= 4;
+	return tBlend;
+}
+
 CEffMesh* CEffMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CEffModel* pModel, ifstream& inFile, _fmatrix PreTransformMatrix)
 {
 
@@ -240,4 +345,5 @@ CComponent* CEffMesh::Clone(void* pArg)
 void CEffMesh::Free()
 {
 	__super::Free();
+	Safe_Release(m_pBlendState);
 }

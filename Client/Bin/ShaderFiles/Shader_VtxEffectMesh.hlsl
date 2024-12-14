@@ -79,9 +79,6 @@ VS_OUT VS_MAIN(VS_IN In)
 
     matrix matWV, matWVP;
 
-    //matWV = mul(g_WorldMatrix, g_ViewMatrix);
-    //CPU에서 루트 본에 미리 WorldMatrix를 곱해서 넘겼을 때
-   // matWVP = mul(g_ViewMatrix, g_ProjMatrix);
     matWV = mul(g_WorldMatrix, g_ViewMatrix);
     matWVP = mul(matWV, g_ProjMatrix);
     float fWeightW = 1.f - (In.vBlendWeights.x + In.vBlendWeights.y + In.vBlendWeights.z);
@@ -130,39 +127,36 @@ struct PS_OUT
 PS_OUT PS_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
- 
-    float4 vBaseColor = g_BaseTexture.Sample(LinearSampler, In.vTexcoord[0]);
-    float4 vDarkColor = g_DetailTexture.Sample(LinearSampler, In.vTexcoord[1]);
-    float4 vDetailColor = g_DetailTexture.Sample(LinearSampler, In.vTexcoord[2]);
-    float4 vGlowColor = g_GlowTexture.Sample(LinearSampler, In.vTexcoord[3]);
-    float4 vDecal0Color = g_Decal0Texture.Sample(LinearSampler, In.vTexcoord[8]);
-		
-    
-    float4 vMtrlDiffuse = vBaseColor;
-    vMtrlDiffuse.rgb = vMtrlDiffuse.rgb * (g_vMaterialDiffuse);
-    vMtrlDiffuse *= vDetailColor;
-    vMtrlDiffuse += vGlowColor * vMtrlDiffuse.a;
-    vMtrlDiffuse.a *= g_fMaterialAlpha;
-	
-    float4 vMtrlAmbient = (g_vMaterialAmbient, g_fMaterialAlpha);
-    float4 vMtrlSpecualr = (g_vMaterialSpecular, g_fMaterialAlpha);
-	
-    float4 vShade = saturate(max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f) + (g_vLightAmbient * vMtrlAmbient));
-    //float4 vReflect = reflect(normalize(g_vLightDir), normalize(In.vNormal));
-    //float4 vLook = In.vWorldPos - g_vCamPosition;
 
-    //float fSpecular = pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f);
-	
+    float4 vShade = saturate(max(dot(normalize(g_vLightDiffuse) * -1.f, In.vNormal), 0.f) + g_vLightAmbient);
 
-    Out.vColor = ( /*g_vLightDiffuse **/vMtrlDiffuse) * saturate(vShade) /*+ (g_vLightSpecular * vMtrlSpecualr) * fSpecular*/;
+    float4 vMaterial;
+    vMaterial.rgb = g_vMaterialDiffuse * vShade.rgb + g_vMaterialEmissive + (g_vMaterialAmbient/5);
+    vMaterial.a = g_fMaterialAlpha;
+    vMaterial = saturate(vMaterial);
 
-	//데칼 블렌딩
-    //Out.vColor.rgb = (1 - vDecal0Color.a) * Out.vColor.rgb + vDecal0Color.a * vDecal0Color.rgb;
-	//Detail 텍스처
+    float4 vColor = vMaterial;
+    if (g_TexFlags & BASE_TEX)
+    {
+        float4 vBaseColor = g_BaseTexture.Sample(LinearSampler, In.vTexcoord[0]);
+        vColor *= vBaseColor;
+
+    }
+
+    if (g_TexFlags & GLOW_TEX)
+    {
+        vColor += g_GlowTexture.Sample(LinearSampler, In.vTexcoord[4]);
+    }
+    if (g_TexFlags & DECAL0_TEX)
+    {
+        vColor += g_fMaterialAlpha * g_Decal0Texture.Sample(LinearSampler, In.vTexcoord[8]);
+    }
+        //빛 * 머티리얼 디퓨즈
+    Out.vColor =vColor;
     if (Out.vColor.a <= 0.05)
         discard;
     return Out;
-}
+ }
 
 
 technique11 DefaultTechnique
@@ -170,10 +164,8 @@ technique11 DefaultTechnique
 	
     pass DefaultPass
     {
-
         SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
-        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN();

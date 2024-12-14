@@ -16,6 +16,7 @@ public:
 		CPlayer* pPlayer = { nullptr };
 		CCubeTerrain* pTerrain = { nullptr };
 		const _tchar* szBackGroundImgTag = { nullptr };
+		LEVELID eBackGroundImgProtoLevel = { LEVELID::LAST };
 	}BACKGROUND_DESC;
 public:
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_Background";

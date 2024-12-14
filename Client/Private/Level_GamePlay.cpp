@@ -54,8 +54,9 @@ HRESULT CLevel_GamePlay::Initialize(void* pArg)
 	tBGDesc.pPlayer = m_pPlayer;
 	tBGDesc.pTerrain = m_pCubeTerrain;
 	tBGDesc.szBackGroundImgTag = pDesc->szBackGroundImgTag;
+	tBGDesc.eBackGroundImgProtoLevel = (LEVELID)m_iLevelID;
 	CBackGround* pBackGround = static_cast<CBackGround*>(m_pGameInstance->Clone_Proto_Object_Stock(CBackGround::m_szProtoTag, &tBGDesc));
-	m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_NONCOLLISION, pBackGround);
+	m_pGameInstance->Add_GameObject_ToLayer(m_iLevelID, LAYER_NONCOLLISION, pBackGround);
 
 return S_OK;
 }

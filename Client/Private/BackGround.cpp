@@ -31,7 +31,7 @@ HRESULT CBackGround::Initialize(void * pArg)
 	pDesc->fYOffset = 0;
 	m_fSizeX = pDesc->fSizeX = g_iWinSizeX<<1;
 	m_fSizeY = pDesc->fSizeY = g_iWinSizeY<<1;
-	pDesc->pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(pDesc->szBackGroundImgTag, nullptr));
+	pDesc->pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT,pDesc->eBackGroundImgProtoLevel,pDesc->szBackGroundImgTag, nullptr));
 	pDesc->bRegisterUIManager = false;
 
 	m_vHorizontalPlane = XMPlaneFromPointNormal({ 0,0,0 }, XMVector3Normalize( { 1,0,-1 }));

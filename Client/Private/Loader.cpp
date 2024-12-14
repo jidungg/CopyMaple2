@@ -449,7 +449,7 @@ HRESULT CLoader::Loading_Level_Henesys()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스처."));
 	/* For.Prototype_Component_Texture_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("bg_henesys_a.dds"),
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HENESYS, TEXT("bg_henesys_a.dds"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_henesys_a.dds"), 1))))
 		return E_FAIL;
 
@@ -476,7 +476,7 @@ HRESULT CLoader::Loading_Level_BayarPeak()
 {
 
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드"));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("bg_perion_c.dds"),
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_BAYARPEAK, TEXT("bg_perion_c.dds"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_perion_c.dds"), 1))))
 		return E_FAIL;
 
@@ -525,7 +525,7 @@ HRESULT CLoader::Loading_Level_MyHome()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_SelectedYellow"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_Mat_SelectedYellow.dds"), 1))))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("bg_indoor_a.dds"),
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("bg_indoor_a.dds"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_indoor_a.dds"), 1))))
 		return E_FAIL;
 
@@ -571,7 +571,7 @@ HRESULT CLoader::Loading_Level_MyHome()
 HRESULT CLoader::Loading_Level_HuntingPlace()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드"));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("bg_henesys_b.dds"),
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HUNTINGPLACE, TEXT("bg_henesys_b.dds"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_henesys_b.dds"), 1))))
 		return E_FAIL;
 

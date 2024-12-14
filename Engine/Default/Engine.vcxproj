@@ -240,6 +240,8 @@ call UpdateLib.bat</Command>
     <ClInclude Include="..\Public\UIManager.h" />
     <ClInclude Include="..\public\UIObject.h" />
     <ClInclude Include="..\public\VIBuffer.h" />
+    <ClInclude Include="..\Public\VIBuffer_Particle_Instance.h" />
+    <ClInclude Include="..\Public\VIBuffer_Particle_Point.h" />
     <ClInclude Include="..\public\VIBuffer_Rect.h" />
     <ClInclude Include="..\public\VIBuffer_Terrain.h" />
     <ClInclude Include="resource.h" />
@@ -304,6 +306,8 @@ call UpdateLib.bat</Command>
     <ClCompile Include="..\Private\UIManager.cpp" />
     <ClCompile Include="..\private\UIObject.cpp" />
     <ClCompile Include="..\private\VIBuffer.cpp" />
+    <ClCompile Include="..\Private\VIBuffer_Particle_Instance.cpp" />
+    <ClCompile Include="..\Private\VIBuffer_Particle_Point.cpp" />
     <ClCompile Include="..\private\VIBuffer_Rect.cpp" />
     <ClCompile Include="..\private\VIBuffer_Terrain.cpp" />
     <ClCompile Include="..\Public\Engine_Struct.cpp" />

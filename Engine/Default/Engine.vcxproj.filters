@@ -276,6 +276,8 @@
     <ClInclude Include="..\Public\DragableUI.h" />
     <ClInclude Include="..\Public\FontManager.h" />
     <ClInclude Include="..\Public\CustomFont.h" />
+    <ClInclude Include="..\Public\VIBuffer_Particle_Point.h" />
+    <ClInclude Include="..\Public\VIBuffer_Particle_Instance.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -439,6 +441,8 @@
     <ClCompile Include="..\Private\DragableUI.cpp" />
     <ClCompile Include="..\Private\FontManager.cpp" />
     <ClCompile Include="..\Private\CustomFont.cpp" />
+    <ClCompile Include="..\Private\VIBuffer_Particle_Point.cpp" />
+    <ClCompile Include="..\Private\VIBuffer_Particle_Instance.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc" />

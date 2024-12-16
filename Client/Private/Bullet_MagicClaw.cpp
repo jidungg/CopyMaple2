@@ -79,9 +79,11 @@ void CBullet_MagicClaw::Launch(_float fDamage, CGameObject* pTarget)
 	
 	m_fDamage = fDamage;
 	Set_Target(pTarget);
-	Set_Transform(Get_Target()->Get_TransformPosition());
+
+	Set_Transform(pTarget->Get_WorldPosition(),{0,0,0,0}, pTarget->Get_Transform()->Compute_Scaled().x);
 	Set_Active(true);
 	m_pEffect->Start_Animation();
+
 	m_iAttackCount = 0;
 	m_fTimeAcc = 0.f;
 }

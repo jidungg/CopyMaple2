@@ -38,6 +38,10 @@ HRESULT CEffController::Initialize_Prototype(ifstream& inFile, const CEffModel* 
 
 _bool CEffController::Update_Controller(_float fTimeDelta)
 {
+
+	if(m_fCurrentTrackPos >= m_fStartPosition)
+		Update_InTime(m_fCurrentTrackPos );
+
 	if (m_fCurrentTrackPos >= m_fStopPosition)
 	{
 		if (m_eProgressType == PROGRESS_TYPE::LOOP)
@@ -49,9 +53,6 @@ _bool CEffController::Update_Controller(_float fTimeDelta)
 			return true;
 		}
 	}
-
-	if(m_fCurrentTrackPos >= m_fStartPosition)
-		Update_InTime(m_fCurrentTrackPos );
 
 
 

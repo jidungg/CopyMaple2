@@ -82,6 +82,9 @@ void CEffBone::Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bone
 		memcpy( m_CombindTransformationMatrix.m[2] ,&vLook, sizeof(_float4));
 
 		_matrix matWorldInverse = XMMatrixInverse(nullptr, matWroldMatrix);
+		matWorldInverse.r[0] = XMVector3Normalize(matWorldInverse.r[0]);
+		matWorldInverse.r[1] = XMVector3Normalize(matWorldInverse.r[1]);
+		matWorldInverse.r[2] = XMVector3Normalize(matWorldInverse.r[2]);
 		matWorldInverse.r[3] = _vector{ 0,0,0,1 };
 		matCombined =XMLoadFloat4x4(&m_CombindTransformationMatrix) * matWorldInverse;
 		XMStoreFloat4x4(&m_CombindTransformationMatrix, matCombined);

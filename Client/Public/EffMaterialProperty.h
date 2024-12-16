@@ -3,6 +3,7 @@
 #include "EffControllable.h"
 BEGIN(Engine)
 class CShader;
+class CTexture;
 END
 
 BEGIN(Client)
@@ -15,7 +16,7 @@ struct EffMaterialData
 	_float fGlossiness = { 10 };
 	_float fAlpha = { 1 };
 };
-class CTexture;
+
 class CEffMaterialProperty :
 	public CComponent, public IEffControllable
 {

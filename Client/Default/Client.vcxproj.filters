@@ -195,7 +195,7 @@
     <ClInclude Include="..\Public\EffBone.h" />
     <ClInclude Include="..\Public\EffMesh.h" />
     <ClInclude Include="..\Public\EffController.h" />
-    <ClInclude Include="..\Public\EffTexture.h" />
+    <ClInclude Include="..\Public\EffTextureSlot.h" />
     <ClInclude Include="..\public\EffConcreteController.h" />
     <ClInclude Include="..\Public\EffControllable.h" />
     <ClInclude Include="..\Public\HitEvent.h" />
@@ -235,6 +235,7 @@
     <ClInclude Include="..\Public\OctoTree.h" />
     <ClInclude Include="..\Public\UIDamgCount.h" />
     <ClInclude Include="..\Public\WorldUIObject.h" />
+    <ClInclude Include="EffFlipController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -369,7 +370,7 @@
     <ClCompile Include="..\Private\EffBone.cpp" />
     <ClCompile Include="..\Private\EffMesh.cpp" />
     <ClCompile Include="..\Private\EffController.cpp" />
-    <ClCompile Include="..\Private\EffTexture.cpp" />
+    <ClCompile Include="..\Private\EffTextureSlot.cpp" />
     <ClCompile Include="..\private\EffConcreteController.cpp" />
     <ClCompile Include="..\Private\EffControllable.cpp" />
     <ClCompile Include="..\Private\HitEvent.cpp" />
@@ -409,6 +410,7 @@
     <ClCompile Include="..\Private\CubeTerrain.cpp" />
     <ClCompile Include="..\Private\UIDamgCount.cpp" />
     <ClCompile Include="..\Private\WorldUIObject.cpp" />
+    <ClCompile Include="EffFlipController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

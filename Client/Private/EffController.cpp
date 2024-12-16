@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "EffController.h"
 
+
+#define PROGRESS_MASK 0b000000000000011
 CEffController::CEffController()
 {
 }
@@ -13,6 +15,7 @@ CEffController::CEffController(const CEffController& Prototype)
 	, m_fPhase(Prototype.m_fPhase)
 	, m_fCurrentTrackPos(Prototype.m_fCurrentTrackPos)
 	, m_iTargetIndex(Prototype.m_iTargetIndex)
+	, m_eProgressType(Prototype.m_eProgressType)
 {
 }
 
@@ -23,23 +26,42 @@ HRESULT CEffController::Initialize_Prototype(ifstream& inFile, const CEffModel* 
 	inFile.read(reinterpret_cast<char*>(&m_fSpeed), sizeof(_float));
 	inFile.read(reinterpret_cast<char*>(&m_fPhase), sizeof(_float));
 	inFile.read(reinterpret_cast<char*>(&m_iTargetIndex), sizeof(_int));
+	_ushort sFlags = 0;
+	inFile.read(reinterpret_cast<char*>(&sFlags), sizeof(_ushort));
+	sFlags >>= 1;
+
+	m_eProgressType = PROGRESS_TYPE(sFlags & PROGRESS_MASK);
+
 
     return S_OK;
 }
 
 _bool CEffController::Update_Controller(_float fTimeDelta)
 {
-	bool bEnd = false;
+	if (m_fCurrentTrackPos >= m_fStopPosition)
+	{
+		if (m_eProgressType == PROGRESS_TYPE::LOOP)
+		{
+			m_fCurrentTrackPos = m_fStartPosition;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
 	if(m_fCurrentTrackPos >= m_fStartPosition)
-		bEnd = Update_InTime(m_fCurrentTrackPos + m_fPhase);
+		Update_InTime(m_fCurrentTrackPos );
+
+
 
 	m_fCurrentTrackPos += fTimeDelta * m_fSpeed ;
-	return bEnd;
+	return false;
 }
 
 void CEffController::Reset_CurrentTrackPosition()
 {
-	m_fCurrentTrackPos = 0.f;
+	m_fCurrentTrackPos = m_fPhase;
 }
 
 void CEffController::Register_AnimEvent(ANIM_EVENT tAnimEvent)

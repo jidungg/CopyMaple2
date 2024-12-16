@@ -3,7 +3,9 @@
 
 BEGIN(Engine)
 class CShader;
+class CTexture;
 END
+
 BEGIN(Client)
 enum  NODE_TYPE
 {
@@ -45,7 +47,8 @@ protected:
     HRESULT Ready_Bones(ifstream& inFile, _uint iParentBoneIndex);
     HRESULT Ready_Meshes(ifstream& inFile);
     HRESULT Ready_Materials(ifstream& inFile);
-    HRESULT Ready_Texturings(ifstream& inFile, const _char* pModelFilePath);
+    HRESULT Ready_Textures(ifstream& inFile, const _char* pModelFilePath);
+    HRESULT Ready_Texturings(ifstream& inFile);
     HRESULT Ready_Controls(ifstream& inFile);
 
 private:
@@ -56,6 +59,8 @@ private:
     vector<class CEffMesh*>		m_vecMesh;
 
     vector<class CEffMaterialProperty*>				m_vecMaterial;
+
+    vector<CTexture*>				m_vecTexture;
 
 	vector<class CEffTexturingProperty* > 				m_vecTexturing;
 

@@ -13,7 +13,7 @@ HRESULT CMaterial::Initialize_Prototype(const _char* szDirPath, ifstream& inFile
 
 	for (size_t texTypeIdx = 1; texTypeIdx < TEXTURE_TYPE_MAX; texTypeIdx++)
 	{
-		CTexture* pTexture = CTexture::Create(m_pDevice, m_pContext, szDirPath, inFile, TEXTURE_TYPE(texTypeIdx));
+		CTexture* pTexture = CTexture::Create(m_pDevice, m_pContext, szDirPath, inFile);
 		m_vecTexture[texTypeIdx] = (pTexture);
 	}
 	return S_OK;

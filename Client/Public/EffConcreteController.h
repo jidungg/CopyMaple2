@@ -5,7 +5,7 @@ class CGameInstance;
 END
 BEGIN(Client)
 class CEffBone;
-class CEffTexture;
+class CEffTextureSlot;
 class CEffMesh;
 class CEffTexturingProperty;
 class CEffMaterialProperty;
@@ -40,6 +40,13 @@ public:
 class CEffTextureTransfromController :
 	public CEffController
 {
+	enum CYCLE_TYPE
+	{
+		LOOP,
+		CLAMP,
+		REVERSE,
+		LAST
+	};
 protected:
 	CEffTextureTransfromController();
 	virtual ~CEffTextureTransfromController() = default;
@@ -71,6 +78,7 @@ public:
 	void Set_Target(vector<CEffBone*>& vecBone);
 private:
 	vector<TRANSFORM_KEYFRAME> m_vecKeyFrame;
+	_ushort m_sFlags = { 0 };
 	//CEffBone* m_pTarget = { nullptr };
 	CGameInstance* m_pGameInstance = { nullptr };
 public:

@@ -33,7 +33,7 @@ protected:
 public:
 	static CTexture* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, ID3D11ShaderResourceView* pSRV);
 	static CTexture* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pTextureFilePath, _uint iNumTextures = 1);
-	static CTexture* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath,  ifstream& inFIle, TEXTURE_TYPE eTexType);
+	static CTexture* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath,  ifstream& inFIle);
 	virtual CComponent* Clone(void* pArg);
 	virtual void Free() override;
 };

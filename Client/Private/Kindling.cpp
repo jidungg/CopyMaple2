@@ -40,6 +40,7 @@ HRESULT CKindling::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_wizard_kindling_cast_01_a.effmodel");
 	m_pCastEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pCastEffect->Set_Active(false);
+	m_pUser->Add_Child(m_pCastEffect);
 
 	//CastEndEffect
 	 tCastEffDesc;
@@ -47,6 +48,8 @@ HRESULT CKindling::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_wizard_kindling_cast_02_a.effmodel");
 	m_pCastEndEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pCastEndEffect->Set_Active(false);
+	m_pUser->Add_Child(m_pCastEndEffect);
+
 	return S_OK;
 }
 
@@ -57,14 +60,7 @@ void CKindling::Update(_float fTimeDelta)
 	{
 		m_pBullet->Update(fTimeDelta);
 	}
-	if (m_pCastEffect->Is_Active())
-	{
-		m_pCastEffect->Update(fTimeDelta);
-	}	
-	if (m_pCastEndEffect->Is_Active())
-	{
-		m_pCastEndEffect->Update(fTimeDelta);
-	}
+
 }
 
 void CKindling::Late_Update(_float fTimeDelta)
@@ -75,21 +71,12 @@ void CKindling::Late_Update(_float fTimeDelta)
 		m_pBullet->Late_Update(fTimeDelta);
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect);
 	}
-	if (m_pCastEffect->Is_Active())
-	{
-		m_pCastEffect->Late_Update(fTimeDelta);
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect);
-	}
-	if (m_pCastEndEffect->Is_Active())
-	{
-		m_pCastEndEffect->Late_Update(fTimeDelta);
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEndEffect);
-	}
+
 }
 
 void CKindling::On_SkillUsed()
 {
-	m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
+	//m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect->Start_Animation();
 	m_pCastEffect->Set_Active(true);
 }
@@ -101,7 +88,7 @@ void CKindling::On_CastingEnd()
 
 void CKindling::Fire()
 {
-	m_pCastEndEffect->Set_Transform(m_pUser->Get_Transform());
+	//m_pCastEndEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEndEffect->Start_Animation();
 	m_pCastEndEffect->Set_Active(true);
 

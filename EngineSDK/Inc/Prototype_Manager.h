@@ -4,7 +4,7 @@
 #include "Texture.h"
 #include "VIBuffer_Rect.h"
 #include "VIBuffer_Terrain.h"
-
+#include "Shader.h"
 /* ������ü���� �������� �����ϰڴ�.*/
 /* Ư�� �������� ������ �ʿ䰡 ���� �������� �����ϰڴ�. */
 /* ������ ��ü�� �����Ͽ� �����Ѵ�. */

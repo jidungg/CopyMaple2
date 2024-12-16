@@ -8,6 +8,13 @@ class IEffControllable;
 class CEffController :
     public CBase
 {
+	enum PROGRESS_TYPE
+	{
+		LOOP = 0b00,
+		REVERSE = 0b01,
+		CLAMP = 0b10,
+		LAST
+	};
 protected:
 	explicit CEffController();
 	explicit CEffController(const CEffController& Prototype);
@@ -39,6 +46,8 @@ protected:
 	_float					m_fCurrentTrackPos = { 0 };
 	IEffControllable* m_pTarget = { nullptr };
 	_int						m_iTargetIndex = { -1 };
+
+	PROGRESS_TYPE m_eProgressType = { PROGRESS_TYPE::LOOP };
 public:
 	virtual CEffController* Clone() abstract;
 	virtual void Free() override;

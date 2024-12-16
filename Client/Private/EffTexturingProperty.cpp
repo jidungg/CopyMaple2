@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "EffTexturingProperty.h"
-#include "EffTexture.h"
+#include "EffTextureSlot.h"
 #include "Shader.h"
 #include "EffConcreteController.h"
+#include "Texture.h"
 
 
 #define BASE_TEX 1<<0
@@ -40,31 +41,31 @@ CEffTexturingProperty::CEffTexturingProperty(ID3D11Device* pDevice, ID3D11Device
 
 CEffTexturingProperty::CEffTexturingProperty(const CEffTexturingProperty& rhs)
 	:CComponent(rhs)
-	, m_vecTexture(rhs.m_vecTexture)
+	, m_vecTextureSlot(rhs.m_vecTextureSlot)
 	, m_iTextureFlags(rhs.m_iTextureFlags)
 {
-	for (auto& pTexture : m_vecTexture)
+	for (auto& pTexture : m_vecTextureSlot)
 		Safe_AddRef(pTexture);
 
 }
 
-HRESULT CEffTexturingProperty::Initialize_Prototype(const _char* szDirPath, ifstream& inFile)
+HRESULT CEffTexturingProperty::Initialize_Prototype(ifstream& inFile)
 {
 	_uint iNumTexture = 0;
 	inFile.read(reinterpret_cast<char*>(&iNumTexture), sizeof(_uint));
 
-	m_vecTexture.resize(EFF_TEX_TYPE::TT_LAST, nullptr);
+	m_vecTextureSlot.resize(EFF_TEX_TYPE::TT_LAST, nullptr);
 	for (_uint iTexIndex = 0; iTexIndex < iNumTexture; iTexIndex++)
 	{
 		EFF_TEX_TYPE eTexType = EFF_TEX_TYPE::TT_LAST;
 		inFile.read(reinterpret_cast<char*>(&eTexType), sizeof(_uint));
-		CEffTexture* pTexture = CEffTexture::Create(m_pDevice, m_pContext, szDirPath, inFile, eTexType);
-		m_vecTexture[eTexType] = pTexture;
+		CEffTextureSlot* pTexture = CEffTextureSlot::Create(m_pDevice, m_pContext, inFile);
+		m_vecTextureSlot[eTexType] = pTexture;
 	}
 	m_iTextureFlags = 0;
 	for (_uint i = 0; i < TT_LAST; ++i)
 	{
-		if (nullptr != m_vecTexture[i])
+		if (nullptr != m_vecTextureSlot[i])
 			m_iTextureFlags |= 1 << i;
 		else
 			m_iTextureFlags &= ~(1 << i);
@@ -74,7 +75,7 @@ HRESULT CEffTexturingProperty::Initialize_Prototype(const _char* szDirPath, ifst
 }
 
 
-HRESULT CEffTexturingProperty::Bind_Texture(CShader* pShader)
+HRESULT CEffTexturingProperty::Bind_Texture(CShader* pShader, vector<CTexture*>& vecTexture)
 {
 	ZeroMemory(m_f2TexcoordScale, sizeof(_float2) * 12);
 	ZeroMemory(m_f2TexcoordRotate, sizeof(_float) * 12);
@@ -86,7 +87,7 @@ HRESULT CEffTexturingProperty::Bind_Texture(CShader* pShader)
 
 	for (_uint i = 0; i < TT_LAST; ++i)
 	{
-		if (m_vecTexture[i] == nullptr)
+		if (m_vecTextureSlot[i] == nullptr)
 		{
 			TextureTransformData tTexTransformData;
 
@@ -97,7 +98,7 @@ HRESULT CEffTexturingProperty::Bind_Texture(CShader* pShader)
 		}
 		else
 		{
-			const TextureTransformData& tTexTransformData = m_vecTexture[i]->Get_TexTransformData();
+			const TextureTransformData& tTexTransformData = m_vecTextureSlot[i]->Get_TexTransformData();
 
 			m_f2TexcoordScale[i] = tTexTransformData.f2Scale;
 			m_f2TexcoordRotate[i] = tTexTransformData.fRotation + XMConvertToRadians(0);
@@ -118,9 +119,9 @@ HRESULT CEffTexturingProperty::Bind_Texture(CShader* pShader)
 
 	for (_uint i = 0; i < TT_LAST; ++i)
 	{
-		if (m_vecTexture[i] == nullptr)
+		if (m_vecTextureSlot[i] == nullptr)
 			continue;
-		m_vecTexture[i]->Bind_ShaderResource(pShader, szTextureNames[i], 0);
+		m_vecTextureSlot[i]->Bind_ShaderResource(pShader, szTextureNames[i], vecTexture,0);
 	}
 	if (FAILED(pShader->Bind_RawValue("g_TexFlags", &m_iTextureFlags, sizeof(_uint))))
 		return E_FAIL;
@@ -130,9 +131,16 @@ HRESULT CEffTexturingProperty::Bind_Texture(CShader* pShader)
 
 void CEffTexturingProperty::Set_TextureTransformData(EFF_TEX_TYPE eTexSlot, EFF_TEX_OPERATION_TYPE eOpType, _float fValue)
 {
-	if (m_vecTexture[eTexSlot] == nullptr)
+	if (m_vecTextureSlot[eTexSlot] == nullptr)
 		return;
-	m_vecTexture[eTexSlot]->Set_TextureTransformData(eOpType, fValue);
+	m_vecTextureSlot[eTexSlot]->Set_TextureTransformData(eOpType, fValue);
+}
+
+void CEffTexturingProperty::Set_TextureIndex(EFF_TEX_TYPE eTexSlot, _uint iTexIdx)
+{
+	if (m_vecTextureSlot[eTexSlot] == nullptr)
+		return;
+	m_vecTextureSlot[eTexSlot]->Set_TextureIndex(iTexIdx);
 }
 
 ID3D11ShaderResourceView* CEffTexturingProperty::CreateEmptySRV()
@@ -170,11 +178,11 @@ ID3D11ShaderResourceView* CEffTexturingProperty::CreateEmptySRV()
 	return pSRV;
 }
 
-CEffTexturingProperty* CEffTexturingProperty::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath, ifstream& inFile)
+CEffTexturingProperty* CEffTexturingProperty::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext,ifstream& inFile)
 {
 	CEffTexturingProperty* pInstance = new CEffTexturingProperty(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(szDirPath, inFile)))
+	if (FAILED(pInstance->Initialize_Prototype(inFile)))
 	{
 		MSG_BOX("Failed to Created : CEffTexturingProperty");
 		Safe_Release(pInstance);
@@ -190,9 +198,9 @@ CComponent* CEffTexturingProperty::Clone(void* pArg)
 void CEffTexturingProperty::Free()
 {
 	__super::Free();
-	for (auto& tex : m_vecTexture)
+	for (auto& tex : m_vecTextureSlot)
 		Safe_Release(tex);
-	m_vecTexture.clear();
+	m_vecTextureSlot.clear();
 	//for (_uint i = 0; i < TT_LAST; ++i)
 	//{
 	//	Safe_Release(m_pSRV[i]);
@@ -201,7 +209,7 @@ void CEffTexturingProperty::Free()
 
 void CEffTexturingProperty::Reset()
 {
-	for (auto& pTex : m_vecTexture)
+	for (auto& pTex : m_vecTextureSlot)
 		if(pTex) pTex->Reset();
 
 }

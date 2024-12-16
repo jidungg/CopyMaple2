@@ -76,6 +76,13 @@ BlendState		BS_AlphaBlend
 
 BlendState		BS_OneBlend
 {
+    BlendEnable[0] = true;
+    BlendEnable[1] = true;
+
+	// sourColor.rgb * 1 + DestColor.rgb * 1
+    SrcBlend = one;
+    DestBlend = one;
+    BlendOp = Add;
 
 };
 

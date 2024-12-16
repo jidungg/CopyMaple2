@@ -31,7 +31,7 @@ HRESULT CBullet_BayarStoneSpike::Initialize(void* pArg)
 	//PrecursorEffec
 	CEffModelObject::EFFECTOBJ_DESC tEffectDesc;
 	tEffectDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tEffectDesc.strModelProtoName, "eff_snail_attack_01_a_a.effmodel");
+	strcpy_s(tEffectDesc.strModelProtoName, "eff_sandstonegiant_offencekeep_cube.effmodel");
 	m_pPrecursorEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tEffectDesc));
 	Add_Child(m_pPrecursorEffect);
 	m_pPrecursorEffect->Set_Active(false);

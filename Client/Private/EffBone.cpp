@@ -61,7 +61,7 @@ void CEffBone::Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bone
 	if (m_bBillboard)
 	{
 		//카메라의 반대방향을 보는 룩벡터
-		_vector vLook = XMVector3Normalize(m_pGameInstance->Get_TransformMatrix_Inverse(CPipeLine::D3DTS_VIEW).r[2]);
+		_vector vLook = -XMVector3Normalize(m_pGameInstance->Get_TransformMatrix_Inverse(CPipeLine::D3DTS_VIEW).r[2]);
 		vLook.m128_f32[3] = 0;
 		_vector vUp = { 0.f, 1.f, 0.f, 0.f };
 		_vector vRight = DirectX::XMVector4Normalize(DirectX::XMVector3Cross(vUp, vLook));

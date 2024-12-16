@@ -27,7 +27,6 @@ public:
 
 private:
 	CEffModelObject* m_pBallEffect = { nullptr };
-	CEffModelObject* m_pRemainEffect = { nullptr };
 	CEffModelObject* m_pSplashCastEffect = { nullptr };
 	CEffModelObject* m_pSplashEndEffect = { nullptr };
 

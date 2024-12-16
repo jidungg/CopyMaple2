@@ -6,7 +6,10 @@
 #include "EffTexturingProperty.h"
 #include "EffConcreteController.h"
 #include "EffModel.h"
-#include "Shader.h"
+#include "EffTextureSlot.h"
+#include "GameInstance.h"
+#include "EffFlipController.h"
+
 
 CEffModel::CEffModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CComponent(pDevice, pContext)
@@ -20,6 +23,7 @@ CEffModel::CEffModel(const CEffModel& Prototype)
     , m_PreTransformMatrix(Prototype.m_PreTransformMatrix)
     , m_vecMesh{ Prototype.m_vecMesh }
 	, m_iNumMeshes(Prototype.m_iNumMeshes)
+	, m_vecTexture{ Prototype.m_vecTexture }
 {
     for (auto& pBone : Prototype.m_vecBone)
         m_vecBone.push_back(pBone->Clone());
@@ -29,6 +33,9 @@ CEffModel::CEffModel(const CEffModel& Prototype)
 
     for (auto& pMaterial : Prototype.m_vecMaterial)
         m_vecMaterial.push_back(static_cast<CEffMaterialProperty*>(pMaterial->Clone(nullptr)));
+
+    for (auto& pTex : m_vecTexture)
+        Safe_AddRef(pTex);
 
     for (auto& pTexturing : Prototype.m_vecTexturing)
         m_vecTexturing.push_back(static_cast<CEffTexturingProperty*>(pTexturing->Clone(nullptr)));
@@ -60,7 +67,10 @@ HRESULT CEffModel::Initialize_Prototype(const _char* pModelFilePath, _fmatrix Pr
     if (FAILED(Ready_Materials(inFile)))
         return E_FAIL;
 
-    if (FAILED(Ready_Texturings(inFile, pModelFilePath)))
+    if (FAILED(Ready_Textures(inFile, pModelFilePath)))
+        return E_FAIL;
+
+    if (FAILED(Ready_Texturings(inFile)))
         return E_FAIL;
 
     if (FAILED(Ready_Controls(inFile)))
@@ -90,6 +100,9 @@ HRESULT CEffModel::Initialize(void* pArg)
         case Client::CT_TEXTURE_TRANSFORM:
             static_cast<CEffTextureTransfromController*>(pController)->Set_Target(m_vecTexturing);
             break;
+        case Client::CT_TEXTURE_FLIP:
+            static_cast<CEffFlipController*>(pController)->Set_Target(m_vecTexturing);
+            break;
         case Client::CT_LAST:
             break;
         default:
@@ -112,7 +125,7 @@ HRESULT CEffModel::Render(CShader* pShader)
                 return E_FAIL;
         _uint iTexturingIdx = m_vecMesh[i]->Get_TexturingIndex();
         if(iTexturingIdx != -1)
-            if (FAILED(m_vecTexturing[iTexturingIdx]->Bind_Texture(pShader)))
+            if (FAILED(m_vecTexturing[iTexturingIdx]->Bind_Texture(pShader,m_vecTexture)))
                 return E_FAIL;
         if (FAILED(m_vecMesh[i]->Bind_BoneMatrices(pShader, "g_BoneMatrices", m_vecBone)))
             return E_FAIL;
@@ -138,25 +151,19 @@ void CEffModel::Update_Animation(_float fTimeDelta, _fmatrix matWorld)
 {
     if (m_bPlay)
     {
-        _bool bAnimEnd = true;
         //모든 컨트롤러가 끝나야 true. -> 하나라도 false면 안됨
         //현재 프레임 계산
-        _uint iCOntrolIndex = 0;
-        for (auto& pController : m_vecControl)
-        {
-            bAnimEnd = pController->Update_Controller(fTimeDelta) && bAnimEnd;
-            iCOntrolIndex++;
-        }
-
-
-        if (bAnimEnd)
-        {
+		if (m_fCurrentTrackPosition >= m_fDuration)
+		{
             if (m_bLoop)
                 Reset();
             else
-            {
                 Stop_Animation();
-            }
+		}
+        else
+        {
+            for (auto& pController : m_vecControl)
+                pController->Update_Controller(fTimeDelta);
         }
 
         //뼈들의 합성변환행렬을 갱신
@@ -203,7 +210,7 @@ void CEffModel::Reset()
 		pTexturing->Reset();
     for (auto& pController : m_vecControl)
         pController->Reset_CurrentTrackPosition();
-
+    m_fCurrentTrackPosition = 0;
 }
 
 void CEffModel::Register_AnimEvent(ANIM_EVENT tAnimEvent)
@@ -292,18 +299,34 @@ HRESULT CEffModel::Ready_Materials(ifstream& inFile)
     return S_OK;
 }
 
-HRESULT CEffModel::Ready_Texturings(ifstream& inFile, const _char* pModelFilePath)
+HRESULT CEffModel::Ready_Textures(ifstream& inFile, const _char* pModelFilePath)
 {
-	_uint iNumTexturings = 0;
-    inFile.read(reinterpret_cast<char*>(&iNumTexturings), sizeof(_uint));
-    m_vecTexturing.resize(iNumTexturings);
+    _uint iNumTextures = 0;
+    inFile.read(reinterpret_cast<char*>(&iNumTextures), sizeof(_uint));
+    m_vecTexture.resize(iNumTextures);
+
     _char		szDrive[MAX_PATH] = "";
     _char		szDirectory[MAX_PATH] = "";
     _splitpath_s(pModelFilePath, szDrive, MAX_PATH, szDirectory, MAX_PATH, nullptr, 0, nullptr, 0);
     strcat_s(szDrive, szDirectory);
-    for (_uint i = 0; i < iNumTexturings; i++)
+
+    for (_uint i = 0; i < iNumTextures; i++)
     {
-        CEffTexturingProperty* pTexturing = CEffTexturingProperty::Create(m_pDevice, m_pContext, szDrive, inFile);
+        //cout << "TextureIndex : " << i << endl;
+        CTexture* pTexture = CTexture::Create(m_pDevice, m_pContext, szDrive, inFile);
+        m_vecTexture[i] = pTexture;
+    }
+    return S_OK;
+}
+
+HRESULT CEffModel::Ready_Texturings(ifstream& inFile)
+{
+	_uint iNumTexturings = 0;
+    inFile.read(reinterpret_cast<char*>(&iNumTexturings), sizeof(_uint));
+    m_vecTexturing.resize(iNumTexturings);
+     for (_uint i = 0; i < iNumTexturings; i++)
+    {
+        CEffTexturingProperty* pTexturing = CEffTexturingProperty::Create(m_pDevice, m_pContext,inFile);
         m_vecTexturing[i] = pTexturing;
     }
 
@@ -320,28 +343,31 @@ HRESULT CEffModel::Ready_Controls(ifstream& inFile)
     {
 		EFF_CTRL_TYPE eCtrlType;
 		inFile.read(reinterpret_cast<char*>(&eCtrlType), sizeof(_uint));
-        CEffController* pMaterial = nullptr;
+        CEffController* pController = nullptr;
         switch (eCtrlType)
-        {
+        {//2번째에서 이상함
         case Client::CT_TRANSFORM:
-			pMaterial = CEffTransformController::Create(inFile, this);
+			pController = CEffTransformController::Create(inFile, this);
             break;
         case Client::CT_ALPHA:
-			pMaterial = CEffAlphaController::Create(inFile, this);
+			pController = CEffAlphaController::Create(inFile, this);
             break;
         case Client::CT_MATERIAL_COLOR:
-			pMaterial = CEffMaterialColorController::Create(inFile, this);
+			pController = CEffMaterialColorController::Create(inFile, this);
             break;
         case Client::CT_TEXTURE_TRANSFORM:
-			pMaterial = CEffTextureTransfromController::Create(inFile, this);
+			pController = CEffTextureTransfromController::Create(inFile, this);
+            break;
+        case Client::CT_TEXTURE_FLIP:
+			pController = CEffFlipController::Create(inFile, this);
             break;
         case Client::CT_LAST:
         default:
             break;
         }
-       if (nullptr == pMaterial)
+       if (nullptr == pController)
            return E_FAIL;
-        m_vecControl[i] = pMaterial;
+        m_vecControl[i] = pController;
     }
     return S_OK;
 }
@@ -354,6 +380,7 @@ CEffModel* CEffModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContex
     {
         MSG_BOX("Failed to Created : CEffectModel");
         Safe_Release(pInstance);
+        return nullptr;
     }
     return pInstance;
 }
@@ -366,6 +393,7 @@ CComponent* CEffModel::Clone(void* pArg)
     {
         MSG_BOX("Failed to Cloned : CEffectModel");
         Safe_Release(pInstance);
+        return nullptr;
     }
 
     return pInstance;
@@ -389,4 +417,7 @@ void CEffModel::Free()
 	for (auto& control : m_vecControl)
 		Safe_Release(control);
 	m_vecControl.clear();
+    for (auto& texture : m_vecTexture)
+        Safe_Release(texture);
+    m_vecTexture.clear();
 }

@@ -83,6 +83,18 @@ namespace Engine
 		static const unsigned int					iNumElements = { 6 };
 		static const D3D11_INPUT_ELEMENT_DESC		Elements[iNumElements];
 	}VTXANIMMESH;
+	typedef struct ENGINE_DLL VertexPoint
+	{
+		XMFLOAT3		vPosition;
+		XMFLOAT2		vSize;
+	}VTXPOINT;
+
+	typedef struct VertexInstance
+	{
+		XMFLOAT4		vRight, vUp, vLook, vTranslation;
+		XMFLOAT2		vLifeTime;
+
+	}VTXINSTANCE;
 
 	typedef struct ENGINE_DLL Ray
 	{

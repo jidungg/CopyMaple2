@@ -4,10 +4,11 @@
 
 BEGIN(Engine)
 class CShader;
+class CTexture;
 END
 
 BEGIN(Client)
-class CEffTexture;
+class CEffTextureSlot;
 class CEffTexturingProperty :
 	public CComponent, public IEffControllable
 {
@@ -17,13 +18,14 @@ protected:
 	virtual ~CEffTexturingProperty() = default;
 
 public:
-	virtual HRESULT Initialize_Prototype(const _char* szDirPath, ifstream& inFile);
+	virtual HRESULT Initialize_Prototype(ifstream& inFile);
 	virtual void Reset() override;
-	HRESULT Bind_Texture(CShader* pShader);
+	HRESULT Bind_Texture(CShader* pShader, vector<CTexture*>& vecTexture);
 	void Set_TextureTransformData(EFF_TEX_TYPE eTexSlot, EFF_TEX_OPERATION_TYPE eOpType, _float fValue);
+	void Set_TextureIndex(EFF_TEX_TYPE eTexSlot,_uint iTexIdx);
 	ID3D11ShaderResourceView* CreateEmptySRV();
 private:
-	vector < CEffTexture* > m_vecTexture;
+	vector < CEffTextureSlot* > m_vecTextureSlot;
 
 	_float2 m_f2TexcoordScale[12];
 	_float m_f2TexcoordRotate[12];
@@ -32,7 +34,7 @@ private:
 
 	_uint m_iTextureFlags = { 0 };
 public:
-	static CEffTexturingProperty* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* szDirPath, ifstream& inFile);
+	static CEffTexturingProperty* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext,ifstream& inFile);
 	CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

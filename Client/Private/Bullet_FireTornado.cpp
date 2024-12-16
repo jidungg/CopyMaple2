@@ -37,13 +37,6 @@ HRESULT CBullet_FireTornado::Initialize(void* pArg)
 	m_pBallEffect->Register_OnAnimEndCallBack(bind(&CBullet_FireTornado::On_BallEffectAnimEnd, this, placeholders::_1));
 	m_pBallEffect->Set_Active(false);
 
-	//RemainEffect
-	tCastEffDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tCastEffDesc.strModelProtoName, "eff_wizard_firetornado_remain_01_a.effmodel");
-	m_pRemainEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
-	Add_Child(m_pRemainEffect);
-	m_pRemainEffect->Register_OnAnimEndCallBack(bind(&CBullet_FireTornado::On_RemainEffectAnimEnd, this, placeholders::_1));
-	m_pRemainEffect->Set_Active(false);
 
 
 	//SplashCastEffect
@@ -100,22 +93,21 @@ void CBullet_FireTornado::Launch(_float fDamage, _vector vPosition)
 {
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	m_fDamage = fDamage;
-	m_pBallEffect->Start_Animation(0, true, 3);
-	m_pBallEffect->Set_Active(true);
+	m_pSplashCastEffect->Start_Animation(0, true, 3);
+	m_pSplashCastEffect->Set_Active(true);
 	m_pCollider->Update(m_pTransformCom->Get_WorldMatrix());
 	Set_Active(true);
 }
 
 void CBullet_FireTornado::On_BallEffectAnimEnd(CEffModel* pModel)
 {
-	m_pBallEffect->Set_Active(false);
-	m_pRemainEffect->Start_Animation(0, false, 1);
+	m_pSplashCastEffect->Set_Active(false);
+	m_pSplashEndEffect->Start_Animation(0, false, 1);
 	Set_Active(true);
 }
 
 void CBullet_FireTornado::On_RemainEffectAnimEnd(CEffModel* pModel)
 {
-	m_pRemainEffect->Set_Active(false);
 	Set_Active(false);
 }
 

@@ -124,7 +124,7 @@ HRESULT CEffTextureTransfromController::Initialize_Prototype(ifstream& inFile, c
 
 
 CEffTextureTransfromController* CEffTextureTransfromController::Create(ifstream& inFile, const CEffModel* pModel)
-{
+  {
 	CEffTextureTransfromController* pInstance = new CEffTextureTransfromController();
 	if (FAILED(pInstance->Initialize_Prototype(inFile, pModel)))
 	{
@@ -204,11 +204,15 @@ HRESULT CEffTransformController::Initialize_Prototype(ifstream& inFile, const CE
 	{
 		TRANSFORM_KEYFRAME tNewFrame;
 		inFile.read(reinterpret_cast<char*>(&tNewFrame.vScale), sizeof(_float3));
+		//_float3 vRotation;
 		inFile.read(reinterpret_cast<char*>(&tNewFrame.vRotation), sizeof(_float4));
+		//XMStoreFloat4( &tNewFrame.vRotation , XMQuaternionRotationRollPitchYaw(vRotation.x, vRotation.z, vRotation.y));
 		inFile.read(reinterpret_cast<char*>(&tNewFrame.vPosition), sizeof(_float3));
 		inFile.read(reinterpret_cast<char*>(&tNewFrame.fTrackPosition), sizeof(_float));
 		m_vecKeyFrame.push_back(tNewFrame);
 	}
+	inFile.read(reinterpret_cast<char*>(&m_sFlags), sizeof(_ushort));
+
 	return S_OK;
 }
 
@@ -226,7 +230,7 @@ _bool CEffTransformController::Update_InTime(_float fTrackPos)
 	if (iNumFrame == 1)
 	{
 		TRANSFORM_KEYFRAME tKeyFrame = m_vecKeyFrame[0];
-		
+
 		(pTarget)->Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&tKeyFrame.vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMLoadFloat4(&tKeyFrame.vRotation), XMVectorSetW(XMLoadFloat3(&tKeyFrame.vPosition), 1.f)));
 		return true;
 	}
@@ -248,6 +252,32 @@ _bool CEffTransformController::Update_InTime(_float fTrackPos)
 	_float fRatio = (fTrackPos - tLeftKeyFrame.fTrackPosition)
 		/ (tRightKeyFrame.fTrackPosition - tLeftKeyFrame.fTrackPosition);
 	TRANSFORM_KEYFRAME tKeyFrame = m_pGameInstance->Lerp_Frame(tLeftKeyFrame, tRightKeyFrame, fRatio);
+
+
+
+	XMMATRIX rotationMatrix = XMMatrixRotationQuaternion(XMLoadFloat4(&tKeyFrame.vRotation));
+
+	// 2. 행렬에서 Euler 각도 추출
+	float pitch, yaw, roll;
+
+	// Pitch (Y-axis rotation)
+	pitch = asinf(-rotationMatrix.r[2].m128_f32[1]);
+
+	// Gimbal Lock 체크
+	if (cosf(pitch) > 0.0001f) {
+		// Yaw (Z-axis rotation)
+		yaw = atan2f(rotationMatrix.r[2].m128_f32[0], rotationMatrix.r[2].m128_f32[2]);
+		// Roll (X-axis rotation)
+		roll = atan2f(rotationMatrix.r[0].m128_f32[1], rotationMatrix.r[1].m128_f32[1]);
+	}
+	else {
+		// Gimbal Lock 상태에서는 Yaw와 Roll이 섞임
+		yaw = atan2f(-rotationMatrix.r[1].m128_f32[0], rotationMatrix.r[0].m128_f32[0]);
+		roll = 0.0f;
+	}
+
+	XMFLOAT3 tmp = {roll, pitch, yaw};
+	cout << "Roll : " << roll << " Pitch : " << pitch << " Yaw : " << yaw << endl;
 
 	pTarget->Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&tKeyFrame.vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMLoadFloat4(&tKeyFrame.vRotation), XMVectorSetW(XMLoadFloat3(&tKeyFrame.vPosition), 1.f)));
 	return false;

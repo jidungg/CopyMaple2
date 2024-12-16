@@ -211,7 +211,7 @@
     <ClInclude Include="..\Public\EffModelObject.h" />
     <ClInclude Include="..\Public\EffModel.h" />
     <ClInclude Include="..\Public\EffMesh.h" />
-    <ClInclude Include="..\Public\EffTexture.h" />
+    <ClInclude Include="..\Public\EffTextureSlot.h" />
     <ClInclude Include="..\public\FakeMeteor.h" />
     <ClInclude Include="..\public\FireTornado.h" />
     <ClInclude Include="..\Public\FlameWave.h" />
@@ -285,6 +285,7 @@
     <ClInclude Include="..\Public\WorldUIObject.h" />
     <ClInclude Include="Client_Utility.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="EffFlipController.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -330,7 +331,7 @@
     <ClCompile Include="..\Private\EffModelObject.cpp" />
     <ClCompile Include="..\Private\EffModel.cpp" />
     <ClCompile Include="..\Private\EffMesh.cpp" />
-    <ClCompile Include="..\Private\EffTexture.cpp" />
+    <ClCompile Include="..\Private\EffTextureSlot.cpp" />
     <ClCompile Include="..\Private\FakeMeteor.cpp" />
     <ClCompile Include="..\Private\FireTornado.cpp" />
     <ClCompile Include="..\Private\FlameWave.cpp" />
@@ -405,6 +406,7 @@
     <ClCompile Include="..\Public\UIItemIndicator.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Client_Utility.cpp" />
+    <ClCompile Include="EffFlipController.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

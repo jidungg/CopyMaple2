@@ -126,13 +126,13 @@ struct PS_OUT
 /* PixelShader */
 PS_OUT PS_MAIN(PS_IN In)
 {
-    //PS_OUT Out = (PS_OUT) 0;
+    PS_OUT Out = (PS_OUT) 0;
 
     
-    //float4 vShade = saturate(max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f) );
+    //float4 vShade = saturate(max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f));
 
     //float4 vMaterial;
-    //vMaterial.rgb = g_vMaterialDiffuse * vShade.rgb ;
+    //vMaterial.rgb = g_vMaterialDiffuse * vShade.rgb;
     //vMaterial.a = g_fMaterialAlpha;
     //vMaterial = saturate(vMaterial);
     //float4 vColor = vMaterial;
@@ -165,7 +165,6 @@ PS_OUT PS_MAIN(PS_IN In)
     //}
     //    //빛 * 머티리얼 디퓨즈
     
-    //return Out;
     //if (Out.vColor.a <= 0.05)
     //    discard;
     //return Out;
@@ -173,64 +172,64 @@ PS_OUT PS_MAIN(PS_IN In)
     
     // Sample textures
 
-    // Combine Base and Dark Texture
-    //float4 vCombinedBaseColor = (1, 1, 1, 1);
-    //if (g_TexFlags & BASE_TEX)
-    //{
-    //    In.vTexcoord[0] = saturate(In.vTexcoord[0]);
-    //    float4 vBaseColor = g_BaseTexture.Sample(LinearSampler, In.vTexcoord[0]);
-    //    vCombinedBaseColor *= vBaseColor;
-    //}
-    //Out.vColor = (g_vMaterialDiffuse, g_fMaterialAlpha);
-    //return Out;
-    ////if (g_TexFlags & DARK_TEX)
-    ////{
-    ////    In.vTexcoord[0] = saturate(In.vTexcoord[1]);
-    ////    float4 vDarkColor = g_DarkTexture.Sample(LinearSampler, In.vTexcoord[1]);
-    ////    vCombinedBaseColor *= (1-vDarkColor);
-    ////}
+     //Combine Base and Dark Texture
+    float4 vCombinedBaseColor = (1, 1, 1, 1);
+    if (g_TexFlags & BASE_TEX)
+    {
+        In.vTexcoord[0] = saturate(In.vTexcoord[0]);
+        float4 vBaseColor = g_BaseTexture.Sample(LinearSampler, In.vTexcoord[0]);
+        vCombinedBaseColor *= vBaseColor;
+    }
 
-    ////// Add Detail Texture
-    ////if (g_TexFlags & DETAIL_TEX)
-    ////{
-    ////    float4 vDetailColor = g_DetailTexture.Sample(LinearSampler, In.vTexcoord[2]);
-    ////    vCombinedBaseColor += vDetailColor * float4(0.5, 0.5, 0.5, 1.0); // 조정 가능
-    ////}
+    if (g_TexFlags & DARK_TEX)
+    {
+        In.vTexcoord[0] = saturate(In.vTexcoord[1]);
+        float4 vDarkColor = g_DarkTexture.Sample(LinearSampler, In.vTexcoord[1]);
+        vCombinedBaseColor *= (1 - vDarkColor);
+    }
 
-    ////// Emissive 
-    //float3 vEmissiveColor = g_vMaterialEmissive;
-    ////if (g_TexFlags & GLOW_TEX)
-    ////{
-    ////    float4 vGlowColor = g_GlowTexture.Sample(LinearSampler, In.vTexcoord[3]);
-    ////    vEmissiveColor += vGlowColor;
-    ////}
+    // Add Detail Texture
+    if (g_TexFlags & DETAIL_TEX)
+    {
+        float4 vDetailColor = g_DetailTexture.Sample(LinearSampler, In.vTexcoord[2]);
+        vCombinedBaseColor += vDetailColor * float4(0.5, 0.5, 0.5, 1.0); // 조정 가능
+    }
 
-    //// Ambient component
-    //float3 vAmbient = (g_vMaterialAmbient / 5) * g_vLightAmbient.rgb;
+    //// Emissive 
+    float3 vEmissiveColor = g_vMaterialEmissive;
+    if (g_TexFlags & GLOW_TEX)
+    {
+        float4 vGlowColor = g_GlowTexture.Sample(LinearSampler, In.vTexcoord[3]);
+        vEmissiveColor += vGlowColor;
+    }
 
-    //// Diffuse component
-    //float fShade = max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f);
-    //float3 vDiffuse = (g_vMaterialDiffuse) * fShade * g_vLightDiffuse.rgb;
+    // Ambient component
+    float3 vAmbient = (g_vMaterialAmbient / 5) * g_vLightAmbient.rgb;
+
+    // Diffuse component
+    float fShade = max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f);
+    float3 vDiffuse = (g_vMaterialDiffuse) * fShade * g_vLightDiffuse.rgb;
 
 
-    //// Combine lighting with textures
-    //float4 vFinalColor = /* ((vAmbient + vDiffuse), 1) * */(g_vMaterialDiffuse,1) * vCombinedBaseColor;
+    // Combine lighting with textures
+    float4 vFinalColor = float4((vAmbient + vDiffuse), 1) *  vCombinedBaseColor;
 
-    ////// Add emissive and decal contributions
-    //vFinalColor.rgb += vEmissiveColor;
-    ////if (g_TexFlags & DECAL0_TEX)
-    ////{
-    ////    float4 vDecal0Color = g_Decal0Texture.Sample(LinearSampler, In.vTexcoord[8]);
-    ////    vFinalColor = vFinalColor * (1 - vDecal0Color.a) + vDecal0Color * vDecal0Color.a;
+    //// Add emissive and decal contributions
+    vFinalColor.rgb += vEmissiveColor;
+    if (g_TexFlags & DECAL0_TEX)
+    {
+        float4 vDecal0Color = g_Decal0Texture.Sample(LinearSampler, In.vTexcoord[8]);
+        vFinalColor = vFinalColor * (1 - vDecal0Color.a) + vDecal0Color * vDecal0Color.a;
 
-    ////}
+    }
 
-    //// Apply Material Alpha
-    //vFinalColor.a *= g_fMaterialAlpha;
+    // Apply Material Alpha
+    vFinalColor.a *= g_fMaterialAlpha;
 
-    //Out.vColor = vFinalColor;
-    
-    //return Out;
+    Out.vColor = vFinalColor;
+    if (Out.vColor.a <= 0.05)
+        discard;
+    return Out;
  }
 
 

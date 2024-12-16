@@ -28,7 +28,7 @@ HRESULT CEffAlphaController::Initialize_Prototype(ifstream& inFile, const CEffMo
 		FLOAT_KEYFRAME tNewFrame;
 		inFile.read(reinterpret_cast<char*>(&tNewFrame.fValue), sizeof(_float));
 		inFile.read(reinterpret_cast<char*>(&tNewFrame.fTrackPosition), sizeof(_float));
-		cout << "fValue" << tNewFrame.fValue << ", TrackPos" << tNewFrame.fTrackPosition << endl;
+		//cout << "fValue" << tNewFrame.fValue << ", TrackPos" << tNewFrame.fTrackPosition << endl;
 		m_vecKeyFrame.push_back(tNewFrame);
 	}
 	return S_OK;

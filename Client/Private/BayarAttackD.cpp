@@ -6,6 +6,8 @@
 #include "Collider_Sphere.h"
 #include "EffModelObject.h"
 #include "Bullet_BayarAttackD.h"
+#include "Client_Utility.h"
+#include "CubeTerrain.h"
 
 CBayarAttackD::CBayarAttackD()
 	: CSkill()
@@ -44,6 +46,7 @@ HRESULT CBayarAttackD::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	m_pChargeEffect->Set_Active(false);
 	m_pUser->Add_Child(m_pChargeEffect);
 
+
 	return S_OK;
 }
 
@@ -52,7 +55,12 @@ void CBayarAttackD::Update(_float fTimeDelta)
 	__super::Update(fTimeDelta);
 	if (m_pAttackEffect->Is_Active())
 	{
-		m_pUser->Move_Forward(m_fMoveSpeed * fTimeDelta);
+		CTransform* pUserTRansform = m_pUser->Get_Transform();
+		_vector vUserPos = m_pUser->Get_WorldPosition();
+		_vector vDir = XMVector3Normalize(pUserTRansform->Get_State(CTransform::STATE_LOOK))* m_fMoveSpeed* fTimeDelta;
+		_float fNextFloor = m_pTerrain->Get_FloorHeight(vDir + vUserPos);
+		if(fNextFloor == m_fFloorHeight)
+			m_pUser->Move_Forward(m_fMoveSpeed * fTimeDelta);
 	}
 }
 
@@ -76,6 +84,8 @@ void CBayarAttackD::On_CastingEnd()
 
 void CBayarAttackD::Fire()
 {
+	m_pTerrain = static_cast<CCubeTerrain*> (m_pGameInstance->Get_FirstGameObject(Get_CurrentTrueLevel(), LAYERID::LAYER_TERRAIN));
+	m_fFloorHeight = m_pTerrain->Get_FloorHeight(m_pUser->Get_WorldPosition());
 
 	m_pAttackEffect->Set_Active(true);
 	m_pAttackEffect->Start_Animation();

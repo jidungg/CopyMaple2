@@ -5,7 +5,7 @@
 #include "Player.h"
 #include "Bullet_FireTornado.h"
 #include "HitEvent.h"
-
+#include "Client_Utility.h"
 
 CFireTornado::CFireTornado()
 	:CSkill()
@@ -24,6 +24,8 @@ HRESULT CFireTornado::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	tBulletDesc.eHitEffect = EFF_MODEL_ID::HIT_FIRETORNADO_A;
 	m_pBullet = static_cast<CBullet_FireTornado*>(m_pGameInstance->Clone_Proto_Object_Stock(CBullet_FireTornado::m_szProtoTag, &tBulletDesc));
 	m_pBullet->Set_Active(false);
+	m_pGameInstance->Add_GameObject_ToLayer((_uint)Get_CurrentTrueLevel(), (_uint)LAYERID::LAYER_BULLET, m_pBullet,true);
+	Safe_AddRef(m_pBullet);
 
 	//CastEffect
 	CEffModelObject::EFFECTOBJ_DESC tCastEffDesc;
@@ -37,10 +39,7 @@ HRESULT CFireTornado::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 void CFireTornado::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
-	if (m_pBullet->Is_Active())
-	{
-		m_pBullet->Update(fTimeDelta);
-	}
+
 	if (m_pCastEffect->Is_Active())
 	{
 		m_pCastEffect->Update(fTimeDelta);
@@ -50,11 +49,7 @@ void CFireTornado::Update(_float fTimeDelta)
 void CFireTornado::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
-	if (m_pBullet->Is_Active())
-	{
-		m_pBullet->Late_Update(fTimeDelta);
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect);
-	}
+
 	if (m_pCastEffect->Is_Active())
 	{
 		m_pCastEffect->Late_Update(fTimeDelta);
@@ -86,7 +81,7 @@ void CFireTornado::Fire()
 	_vector vLook = pShooterTransform->Get_State(CTransform::STATE_LOOK);
 	vPos += vLook * 2.5f;
 
-	m_pBullet->Launch(fDmg, vPos);
+m_pBullet->Launch(fDmg, vPos);
 }
 
 

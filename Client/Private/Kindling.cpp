@@ -33,6 +33,8 @@ HRESULT CKindling::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	tBulletDesc.eHitEffect = EFF_MODEL_ID::HIT_KINDLING;
 	m_pBullet = static_cast<CBullet_Kindling*>(m_pGameInstance->Clone_Proto_Object_Stock(CBullet_Kindling::m_szProtoTag, &tBulletDesc));
 	m_pBullet->Set_Active(false);
+	m_pGameInstance->Add_GameObject_ToLayer((_uint)Get_CurrentTrueLevel(), (_uint)LAYERID::LAYER_BULLET, m_pBullet, true);
+	Safe_AddRef(m_pBullet);
 
 	//CastEffect
 	CEffModelObject::EFFECTOBJ_DESC tCastEffDesc;
@@ -56,21 +58,14 @@ HRESULT CKindling::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 void CKindling::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
-	if (m_pBullet->Is_Active())
-	{
-		m_pBullet->Update(fTimeDelta);
-	}
+
 
 }
 
 void CKindling::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
-	if (m_pBullet->Is_Active())
-	{
-		m_pBullet->Late_Update(fTimeDelta);
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect);
-	}
+
 
 }
 

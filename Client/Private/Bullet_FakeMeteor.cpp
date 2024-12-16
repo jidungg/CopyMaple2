@@ -38,7 +38,6 @@ HRESULT CBullet_FakeMeteor::Initialize(void* pArg)
 	tAnimEvent.pFunc = bind(&CBullet_FakeMeteor::On_MeteorImpact, this);
 	m_pSplashInvokeEffectA->Register_AnimEvent(tAnimEvent);
 	m_pSplashInvokeEffectA->Set_Active(false);
-
 	//SplashInvokeEffectB
 	tEffectDesc.eModelProtoLevelID = LEVEL_LOADING;
 	strcpy_s(tEffectDesc.strModelProtoName, "eff_wizard_fakemeteor_splashinvoke_03_b.effmodel");
@@ -102,6 +101,7 @@ void CBullet_FakeMeteor::Launch(_float fDamage, CGameObject* pTarget)
 	m_fDamage = fDamage;
 	m_pSplashCastEffect->Start_Animation(0, true, m_fInvokeDelay);
 	m_pSplashCastEffect->Set_Active(true);
+	//m_pSplashCastEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, pTarget->Get_WorldPosition() + _vector{0,0.1,0,0});
 	m_bInvoke = false;
 	m_fTimeAcc = 0.f;
 	Set_Active(true);

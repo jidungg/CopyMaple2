@@ -6,6 +6,7 @@
 #include "Character.h"
 #include "Player.h"
 #include "HitEvent.h"
+#include "Client_Utility.h"
 
 CFakeMeteor::CFakeMeteor()
 	: CSkill()
@@ -34,6 +35,8 @@ HRESULT CFakeMeteor::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	tBulletDesc.eHitEffect = EFF_MODEL_ID::HIT_KINDLING;
 	m_pBullet = static_cast<CBullet_FakeMeteor*>(m_pGameInstance->Clone_Proto_Object_Stock(CBullet_FakeMeteor::m_szProtoTag, &tBulletDesc));
 	m_pBullet->Set_Active(false);
+	m_pGameInstance->Add_GameObject_ToLayer((_uint)Get_CurrentTrueLevel(), (_uint)LAYERID::LAYER_BULLET, m_pBullet, true);
+	Safe_AddRef(m_pBullet);
 
 	//CastEffect
 	CEffModelObject::EFFECTOBJ_DESC tCastEffDesc;
@@ -53,10 +56,7 @@ HRESULT CFakeMeteor::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 void CFakeMeteor::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
-	if (m_pBullet->Is_Active())
-	{
-		m_pBullet->Update(fTimeDelta);
-	}
+
 	if (m_pCastEffect1->Is_Active())
 	{
 		m_pCastEffect1->Update(fTimeDelta);
@@ -70,11 +70,7 @@ void CFakeMeteor::Update(_float fTimeDelta)
 void CFakeMeteor::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
-	if (m_pBullet->Is_Active())
-	{
-		m_pBullet->Late_Update(fTimeDelta);
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect1);
-	}
+
 	if (m_pCastEffect1->Is_Active())
 	{
 		m_pCastEffect1->Late_Update(fTimeDelta);

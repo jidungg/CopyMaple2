@@ -9,9 +9,9 @@ CEffMaterialProperty::CEffMaterialProperty(ID3D11Device* pDevice, ID3D11DeviceCo
 
 CEffMaterialProperty::CEffMaterialProperty(const CEffMaterialProperty& other)
 	:CComponent(other)
-	, m_tMaterialData(other.m_tMaterialData)
 	, m_tDefaultMaterialData(other.m_tDefaultMaterialData)
 {
+	m_tMaterialData = m_tDefaultMaterialData;
 }
 
 HRESULT CEffMaterialProperty::Initialize_Prototype( ifstream& inFile)
@@ -40,7 +40,7 @@ HRESULT CEffMaterialProperty::Bind_Material(CShader* pShader)
 		return E_FAIL;
 	if (FAILED(pShader->Bind_RawValue("g_fMaterialAlpha", &m_tMaterialData.fAlpha, sizeof(_float))))
 		return E_FAIL;
-	return S_OK;
+ 	return S_OK;
 }
 
 void CEffMaterialProperty::Set_Alpha(_float fAlpha)

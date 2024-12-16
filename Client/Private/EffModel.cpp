@@ -181,7 +181,7 @@ void CEffModel::Update_Animation(_float fTimeDelta, _fmatrix matWorld)
                 tEvnt.bIsTriggered = true;
             }
         }
-		m_fCurrentTrackPosition += fTimeDelta;
+		m_fCurrentTrackPosition += fTimeDelta* m_fSpeed;
     }
 }
 
@@ -242,6 +242,7 @@ _uint CEffModel::Get_BoneIndex(const _char* pBoneName) const
 
 void CEffModel::Set_AnimSpeed(_float fSpeed)
 {
+    m_fSpeed = fSpeed;
 	for (auto& pController : m_vecControl)
 		pController->Set_Speed(fSpeed);
 }

@@ -29,7 +29,7 @@ HRESULT CBullet_Kindling::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 	CCollider_Sphere::SPHERE_COLLIDER_DESC tDesc;
-	tDesc.fRadius = 0.15f;
+	tDesc.fRadius = 0.3f;
 	tDesc.vCenter = { 0.f,0.f,0.f };
 	m_pCollider = static_cast<CCollider_Sphere*>(m_pGameInstance->Clone_Proto_Component_Stock(CCollider_Sphere::m_szProtoTag, &tDesc));
 	

@@ -76,6 +76,7 @@ private:
     list< ANIM_EVENT>m_listAnimEvent;
 
 	_float m_fDuration = { 0.f };
+    _float m_fSpeed = { 1.f };
 	_float m_fCurrentTrackPosition = { 0.f };
 public:
     static CEffModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _char* pModelFilePath, _fmatrix PreTransformMatrix);

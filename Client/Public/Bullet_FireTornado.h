@@ -21,7 +21,6 @@ public:
 
 	virtual void Launch(_float fDamage, _vector vPosition) override;
 
-	void On_BallEffectAnimEnd(CEffModel* pModel);
 	void On_RemainEffectAnimEnd(CEffModel* pModel);
 
 
@@ -30,7 +29,8 @@ private:
 	CEffModelObject* m_pSplashCastEffect = { nullptr };
 	CEffModelObject* m_pSplashEndEffect = { nullptr };
 
-	_float m_fTimeAcc = { 0.f };
+	_float m_fDamgTimeAcc = { 0.f };
+	_bool m_bSplashEnded = { false };
 	_float m_fDamgInterval = { 0.5f };
 public:
 	static CBullet_FireTornado* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

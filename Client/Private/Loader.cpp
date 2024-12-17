@@ -31,6 +31,7 @@
 #include "UIFont.h"
 #include "UIIcon.h"
 #include "BackGround.h"
+#include "UIInvenTabButton.h"
 
 #include "StateMachine.h"
 #include "SkillManager.h"
@@ -436,6 +437,9 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIIcon::m_szProtoTag,
 		CUIIcon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIInvenTabButton::m_szProtoTag,
+		CUIInvenTabButton::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,

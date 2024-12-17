@@ -7,6 +7,7 @@ BEGIN(Client)
 class CInventory;
 class CUIListSelector;
 class CUIScroller;
+class CUIInvenTabButton;
 class CUIInventory :
     public CUICommonWindow
 {
@@ -37,14 +38,15 @@ private:
 	_float2 m_fTabButtonSize = { 50,25 };
 	_float2 m_fCommonMargin = { 5,5 };
 	_float m_fHeaderHeight = { 55 };
-	_uint m_iVisibleRowCount = 8;
-	_uint m_iVisibleColCount = 6;
-	ITEM_TYPE m_eCurrentTab = ITEM_TYPE::EQUIP;
+	_uint m_iVisibleRowCount = { 8 };
+	_uint m_iVisibleColCount = { 6 };
+	ITEM_TYPE m_eCurrentTab = { ITEM_TYPE::EQUIP };
 
 	CUIPanel* m_pItemBackPanel = { nullptr };
 	CUIListSelector* m_pItemList = { nullptr };
 	CUIScroller* m_pScroller = { nullptr };
 
+	CUIInvenTabButton* m_arrTabButton[(_uint)ITEM_TYPE::LAST];
 public:
 	static CUIInventory* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

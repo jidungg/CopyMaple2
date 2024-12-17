@@ -106,42 +106,10 @@ HRESULT CUIInventory::Ready_Slots()
 
 	Set_InventoryTab(ITEM_TYPE::EQUIP);
 
-
-	//_float3 fSize = m_pTransformCom->Compute_Scaled();
-	//_uint iXMaxCount = _uint(fSize.x / (m_fSlotSize.x + m_fSlotMargin.x));
-	//_uint iYMaxCount = _uint(fSize.y / (m_fSlotSize.y + m_fSlotMargin.y));
-	//
-	//auto pSlots = m_pInventory->Get_Slots(m_eCurrentTab);
-	//CUIInvenSlot::UIINVENSLOT_DESC tSlotDesc;
-	//for (_uint iTabIdx = 0; iTabIdx < 1; iTabIdx++)
-	//{
-	//	_uint iSlotCount = pSlots->size();
-	//	m_vecSlot[iTabIdx].reserve(iSlotCount);
-
-	//	tSlotDesc.eAnchorType = CORNOR_TYPE::LEFT_TOP;
-	//	tSlotDesc.ePivotType = CORNOR_TYPE::LEFT_TOP;
-	//	tSlotDesc.fSizeX = m_fSlotSize.x;
-	//	tSlotDesc.fSizeY = m_fSlotSize.y;
-	//	tSlotDesc.fXOffset = 0;
-	//	tSlotDesc.fYOffset = 0;
-	//	tSlotDesc.vBorder = { 3,3,3,3 };
-	//	_float fSlotsOffsetX = m_vBorder.z + m_fSlotMargin.x / 2;
-	//	_float fSlotsOffsetY = m_vBorder.x + m_fSlotMargin.y / 2;
-	//	for (_uint i = 0; i < iSlotCount; i++)
-	//	{
-	//		tSlotDesc.fXOffset = fSlotsOffsetX+ i % iXMaxCount * (m_fSlotSize.x + m_fSlotMargin.x) + m_fSlotMargin.x / 2;
-	//		tSlotDesc.fYOffset = fSlotsOffsetY + i / iXMaxCount * (m_fSlotSize.y + m_fSlotMargin.y) + m_fSlotMargin.y / 2;
-	//		tSlotDesc.pInvenSlot = pSlots->at(i);
-	//		tSlotDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("Texture_InvenSlotBack")));
-
-	//		CUIInvenSlot* pSlot =  static_cast<CUIInvenSlot*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIInvenSlot::m_szProtoTag, &tSlotDesc));
-	//		Add_Child(pSlot);
-	//		pSlot->Compute_Matrix();
-	//		m_vecSlot[iTabIdx].push_back(pSlot);
-	//		m_vecSlot[iTabIdx][i]->Update_Slot();
-	//	}
-	//}
-
+	for (_uint i = 0; i < (_uint)ITEM_TYPE::LAST; i++)
+	{
+		m_arrTabButton[i] = 
+	}
 	return S_OK;
 }
 

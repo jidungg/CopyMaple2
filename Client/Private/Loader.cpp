@@ -28,6 +28,8 @@
 #include "UIScrollButton.h"
 #include "UIDamgCount.h"
 #include "UIInvenSlotEntry.h"
+#include "UIFont.h"
+#include "UIIcon.h"
 #include "BackGround.h"
 
 #include "StateMachine.h"
@@ -66,7 +68,6 @@
 #include "EffModelObject.h"
 #include "EffectManager.h"
 #include "AttachableBodyPart.h"
-#include "UIFont.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -412,9 +413,6 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIInventory::m_szProtoTag,
 		CUIInventory::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIInvenSlot::m_szProtoTag,
-		CUIInvenSlot::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIButton::m_szProtoTag,
 		CUIButton::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -435,6 +433,9 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIInvenSlotEntry::m_szProtoTag,
 		CUIInvenSlotEntry::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIIcon::m_szProtoTag,
+		CUIIcon::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,

@@ -32,7 +32,7 @@ HRESULT CUICommonWindow::Initialize(void* pArg)
 		tPanelDesc.fXOffset = m_fCommonMargin;
 		tPanelDesc.fYOffset = -(tPanelDesc.fSizeY - m_vBorder.x);
 		tPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(pDesc->szIconProtoTag));
-		CUIIcon* pIcon = static_cast<CUIIcon*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag,&tPanelDesc));
+		CUIIcon* pIcon = static_cast<CUIIcon*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIIcon::m_szProtoTag,&tPanelDesc));
 		Add_Child(pIcon);
 
 	}

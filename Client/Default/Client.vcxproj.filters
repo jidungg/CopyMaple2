@@ -163,7 +163,6 @@
     <ClInclude Include="..\Public\HumanModelObject.h" />
     <ClInclude Include="..\Public\Inventory.h" />
     <ClInclude Include="..\Public\InvenSlot.h" />
-    <ClInclude Include="..\Public\UIInvenSlot.h" />
     <ClInclude Include="..\Public\SlotItem.h" />
     <ClInclude Include="..\Public\UISlot.h" />
     <ClInclude Include="..\Public\InvenEquipSlot.h" />
@@ -342,7 +341,6 @@
     <ClCompile Include="..\Private\HumanModelObject.cpp" />
     <ClCompile Include="..\Private\Inventory.cpp" />
     <ClCompile Include="..\Private\InvenSlot.cpp" />
-    <ClCompile Include="..\Private\UIInvenSlot.cpp" />
     <ClCompile Include="..\Private\SlotItem.cpp" />
     <ClCompile Include="..\Private\UISlot.cpp" />
     <ClCompile Include="..\Private\InvenEquipSlot.cpp" />

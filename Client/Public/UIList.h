@@ -103,7 +103,7 @@ public:
 	virtual void Free() override
 	{
 		__super::Free();
-		//Safe_Release(m_pItemEntryPool);
+		Safe_Release(m_pItemEntryPool);
 	}
 };
 

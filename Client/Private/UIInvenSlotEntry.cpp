@@ -44,7 +44,7 @@ HRESULT CUIInvenSlotEntry::Initialize(void* pArg)
 	tPanelDesc.fSizeY = fSize.y - 10;
 	tPanelDesc.fXOffset = 0;
 	tPanelDesc.fYOffset = 0;
-	m_pIcon = static_cast<CUIIcon*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &tPanelDesc));
+	m_pIcon = static_cast<CUIIcon*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIIcon::m_szProtoTag, &tPanelDesc));
 	Add_Child(m_pIcon);
 
     return S_OK;
@@ -69,12 +69,14 @@ HRESULT CUIInvenSlotEntry::On_ListItemDataSet(const ITEM_DATA* data)
 	{
 		for (auto& i : m_arrSRVIndex)
 			i = 0;
+		m_iSRVIndex = m_arrSRVIndex[0];
 		m_pIcon->Set_Active(false);
 		return S_OK;
 	}
 	m_pItemDesc = data;
 	for (auto& i : m_arrSRVIndex)
 		i = (_uint)m_pItemDesc->eItemGrade;
+	m_iSRVIndex = m_arrSRVIndex[0];
 	string strProtoItemIconTag = m_pItemDesc->strIconImageTag;
 	wstring wstrItemIconTag(strProtoItemIconTag.begin(), strProtoItemIconTag.end());
 	CTexture* pTexture = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, wstrItemIconTag, nullptr));

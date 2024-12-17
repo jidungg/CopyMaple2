@@ -258,7 +258,6 @@
     <ClInclude Include="..\Public\UIQuickSlotBundle.h" />
     <ClInclude Include="..\Public\SlotItem.h" />
     <ClInclude Include="..\Public\UIContainer.h" />
-    <ClInclude Include="..\Public\UIInvenSlot.h" />
     <ClInclude Include="..\Public\UIListSelector.h" />
     <ClInclude Include="..\Public\UIQuickSlot.h" />
     <ClInclude Include="..\Public\Skill.h" />
@@ -383,7 +382,6 @@
     <ClCompile Include="..\Private\UIQuickSlotBundle.cpp" />
     <ClCompile Include="..\Private\SlotItem.cpp" />
     <ClCompile Include="..\Private\UIContainer.cpp" />
-    <ClCompile Include="..\Private\UIInvenSlot.cpp" />
     <ClCompile Include="..\Private\UIListSelector.cpp" />
     <ClCompile Include="..\Private\UIQuickSlot.cpp" />
     <ClCompile Include="..\Private\Skill.cpp" />

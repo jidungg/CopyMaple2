@@ -90,7 +90,7 @@ HRESULT CUIInventory::Ready_Slots()
 	m_pItemList = static_cast<CUIListSelector*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_UIList"), &ListDesc));
 	m_pItemBackPanel->Add_Child(m_pItemList);
 
-
+	
 	CUIScroller::SCROLLBAR_DESC ScrollDesc{};
 	ScrollDesc.eAnchorType = CORNOR_TYPE::RIGHT_BOT;
 	ScrollDesc.ePivotType = CORNOR_TYPE::RIGHT_BOT;
@@ -105,6 +105,8 @@ HRESULT CUIInventory::Ready_Slots()
 	m_pItemBackPanel->Add_Child(m_pScroller);
 
 	Set_InventoryTab(ITEM_TYPE::EQUIP);
+
+
 	//_float3 fSize = m_pTransformCom->Compute_Scaled();
 	//_uint iXMaxCount = _uint(fSize.x / (m_fSlotSize.x + m_fSlotMargin.x));
 	//_uint iYMaxCount = _uint(fSize.y / (m_fSlotSize.y + m_fSlotMargin.y));

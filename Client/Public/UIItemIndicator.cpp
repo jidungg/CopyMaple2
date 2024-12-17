@@ -52,7 +52,7 @@ HRESULT CUIButtonItemIndicator::Initialize(void* pArg)
 	tPanelDesc.fSizeY = fSize.y - 12;
 	tPanelDesc.fXOffset = 0;
 	tPanelDesc.fYOffset = 0;
-	m_pIcon = static_cast<CUIIcon*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &tPanelDesc));
+	m_pIcon = static_cast<CUIIcon*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIIcon::m_szProtoTag, &tPanelDesc));
 	Add_Child(m_pIcon);
 	return S_OK;
 }

@@ -46,4 +46,5 @@ CGameObject* CUIIcon::Clone(void* pArg)
 
 void CUIIcon::Free()
 {
+	__super::Free();
 }

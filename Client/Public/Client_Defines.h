@@ -210,10 +210,6 @@ namespace Client
 
 #pragma endregion
 
-	typedef struct UIListItemData
-	{
-
-	}UIITEMDATA;
 
 	enum class SKILL_CASTING_TYPE
 	{

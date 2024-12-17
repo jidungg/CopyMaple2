@@ -107,6 +107,10 @@ public: // Target_Manager
 public: /* Frustum */
 	_bool Frustum_Culling_World(_fvector vWorldPos, _float fRange = 0.f);
 
+public: //FONT
+	HRESULT Add_Font(const _wstring& strFontTag, const _tchar* pFontFilePath);
+	class CCustomFont* Find_Font(const _wstring& strFontTag);
+	HRESULT Render_Font(const _wstring& strFontTag, const _tchar* pText, const _float2& vPosition, _fvector vColor, _float fRotation = 0.f, const _float2& vOrigin = _float2(0.f, 0.f));
 
 
 #ifdef _DEBUG
@@ -134,6 +138,7 @@ private:
 	class CCollisionManager* m_pCollisionManager = { nullptr };
 	class CTarget_Manager* m_pTarget_Manager = { nullptr };
 	class CCollider_Frustum* m_pFrustum = { nullptr };
+	class CFontManager* m_pFontManager = { nullptr };
 public:
 	static void Release_Engine();
 

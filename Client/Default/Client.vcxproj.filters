@@ -236,6 +236,10 @@
     <ClInclude Include="..\Public\UIDamgCount.h" />
     <ClInclude Include="..\Public\WorldUIObject.h" />
     <ClInclude Include="EffFlipController.h" />
+    <ClInclude Include="..\Public\UICommonWindow.h" />
+    <ClInclude Include="..\Public\UIIcon.h" />
+    <ClInclude Include="..\public\UIFont.h" />
+    <ClInclude Include="..\Public\UIInvenSlotEntry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -411,6 +415,10 @@
     <ClCompile Include="..\Private\UIDamgCount.cpp" />
     <ClCompile Include="..\Private\WorldUIObject.cpp" />
     <ClCompile Include="EffFlipController.cpp" />
+    <ClCompile Include="..\Private\UICommonWindow.cpp" />
+    <ClCompile Include="..\Private\UIIcon.cpp" />
+    <ClCompile Include="..\Private\UIFont.cpp" />
+    <ClCompile Include="..\Private\UIInvenSlotEntry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

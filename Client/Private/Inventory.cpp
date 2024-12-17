@@ -5,6 +5,7 @@
 #include "InvenEquipSlot.h"
 #include "UIBundle.h"
 #include "UIInventory.h"
+#include "UIInvenSlotEntry.h"
 
 IMPLEMENT_SINGLETON(CInventory)
 

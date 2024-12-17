@@ -51,13 +51,58 @@ HRESULT CUIListSelector::Render()
 	return S_OK;
 }
 
+void CUIListSelector::Register_OnClickCallback(_uint iIdx, const ButtonCallback& fCallback)
+{
+	CUIButton* pButton = dynamic_cast<CUIButton*>(m_vecUIItem[iIdx]);
+	if (pButton)
+		pButton->Register_OnClickCallback(fCallback);
+}
+
 void CUIListSelector::Register_OnClickCallback(const ButtonCallback& fCallback)
 {
-	for (auto& child : m_pChilds)
+	for (auto& pItem : m_vecUIItem)
+	{
+		CUIButton* pButton = dynamic_cast<CUIButton*>(pItem);
+		if (pButton)
+			pButton->Register_OnClickCallback(fCallback);
+	}
+}
+
+void CUIListSelector::Register_OnRightClickCallback(_uint iIdx, const ButtonCallback& fCallback)
+{
+	CUIButton* pButton = dynamic_cast<CUIButton*>(m_vecUIItem[iIdx]);
+	if (pButton)
+		pButton->Register_OnRightClickCallback(fCallback);
+}
+
+void CUIListSelector::Register_OnRightClickCallback(const ButtonCallback& fCallback)
+{
+	for (auto& pItem : m_vecUIItem)
+	{
+		CUIButton* pButton = dynamic_cast<CUIButton*>(pItem);
+		if (pButton)
+			pButton->Register_OnRightClickCallback(fCallback);
+	}
+}
+
+
+void CUIListSelector::Clear_OnClickCallback()
+{
+	for (auto& child : m_vecUIItem)
 	{
 		CUIButton* pButton = dynamic_cast<CUIButton*>(child);
-		if(pButton)
-			pButton->Register_OnClickCallback(fCallback);
+		if (pButton)
+			pButton->Clear_OnClickCallback();
+	}
+}
+
+void CUIListSelector::Clear_OnRightClickCallback()
+{
+	for (auto& child : m_vecUIItem)
+	{
+		CUIButton* pButton = dynamic_cast<CUIButton*>(child);
+		if (pButton)
+			pButton->Clear_OnRightClickCallback();
 	}
 }
 

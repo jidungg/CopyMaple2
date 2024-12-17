@@ -16,7 +16,7 @@
 #include "Engine_Utility.h"
 #include "RenderTarget_Manager.h"
 #include "Collider_Frustum.h"
-
+#include "FontManager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -83,6 +83,10 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	if (nullptr == m_pEventManager)
 		return E_FAIL;
 	
+	m_pFontManager = CFontManager::Create(*ppDevice, *ppContext, this);
+	if (nullptr == m_pFontManager)
+		return E_FAIL;
+
 
 	m_pFrustum = CCollider_Frustum::Create(*ppDevice, *ppContext);
 	m_pFrustum->Initialize(XMMatrixPerspectiveFovLH(XMConvertToRadians(60.f), (_float)1280 / 720, 0.1f, 1000.f));
@@ -522,6 +526,24 @@ _bool CGameInstance::Frustum_Culling_World(_fvector vWorldPos, _float fRange)
 	BoundingSphere tSphere(f3WorldPos, fRange);
 	return m_pFrustum->Get_Desc()->Intersects(tSphere);
 }
+HRESULT CGameInstance::Add_Font(const _wstring& strFontTag, const _tchar* pFontFilePath)
+{
+	if (nullptr == m_pFontManager)
+		return E_FAIL;
+	return m_pFontManager->Load_Font(strFontTag, pFontFilePath);
+}
+CCustomFont* CGameInstance::Find_Font(const _wstring& strFontTag)
+{
+	if (nullptr == m_pFontManager)
+		return nullptr;
+	return m_pFontManager->Find_Font(strFontTag);
+}
+HRESULT CGameInstance::Render_Font(const _wstring& strFontTag, const _tchar* pText, const _float2& vPosition, _fvector vColor, _float fRotation, const _float2& vOrigin)
+{
+	if (nullptr == m_pFontManager)
+		return E_FAIL;
+	return m_pFontManager->Render_Font(strFontTag, pText, vPosition, vColor, fRotation, vOrigin);
+}
 #ifdef _DEBUG
 HRESULT CGameInstance::Ready_RT_Debug(const _wstring& strTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
 {
@@ -561,4 +583,5 @@ void CGameInstance::Free()
 	Safe_Release(m_pCollisionManager);
 	Safe_Release(m_pEventManager);
 	Safe_Release(m_pFrustum);
+	Safe_Release(m_pFontManager);
 }

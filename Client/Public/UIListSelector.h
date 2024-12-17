@@ -23,7 +23,13 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render()override;
+	void Register_OnClickCallback(_uint iIdx, const ButtonCallback& fCallback);
 	void Register_OnClickCallback(const ButtonCallback& fCallback);
+	void Register_OnRightClickCallback(_uint iIdx, const ButtonCallback& fCallback);
+	void Register_OnRightClickCallback(const ButtonCallback& fCallback);
+
+	void Clear_OnClickCallback();
+	void Clear_OnRightClickCallback();
 	void On_ClickItem(void* pArg);
 	void Select_Item(_uint iIndex);
 	_uint Select_NextItem();

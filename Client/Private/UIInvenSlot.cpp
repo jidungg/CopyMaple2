@@ -49,7 +49,7 @@ void CUIInvenSlot::Update_Slot()
 		Set_IconTexture(nullptr);
 		return;
 	}
-	auto pITemDesc = m_pSlot->Get_ItemDesc();
+	auto pITemDesc = m_pSlot->Get_ItemData();
 	m_iSRVIndex = (_uint)pITemDesc->eItemGrade;
 	string str = pITemDesc->strIconImageTag;
 	wstring wstr(str.begin(), str.end());
@@ -92,33 +92,23 @@ bool CUIInvenSlot::Has_Item()
 	return m_pSlot != nullptr && false == m_pSlot->Is_Empty();
 }
 
-void CUIInvenSlot::On_MouseOver()
-{
-}
 
-void CUIInvenSlot::On_MouseEnter()
-{
-}
-
-void CUIInvenSlot::On_MouseExit()
-{
-}
 
 void CUIInvenSlot::On_MouseClick()
 {
-	if (m_pSlot)
-	{
-		m_pSlot->On_LeftClick();
-	}
+	//if (m_pSlot)
+	//{
+	//	m_pSlot->On_LeftClick();
+	//}
 
 }
 
 void CUIInvenSlot::On_MouseRightClick()
 {
-	if (m_pSlot)
-	{
-		m_pSlot->On_RightClick();
-	}
+	//if (m_pSlot)
+	//{
+	//	m_pSlot->On_RightClick();
+	//}
 
 }
 

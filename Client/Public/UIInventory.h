@@ -1,14 +1,17 @@
 #pragma once
-#include "UIPanel.h"
+#include "UICommonWindow.h"
 #include "UIInvenSlot.h"
+#include "Item.h"
 
 BEGIN(Client)
 class CInventory;
+class CUIListSelector;
+class CUIScroller;
 class CUIInventory :
-    public CUIPanel
+    public CUICommonWindow
 {
 public:
-	typedef struct UIInventoryDesc : public CUIPanel::PANEL_DESC
+	typedef struct UIInventoryDesc : public CUICommonWindow::UICOMMONWINDOW_DESC
 	{
 		CInventory* pInventory = { nullptr };
 	}UIINVENTORY_DESC;
@@ -20,21 +23,28 @@ private:
 	virtual ~CUIInventory() = default;
 
 public:
-	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual void Update(_float fTimeDelta) override;
+
 	virtual void Late_Update(_float fTimeDelta) override;
 	HRESULT Ready_Slots();
 
 	void Set_InventoryTab(ITEM_TYPE eType);
-	void Update_Slot(ITEM_TYPE eType, _uint iIndex);
+	void Update_Slot( _uint iIndex, ITEM_DATA* pData);
+	void Clear_OnRightClickCallback();
 private:
 	CInventory* m_pInventory = { nullptr };
-	_float2 m_fSlotSize = {};
-	_float2 m_fSlotMargin = {};
-	_float2 m_fSlotOffset = { 50,50 };
-	vector<CUIInvenSlot*> m_vecSlot[(_uint)ITEM_TYPE::LAST];
+	_float2 m_fSlotSize = { 62,62 };
+	_float2 m_fTabButtonSize = { 50,25 };
+	_float2 m_fCommonMargin = { 5,5 };
+	_float m_fHeaderHeight = { 55 };
+	_uint m_iVisibleRowCount = 8;
+	_uint m_iVisibleColCount = 6;
 	ITEM_TYPE m_eCurrentTab = ITEM_TYPE::EQUIP;
+
+	CUIPanel* m_pItemBackPanel = { nullptr };
+	CUIListSelector* m_pItemList = { nullptr };
+	CUIScroller* m_pScroller = { nullptr };
+
 public:
 	static CUIInventory* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

@@ -24,9 +24,6 @@ public:
 	HRESULT Initialize(void* pArg) override;
 	// CUISlot을(를) 통해 상속됨
 	bool Has_Item() override;
-	virtual void On_MouseOver() override;
-	virtual void On_MouseEnter()override;
-	virtual void On_MouseExit()override;
 	virtual void On_MouseClick()override;
 	virtual void On_MouseRightClick()override;
 

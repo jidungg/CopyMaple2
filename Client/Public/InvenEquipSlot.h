@@ -10,8 +10,8 @@ private:
 	virtual ~CInvenEquipSlot() = default;
 
 public:
-	virtual void On_RightClick() override;
-	virtual void On_LeftClick() override;
+	virtual void On_RightClick(void*) override;
+	virtual void On_LeftClick(void*) override;
 	EQUIP_ITEM_TYPE Get_EquipType();
 private:
 

@@ -2,7 +2,7 @@
 #include "UIList.h"
 #include "GameInstance.h"
 #include "UIItemIndicator.h"
-
+#include "ObjectPool.h"
 
 CUIList::CUIList(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIContainer(pDevice, pContext)
@@ -11,8 +11,8 @@ CUIList::CUIList(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 CUIList::CUIList(const CUIList& Prototype)
 	: CUIContainer(Prototype)
-	, m_eBackTexProtoLev(Prototype.m_eBackTexProtoLev)
-	, m_szBackTexProtoTag(Prototype.m_szBackTexProtoTag)
+	, m_eItemEntryProtoLev(Prototype.m_eItemEntryProtoLev)
+	, m_szItemEntryProtoTag(Prototype.m_szItemEntryProtoTag)
 	, m_fItemHeight(Prototype.m_fItemHeight)
 	, m_fItemWidth(Prototype.m_fItemWidth)
 	, m_fItemMarginX(Prototype.m_fItemMarginX)
@@ -31,40 +31,32 @@ HRESULT CUIList::Initialize(void* pArg)
 	m_fItemWidth = pDesc->fItemWidth;
 	m_fItemMarginX = pDesc->fItemMarginX;
 	m_fItemMarginY = pDesc->fItemMarginY;
-	m_eBackTexProtoLev = pDesc->eBackTexProtoLev;
-	m_szBackTexProtoTag = pDesc->szBackTexProtoTag;
-	m_iItemCount = pDesc->listData->size();
+	m_eItemEntryProtoLev = pDesc->eItemEntryProtoLev;
+	m_szItemEntryProtoTag = pDesc->szItemEntryProtoTag;
 	m_iColCount = pDesc->iColumnCount;
 	m_iRowCount = pDesc->iRowCount;
 
-	_uint iUIItemCount = Get_ColCount() * Get_RowCount();
-	m_vecUIItem.resize(iUIItemCount);
 	CUIPanel::PANEL_DESC desc{};
 	desc.eAnchorType = CORNOR_TYPE::LEFT_TOP;
 	desc.ePivotType = CORNOR_TYPE::LEFT_TOP;
 	desc.fSizeX = m_fItemWidth;
 	desc.fSizeY = m_fItemHeight;
 	desc.vBorder = { 3,3,3,3 };
-	for (_uint i = 0; i < iUIItemCount; i++)
-	{
-		desc.fXOffset = i % m_iColCount * (m_fItemWidth + m_fItemMarginX);
-		desc.fYOffset = i / m_iColCount * (m_fItemHeight + m_fItemMarginY);
-		CUIObject* pItem = static_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, m_eBackTexProtoLev, m_szBackTexProtoTag, &desc));
-		Add_Child(pItem);
-		IUIListItemEntry* pIListItemEntry = dynamic_cast<IUIListItemEntry*>(pItem);
-		if (pIListItemEntry == nullptr)
-			return E_FAIL;
-		pIListItemEntry->On_CreateListItemEntry(this, i);
-		m_vecUIItem[i] = pIListItemEntry;
-	}
+	CUIObject* pItem = static_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, m_eItemEntryProtoLev, m_szItemEntryProtoTag, &desc));
+	if(pItem)
+		m_pItemEntryPool = CObjectPool< CUIObject>::Create(pItem,&desc,200);
+	else
+		return E_FAIL;
+
+	Resize(m_iRowCount, m_iColCount);
 
 	if (FAILED(Set_ItemData(pDesc->listData)))
 		return E_FAIL;
 	return S_OK;
 }
-HRESULT CUIList::Set_ItemData(list<UIListItemData*>* listData)
+HRESULT CUIList::Set_ItemData(list<ITEM_DATA*>* listData)
 {
-	if (listData->size() > m_iItemCount)
+	if (listData->size() > Get_ItemCount())
 		return E_FAIL;
 
 	_uint iItemIdx = 0;
@@ -77,13 +69,75 @@ HRESULT CUIList::Set_ItemData(list<UIListItemData*>* listData)
 	return S_OK;
 }
 
+HRESULT CUIList::Set_ItemData(_uint iIdx, ITEM_DATA* pData)
+{
+	if (iIdx >= Get_ItemCount())
+		return E_FAIL;
+	if (FAILED(m_vecUIItem[iIdx]->On_ListItemDataSet(pData)))
+		return E_FAIL;
+	return S_OK;
+}
+
+HRESULT CUIList::Resize(_uint iRow, _uint iCol)
+{
+	_uint iDiff = iRow * iCol- Get_ItemCount();
+	//늘리기
+	if (iDiff > 0)
+	{
+		CUIPanel::PANEL_DESC desc{};
+		desc.eAnchorType = CORNOR_TYPE::LEFT_TOP;
+		desc.ePivotType = CORNOR_TYPE::LEFT_TOP;
+		desc.fSizeX = m_fItemWidth;
+		desc.fSizeY = m_fItemHeight;
+		desc.vBorder = { 3,3,3,3 };
+		while (m_vecUIItem.size() < iRow*iCol)
+		{
+			CUIObject* pItem = m_pItemEntryPool->Get_Object();
+			Add_Child(pItem);
+			IUIListItemEntry* pEntry = dynamic_cast<IUIListItemEntry*>(pItem);
+			pEntry->On_CreateListItemEntry(this, m_vecUIItem.size());
+			m_vecUIItem.push_back(pEntry);
+		}
+	}
+	//줄이기
+	else
+	{
+		while (m_vecUIItem.size() > iRow * iCol)
+		{
+			CUIObject* pItem = dynamic_cast<CUIObject*>(m_vecUIItem.back());
+			if (pItem)
+			{
+				Remove_Child(pItem);
+				m_pItemEntryPool->Return_Object(pItem);
+				m_vecUIItem.pop_back();
+			}
+		}
+	}
+	m_iRowCount = iRow;
+	m_iColCount = iCol;
+	Reposition();
+	return S_OK;
+}
+
+void CUIList::Reposition()
+{
+	_uint iItemCount = Get_ItemCount();
+	for (_uint i = 0; i < iItemCount; i++)
+	{
+		_float fXOffset = i % m_iColCount * (m_fItemWidth + m_fItemMarginX);
+		_float fYOffset = i / m_iColCount * (m_fItemHeight + m_fItemMarginY);
+		m_vecUIItem[i]->Set_Offset(fXOffset, fYOffset);
+	}
+
+}
+
 
 
 HRESULT CUIList::Render()
 {
 	if (false == m_bActive) return S_OK;
-
-	for (_uint i = 0; i < m_iItemCount; i++)
+	_uint iItemCount = Get_ItemCount();
+	for (_uint i = 0; i < iItemCount; i++)
 	{
 		if(Is_VisibleRow(Get_ItemRow(i)))
 			m_vecUIItem[i]->Render_ListEntry();

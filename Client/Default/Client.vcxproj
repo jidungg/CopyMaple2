@@ -250,7 +250,11 @@
     <ClInclude Include="..\Public\EffTexturingProperty.h" />
     <ClInclude Include="..\Public\UIBar.h" />
     <ClInclude Include="..\Public\UIBundle.h" />
+    <ClInclude Include="..\Public\UICommonWindow.h" />
     <ClInclude Include="..\Public\UIDamgCount.h" />
+    <ClInclude Include="..\public\UIFont.h" />
+    <ClInclude Include="..\Public\UIIcon.h" />
+    <ClInclude Include="..\Public\UIInvenSlotEntry.h" />
     <ClInclude Include="..\Public\UIQuickSlotBundle.h" />
     <ClInclude Include="..\Public\SlotItem.h" />
     <ClInclude Include="..\Public\UIContainer.h" />
@@ -371,7 +375,11 @@
     <ClCompile Include="..\Private\EffTexturingProperty.cpp" />
     <ClCompile Include="..\Private\UIBar.cpp" />
     <ClCompile Include="..\Private\UIBundle.cpp" />
+    <ClCompile Include="..\Private\UICommonWindow.cpp" />
     <ClCompile Include="..\Private\UIDamgCount.cpp" />
+    <ClCompile Include="..\Private\UIFont.cpp" />
+    <ClCompile Include="..\Private\UIIcon.cpp" />
+    <ClCompile Include="..\Private\UIInvenSlotEntry.cpp" />
     <ClCompile Include="..\Private\UIQuickSlotBundle.cpp" />
     <ClCompile Include="..\Private\SlotItem.cpp" />
     <ClCompile Include="..\Private\UIContainer.cpp" />

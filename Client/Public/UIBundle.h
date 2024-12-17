@@ -1,5 +1,6 @@
 #pragma once
 #include "UIContainer.h"
+#include "Item.h"
 
 BEGIN(Client)
 class IQuickItem;
@@ -28,7 +29,7 @@ public:
 	CUIQuickSlotBundle* Get_QuckSlotBundle() { return m_pQuickSlotBundle; }
 
 	void Set_QuickItem(KEY eHotKey, IQuickItem* pItem);
-	void Update_Slot(ITEM_TYPE eType, _uint iIndex);
+	void Update_Inven_Slot(_uint iIndex, ITEM_DATA* pData);
 	void Update_CastingRatio(_float fRatio);
 	void Set_CastingBarVisible(_bool bVisible);
 private:

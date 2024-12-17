@@ -30,7 +30,7 @@ HRESULT CInvenSlot::Insert_Item(ITEM_DATA* pData, _uint iCount)
 		return E_FAIL;
     m_pItemDesc = pData;
 	m_iStack += iCount;
-	UIBUNDLE->Update_Slot(m_eItemType, m_iIndex);
+	UIBUNDLE->Update_Inven_Slot( m_iIndex, m_pItemDesc);
     return S_OK;
 }
 
@@ -42,7 +42,7 @@ ITEM_DATA* CInvenSlot::Pop_Item(_uint iCount)
 	ITEM_DATA* pItem = m_pItemDesc;
 	if (m_iStack <= 0)
         m_pItemDesc = nullptr;
-    UIBUNDLE->Update_Slot(m_eItemType, m_iIndex);
+    UIBUNDLE->Update_Inven_Slot(m_iIndex, m_pItemDesc);
     return pItem;
 }
 
@@ -63,9 +63,9 @@ void CInvenSlot::Free()
     __super::Free();
 }
 
-const _char* CInvenSlot::Get_IconTag()
-{
-    return m_pItemDesc->strIconImageTag;
-}
+//const _char* CInvenSlot::Get_IconTag()
+//{
+//    return m_pItemDesc->strIconImageTag;
+//}
 
 

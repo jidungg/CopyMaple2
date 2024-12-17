@@ -8,7 +8,18 @@ CCustomFont::CCustomFont(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	Safe_AddRef(m_pContext);
 }
 
-HRESULT CCustomFont::Initialize(const _tchar* pFontFilePath)
+CCustomFont::CCustomFont(const CCustomFont& Prototype)
+	: m_pDevice{ Prototype.m_pDevice }
+	, m_pContext{ Prototype.m_pContext }
+	, m_pFont{ Prototype.m_pFont }
+	, m_pBatch{ Prototype.m_pBatch }
+{
+	Safe_AddRef(m_pDevice);
+	Safe_AddRef(m_pContext);
+
+}
+
+HRESULT CCustomFont::Initialize_Prototype(const _tchar* pFontFilePath)
 {
 	m_pFont = new SpriteFont(m_pDevice, pFontFilePath);
 
@@ -35,13 +46,18 @@ CCustomFont* CCustomFont::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 {
 	CCustomFont* pInstance = new CCustomFont(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize(pFontFilePath)))
+	if (FAILED(pInstance->Initialize_Prototype(pFontFilePath)))
 	{
 		MSG_BOX("Failed to Created : CCustomFont");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
+}
+
+CCustomFont* CCustomFont::Clone()
+{
+	return new CCustomFont(*this);
 }
 
 void CCustomFont::Free()

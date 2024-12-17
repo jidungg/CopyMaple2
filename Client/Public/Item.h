@@ -3,7 +3,7 @@
 #include "Model.h"
 
 BEGIN(Client)
-typedef struct ItemData : public UIListItemData
+typedef struct ItemData 
 {
 	ItemData() = default;
 	ItemData(json& js)

@@ -2,7 +2,12 @@
 #include "UIContainer.h"
 #include "UIListItemEntry.h"
 #include "UIScroller.h"
+#include "ObjectPool.h"
 
+BEGIN(Engine)
+
+
+END
 BEGIN(Client)
 
 class CUIList :
@@ -18,9 +23,9 @@ public:
 		_uint iColumnCount = 10;
 		_uint iRowCount = 10;
 
-		LEVELID eBackTexProtoLev;
-		const _tchar* szBackTexProtoTag;
-		list<UIListItemData*>* listData;
+		LEVELID eItemEntryProtoLev;
+		const _tchar* szItemEntryProtoTag;
+		list<ITEM_DATA*>* listData;
 
 		CUIScroller::SCROLLBAR_DESC tScrollerDesc = {};
 	}UILIST_DESC;
@@ -38,35 +43,37 @@ public:
 
 
 	void Set_YOffset(_float fYPos);
-	HRESULT Set_ItemData(list<UIListItemData*>* listData);
+	//UIEntry의 크기는 늘어나지 않으므로, Row,Column을 먼저 세팅해야 함.
+	HRESULT Set_ItemData(list<ITEM_DATA*>* listData);
+	HRESULT Set_ItemData(_uint iIdx, ITEM_DATA* pData);
+	HRESULT Resize(_uint iRow, _uint iCol);
+	void Reposition();
 	void Set_VisibleRowStart(_uint iRow) { m_iVisibleRowStart = iRow; }
 	void Set_VisibleRowCount(_uint iCount) { m_iVisibleRowCount = iCount; }
 
 	_bool Is_VisibleRow(_uint iRow);
 	_uint Get_ItemRow(_uint iIndex);
 	_float2 Get_ItemPos(_int iIndex);
-	_uint Get_ItemCount() { return m_iItemCount; }	
+	_uint Get_ItemCount() { return m_vecUIItem.size(); }
 	_uint Get_ColCount() { return m_iColCount; }
 	_uint Get_RowCount() { return m_iRowCount; }
 	_float Get_HeightPerItem() { return m_fItemHeight + m_fItemMarginY; }
 	_float Get_YOffset();
 	_float Get_YMargin() { return m_fItemMarginY; }
-
 private:
 	float m_fItemHeight = 70;
 	float m_fItemWidth = 70;
 	float m_fItemMarginX = 5;
 	float m_fItemMarginY = 5;
-	_uint m_iItemCount = 0;
 	_uint m_iColCount = 10;
 	_uint m_iRowCount = 10;
 	_uint m_iVisibleRowStart = 0;
 	_uint m_iVisibleRowCount = 2;
 
-	LEVELID m_eBackTexProtoLev;
-	const _tchar* m_szBackTexProtoTag;
-
-	CUIScroller* m_pScrollBar = { nullptr };
+	LEVELID m_eItemEntryProtoLev;
+	const _tchar* m_szItemEntryProtoTag;
+	CObjectPool< CUIObject>* m_pItemEntryPool = { nullptr };
+protected:
 	vector<IUIListItemEntry*> m_vecUIItem;
 public:
 	static CUIList* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -96,6 +103,7 @@ public:
 	virtual void Free() override
 	{
 		__super::Free();
+		//Safe_Release(m_pItemEntryPool);
 	}
 };
 

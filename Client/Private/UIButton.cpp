@@ -51,14 +51,14 @@ void CUIButton::On_MouseEnter()
 {
 	if (m_bDisabled)return;
 	__super::On_MouseEnter();
-	m_iSRVIndex = BS_HIGHLIGHTED;
+	m_iSRVIndex = m_arrSRVIndex[ BS_HIGHLIGHTED];
 }
 
 void CUIButton::On_MouseExit()
 {
 	if (m_bDisabled)return;
 	__super::On_MouseExit();
-	m_iSRVIndex = BS_NORMAL;
+	m_iSRVIndex = m_arrSRVIndex[BS_NORMAL];
 		
 }
 
@@ -66,7 +66,7 @@ void CUIButton::On_MouseLButtonDown(const POINT& tMousePoint)
 {
 	if (m_bDisabled)return;
 	__super::On_MouseLButtonDown(tMousePoint);
-	m_iSRVIndex = BS_PRESSED;
+	m_iSRVIndex = m_arrSRVIndex[BS_PRESSED];
 	return;
 }
 
@@ -74,14 +74,14 @@ void CUIButton::On_MouseLButtonUp()
 {
 	if (m_bDisabled)return;
 	__super::On_MouseLButtonUp();
-	m_iSRVIndex = BS_NORMAL;
+	m_iSRVIndex = m_arrSRVIndex[BS_NORMAL];
 }
 
 void CUIButton::On_MouseClick()
 {
 	if (m_bDisabled)return;
 	__super::On_MouseClick();
-	m_iSRVIndex = BS_HIGHLIGHTED;
+	m_iSRVIndex = m_arrSRVIndex[BS_HIGHLIGHTED];
 
 	for (auto& func : m_listCallback)
 	{
@@ -90,16 +90,29 @@ void CUIButton::On_MouseClick()
 	return ;
 }
 
+void CUIButton::On_MouseRightClick()
+{
+	if (m_bDisabled)return;
+	__super::On_MouseRightClick();
+	m_iSRVIndex = m_arrSRVIndex[BS_HIGHLIGHTED];
+
+	for (auto& func : m_listRightClickCallback)
+	{
+		Call_Callback(func);
+	}
+	return;
+}
+
 void CUIButton::Set_Disable(_bool bValue)
 {
 	m_bDisabled = bValue;
 	if (m_bDisabled)
 	{
-		m_iSRVIndex = BS_DISABLED;
+		m_iSRVIndex = m_arrSRVIndex[BS_DISABLED];
 	}
 	else
 	{
-		m_iSRVIndex = BS_NORMAL;
+		m_iSRVIndex = m_arrSRVIndex[BS_NORMAL];
 	}
 }
 
@@ -108,6 +121,7 @@ void CUIButton::Call_Callback(const function<void(void*)>& fCallback)
 	if (m_bDisabled)return;
 	fCallback(this);
 }
+
 
 CUIButton* CUIButton::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

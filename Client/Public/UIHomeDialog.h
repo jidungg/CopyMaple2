@@ -18,7 +18,7 @@ public:
 		_float fItemWidth = 50;
 		_uint iItemXCount = 10;
 		_uint iItemYCount = 2;
-		list<UIListItemData*>* listData;
+		list<ITEM_DATA*>* listData;
 	}HOMEDIALOG_DESC;
 
 protected:
@@ -44,11 +44,11 @@ private:
 
 	_float m_fCommonMargin = 5;
 	_float m_fCommonButtonSize = 24;
+	_float m_fHeaderHeight = 40;
 	_float m_fItemHeight = 50;
 	_float m_fItemWidth = 50;
 	_uint m_iVisibleRowCount = 2;
 	_uint m_iVisibleColCount = 10;
-	_float m_fHeaderHeight = 40;
 public:
 	static CUIHomeDialog* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

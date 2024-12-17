@@ -13,7 +13,7 @@ public:
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_CUIButton";
 
 public:
-	enum BUTTON_STATE { BS_NORMAL, BS_HIGHLIGHTED, BS_PRESSED, BS_DISABLED };
+	enum BUTTON_STATE { BS_NORMAL, BS_HIGHLIGHTED, BS_PRESSED, BS_DISABLED, LAST };
 public:
 	typedef struct ButtonDesc: public CUIPanel::PANEL_DESC
 	{
@@ -37,8 +37,13 @@ public:
 	virtual void On_MouseLButtonDown(const POINT& tMousePoint) override;
 	virtual void On_MouseLButtonUp()override;
 	virtual void On_MouseClick()override;
+	virtual void On_MouseRightClick();
 
 	void Register_OnClickCallback(const function<void(void*)>& fCallback) { m_listCallback.push_back(fCallback); }
+	void Clear_OnClickCallback() { m_listCallback.clear(); }
+	void Register_OnRightClickCallback(const function<void(void*)>& fCallback) { m_listRightClickCallback.push_back(fCallback); }
+	void Clear_OnRightClickCallback() { m_listRightClickCallback.clear(); }
+
 	void Set_Disable(_bool bValue);
 	//void Remove_OnClickCallback(function<void(CBase&, void*)> fCallback)
 	//{
@@ -48,7 +53,9 @@ public:
 protected:
 	virtual void Call_Callback(const function<void(void*)>& fCallback);
 	list<function<void(void*)> > m_listCallback;
+	list<function<void(void*)> > m_listRightClickCallback;
 	_bool m_bDisabled = { false };
+	_uint m_arrSRVIndex[BUTTON_STATE::LAST] = { BS_NORMAL, BS_HIGHLIGHTED,BS_PRESSED,BS_DISABLED };
 public:
 	static CUIButton* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

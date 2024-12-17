@@ -92,7 +92,7 @@ HRESULT CUIHomeDialog::Ready_Childs(HOMEDIALOG_DESC* pDesc)
 	tItemBackPanelDesc.fYOffset = m_fHeaderHeight;
 	tItemBackPanelDesc.fSizeX = fSize.x - m_fCommonMargin*2;
 	tItemBackPanelDesc.fSizeY = fSize.y - m_fHeaderHeight - m_fCommonMargin ;
-	tItemBackPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_HOME, TEXT("UI_Texture_ItemListBack"), nullptr));
+	tItemBackPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("UI_Texture_ItemListBack"), nullptr));
 	tItemBackPanelDesc.vBorder = { 4,4,4,4 };
 	m_pItemBackPanel = static_cast<CUIPanel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIPanel::m_szProtoTag, &tItemBackPanelDesc));
 	Add_Child(m_pItemBackPanel);
@@ -110,11 +110,11 @@ HRESULT CUIHomeDialog::Ready_Childs(HOMEDIALOG_DESC* pDesc)
 	ListDesc.fItemMarginY = m_fCommonMargin;
 	ListDesc.iColumnCount = m_iVisibleColCount;
 	ListDesc.iRowCount = (_uint)ceilf((_float)pDesc->listData->size() / (_float)m_iVisibleColCount);;
-	ListDesc.eHighlighterTexProtoLev = LEVEL_HOME;
+	ListDesc.eHighlighterTexProtoLev = LEVEL_LOADING;
 	ListDesc.szHighlighterTexProtoTag = TEXT("UI_Texture_HighlightBorder");
 	ListDesc.listData = pDesc->listData;
-	ListDesc.eBackTexProtoLev = LEVEL_HOME;
-	ListDesc.szBackTexProtoTag = TEXT("Prototype_GameObject_HomeDialogBuildItemIndicator");
+	ListDesc.eItemEntryProtoLev = LEVEL_HOME;
+	ListDesc.szItemEntryProtoTag = TEXT("Prototype_GameObject_HomeDialogBuildItemIndicator");
 	m_pItemList = static_cast<CUIListSelector*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_UIList"), &ListDesc));
 	m_pItemBackPanel->Add_Child(m_pItemList);
 

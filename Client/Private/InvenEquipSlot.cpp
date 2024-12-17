@@ -9,14 +9,14 @@ CInvenEquipSlot::CInvenEquipSlot(_uint iIdx, CInventory* pInventory)
 
 
 
-void CInvenEquipSlot::On_RightClick()
+void CInvenEquipSlot::On_RightClick(void*)
 {
 	if (Is_Empty())
 		return;
 	PLAYERINIFO->Equip(this);
 }
 
-void CInvenEquipSlot::On_LeftClick()
+void CInvenEquipSlot::On_LeftClick(void*)
 {
 	if (Is_Empty())
 		return;
@@ -25,7 +25,7 @@ void CInvenEquipSlot::On_LeftClick()
 
 EQUIP_ITEM_TYPE CInvenEquipSlot::Get_EquipType()
 {
-	EQUIP_ITEM_DATA* pEqDesc = static_cast<EQUIP_ITEM_DATA*>( Get_ItemDesc());
+	EQUIP_ITEM_DATA* pEqDesc = static_cast<EQUIP_ITEM_DATA*>( Get_ItemData());
 	return pEqDesc->eEquipType;
 }
 

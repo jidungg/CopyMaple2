@@ -2,17 +2,20 @@
 
 
 #include "CustomFont.h"
+#include "GameInstance.h"
 
 
-CFontManager::CFontManager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CFontManager::CFontManager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CGameInstance* pGI)
 	: m_pDevice{ pDevice }
 	, m_pContext{ pContext }
 {
 	Safe_AddRef(m_pContext);
 	Safe_AddRef(m_pDevice);
+	m_pGameInstance = pGI;
+	Safe_AddRef(m_pGameInstance);
 }
 
-HRESULT CFontManager::Add_Font(const _wstring& strFontTag, const _tchar* pFontFilePath)
+HRESULT CFontManager::Load_Font(const _wstring& strFontTag, const _tchar* pFontFilePath)
 {
 	if (nullptr != Find_Font(strFontTag))
 		return E_FAIL;
@@ -20,7 +23,7 @@ HRESULT CFontManager::Add_Font(const _wstring& strFontTag, const _tchar* pFontFi
 	CCustomFont* pFont = CCustomFont::Create(m_pDevice, m_pContext, pFontFilePath);
 	if (nullptr == pFont)
 		return E_FAIL;
-
+	
 	m_Fonts.emplace(strFontTag, pFont);
 
 	return S_OK;
@@ -46,9 +49,9 @@ CCustomFont* CFontManager::Find_Font(const _wstring& strFontTag)
 	return iter->second;
 }
 
-CFontManager* CFontManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CFontManager* CFontManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CGameInstance* pGI)
 {
-	return new CFontManager(pDevice, pContext);
+	return new CFontManager(pDevice, pContext, pGI);
 }
 
 void CFontManager::Free()
@@ -62,4 +65,5 @@ void CFontManager::Free()
 
 	Safe_Release(m_pContext);
 	Safe_Release(m_pDevice);
+	Safe_Release(m_pGameInstance);
 }

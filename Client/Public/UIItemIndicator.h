@@ -5,6 +5,7 @@
 
 BEGIN(Client)
 class CUIList;
+class CUIIcon;
 class CUIButtonItemIndicator :
 	public CUIButton, public IUIListItemEntry
 {
@@ -19,7 +20,7 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual HRESULT Render()override;
 
-	HRESULT On_ListItemDataSet(const UIListItemData* data) override;
+	HRESULT On_ListItemDataSet(const ITEM_DATA* data) override;
 	virtual HRESULT Render_ListEntry() override;
 	virtual void On_CreateListItemEntry(CUIList* pList, _uint iIndex) override;
 	virtual void Set_ListItemEntryActive(_bool bActive) override;
@@ -27,13 +28,15 @@ public:
 protected:
 	virtual void Call_Callback(const ButtonCallback& fCallback) override;
 	const ITEM_DATA* m_pItemDesc = { nullptr };
-	CTexture* m_pIconTexure = { nullptr };
-	CRect_Transform* m_pIconTransform = { nullptr };
+	CUIIcon* m_pIcon = { nullptr };
 	_float4 m_vIconBorder = { 3,3,3,3 };
 public:
 	static CUIButtonItemIndicator* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eBackTexProtoLev, const _tchar* szBackTexProtoTag);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
+
+	// IUIListItemEntry을(를) 통해 상속됨
+	void Set_Offset(_float iX, _float iY) override;
 };
 
 END

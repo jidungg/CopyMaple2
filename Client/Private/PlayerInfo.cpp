@@ -40,7 +40,7 @@ HRESULT CPlayerInfo::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pCon
 
 HRESULT CPlayerInfo::Equip(CInvenEquipSlot* pInvenSlot)
 {
-	EQUIP_ITEM_DATA* pEQDesc = static_cast<EQUIP_ITEM_DATA	*>( pInvenSlot->Get_ItemDesc());
+	EQUIP_ITEM_DATA* pEQDesc = static_cast<EQUIP_ITEM_DATA	*>( pInvenSlot->Get_ItemData());
 	EQUIP_ITEM_TYPE  eEQType = pEQDesc->eEquipType;
 	assert(pEQDesc != nullptr);
 
@@ -88,7 +88,7 @@ HRESULT CPlayerInfo::Equip(CInvenEquipSlot* pInvenSlot)
 HRESULT CPlayerInfo::UnEquip(EQUIP_ITEM_TYPE eType)
 {
 	//TODO : CUIPlayerInfoEquipSlot 에서 우클릭 시 호출
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 void CPlayerInfo::Toggle_UI()

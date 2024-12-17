@@ -27,6 +27,7 @@
 #include "UIScroller.h"
 #include "UIScrollButton.h"
 #include "UIDamgCount.h"
+#include "UIInvenSlotEntry.h"
 #include "BackGround.h"
 
 #include "StateMachine.h"
@@ -65,6 +66,7 @@
 #include "EffModelObject.h"
 #include "EffectManager.h"
 #include "AttachableBodyPart.h"
+#include "UIFont.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -159,6 +161,19 @@ HRESULT CLoader::Loading_Level_Logo()
 		CStateMachine::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	lstrcpy(m_szLoadingText, TEXT("폰트 로드."));
+	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_15"), TEXT("../Bin/Resources/Fonts/Lev2_15.spritefont"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_30"), TEXT("../Bin/Resources/Fonts/Lev2_30.spritefont"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_Bold_15"), TEXT("../Bin/Resources/Fonts/Lev2_Bold_15.spritefont"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_Bold_30"), TEXT("../Bin/Resources/Fonts/Lev2_Bold_30.spritefont"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_Medium_15"), TEXT("../Bin/Resources/Fonts/Lev2_Medium_15.spritefont"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_Medium_30"), TEXT("../Bin/Resources/Fonts/Lev2_Medium_30.spritefont"))))
+		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드."));
 	/* For.Prototype_Component_Texture_Logo */
 	//히ㅏ다보니까 다 STatic 됨
@@ -169,6 +184,7 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Texture_InvenSlotBack"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/SlotBack/InvenSlot_%d.dds"), 5))))
 		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Face_Face1"),
 		CFace::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Face/00300011/")))))
 		return E_FAIL;
@@ -187,6 +203,9 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/UI/CastingBar/"), TEXT(".dds"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_HighlightBorder"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_Mat_HighlightBorder.dds"), 1))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_CloseButton"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/close_button_%d.dds"), 4))))
@@ -211,6 +230,9 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_DamagCountMonsterCritical"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/dmgcnt_monster_critical.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_ItemListBack"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_ItemListBack.dds"), 1))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/"), TEXT(".dds"))))
@@ -408,6 +430,12 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIDamgCount::m_szProtoTag,
 		CUIDamgCount::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIFont::m_szProtoTag,
+		CUIFont::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIInvenSlotEntry::m_szProtoTag,
+		CUIInvenSlotEntry::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,
 		CHumanModelObject::Create(m_pDevice, m_pContext))))
@@ -515,13 +543,9 @@ HRESULT CLoader::Loading_Level_MyHome()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_HomeDialog"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_Box_%d.dds"), 4))))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_ItemListBack"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_ItemListBack.dds"), 1))))
-		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_HighlightBorder"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_Mat_HighlightBorder.dds"), 1))))
-		return E_FAIL;
+
+
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_SelectedYellow"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_Mat_SelectedYellow.dds"), 1))))
 		return E_FAIL;
@@ -557,6 +581,7 @@ HRESULT CLoader::Loading_Level_MyHome()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_HomeDialogBuildItemIndicator"),
 		CUIButtonItemIndicator::Create(m_pDevice, m_pContext,LEVEL_HOME, TEXT("UI_Texture_HomeDialog")))))
 		return E_FAIL;
+
 
 
 

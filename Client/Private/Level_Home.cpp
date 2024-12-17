@@ -187,7 +187,7 @@ HRESULT CLevel_Home::Ready_Layer_UI(LAYERID eLayerId)
 	//homDialogDesc.fSizeY = 180;
 	homDialogDesc.vBorder = {3,3,3,3 };
 	homDialogDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, m_iLevelID, TEXT("UI_Texture_HomeDialog"), nullptr));
-	list<UIListItemData*> listData;
+	list<ITEM_DATA*> listData;
 	for (auto& i : *m_pItemData)
 		listData.push_back(i.second);
 	homDialogDesc.listData = &listData;

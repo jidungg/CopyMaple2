@@ -87,10 +87,11 @@ void CUIBundle::Set_QuickItem(KEY eHotKey, IQuickItem* pItem)
 	m_pQuickSlotBundle->Set_QuickItem(eHotKey, pItem);
 }
 
-void CUIBundle::Update_Slot(ITEM_TYPE eType, _uint iIndex)
+void CUIBundle::Update_Inven_Slot(_uint iIndex, ITEM_DATA* pData)
 {
-	m_pInventory->Update_Slot(eType, iIndex);
+	m_pInventory->Update_Slot(iIndex, pData);
 }
+
 
 void CUIBundle::Update_CastingRatio(_float fRatio)
 {

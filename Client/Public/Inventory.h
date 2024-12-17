@@ -19,7 +19,7 @@ public:
 	//HRESULT Remove_Item(ITEM_DESC* pData);
 
 	vector<CInvenSlot*>* Get_Slots(ITEM_TYPE eItemType);
-	//void Update_SlotUI(CInvenSlot* pSlot);
+	
 private:
 	_uint m_iMaxSlot[(_uint)ITEM_TYPE::LAST] = { 48,48,100,100,100 };
 	vector<CInvenSlot*> m_vecSlot[(_uint)ITEM_TYPE::LAST];

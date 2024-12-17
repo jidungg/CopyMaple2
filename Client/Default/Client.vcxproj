@@ -255,6 +255,7 @@
     <ClInclude Include="..\public\UIFont.h" />
     <ClInclude Include="..\Public\UIIcon.h" />
     <ClInclude Include="..\Public\UIInvenSlotEntry.h" />
+    <ClInclude Include="..\Public\UIInvenTabButton.h" />
     <ClInclude Include="..\Public\UIQuickSlotBundle.h" />
     <ClInclude Include="..\Public\SlotItem.h" />
     <ClInclude Include="..\Public\UIContainer.h" />
@@ -379,6 +380,7 @@
     <ClCompile Include="..\Private\UIFont.cpp" />
     <ClCompile Include="..\Private\UIIcon.cpp" />
     <ClCompile Include="..\Private\UIInvenSlotEntry.cpp" />
+    <ClCompile Include="..\Private\UIInvenTabButton.cpp" />
     <ClCompile Include="..\Private\UIQuickSlotBundle.cpp" />
     <ClCompile Include="..\Private\SlotItem.cpp" />
     <ClCompile Include="..\Private\UIContainer.cpp" />

@@ -22,6 +22,7 @@ HRESULT CUIInvenTabButton::Initialize(void* pArg)
 void CUIInvenTabButton::On_MouseClick()
 {
 	__super::On_MouseClick();
+
 }
 
 CUIInvenTabButton* CUIInvenTabButton::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

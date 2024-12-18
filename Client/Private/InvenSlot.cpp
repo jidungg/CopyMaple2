@@ -14,22 +14,20 @@ HRESULT CInvenSlot::Insert_Item(const ITEM_DATA* pData, _uint iCount)
 {
 	if (Is_Insertable(pData, iCount) == false)
 		return E_FAIL;
-    _uint iOriginCount = m_tItemDesc.m_iStack;
-    m_tItemDesc = *pData;
-    m_tItemDesc.m_iStack = iOriginCount+ iCount;
-	UIBUNDLE->Update_Inven_Slot( m_iIndex, &m_tItemDesc);
+    m_pItemDesc = pData;
+    m_iStackCount += iCount;
+	UIBUNDLE->Update_Inven_Slot( m_iIndex, this);
     return S_OK;
 }
 
-ITEM_DATA* CInvenSlot::Pop_Item(_uint iCount)
+const ITEM_DATA* CInvenSlot::Pop_Item(_uint iCount)
 {
-    if (m_tItemDesc.m_iStack < iCount)
+    if (m_iStackCount < iCount)
         return nullptr;
-    m_tItemDesc.m_iStack -= iCount;
-	ITEM_DATA* pItem = &m_tItemDesc;
-	if (m_tItemDesc.m_iStack <= 0)
-        m_tItemDesc = ITEM_DATA{};
-    UIBUNDLE->Update_Inven_Slot(m_iIndex, &m_tItemDesc);
+    m_iStackCount -= iCount;
+	const ITEM_DATA* pItem = m_pItemDesc;
+
+    UIBUNDLE->Update_Inven_Slot(m_iIndex, this);
     return pItem;
 }
 
@@ -37,10 +35,12 @@ bool CInvenSlot::Is_Insertable(const ITEM_DATA* pData, _uint iCount)
 {
 	if (Is_Empty())
 		return true;
-    if (m_tItemDesc.eITemType != pData->eITemType
-        || m_tItemDesc.iItemID != pData->iItemID)
+    if (m_eItemType != pData->eITemType)
         return false;
-    if (m_tItemDesc.m_iStack + iCount > m_tItemDesc.m_iMaxStack)
+    if(m_pItemDesc!= nullptr &&
+        m_pItemDesc->iItemID != pData->iItemID)
+        return false;
+    if (m_iStackCount + iCount > m_pItemDesc->m_iMaxStack)
         return false;
     return true;
 }

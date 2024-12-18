@@ -21,11 +21,11 @@ public:
 
 
 
-	const EQUIP_ITEM_DATA* Get_ItemDesc() { return m_pItemDesc; }
-	bool Is_Empty() { return m_pItemDesc == nullptr; }
+	const EQUIP_ITEM_DATA* Get_ItemDesc() { return m_pItemData; }
+	bool Is_Empty() { return m_pItemData == nullptr; }
 private:
 	EQUIP_ITEM_TYPE m_eEquipType = { EQUIP_ITEM_TYPE::LAST };
-	const EQUIP_ITEM_DATA* m_pItemDesc = { nullptr };
+	const EQUIP_ITEM_DATA* m_pItemData = { nullptr };
 public:
 	static CPlayerEquipSlot* Create(EQUIP_ITEM_TYPE eType);
 	void Free();

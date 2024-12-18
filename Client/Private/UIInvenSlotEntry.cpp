@@ -78,7 +78,7 @@ HRESULT CUIInvenSlotEntry::Render()
 HRESULT CUIInvenSlotEntry::On_ListItemDataSet(const ITEM_DATA* data)
 {
 	m_pItemDesc = data;
-	if (nullptr == m_pItemDesc || data->Is_Empty())
+	if (nullptr == m_pItemDesc )
 	{
 		for (auto& i : m_arrSRVIndex)
 			i = 0;
@@ -110,6 +110,14 @@ HRESULT CUIInvenSlotEntry::On_ListItemDataSet(const ITEM_DATA* data)
 		m_pStackCountFont->Set_Active(false);
 
 	Set_Disable(false);
+	return S_OK;
+}
+
+HRESULT CUIInvenSlotEntry::On_InvenListItemDataSet(pair<const ITEM_DATA*, _uint> Data)
+{
+	if (FAILED(On_ListItemDataSet(Data.first)))
+		return E_FAIL;
+	Set_StackCount(Data.second);
 	return S_OK;
 }
 

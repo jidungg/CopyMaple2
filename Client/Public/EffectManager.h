@@ -26,6 +26,7 @@ public:
 	void Play_EffectModel(EFF_MODEL_ID eID, _vector vPos = {0,0,0,1}, _vector vRotation ={ 0,0,0,0 }, _float fScale = 1);
 	void Play_DamgCount(DAMG_TYPE eID, _int iDamg, _vector vPos = { 0,0,0,1 }, _vector vRotation = { 0,0,0,0 }, _float fScale = 1);
 	void Play_DamgCount(_bool bCrit, _bool bPlayer, _int iDamg, _vector vPos = { 0,0,0,1 }, _vector vRotation = { 0,0,0,0 }, _float fScale = 1);
+	void Play_RecoverCount(_int iRecovery, _vector vPos = { 0,0,0,1 }, _vector vRotation = { 0,0,0,0 }, _float fScale = 1);
 	//void Play_EffectModel(EFF_MODEL_ID eID, CGameObject* pTarget = {nullptr}, _vector vPos={ 0,0,0,1 }, _vector vRotation= { 0,0,0,0 }, _float fScale = 1);
 private:
 

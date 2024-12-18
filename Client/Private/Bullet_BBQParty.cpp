@@ -115,7 +115,7 @@ void CBullet_BBQParty::Late_Update(_float fTimeDelta)
 				{
 					_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
 					m_fDamage *= bCrit ? 1.5 : 1.f;
-					m_pGameInstance->Push_Event(CHitEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, bCrit,true, EFF_MODEL_ID::HIT_KINDLING));
+					m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, bCrit,true, EFF_MODEL_ID::HIT_KINDLING));
 				}
 			}
 		}

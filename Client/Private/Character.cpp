@@ -216,15 +216,21 @@ void CCharacter::Hit(CGameObject* pFoe,_int iDamage)
 	}
 
 }
-void CCharacter::Restore_HP()
+void CCharacter::FullRecovery()
 {
 	m_tStat.iHP = m_tStatDefault.iHP;
+}
+void CCharacter::RestoreHP(_int iAmount)
+{
+	m_tStat.iHP += iAmount;
+	if (m_tStat.iHP > m_tStatDefault.iHP)
+		m_tStat.iHP = m_tStatDefault.iHP;
 }
 void CCharacter::Respawn()
 {
 	Set_Active(true);
 	Set_Target(nullptr);
-	Restore_HP();
+	FullRecovery();
 	m_bHPZero = false;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vHomePos);
 }

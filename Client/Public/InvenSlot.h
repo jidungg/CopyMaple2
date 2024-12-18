@@ -17,13 +17,14 @@ public:
 	//virtual const _char* Get_IconTag() override;
 
 	virtual HRESULT Insert_Item(const ITEM_DATA* pData, _uint iCount = 1);
-	virtual ITEM_DATA* Pop_Item(_uint iCount = 1);
+	virtual const ITEM_DATA* Pop_Item(_uint iCount = 1);
 
 	bool Is_Insertable(const ITEM_DATA* pData, _uint iCount = 1);
-	bool Is_Empty() { return m_tItemDesc.Is_Empty(); }
-	const ITEM_DATA * Get_ItemData() { return &m_tItemDesc; }
+	bool Is_Empty() { return m_pItemDesc == nullptr; }
+	const ITEM_DATA * Get_ItemData() { return m_pItemDesc; }
+	_uint Get_StackCount() { return m_iStackCount; }
 
-	void Set_ItemDesc(ITEM_DATA* pData) { m_tItemDesc = *pData; }
+	void Set_ItemDesc(ITEM_DATA* pData) { m_pItemDesc = pData; }
 
 	virtual void On_RightClick(void*) abstract;
 	virtual void On_LeftClick(void*) abstract;
@@ -33,8 +34,9 @@ public:
 private:
 	CInventory* m_pInventory = { nullptr };
 	ITEM_TYPE m_eItemType = { ITEM_TYPE::LAST };
-	ITEM_DATA m_tItemDesc;
+	const ITEM_DATA* m_pItemDesc = { nullptr };
 	_uint m_iIndex = { 0 };
+	_uint m_iStackCount = { 0 };
 public:
 	
 	void Free();

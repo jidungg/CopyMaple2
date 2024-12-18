@@ -7,7 +7,7 @@
 #include "EffectManager.h"
 #include "UIDamgCount.h"
 
-CHitEvent::CHitEvent(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, _bool bCrit, _bool bPlayer, EFF_MODEL_ID eHitEffect)
+CDamgEvent::CDamgEvent(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, _bool bCrit, _bool bPlayer, EFF_MODEL_ID eHitEffect)
 	: m_pAttacker(pAttacker)
 	, m_pVictim(pVictim)
 	, m_iDamage(iDamage)
@@ -20,22 +20,31 @@ CHitEvent::CHitEvent(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage,
 	m_eEventID = (_uint)EVENT_ID::HIT;
 }
 
-CHitEvent* CHitEvent::Create(CGameObject* pAttacker, CGameObject* pVictim, _int iDamg, _bool bCrit, _bool bPlayer, EFF_MODEL_ID eHitEffect)
+CDamgEvent* CDamgEvent::Create(CGameObject* pAttacker, CGameObject* pVictim, _int iDamg, _bool bCrit, _bool bPlayer, EFF_MODEL_ID eHitEffect)
 {
-	return new CHitEvent(pAttacker, pVictim, iDamg, bCrit, bPlayer, eHitEffect);
+	return new CDamgEvent(pAttacker, pVictim, iDamg, bCrit, bPlayer, eHitEffect);
 }
 
-void CHitEvent::Exec()
+void CDamgEvent::Exec()
 {
 	CEffectManager* pEffMgr = EFFECT_MANAGER;
 	_vector vPos = static_cast<CCharacter*>(m_pVictim)->Get_Hitpoint();
-	m_pVictim->Hit(m_pAttacker,m_iDamage);
-	pEffMgr->Play_EffectModel(m_eHitEffect, vPos);
 	vPos = static_cast<CCharacter*>(m_pVictim)->Get_OverHeadPoint();
-	pEffMgr->Play_DamgCount(m_bCrit,m_bPlayer, m_iDamage, vPos);
+	pEffMgr->Play_EffectModel(m_eHitEffect, vPos);
+	if (m_iDamage >= 0)
+	{
+		m_pVictim->Hit(m_pAttacker,m_iDamage);
+		pEffMgr->Play_DamgCount(m_bCrit, m_bPlayer, m_iDamage, vPos);
+	}
+	else
+	{
+		static_cast<CCharacter*>(m_pVictim)->RestoreHP(m_iDamage);
+		pEffMgr->Play_RecoverCount(m_iDamage);
+	}
+
 }
 
-void CHitEvent::Free()
+void CDamgEvent::Free()
 {
 	Safe_Release(m_pAttacker);
 	Safe_Release(m_pVictim);

@@ -8,15 +8,15 @@ END
 
 BEGIN(Client)
 
-class CHitEvent :
+class CDamgEvent :
     public CEvent
 {
 private:
-	explicit CHitEvent(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, _bool bCrit, _bool bPlayer, EFF_MODEL_ID eHitEffect);
-	virtual ~CHitEvent() {}
+	explicit CDamgEvent(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, _bool bCrit, _bool bPlayer, EFF_MODEL_ID eHitEffect);
+	virtual ~CDamgEvent() {}
 
 public:
-	static CHitEvent* Create(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, _bool bCrit, _bool bPlayer, EFF_MODEL_ID eHitEffect);
+	static CDamgEvent* Create(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, _bool bCrit, _bool bPlayer, EFF_MODEL_ID eHitEffect);
 	void Exec() override;
 
 private:

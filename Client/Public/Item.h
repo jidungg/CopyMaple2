@@ -21,7 +21,6 @@ typedef struct ItemData
 		eItemGrade = js["ItemGrade"];
 
 	}
-	_bool Is_Empty() const { return m_iStack == 0; }
 
 	ITEM_TYPE eITemType = ITEM_TYPE::LAST;
 	ITEM_GRADE eItemGrade = ITEM_GRADE::LAST;
@@ -31,7 +30,6 @@ typedef struct ItemData
 	_char strIconImageTag[MAX_PATH] = ("");
 	_char strModelTag[MAX_PATH] = ("");
 	_uint iPrice = 0;
-	_uint m_iStack = { 0 };
 	_uint m_iMaxStack = { 0 };
 }ITEM_DATA;
 typedef struct BuildItemData : public ItemData
@@ -91,11 +89,11 @@ typedef struct DecoItemData : public ItemData
 		eITemType = ITEM_TYPE::DECO;
 		DECO_ITEM_ID eId = js["ItemId"];
 		iItemID = (_uint)eId;
-		eConsumableType = js["ConsumType"];
+		eDecoType = js["ConsumType"];
 		m_iMaxStack = 1;
 		m_iMaxStack = 99;
 	}
-	DECO_ITEM_TYPE eConsumableType = { DECO_ITEM_TYPE::LAST };
+	DECO_ITEM_TYPE eDecoType = { DECO_ITEM_TYPE::LAST };
 }DECO_ITEM_DATA;
 
 typedef struct ETCItemData : public ItemData

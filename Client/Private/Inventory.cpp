@@ -2,11 +2,14 @@
 #include "Inventory.h"
 #include "UIManager.h"
 #include "GameInstance.h"
-#include "InvenEquipSlot.h"
 #include "UIBundle.h"
 #include "UIInventory.h"
 #include "UIInvenSlotEntry.h"
+#include "InvenEquipSlot.h"
 #include "InvenDecoSlot.h"
+#include "InvenConsumableSlot.h"
+#include "InvenBuildSlot.h"
+#include "InvenETCSlot.h"
 
 IMPLEMENT_SINGLETON(CInventory)
 

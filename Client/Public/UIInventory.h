@@ -5,7 +5,7 @@
 
 BEGIN(Client)
 class CInventory;
-class CUIListSelector;
+class CUIInvenItemList;
 class CUIScroller;
 class CUIInvenTabButton;
 class CUIInventory :
@@ -30,7 +30,7 @@ public:
 	HRESULT Ready_Slots();
 
 	void Set_InventoryTab(ITEM_TYPE eType);
-	void Update_Slot( _uint iIndex, ITEM_DATA* pData);
+	void Update_Slot( _uint iIndex, CInvenSlot* pSlot);
 	void Clear_OnRightClickCallback();
 private:
 	CInventory* m_pInventory = { nullptr };
@@ -42,7 +42,7 @@ private:
 	_uint m_iVisibleColCount = { 6 };
 
 	CUIPanel* m_pItemBackPanel = { nullptr };
-	CUIListSelector* m_pItemList = { nullptr };
+	CUIInvenItemList* m_pItemList = { nullptr };
 	CUIScroller* m_pScroller = { nullptr };
 
 	ITEM_TYPE m_eCurrentTab = { ITEM_TYPE::EQUIP };

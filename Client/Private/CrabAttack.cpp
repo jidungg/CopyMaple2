@@ -81,7 +81,7 @@ void CCrabAttack::Fire()
 		fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
 		_bool bCrit = m_pUser->Judge_Critical();
 		fDmg *= bCrit ? 1.5 : 1.f;
-		m_pGameInstance->Push_Event(CHitEvent::Create(m_pUser, pTarget, (_int)fDmg, bCrit, false, EFF_MODEL_ID::HIT_A));
+		m_pGameInstance->Push_Event(CDamgEvent::Create(m_pUser, pTarget, (_int)fDmg, bCrit, false, EFF_MODEL_ID::HIT_A));
 	}
 }
 

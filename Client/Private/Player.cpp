@@ -178,15 +178,6 @@ HRESULT CPlayer::Ready_Parts(const json& jCustomData)
 	m_pCustomizes[(_uint)CUSTOMIZE_PART::HAIR]->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
 
 
-	//FaceDeco
-	//tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-	//strcpy_s(tBoneModelDesc.strModelProtoName, "01000001_c_lolipop.model");
-	//tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Head");//Bip01 HeadNub_end
-	//m_pDecoModels[(_uint)DECO_TYPE::FACE] = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
-	//if (nullptr == m_pDecoModels[(_uint)DECO_TYPE::FACE]) return E_FAIL;
-	//Add_Child(m_pDecoModels[(_uint)DECO_TYPE::FACE]);
-	//m_pDecoModels[(_uint)DECO_TYPE::FACE]->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
-
 
 
 	return S_OK;
@@ -1246,8 +1237,36 @@ HRESULT CPlayer::UnEquip(EQUIP_ITEM_TYPE eType)
 	return S_OK;
 }
 
-HRESULT CPlayer::Set_Deco(DECO_ITEM_DESC* pItem)
+HRESULT CPlayer::Equip(const DECO_ITEM_DATA* pItem)
 {
+	assert(pItem != nullptr);
+
+	DECO_ITEM_TYPE eType = pItem->eDecoType;
+	Remove_Child(m_pDecoModels[(_uint)eType]);
+	Safe_Release(m_pDecoModels[(_uint)eType]);
+	m_pDecoModels[(_uint)eType] = nullptr;
+
+	//FaceDeco
+	CBoneModelObject::BONEMODELOBJ_DESC tBoneModelDesc = {};
+	tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
+	strcpy_s(tBoneModelDesc.strModelProtoName, pItem->strModelTag);
+	tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Head");//Bip01 HeadNub_end
+	m_pDecoModels[(_uint)eType] = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
+	if (nullptr == m_pDecoModels[(_uint)eType]) return E_FAIL;
+	Add_Child(m_pDecoModels[(_uint)eType]);
+	m_pDecoModels[(_uint)eType]->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
+
+
+	return S_OK;
+}
+
+
+HRESULT CPlayer::UnEquip(DECO_ITEM_TYPE eType)
+{
+	Remove_Child(m_pDecoModels[(_uint)eType]);
+	Safe_Release(m_pDecoModels[(_uint)eType]);
+	m_pDecoModels[(_uint)eType] = nullptr;
+
 	return S_OK;
 }
 

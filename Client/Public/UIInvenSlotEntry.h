@@ -32,6 +32,7 @@ public:
 	virtual HRESULT Render()override;
 
 	HRESULT On_ListItemDataSet(const ITEM_DATA* data) override;
+	HRESULT On_InvenListItemDataSet(pair<const ITEM_DATA* , _uint> Data) ;
 	virtual HRESULT Render_ListEntry() override;
 	virtual void On_CreateListItemEntry(CUIList* pList, _uint iIndex) override;
 	virtual void On_MouseEnter()override;

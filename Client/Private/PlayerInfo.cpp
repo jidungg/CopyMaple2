@@ -1,10 +1,12 @@
 #include "stdafx.h"
-#include "InvenEquipSlot.h"
 #include "PlayerInfo.h"
 #include "Player.h"
 #include "Inventory.h"
 #include "PlayerEquipSlot.h"
+#include "InvenEquipSlot.h"
 #include "GameInstance.h"
+#include "InvenDecoSlot.h"
+#include "PlayerDecoSlot.h"
 
 IMPLEMENT_SINGLETON(CPlayerInfo)
 CPlayerInfo::CPlayerInfo()
@@ -18,6 +20,8 @@ HRESULT CPlayerInfo::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pCon
 {
 	for (_uint iEqType = 0; iEqType < (_uint)EQUIP_ITEM_TYPE::LAST; iEqType++)
 		m_pEquipSlots[iEqType] = CPlayerEquipSlot::Create((EQUIP_ITEM_TYPE)iEqType);
+	for (_uint iDecoType = 0; iDecoType < (_uint)DECO_ITEM_TYPE::LAST; iDecoType++)
+		m_pDecoSlots[iDecoType] = CPlayerDecoSlot::Create((DECO_ITEM_TYPE)iDecoType);
 
 	CPlayer::PLAYER_DESC		PlayerDesc{};
 
@@ -93,6 +97,21 @@ HRESULT CPlayerInfo::UnEquip(EQUIP_ITEM_TYPE eType)
 
 HRESULT CPlayerInfo::Equip(CInvenDecoSlot* pInvenSlot)
 {
+	const DECO_ITEM_DATA* pData = static_cast<const DecoItemData*>( pInvenSlot->Get_ItemData());
+	const DECO_ITEM_DATA* pPoped = m_pDecoSlots[(_uint)pData->eDecoType]->Pop_Item();
+	m_pDecoSlots[(_uint)pData->eDecoType]->Insert_Item(pData);
+	m_pPlayer->Equip(pData);
+	pInvenSlot->Pop_Item();
+	if (pPoped != nullptr)
+	{
+		if (FAILED(m_pInventory->Insert_Item(pPoped)))
+		{
+			//TODO : 밖으로 템 떨구기.
+			MSG_BOX("인벤토리 공간이 부족합니다.");
+			return E_FAIL;
+		}
+	}
+
 	return S_OK;
 }
 
@@ -112,4 +131,6 @@ void CPlayerInfo::Free()
 	Safe_Release(m_pPlayer);
 	for (_uint i = 0; i < (_uint)EQUIP_ITEM_TYPE::LAST; i++)
 		Safe_Release(m_pEquipSlots[i]);
+	for (_uint i = 0; i < (_uint)DECO_ITEM_TYPE::LAST; i++)
+		Safe_Release(m_pDecoSlots[i]);
 }

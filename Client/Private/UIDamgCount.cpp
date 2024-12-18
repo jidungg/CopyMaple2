@@ -44,16 +44,19 @@ HRESULT CUIDamgCount::Initialize(void* pArg)
 	switch (m_eDamgType)
 	{
 	case Client::DAMG_TYPE::PLAYER_NORMAL:
-			wstrTexture = L"UI_Texture_DamagCountPlayerNormal";
+		wstrTexture = L"UI_Texture_DamagCountPlayerNormal";
 		break;
 	case Client::DAMG_TYPE::PLAYER_CRITICAL:
-			wstrTexture = L"UI_Texture_DamagCountPlayerCritical";
+		wstrTexture = L"UI_Texture_DamagCountPlayerCritical";
 		break;
 	case Client::DAMG_TYPE::MONSTER_NORMAL:
-			wstrTexture = L"UI_Texture_DamagCountMonsterNormal";
+		wstrTexture = L"UI_Texture_DamagCountMonsterNormal";
 		break;
 	case Client::DAMG_TYPE::MONSTER_CRITICAL:
-			wstrTexture = L"UI_Texture_DamagCountMonsterCritical";
+		wstrTexture = L"UI_Texture_DamagCountMonsterCritical";
+		break;
+	case Client::DAMG_TYPE::HEAL_NORMAL:
+		wstrTexture = L"UI_Texture_DamagCounHealNormal";
 		break;
 	case Client::DAMG_TYPE::LAST:
 		break;

@@ -70,17 +70,7 @@ HRESULT CUIList::Set_ItemData(list<const ITEM_DATA*>* listData)
 	return S_OK;
 }
 
-HRESULT CUIList::Set_ItemData(_uint iIdx, const ITEM_DATA* pData, _uint iItemCount)
-{
-	if (iIdx >= Get_ItemCount())
-		return E_FAIL;
-	if (FAILED(m_vecUIItem[iIdx]->On_ListItemDataSet(pData)))
-		return E_FAIL;
-	CUIInvenSlotEntry* pInvenEntry = dynamic_cast<CUIInvenSlotEntry*>(m_vecUIItem[iIdx]);
-	if(pInvenEntry)
-		pInvenEntry->Set_StackCount(iItemCount);
-	return S_OK;
-}
+
 
 
 HRESULT CUIList::Resize(_uint iRow, _uint iCol)

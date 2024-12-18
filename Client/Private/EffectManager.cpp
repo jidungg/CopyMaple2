@@ -151,6 +151,11 @@ void CEffectManager::Play_DamgCount(_bool bCrit, _bool bPlayer, _int iDamg, _vec
 	Play_DamgCount(eType, iDamg, vPos, vRotation, fScale);
 }
 
+void CEffectManager::Play_RecoverCount(_int iRecovery, _vector vPos, _vector vRotation, _float fScale)
+{
+	Play_DamgCount(DAMG_TYPE::HEAL_NORMAL, iRecovery, vPos, vRotation, fScale);
+}
+
 
 
 void CEffectManager::Free()

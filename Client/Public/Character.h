@@ -51,7 +51,8 @@ public:
 
 	void Move_Forward(_float fDist);
 	virtual void Hit(CGameObject* pFoe,_int fDamage) override;
-	void Restore_HP();
+	void FullRecovery();
+	void RestoreHP(_int iAmount);
 	virtual void Respawn();
 	virtual _bool Is_Targetable();
 	_vector BlockXZ(_vector vPrev, _vector vNext, _float fRadius);

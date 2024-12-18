@@ -29,6 +29,7 @@ public:
 
 private:
 	CPlayerEquipSlot* m_pEquipSlots[(_uint)EQUIP_ITEM_TYPE::LAST] = { nullptr, };
+	CPlayerDecoSlot* m_pDecoSlots[(_uint)DECO_ITEM_TYPE::LAST] = { nullptr, };
 	class CUIPlayerInfo* m_pPlayerInfoUI = { nullptr };
 	CPlayer* m_pPlayer = { nullptr };
 	CInventory* m_pInventory = { nullptr };

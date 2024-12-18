@@ -2,7 +2,7 @@
 #include "UIInventory.h"
 #include "GameInstance.h"
 #include "Inventory.h"
-#include "UIListSelector.h"
+#include "UIInvenItemList.h"
 #include "UIScroller.h"
 #include "InvenSlot.h"
 #include "UIInvenSlotEntry.h"
@@ -80,7 +80,7 @@ HRESULT CUIInventory::Ready_Slots()
 	tListDesc.szHighlighterTexProtoTag = TEXT("UI_Texture_HighlightBorder");
 	tListDesc.eItemEntryProtoLev = LEVEL_LOADING;
 	tListDesc.szItemEntryProtoTag =CUIInvenSlotEntry::m_szProtoTag;
-	m_pItemList = static_cast<CUIListSelector*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_UIList"), &tListDesc));
+	m_pItemList = static_cast<CUIInvenItemList*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_CUIInvenItemList"), &tListDesc));
 	m_pItemBackPanel->Add_Child(m_pItemList);
 
 	
@@ -143,10 +143,10 @@ void CUIInventory::Set_InventoryTab(ITEM_TYPE eType)
 	m_pScroller->Set_CursorRow(0);
 
 	//데이터 셋팅
-	list<const ITEM_DATA*> listData;
+	list<pair<const ITEM_DATA*, _uint>> listData;
 	for (auto& pSlot : *vecSlots)
 	{
-		listData.push_back(pSlot->Get_ItemData());
+		listData.push_back({ pSlot->Get_ItemData() ,pSlot->Get_StackCount()});
 	}
  	m_pItemList->Set_ItemData(&listData);
 
@@ -163,11 +163,16 @@ void CUIInventory::Set_InventoryTab(ITEM_TYPE eType)
 	}
 }
 
-void CUIInventory::Update_Slot(_uint iIndex, ITEM_DATA* pData)
+void CUIInventory::Update_Slot(_uint iIndex, CInvenSlot* pSlot)
 {
-	if (nullptr != pData && m_eCurrentTab != pData->eITemType)
+	if (nullptr == pSlot)
 		return;
-	m_pItemList->Set_ItemData(iIndex, pData);
+	const ITEM_DATA* pData = pSlot->Get_ItemData();
+	if(nullptr != pData && m_eCurrentTab != pData->eITemType)
+		return;
+	_uint iCount = pSlot->Get_StackCount();
+	if (iCount <= 0) pData = nullptr;
+	m_pItemList->Set_ItemData(iIndex, { pData ,iCount });
 }
 
 void CUIInventory::Clear_OnRightClickCallback()

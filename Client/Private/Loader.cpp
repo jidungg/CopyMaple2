@@ -32,6 +32,7 @@
 #include "UIIcon.h"
 #include "BackGround.h"
 #include "UIInvenTabButton.h"
+#include "UIInvenItemList.h"
 
 #include "StateMachine.h"
 #include "SkillManager.h"
@@ -235,6 +236,9 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_DamagCountMonsterCritical"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/dmgcnt_monster_critical.dds"), 1))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_DamagCountHealNormal"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/dmgcnt_heal_normal.dds"), 1))))
+		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_ItemListBack"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_ItemListBack.dds"), 1))))
 		return E_FAIL;
@@ -409,6 +413,9 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_GameObject_UIList"),
 		CUIListSelector::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_GameObject_CUIInvenItemList"),
+		CUIInvenItemList::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIQuickSlot::m_szProtoTag,
 		CUIQuickSlot::Create(m_pDevice, m_pContext))))

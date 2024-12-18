@@ -65,6 +65,12 @@
             "Id": "HIT_FIREBALL_2",
             "LevelProto": 0,
             "Model": "eff_wizard_fireball_hit_02_a.effmodel"
+        },
+        {
+            "Type": "MODEL",
+            "Id": "RECOVER_HP",
+            "LevelProto": 0,
+            "Model": "eff_hp_recover.effmodel"
         }
     ]
 }

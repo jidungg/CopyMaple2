@@ -170,7 +170,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\CubeTerrain.h" />
+    <ClInclude Include="..\Public\InvenBuildSlot.h" />
+    <ClInclude Include="..\Public\InvenConsumableSlot.h" />
     <ClInclude Include="..\Public\InvenDecoSlot.h" />
+    <ClInclude Include="..\Public\InvenETCSlot.h" />
     <ClInclude Include="..\Public\Level_HuntingPlace.h" />
     <ClInclude Include="..\Public\Level_BayarPeak.h" />
     <ClInclude Include="..\Public\AttachableBodyPart.h" />
@@ -225,6 +228,7 @@
     <ClInclude Include="..\Public\MonsterDataBase.h" />
     <ClInclude Include="..\Public\MonsterSpawner.h" />
     <ClInclude Include="..\Public\OctoTree.h" />
+    <ClInclude Include="..\Public\PlayerDecoSlot.h" />
     <ClInclude Include="..\Public\Portal.h" />
     <ClInclude Include="..\Public\PortalTerrainObject.h" />
     <ClInclude Include="..\Public\SnailAttack.h" />
@@ -255,6 +259,7 @@
     <ClInclude Include="..\Public\UIDamgCount.h" />
     <ClInclude Include="..\public\UIFont.h" />
     <ClInclude Include="..\Public\UIIcon.h" />
+    <ClInclude Include="..\Public\UIInvenItemList.h" />
     <ClInclude Include="..\Public\UIInvenSlotEntry.h" />
     <ClInclude Include="..\Public\UIInvenTabButton.h" />
     <ClInclude Include="..\Public\UIQuickSlotBundle.h" />
@@ -322,6 +327,8 @@
     <ClCompile Include="..\Private\Bullet_MagicClaw.cpp" />
     <ClCompile Include="..\Private\Bullet_WildFire.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />
+    <ClCompile Include="..\Private\InvenBuildSlot.cpp" />
+    <ClCompile Include="..\Private\InvenETCSlot.cpp" />
     <ClCompile Include="..\Private\CrabAttack.cpp" />
     <ClCompile Include="..\Private\CreateObjEvent.cpp" />
     <ClCompile Include="..\Private\CubeTerrain.cpp" />
@@ -341,6 +348,7 @@
     <ClCompile Include="..\Private\FireTornado.cpp" />
     <ClCompile Include="..\Private\FlameWave.cpp" />
     <ClCompile Include="..\Private\HitEvent.cpp" />
+    <ClCompile Include="..\Private\InvenConsumableSlot.cpp" />
     <ClCompile Include="..\Private\InvenDecoSlot.cpp" />
     <ClCompile Include="..\Private\Level_HuntingPlace.cpp" />
     <ClCompile Include="..\Private\Interactable.cpp" />
@@ -352,6 +360,7 @@
     <ClCompile Include="..\Private\MonsterDataBase.cpp" />
     <ClCompile Include="..\Private\MonsterSpawner.cpp" />
     <ClCompile Include="..\Private\OctoTree.cpp" />
+    <ClCompile Include="..\Private\PlayerDecoSlot.cpp" />
     <ClCompile Include="..\Private\Portal.cpp" />
     <ClCompile Include="..\Private\PortalTerrainObject.cpp" />
     <ClCompile Include="..\Private\SnailAttack.cpp" />
@@ -381,6 +390,7 @@
     <ClCompile Include="..\Private\UIDamgCount.cpp" />
     <ClCompile Include="..\Private\UIFont.cpp" />
     <ClCompile Include="..\Private\UIIcon.cpp" />
+    <ClCompile Include="..\Private\UIInvenItemList.cpp" />
     <ClCompile Include="..\Private\UIInvenSlotEntry.cpp" />
     <ClCompile Include="..\Private\UIInvenTabButton.cpp" />
     <ClCompile Include="..\Private\UIQuickSlotBundle.cpp" />

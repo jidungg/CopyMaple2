@@ -96,14 +96,14 @@ HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle)
 		else
 			hr = CreateWICTextureFromFile(m_pDevice, szWideFullPath, nullptr, &pSRV);
 #ifdef _DEBUG
-		//if (FAILED(hr))
-		//{
-		//	string strFileName = szFileName;
-		//	strFileName += szExt;
-		//	hr = Search_Copy("D:/Workbench/Resources/3DResources/MapleStroty2/RawData/Resource/", strFileName, szDirPath);
-		//	if(SUCCEEDED(hr))
-		//		hr = CreateDDSTextureFromFile(m_pDevice, szWideFullPath, nullptr, &pSRV);
-		//}
+	/*	if (FAILED(hr))
+		{
+			string strFileName = szFileName;
+			strFileName += szExt;
+			hr = Search_Copy("D:/Workbench/Resources/3DResources/MapleStroty2/RawData/Resource/", strFileName, szDirPath);
+			if(SUCCEEDED(hr))
+				hr = CreateDDSTextureFromFile(m_pDevice, szWideFullPath, nullptr, &pSRV);
+		}*/
 #endif
 		if(FAILED(hr))
 			hr = CreateDDSTextureFromFile(m_pDevice, TEXT("../Bin/Resources/Textures/Default.dds"), nullptr, &pSRV);

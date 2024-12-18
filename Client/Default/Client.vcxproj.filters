@@ -241,6 +241,11 @@
     <ClInclude Include="..\Public\UIInvenSlotEntry.h" />
     <ClInclude Include="..\Public\UIInvenTabButton.h" />
     <ClInclude Include="..\Public\InvenDecoSlot.h" />
+    <ClInclude Include="..\Public\PlayerDecoSlot.h" />
+    <ClInclude Include="..\Public\UIInvenItemList.h" />
+    <ClInclude Include="..\Public\InvenConsumableSlot.h" />
+    <ClInclude Include="..\Public\InvenBuildSlot.h" />
+    <ClInclude Include="..\Public\InvenETCSlot.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -421,6 +426,11 @@
     <ClCompile Include="..\Private\UIInvenSlotEntry.cpp" />
     <ClCompile Include="..\Private\UIInvenTabButton.cpp" />
     <ClCompile Include="..\Private\InvenDecoSlot.cpp" />
+    <ClCompile Include="..\Private\PlayerDecoSlot.cpp" />
+    <ClCompile Include="..\Private\UIInvenItemList.cpp" />
+    <ClCompile Include="..\Private\InvenBuildSlot.cpp" />
+    <ClCompile Include="..\Private\InvenETCSlot.cpp" />
+    <ClCompile Include="..\Private\InvenConsumableSlot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

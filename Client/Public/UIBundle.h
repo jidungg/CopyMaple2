@@ -7,6 +7,7 @@ class IQuickItem;
 class CUIQuickSlotBundle;
 class CUIInventory;
 class CUIBar;
+class CInvenSlot;
 class CUIBundle :
     public CUIContainer
 {
@@ -29,7 +30,7 @@ public:
 	CUIQuickSlotBundle* Get_QuckSlotBundle() { return m_pQuickSlotBundle; }
 
 	void Set_QuickItem(KEY eHotKey, IQuickItem* pItem);
-	void Update_Inven_Slot(_uint iIndex, ITEM_DATA* pData);
+	void Update_Inven_Slot(_uint iIndex, CInvenSlot* pSlot);
 	void Update_CastingRatio(_float fRatio);
 	void Set_CastingBarVisible(_bool bVisible);
 private:

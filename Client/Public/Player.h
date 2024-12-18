@@ -17,6 +17,7 @@ class CAttachableBodyPart;
 class CBayar;
 class CUIBundle;
 class CUIQuickSlotBundle;
+class CModelObject;
 class CPlayer :
 	public CCharacter
 {
@@ -245,7 +246,8 @@ public:
 	void Set_Battle(bool bBattle); 
 	HRESULT Equip(const EQUIP_ITEM_DATA* pItem);
 	HRESULT UnEquip(EQUIP_ITEM_TYPE eType);
-	HRESULT Set_Deco(struct DECO_ITEM_DESC* pItem);
+	HRESULT Equip(const DECO_ITEM_DATA* pItem);
+	HRESULT UnEquip(DECO_ITEM_TYPE eType);
 	HRESULT Set_Customize(struct CUSTOMIZE_DESC* pItem);
 	void Set_BodyMeshActive(EQUIP_ITEM_TYPE eType, bool bActive);
 	_bool Is_Weapon() { return m_bWeapon; }

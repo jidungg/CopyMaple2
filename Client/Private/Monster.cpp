@@ -361,7 +361,7 @@ void CMonster::Priority_Update(_float fTimeDelta)
 		else
 			m_vNextStation = m_vHomePos;
 		GoTo_Home(fTimeDelta);
-		Restore_HP();
+		FullRecovery();
 	}
 	else
 	{

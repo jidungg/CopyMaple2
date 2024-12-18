@@ -28,18 +28,22 @@ CDamgEvent* CDamgEvent::Create(CGameObject* pAttacker, CGameObject* pVictim, _in
 void CDamgEvent::Exec()
 {
 	CEffectManager* pEffMgr = EFFECT_MANAGER;
-	_vector vPos = static_cast<CCharacter*>(m_pVictim)->Get_Hitpoint();
-	vPos = static_cast<CCharacter*>(m_pVictim)->Get_OverHeadPoint();
-	pEffMgr->Play_EffectModel(m_eHitEffect, vPos);
 	if (m_iDamage >= 0)
 	{
 		m_pVictim->Hit(m_pAttacker,m_iDamage);
+		_vector vPos = static_cast<CCharacter*>(m_pVictim)->Get_Hitpoint();
+		pEffMgr->Play_EffectModel(m_eHitEffect, vPos);
+		vPos = static_cast<CCharacter*>(m_pVictim)->Get_OverHeadPoint();
 		pEffMgr->Play_DamgCount(m_bCrit, m_bPlayer, m_iDamage, vPos);
 	}
 	else
 	{
+		_vector vPos = static_cast<CCharacter*>(m_pVictim)->Get_WorldPosition();
+		vPos.m128_f32[1] += 0.01;
+		pEffMgr->Play_EffectModel(m_eHitEffect, vPos);
+		vPos = static_cast<CCharacter*>(m_pVictim)->Get_OverHeadPoint();
+		pEffMgr->Play_RecoverCount(m_iDamage, vPos);
 		static_cast<CCharacter*>(m_pVictim)->RestoreHP(m_iDamage);
-		pEffMgr->Play_RecoverCount(m_iDamage);
 	}
 
 }

@@ -10,8 +10,8 @@ class CUIFont :
 public:
 	typedef struct UIFontDesc : public CUIObject::UIObjectDesc
 	{
-		const _tchar* pText = { nullptr };
-		const _tchar* pFontTag = { nullptr };
+		const _tchar* pText = L"";
+		const _tchar* pFontTag = L"";
 		_vector vColor = { 1.f,1.f,1.f };
 		_bool bShade = { false };
 	} UIFontDesc;
@@ -34,7 +34,7 @@ public:
 	_float2 Get_TextSize(const _tchar* pText);
 private:
 	CCustomFont* m_pFont = { nullptr };
-	const _tchar* m_pText = { nullptr };
+	wstring m_pText ;
 	_vector m_vColor = { 1.f,1.f,1.f };
 	_bool m_bShade = { false };
 public:

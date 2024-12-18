@@ -12,8 +12,12 @@ class IQuickItem : public ISlotItem
 {
 public:
 	virtual void Use() abstract;
-	virtual _float Get_CoolTimeRatio() abstract;
+	virtual void Update_Cool(_float fTimeDelta)
+	{
+		m_fCoolTimeAcc += fTimeDelta;
+	}
 protected:
-
+	_float m_fCoolTimeAcc = { 0.f };
+	_float m_fCoolTime = { 0.f };
 };
 END

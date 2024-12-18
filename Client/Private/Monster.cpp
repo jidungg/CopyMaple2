@@ -561,6 +561,9 @@ _bool CMonster::FindWay(_vector& vStart, _vector& vGoal, _uint iSearchRange)
 void CMonster::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
+	for (auto& pSkill : m_mapSkill)
+		pSkill.second->Update_Cool(fTimeDelta);
+
 	if (m_bHPZero)
 	{
 		if (m_fDeadIdleTime <= m_fDeadIdleTimeAcc)

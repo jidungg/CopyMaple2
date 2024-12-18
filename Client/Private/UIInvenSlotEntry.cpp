@@ -115,8 +115,16 @@ HRESULT CUIInvenSlotEntry::On_ListItemDataSet(const ITEM_DATA* data)
 
 HRESULT CUIInvenSlotEntry::On_InvenListItemDataSet(pair<const ITEM_DATA*, _uint> Data)
 {
-	if (FAILED(On_ListItemDataSet(Data.first)))
-		return E_FAIL;
+	if(Data.second == 0)
+	{
+		if (FAILED(On_ListItemDataSet(nullptr)))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(On_ListItemDataSet(Data.first)))
+			return E_FAIL;
+	}
 	Set_StackCount(Data.second);
 	return S_OK;
 }
@@ -159,7 +167,7 @@ void CUIInvenSlotEntry::Set_Offset(_float iX, _float iY)
 void CUIInvenSlotEntry::Set_StackCount(_uint iCount)
 {
 	wstring str = to_wstring(iCount);
-	m_pStackCountFont->Set_Text(str.c_str());
+	m_pStackCountFont->Set_Text(str.data());
 }	
 
 

@@ -75,10 +75,12 @@ typedef struct ConsumableItemData : public ItemData
 		iItemID = (_uint)eId;
 		eConsumableType = js["ConsumType"];
 		iValue = js["Value"];
+		fCoolTime = js["CoolTime"];
 		m_iMaxStack = 99;
 	}
 	CONSUMABLE_ITEM_TYPE eConsumableType = { CONSUMABLE_ITEM_TYPE::LAST };
 	_int iValue = { 0 };
+	_float fCoolTime = { 0.f };
 }CONSUMABLE_ITEM_DATA;
 
 typedef struct DecoItemData : public ItemData

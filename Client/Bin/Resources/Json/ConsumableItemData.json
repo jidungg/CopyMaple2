@@ -9,7 +9,8 @@
             "IconImg": "20000022.png",
             "Model": "EmptyModel.model",
             "ConsumType": "HP",
-            "Value": 1000
+            "Value": 1000,
+            "CoolTime" :  5.0
         }
     ]
 }

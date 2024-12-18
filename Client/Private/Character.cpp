@@ -50,8 +50,6 @@ void CCharacter::Priority_Update(_float fTimeDelta)
 
 void CCharacter::Update(_float fTimeDelta)
 {
-	 for (auto& pSkill : m_mapSkill)
-		 pSkill.second->Update_CoolTime(fTimeDelta);
 	 if(m_bAttack)
 		Get_CurrentSkill()->Update_CastingTime(fTimeDelta);
 

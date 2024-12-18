@@ -26,7 +26,8 @@ const ITEM_DATA* CInvenSlot::Pop_Item(_uint iCount)
         return nullptr;
     m_iStackCount -= iCount;
 	const ITEM_DATA* pItem = m_pItemDesc;
-
+    if(m_iStackCount == 0)
+        m_pItemDesc = nullptr;
     UIBUNDLE->Update_Inven_Slot(m_iIndex, this);
     return pItem;
 }

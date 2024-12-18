@@ -26,6 +26,7 @@ protected:
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
+	virtual void Update(_float fTImeDelta) override;
 
 	void Recevie_Input(KEY eKey);
 	void Set_QuickItem(KEY eHotKey,  IQuickItem* pItem);

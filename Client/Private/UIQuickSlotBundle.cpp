@@ -52,6 +52,14 @@ HRESULT CUIQuickSlotBundle::Initialize(void* pArg)
 	return S_OK;
 }
 
+void CUIQuickSlotBundle::Update(_float fTImeDelta)
+{
+	for (auto& pQuickSlot : m_mapQuickSlot)
+	{
+		pQuickSlot.second->Update(fTImeDelta);
+	}
+}
+
 void CUIQuickSlotBundle::Recevie_Input(KEY eKey)
 {
 	if (m_mapQuickSlot.find(eKey) != m_mapQuickSlot.end())

@@ -56,7 +56,7 @@ HRESULT CUIDamgCount::Initialize(void* pArg)
 		wstrTexture = L"UI_Texture_DamagCountMonsterCritical";
 		break;
 	case Client::DAMG_TYPE::HEAL_NORMAL:
-		wstrTexture = L"UI_Texture_DamagCounHealNormal";
+		wstrTexture = L"UI_Texture_DamagCountHealNormal";
 		break;
 	case Client::DAMG_TYPE::LAST:
 		break;
@@ -139,6 +139,8 @@ HRESULT CUIDamgCount::Bind_ShaderResources(CShader* pShader)
 }
 void CUIDamgCount::Set_Damge(_int iValue)
 {
+	if (iValue < 0)
+		iValue = -iValue;
 	m_vecNumbers.clear();
 	while (iValue >= 1)
 	{

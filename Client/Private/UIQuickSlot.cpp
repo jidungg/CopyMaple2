@@ -40,7 +40,9 @@ HRESULT CUIQuickSlot::Initialize(void* pArg)
 
 void CUIQuickSlot::Update(_float fTimeDelta)
 {
+
 	__super::Update(fTimeDelta);
+	m_pQuickItem->Update_Cool(fTimeDelta);
 }
 
 void CUIQuickSlot::Late_Update(_float fTimeDelta)

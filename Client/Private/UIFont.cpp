@@ -31,20 +31,20 @@ HRESULT CUIFont::Initialize(void* pArg)
 
 HRESULT CUIFont::Render()
 {
-	if (nullptr == m_pText)
+	if (m_pText.empty())
 		return S_OK;
 	CRect_Transform* pTransform = static_cast<CRect_Transform*>(m_pTransformCom);
 	_float2 fPos = pTransform->Get_PivotPosition(CORNOR_TYPE::LEFT_TOP);
-	_float2 fSize = m_pFont->Get_TextSize(m_pText);
+	_float2 fSize = m_pFont->Get_TextSize(m_pText.c_str());
 	_float2 fOrigin = {0,0};
 	if (m_bShade)
 	{
 		_float2 fPos2 = fPos;
 		fPos2.x -= 1.f;
 		fPos2.y += 1.f;
-		m_pFont->Render(m_pText, fPos2, {0,0,0,1}, _float{0}, fOrigin);
+		m_pFont->Render(m_pText.c_str(), fPos2, {0,0,0,1}, _float{0}, fOrigin);
 	}
-	m_pFont->Render(m_pText, fPos, m_vColor, _float{ 0 }, fOrigin);
+	m_pFont->Render(m_pText.c_str(), fPos, m_vColor, _float{ 0 }, fOrigin);
 	return S_OK;
 }
 

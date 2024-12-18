@@ -57,10 +57,10 @@ protected:
 	virtual ~CSkill() = default;
 public:
 	virtual HRESULT Initialize(SKILL_DATA* pSkillData, CCharacter* pUser);
-	void Update_CoolTime(_float fDeltaTime );
+	//void Update_CoolTime(_float fDeltaTime );
 	void Update_CastingTime(_float fDeltaTime );
-	virtual void Update(_float fTimeDelta);
-	virtual void Late_Update(_float fTimeDelta);
+	virtual void Update(_float fTimeDelta) {};
+	virtual void Late_Update(_float fTimeDelta) {};
 	virtual HRESULT Render_Collider() { return S_OK; }
 	void Use();
 	void Cancel_Casting();
@@ -68,7 +68,8 @@ public:
 
 
 	virtual const _char* Get_IconTag() override;
-	virtual _float Get_CoolTimeRatio() override;
+	//virtual _float Get_CoolTimeRatio() override;
+
 	SKILL_DATA* Get_SkillDesc() { return m_pSkillDesc; }
 	_int Get_NextAnimation(_uint iAnimIdx);
 	vector<_uint>& Get_AnimIdcies();
@@ -94,7 +95,7 @@ protected:
 	SKILL_DATA* m_pSkillDesc = { nullptr };
 	CCharacter* m_pUser = {nullptr};
 	_float m_fCastingRatio = { 0.f };
-	_float m_fCoolTimeAcc = { 0.f };
+	//_float m_fCoolTimeAcc = { 0.f };
 	_bool m_bCastingComplete = { false };
 	map<_uint, list< ANIM_EVENT>> m_mapAnimEvent;
 	CColliderBase* m_pTargetSearcher = { nullptr };

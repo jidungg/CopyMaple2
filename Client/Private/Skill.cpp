@@ -44,11 +44,6 @@ HRESULT CSkill::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	m_pUIBundle = UIBUNDLE;
 	return S_OK;
 }
-void CSkill::Update_CoolTime(_float fDeltaTime)
-{
-
-	m_fCoolTimeAcc += fDeltaTime;
-}
 
 void CSkill::Update_CastingTime(_float fDeltaTime)
 {
@@ -68,14 +63,6 @@ void CSkill::Update_CastingTime(_float fDeltaTime)
 	}
 }
 
-void CSkill::Update(_float fTimeDelta)
-{
-
-}
-
-void CSkill::Late_Update(_float fTimeDelta)
-{
-}
 
 void CSkill::Use()
 {
@@ -392,10 +379,7 @@ const _char* CSkill::Get_IconTag()
 	return m_pSkillDesc->strIconImageTag;
 }
 
-_float CSkill::Get_CoolTimeRatio()
-{
-	return m_fCoolTimeAcc / m_pSkillDesc->fCoolTime;
-}
+
 
 SkillData::SkillData(const json& jData)
 {

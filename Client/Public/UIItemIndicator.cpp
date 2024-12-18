@@ -88,6 +88,7 @@ HRESULT CUIButtonItemIndicator::On_ListItemDataSet(const ITEM_DATA* data)
 	wstring wstrItemIconTag(strProtoItemIconTag.begin(), strProtoItemIconTag.end());
 	CTexture* pTexture = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, wstrItemIconTag, nullptr));
 	m_pIcon->Set_Texture(pTexture);
+	m_pIcon->Set_Active(true);
 	Set_Disable(false);
 }
 

@@ -203,17 +203,23 @@ CUIObject* CUIObject::Find_FocusedUI(POINT fPos)
 		return nullptr;
 	}
 	MouseOver();
-	CUIObject* pFocusedUI = nullptr;
+	CUIObject* pFocusedUI = this;
 	for (auto& child : m_pChilds)
 	{
 		if (false == child->Is_Active()) continue;
 		CUIObject* pChildUI = static_cast<CUIObject*>(child);
-		pFocusedUI = pChildUI->Find_FocusedUI(fPos);
-		if (pFocusedUI != nullptr)
-			return pFocusedUI;
+		if(pFocusedUI != this)
+		{
+			pChildUI->MouseNotOver();
+			continue;
+		}
+		CUIObject* pTmp = pChildUI->Find_FocusedUI(fPos);
+		if (pTmp != nullptr)
+			pFocusedUI = pTmp;
+
 	}
 
-	return this;
+	return pFocusedUI;
 }
 
 

@@ -38,8 +38,15 @@ HRESULT CCustomFont::Render(const _tchar* pText, const _float2& vPosition, _fvec
 	m_pFont->DrawString(m_pBatch, pText, vPosition, vColor, fRotation, vOrigin);
 
 	m_pBatch->End();
-
+	
 	return S_OK;
+}
+
+_float2 CCustomFont::Get_TextSize(const _tchar* pText)
+{
+	_float2 fSize;
+	XMStoreFloat2(&fSize, m_pFont->MeasureString(pText));
+	return fSize;
 }
 
 CCustomFont* CCustomFont::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pFontFilePath)

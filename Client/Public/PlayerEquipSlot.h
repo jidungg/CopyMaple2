@@ -16,16 +16,16 @@ public:
 	// ISlotItem을(를) 통해 상속됨
 	virtual const _char* Get_IconTag() override;
 
-	HRESULT Insert_Item(EQUIP_ITEM_DATA* pData);
-	EQUIP_ITEM_DATA* Pop_Item();
+	HRESULT Insert_Item(const EQUIP_ITEM_DATA* pData);
+	const EQUIP_ITEM_DATA* Pop_Item();
 
 
 
-	EQUIP_ITEM_DATA* Get_ItemDesc() { return m_pItemDesc; }
+	const EQUIP_ITEM_DATA* Get_ItemDesc() { return m_pItemDesc; }
 	bool Is_Empty() { return m_pItemDesc == nullptr; }
 private:
 	EQUIP_ITEM_TYPE m_eEquipType = { EQUIP_ITEM_TYPE::LAST };
-	EQUIP_ITEM_DATA* m_pItemDesc = { nullptr };
+	const EQUIP_ITEM_DATA* m_pItemDesc = { nullptr };
 public:
 	static CPlayerEquipSlot* Create(EQUIP_ITEM_TYPE eType);
 	void Free();

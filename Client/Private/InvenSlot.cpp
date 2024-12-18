@@ -7,53 +7,40 @@ CInvenSlot::CInvenSlot(ITEM_TYPE eItemType, _uint iIdx, CInventory* pInventory)
 	, m_iIndex(iIdx)
     ,m_pInventory(pInventory)
 {
-    switch (m_eItemType)
-    {
-    case Client::ITEM_TYPE::EQUIP:
-    case Client::ITEM_TYPE::DECO:
-		m_iMaxStack = 1;
-        break;
-    case Client::ITEM_TYPE::CONSUMABLE:
-    case Client::ITEM_TYPE::BUILD:
-    case Client::ITEM_TYPE::ETC:
-		m_iMaxStack = 99;
-        break;
-    case Client::ITEM_TYPE::LAST:
-    default:
-        break;
-    }
+   
 }
 
-HRESULT CInvenSlot::Insert_Item(ITEM_DATA* pData, _uint iCount)
+HRESULT CInvenSlot::Insert_Item(const ITEM_DATA* pData, _uint iCount)
 {
 	if (Is_Insertable(pData, iCount) == false)
 		return E_FAIL;
-    m_pItemDesc = pData;
-	m_iStack += iCount;
-	UIBUNDLE->Update_Inven_Slot( m_iIndex, m_pItemDesc);
+    _uint iOriginCount = m_tItemDesc.m_iStack;
+    m_tItemDesc = *pData;
+    m_tItemDesc.m_iStack = iOriginCount+ iCount;
+	UIBUNDLE->Update_Inven_Slot( m_iIndex, &m_tItemDesc);
     return S_OK;
 }
 
 ITEM_DATA* CInvenSlot::Pop_Item(_uint iCount)
 {
-    if (m_iStack < iCount)
+    if (m_tItemDesc.m_iStack < iCount)
         return nullptr;
-	m_iStack -= iCount;
-	ITEM_DATA* pItem = m_pItemDesc;
-	if (m_iStack <= 0)
-        m_pItemDesc = nullptr;
-    UIBUNDLE->Update_Inven_Slot(m_iIndex, m_pItemDesc);
+    m_tItemDesc.m_iStack -= iCount;
+	ITEM_DATA* pItem = &m_tItemDesc;
+	if (m_tItemDesc.m_iStack <= 0)
+        m_tItemDesc = ITEM_DATA{};
+    UIBUNDLE->Update_Inven_Slot(m_iIndex, &m_tItemDesc);
     return pItem;
 }
 
-bool CInvenSlot::Is_Insertable(ITEM_DATA* pData, _uint iCount)
+bool CInvenSlot::Is_Insertable(const ITEM_DATA* pData, _uint iCount)
 {
-	if (m_pItemDesc == nullptr)
+	if (Is_Empty())
 		return true;
-    if (m_pItemDesc->eITemType != pData->eITemType
-        || m_pItemDesc->iItemID != pData->iItemID)
+    if (m_tItemDesc.eITemType != pData->eITemType
+        || m_tItemDesc.iItemID != pData->iItemID)
         return false;
-    if (m_iStack + iCount > m_iMaxStack)
+    if (m_tItemDesc.m_iStack + iCount > m_tItemDesc.m_iMaxStack)
         return false;
     return true;
 }

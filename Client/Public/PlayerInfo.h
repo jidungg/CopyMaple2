@@ -7,6 +7,8 @@ class CPlayer;
 class CInventory;
 class CInvenEquipSlot;
 class CPlayerEquipSlot;
+class CInvenDecoSlot;
+class CPlayerDecoSlot;
 class CPlayerInfo :
     public CBase
 {
@@ -20,6 +22,8 @@ public:
 
 	HRESULT Equip(CInvenEquipSlot* pInvenSlot);
 	HRESULT UnEquip(EQUIP_ITEM_TYPE eType);
+	HRESULT Equip(CInvenDecoSlot* pInvenSlot);
+	HRESULT UnEquip(DECO_ITEM_TYPE eType);
 	void Toggle_UI();
 	CPlayer* Get_Player() { return m_pPlayer; }
 

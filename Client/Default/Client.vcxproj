@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\CubeTerrain.h" />
+    <ClInclude Include="..\Public\InvenDecoSlot.h" />
     <ClInclude Include="..\Public\Level_HuntingPlace.h" />
     <ClInclude Include="..\Public\Level_BayarPeak.h" />
     <ClInclude Include="..\Public\AttachableBodyPart.h" />
@@ -340,6 +341,7 @@
     <ClCompile Include="..\Private\FireTornado.cpp" />
     <ClCompile Include="..\Private\FlameWave.cpp" />
     <ClCompile Include="..\Private\HitEvent.cpp" />
+    <ClCompile Include="..\Private\InvenDecoSlot.cpp" />
     <ClCompile Include="..\Private\Level_HuntingPlace.cpp" />
     <ClCompile Include="..\Private\Interactable.cpp" />
     <ClCompile Include="..\Private\Kindling.cpp" />

@@ -29,7 +29,7 @@ protected:
 public:
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(_float fTimeDelta) override;
-
+	virtual HRESULT Render()override;
 	virtual void On_MouseDrag(const POINT& tMousePoint, const DIMOUSESTATE& tState) override;
 
 	void Set_RowCounts(_uint iTotalRowCount, _uint iVisibleCount);

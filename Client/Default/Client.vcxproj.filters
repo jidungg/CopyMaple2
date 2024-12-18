@@ -240,6 +240,7 @@
     <ClInclude Include="..\public\UIFont.h" />
     <ClInclude Include="..\Public\UIInvenSlotEntry.h" />
     <ClInclude Include="..\Public\UIInvenTabButton.h" />
+    <ClInclude Include="..\Public\InvenDecoSlot.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -419,6 +420,7 @@
     <ClCompile Include="..\Private\UIFont.cpp" />
     <ClCompile Include="..\Private\UIInvenSlotEntry.cpp" />
     <ClCompile Include="..\Private\UIInvenTabButton.cpp" />
+    <ClCompile Include="..\Private\InvenDecoSlot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

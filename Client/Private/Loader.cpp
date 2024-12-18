@@ -172,6 +172,8 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_Bold_30"), TEXT("../Bin/Resources/Fonts/Lev2_Bold_30.spritefont"))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_Medium_10"), TEXT("../Bin/Resources/Fonts/Lev2_Medium_10.spritefont"))))
+		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_Medium_15"), TEXT("../Bin/Resources/Fonts/Lev2_Medium_15.spritefont"))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_Medium_30"), TEXT("../Bin/Resources/Fonts/Lev2_Medium_30.spritefont"))))
@@ -235,6 +237,9 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_ItemListBack"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_ItemListBack.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_TabButton"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Inventory_TabButton_%d.dds"), 3))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/"), TEXT(".dds"))))

@@ -54,7 +54,7 @@ public:
 	{
 		CUIListSelector* pInstance = new CUIListSelector(*this);
 
-		if (FAILED(pInstance->Initialize(pArg)))
+ 		if (FAILED(pInstance->Initialize(pArg)))
 		{
 			MSG_BOX("Failed to Clone : CUIListSelector");
 			Safe_Release(pInstance);

@@ -6,6 +6,7 @@
 #include "UIBundle.h"
 #include "UIInventory.h"
 #include "UIInvenSlotEntry.h"
+#include "InvenDecoSlot.h"
 
 IMPLEMENT_SINGLETON(CInventory)
 
@@ -33,10 +34,17 @@ HRESULT CInventory::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pCont
 				m_vecSlot[i][j] = CInvenEquipSlot::Create(j, this);
 				break;
 			case ITEM_TYPE::DECO:
+				m_vecSlot[i][j] = CInvenDecoSlot::Create(j, this);
 				break;
 			case ITEM_TYPE::CONSUMABLE:
+				m_vecSlot[i][j] = CInvenConsumableSlot::Create(j, this);
+				break;
 			case ITEM_TYPE::BUILD:
+				m_vecSlot[i][j] = CInvenBuildSlot::Create(j, this);
+				break;
 			case ITEM_TYPE::ETC:
+				m_vecSlot[i][j] = CInvenBuildSlot::Create(j, this);
+				break;
 			case ITEM_TYPE::LAST:
 			default:
 				break;
@@ -47,7 +55,7 @@ HRESULT CInventory::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pCont
 	return S_OK;
 }
 
-HRESULT CInventory::Insert_Item(ITEM_DATA* pData, _uint iCount)
+HRESULT CInventory::Insert_Item(const ITEM_DATA* pData, _uint iCount)
 {
 	assert(pData != nullptr);
 	CInvenSlot* pUpdateSlot = nullptr;
@@ -84,7 +92,7 @@ HRESULT CInventory::Insert_Item(ITEM_DATA* pData, _uint iCount)
 				{
 					pSlot->Insert_Item(pData, iCount);
 					pUpdateSlot = pSlot;
-					break;
+					return S_OK;
 				}
 			}
 		}

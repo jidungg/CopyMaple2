@@ -4,6 +4,7 @@
 #include "UIIcon.h"
 #include "InvenSlot.h"
 #include "UIListSelector.h"
+#include "UIFont.h"
 
 CUIInvenSlotEntry::CUIInvenSlotEntry(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIButton(pDevice, pContext)
@@ -47,6 +48,17 @@ HRESULT CUIInvenSlotEntry::Initialize(void* pArg)
 	m_pIcon = static_cast<CUIIcon*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIIcon::m_szProtoTag, &tPanelDesc));
 	Add_Child(m_pIcon);
 
+	CUIFont::UIFontDesc tFontDesc{};
+	tFontDesc.eAnchorType = CORNOR_TYPE::LEFT_TOP;
+	tFontDesc.ePivotType = CORNOR_TYPE::LEFT_TOP;
+	tFontDesc.fXOffset = 2.5;
+	tFontDesc.fYOffset = 2.5;
+	tFontDesc.pFontTag = L"LV2Gothic_Medium_10";
+	tFontDesc.vColor = _vector{ 1.f, 1.f, 1.f, 1.f };
+	tFontDesc.bShade = true;
+	m_pStackCountFont = static_cast<CUIFont*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIFont::m_szProtoTag, &tFontDesc));
+	Add_Child(m_pStackCountFont);
+
     return S_OK;
 }
 
@@ -65,24 +77,40 @@ HRESULT CUIInvenSlotEntry::Render()
 
 HRESULT CUIInvenSlotEntry::On_ListItemDataSet(const ITEM_DATA* data)
 {
-	if (nullptr == data)
+	m_pItemDesc = data;
+	if (nullptr == m_pItemDesc || data->Is_Empty())
 	{
 		for (auto& i : m_arrSRVIndex)
 			i = 0;
 		m_iSRVIndex = m_arrSRVIndex[0];
+		m_pIcon->Set_Texture(nullptr);
 		m_pIcon->Set_Active(false);
+		m_pStackCountFont->Set_Active(false);
 		return S_OK;
 	}
-	m_pItemDesc = data;
+
+	//아이템 등급에 따른 배경 이미지
 	for (auto& i : m_arrSRVIndex)
 		i = (_uint)m_pItemDesc->eItemGrade;
 	m_iSRVIndex = m_arrSRVIndex[0];
+
+	//아이콘 이미지
 	string strProtoItemIconTag = m_pItemDesc->strIconImageTag;
 	wstring wstrItemIconTag(strProtoItemIconTag.begin(), strProtoItemIconTag.end());
 	CTexture* pTexture = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, wstrItemIconTag, nullptr));
 	m_pIcon->Set_Texture(pTexture);
 	m_pIcon->Set_Active(true);
+
+	//스택 카운트 폰트
+	if (m_pItemDesc->eITemType == ITEM_TYPE::CONSUMABLE 
+		|| m_pItemDesc->eITemType == ITEM_TYPE::ETC
+		|| m_pItemDesc->eITemType == ITEM_TYPE::BUILD)
+		m_pStackCountFont->Set_Active(true);
+	else
+		m_pStackCountFont->Set_Active(false);
+
 	Set_Disable(false);
+	return S_OK;
 }
 
 HRESULT CUIInvenSlotEntry::Render_ListEntry()
@@ -119,6 +147,12 @@ void CUIInvenSlotEntry::Set_Offset(_float iX, _float iY)
 {
 	static_cast<CRect_Transform*>(m_pTransformCom)->Set_Offset(iX, iY);
 }
+
+void CUIInvenSlotEntry::Set_StackCount(_uint iCount)
+{
+	wstring str = to_wstring(iCount);
+	m_pStackCountFont->Set_Text(str.c_str());
+}	
 
 
 

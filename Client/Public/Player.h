@@ -243,7 +243,7 @@ public:
 	HRESULT Gain_Item(ITEM_DATA* pItem, _uint iCount = 1);
 
 	void Set_Battle(bool bBattle); 
-	HRESULT Equip(EQUIP_ITEM_DATA* pItem);
+	HRESULT Equip(const EQUIP_ITEM_DATA* pItem);
 	HRESULT UnEquip(EQUIP_ITEM_TYPE eType);
 	HRESULT Set_Deco(struct DECO_ITEM_DESC* pItem);
 	HRESULT Set_Customize(struct CUSTOMIZE_DESC* pItem);
@@ -255,7 +255,7 @@ protected:
 	CInteractableObject* m_pInteractable = { nullptr };
 
 	CModelObject* m_pEquipModels[(_uint)EQUIP_ITEM_TYPE::LAST] = { nullptr, };
-	CModelObject* m_pDecoModels[(_uint)DECO_TYPE::LAST] = { nullptr, };
+	CModelObject* m_pDecoModels[(_uint)DECO_ITEM_TYPE::LAST] = { nullptr, };
 	CModelObject* m_pCustomizes[(_uint)CUSTOMIZE_PART::LAST] = { nullptr, };
 
 

@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "UIItemIndicator.h"
 #include "ObjectPool.h"
+#include <UIInvenSlotEntry.h>
 
 CUIList::CUIList(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIContainer(pDevice, pContext)
@@ -44,17 +45,17 @@ HRESULT CUIList::Initialize(void* pArg)
 	desc.vBorder = { 3,3,3,3 };
 	CUIObject* pItem = static_cast<CUIObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, m_eItemEntryProtoLev, m_szItemEntryProtoTag, &desc));
 	if(pItem)
-		m_pItemEntryPool = CObjectPool< CUIObject>::Create(pItem,&desc,200);
+		m_pItemEntryPool = CObjectPool< CUIObject>::Create(pItem,&desc, pDesc->iObjectPoolSize);
 	else
 		return E_FAIL;
 
 	Resize(m_iRowCount, m_iColCount);
 
-	if (FAILED(Set_ItemData(pDesc->listData)))
-		return E_FAIL;
+	//if (FAILED(Set_ItemData(pDesc->listData)))
+	//	return E_FAIL;
 	return S_OK;
 }
-HRESULT CUIList::Set_ItemData(list<ITEM_DATA*>* listData)
+HRESULT CUIList::Set_ItemData(list<const ITEM_DATA*>* listData)
 {
 	if (listData->size() > Get_ItemCount())
 		return E_FAIL;
@@ -69,14 +70,18 @@ HRESULT CUIList::Set_ItemData(list<ITEM_DATA*>* listData)
 	return S_OK;
 }
 
-HRESULT CUIList::Set_ItemData(_uint iIdx, ITEM_DATA* pData)
+HRESULT CUIList::Set_ItemData(_uint iIdx, const ITEM_DATA* pData, _uint iItemCount)
 {
 	if (iIdx >= Get_ItemCount())
 		return E_FAIL;
 	if (FAILED(m_vecUIItem[iIdx]->On_ListItemDataSet(pData)))
 		return E_FAIL;
+	CUIInvenSlotEntry* pInvenEntry = dynamic_cast<CUIInvenSlotEntry*>(m_vecUIItem[iIdx]);
+	if(pInvenEntry)
+		pInvenEntry->Set_StackCount(iItemCount);
 	return S_OK;
 }
+
 
 HRESULT CUIList::Resize(_uint iRow, _uint iCol)
 {
@@ -94,6 +99,7 @@ HRESULT CUIList::Resize(_uint iRow, _uint iCol)
 		{
 			CUIObject* pItem = m_pItemEntryPool->Get_Object();
 			Add_Child(pItem);
+			Safe_AddRef(pItem);
 			IUIListItemEntry* pEntry = dynamic_cast<IUIListItemEntry*>(pItem);
 			pEntry->On_CreateListItemEntry(this, m_vecUIItem.size());
 			m_vecUIItem.push_back(pEntry);
@@ -107,6 +113,7 @@ HRESULT CUIList::Resize(_uint iRow, _uint iCol)
 			CUIObject* pItem = dynamic_cast<CUIObject*>(m_vecUIItem.back());
 			if (pItem)
 			{
+				Safe_Release(pItem);
 				Remove_Child(pItem);
 				m_pItemEntryPool->Return_Object(pItem);
 				m_vecUIItem.pop_back();

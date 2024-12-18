@@ -38,6 +38,13 @@ void CUIScrollButton::Update(_float fTimeDelta)
 	__super::Update(fTimeDelta);
 }
 
+HRESULT CUIScrollButton::Render()
+{
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+	return S_OK;
+}
+
 void CUIScrollButton::On_MouseDrag(const POINT& tMousePoint, const DIMOUSESTATE& tState)
 {
 	if (m_bGrabbed == false)
@@ -66,8 +73,9 @@ void CUIScrollButton::Set_RowCounts(_uint iTotalRowCount, _uint iVisibleCount)
 {
 	m_iTotalRowCount = iTotalRowCount;
 	m_iVisibleRowCount = iVisibleCount;
-	_float3 fSize = m_pTransformCom->Compute_Scaled();
 	_float fNewHeight = clamp(m_fMaxButtonSize * ((_float)iVisibleCount/(_float)iTotalRowCount ), m_fMinButtonSize, m_fMaxButtonSize);
+	fNewHeight = std::clamp(fNewHeight, m_fMinButtonSize, m_fMaxButtonSize);
+	_float3 fSize = m_pTransformCom->Compute_Scaled();
 	static_cast<CRect_Transform*>( m_pTransformCom)->Set_Size(fSize.x,fNewHeight);
 }
 
@@ -75,12 +83,17 @@ void CUIScrollButton::Set_Offset(_uint iRow)
 {
 	_float3 fSize = m_pTransformCom->Compute_Scaled();
 	_float fScrollLength = m_fMaxOffsetY - m_fMinOffsetY - fSize.y;
-	_float fCellLength = fScrollLength / m_iTotalRowCount;
-	_float2 vCurOffset = static_cast<CRect_Transform*>(m_pTransformCom)->Get_Offset();
+	_float fCellLength;
+	if (m_iTotalRowCount - m_iVisibleRowCount <= 0)
+		fCellLength = fScrollLength / 1;
+	else
+		fCellLength = fScrollLength / (m_iTotalRowCount - m_iVisibleRowCount);
+
 	_float fNewY = m_fMinOffsetY + fCellLength * iRow;
 	fNewY = std::clamp(fNewY, m_fMinOffsetY, m_fMaxOffsetY - fSize.y);
 
-	static_cast<CRect_Transform*>(m_pTransformCom)->Set_Offset(vCurOffset.x, m_fMinOffsetY + fCellLength* iRow);
+	_float2 vCurOffset = static_cast<CRect_Transform*>(m_pTransformCom)->Get_Offset();
+	static_cast<CRect_Transform*>(m_pTransformCom)->Set_Offset(vCurOffset.x, fNewY);
 }
 
 CUIScrollButton* CUIScrollButton::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

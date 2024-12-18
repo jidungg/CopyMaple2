@@ -1,33 +1,42 @@
 {
     "items": [
         {
-            "name": "풀 블록1",
-            "desc": "풀이 돋아난 블록.",
-            "price": 10,
-            "iconimg": "he_ground_grass_a01.dds",
-            "model": "he_ground_grass_a01.model"
+            "ItemId": "LOLIPOP",
+            "ItemGrade": "NORMAL",
+            "Name": "막대 사탕",
+            "Desc": "맛있어보임.",
+            "Price": 10,
+            "IconImg": "01000001.png",
+            "Model": "01000001_c_lolipop.model"
         },
         {
-            "name": "돌 블록1",
-            "desc": "단단한 돌 블록.",
-            "price": 10,
-            "iconimg": "he_ground_rock_a01.dds",
-            "model": "he_ground_rock_a01.model"
+            "ItemId": "MUSTACH",
+            "ItemGrade": "NORMAL",
+            "Name": "콧수염",
+            "Desc": "중후한 매력.",
+            "Price": 10,
+            "IconImg": "01000002.png",
+            "Model": "01000002_c_gentlemustache.model"
         },
         {
-            "name": "부쉬 1",
-            "desc": "부쉬.",
-            "price": 10,
-            "iconimg": "he_fi_cubric_bush_a01.dds",
-            "model": "he_fi_cubric_bush_a01.model"
+            "ItemId": "GLASSES",
+            "ItemGrade": "NORMAL",
+            "Name": "동그리 안경",
+            "Desc": "똑똑해 보이기 좋다.",
+            "Price": 10,
+            "IconImg": "01100001.png",
+            "Model": "01100001_c_basicround.model"
         },
         {
-            "name": "꽃 1",
-            "desc": "꽃.",
-            "price": 10,
-            "iconimg": "he_fi_nature_flower_a01.dds",
-            "model": "he_fi_nature_flower_a01.model"
+            "ItemId": "EGGTOAST",
+            "ItemGrade": "NORMAL",
+            "Name": "에그 토스트",
+            "Desc": "지각이다 지각~",
+            "Price": 10,
+            "IconImg": "11050018.png",
+            "Model": "11050018_c_fheggtoast.model"
         }
+
 
     ]
 }

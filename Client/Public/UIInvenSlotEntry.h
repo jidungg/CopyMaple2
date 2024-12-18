@@ -9,6 +9,7 @@ BEGIN(Client)
 //우클릭 하면 아이템 장착 등
 class CUIIcon;
 class CInvenSlot;
+class CUIFont;
 class CUIInvenSlotEntry :
     public CUIButton, public IUIListItemEntry
 {
@@ -38,6 +39,8 @@ public:
 
 	virtual void Set_ListItemEntryActive(_bool bActive) override;
 	virtual void Set_Offset(_float iX, _float iY) override;
+	void Set_StackCount(_uint iCount);
+
 	const ITEM_DATA* Get_ItemDesc() { return(m_pItemDesc); }
 
 protected:
@@ -46,6 +49,8 @@ protected:
 	CUIIcon* m_pIcon = { nullptr };
 	_float4 m_vIconBorder = { 3,3,3,3 };
 	CUIList* m_pList = { nullptr };
+
+	CUIFont* m_pStackCountFont = { nullptr };
 public:
 	static CUIInvenSlotEntry* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

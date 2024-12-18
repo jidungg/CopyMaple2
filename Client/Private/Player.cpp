@@ -129,6 +129,17 @@ HRESULT CPlayer::Initialize(void* pArg)
 	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_SHOES);
 	Gain_Item(pItemDesc);
 
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::CONSUMABLE, (_uint)CONSUMABLE_ITEM_ID::HP_POTION);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::CONSUMABLE, (_uint)CONSUMABLE_ITEM_ID::HP_POTION);
+	Gain_Item(pItemDesc);
+
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::DECO, (_uint)DECO_ITEM_ID::EGGTOAST);
+	Gain_Item(pItemDesc);
+
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::ETC, (_uint)ETC_ITEM_ID::CHICKEN);
+	Gain_Item(pItemDesc);
+
 	UIBUNDLE->Set_QuickItem(KEY::Q, m_mapSkill[SKILL_ID::TELEPORT]);
 	UIBUNDLE->Set_QuickItem(KEY::W, m_mapSkill[SKILL_ID::BBQ_PARTY]);
 	UIBUNDLE->Set_QuickItem(KEY::E, m_mapSkill[SKILL_ID::FAKE_METEOR]);
@@ -167,7 +178,7 @@ HRESULT CPlayer::Ready_Parts(const json& jCustomData)
 	m_pCustomizes[(_uint)CUSTOMIZE_PART::HAIR]->Get_Transform()->Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(-90.f));
 
 
-	////FaceDeco
+	//FaceDeco
 	//tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
 	//strcpy_s(tBoneModelDesc.strModelProtoName, "01000001_c_lolipop.model");
 	//tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Head");//Bip01 HeadNub_end
@@ -1134,7 +1145,7 @@ void CPlayer::Set_Battle(bool bBattle)
 		static_cast<CWeapon*>(m_pEquipModels[(_uint)EQUIP_ITEM_TYPE::WEAPON])->Set_Battle(bBattle);
 }
 
-HRESULT CPlayer::Equip(EQUIP_ITEM_DATA* pItem)
+HRESULT CPlayer::Equip(const EQUIP_ITEM_DATA* pItem)
 {
 	assert(pItem != nullptr);
 

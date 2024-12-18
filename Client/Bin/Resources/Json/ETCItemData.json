@@ -1,32 +1,103 @@
 {
     "items": [
         {
-            "name": "풀 블록1",
-            "desc": "풀이 돋아난 블록.",
-            "price": 10,
-            "iconimg": "he_ground_grass_a01.dds",
-            "model": "he_ground_grass_a01.model"
+            "ItemId": "BOTTLE",
+            "ItemGrade": "NORMAL",
+            "Name": "생수병",
+            "Desc": "쓰레기.",
+            "Price": 10,
+            "IconImg": "30000230.png",
+            "Model": "EmptyModel.model"
         },
         {
-            "name": "돌 블록1",
-            "desc": "단단한 돌 블록.",
-            "price": 10,
-            "iconimg": "he_ground_rock_a01.dds",
-            "model": "he_ground_rock_a01.model"
+            "ItemId": "ROOT",
+            "ItemGrade": "NORMAL",
+            "Name": "뿌리",
+            "Desc": "약재가 될 수도?",
+            "Price": 10,
+            "IconImg": "30000231.png",
+            "Model": "EmptyModel.model"
         },
         {
-            "name": "부쉬 1",
-            "desc": "부쉬.",
-            "price": 10,
-            "iconimg": "he_fi_cubric_bush_a01.dds",
-            "model": "he_fi_cubric_bush_a01.model"
+            "ItemId": "CHERRY",
+            "ItemGrade": "NORMAL",
+            "Name": "산수유",
+            "Desc": "남자에게 참 좋은데.",
+            "Price": 10,
+            "IconImg": "30000232.png",
+            "Model": "EmptyModel.model"
         },
         {
-            "name": "꽃 1",
-            "desc": "꽃.",
-            "price": 10,
-            "iconimg": "he_fi_nature_flower_a01.dds",
-            "model": "he_fi_nature_flower_a01.model"
+            "ItemId": "SHROOM",
+            "ItemGrade": "NORMAL",
+            "Name": "버섯",
+            "Desc": "향긋한 냄새가 난다.",
+            "Price": 10,
+            "IconImg": "30000233.png",
+            "Model": "EmptyModel.model"
+        },
+        {
+            "ItemId": "MEAT",
+            "ItemGrade": "NORMAL",
+            "Name": "돼지 고기",
+            "Desc": "맛 있을듯.",
+            "Price": 10,
+            "IconImg": "30000240.png",
+            "Model": "EmptyModel.model"
+        },
+        {
+            "ItemId": "SALT",
+            "ItemGrade": "NORMAL",
+            "Name": "소금",
+            "Desc": "필수 조미료.",
+            "Price": 10,
+            "IconImg": "30000241.png",
+            "Model": "EmptyModel.model"
+        },
+        {
+            "ItemId": "PEPPER",
+            "ItemGrade": "NORMAL",
+            "Name": "후추",
+            "Desc": "필수 조미료2.",
+            "Price": 10,
+            "IconImg": "30000242.png",
+            "Model": "EmptyModel.model"
+        },
+        {
+            "ItemId": "CHICKEN",
+            "ItemGrade": "NORMAL",
+            "Name": "닭 고기",
+            "Desc": "국민 식재료.",
+            "Price": 10,
+            "IconImg": "30000243.png",
+            "Model": "EmptyModel.model"
+        },
+        {
+            "ItemId": "BAYAR_PIECE",
+            "ItemGrade": "NORMAL",
+            "Name": "바야르 조각",
+            "Desc": "에너지가 느껴진다.",
+            "Price": 10000,
+            "IconImg": "30000282.png",
+            "Model": "EmptyModel.model"
+        },
+        {
+            "ItemId": "GREEN_SNAIL",
+            "ItemGrade": "NORMAL",
+            "Name": "초록 달팽이",
+            "Desc": "귀여운 애완용 달팽이.",
+            "Price": 10,
+            "IconImg": "30000284.png",
+            "Model": "EmptyModel.model"
+        },
+        {
+            "ItemId": "WOOD_PIECE",
+            "ItemGrade": "NORMAL",
+            "Name": "나무 조각",
+            "Desc": "팔면 됨.",
+            "Price": 10,
+            "IconImg": "30000434.png",
+            "Model": "EmptyModel.model"
         }
 
     ]

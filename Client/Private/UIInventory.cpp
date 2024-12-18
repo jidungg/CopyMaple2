@@ -6,6 +6,7 @@
 #include "UIScroller.h"
 #include "InvenSlot.h"
 #include "UIInvenSlotEntry.h"
+#include "UIInvenTabButton.h"
 
 //TODO : 슬롯  SRV 이상함
 //TODO : BackPanel 이미지 이상함.
@@ -28,7 +29,7 @@ HRESULT CUIInventory::Initialize(void* pArg)
 	pInvenDesc->bDraggableY = true;
 	pInvenDesc->eAnchorType = CORNOR_TYPE::CENTER;
 	pInvenDesc->ePivotType = CORNOR_TYPE::CENTER;
-	pInvenDesc->fSizeX = m_iVisibleColCount * (m_fSlotSize.x + m_fCommonMargin.x) + m_fCommonMargin.x*5 + m_fTabButtonSize.x + m_fCommonButtonSize;
+	pInvenDesc->fSizeX = m_iVisibleColCount * (m_fSlotSize.x + m_fCommonMargin.x) + m_fCommonMargin.x*4 + m_fTabButtonSize.x + m_fCommonButtonSize;
 	pInvenDesc->fSizeY = m_fHeaderHeight + m_iVisibleRowCount* (m_fSlotSize.y + m_fCommonMargin.y) + m_fCommonMargin.y*3;
 	pInvenDesc->fXOffset = 0;
 	pInvenDesc->fYOffset = 0;
@@ -54,7 +55,7 @@ HRESULT CUIInventory::Ready_Slots()
 	tItemBackPanelDesc.ePivotType = CORNOR_TYPE::RIGHT_TOP;
 	tItemBackPanelDesc.fXOffset = -m_fCommonMargin.x;
 	tItemBackPanelDesc.fYOffset = m_fHeaderHeight + m_fCommonMargin.y;
-	tItemBackPanelDesc.fSizeX = fSize.x - m_fCommonMargin.x * 3 - m_fTabButtonSize.x;
+	tItemBackPanelDesc.fSizeX = fSize.x - m_fCommonMargin.x * 2 - m_fTabButtonSize.x;
 	tItemBackPanelDesc.fSizeY = fSize.y - m_fHeaderHeight - m_fCommonMargin.y*2;
 	tItemBackPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("UI_Texture_ItemListBack"), nullptr));
 	tItemBackPanelDesc.vBorder = { m_fCommonMargin.y,m_fCommonMargin.y,m_fCommonMargin.x,m_fCommonMargin.x };
@@ -62,54 +63,58 @@ HRESULT CUIInventory::Ready_Slots()
 	Add_Child(m_pItemBackPanel);
 
 
-	CUIListSelector::UILISTSELECTOR_DESC ListDesc{};
-	ListDesc.eAnchorType = CORNOR_TYPE::LEFT_TOP;
-	ListDesc.ePivotType = CORNOR_TYPE::LEFT_TOP;
-	ListDesc.fXOffset = m_fCommonMargin.x;
-	ListDesc.fYOffset = m_fCommonMargin.y;
-	ListDesc.fSizeX = tItemBackPanelDesc.fSizeX - m_fCommonButtonSize - m_fCommonMargin.x * 3;
-	ListDesc.fSizeY = tItemBackPanelDesc.fSizeY - m_fCommonMargin.y * 2;
-	ListDesc.fItemHeight = m_fSlotSize.y;
-	ListDesc.fItemWidth = m_fSlotSize.x;
-	ListDesc.fItemMarginX = m_fCommonMargin.x;
-	ListDesc.fItemMarginY = m_fCommonMargin.y;
-	ListDesc.iColumnCount = m_iVisibleColCount;
-
-	ListDesc.iRowCount = (_uint)ceilf((_float)m_pInventory->Get_Slots(m_eCurrentTab) ->size()/ (_float)m_iVisibleColCount);;
-	ListDesc.eHighlighterTexProtoLev = LEVEL_LOADING;
-	ListDesc.szHighlighterTexProtoTag = TEXT("UI_Texture_HighlightBorder");
-	vector< CInvenSlot*>* vecSlots = m_pInventory->Get_Slots(m_eCurrentTab);
-	list<ITEM_DATA*> listData;
-	for (auto& pSlot : *vecSlots)
-	{
-		listData.push_back(pSlot->Get_ItemData());
-	}
-	ListDesc.listData = &listData;
-	ListDesc.eItemEntryProtoLev = LEVEL_LOADING;
-	ListDesc.szItemEntryProtoTag =CUIInvenSlotEntry::m_szProtoTag;
-	m_pItemList = static_cast<CUIListSelector*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_UIList"), &ListDesc));
+	CUIListSelector::UILISTSELECTOR_DESC tListDesc{};
+	tListDesc.eAnchorType = CORNOR_TYPE::LEFT_TOP;
+	tListDesc.ePivotType = CORNOR_TYPE::LEFT_TOP;
+	tListDesc.fXOffset = m_fCommonMargin.x;
+	tListDesc.fYOffset = m_fCommonMargin.y;
+	tListDesc.fSizeX = tItemBackPanelDesc.fSizeX - m_fCommonButtonSize - m_fCommonMargin.x * 3;
+	tListDesc.fSizeY = tItemBackPanelDesc.fSizeY - m_fCommonMargin.y * 2;
+	tListDesc.fItemHeight = m_fSlotSize.y;
+	tListDesc.fItemWidth = m_fSlotSize.x;
+	tListDesc.fItemMarginX = m_fCommonMargin.x;
+	tListDesc.fItemMarginY = m_fCommonMargin.y;
+	tListDesc.iColumnCount = m_iVisibleColCount;
+	tListDesc.iRowCount = (_uint)ceilf((_float)m_pInventory->Get_Slots(m_eCurrentTab) ->size()/ (_float)m_iVisibleColCount);;
+	tListDesc.eHighlighterTexProtoLev = LEVEL_LOADING;
+	tListDesc.szHighlighterTexProtoTag = TEXT("UI_Texture_HighlightBorder");
+	tListDesc.eItemEntryProtoLev = LEVEL_LOADING;
+	tListDesc.szItemEntryProtoTag =CUIInvenSlotEntry::m_szProtoTag;
+	m_pItemList = static_cast<CUIListSelector*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_UIList"), &tListDesc));
 	m_pItemBackPanel->Add_Child(m_pItemList);
 
 	
-	CUIScroller::SCROLLBAR_DESC ScrollDesc{};
-	ScrollDesc.eAnchorType = CORNOR_TYPE::RIGHT_BOT;
-	ScrollDesc.ePivotType = CORNOR_TYPE::RIGHT_BOT;
-	ScrollDesc.fXOffset = -m_fCommonMargin.x;
-	ScrollDesc.fYOffset = -m_fCommonMargin.y;
-	ScrollDesc.fSizeX = m_fCommonButtonSize;
-	ScrollDesc.fSizeY = ListDesc.fSizeY;
-	ScrollDesc.iTotalRowCount = m_pItemList->Get_RowCount();
-	ScrollDesc.iVisibleRowCount = m_iVisibleRowCount;
-	ScrollDesc.pUIList = m_pItemList;
-	m_pScroller = static_cast<CUIScroller*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIScroller::m_szProtoTag, &ScrollDesc));
+	CUIScroller::SCROLLBAR_DESC tScrollDesc{};
+	tScrollDesc.eAnchorType = CORNOR_TYPE::RIGHT_BOT;
+	tScrollDesc.ePivotType = CORNOR_TYPE::RIGHT_BOT;
+	tScrollDesc.fXOffset = -m_fCommonMargin.x;
+	tScrollDesc.fYOffset = -m_fCommonMargin.y;
+	tScrollDesc.fSizeX = m_fCommonButtonSize;
+	tScrollDesc.fSizeY = tListDesc.fSizeY;
+	tScrollDesc.iTotalRowCount = m_pItemList->Get_RowCount();
+	tScrollDesc.iVisibleRowCount = m_iVisibleRowCount;
+	tScrollDesc.pUIList = m_pItemList;
+	m_pScroller = static_cast<CUIScroller*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIScroller::m_szProtoTag, &tScrollDesc));
 	m_pItemBackPanel->Add_Child(m_pScroller);
 
-	Set_InventoryTab(ITEM_TYPE::EQUIP);
 
+	CUIInvenTabButton::UIINVENTABBUTTON_DESC tTabButtonDesc;
+	tTabButtonDesc.eAnchorType = CORNOR_TYPE::LEFT_TOP;
+	tTabButtonDesc.fXOffset = m_fCommonMargin.x;
+	tTabButtonDesc.ePivotType = CORNOR_TYPE::LEFT_TOP;
+	tTabButtonDesc.fSizeX = m_fTabButtonSize.x;
+	tTabButtonDesc.fSizeY = m_fTabButtonSize.y;
+	tTabButtonDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("UI_Texture_TabButton"), nullptr));
 	for (_uint i = 0; i < (_uint)ITEM_TYPE::LAST; i++)
 	{
-		m_arrTabButton[i] = 
+		tTabButtonDesc.fYOffset = m_fCommonMargin.y +m_fHeaderHeight + m_fTabButtonSize.y*i;
+		tTabButtonDesc.pUIInventory = this;
+		tTabButtonDesc.eItemType = (ITEM_TYPE)i;
+		m_arrTabButton[i] = static_cast<CUIInvenTabButton*>( m_pGameInstance->Clone_Proto_Object_Stock(CUIInvenTabButton::m_szProtoTag,&tTabButtonDesc));
+		Add_Child(m_arrTabButton[i]);
 	}
+
+	Set_InventoryTab(ITEM_TYPE::EQUIP);
 	return S_OK;
 }
 
@@ -130,14 +135,20 @@ void CUIInventory::Set_InventoryTab(ITEM_TYPE eType)
 	//콜백함수 다 지우기
 	Clear_OnRightClickCallback();
 
-	//UI 리스트 사이즈 조정
-	m_pItemList->Resize((iSlotCount+1) / m_iVisibleColCount, m_iVisibleColCount);
+	//UI 리스트 & 스크롤러 사이즈 조정
+	_uint iNewRowCount = (iSlotCount + 1) / m_iVisibleColCount;
+	m_pItemList->Resize(iNewRowCount, m_iVisibleColCount);
+	m_pItemList->Select_Item(0);
+	m_pScroller->Set_RowCounts(iNewRowCount,m_iVisibleRowCount);
+	m_pScroller->Set_CursorRow(0);
 
 	//데이터 셋팅
-	list<ITEM_DATA*> listData;
+	list<const ITEM_DATA*> listData;
 	for (auto& pSlot : *vecSlots)
+	{
 		listData.push_back(pSlot->Get_ItemData());
-	m_pItemList->Set_ItemData(&listData);
+	}
+ 	m_pItemList->Set_ItemData(&listData);
 
 	//콜백 다시 셋팅
 	for (_uint i = 0; i < iSlotCount; i++)
@@ -146,10 +157,16 @@ void CUIInventory::Set_InventoryTab(ITEM_TYPE eType)
 		m_pItemList->Register_OnRightClickCallback(i, f);
 	}
 
+	for (auto& pTabButton : m_arrTabButton)
+	{
+		pTabButton->Set_Selected(m_eCurrentTab == pTabButton->Get_ItemType());
+	}
 }
 
 void CUIInventory::Update_Slot(_uint iIndex, ITEM_DATA* pData)
 {
+	if (nullptr != pData && m_eCurrentTab != pData->eITemType)
+		return;
 	m_pItemList->Set_ItemData(iIndex, pData);
 }
 

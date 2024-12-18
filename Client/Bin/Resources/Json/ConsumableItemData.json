@@ -1,33 +1,15 @@
 {
     "items": [
         {
-            "name": "풀 블록1",
-            "desc": "풀이 돋아난 블록.",
-            "price": 10,
-            "iconimg": "he_ground_grass_a01.dds",
-            "model": "he_ground_grass_a01.model"
-        },
-        {
-            "name": "돌 블록1",
-            "desc": "단단한 돌 블록.",
-            "price": 10,
-            "iconimg": "he_ground_rock_a01.dds",
-            "model": "he_ground_rock_a01.model"
-        },
-        {
-            "name": "부쉬 1",
-            "desc": "부쉬.",
-            "price": 10,
-            "iconimg": "he_fi_cubric_bush_a01.dds",
-            "model": "he_fi_cubric_bush_a01.model"
-        },
-        {
-            "name": "꽃 1",
-            "desc": "꽃.",
-            "price": 10,
-            "iconimg": "he_fi_nature_flower_a01.dds",
-            "model": "he_fi_nature_flower_a01.model"
+            "ItemId": "HP_POTION",
+            "ItemGrade": "NORMAL",
+            "Name": "체력 회복 포션",
+            "Desc": "체력을 1000 회복합니다.",
+            "Price": 100,
+            "IconImg": "20000022.png",
+            "Model": "EmptyModel.model",
+            "ConsumType": "HP",
+            "Value": 1000
         }
-
     ]
 }

@@ -15,7 +15,7 @@ const _char* CPlayerEquipSlot::Get_IconTag()
 		return nullptr;
 }
 
-HRESULT CPlayerEquipSlot::Insert_Item(EQUIP_ITEM_DATA* pData)
+HRESULT CPlayerEquipSlot::Insert_Item(const EQUIP_ITEM_DATA* pData)
 {
 	assert(pData != nullptr);
 	if (pData->eITemType != ITEM_TYPE::EQUIP)
@@ -27,9 +27,9 @@ HRESULT CPlayerEquipSlot::Insert_Item(EQUIP_ITEM_DATA* pData)
 	return S_OK;
 }
 
-EQUIP_ITEM_DATA* CPlayerEquipSlot::Pop_Item()
+const EQUIP_ITEM_DATA* CPlayerEquipSlot::Pop_Item()
 {
-	EQUIP_ITEM_DATA* pItem = m_pItemDesc;
+	const EQUIP_ITEM_DATA* pItem = m_pItemDesc;
 	m_pItemDesc = nullptr;
 	return pItem;
 }

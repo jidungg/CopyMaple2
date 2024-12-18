@@ -71,7 +71,11 @@ inline void CObjectPool<T>::Retrive_False_Object(_bool(*func)(T*))
 template<class T>
 inline T* CObjectPool<T>::Get_Object()
 {
-	assert(false == m_queStockObject.empty());
+	if (m_queStockObject.empty())
+	{
+		T* pClone = static_cast<T*>(m_pOriginal->Clone(m_pArg));
+		m_queStockObject.push(pClone);
+	}
 
 	T* pObject = m_queStockObject.front();
 	m_queStockObject.pop();

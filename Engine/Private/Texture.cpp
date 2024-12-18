@@ -100,7 +100,7 @@ HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle)
 		//{
 		//	string strFileName = szFileName;
 		//	strFileName += szExt;
-		//	hr = Search_Copy("D:/Workbench/Portfolio/3DResources/MapleStroty2/RawData/Resource/", strFileName, szDirPath);
+		//	hr = Search_Copy("D:/Workbench/Resources/3DResources/MapleStroty2/RawData/Resource/", strFileName, szDirPath);
 		//	if(SUCCEEDED(hr))
 		//		hr = CreateDDSTextureFromFile(m_pDevice, szWideFullPath, nullptr, &pSRV);
 		//}
@@ -182,6 +182,9 @@ HRESULT CTexture::Search_Copy(const fs::path& pathSourceDir, const std::string& 
 {
 	// 디렉토리가 존재하지 않으면 실패
 	if (!fs::exists(pathDestDir)) {
+		return E_FAIL;
+	}
+	if (!fs::exists(pathSourceDir)) {
 		return E_FAIL;
 	}
 

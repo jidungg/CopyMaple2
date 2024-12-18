@@ -29,6 +29,9 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render() override;
 
+	void Set_Text(const _tchar* pText);
+
+	_float2 Get_TextSize(const _tchar* pText);
 private:
 	CCustomFont* m_pFont = { nullptr };
 	const _tchar* m_pText = { nullptr };

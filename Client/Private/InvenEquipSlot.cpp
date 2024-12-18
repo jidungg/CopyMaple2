@@ -25,7 +25,7 @@ void CInvenEquipSlot::On_LeftClick(void*)
 
 EQUIP_ITEM_TYPE CInvenEquipSlot::Get_EquipType()
 {
-	EQUIP_ITEM_DATA* pEqDesc = static_cast<EQUIP_ITEM_DATA*>( Get_ItemData());
+	const EQUIP_ITEM_DATA* pEqDesc = static_cast<const EQUIP_ITEM_DATA*>( Get_ItemData());
 	return pEqDesc->eEquipType;
 }
 

@@ -44,15 +44,19 @@ HRESULT CUIPanel::Initialize(void* pArg)
 
 HRESULT CUIPanel::Render()
 {
-	if (FAILED(Bind_ShaderResources()))
-		return E_FAIL;
-	if (m_pShaderCom)
-		m_pShaderCom->Begin(0);
-	if (m_pVIBufferCom)
+	if (m_iSRVIndex != UINT_MAX)
 	{
-		m_pVIBufferCom->Bind_BufferDesc();
-		m_pVIBufferCom->Render();
+		if (FAILED(Bind_ShaderResources()))
+			return E_FAIL;
+		if (m_pShaderCom)
+			m_pShaderCom->Begin(0);
+		if (m_pVIBufferCom)
+		{
+			m_pVIBufferCom->Bind_BufferDesc();
+			m_pVIBufferCom->Render();
+		}
 	}
+
 
 	for (auto& child : m_pChilds)
 		if (child->Is_Active())
@@ -63,6 +67,7 @@ HRESULT CUIPanel::Render()
 
 HRESULT CUIPanel::Bind_ShaderResources()
 {
+
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
@@ -79,8 +84,8 @@ HRESULT CUIPanel::Bind_ShaderResources()
 			return E_FAIL;
 	}
 	if (m_pTextureCom)
-		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iSRVIndex)))
-			return E_FAIL;
+			if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iSRVIndex)))
+				return E_FAIL;
 
 	return S_OK;
 }
@@ -108,6 +113,7 @@ HRESULT CUIPanel::Ready_Components()
 void CUIPanel::Set_Texture(CTexture* pTexture)
 {
 	Remove_Component(m_pTextureCom);
+	Safe_Release(m_pTextureCom);
 	m_pTextureCom = pTexture;
 	if (nullptr == pTexture)return;
 

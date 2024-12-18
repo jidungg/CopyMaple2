@@ -18,7 +18,7 @@ public:
 		_float fItemWidth = 50;
 		_uint iItemXCount = 10;
 		_uint iItemYCount = 2;
-		list<ITEM_DATA*>* listData;
+		list<const ITEM_DATA*>* listData;
 	}HOMEDIALOG_DESC;
 
 protected:

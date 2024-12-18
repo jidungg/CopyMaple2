@@ -19,7 +19,7 @@ HRESULT CUIListSelector::Initialize_Prototype()
 }
 
 HRESULT CUIListSelector::Initialize(void* pArg)
-{
+ {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 

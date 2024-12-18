@@ -48,6 +48,8 @@ public:
 	_float2 Get_PivotPosition(CORNOR_TYPE ePivotType);
 	_float2 Get_AnchorPosition(CORNOR_TYPE eAnchorType);
 	_float4 Get_MinMax();
+	CORNOR_TYPE Get_PivotType() { return m_ePivotType; }
+	CORNOR_TYPE Get_AnchorType() { return m_eAnchorType; }
 	_bool Is_InRect(_float2 vPosition);
 public:
 	static _float2 Get_CornorRatio(CORNOR_TYPE ePivotType);

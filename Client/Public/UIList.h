@@ -22,10 +22,10 @@ public:
 		float fItemMarginY = 5;
 		_uint iColumnCount = 10;
 		_uint iRowCount = 10;
+		_uint iObjectPoolSize = 200;
 
 		LEVELID eItemEntryProtoLev;
 		const _tchar* szItemEntryProtoTag;
-		list<ITEM_DATA*>* listData;
 
 		CUIScroller::SCROLLBAR_DESC tScrollerDesc = {};
 	}UILIST_DESC;
@@ -44,8 +44,8 @@ public:
 
 	void Set_YOffset(_float fYPos);
 	//UIEntry의 크기는 늘어나지 않으므로, Row,Column을 먼저 세팅해야 함.
-	HRESULT Set_ItemData(list<ITEM_DATA*>* listData);
-	HRESULT Set_ItemData(_uint iIdx, ITEM_DATA* pData);
+	HRESULT Set_ItemData(list<const ITEM_DATA*>* listData);
+	HRESULT Set_ItemData(_uint iIdx, const ITEM_DATA* pData, _uint iItemCount = 1);
 	HRESULT Resize(_uint iRow, _uint iCol);
 	void Reposition();
 	void Set_VisibleRowStart(_uint iRow) { m_iVisibleRowStart = iRow; }
@@ -102,8 +102,8 @@ public:
 	}
 	virtual void Free() override
 	{
-		__super::Free();
 		Safe_Release(m_pItemEntryPool);
+		__super::Free();
 	}
 };
 

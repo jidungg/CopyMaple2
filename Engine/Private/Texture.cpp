@@ -10,6 +10,7 @@ CTexture::CTexture(const CTexture & Prototype)
 	: CComponent{ Prototype }
 	, m_iNumSRVs { Prototype.m_iNumSRVs }
 	, m_SRVs { Prototype.m_SRVs }
+	, m_wstrTextureName{ Prototype.m_wstrTextureName }
 {
 	for (auto& pSRV : m_SRVs)
 		Safe_AddRef(pSRV);
@@ -26,9 +27,10 @@ HRESULT CTexture::Initialize_Prototype(const _tchar * pTextureFilePath, _uint iN
 		wsprintf(szTextureFilePath, pTextureFilePath, i);
 
 		_tchar		szEXT[MAX_PATH] = TEXT("");
+		_tchar		szFileName[MAX_PATH] = TEXT("");
 
-		_wsplitpath_s(szTextureFilePath, nullptr, 0, nullptr, 0, nullptr, 0, szEXT, MAX_PATH);
-
+		_wsplitpath_s(szTextureFilePath, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szEXT, MAX_PATH);
+		m_wstrTextureName = szFileName;
 		HRESULT		hr = {};
 
 		ID3D11ShaderResourceView*		pSRV = { nullptr };
@@ -70,9 +72,10 @@ HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle)
 		_char* strTexturePath = new _char[strLen + 1];
 		inFIle.read(strTexturePath, sizeof(_char) * strLen);
 		strTexturePath[strLen] = '\0';
-		//cout << strTexturePath << endl;
-
-
+		//cout << strTexturePath << endl;z
+		string strTexturePathStr = strTexturePath;
+		m_wstrTextureName = wstring( strTexturePathStr.begin(), strTexturePathStr.end());
+		
 		_char		szFileName[MAX_PATH] = "";
 		_char		szExt[MAX_PATH] = "";
 

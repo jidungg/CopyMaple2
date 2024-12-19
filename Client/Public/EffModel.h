@@ -39,10 +39,11 @@ public:
 public:
     _uint Get_NumMeshes() const { return m_iNumMeshes; }
     _uint Get_BoneIndex(const _char* pBoneName) const;
+	_uint Get_TextureIndex(const _tchar* pTextureName) const;
 
     void Set_Loop(bool bLoop) { m_bLoop = bLoop; }
     void Set_AnimSpeed(_float fSpeed);
-; 
+    void Set_Texture(_uint iIdx , CTexture* pTexture);
 protected:
     HRESULT Ready_Bones(ifstream& inFile, _uint iParentBoneIndex);
     HRESULT Ready_Meshes(ifstream& inFile);

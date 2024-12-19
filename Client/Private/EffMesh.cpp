@@ -21,6 +21,14 @@
 #define BLEND_DST_ALPHA					0b1000
 #define BLEND_INV_DST_ALPHA			0b1001
 
+#define TEST_ALWAYS							0b000
+#define TEST_LESS								0b001
+#define TEST_EQUAL								0b010
+#define TEST_LEQUAL							0b011
+#define TEST_GREATER							0b100
+#define TEST_NOTEQUAL						0b101
+#define TEST_GEQUAL							0b110
+#define TEST_NEVER								0b111
 
 CEffMesh::CEffMesh(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CVIBuffer(pDevice, pContext)
@@ -62,8 +70,12 @@ HRESULT CEffMesh::Initialize_Prototype(CEffModel* pModel, ifstream& inFile, _fma
 	inFile.read(reinterpret_cast<char*>(&sAlphaFlags), sizeof(_ushort));
 
 	m_tBlendDesc = Read_BlendDescFromFlags(sAlphaFlags);
+	m_tDepthStencilDesc = Read_TestDescFromFlags(sAlphaFlags);
 
 	HRESULT hr = m_pDevice->CreateBlendState(&m_tBlendDesc, &m_pBlendState);
+	if (FAILED(hr))
+		return E_FAIL;
+	hr = m_pDevice->CreateDepthStencilState(&m_tDepthStencilDesc, &m_pDepthStencilState);
 	if (FAILED(hr))
 		return E_FAIL;
 	return S_OK;
@@ -100,15 +112,16 @@ void CEffMesh::ReSet_OffsetMarix()
 	}
 }
 
-HRESULT CEffMesh::Set_BlendState()
+HRESULT CEffMesh::Set_AlphaState()
 {
 	//m_pContext->OMGetBlendState(&m_pOriginalBlendState, m_arrOriginalBlendFactor, m_pOriginalBlendMask);
 
+	m_pContext->OMSetDepthStencilState(m_pDepthStencilState, 0x00);
 	m_pContext->OMSetBlendState(m_pBlendState, m_arrBlendFactor, m_iSampleMask);
 	return S_OK;
 }
 
-HRESULT CEffMesh::Unset_BlendState()
+HRESULT CEffMesh::Unset_AlphaState()
 {
 	//m_pContext->OMSetBlendState(m_pOriginalBlendState, m_arrOriginalBlendFactor, *m_pOriginalBlendMask);
 
@@ -269,8 +282,8 @@ D3D11_BLEND_DESC CEffMesh::Read_BlendDescFromFlags(_ushort& Flags)
 	tBlendDesc.IndependentBlendEnable = TRUE;
 	tBlendDesc.RenderTarget[0].BlendEnable = Flags & ALPHA_ENABLE_MASK;
 	Flags >>= 1;
-	tBlendDesc.RenderTarget[0].SrcBlend = Read_BlendModeFromFlags(Flags);
-	tBlendDesc.RenderTarget[0].DestBlend = Read_BlendModeFromFlags(Flags);
+	tBlendDesc.RenderTarget[0].SrcBlend =  Read_BlendModeFromFlags(Flags);
+	tBlendDesc.RenderTarget[0].DestBlend =Read_BlendModeFromFlags(Flags);
 	tBlendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 	tBlendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
 	tBlendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
@@ -324,6 +337,58 @@ D3D11_BLEND CEffMesh::Read_BlendModeFromFlags(_ushort& Flag)
 	return tBlend;
 }
 
+D3D11_DEPTH_STENCIL_DESC CEffMesh::Read_TestDescFromFlags(_ushort& Flag)
+{
+	D3D11_DEPTH_STENCIL_DESC tTestDesc = {};
+
+	tTestDesc.DepthEnable = (Flag & 0b1);
+	Flag >>= 1;
+	tTestDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	tTestDesc.DepthFunc = Read_TestModeFromFlags(Flag);
+
+	tTestDesc.DepthEnable = true;
+	//tTestDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	return tTestDesc;
+}
+
+D3D11_COMPARISON_FUNC CEffMesh::Read_TestModeFromFlags(_ushort& Flag)
+{
+	_ushort tmpFlag = Flag & 0b111;
+	D3D11_COMPARISON_FUNC eTestFunc = D3D11_COMPARISON_LESS;
+
+	switch (tmpFlag)
+	{
+	case TEST_ALWAYS:
+		eTestFunc = D3D11_COMPARISON_ALWAYS;
+		break;
+	case TEST_LESS:
+		eTestFunc = D3D11_COMPARISON_GREATER;
+		break;
+	case TEST_EQUAL:
+		eTestFunc = D3D11_COMPARISON_EQUAL;
+		break;
+	case TEST_LEQUAL:
+		eTestFunc = D3D11_COMPARISON_GREATER_EQUAL;
+		break;
+	case TEST_GREATER:
+		eTestFunc = D3D11_COMPARISON_LESS;
+		break;
+	case TEST_NOTEQUAL:
+		eTestFunc = D3D11_COMPARISON_NOT_EQUAL;
+		break;
+	case TEST_GEQUAL:
+		eTestFunc = D3D11_COMPARISON_LESS_EQUAL;
+		break;
+	case TEST_NEVER:
+		eTestFunc = D3D11_COMPARISON_NEVER;
+		break;
+	default:
+		break;
+	}
+	Flag >>= 3;
+	return eTestFunc;
+}
+
 CEffMesh* CEffMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CEffModel* pModel, ifstream& inFile, _fmatrix PreTransformMatrix)
 {
 
@@ -346,4 +411,5 @@ void CEffMesh::Free()
 {
 	__super::Free();
 	Safe_Release(m_pBlendState);
+	Safe_Release(m_pDepthStencilState);
 }

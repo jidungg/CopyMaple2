@@ -21,15 +21,15 @@ public:
 	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName, _uint iSRVIndex = 0);
 	HRESULT Push_Texture(const _tchar* szPath);
 	HRESULT Push_Texture(ID3D11ShaderResourceView* pSRV);
-
+	const wstring& Get_TextureName() { return m_wstrTextureName; }
 #ifdef _DEBUG
 private:
 	HRESULT Search_Copy(const fs::path& pathSourceDir, const std::string& strFileName, const fs::path& pathDestDir);
 #endif
 protected:
-	_uint										m_iNumSRVs = { 0 };
-	vector<ID3D11ShaderResourceView*>			m_SRVs;
-
+	_uint	 m_iNumSRVs = { 0 };
+	vector<ID3D11ShaderResourceView*>	m_SRVs;
+	wstring m_wstrTextureName;
 public:
 	static CTexture* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, ID3D11ShaderResourceView* pSRV);
 	static CTexture* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pTextureFilePath, _uint iNumTextures = 1);

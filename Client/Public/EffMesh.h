@@ -20,8 +20,8 @@ public:
 	//셰이더에 본 행렬을 바인딩
 	HRESULT Bind_BoneMatrices(CShader* pShader, const _char* pConstantName, const vector<CEffBone*>& Bones);
 	void ReSet_OffsetMarix();
-	HRESULT Set_BlendState();
-	HRESULT Unset_BlendState();
+	HRESULT Set_AlphaState();
+	HRESULT Unset_AlphaState();
 public:
 	HRESULT Ready_VertexBuffer(ifstream& inFile, class CEffModel* pModel);
 	HRESULT Ready_IndexBuffer(ifstream& inFile, class CEffModel* pModel, _uint iNumFaces);
@@ -32,6 +32,8 @@ public:
 protected:
 	D3D11_BLEND_DESC Read_BlendDescFromFlags(_ushort& Flags);
 	D3D11_BLEND Read_BlendModeFromFlags(_ushort& Flag);
+	D3D11_DEPTH_STENCIL_DESC Read_TestDescFromFlags(_ushort& Flag);
+	D3D11_COMPARISON_FUNC Read_TestModeFromFlags(_ushort& Flag);
 private:
 	_int						m_iMaterialIndex = {-1};
 	//vector<_uint>      m_iMaterialControllerIndex;
@@ -51,6 +53,11 @@ private:
 	ID3D11BlendState* m_pOriginalBlendState ;
 	_float m_arrOriginalBlendFactor[4] = { 1.f,1.f,1.f,1.f };
 	_uint* m_pOriginalBlendMask ;
+
+	D3D11_DEPTH_STENCIL_DESC m_tDepthStencilDesc;
+	_float m_fTestThreshold = 0.0f;
+	ID3D11DepthStencilState* m_pDepthStencilState = { nullptr };
+	ID3D11DepthStencilState* m_pOriginalDepthStencilState = { nullptr };
 public:
 	static CEffMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, CEffModel* pModel, ifstream& inFile, _fmatrix PreTransformMatrix);
 	virtual CComponent* Clone(void* pArg) override;

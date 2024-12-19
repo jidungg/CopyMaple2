@@ -72,6 +72,7 @@
 #include "EffModelObject.h"
 #include "EffectManager.h"
 #include "AttachableBodyPart.h"
+#include "WorldItem.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -491,6 +492,10 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CAttachableBodyPart::m_szProtoTag,
 		CAttachableBodyPart::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CWorldItem::m_szProtoTag,
+		CWorldItem::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

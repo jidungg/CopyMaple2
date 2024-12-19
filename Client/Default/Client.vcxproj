@@ -294,6 +294,7 @@
     <ClInclude Include="..\Public\WayFinder.h" />
     <ClInclude Include="..\Public\Weapon.h" />
     <ClInclude Include="..\Public\WildFire.h" />
+    <ClInclude Include="..\Public\WorldItem.h" />
     <ClInclude Include="..\Public\WorldUIObject.h" />
     <ClInclude Include="Client_Utility.h" />
     <ClInclude Include="Client.h" />
@@ -426,6 +427,7 @@
     <ClCompile Include="..\Private\WayFinder.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />
     <ClCompile Include="..\Private\WildFire.cpp" />
+    <ClCompile Include="..\Private\WorldItem.cpp" />
     <ClCompile Include="..\Private\WorldUIObject.cpp" />
     <ClCompile Include="..\Public\UIItemIndicator.cpp" />
     <ClCompile Include="Client.cpp" />

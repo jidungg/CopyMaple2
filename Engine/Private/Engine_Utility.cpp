@@ -30,3 +30,18 @@ void CEngineUtility::Scale_Matrix(_matrix& outmatSrc, _float fX, _float fY, _flo
 	outmatSrc.r[1] = XMVector3Normalize(outmatSrc.r[1]) * fY;
 	outmatSrc.r[2] = XMVector3Normalize(outmatSrc.r[2]) * fZ;
 }
+
+_vector CEngineUtility::Parabolic_Interpolation(_fvector vStart, _fvector vEnd, _float fJumpHeight, _float fArrivalTime, _float fCurrentTime, _float fGravity)
+{
+	_float fMaxHeight = vStart.m128_f32[1] + fJumpHeight;
+	_float fTimeRatio = fCurrentTime / fArrivalTime;
+	_vector vResult = {};
+	vResult.m128_f32[0]= fTimeRatio *(vEnd.m128_f32[0] - vStart.m128_f32[0]);
+	vResult.m128_f32[2]= fTimeRatio * (vEnd.m128_f32[2] - vStart.m128_f32[2]) ;
+
+	_float fInitialVelocityY = fMaxHeight * 2 / fArrivalTime;
+	vResult.m128_f32[1] = vStart.m128_f32[1] + fInitialVelocityY * fTimeRatio  -fGravity*fTimeRatio*fTimeRatio * 0.5f;
+
+	return vResult;
+}
+

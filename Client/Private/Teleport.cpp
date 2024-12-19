@@ -20,8 +20,7 @@ HRESULT CTeleport::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_wizard_teleport_cast_01_a.effmodel");
 	m_pCastEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pCastEffect->Set_Active(false);
-	m_pCastEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0,0.01,0,1 });
-	m_pUser->Add_Child(m_pCastEffect);
+//m_pUser->Add_Child(m_pCastEffect);
 
 	return S_OK;
 }
@@ -29,12 +28,18 @@ HRESULT CTeleport::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 void CTeleport::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
-
+	if (m_pCastEffect->Is_Active())
+		m_pCastEffect->Update(fTimeDelta);
 }
 
 void CTeleport::Late_Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
+	if (m_pCastEffect->Is_Active())
+	{
+		m_pCastEffect->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect);
+	}
 
 }
 
@@ -43,6 +48,10 @@ void CTeleport::Fire()
 	m_pUser->Move_Forward(m_pSkillDesc->vecData[m_pSkillDesc->iLevel - 1]);
 	m_pCastEffect->Start_Animation();
 	m_pCastEffect->Set_Active(true);
+	_vector vPos = m_pUser->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+	vPos += _vector{ 0,0.01,0,0 };
+	m_pCastEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos);
+
 }
 
 void CTeleport::On_SkillUsed()

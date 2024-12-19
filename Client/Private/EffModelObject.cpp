@@ -171,7 +171,7 @@ CEffModelObject* CEffModelObject::Create(ID3D11Device* pDevice, ID3D11DeviceCont
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CEffect");
+		MSG_BOX("Failed to Created : CEffModelObject");
 		Safe_Release(pInstance);
 	}
 
@@ -184,7 +184,7 @@ CGameObject* CEffModelObject::Clone(void* pArg)
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CEffect");
+		MSG_BOX("Failed to Cloned : CEffModelObject");
 		Safe_Release(pInstance);
 	}
 

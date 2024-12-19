@@ -52,7 +52,7 @@ protected:
 private:
 	virtual HRESULT Ready_Components(void* pArg);
 	HRESULT Bind_ShaderResources(CShader* pShader);
-private:
+protected:
 	CEffModel* m_pModelCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
 

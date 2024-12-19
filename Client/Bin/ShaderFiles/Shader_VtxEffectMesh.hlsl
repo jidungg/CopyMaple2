@@ -185,7 +185,7 @@ PS_OUT PS_MAIN(PS_IN In)
     {
         In.vTexcoord[0] = saturate(In.vTexcoord[1]);
         float4 vDarkColor = g_DarkTexture.Sample(LinearSampler, In.vTexcoord[1]);
-        vCombinedBaseColor *= (1 - vDarkColor);
+        vCombinedBaseColor *= (vDarkColor);
     }
 
     // Add Detail Texture
@@ -227,7 +227,7 @@ PS_OUT PS_MAIN(PS_IN In)
     vFinalColor.a *= g_fMaterialAlpha;
 
     Out.vColor = vFinalColor;
-    if (Out.vColor.a <= 0.05)
+    if (Out.vColor.a <= 0.0)
         discard;
     return Out;
  }
@@ -239,7 +239,7 @@ technique11 DefaultTechnique
     pass DefaultPass
     {
         SetRasterizerState(RS_Cull_None);
-        SetDepthStencilState(DSS_Default, 0);
+
 
         VertexShader = compile vs_5_0 VS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN();

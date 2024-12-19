@@ -132,13 +132,13 @@ HRESULT CEffModel::Render(CShader* pShader)
 
         if (FAILED(m_vecMesh[i]->Bind_BufferDesc()))
             return E_FAIL;
-        if (FAILED(m_vecMesh[i]->Set_BlendState()))
+        if (FAILED(m_vecMesh[i]->Set_AlphaState()))
             return E_FAIL;
         if (FAILED(pShader->Begin(0)))
             return E_FAIL;
         if (FAILED((m_vecMesh[i]->Render())))
             return E_FAIL;
-        if (FAILED(m_vecMesh[i]->Unset_BlendState()))
+        if (FAILED(m_vecMesh[i]->Unset_AlphaState()))
             return E_FAIL;
     }
 
@@ -240,11 +240,29 @@ _uint CEffModel::Get_BoneIndex(const _char* pBoneName) const
     return iBoneIndex;
 }
 
+_uint CEffModel::Get_TextureIndex(const _tchar* pTextureName) const
+{
+	for (_uint i = 0; i < m_vecTexture.size(); i++)
+	{
+		if (0 == lstrcmpW(m_vecTexture[i]->Get_TextureName().c_str(), pTextureName))
+			return i;
+	}
+    return UINT_MAX;
+}
+
 void CEffModel::Set_AnimSpeed(_float fSpeed)
 {
     m_fSpeed = fSpeed;
 	for (auto& pController : m_vecControl)
 		pController->Set_Speed(fSpeed);
+}
+
+void CEffModel::Set_Texture(_uint iIdx, CTexture* pTexture)
+{
+    if (iIdx >= m_vecTexture.size())
+        return;
+    Safe_Release(m_vecTexture[iIdx]);
+    m_vecTexture[iIdx] = pTexture;
 }
 
 HRESULT CEffModel::Ready_Bones(ifstream& inFile, _uint iParentBoneIndex)

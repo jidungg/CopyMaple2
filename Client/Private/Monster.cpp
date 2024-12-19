@@ -47,6 +47,7 @@ HRESULT CMonster::Initialize(void* pArg)
 	m_fChaseRange = m_pMonData->fChaseRange;
 	m_mapAnimIdx = m_pMonData->mapAnimIdx;
 	m_vHomePos = pDesc->vHomePos; 
+	m_pCubeTerrain = pDesc->pCubeTerrain;
 
 	m_fRandomMoveTime = m_pGameInstance->Get_RandomFloat(5,10);
 
@@ -72,7 +73,6 @@ HRESULT CMonster::Initialize(void* pArg)
 	Set_Position(m_vHomePos);
 
 	CWayFinder::WAYFINDER_DESC tDesc;
-	m_pCubeTerrain = pDesc->pCubeTerrain;
 	tDesc.pCubeTerrain = m_pCubeTerrain;
 	m_pWayFinder = CWayFinder::Create(m_pDevice, m_pContext);
 	m_pWayFinder->Initialize(&tDesc);

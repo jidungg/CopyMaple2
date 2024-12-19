@@ -47,6 +47,7 @@ HRESULT CLevel_Logo::Initialize(void* pArg)
 	if (FAILED(EFFECT_MANAGER->Initialize(m_pDevice, m_pContext)))
 		return E_FAIL;
 
+	UIBUNDLE->Initialize_PlayerInfo(PLAYERINIFO->Get_Player());
 	return S_OK;
 }
 

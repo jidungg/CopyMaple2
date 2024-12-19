@@ -26,7 +26,6 @@ private:
 public:
 	virtual HRESULT Initialize(void* pArg) override;
 
-	virtual void Late_Update(_float fTimeDelta) override;
 	HRESULT Ready_Slots();
 
 	void Set_InventoryTab(ITEM_TYPE eType);

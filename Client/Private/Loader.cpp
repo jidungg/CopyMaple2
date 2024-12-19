@@ -33,6 +33,8 @@
 #include "BackGround.h"
 #include "UIInvenTabButton.h"
 #include "UIInvenItemList.h"
+#include "UIPlayerInfo.h"
+#include "UIVerticalFill.h"
 
 #include "StateMachine.h"
 #include "SkillManager.h"
@@ -169,11 +171,17 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_30"), TEXT("../Bin/Resources/Fonts/Lev2_30.spritefont"))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_Bold_10"), TEXT("../Bin/Resources/Fonts/Lev2_Bold_10.spritefont"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_Bold_13"), TEXT("../Bin/Resources/Fonts/Lev2_Bold_13.spritefont"))))
+		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_Bold_15"), TEXT("../Bin/Resources/Fonts/Lev2_Bold_15.spritefont"))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_Bold_30"), TEXT("../Bin/Resources/Fonts/Lev2_Bold_30.spritefont"))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_Medium_10"), TEXT("../Bin/Resources/Fonts/Lev2_Medium_10.spritefont"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_Medium_13"), TEXT("../Bin/Resources/Fonts/Lev2_Medium_13.spritefont"))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_Medium_15"), TEXT("../Bin/Resources/Fonts/Lev2_Medium_15.spritefont"))))
 		return E_FAIL;
@@ -247,6 +255,9 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/"), TEXT(".dds"))))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
+		TEXT("../Bin/Resources/Textures/UI/MainHPBar/"), TEXT(".dds"))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더 로드."));
@@ -452,6 +463,12 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIInvenTabButton::m_szProtoTag,
 		CUIInvenTabButton::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIPlayerInfo::m_szProtoTag,
+		CUIPlayerInfo::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_UI_IntVerticalFill"),
+		CUIVerticalFill<_int>::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,

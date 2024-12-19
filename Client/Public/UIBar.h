@@ -21,7 +21,7 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	void Update_Ratio(_float fRatio);
-	virtual void Late_Update(_float fTimeDelta) override;
+
 	virtual HRESULT Render()override;
 
 private:

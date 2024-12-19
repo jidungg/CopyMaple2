@@ -72,6 +72,8 @@ public:
 	_float Get_AnimationProgress(_uint iAnimIdx);
 	TEAM Get_Team() { return m_eTeam; }
 	Stat Get_Stat() { return m_tStat; }
+	Stat* Get_Stat_Ref() { return &m_tStat; }
+	Stat* Get_DefaultStat_Ref() { return &m_tStatDefault; }
 	_bool Judge_Critical();
 
 	const _float4x4* Get_BoneMatrix(const _char* szBoneName);

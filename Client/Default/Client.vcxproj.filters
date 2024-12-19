@@ -246,6 +246,8 @@
     <ClInclude Include="..\Public\InvenConsumableSlot.h" />
     <ClInclude Include="..\Public\InvenBuildSlot.h" />
     <ClInclude Include="..\Public\InvenETCSlot.h" />
+    <ClInclude Include="..\Public\UIPlayerInfo.h" />
+    <ClInclude Include="..\Public\UIVerticalFill.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -431,6 +433,8 @@
     <ClCompile Include="..\Private\InvenBuildSlot.cpp" />
     <ClCompile Include="..\Private\InvenETCSlot.cpp" />
     <ClCompile Include="..\Private\InvenConsumableSlot.cpp" />
+    <ClCompile Include="..\Private\UIPlayerInfo.cpp" />
+    <ClCompile Include="..\Private\UIVerticalFill.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

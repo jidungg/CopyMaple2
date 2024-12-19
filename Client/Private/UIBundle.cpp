@@ -9,6 +9,9 @@
 #include "UIInventory.h"
 #include "Inventory.h"
 #include "UIBar.h"
+#include "UIPlayerInfo.h"
+#include "PlayerInfo.h"
+#include "Player.h"
 
 IMPLEMENT_SINGLETON(CUIBundle)
 
@@ -20,6 +23,7 @@ CUIBundle::CUIBundle()
 
 HRESULT CUIBundle::Initialize(void* pArg)
 {
+	CPlayer* pPlayer = PLAYERINIFO->Get_Player();
 
 	UIBUNDLE_DESC* pDesc = static_cast<UIBUNDLE_DESC*>(pArg);
 	m_pDevice = pDesc->pDevice;
@@ -69,6 +73,8 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	Add_Child(m_pCastingBar);
 	Safe_AddRef(m_pCastingBar);
 	m_pCastingBar->Set_Active(false);
+
+
 	return S_OK;
 }
 
@@ -82,9 +88,33 @@ void CUIBundle::Update(_float fTimeDelta)
 	}
 }
 
+void CUIBundle::Late_Update(_float fTimeDelta)
+{
+	__super::Late_Update(fTimeDelta);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
+}
+
 void CUIBundle::Set_QuickItem(KEY eHotKey, IQuickItem* pItem)
 {
 	m_pQuickSlotBundle->Set_QuickItem(eHotKey, pItem);
+}
+
+void CUIBundle::Initialize_PlayerInfo(CPlayer* pPalyer)
+{
+	CUIPlayerInfo::UIPLAYERINFO_DESC tMainBarDesc;
+	tMainBarDesc.eAnchorType = CORNOR_TYPE::BOT;
+	tMainBarDesc.ePivotType = CORNOR_TYPE::BOT;
+	tMainBarDesc.fSizeX = 168;
+	tMainBarDesc.fSizeY = 186;
+	tMainBarDesc.fXOffset = 0;
+	tMainBarDesc.fYOffset = 0;
+	tMainBarDesc.pStat = pPalyer->Get_Stat_Ref();
+	tMainBarDesc.pDefaultStat = pPalyer->Get_DefaultStat_Ref();
+	m_pMainHPBar = static_cast<CUIPlayerInfo*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPlayerInfo::m_szProtoTag, &tMainBarDesc));
+	Add_Child(m_pMainHPBar);
+	Safe_AddRef(m_pMainHPBar);
+	m_pMainHPBar->Set_Active(true);
+
 }
 
 void CUIBundle::Update_Inven_Slot(_uint iIndex,CInvenSlot* pSlot)
@@ -109,4 +139,5 @@ void CUIBundle::Free()
 	Safe_Release(m_pQuickSlotBundle);
 	Safe_Release(m_pInventory);
 	Safe_Release(m_pCastingBar);
+	Safe_Release(m_pMainHPBar);
 }

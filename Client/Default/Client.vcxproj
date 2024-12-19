@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\CubeTerrain.h" />
+    <ClInclude Include="..\Public\UIPlayerInfo.h" />
     <ClInclude Include="..\Public\InvenBuildSlot.h" />
     <ClInclude Include="..\Public\InvenConsumableSlot.h" />
     <ClInclude Include="..\Public\InvenDecoSlot.h" />
@@ -289,6 +290,7 @@
     <ClInclude Include="..\Public\UIScroller.h" />
     <ClInclude Include="..\Public\UIScrollButton.h" />
     <ClInclude Include="..\Public\UISlot.h" />
+    <ClInclude Include="..\Public\UIVerticalFill.h" />
     <ClInclude Include="..\Public\WayFinder.h" />
     <ClInclude Include="..\Public\Weapon.h" />
     <ClInclude Include="..\Public\WildFire.h" />
@@ -327,6 +329,7 @@
     <ClCompile Include="..\Private\Bullet_MagicClaw.cpp" />
     <ClCompile Include="..\Private\Bullet_WildFire.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />
+    <ClCompile Include="..\Private\UIPlayerInfo.cpp" />
     <ClCompile Include="..\Private\InvenBuildSlot.cpp" />
     <ClCompile Include="..\Private\InvenETCSlot.cpp" />
     <ClCompile Include="..\Private\CrabAttack.cpp" />
@@ -419,6 +422,7 @@
     <ClCompile Include="..\Private\UIScroller.cpp" />
     <ClCompile Include="..\Private\UIScrollButton.cpp" />
     <ClCompile Include="..\Private\UISlot.cpp" />
+    <ClCompile Include="..\Private\UIVerticalFill.cpp" />
     <ClCompile Include="..\Private\WayFinder.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />
     <ClCompile Include="..\Private\WildFire.cpp" />

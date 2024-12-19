@@ -12,6 +12,9 @@ int g_arrDigitWidth[10];
 int g_arrDigitNumber[10];
 int g_DigitCount = 0;
 
+float g_fVerticalRatio = 1.0f;
+
+
 struct VS_IN
 {
 	float3		vPosition : POSITION;
@@ -188,6 +191,18 @@ PS_OUT PS_NOBORDER_MAIN(PS_NOBORDER_IN In)
     return Out;
 }
 
+PS_OUT PS_VERTICALFILL_MAIN(PS_NOBORDER_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+
+    if (In.vTexcoord.y < g_fVerticalRatio)
+    {
+        discard;
+    }
+    Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord);
+
+    return Out;
+}
 
 technique11 DefaultTechnique
 {
@@ -223,5 +238,16 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_NOBORDER_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_NOBORDER_MAIN();
+    }
+    pass VerticalFillPass
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+
+        VertexShader = compile vs_5_0 VS_NOBORDER_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_VERTICALFILL_MAIN();
     }
 }

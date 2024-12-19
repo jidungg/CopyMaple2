@@ -45,11 +45,7 @@ void CUIQuickSlot::Update(_float fTimeDelta)
 	m_pQuickItem->Update_Cool(fTimeDelta);
 }
 
-void CUIQuickSlot::Late_Update(_float fTimeDelta)
-{
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
-	__super::Late_Update(fTimeDelta);
-}
+
 
 
 void CUIQuickSlot::Receive_Input()

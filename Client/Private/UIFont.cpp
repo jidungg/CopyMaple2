@@ -33,18 +33,17 @@ HRESULT CUIFont::Render()
 {
 	if (m_pText.empty())
 		return S_OK;
-	CRect_Transform* pTransform = static_cast<CRect_Transform*>(m_pTransformCom);
-	_float2 fPos = pTransform->Get_PivotPosition(CORNOR_TYPE::LEFT_TOP);
-	_float2 fSize = m_pFont->Get_TextSize(m_pText.c_str());
-	_float2 fOrigin = {0,0};
+
+	_float2 fOrigin = { 0,0 };
+	_float2 fFontPosition = Calc_FontLeftTop(m_pText.c_str());
 	if (m_bShade)
 	{
-		_float2 fPos2 = fPos;
+		_float2 fPos2 = fFontPosition;
 		fPos2.x -= 1.f;
 		fPos2.y += 1.f;
 		m_pFont->Render(m_pText.c_str(), fPos2, {0,0,0,1}, _float{0}, fOrigin);
 	}
-	m_pFont->Render(m_pText.c_str(), fPos, m_vColor, _float{ 0 }, fOrigin);
+	m_pFont->Render(m_pText.c_str(), fFontPosition, m_vColor, _float{ 0 }, fOrigin);
 	return S_OK;
 }
 
@@ -56,6 +55,22 @@ void CUIFont::Set_Text(const _tchar* pText)
 _float2 CUIFont::Get_TextSize(const _tchar* pText)
 {
 	return m_pFont->Get_TextSize(pText);
+}
+
+_float2 CUIFont::Calc_FontLeftTop(const _tchar* pText)
+{
+	CRect_Transform* pTransform = static_cast<CRect_Transform*>(m_pTransformCom);
+	CORNOR_TYPE ePivotType = pTransform->Get_PivotType();
+	_float2 fPosition = pTransform->Get_PivotPosition(ePivotType);
+
+	_float2 fSize = m_pFont->Get_TextSize(m_pText.c_str());
+	_float2		fPivotRatio = pTransform->Get_CornorRatio(ePivotType);
+	fPosition.x -= fSize.x *0.5f;
+	fPosition.y -= fSize.y *0.5f;
+	fPosition.x -= fSize.x * fPivotRatio.x;
+	fPosition.y -= fSize.y * fPivotRatio.y;
+
+	return fPosition;
 }
 
 bool CUIFont::Check_MouseOver(POINT fPos)

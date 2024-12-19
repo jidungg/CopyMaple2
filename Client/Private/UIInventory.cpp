@@ -118,10 +118,7 @@ HRESULT CUIInventory::Ready_Slots()
 	return S_OK;
 }
 
-void CUIInventory::Late_Update(_float fTimeDelta)
-{
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
-}
+
 
 void CUIInventory::Set_InventoryTab(ITEM_TYPE eType)
 {

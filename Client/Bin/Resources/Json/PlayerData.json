@@ -18,7 +18,12 @@
                 "RunSpeed": 2.5,
                 "WalkSpeed": 1.5,
                 "AttackInterval": 1,
-                "AttackRange": 2
+                "AttackRange": 2,
+                "HPRecovery": 10,
+                "SPRecovery": 10,
+                "EPRecovery": 2
+
+
             },
             "Skill": [
                 "BASIC_ATTACK",

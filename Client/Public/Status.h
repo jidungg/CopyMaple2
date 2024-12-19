@@ -21,6 +21,10 @@ typedef struct Stat
 		fWalkSpeed = js["WalkSpeed"];
 		fAttackInterval = js["AttackInterval"];
 		fAttackRange = js["AttackRange"];
+
+		fHPRecovery = js["HPRecovery"];
+		fSPRecovery = js["SPRecovery"];
+		fEPRecovery = js["EPRecovery"];
 	}
 	_int iHP { 0};
 	_int iSP { 0};
@@ -37,6 +41,11 @@ typedef struct Stat
 	_float fAttackInterval{ 1.f };
 	_float fAttackRange{ 2.f };
 	_float fBodyHeight{ 0.5f };
+
+	_float fHPRecovery = { 10 };
+	_float fSPRecovery = { 10 };
+	_float fEPRecovery = { 0.75 };
+
 }STATUS;
 
 END

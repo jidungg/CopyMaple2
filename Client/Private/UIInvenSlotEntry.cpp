@@ -49,10 +49,10 @@ HRESULT CUIInvenSlotEntry::Initialize(void* pArg)
 	Add_Child(m_pIcon);
 
 	CUIFont::UIFontDesc tFontDesc{};
-	tFontDesc.eAnchorType = CORNOR_TYPE::LEFT_TOP;
-	tFontDesc.ePivotType = CORNOR_TYPE::LEFT_TOP;
-	tFontDesc.fXOffset = 2.5;
-	tFontDesc.fYOffset = 2.5;
+	tFontDesc.eAnchorType = CORNOR_TYPE::RIGHT_BOT;
+	tFontDesc.ePivotType = CORNOR_TYPE::RIGHT_BOT;
+	tFontDesc.fXOffset = -3.5;
+	tFontDesc.fYOffset = -3.5;
 	tFontDesc.pFontTag = L"LV2Gothic_Medium_10";
 	tFontDesc.vColor = _vector{ 1.f, 1.f, 1.f, 1.f };
 	tFontDesc.bShade = true;

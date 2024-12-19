@@ -53,6 +53,9 @@ public:
 	virtual void Hit(CGameObject* pFoe,_int fDamage) override;
 	void FullRecovery();
 	void RestoreHP(_int iAmount);
+	void RestoreSP(_int iAmount);
+	void RestoreEP(_int iAmount =1);
+	void NatureRecover(_float fTimeDelta);
 	virtual void Respawn();
 	virtual _bool Is_Targetable();
 	_vector BlockXZ(_vector vPrev, _vector vNext, _float fRadius);
@@ -113,6 +116,11 @@ protected:
 
 
 	_vector m_vHomePos = { 10.f,1.f,10.f,1.f };
+
+	_float m_fEPRecoverTimeAcc = { 0.f };
+	_float m_fHPRecoverAcc = { 1.f };
+	_float m_fSPRecoverAcc = { 1.f };
+
 private:
 	_uint m_iBodyColliderIndex = { 0 };
 public:

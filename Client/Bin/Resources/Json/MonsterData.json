@@ -16,7 +16,7 @@
                 "SP": 10,
                 "EP": 1,
                 "ATK": 100,
-                "CRIT" :  0.1,  
+                "CRIT": 0.1,
                 "DEF": 1,
                 "EXP": 1,
                 "Gold": 1,
@@ -24,7 +24,10 @@
                 "RunSpeed": 1.5,
                 "WalkSpeed": 0.5,
                 "AttackInterval": 3,
-                "AttackRange":1
+                "AttackRange": 1,
+                "HPRecovery": 0,
+                "SPRecovery": 0,
+                "EPRecovery": 0
             },
             "AnimIdx": {
                 "ATTACK_IDLE": [ 1 ],
@@ -57,7 +60,7 @@
                 "SP": 10,
                 "EP": 1,
                 "ATK": 100,
-                 "CRIT" :  0.1,
+                "CRIT": 0.1,
                 "DEF": 1,
                 "EXP": 1,
                 "Gold": 1,
@@ -65,7 +68,10 @@
                 "RunSpeed": 2.5,
                 "WalkSpeed": 1.5,
                 "AttackInterval": 3,
-                "AttackRange": 1
+                "AttackRange": 1,
+                "HPRecovery": 0,
+                "SPRecovery": 0,
+                "EPRecovery": 0
             },
             "AnimIdx": {
                 "ATTACK_IDLE": [ 1 ],
@@ -98,7 +104,7 @@
                 "SP": 10,
                 "EP": 1,
                 "ATK": 100,
-                 "CRIT" :  0.1,
+                "CRIT": 0.1,
                 "DEF": 1,
                 "EXP": 1,
                 "Gold": 1,
@@ -106,7 +112,10 @@
                 "RunSpeed": 2.5,
                 "WalkSpeed": 1.5,
                 "AttackInterval": 3.5,
-                "AttackRange": 1
+                "AttackRange": 1,
+                "HPRecovery": 0,
+                "SPRecovery": 0,
+                "EPRecovery": 0
             },
             "AnimIdx": {
                 "ATTACK_IDLE": [ 5 ],
@@ -141,7 +150,7 @@
                 "SP": 10,
                 "EP": 1,
                 "ATK": 100,
-                 "CRIT" :  0.1,
+                "CRIT": 0.1,
                 "DEF": 1,
                 "EXP": 1,
                 "Gold": 1,
@@ -149,7 +158,10 @@
                 "RunSpeed": 2.5,
                 "WalkSpeed": 1.5,
                 "AttackInterval": 1,
-                "AttackRange": 2
+                "AttackRange": 2,
+                "HPRecovery": 0,
+                "SPRecovery": 0,
+                "EPRecovery": 0
             },
             "AnimIdx": {
                 "ATTACK_IDLE": [ 20 ],

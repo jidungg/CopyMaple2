@@ -43,7 +43,7 @@ void CDamgEvent::Exec()
 		pEffMgr->Play_EffectModel(m_eHitEffect, vPos);
 		vPos = static_cast<CCharacter*>(m_pVictim)->Get_OverHeadPoint();
 		pEffMgr->Play_RecoverCount(m_iDamage, vPos);
-		static_cast<CCharacter*>(m_pVictim)->RestoreHP(m_iDamage);
+		static_cast<CCharacter*>(m_pVictim)->RestoreHP(-m_iDamage);
 	}
 
 }

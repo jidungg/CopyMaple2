@@ -36,7 +36,7 @@ HRESULT CBayar::Initialize(void* pArg)
 	pDesc->iBodyColliderIndex = PART_ID::BODY;
 	pDesc->iColliderCount = PART_LAST;
 	pDesc->eMonID = MONSTER_ID::BAYAR;
-	m_fHomeRange = 10.f;
+	m_fHomeRange = 1000.f;
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 	if (FAILED(Ready_AttacableParts(pDesc)))

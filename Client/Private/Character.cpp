@@ -55,6 +55,7 @@ void CCharacter::Update(_float fTimeDelta)
 
 	 Get_CurrentSkill()->Update(fTimeDelta);
 	 Update_Collider();
+	 NatureRecover(fTimeDelta);
 	__super::Update(fTimeDelta);
 }
 
@@ -217,12 +218,47 @@ void CCharacter::Hit(CGameObject* pFoe,_int iDamage)
 void CCharacter::FullRecovery()
 {
 	m_tStat.iHP = m_tStatDefault.iHP;
+	m_tStat.iSP = m_tStatDefault.iSP;
+	m_tStat.iEP = m_tStatDefault.iEP;
 }
 void CCharacter::RestoreHP(_int iAmount)
 {
 	m_tStat.iHP += iAmount;
 	if (m_tStat.iHP > m_tStatDefault.iHP)
 		m_tStat.iHP = m_tStatDefault.iHP;
+}
+void CCharacter::RestoreSP(_int iAmount)
+{
+	m_tStat.iSP += iAmount;
+	if (m_tStat.iSP > m_tStatDefault.iSP)
+		m_tStat.iSP = m_tStatDefault.iSP;
+}
+void CCharacter::RestoreEP(_int iAmount)
+{
+	m_tStat.iEP += iAmount;
+	if (m_tStat.iEP > m_tStatDefault.iEP)
+		m_tStat.iEP = m_tStatDefault.iEP;
+}
+void CCharacter::NatureRecover(_float fTimeDelta)
+{
+	m_fEPRecoverTimeAcc += fTimeDelta;
+	if (m_fEPRecoverTimeAcc >= m_tStat.fEPRecovery)
+	{
+		RestoreEP();
+		m_fEPRecoverTimeAcc = 0;
+	}
+	m_fHPRecoverAcc += m_tStat.fHPRecovery *fTimeDelta;
+	if (m_fHPRecoverAcc >= 1)
+	{
+		RestoreHP((_int)m_fHPRecoverAcc);
+		m_fHPRecoverAcc = fmod(m_fHPRecoverAcc, 1);
+	}
+	m_fSPRecoverAcc += m_tStat.fSPRecovery * fTimeDelta;
+	if (m_fSPRecoverAcc >= 1)
+	{
+		RestoreSP((_int)m_fSPRecoverAcc);
+		m_fSPRecoverAcc = fmod(m_fSPRecoverAcc, 1);
+	}
 }
 void CCharacter::Respawn()
 {

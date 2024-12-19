@@ -14,7 +14,7 @@ int g_DigitCount = 0;
 
 float g_fVerticalRatio = 1.0f;
 
-
+float g_fDarkRatio = 0.5f;
 struct VS_IN
 {
 	float3		vPosition : POSITION;
@@ -204,6 +204,59 @@ PS_OUT PS_VERTICALFILL_MAIN(PS_NOBORDER_IN In)
     return Out;
 }
 
+PS_OUT PS_VERTICALDARK_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+	
+    float fXSize = g_MinMax[2] - g_MinMax[0];
+    float fYSize = g_MinMax[3] - g_MinMax[1];
+	//좌 테두리
+    if (g_MinMax[0] + g_BorderSize[2] >= In.vPosition.x)
+    {
+        In.vTexcoord.x *= In.vRatio.x;
+    }
+    //우 테두리
+    else if (g_MinMax[2] - g_BorderSize[3] <= In.vPosition.x)
+    {
+        In.vTexcoord.x = 1 - (1 - In.vTexcoord.x) * In.vRatio.x;
+    }
+    //가운데
+    else
+    {
+        float fLeftBorderCoordLen = g_BorderSize[2] / fXSize * In.vRatio.x;
+        float fRightBorderCoordLen = g_BorderSize[3] / fXSize * In.vRatio.x;
+        float fCenterCoordLen = 1 - fLeftBorderCoordLen - fRightBorderCoordLen;
+        In.vTexcoord.x = In.vTexcoord.x * fCenterCoordLen + fLeftBorderCoordLen;
+    }
+ //   //상 테두리
+    if (g_MinMax[1] + g_BorderSize[0] >= In.vPosition.y)
+    {
+        In.vTexcoord.y *= In.vRatio.y;
+    }
+    //하 테두리
+    else if (g_MinMax[3] - g_BorderSize[1] <= In.vPosition.y)
+    {
+        In.vTexcoord.y = 1 - (1 - In.vTexcoord.y) * In.vRatio.y;
+    }
+    else
+    {
+        float fTopBorderCoordLen = g_BorderSize[0] / fYSize * In.vRatio.y;
+        float fBotBorderCoordLen = g_BorderSize[1] / fYSize * In.vRatio.y;
+        float fCenterCoordLen = 1 - fTopBorderCoordLen - fBotBorderCoordLen;
+        In.vTexcoord.y = In.vTexcoord.y * fCenterCoordLen + fTopBorderCoordLen;
+    }
+    Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord);
+
+
+    if (In.vTexcoord.y > g_fVerticalRatio)
+    {
+        Out.vColor.rgb = Out.vColor.rgb * g_fDarkRatio;
+    }
+    else
+        Out.vColor.a = 0.f;
+
+    return Out;
+}
 technique11 DefaultTechnique
 {
 	pass DefaultPass
@@ -249,5 +302,16 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_NOBORDER_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_VERTICALFILL_MAIN();
+    }
+    pass VerticalDarkPass
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_VERTICALDARK_MAIN();
     }
 }

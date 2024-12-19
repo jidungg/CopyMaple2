@@ -15,6 +15,8 @@ public:
 
 	virtual const _char* Get_IconTag() override;
 	virtual void Use() override;
+	virtual _float Get_CoolTimeRatio() override;
+	virtual _int Get_StackCount() override;
 
 private:
 	CONSUMABLE_ITEM_TYPE m_eConsumableType = { CONSUMABLE_ITEM_TYPE::LAST };
@@ -22,7 +24,6 @@ private:
 public:
 	static CInvenConsumableSlot* Create(_uint iIdx, CInventory* pInventory);
 	void Free();
-
 
 };
 END

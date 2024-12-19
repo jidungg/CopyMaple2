@@ -30,7 +30,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 
 	CUIInventory* Get_Inventory() { return m_pInventory; }
-	CUIQuickSlotBundle* Get_QuckSlotBundle() { return m_pQuickSlotBundle; }
+	CUIQuickSlotBundle* Get_QuckSlotBundle() { return m_pQuickSlotBundle1; }
 
 	void Set_QuickItem(KEY eHotKey, IQuickItem* pItem);
 	void Initialize_PlayerInfo(CPlayer* pPalyer);
@@ -38,7 +38,8 @@ public:
 	void Update_CastingRatio(_float fRatio);
 	void Set_CastingBarVisible(_bool bVisible);
 private:
-	CUIQuickSlotBundle* m_pQuickSlotBundle = { nullptr };
+	CUIQuickSlotBundle* m_pQuickSlotBundle1 = { nullptr };
+	CUIQuickSlotBundle* m_pQuickSlotBundle2 = { nullptr };
 	CUIInventory* m_pInventory = { nullptr };
 	CUIBar* m_pCastingBar = { nullptr };
 	CUIPlayerInfo* m_pMainHPBar = { nullptr };

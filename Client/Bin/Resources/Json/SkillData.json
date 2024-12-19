@@ -88,7 +88,7 @@
         {
             "Id": "FIRE_TORNADO",
             "CastType": "INSTANT",
-            "Name": "플레임 웨이브",
+            "Name": "파이어 토네이도",
             "Desc": "스태프에 화염의 기운을 집중시킨 뒤 파도 형태로 날려보낸다.",
             "Level": 1,
             "MaxLevel": 10,

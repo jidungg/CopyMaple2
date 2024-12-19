@@ -1,7 +1,7 @@
 #pragma once
 #include "UIPanel.h"
 BEGIN(Client)
-
+class CUIIcon;
 class CUISlot :
     public CUIPanel
 {
@@ -22,8 +22,7 @@ public:
 	virtual void Set_IconTexture(CTexture* pTexture);
 	virtual void Compute_Matrix() override;
 protected:
-	CTexture* m_pIconTexure = nullptr;
-	CRect_Transform* m_pIconTransform = nullptr;
+	CUIIcon* m_pIcon = { nullptr };
 public:
 	virtual void Free() override;
 };

@@ -50,7 +50,15 @@ void CInvenConsumableSlot::Use()
 	}
 
 }
+_float CInvenConsumableSlot::Get_CoolTimeRatio()
+{
+	return   m_fCoolTimeAcc/ static_cast<const CONSUMABLE_ITEM_DATA*>(Get_ItemData())->fCoolTime;
+}
 
+_int CInvenConsumableSlot::Get_StackCount()
+{
+	return Get_StackCount();
+}
 
 
 CInvenConsumableSlot* CInvenConsumableSlot::Create(_uint iIdx, CInventory* pInventory)
@@ -62,3 +70,5 @@ void CInvenConsumableSlot::Free()
 {
 	__super::Free();
 }
+
+

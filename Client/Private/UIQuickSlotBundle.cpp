@@ -56,7 +56,8 @@ void CUIQuickSlotBundle::Update(_float fTImeDelta)
 {
 	for (auto& pQuickSlot : m_mapQuickSlot)
 	{
-		pQuickSlot.second->Update(fTImeDelta);
+		if(pQuickSlot.second && pQuickSlot.second->Is_Valid())
+			pQuickSlot.second->Update(fTImeDelta);
 	}
 }
 

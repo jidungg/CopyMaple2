@@ -396,6 +396,16 @@ void CSkill::Free()
 	Safe_Release(m_pTargetSearcher);
 }
 
+_int CSkill::Get_StackCount()
+{
+	return -1;
+}
+
+_float CSkill::Get_CoolTimeRatio()
+{
+	return m_fCoolTimeAcc/ m_pSkillDesc->fCoolTime;
+}
+
 const _char* CSkill::Get_IconTag()
 {
 	return m_pSkillDesc->strIconImageTag;

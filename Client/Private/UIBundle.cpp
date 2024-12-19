@@ -47,15 +47,28 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	tQuickDesc.iSlotRowCount = 2;
 	tQuickDesc.vecHotKey = { KEY::Q, KEY::W, KEY::E, KEY::R, KEY::A, KEY::S, KEY::D, KEY::F };
 	tQuickDesc.eAnchorType = CORNOR_TYPE::BOT;
-	tQuickDesc.ePivotType = CORNOR_TYPE::BOT;
+	tQuickDesc.ePivotType = CORNOR_TYPE::RIGHT_BOT;
 	tQuickDesc.fSizeX= 240;
 	tQuickDesc.fSizeY = 120;
-	tQuickDesc.fXOffset= -200;
+	tQuickDesc.fXOffset= -100;
 	tQuickDesc.fYOffset = -30;
 
-	m_pQuickSlotBundle = static_cast<CUIQuickSlotBundle*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIQuickSlotBundle::m_szProtoTag, &tQuickDesc));
-	Add_Child(m_pQuickSlotBundle);
-	Safe_AddRef(m_pQuickSlotBundle);
+	m_pQuickSlotBundle1 = static_cast<CUIQuickSlotBundle*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIQuickSlotBundle::m_szProtoTag, &tQuickDesc));
+	Add_Child(m_pQuickSlotBundle1);
+	Safe_AddRef(m_pQuickSlotBundle1);
+
+
+	tQuickDesc.vecHotKey = { KEY::NUM1, KEY::NUM2, KEY::NUM3, KEY::NUM4, KEY::NUM5, KEY::NUM6, KEY::NUM7, KEY::NUM8 };
+	tQuickDesc.eAnchorType = CORNOR_TYPE::BOT;
+	tQuickDesc.ePivotType = CORNOR_TYPE::LEFT_BOT;
+	tQuickDesc.fSizeX = 240;
+	tQuickDesc.fSizeY = 120;
+	tQuickDesc.fXOffset = 100;
+	tQuickDesc.fYOffset = -30;
+
+	m_pQuickSlotBundle2 = static_cast<CUIQuickSlotBundle*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIQuickSlotBundle::m_szProtoTag, &tQuickDesc));
+	Add_Child(m_pQuickSlotBundle2);
+	Safe_AddRef(m_pQuickSlotBundle2);
 
 	CUIBar::UIBarDesc tBarDesc;
 	tBarDesc.eAnchorType = CORNOR_TYPE::CENTER;
@@ -96,7 +109,7 @@ void CUIBundle::Late_Update(_float fTimeDelta)
 
 void CUIBundle::Set_QuickItem(KEY eHotKey, IQuickItem* pItem)
 {
-	m_pQuickSlotBundle->Set_QuickItem(eHotKey, pItem);
+	m_pQuickSlotBundle1->Set_QuickItem(eHotKey, pItem);
 }
 
 void CUIBundle::Initialize_PlayerInfo(CPlayer* pPalyer)
@@ -106,7 +119,7 @@ void CUIBundle::Initialize_PlayerInfo(CPlayer* pPalyer)
 	tMainBarDesc.ePivotType = CORNOR_TYPE::BOT;
 	tMainBarDesc.fSizeX = 168;
 	tMainBarDesc.fSizeY = 186;
-	tMainBarDesc.fXOffset = 0;
+	tMainBarDesc.fXOffset = -10;
 	tMainBarDesc.fYOffset = 0;
 	tMainBarDesc.pStat = pPalyer->Get_Stat_Ref();
 	tMainBarDesc.pDefaultStat = pPalyer->Get_DefaultStat_Ref();
@@ -136,7 +149,8 @@ void CUIBundle::Set_CastingBarVisible(_bool bVisible)
 void CUIBundle::Free()
 {
 	__super::Free();
-	Safe_Release(m_pQuickSlotBundle);
+	Safe_Release(m_pQuickSlotBundle1);
+	Safe_Release(m_pQuickSlotBundle2);
 	Safe_Release(m_pInventory);
 	Safe_Release(m_pCastingBar);
 	Safe_Release(m_pMainHPBar);

@@ -16,8 +16,9 @@ public:
 	{
 		m_fCoolTimeAcc += fTimeDelta;
 	}
+	virtual _float Get_CoolTimeRatio() abstract;
+	virtual _int Get_StackCount()abstract;
 protected:
 	_float m_fCoolTimeAcc = { 0.f };
-	_float m_fCoolTime = { 0.f };
 };
 END

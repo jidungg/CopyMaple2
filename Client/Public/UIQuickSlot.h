@@ -2,6 +2,7 @@
 #include "UISlot.h"
 BEGIN(Client)
 class IQuickItem;
+class CUIFont;
 class CUIQuickSlot :
     public CUISlot
 {
@@ -21,6 +22,7 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(_float fTimeDelta) override;
+	virtual HRESULT Render() override;
 
 	bool Has_Item() override;
 	
@@ -29,10 +31,13 @@ public:
 
 	void Set_QuickItem(IQuickItem* pItem);
 	void Set_HotKey(KEY eKey) { m_eHotKey = eKey; }
+	void Set_StackCount(_uint iCount);
 private:
 	IQuickItem* m_pQuickItem = { nullptr };
 
 	KEY m_eHotKey = { KEY::LAST };
+	CUIFont* m_pHotKeyFont = { nullptr };
+	CUIFont* m_pStackCountFont = { nullptr };
 public:
 	static CUIQuickSlot* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

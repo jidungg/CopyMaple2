@@ -86,6 +86,8 @@ protected:
 	virtual void On_CastingEnd() abstract;
 	virtual void Fire();
 	virtual void On_AttackEnd();
+	virtual _float Get_CoolTimeRatio() override;
+	virtual _int Get_StackCount() override;
 
 	void Consume_Cost();
 	void SearchTarget(list<CGameObject*>* pOutList, LAYERID eLayerID);

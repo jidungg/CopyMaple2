@@ -38,7 +38,8 @@ HRESULT CUIInvenSlotEntry::Initialize(void* pArg)
 
 	_float3 fSize = m_pTransformCom->Compute_Scaled();
 	CUIPanel::PANEL_DESC tPanelDesc{};
-
+	tPanelDesc.bDraggableX = true;
+	tPanelDesc.bDraggableY = true;
 	tPanelDesc.eAnchorType = CORNOR_TYPE::CENTER;
 	tPanelDesc.ePivotType = CORNOR_TYPE::CENTER;
 	tPanelDesc.fSizeX = fSize.x - 10;

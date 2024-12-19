@@ -1,0 +1,50 @@
+{
+    "DropTable": [
+      {
+        "MonsterId": "SNAIL",
+        "Table": [
+          {
+            "Item": {
+              "Type": "EQUIP",
+              "Id": "BASIC_SHOES"
+            },
+            "Weight": 60
+          },
+          {
+            "Item": {
+              "Type": "EQUIP",
+              "Id": "BASIC_SUIT"
+            },
+            "Weight": 60
+          },
+          {
+            "Item": {
+              "Type": "EQUIP",
+              "Id": "BASIC_HAT"
+            },
+            "Weight": 60
+          },
+          {
+            "Item": {
+              "Type": "EQUIP",
+              "Id": "BASIC_STAFF"
+            },
+            "Weight": 60
+          }
+          
+        ]
+      },
+      {
+        "MonsterId": "CRAB"
+
+      },
+      {
+        "MonsterId": "STUMP"
+
+      },
+      {
+        "MonsterId": "BAYAR"
+
+      }
+    ]
+}

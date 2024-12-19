@@ -30,7 +30,8 @@ HRESULT CWildFire::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_wizard_wildfire_cast_01.effmodel");
 	m_pCastEffect1 = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pCastEffect1->Set_Active(false);
-
+	m_pUser->Add_Child(m_pCastEffect1);
+	m_pCastEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, { 0,0.01,0 ,1});
 
 	return S_OK;
 }
@@ -42,10 +43,7 @@ void CWildFire::Update(_float fTimeDelta)
 	{
 		m_pBullet->Update(fTimeDelta);
 	}
-	if (m_pCastEffect1->Is_Active())
-	{
-		m_pCastEffect1->Update(fTimeDelta);
-	}
+
 
 }
 
@@ -57,17 +55,12 @@ void CWildFire::Late_Update(_float fTimeDelta)
 	//	m_pBullet->Late_Update(fTimeDelta);
 	//	m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect1);
 	//}
-	if (m_pCastEffect1->Is_Active())
-	{
-		m_pCastEffect1->Late_Update(fTimeDelta);
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect1);
-	}
+
 
 }
 
 void CWildFire::On_SkillUsed()
 {
-	m_pCastEffect1->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect1->Start_Animation();
 	m_pCastEffect1->Set_Active(true);
 }
@@ -80,7 +73,6 @@ void CWildFire::On_CastingEnd()
 void CWildFire::Fire()
 {
 	m_pUser->Move_Forward(2.5);
-	m_pCastEffect1->Set_Transform(m_pUser->Get_Transform());
 	_uint iDamgID = (_uint)SKILL_DATA_ID::DAMG;
 	_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
 	fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
@@ -104,6 +96,5 @@ void CWildFire::Free()
 {
 	__super::Free();
 	Safe_Release(m_pBullet);
-	Safe_Release(m_pCastEffect1);
 
 }

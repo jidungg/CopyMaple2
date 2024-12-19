@@ -41,8 +41,6 @@ HRESULT CUISlot::Initialize(void* pArg)
 
 HRESULT CUISlot::Render()
 {
-	
-
 
 	return __super::Render();
 }

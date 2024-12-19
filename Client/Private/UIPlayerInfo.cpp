@@ -179,6 +179,13 @@ HRESULT CUIPlayerInfo::Render()
 	m_pSPCountFont->Set_Text(to_wstring(m_pStat->iSP).c_str());
 	m_pDefaultHPCountFont->Set_Text(to_wstring(m_pDefaultStat->iHP).c_str());
 	m_pDefaultSPCountFont->Set_Text(to_wstring(m_pDefaultStat->iSP).c_str());
+	for (_uint i = 0; i < 3; i++)
+	{
+		if(i < m_pStat->iEP )
+			m_pWhiteFill[i]->Set_Active(true);
+		else
+			m_pWhiteFill[i]->Set_Active(false);
+	} 
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 	return S_OK;

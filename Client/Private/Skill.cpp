@@ -70,6 +70,7 @@ void CSkill::Use()
 		return;
 	if (m_pUser->Use_Skill(this))
 	{
+		Consume_Cost();
 		if (Is_CastingType())
 		{
 			m_bCastingComplete = false;
@@ -211,6 +212,27 @@ void CSkill::Fire()
 
 void CSkill::On_AttackEnd()
 {
+}
+
+void CSkill::Consume_Cost()
+{
+	SKILL_COST_TYPE eCostType = m_pSkillDesc->eCostType;
+	Stat* pUserStat = m_pUser->Get_Stat_Ref();
+	Stat* pUserDefaultStat = m_pUser->Get_DefaultStat_Ref();
+	switch (eCostType)
+	{
+	case Client::SKILL_COST_TYPE::NONE:
+		return;
+	case Client::SKILL_COST_TYPE::SP:
+		pUserStat->iSP = clamp(pUserStat->iSP - (_int)m_pSkillDesc->iCost, 0, pUserDefaultStat->iSP);
+		break;
+	case Client::SKILL_COST_TYPE::EP:
+		pUserStat->iEP = clamp(pUserStat->iEP - (_int)m_pSkillDesc->iCost, 0, pUserDefaultStat->iEP);
+		break;
+	case Client::SKILL_COST_TYPE::LAST:
+	default:
+		break;
+	}
 }
 
 void CSkill::SearchTarget(list<CGameObject*>* pOutList, LAYERID eLayerID)

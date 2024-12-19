@@ -87,6 +87,7 @@ protected:
 	virtual void Fire();
 	virtual void On_AttackEnd();
 
+	void Consume_Cost();
 	void SearchTarget(list<CGameObject*>* pOutList, LAYERID eLayerID);
 	CCharacter* SearchTarget(LAYERID eLayerID);
 	virtual _bool Check_Collision(CGameObject* pOther);

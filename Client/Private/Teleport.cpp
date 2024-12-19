@@ -20,6 +20,8 @@ HRESULT CTeleport::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_wizard_teleport_cast_01_a.effmodel");
 	m_pCastEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pCastEffect->Set_Active(false);
+	m_pCastEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0,0.01,0,1 });
+
 	return S_OK;
 }
 

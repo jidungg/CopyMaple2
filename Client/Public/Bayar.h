@@ -11,7 +11,6 @@ class CMimicBoneModelObject;
 class CFace;
 class CInventory;
 class CAttachableBodyPart;
-class CItemObjet;
 class CPlayer;
 class CBayar :
     public CMonster

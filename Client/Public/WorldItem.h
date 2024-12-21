@@ -25,6 +25,9 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
+	virtual HRESULT Render() override;
+
+	virtual _bool Check_Collision(CGameObject* pOther) override;
 
 	void PopUp();
 	void Set_Item(const ITEM_DATA* pItemData, _uint iStackCount = 1);
@@ -34,10 +37,12 @@ private:
 
 	_bool m_bPopUp = { false };
 	CCubeTerrain* m_pTerrain = { nullptr };
+	_float m_fMagnetRange = { 1.f };
+	_float m_fAcquireRange = { 0.1f };
 	_float m_fUpForce = { 0.0f };
-	_float m_fJumpForce = { 6.f };
-	_vector m_vMoveDirection = { 0,0,0,0 };
-	_float m_fMoveSpeed = { 1.f };
+	_float m_fJumpForce = { 7.5f };
+	_vector m_vPopMoveDirection = { 0,0,0,0 };
+	_float m_fMoveSpeed = { 3.f };
 	_float m_fUpforceAcc = { 1.5f  };
 	_float m_fUpforceMax = { 1.f };
 	

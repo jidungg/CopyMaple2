@@ -102,32 +102,6 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 	ITEM_DATA* pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_STAFF);
 	Gain_Item(pItemDesc);
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_HAT);
-	Gain_Item(pItemDesc);
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_SHOES);
-	Gain_Item(pItemDesc);
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_SUIT);
-	Gain_Item(pItemDesc);
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_SUIT);
-	Gain_Item(pItemDesc);
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::EVILWINGS);
-	Gain_Item(pItemDesc);
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_BOTTOM);
-	Gain_Item(pItemDesc);
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_CAPE);
-	Gain_Item(pItemDesc);
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_EAR);
-	Gain_Item(pItemDesc);
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_GLOVE);
-	Gain_Item(pItemDesc);
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_HAT);
-	Gain_Item(pItemDesc);
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_STAFF);
-	Gain_Item(pItemDesc);
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_TOP);
-	Gain_Item(pItemDesc);
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_SHOES);
-	Gain_Item(pItemDesc);
 
 	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::CONSUMABLE, (_uint)CONSUMABLE_ITEM_ID::HP_POTION);
 	Gain_Item(pItemDesc);
@@ -148,6 +122,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	UIBUNDLE->Set_QuickItem(KEY::S, m_mapSkill[SKILL_ID::KINDLING]);
 	UIBUNDLE->Set_QuickItem(KEY::D, m_mapSkill[SKILL_ID::FLAME_WAVE]);
 	UIBUNDLE->Set_QuickItem(KEY::F, m_mapSkill[SKILL_ID::FIRE_TORNADO]);
+
 	return S_OK;
 }
 
@@ -1114,12 +1089,7 @@ _bool CPlayer::Use_Skill(CSkill* pSkill)
 	return true;
 }
 
-HRESULT CPlayer::Gain_Item(CItemObjet* pItem)
-{
-	return S_OK;
-}
-
-HRESULT CPlayer::Gain_Item(ITEM_DATA* pItem, _uint iCount)
+HRESULT CPlayer::Gain_Item(const ITEM_DATA* pItem, _uint iCount)
 {
 	return 	m_pInventory->Insert_Item(pItem, iCount);
 }

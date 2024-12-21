@@ -5,7 +5,8 @@
 #include "CubeTerrain.h"
 #include "Engine_Utility.h"
 #include "EffModel.h"
-
+#include "Player.h"
+#include "PlayerInfo.h"
 
 CWorldItem::CWorldItem(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CEffModelObject(pDevice, pContext)
@@ -23,7 +24,8 @@ HRESULT CWorldItem::Initialize(void* pArg)
 	m_pTerrain = pDesc->pTerrain;
 	m_pItemData = pDesc->pItemData;
 	m_iStackCount = pDesc->iStackCount;
-
+	pDesc->fSpeedPerSec = 1.5f;
+	pDesc->fRotationPerSec = XMConvertToRadians(90.f);
 
 	ITEM_GRADE eItemGrade = m_pItemData->eItemGrade;
 
@@ -64,13 +66,11 @@ HRESULT CWorldItem::Initialize(void* pArg)
 
 void CWorldItem::Update(_float fTimeDelta)
 {
-	if (m_pGameInstance->GetKeyState(KEY::F2) == KEY_STATE::DOWN)
-		PopUp();
 	_vector vCurrentPosition = Get_WorldPosition();
 	if (m_bPopUp)
 	{
 		vCurrentPosition.m128_f32[1] += m_fUpForce * fTimeDelta;
-		vCurrentPosition += m_vMoveDirection * m_fMoveSpeed* fTimeDelta;
+		vCurrentPosition += m_vPopMoveDirection * m_fMoveSpeed* fTimeDelta;
 
 		m_fUpForce -= 9.8f * 3 * fTimeDelta;
 		_float fFloorHeight = m_pTerrain->Get_FloorHeight(vCurrentPosition);
@@ -83,14 +83,23 @@ void CWorldItem::Update(_float fTimeDelta)
 	}
 	else
 	{
-		_float fFloorHeight = m_pTerrain->Get_FloorHeight(vCurrentPosition);
-		vCurrentPosition.m128_f32[1] += m_fUpForce * fTimeDelta;
-		m_fUpForce += m_fUpforceAcc * fTimeDelta;
-		if (fabs( m_fUpForce) > m_fUpforceMax)
+		CPlayer* pTarget = static_cast<CPlayer*>(Get_Target());
+		if (pTarget)
 		{
-			m_fUpforceAcc *= -1;
+			_vector vDir = pTarget->Get_WorldPosition() - vCurrentPosition;
+			vCurrentPosition += XMVector3Normalize(vDir) * m_fMoveSpeed *fTimeDelta;
 		}
-		m_pTransformCom->Turn({0,1,0,0}, fTimeDelta);
+		else
+		{
+			_float fFloorHeight = m_pTerrain->Get_FloorHeight(vCurrentPosition);
+			vCurrentPosition.m128_f32[1] += m_fUpForce * fTimeDelta;
+			m_fUpForce += m_fUpforceAcc * fTimeDelta;
+			if (fabs(m_fUpForce) > m_fUpforceMax)
+			{
+				m_fUpforceAcc *= -1;
+			}
+			m_pTransformCom->Turn({ 0,1,0,0 }, fTimeDelta);
+		}
 	}
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vCurrentPosition);
 	__super::Update(fTimeDelta);
@@ -102,14 +111,57 @@ void CWorldItem::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, this);
 }
 
+HRESULT CWorldItem::Render()
+{
+	return __super::Render();
+}
+
+_bool CWorldItem::Check_Collision(CGameObject* pOther)
+{
+
+	assert(pOther->Is_Active());
+	assert(false == pOther->Is_Dead());
+
+
+	LAYERID eLayerID = (LAYERID)pOther->Get_LayerID();
+	switch (eLayerID)
+	{
+	case Client::LAYER_PLAYER:
+	{
+		_float fDist = pOther->Get_Distance(this);
+		if (nullptr == Get_Target())
+		{
+			if (fDist <= m_fMagnetRange)
+			{
+				Set_Target(pOther);
+
+			}
+		}
+		else
+		{
+			if (fDist <= m_fAcquireRange)
+			{
+				PLAYERINIFO->Gain_Item(m_pItemData, m_iStackCount);
+				Set_Dead();
+			}
+		}
+		break;
+	}
+
+	default:
+		break;
+	}
+	return false;
+}
+
 void CWorldItem::PopUp()
 {
 	m_bPopUp = true;
 	m_pTerrain = static_cast<CCubeTerrain*>(m_pGameInstance->Get_FirstGameObject(Get_CurrentTrueLevel(), LAYERID::LAYER_TERRAIN));
 	m_fUpForce = m_fJumpForce;
-	m_vMoveDirection.m128_f32[0] = CEngineUtility::Get_RandomFloat(-1, 1);
-	m_vMoveDirection.m128_f32[2] = CEngineUtility::Get_RandomFloat(-1, 1);
-	m_vMoveDirection = XMVector3Normalize(m_vMoveDirection);
+	m_vPopMoveDirection.m128_f32[0] = CEngineUtility::Get_RandomFloat(-1, 1);
+	m_vPopMoveDirection.m128_f32[2] = CEngineUtility::Get_RandomFloat(-1, 1);
+	m_vPopMoveDirection = XMVector3Normalize(m_vPopMoveDirection);
 }
 
 void CWorldItem::Set_Item(const ITEM_DATA* pItemData, _uint iStackCount )

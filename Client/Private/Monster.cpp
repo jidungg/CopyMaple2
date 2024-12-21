@@ -12,6 +12,7 @@
 #include "Client_Utility.h"
 #include "WayFinder.h"
 #include "CubeTerrain.h"
+#include "DropTable.h"
 
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CCharacter(pDevice, pContext)
@@ -692,7 +693,11 @@ void CMonster::Free()
 
 void CMonster::On_HPZero()
 {
-	m_bHPZero = true;
+	if (false == m_bHPZero)
+	{
+		DROPTABLE->Drop_Item(this);
+		m_bHPZero = true;
+	}
 
 	Set_Target(nullptr);
 }

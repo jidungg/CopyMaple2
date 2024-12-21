@@ -26,6 +26,7 @@ public:
 	HRESULT UnEquip(DECO_ITEM_TYPE eType);
 	void Toggle_UI();
 	CPlayer* Get_Player() { return m_pPlayer; }
+	HRESULT Gain_Item(const ITEM_DATA* pItem, _uint iCount = 1);
 
 private:
 	CPlayerEquipSlot* m_pEquipSlots[(_uint)EQUIP_ITEM_TYPE::LAST] = { nullptr, };

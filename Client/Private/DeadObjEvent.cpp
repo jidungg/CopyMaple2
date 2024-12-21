@@ -2,6 +2,7 @@
 #include "DeadObjEvent.h"
 #include "GameObject.h"
 
+
 CDeadObjEvent::CDeadObjEvent(CGameObject* _pDeadObj)
 	:m_pDeadObj(_pDeadObj)
 {

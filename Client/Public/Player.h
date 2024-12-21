@@ -240,8 +240,7 @@ public:
 
 	virtual _bool Use_Skill(CSkill* pSkill) override;
 
-	HRESULT Gain_Item(CItemObjet* pItem);
-	HRESULT Gain_Item(ITEM_DATA* pItem, _uint iCount = 1);
+	HRESULT Gain_Item(const ITEM_DATA* pItem, _uint iCount = 1);
 
 	void Set_Battle(bool bBattle); 
 	HRESULT Equip(const EQUIP_ITEM_DATA* pItem);

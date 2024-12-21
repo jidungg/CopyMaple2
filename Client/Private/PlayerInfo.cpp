@@ -124,6 +124,11 @@ void CPlayerInfo::Toggle_UI()
 {
 }
 
+HRESULT CPlayerInfo::Gain_Item(const ITEM_DATA* pItem, _uint iCount)
+{
+	return m_pPlayer->Gain_Item(pItem,iCount);
+}
+
 
 void CPlayerInfo::Free()
 {

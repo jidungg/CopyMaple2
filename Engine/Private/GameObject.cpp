@@ -230,7 +230,7 @@ _vector CGameObject::Get_WorldPosition()
 
 _float CGameObject::Get_Distance(CGameObject* pOther)
 {
-	_vector vDist = pOther->Get_TransformPosition() - Get_TransformPosition();
+	_vector vDist = pOther->Get_WorldPosition() - Get_WorldPosition();
 	return XMVector3Length(vDist).m128_f32[0];
 }
 

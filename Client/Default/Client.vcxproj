@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\CubeTerrain.h" />
+    <ClInclude Include="..\Public\DropTable.h" />
     <ClInclude Include="..\Public\UIPlayerInfo.h" />
     <ClInclude Include="..\Public\InvenBuildSlot.h" />
     <ClInclude Include="..\Public\InvenConsumableSlot.h" />
@@ -330,6 +331,7 @@
     <ClCompile Include="..\Private\Bullet_MagicClaw.cpp" />
     <ClCompile Include="..\Private\Bullet_WildFire.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />
+    <ClCompile Include="..\Private\DropTable.cpp" />
     <ClCompile Include="..\Private\UIPlayerInfo.cpp" />
     <ClCompile Include="..\Private\InvenBuildSlot.cpp" />
     <ClCompile Include="..\Private\InvenETCSlot.cpp" />

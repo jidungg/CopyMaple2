@@ -12,6 +12,7 @@
 #include "UIBundle.h"
 #include "MonsterDataBase.h"
 #include "EffectManager.h"
+#include "DropTable.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance { CGameInstance::GetInstance() }
@@ -106,6 +107,6 @@ void CMainApp::Free()
 	Safe_Release(m_pGameInstance);
 	CGameInstance::Release_Engine();
 	CEffectManager::DestroyInstance();
-
+	CDropTable::DestroyInstance();
 }
 

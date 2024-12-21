@@ -2,7 +2,72 @@
     "DropTable": [
       {
         "MonsterId": "SNAIL",
-        "Table": [
+        "Items": [
+          {
+            "Item": {
+              "Type": "EQUIP",
+              "Id": "BASIC_SHOES"
+            },
+            "Weight": 60
+          },
+          {
+            "Item": {
+              "Type": "EQUIP",
+              "Id": "BASIC_SUIT"
+            },
+            "Weight": 60
+          },
+          {
+            "Item": {
+              "Type": "EQUIP",
+              "Id": "BASIC_HAT"
+            },
+            "Weight": 60
+          },
+          {
+            "Item": {
+              "Type": "ETC",
+              "Id": "BOTTLE"
+            },
+
+            "Weight": 500
+          },
+          {
+            "Item": {
+              "Type": "EQUIP",
+              "Id": "BASIC_STAFF"
+            },
+            "Weight": 60
+          },
+          {
+            "Item": {
+              "Type": "ETC",
+              "Id": "SALT"
+            },
+
+            "Weight": 500
+          },
+          {
+            "Item": {
+              "Type": "ETC",
+              "Id": "PEPPER"
+            },
+
+            "Weight": 500
+          },
+          {
+            "Item": {
+              "Type": "ETC",
+              "Id": "GREEN_SNIAL"
+            },
+
+            "Weight": 100
+          }
+        ]
+      },
+      {
+        "MonsterId": "CRAB",
+        "Items": [
           {
             "Item": {
               "Type": "EQUIP",
@@ -30,21 +95,117 @@
               "Id": "BASIC_STAFF"
             },
             "Weight": 60
+          },
+          {
+            "Item": {
+              "Type": "ETC",
+              "Id": "CHICKEN"
+            },
+
+            "Weight": 500
+          },
+          {
+            "Item": {
+              "Type": "ETC",
+              "Id": "MEAT"
+            },
+
+            "Weight": 500
+          },
+          {
+            "Item": {
+              "Type": "ETC",
+              "Id": "BOTTLE"
+            },
+
+            "Weight": 500
+          },
+          {
+            "Item": {
+              "Type": "EQUIP",
+              "Id": "EVILWINGS"
+            },
+
+            "Weight": 60
           }
-          
         ]
       },
       {
-        "MonsterId": "CRAB"
+        "MonsterId": "STUMP",
+        "Items": [
+          {
+            "Item": {
+              "Type": "EQUIP",
+              "Id": "BASIC_SHOES"
+            },
+            "Weight": 60
+          },
+          {
+            "Item": {
+              "Type": "EQUIP",
+              "Id": "BASIC_SUIT"
+            },
+            "Weight": 60
+          },
+          {
+            "Item": {
+              "Type": "EQUIP",
+              "Id": "BASIC_HAT"
+            },
+            "Weight": 60
+          },
+          {
+            "Item": {
+              "Type": "EQUIP",
+              "Id": "BASIC_STAFF"
+            },
+            "Weight": 60
+          },
+          {
+            "Item": {
+              "Type": "ETC",
+              "Id": "CHERRY"
+            },
 
+            "Weight": 500
+          },
+          {
+            "Item": {
+              "Type": "ETC",
+              "Id": "SHROOM"
+            },
+
+            "Weight": 500
+          },
+          {
+            "Item": {
+              "Type": "ETC",
+              "Id": "ROOT"
+            },
+
+            "Weight": 500
+          },
+          {
+            "Item": {
+              "Type": "EQUIP",
+              "Id": "EVILWINGS"
+            },
+
+            "Weight": 60
+          }
+        ]
       },
       {
-        "MonsterId": "STUMP"
-
-      },
-      {
-        "MonsterId": "BAYAR"
-
+        "MonsterId": "BAYAR",
+        "Items": [
+          {
+            "Item": {
+              "Type": "ETC",
+              "Id": "BAYAR_PIECE"
+            },
+            "Weight": 100
+          }
+        ]
       }
     ]
 }

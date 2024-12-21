@@ -64,7 +64,7 @@ HRESULT CLevel_Home::Initialize(void* pArg)
 	tWorldItemDesc.pItemData = static_cast<const ITEM_DATA*>(ITEMDB->Get_Data(ITEM_TYPE::EQUIP, 0));
 	tWorldItemDesc.iStackCount = 1;
 	tWorldItemDesc.pTerrain = m_pCubeTerrain;
-	tWorldItemDesc.fRotationPerSec = XMConvertToRadians( 90.f);
+
 	CWorldItem* pWorldItem = static_cast<CWorldItem*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CWorldItem::m_szProtoTag, &tWorldItemDesc));
 	pWorldItem->Set_Transform({ 0,1,0,1 }, { 0,0,0,0 }, 1);
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, LAYER_NONCOLLISION, pWorldItem)))

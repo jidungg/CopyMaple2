@@ -3,6 +3,7 @@
 #include "Engine_Defines.h"
 #include "GameInstance.h"
 #include "JsonParser.h"
+#include "DropTable.h"
 
 #include "Camera_Free.h"
 #include "Camera_Trace.h"
@@ -503,6 +504,8 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(ITEMDB->Load_Data()))
 		return E_FAIL;
 	if (FAILED(EFFECT_MANAGER->Load_Data()))
+		return E_FAIL;
+	if (FAILED(DROPTABLE->Load_Data()))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로드 완료."));

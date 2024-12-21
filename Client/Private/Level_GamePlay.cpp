@@ -63,6 +63,7 @@ return S_OK;
 
 void CLevel_GamePlay::On_Start(_uint iPrevLevelID)
 {
+	m_pGameInstance->Set_CollisionMatrix( LAYERID::LAYER_WORLD_ITEM, LAYERID::LAYER_PLAYER, true);
 
 }
 

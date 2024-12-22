@@ -7,6 +7,8 @@
 #include "GameInstance.h"
 #include "InvenDecoSlot.h"
 #include "PlayerDecoSlot.h"
+#include "WorldItem.h"
+#include "Client_Utility.h"
 
 IMPLEMENT_SINGLETON(CPlayerInfo)
 CPlayerInfo::CPlayerInfo()
@@ -50,7 +52,7 @@ HRESULT CPlayerInfo::Equip(CInvenEquipSlot* pInvenSlot)
 
 	//해당 부위에 장착된 아이템이 장착 해제. 
 	//한벌은 SUIT, TOP, BOTTOM 모두 장착 해제해야함.
-	list <const EQUIP_ITEM_DATA*> pPopedItem;
+	list <const ITEM_DATA*> pPopedItem;
 	pPopedItem.push_back(m_pEquipSlots[(_uint)eEQType]->Pop_Item());
 	m_pPlayer->UnEquip(eEQType);
 	if (eEQType == EQUIP_ITEM_TYPE::SUIT)
@@ -92,6 +94,24 @@ HRESULT CPlayerInfo::Equip(CInvenEquipSlot* pInvenSlot)
 HRESULT CPlayerInfo::UnEquip(EQUIP_ITEM_TYPE eType)
 {
 	//TODO : CUIPlayerInfoEquipSlot 에서 우클릭 시 호출
+	//먼저 인벤에 빈 공간이 있는지 확인
+	//있으면 인벤에 넣고, 플레이어에서 장착 해제
+	//없으면 밖으로 떨구기.
+	const ITEM_DATA* pItem = m_pEquipSlots[(_uint)eType]->Pop_Item();
+	HRESULT hr =  m_pInventory->Insert_Item(pItem);
+	if (FAILED(hr))
+	{
+		CWorldItem::WORLDITEM_DESC tItemDesc;
+		tItemDesc.pItemData = pItem;
+		tItemDesc.iStackCount = 1;
+		CWorldItem* pItem = static_cast<CWorldItem*>(m_pGameInstance->Clone_Proto_Object_Stock(CWorldItem::m_szProtoTag, &tItemDesc));
+		pItem->Set_Transform(m_pPlayer->Get_WorldPosition());
+		pItem->Compute_Matrix();
+		m_pGameInstance->Add_GameObject_ToLayer((_uint)Get_CurrentTrueLevel(), (_uint)LAYERID::LAYER_WORLD_ITEM, pItem);
+		pItem->PopUp();
+	}
+	m_pPlayer->UnEquip(eType);
+
 	return S_OK;
 }
 
@@ -117,6 +137,21 @@ HRESULT CPlayerInfo::Equip(CInvenDecoSlot* pInvenSlot)
 
 HRESULT CPlayerInfo::UnEquip(DECO_ITEM_TYPE eType)
 {
+	const ITEM_DATA* pItem = m_pDecoSlots[(_uint)eType]->Pop_Item();
+	HRESULT hr = m_pInventory->Insert_Item(pItem);
+	if (FAILED(hr))
+	{
+		CWorldItem::WORLDITEM_DESC tItemDesc;
+		tItemDesc.pItemData = pItem;
+		tItemDesc.iStackCount = 1;
+		CWorldItem* pItem = static_cast<CWorldItem*>(m_pGameInstance->Clone_Proto_Object_Stock(CWorldItem::m_szProtoTag, &tItemDesc));
+		pItem->Set_Transform(m_pPlayer->Get_WorldPosition());
+		pItem->Compute_Matrix();
+		m_pGameInstance->Add_GameObject_ToLayer((_uint)Get_CurrentTrueLevel(), (_uint)LAYERID::LAYER_WORLD_ITEM, pItem);
+		pItem->PopUp();
+	}
+	m_pPlayer->UnEquip(eType);
+
 	return S_OK;
 }
 
@@ -128,6 +163,17 @@ HRESULT CPlayerInfo::Gain_Item(const ITEM_DATA* pItem, _uint iCount)
 {
 	return m_pPlayer->Gain_Item(pItem,iCount);
 }
+
+_bool CPlayerInfo::Is_Insertable(const ITEM_DATA* pItem, _uint iCount)
+{
+	return m_pInventory->Is_Insertable(pItem,iCount);
+}
+
+CPlayerInfoSlot* CPlayerInfo::Get_Slot(CUIPlayerInfo::SLOT_ID eSlotID)
+{
+	return nullptr;
+}
+
 
 
 void CPlayerInfo::Free()

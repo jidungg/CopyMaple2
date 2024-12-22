@@ -133,16 +133,18 @@ _bool CWorldItem::Check_Collision(CGameObject* pOther)
 		{
 			if (fDist <= m_fMagnetRange)
 			{
-				Set_Target(pOther);
-
+				if (PLAYERINIFO->Is_Insertable(m_pItemData, m_iStackCount))
+					Set_Target(pOther);
 			}
 		}
 		else
 		{
 			if (fDist <= m_fAcquireRange)
 			{
-				PLAYERINIFO->Gain_Item(m_pItemData, m_iStackCount);
-				Set_Dead();
+				if(FAILED( PLAYERINIFO->Gain_Item(m_pItemData, m_iStackCount)))
+					Set_Target(nullptr);
+				else
+					Set_Dead();
 			}
 		}
 		break;

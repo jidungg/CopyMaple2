@@ -559,6 +559,8 @@ namespace Client
 		HEAL_NORMAL,
 		LAST
 	};
+
+
 }
 
 extern HINSTANCE g_hInst;

@@ -34,8 +34,10 @@
 #include "BackGround.h"
 #include "UIInvenTabButton.h"
 #include "UIInvenItemList.h"
-#include "UIPlayerInfo.h"
+#include "UIMainHUDGuage.h"
 #include "UIVerticalFill.h"
+#include "UIPlayerInfo.h"
+#include "UIPlayerInfoSlot.h"
 
 #include "StateMachine.h"
 #include "SkillManager.h"
@@ -199,7 +201,9 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Texture_InvenSlotBack"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/SlotBack/InvenSlot_%d.dds"), 5))))
 		return E_FAIL;
-
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Texture_PlayerInfoSlotBack"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/PlayerInfo/playerinfo_slot_base_%d.dds"), 5))))
+		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Face_Face1"),
 		CFace::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Face/00300011/")))))
 		return E_FAIL;
@@ -260,6 +264,9 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/UI/MainHPBar/"), TEXT(".dds"))))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
+		TEXT("../Bin/Resources/Textures/UI/PlayerInfo/"), TEXT(".dds"))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더 로드."));
@@ -466,11 +473,17 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIInvenTabButton::m_szProtoTag,
 		CUIInvenTabButton::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIPlayerInfo::m_szProtoTag,
-		CUIPlayerInfo::Create(m_pDevice, m_pContext))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIMainHUDGuage::m_szProtoTag,
+		CUIMainHUDGuage::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_UI_IntVerticalFill"),
 		CUIVerticalFill<_int>::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIPlayerInfo::m_szProtoTag,
+		CUIPlayerInfo::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIPlayerInfoSlot::m_szProtoTag,
+		CUIPlayerInfoSlot::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,

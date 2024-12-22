@@ -16,6 +16,7 @@ public:
 	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 
 	HRESULT Insert_Item(const ITEM_DATA* pData, _uint iCount = 1);
+	_bool Is_Insertable(const ITEM_DATA* pData, _uint iCount = 1);
 	//HRESULT Remove_Item(ITEM_DESC* pData);
 
 	vector<CInvenSlot*>* Get_Slots(ITEM_TYPE eItemType);

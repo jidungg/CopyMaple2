@@ -1,216 +1,220 @@
 #include "stdafx.h"
 #include "UIPlayerInfo.h"
+#include "PlayerInfo.h"
 #include "GameInstance.h"
-#include "UIPanel.h"
-#include "UIVerticalFill.h"
-#include "UIFont.h"
+#include "UIPlayerInfoSlot.h"
+#include "PlayerInfoSlot.h"
+
 
 CUIPlayerInfo::CUIPlayerInfo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CUIContainer(pDevice, pContext)
+	: CUICommonWindow(pDevice, pContext)
 {
 }
 
 CUIPlayerInfo::CUIPlayerInfo(const CUIPlayerInfo& Prototype)
-	: CUIContainer(Prototype)
+	: CUICommonWindow(Prototype)
 {
 }
-
 
 HRESULT CUIPlayerInfo::Initialize(void* pArg)
 {
+	//239 + 422 + 
 	UIPLAYERINFO_DESC* pDesc = static_cast<UIPLAYERINFO_DESC*>(pArg);
-	m_pStat = pDesc->pStat;
-	m_pDefaultStat = pDesc->pDefaultStat;
-
-	if (FAILED(__super::Initialize(pArg)))
+	pDesc->bDraggableX = true;
+	pDesc->bDraggableY = true;
+	pDesc->eAnchorType = CORNOR_TYPE::LEFT_TOP;
+	pDesc->ePivotType = CORNOR_TYPE::LEFT_TOP;
+	pDesc->fSizeX = m_fBackSize.x + m_fBackBorderSize.x *2 + m_fDashBoardSize.x + m_fCommonMargin.x *3;
+	pDesc->fSizeY = m_fHeaderHeight + m_fDashBoardSize.y + m_fCommonMargin.y *2  ;
+	pDesc->fXOffset = 100;
+	pDesc->fYOffset = 100;
+	pDesc->vBorder = { m_fHeaderHeight,m_fCommonMargin.y,m_fCommonMargin.x,m_fCommonMargin.x };
+	pDesc->szIconProtoTag = TEXT("playerinfo_icon.dds");
+	pDesc->szTitleText = TEXT("캐릭터 정보");
+if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
+	
+	m_pPlayerInfo = pDesc->pPlayerInfo;
+
+
 	CUIPanel::PANEL_DESC tPanelDesc;
-	tPanelDesc.eAnchorType = CORNOR_TYPE::BOT;
-	tPanelDesc.ePivotType = CORNOR_TYPE::BOT;
-	tPanelDesc.fSizeX = pDesc->fSizeX;
-	tPanelDesc.fSizeY = pDesc->fSizeY;
-	tPanelDesc.fXOffset = 0;
-	tPanelDesc.fYOffset = -25;
-	tPanelDesc.vBorder = { 0,0,0,0 };
-	tPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("mainhpbar_back.dds")));
-	m_pBack = static_cast<CUIPanel*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &tPanelDesc));
-	if (nullptr == m_pBack)
-		return E_FAIL;
-	Add_Child(m_pBack);
+	tPanelDesc.eAnchorType = CORNOR_TYPE::LEFT_TOP;
+	tPanelDesc.ePivotType = CORNOR_TYPE::LEFT_TOP;
+	tPanelDesc.fXOffset = m_fCommonMargin.x + (m_fBackBorderSize.x - 3);
+	tPanelDesc.fYOffset = m_fHeaderHeight + m_fCommonMargin.y + (m_fDashBoardSize.y - m_fBackSize.y) / 2;
+	tPanelDesc.fSizeX = m_fBackSize.x;
+	tPanelDesc.fSizeY = m_fBackSize.y;
+	tPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("playerinfo_back.dds"), nullptr));
+	tPanelDesc.vBorder = { m_fBackBorderSize.y,m_fBackBorderSize.y,m_fBackBorderSize.x,m_fBackBorderSize.x };
+	m_pBackPanel = static_cast<CUIPanel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIPanel::m_szProtoTag, &tPanelDesc));
+	Add_Child(m_pBackPanel);
 
-	CUIVerticalFill<_int>::UIVERTICALFILL_DESC tFillDesc;
-	tFillDesc.eAnchorType = CORNOR_TYPE::BOT;
-	tFillDesc.ePivotType = CORNOR_TYPE::BOT;
-	tFillDesc.fSizeX = pDesc->fSizeX;
-	tFillDesc.fSizeY = pDesc->fSizeY;
-	tFillDesc.fXOffset = 0;
-	tFillDesc.fYOffset = -25;
-	tFillDesc.vBorder = { 0,0,0,0 };
-	tFillDesc.pValue = &(m_pStat->iHP);
-	tFillDesc.pDefaultValue = &(m_pDefaultStat->iHP);
-	tFillDesc.fVerticalEnd = { 0.85f };
-	tFillDesc.fVerticalStart = { 0.054f };
-	tFillDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("mainhpbar_red.dds")));
-	m_pRedFill = static_cast<CUIVerticalFill<_int>*>(m_pGameInstance->Clone_Proto_Object_Stock(TEXT("Prototype_UI_IntVerticalFill"), &tFillDesc));
-	if (nullptr == m_pRedFill)
-		return E_FAIL;
-	Add_Child(m_pRedFill);
+	tPanelDesc.eAnchorType = CORNOR_TYPE::LEFT_TOP;
+	tPanelDesc.ePivotType = CORNOR_TYPE::LEFT_TOP;
+	tPanelDesc.fXOffset = -(m_fBackBorderSize.x - 3);
+	tPanelDesc.fYOffset = -(m_fBackBorderSize.y - 3);
+	tPanelDesc.fSizeX = m_fBackSize.x + (m_fBackBorderSize.x - 3) * 2;
+	tPanelDesc.fSizeY = m_fDashBoardSize.y;
+	tPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("playerinfo_back_border.dds"), nullptr));
+	tPanelDesc.vBorder = { m_fBackBorderSize.y,m_fBackBorderSize.y,m_fBackBorderSize.x,m_fBackBorderSize.x };
+	m_pBackBorder = static_cast<CUIPanel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIPanel::m_szProtoTag, &tPanelDesc));
+	m_pBackPanel->Add_Child(m_pBackBorder);
 
-	tFillDesc.pValue = &(m_pStat->iSP);
-	tFillDesc.pDefaultValue = &(m_pDefaultStat->iSP);
-	tFillDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("mainhpbar_blue.dds")));
-	m_pBlueFill = static_cast<CUIVerticalFill<_int>*>(m_pGameInstance->Clone_Proto_Object_Stock(TEXT("Prototype_UI_IntVerticalFill"), &tFillDesc));
-	if (nullptr == m_pBlueFill)
-		return E_FAIL;
-	Add_Child(m_pBlueFill);
 
-	tPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("mainhpbar_white0.dds")));
-	m_pWhiteFill[0] = static_cast<CUIPanel*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &tPanelDesc));
-	if (nullptr == m_pWhiteFill[0])
-		return E_FAIL;
-	Add_Child(m_pWhiteFill[0]);
+	tPanelDesc.eAnchorType = CORNOR_TYPE::RIGHT_TOP;
+	tPanelDesc.ePivotType = CORNOR_TYPE::RIGHT_TOP;
+	tPanelDesc.fXOffset = -m_fCommonMargin.x;
+	tPanelDesc.fYOffset = m_fHeaderHeight + m_fCommonMargin.y;
+	tPanelDesc.fSizeX = m_fDashBoardSize.x;
+	tPanelDesc.fSizeY = m_fDashBoardSize.y;
+	tPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("playerinfo_dashboard.dds"), nullptr));
+	tPanelDesc.vBorder = { m_fCommonMargin.y,m_fCommonMargin.y,m_fCommonMargin.x,m_fCommonMargin.x };
+	m_pDashBoardBack = static_cast<CUIPanel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIPanel::m_szProtoTag, &tPanelDesc));
+	Add_Child(m_pDashBoardBack);
 
-	tPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("mainhpbar_white1.dds")));
-	m_pWhiteFill[1] = static_cast<CUIPanel*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &tPanelDesc));
-	if (nullptr == m_pWhiteFill[1])
+	if (FAILED(Ready_Slots()))
 		return E_FAIL;
-	Add_Child(m_pWhiteFill[1]);
 
-	tPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("mainhpbar_white2.dds")));
-	m_pWhiteFill[2] = static_cast<CUIPanel*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &tPanelDesc));
-	if (nullptr == m_pWhiteFill[2])
-		return E_FAIL;
-	Add_Child(m_pWhiteFill[2]);
-
-	tPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("mainhpbar_front.dds")));
-	m_pFront = static_cast<CUIPanel*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &tPanelDesc));
-	if (nullptr == m_pFront)
-		return E_FAIL;
-	Add_Child(m_pFront);
-
-	CUIFont::UIFontDesc tFontDesc{};
-	tFontDesc.eAnchorType = CORNOR_TYPE::TOP;
-	tFontDesc.ePivotType = CORNOR_TYPE::RIGHT;
-	tFontDesc.fXOffset = -5;
-	tFontDesc.fYOffset = 30;
-	tFontDesc.pText = L"HP";
-	tFontDesc.pFontTag = L"LV2Gothic_Bold_15";
-	tFontDesc.vColor = _vector{ 0.6f, 0.2f, 0.2f, 1.f };
-	tFontDesc.bShade = true;
-	m_pHPFont = static_cast<CUIFont*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIFont::m_szProtoTag, &tFontDesc));
-	if (nullptr == m_pHPFont)
-		return E_FAIL;
-	Add_Child(m_pHPFont);
-
-	tFontDesc.eAnchorType = CORNOR_TYPE::TOP;
-	tFontDesc.ePivotType = CORNOR_TYPE::LEFT;
-	tFontDesc.fXOffset = 5;
-	tFontDesc.fYOffset = 30;
-	tFontDesc.pText = L"SP";
-	tFontDesc.pFontTag = L"LV2Gothic_Bold_15";
-	tFontDesc.vColor = _vector{ 0.2f, 0.2f, 0.6f, 1.f };
-	tFontDesc.bShade = true;
-	m_pSPFont = static_cast<CUIFont*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIFont::m_szProtoTag, &tFontDesc));
-	if (nullptr == m_pSPFont)
-		return E_FAIL;
-	Add_Child(m_pSPFont);
-
-	tFontDesc.eAnchorType = CORNOR_TYPE::CENTER;
-	tFontDesc.ePivotType = CORNOR_TYPE::RIGHT;
-	tFontDesc.fXOffset = -5;
-	tFontDesc.fYOffset = -2.5;
-	wstring str = to_wstring(m_pStat->iHP);
-	tFontDesc.pText = str.c_str();
-	tFontDesc.pFontTag = L"LV2Gothic_Bold_13";
-	tFontDesc.vColor = _vector{ 1.f, 1.f, 1.f, 1.f };
-	tFontDesc.bShade = true;
-	m_pHPCountFont = static_cast<CUIFont*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIFont::m_szProtoTag, &tFontDesc));
-	if (nullptr == m_pHPCountFont)
-		return E_FAIL;
-	Add_Child(m_pHPCountFont);
-
-	tFontDesc.eAnchorType = CORNOR_TYPE::CENTER;
-	tFontDesc.ePivotType = CORNOR_TYPE::LEFT;
-	tFontDesc.fXOffset = 5;
-	tFontDesc.fYOffset = -2.5;
-	str = to_wstring(m_pStat->iSP);
-	tFontDesc.pText = str.c_str();
-	tFontDesc.pFontTag = L"LV2Gothic_Bold_13";
-	tFontDesc.vColor = _vector{ 1.f, 1.f, 1.f, 1.f };
-	tFontDesc.bShade = true;
-	m_pSPCountFont = static_cast<CUIFont*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIFont::m_szProtoTag, &tFontDesc));
-	if (nullptr == m_pSPCountFont)
-		return E_FAIL;
-	Add_Child(m_pSPCountFont);
-
-	tFontDesc.eAnchorType = CORNOR_TYPE::CENTER;
-	tFontDesc.ePivotType = CORNOR_TYPE::RIGHT;
-	tFontDesc.fXOffset = -5;
-	tFontDesc.fYOffset = 10;
-	str = to_wstring(m_pDefaultStat->iHP);
-	tFontDesc.pText = str.c_str();
-	tFontDesc.pFontTag = L"LV2Gothic_Bold_10";
-	tFontDesc.vColor = _vector{ 0.7f, 0.7, 0.7, 1.f };
-	tFontDesc.bShade = true;
-	m_pDefaultHPCountFont = static_cast<CUIFont*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIFont::m_szProtoTag, &tFontDesc));
-	if (nullptr == m_pDefaultHPCountFont)
-		return E_FAIL;
-	Add_Child(m_pDefaultHPCountFont);
-
-	tFontDesc.eAnchorType = CORNOR_TYPE::CENTER;
-	tFontDesc.ePivotType = CORNOR_TYPE::LEFT;
-	tFontDesc.fXOffset = 5;
-	tFontDesc.fYOffset = 10;
-	str = to_wstring(m_pDefaultStat->iSP);
-	tFontDesc.pText = str.c_str();
-	tFontDesc.pFontTag = L"LV2Gothic_Bold_10";
-	tFontDesc.vColor = _vector{ 0.7f, 0.7, 0.7, 1.f };
-	tFontDesc.bShade = true;
-	m_pDefaultSPCountFont = static_cast<CUIFont*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIFont::m_szProtoTag, &tFontDesc));
-	if (nullptr == m_pDefaultSPCountFont)
-		return E_FAIL;
-	Add_Child(m_pDefaultSPCountFont);
+	
+	return S_OK;
+}
+HRESULT CUIPlayerInfo::Ready_Slots()
+{
+	CUIPlayerInfoSlot::UIPLAYERINFO_SLOT_DESC tSlotDesc;
+	tSlotDesc.eAnchorType = CORNOR_TYPE::LEFT_TOP;
+	tSlotDesc.ePivotType = CORNOR_TYPE::LEFT_TOP;
+	tSlotDesc.fSizeX = m_fSlotSize.x;
+	tSlotDesc.fSizeY = m_fSlotSize.y;
+	tSlotDesc.pPlayerInfo = this;
+	for (_uint i = 0; i < 6; i++)
+	{
+		tSlotDesc.fXOffset = m_fCommonMargin.x+ m_fInnerBackBorderSize.x;
+		tSlotDesc.fYOffset = m_fCommonMargin.y + m_fInnerBackBorderSize .y+ (m_fSlotSize.y + m_fCommonMargin.y) * i;
+		tSlotDesc.eSlotId = (SLOT_ID)i;
+		m_arrSlot[i] = static_cast<CUIPlayerInfoSlot*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIPlayerInfoSlot::m_szProtoTag, &tSlotDesc));
+		m_pBackBorder->Add_Child(m_arrSlot[i]);
+	}
+	tSlotDesc.eAnchorType = CORNOR_TYPE::RIGHT_TOP;
+	tSlotDesc.ePivotType = CORNOR_TYPE::RIGHT_TOP;
+	for (_uint i = 6; i < SLOT_LAST; i++)
+	{
+		tSlotDesc.fXOffset = -(m_fInnerBackBorderSize.x+ m_fCommonMargin.x );
+		tSlotDesc.fYOffset = m_fCommonMargin.y + m_fInnerBackBorderSize .y+ (m_fSlotSize.y + m_fCommonMargin.y) * (i - 6);
+		tSlotDesc.eSlotId = (SLOT_ID)i;
+		m_arrSlot[i] = static_cast<CUIPlayerInfoSlot*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIPlayerInfoSlot::m_szProtoTag, &tSlotDesc));
+		m_pBackBorder->Add_Child(m_arrSlot[i]);
+	}
 	return S_OK;
 }
 
-HRESULT CUIPlayerInfo::Render()
+void CUIPlayerInfo::Update_Slot(SLOT_ID eSlotID, CPlayerInfoSlot* pItemSlot)
 {
-	m_pHPCountFont->Set_Text(to_wstring(m_pStat->iHP).c_str());
-	m_pSPCountFont->Set_Text(to_wstring(m_pStat->iSP).c_str());
-	m_pDefaultHPCountFont->Set_Text(to_wstring(m_pDefaultStat->iHP).c_str());
-	m_pDefaultSPCountFont->Set_Text(to_wstring(m_pDefaultStat->iSP).c_str());
-	for (_uint i = 0; i < 3; i++)
+	m_arrSlot[eSlotID]->Set_Item(pItemSlot->Get_ItemData());
+}
+
+void CUIPlayerInfo::Switch_Tab(TAB_ID eTab)
+{
+}
+
+void CUIPlayerInfo::Select_Slot(SLOT_ID eSlotID)
+{
+}
+
+list<CUIPlayerInfo::SLOT_ID> CUIPlayerInfo::Item_To_SlotID(const ITEM_DATA* pItemData)
+{
+	list<SLOT_ID> listSlotID;
+	ITEM_TYPE eType = pItemData->eITemType;
+	switch (eType)
 	{
-		if(i < m_pStat->iEP )
-			m_pWhiteFill[i]->Set_Active(true);
-		else
-			m_pWhiteFill[i]->Set_Active(false);
-	} 
-	if (FAILED(__super::Render()))
-		return E_FAIL;
-	return S_OK;
+	case Client::ITEM_TYPE::EQUIP:
+	{
+		EQUIP_ITEM_TYPE eEquipType = static_cast<const EQUIP_ITEM_DATA*>(pItemData)->eEquipType;
+		switch (eEquipType)
+		{
+		case Client::EQUIP_ITEM_TYPE::HAT:
+			listSlotID.push_back(SLOT_ID::HAT);
+			break;
+		case Client::EQUIP_ITEM_TYPE::TOP:
+			listSlotID.push_back(SLOT_ID::TOP);
+			break;
+		case Client::EQUIP_ITEM_TYPE::BOTTOM:
+			listSlotID.push_back(SLOT_ID::BOTTOM);
+			break;
+		case Client::EQUIP_ITEM_TYPE::SUIT:
+			listSlotID.push_back(SLOT_ID::TOP);
+			listSlotID.push_back(SLOT_ID::BOTTOM);
+			break;
+		case Client::EQUIP_ITEM_TYPE::GLOVES:
+			listSlotID.push_back(SLOT_ID::GLOVES);
+			break;
+		case Client::EQUIP_ITEM_TYPE::SHOES:
+			listSlotID.push_back(SLOT_ID::SHOES);
+			break;
+		case Client::EQUIP_ITEM_TYPE::CAPE:
+			listSlotID.push_back(SLOT_ID::CAPE);
+			break;
+		case Client::EQUIP_ITEM_TYPE::WEAPON:
+			listSlotID.push_back(SLOT_ID::WEAPON);
+			break;
+		case Client::EQUIP_ITEM_TYPE::EAR:
+			listSlotID.push_back(SLOT_ID::EAR);
+			break;
+		case Client::EQUIP_ITEM_TYPE::LAST:
+		default:
+			break;
+		}
+		break;
+	}
+	case Client::ITEM_TYPE::DECO:
+	{
+		DECO_ITEM_TYPE eDecoType = static_cast<const DECO_ITEM_DATA*>(pItemData)->eDecoType;
+		switch (eDecoType)
+		{
+		case Client::DECO_ITEM_TYPE::FACE:
+			listSlotID.push_back(SLOT_ID::FACE);
+			break;
+		case Client::DECO_ITEM_TYPE::LAST:
+		default:
+			break;
+		}
+		break;
+	}
+	case Client::ITEM_TYPE::CONSUMABLE:
+	case Client::ITEM_TYPE::BUILD:
+	case Client::ITEM_TYPE::ETC:
+	case Client::ITEM_TYPE::LAST:
+	default:
+		break;
+	}
+	return listSlotID;
 }
 
 
 CUIPlayerInfo* CUIPlayerInfo::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CUIPlayerInfo* pInstance = new CUIPlayerInfo(pDevice, pContext);
+
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Create : CHUDBundle");
+		MSG_BOX("Failed to Cloned : CUIPlayerInfo");
 		Safe_Release(pInstance);
+		return nullptr;
 	}
+
 	return pInstance;
 }
 
 CGameObject* CUIPlayerInfo::Clone(void* pArg)
 {
 	CUIPlayerInfo* pInstance = new CUIPlayerInfo(*this);
+
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Clone : CUIMainHPBar");
+		MSG_BOX("Failed to Cloned : CUIPlayerInfo");
 		Safe_Release(pInstance);
+		return nullptr;
 	}
+
 	return pInstance;
 }
 

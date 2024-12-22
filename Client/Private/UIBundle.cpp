@@ -9,9 +9,10 @@
 #include "UIInventory.h"
 #include "Inventory.h"
 #include "UIBar.h"
-#include "UIPlayerInfo.h"
+#include "UIMainHUDGuage.h"
 #include "PlayerInfo.h"
 #include "Player.h"
+#include "UIPlayerInfo.h"
 
 IMPLEMENT_SINGLETON(CUIBundle)
 
@@ -97,8 +98,7 @@ void CUIBundle::Update(_float fTimeDelta)
 	if (m_pGameInstance->GetKeyState(KEY::I) == KEY_STATE::DOWN)
 		m_pInventory->Toggle_Active();
 	if (m_pGameInstance->GetKeyState(KEY::P) == KEY_STATE::DOWN)
-	{
-	}
+		m_pPlayerInfoUI->Toggle_Active();
 }
 
 void CUIBundle::Late_Update(_float fTimeDelta)
@@ -114,7 +114,7 @@ void CUIBundle::Set_QuickItem(KEY eHotKey, IQuickItem* pItem)
 
 void CUIBundle::Initialize_PlayerInfo(CPlayer* pPalyer)
 {
-	CUIPlayerInfo::UIPLAYERINFO_DESC tMainBarDesc;
+	CUIMainHUDGuage::UIMAINHUDGUAGE_DESC tMainBarDesc;
 	tMainBarDesc.eAnchorType = CORNOR_TYPE::BOT;
 	tMainBarDesc.ePivotType = CORNOR_TYPE::BOT;
 	tMainBarDesc.fSizeX = 168;
@@ -123,11 +123,16 @@ void CUIBundle::Initialize_PlayerInfo(CPlayer* pPalyer)
 	tMainBarDesc.fYOffset = 0;
 	tMainBarDesc.pStat = pPalyer->Get_Stat_Ref();
 	tMainBarDesc.pDefaultStat = pPalyer->Get_DefaultStat_Ref();
-	m_pMainHPBar = static_cast<CUIPlayerInfo*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPlayerInfo::m_szProtoTag, &tMainBarDesc));
+	m_pMainHPBar = static_cast<CUIMainHUDGuage*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIMainHUDGuage::m_szProtoTag, &tMainBarDesc));
 	Add_Child(m_pMainHPBar);
 	Safe_AddRef(m_pMainHPBar);
 	m_pMainHPBar->Set_Active(true);
 
+	CUIPlayerInfo::UIPLAYERINFO_DESC tPlayerInfoDesc;
+	tPlayerInfoDesc.pPlayerInfo = PLAYERINIFO;
+	m_pPlayerInfoUI = static_cast<CUIPlayerInfo*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPlayerInfo::m_szProtoTag, &tPlayerInfoDesc));
+	Add_Child(m_pPlayerInfoUI);
+	Safe_AddRef(m_pPlayerInfoUI);
 }
 
 void CUIBundle::Update_Inven_Slot(_uint iIndex,CInvenSlot* pSlot)
@@ -140,6 +145,12 @@ void CUIBundle::Update_CastingRatio(_float fRatio)
 {
 	m_pCastingBar->Update_Ratio(fRatio);
 }
+
+void CUIBundle::Update_PlayerInfo_Slot(_uint iSlotId, CPlayerInfoSlot* pItemSlot)
+{
+	m_pPlayerInfoUI->Update_Slot((CUIPlayerInfo::SLOT_ID)iSlotId, pItemSlot);
+}
+
 
 void CUIBundle::Set_CastingBarVisible(_bool bVisible)
 {
@@ -154,4 +165,5 @@ void CUIBundle::Free()
 	Safe_Release(m_pInventory);
 	Safe_Release(m_pCastingBar);
 	Safe_Release(m_pMainHPBar);
+	Safe_Release(m_pPlayerInfoUI);
 }

@@ -15,6 +15,11 @@ const _char* CPlayerDecoSlot::Get_IconTag()
 		return nullptr;
 }
 
+_bool CPlayerDecoSlot::Has_Item()
+{
+	return m_pItemData != nullptr;
+}
+
 HRESULT CPlayerDecoSlot::Insert_Item(const DECO_ITEM_DATA* pData)
 {
 	assert(pData != nullptr);

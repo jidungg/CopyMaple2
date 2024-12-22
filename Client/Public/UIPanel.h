@@ -27,6 +27,7 @@ public:
 
 	void Set_Texture(CTexture* pTexture);
 	bool Is_TextureNullptr() { return m_pTextureCom == nullptr; }
+	void Set_SRVIndex(_uint iIndex) { m_iSRVIndex = iIndex; }
 protected:
 	virtual HRESULT Bind_ShaderResources();
 private:

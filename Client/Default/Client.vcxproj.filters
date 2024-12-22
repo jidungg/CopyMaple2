@@ -246,10 +246,13 @@
     <ClInclude Include="..\Public\InvenConsumableSlot.h" />
     <ClInclude Include="..\Public\InvenBuildSlot.h" />
     <ClInclude Include="..\Public\InvenETCSlot.h" />
-    <ClInclude Include="..\Public\UIPlayerInfo.h" />
+    <ClInclude Include="..\Public\UIMainHUDGuage.h" />
     <ClInclude Include="..\Public\UIVerticalFill.h" />
     <ClInclude Include="..\Public\WorldItem.h" />
     <ClInclude Include="..\Public\DropTable.h" />
+    <ClInclude Include="..\Public\UIPlayerInfo.h" />
+    <ClInclude Include="..\Public\UIPlayerInfoSlot.h" />
+    <ClInclude Include="..\Public\PlayerInfoSlot.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -435,10 +438,13 @@
     <ClCompile Include="..\Private\InvenBuildSlot.cpp" />
     <ClCompile Include="..\Private\InvenETCSlot.cpp" />
     <ClCompile Include="..\Private\InvenConsumableSlot.cpp" />
-    <ClCompile Include="..\Private\UIPlayerInfo.cpp" />
+    <ClCompile Include="..\Private\UIMainHUDGuage.cpp" />
     <ClCompile Include="..\Private\UIVerticalFill.cpp" />
     <ClCompile Include="..\Private\WorldItem.cpp" />
     <ClCompile Include="..\Private\DropTable.cpp" />
+    <ClCompile Include="..\Private\UIPlayerInfo.cpp" />
+    <ClCompile Include="..\Private\UIPlayerInfoSlot.cpp" />
+    <ClCompile Include="..\Private\PlayerInfoSlot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

@@ -36,7 +36,6 @@ HRESULT CUIInventory::Initialize(void* pArg)
 	pInvenDesc->vBorder = { m_fHeaderHeight,m_fCommonMargin.y,m_fCommonMargin.x,m_fCommonMargin.x };
 	pInvenDesc->szIconProtoTag = TEXT("Inventory_Icon.dds");
 	pInvenDesc->szTitleText = TEXT("소지품");
-	pInvenDesc->pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("Common_Window.dds")));
 	if (FAILED(CUICommonWindow::Initialize(pArg)))
 		return E_FAIL;
 

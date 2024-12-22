@@ -1,24 +1,46 @@
 #pragma once
-#include "UIContainer.h"
-#include "Status.h"
+#include "UICommonWindow.h"
+#include "Item.h"
 
 BEGIN(Client)
+class CPlayerInfo;
 class CUIPanel;
-template<typename T>
-class CUIVerticalFill;
-class CUIFont;
+class CUIPlayerInfoSlot;
+class CPlayerEquipSlot;
+class CPlayerInfoSlot;
+//아이템 장착 상황, 공격력, 방어력, 아이템 점수, 스탯
 class CUIPlayerInfo :
-    public CUIContainer
+    public CUICommonWindow
 {
 public:
-	typedef struct UIPlayerInfoDesc : public CUIContainer::UIOBJECT_DESC
+	enum TAB_ID
 	{
-		Stat* pStat = { nullptr };
-		Stat* pDefaultStat = { nullptr };
+		EQUIP,
+		DECO,
+		TAB_LAST
+	};
+	enum SLOT_ID
+	{
+		HAT,
+		TOP,
+		BOTTOM,
+		GLOVES,
+		SHOES,
+		CAPE,
+		WEAPON,
+		EAR,
+		FACE,
+		SLOT_LAST
+	};
+public:
+	typedef struct UIPlayerInfoDesc : public CUICommonWindow::UICOMMONWINDOW_DESC
+	{
+		CPlayerInfo* pPlayerInfo = { nullptr };
 	}UIPLAYERINFO_DESC;
 
-	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_UIMainHPBarDesc";
-protected:
+public:
+	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_CUIPlayerInfo";
+private:
 	explicit CUIPlayerInfo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	explicit CUIPlayerInfo(const CUIPlayerInfo& Prototype);
 	virtual ~CUIPlayerInfo() = default;
@@ -26,27 +48,35 @@ protected:
 public:
 	virtual HRESULT Initialize(void* pArg) override;
 	
-	virtual HRESULT Render() override;
+	void Update_Slot(SLOT_ID eSlotID, CPlayerInfoSlot* pItemSlot);
+	void Switch_Tab(TAB_ID eTab);
+	void Select_Slot(SLOT_ID eSlotID);
+
+public:
+    static std::list<SLOT_ID> Item_To_SlotID(const ITEM_DATA* pItemData);
 private:
-	Stat* m_pStat = { nullptr };
-	Stat* m_pDefaultStat = { nullptr };
-	CUIPanel* m_pBack = { nullptr };
-	CUIPanel* m_pFront = { nullptr };
-	CUIVerticalFill<_int>* m_pRedFill = { nullptr };
-	CUIVerticalFill<_int>* m_pBlueFill = { nullptr };
-	CUIPanel* m_pWhiteFill[3] = {nullptr};
+	HRESULT Ready_Slots();
+private:
+	CPlayerInfo* m_pPlayerInfo = { nullptr };
+	_float2 m_fSlotSize = { 68,68 };
+	_float2 m_fCommonMargin = { 6,6};
+	_float m_fHeaderHeight = { 55 };
+	_uint m_iVisibleRowCount = { 8 };
+	_uint m_iVisibleColCount = { 6 };
+	_float2 m_fBackSize = { 422,451 };
+	_float2 m_fBackBorderSize = { 7,7};
+	_float2 m_fInnerBackBorderSize = { 5,5};
+	_float2 m_fDashBoardSize = { 239,457 };
 
-	CUIFont* m_pHPFont = { nullptr };
-	CUIFont* m_pSPFont = { nullptr };
-	CUIFont* m_pHPCountFont = { nullptr };
-	CUIFont* m_pSPCountFont = { nullptr };
-	CUIFont* m_pDefaultHPCountFont = { nullptr };
-	CUIFont* m_pDefaultSPCountFont = { nullptr };
-
+	CUIPanel* m_pBackBorder = { nullptr };
+	CUIPanel* m_pBackPanel = { nullptr };
+	CUIPanel* m_pDashBoardBack = { nullptr };
+	TAB_ID m_eCurrentTab = { TAB_ID::EQUIP };
+	CUIPlayerInfoSlot* m_arrSlot[SLOT_ID::SLOT_LAST] = { nullptr, };
 public:
 	static CUIPlayerInfo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
-	void Free();
+	virtual void Free() override;
 };
 
 END

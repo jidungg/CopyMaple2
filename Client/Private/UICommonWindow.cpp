@@ -18,9 +18,10 @@ CUICommonWindow::CUICommonWindow(const CUICommonWindow& Prototype)
 
 HRESULT CUICommonWindow::Initialize(void* pArg)
 {
+	UICOMMONWINDOW_DESC* pDesc = static_cast<UICOMMONWINDOW_DESC*> (pArg);
+	pDesc->pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("Common_Window.dds")));
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-	UICOMMONWINDOW_DESC* pDesc = static_cast<UICOMMONWINDOW_DESC*> (pArg);
 	if (nullptr != pDesc->szIconProtoTag)
 	{
 		CUIPanel::PANEL_DESC tPanelDesc{};

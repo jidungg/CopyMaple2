@@ -14,6 +14,7 @@ protected:
 public:
 	// ISlotItem을(를) 통해 상속됨
 	virtual const _char* Get_IconTag() override;
+	virtual _bool Has_Item();
 
 	HRESULT Insert_Item(const DECO_ITEM_DATA* pData);
 	const DECO_ITEM_DATA* Pop_Item();

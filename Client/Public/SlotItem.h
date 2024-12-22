@@ -8,6 +8,7 @@ public:
 	virtual const _char* Get_IconTag() abstract;
 protected:
 };
+
 class IQuickItem : public ISlotItem
 {
 public:

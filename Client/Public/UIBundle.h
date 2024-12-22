@@ -9,11 +9,17 @@ class CUIInventory;
 class CUIBar;
 class CInvenSlot;
 class CPlayer;
+class CUIMainHUDGuage;
 class CUIPlayerInfo;
+class CPlayerEquipSlot;
+class CPlayerDecoSlot;
+class CPlayerInfoSlot;
 class CUIBundle :
     public CUIContainer
 {
+
 	DECLARE_SINGLETON(CUIBundle)
+
 public:
 	typedef struct UIBUNDLE_DESC : public CUIObject::UIOBJECT_DESC
 	{
@@ -29,20 +35,23 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 
-	CUIInventory* Get_Inventory() { return m_pInventory; }
-	CUIQuickSlotBundle* Get_QuckSlotBundle() { return m_pQuickSlotBundle1; }
 
-	void Set_QuickItem(KEY eHotKey, IQuickItem* pItem);
 	void Initialize_PlayerInfo(CPlayer* pPalyer);
 	void Update_Inven_Slot(_uint iIndex, CInvenSlot* pSlot);
 	void Update_CastingRatio(_float fRatio);
+	void Update_PlayerInfo_Slot(_uint iSlotId, CPlayerInfoSlot* pItemSlot);
 	void Set_CastingBarVisible(_bool bVisible);
+
+	CUIInventory* Get_Inventory() { return m_pInventory; }
+	CUIQuickSlotBundle* Get_QuckSlotBundle() { return m_pQuickSlotBundle1; }
+	void Set_QuickItem(KEY eHotKey, IQuickItem* pItem);
 private:
 	CUIQuickSlotBundle* m_pQuickSlotBundle1 = { nullptr };
 	CUIQuickSlotBundle* m_pQuickSlotBundle2 = { nullptr };
 	CUIInventory* m_pInventory = { nullptr };
 	CUIBar* m_pCastingBar = { nullptr };
-	CUIPlayerInfo* m_pMainHPBar = { nullptr };
+	CUIMainHUDGuage* m_pMainHPBar = { nullptr };
+	CUIPlayerInfo* m_pPlayerInfoUI = { nullptr };
 public:
 	void Free() override;
 };

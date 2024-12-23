@@ -2,6 +2,11 @@
 #include "UIContainer.h"
 #include "Item.h"
 
+
+BEGIN(Engien)
+class CGameInstance;
+END
+
 BEGIN(Client)
 class IQuickItem;
 class CUIQuickSlotBundle;
@@ -15,13 +20,13 @@ class CPlayerEquipSlot;
 class CPlayerDecoSlot;
 class CPlayerInfoSlot;
 class CUIBundle :
-    public CUIContainer
+    public CBase
 {
 
 	DECLARE_SINGLETON(CUIBundle)
 
 public:
-	typedef struct UIBUNDLE_DESC : public CUIObject::UIOBJECT_DESC
+	typedef struct UIBUNDLE_DESC 
 	{
 		ID3D11Device* pDevice;
 		ID3D11DeviceContext* pContext;
@@ -31,9 +36,7 @@ protected:
 	~CUIBundle() = default;
 
 public:
-	virtual HRESULT Initialize(void* pArg) override;
-	virtual void Update(_float fTimeDelta) override;
-	virtual void Late_Update(_float fTimeDelta) override;
+	virtual HRESULT Initialize(void* pArg) ;
 
 
 	void Initialize_PlayerInfo(CPlayer* pPalyer);
@@ -45,7 +48,13 @@ public:
 	CUIInventory* Get_Inventory() { return m_pInventory; }
 	CUIQuickSlotBundle* Get_QuckSlotBundle() { return m_pQuickSlotBundle1; }
 	void Set_QuickItem(KEY eHotKey, IQuickItem* pItem);
+	void Toggle_Inventory();
+	void Toggle_PlayerInfo();
 private:
+	ID3D11Device* m_pDevice = { nullptr };
+	ID3D11DeviceContext* m_pContext = { nullptr };
+	CGameInstance* m_pGameInstance = { nullptr };
+
 	CUIQuickSlotBundle* m_pQuickSlotBundle1 = { nullptr };
 	CUIQuickSlotBundle* m_pQuickSlotBundle2 = { nullptr };
 	CUIInventory* m_pInventory = { nullptr };

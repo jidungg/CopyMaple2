@@ -71,8 +71,9 @@ protected:
 	POINT m_tGrabbedMousePos = { 0,0 };
 	_bool m_bGrabbed = { false };
 	_bool m_bRegisterUIManager = { true };
+	_bool m_bContainer = { false };
 private:
-	bool m_bMouseOver = { false };
+	_bool m_bMouseOver = { false };
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;

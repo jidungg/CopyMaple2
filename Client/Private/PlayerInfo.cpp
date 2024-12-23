@@ -118,7 +118,7 @@ HRESULT CPlayerInfo::UnEquip(EQUIP_ITEM_TYPE eType)
 HRESULT CPlayerInfo::Equip(CInvenDecoSlot* pInvenSlot)
 {
 	const DECO_ITEM_DATA* pData = static_cast<const DecoItemData*>( pInvenSlot->Get_ItemData());
-	const DECO_ITEM_DATA* pPoped = m_pDecoSlots[(_uint)pData->eDecoType]->Pop_Item();
+	const DECO_ITEM_DATA* pPoped = static_cast<const DecoItemData*>( m_pDecoSlots[(_uint)pData->eDecoType]->Pop_Item());
 	m_pDecoSlots[(_uint)pData->eDecoType]->Insert_Item(pData);
 	m_pPlayer->Equip(pData);
 	pInvenSlot->Pop_Item();

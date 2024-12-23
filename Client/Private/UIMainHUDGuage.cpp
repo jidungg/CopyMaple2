@@ -173,6 +173,12 @@ HRESULT CUIMainHUDGuage::Initialize(void* pArg)
 	return S_OK;
 }
 
+void CUIMainHUDGuage::Late_Update(_float fTimeDelta)
+{
+	__super::Late_Update(fTimeDelta);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
+}
+
 HRESULT CUIMainHUDGuage::Render()
 {
 	m_pHPCountFont->Set_Text(to_wstring(m_pStat->iHP).c_str());

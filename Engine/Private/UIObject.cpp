@@ -66,7 +66,7 @@ void CUIObject::Remove_Child(CGameObject* pChild)
 }
 void CUIObject::Increase_Priority()
 {
-	if(m_pParent == nullptr)
+	if(m_pParent == nullptr || static_cast<CUIObject*>( m_pParent)->m_bContainer)
 		m_iPriority = m_iStaticPriority++;
 	else
 		static_cast<CUIObject*>(m_pParent)->Increase_Priority();

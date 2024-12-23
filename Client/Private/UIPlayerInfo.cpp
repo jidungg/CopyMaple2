@@ -31,8 +31,8 @@ HRESULT CUIPlayerInfo::Initialize(void* pArg)
 	pDesc->vBorder = { m_fHeaderHeight,m_fCommonMargin.y,m_fCommonMargin.x,m_fCommonMargin.x };
 	pDesc->szIconProtoTag = TEXT("playerinfo_icon.dds");
 	pDesc->szTitleText = TEXT("캐릭터 정보");
-if (FAILED(__super::Initialize(pArg)))
-		return E_FAIL;
+	if (FAILED(__super::Initialize(pArg)))
+			return E_FAIL;
 	
 	m_pPlayerInfo = pDesc->pPlayerInfo;
 
@@ -77,6 +77,11 @@ if (FAILED(__super::Initialize(pArg)))
 
 	
 	return S_OK;
+}
+void CUIPlayerInfo::Late_Update(_float fTimeDelta)
+{
+	__super::Late_Update(fTimeDelta);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 }
 HRESULT CUIPlayerInfo::Ready_Slots()
 {

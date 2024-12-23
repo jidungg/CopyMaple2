@@ -47,6 +47,7 @@ void CUIManager::Update()
 		m_pFocusedUI = nullptr;
         return;
     }
+
     m_pFocusedUI = pTopUI->Find_FocusedUI(tPosition);
 	//if (m_pFocusedUI != nullptr)
  //       m_pFocusedUI->MouseOver();

@@ -13,6 +13,8 @@ protected:
 
 public:
 	virtual bool Check_MouseOver(POINT fPos);
+	virtual HRESULT Render() override;
+private:
 
 public:
 	static CUIContainer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

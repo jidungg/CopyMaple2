@@ -54,6 +54,12 @@ void CUIBar::Update_Ratio(_float fRatio)
 	m_pFillTransformCom->Set_Size(m_fRatio * (m_fFrameXSize - m_vBorder.z - m_vBorder.w), m_fFrameYSize - m_vBorder.y - m_vBorder.x);
 }
 
+void CUIBar::Late_Update(_float fTimeDelta)
+{
+	__super::Late_Update(fTimeDelta);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
+}
+
 
 
 HRESULT CUIBar::Render()

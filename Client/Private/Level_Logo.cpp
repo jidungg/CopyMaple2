@@ -111,17 +111,10 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(LAYERID eID)
 HRESULT CLevel_Logo::Ready_UI()
 {
 	CUIBundle::UIBUNDLE_DESC tDesc{};
-	tDesc.eAnchorType = CORNOR_TYPE::CENTER;
-	tDesc.ePivotType = CORNOR_TYPE::CENTER;
-	tDesc.fSizeX = g_iWinSizeX;
-	tDesc.fSizeY = g_iWinSizeY;
-	tDesc.fXOffset = 0;
-	tDesc.fYOffset = 0;
 	tDesc.pDevice = m_pDevice;
 	tDesc.pContext = m_pContext;
 	UIBUNDLE->Initialize(&tDesc);
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI,UIBUNDLE,true)))
-		return E_FAIL;
+
 	return S_OK;
 }
 

@@ -61,6 +61,12 @@ void CUIQuickSlotBundle::Update(_float fTImeDelta)
 	}
 }
 
+void CUIQuickSlotBundle::Late_Update(_float fTimeDelta)
+{
+	__super::Late_Update(fTimeDelta);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
+}
+
 void CUIQuickSlotBundle::Recevie_Input(KEY eKey)
 {
 	if (m_mapQuickSlot.find(eKey) != m_mapQuickSlot.end())

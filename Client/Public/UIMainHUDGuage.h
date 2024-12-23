@@ -25,7 +25,8 @@ protected:
 
 public:
 	virtual HRESULT Initialize(void* pArg) override;
-	
+	virtual void Late_Update(_float fTimeDelta) override;
+
 	virtual HRESULT Render() override;
 private:
 	Stat* m_pStat = { nullptr };

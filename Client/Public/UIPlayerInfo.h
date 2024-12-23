@@ -47,7 +47,8 @@ private:
 
 public:
 	virtual HRESULT Initialize(void* pArg) override;
-	
+	virtual void Late_Update(_float fTimeDelta) override;
+
 	void Update_Slot(SLOT_ID eSlotID, CPlayerInfoSlot* pItemSlot);
 	void Switch_Tab(TAB_ID eTab);
 	void Select_Slot(SLOT_ID eSlotID);

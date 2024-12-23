@@ -587,7 +587,10 @@ void CPlayer::Receive_KeyInput(_float fTimeDelta)
 		m_bWalk = true;
 	else if (m_pGameInstance->GetKeyState(KEY::LSHIFT) == KEY_STATE::UP)
 		m_bWalk = false;
-
+	if (m_pGameInstance->GetKeyState(KEY::I) == KEY_STATE::DOWN)
+		UIBUNDLE->Toggle_Inventory();
+	if (m_pGameInstance->GetKeyState(KEY::P) == KEY_STATE::DOWN)
+		UIBUNDLE->Toggle_PlayerInfo();
 
 	_vector vAddDir{ 0,0,0,0 };
 	_float vMoveSpeed = m_tStat.fRunSpeed;

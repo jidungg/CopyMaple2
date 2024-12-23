@@ -17,9 +17,9 @@
 IMPLEMENT_SINGLETON(CUIBundle)
 
 CUIBundle::CUIBundle()
-	: CUIContainer(nullptr, nullptr)
+	: CBase()
 {
-
+	m_pGameInstance = CGameInstance::GetInstance();
 }
 
 HRESULT CUIBundle::Initialize(void* pArg)
@@ -31,13 +31,12 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	m_pContext = pDesc->pContext;
 	Safe_AddRef(m_pDevice);
 	Safe_AddRef(m_pContext);
-	if (FAILED(__super::Initialize(pArg)))
-		return E_FAIL;
 
 	CUIInventory::UIINVENTORY_DESC tDesc;
 	tDesc.pInventory = INVENTORY;
 	m_pInventory = static_cast<CUIInventory*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIInventory::m_szProtoTag, &tDesc));
-	Add_Child(m_pInventory);	
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pInventory, true)))
+		return E_FAIL;
 	m_pInventory->Set_Active(false);
 	Safe_AddRef(m_pInventory);
 
@@ -55,7 +54,8 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	tQuickDesc.fYOffset = -30;
 
 	m_pQuickSlotBundle1 = static_cast<CUIQuickSlotBundle*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIQuickSlotBundle::m_szProtoTag, &tQuickDesc));
-	Add_Child(m_pQuickSlotBundle1);
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pQuickSlotBundle1, true)))
+		return E_FAIL;
 	Safe_AddRef(m_pQuickSlotBundle1);
 
 
@@ -68,7 +68,8 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	tQuickDesc.fYOffset = -30;
 
 	m_pQuickSlotBundle2 = static_cast<CUIQuickSlotBundle*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIQuickSlotBundle::m_szProtoTag, &tQuickDesc));
-	Add_Child(m_pQuickSlotBundle2);
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pQuickSlotBundle2, true)))
+		return E_FAIL;
 	Safe_AddRef(m_pQuickSlotBundle2);
 
 	CUIBar::UIBarDesc tBarDesc;
@@ -84,7 +85,8 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	tBarDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock( TEXT("castingbar_mainfrm.dds")));
 	tBarDesc.pFillTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("castingbar_fill.dds")));
 	m_pCastingBar = static_cast<CUIBar*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIBar::m_szProtoTag, &tBarDesc));
-	Add_Child(m_pCastingBar);
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pCastingBar, true)))
+		return E_FAIL;
 	Safe_AddRef(m_pCastingBar);
 	m_pCastingBar->Set_Active(false);
 
@@ -92,26 +94,21 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CUIBundle::Update(_float fTimeDelta)
-{
-	__super::Update(fTimeDelta);
-	if (m_pGameInstance->GetKeyState(KEY::I) == KEY_STATE::DOWN)
-		m_pInventory->Toggle_Active();
-	if (m_pGameInstance->GetKeyState(KEY::P) == KEY_STATE::DOWN)
-		m_pPlayerInfoUI->Toggle_Active();
-}
-
-void CUIBundle::Late_Update(_float fTimeDelta)
-{
-	__super::Late_Update(fTimeDelta);
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
-}
 
 void CUIBundle::Set_QuickItem(KEY eHotKey, IQuickItem* pItem)
 {
 	m_pQuickSlotBundle1->Set_QuickItem(eHotKey, pItem);
 }
 
+void CUIBundle::Toggle_Inventory()
+{
+	m_pInventory->Toggle_Active();
+}
+
+void CUIBundle::Toggle_PlayerInfo()
+{
+	m_pPlayerInfoUI->Toggle_Active();
+}
 void CUIBundle::Initialize_PlayerInfo(CPlayer* pPalyer)
 {
 	CUIMainHUDGuage::UIMAINHUDGUAGE_DESC tMainBarDesc;
@@ -124,15 +121,18 @@ void CUIBundle::Initialize_PlayerInfo(CPlayer* pPalyer)
 	tMainBarDesc.pStat = pPalyer->Get_Stat_Ref();
 	tMainBarDesc.pDefaultStat = pPalyer->Get_DefaultStat_Ref();
 	m_pMainHPBar = static_cast<CUIMainHUDGuage*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIMainHUDGuage::m_szProtoTag, &tMainBarDesc));
-	Add_Child(m_pMainHPBar);
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pMainHPBar, true)))
+		return ;
 	Safe_AddRef(m_pMainHPBar);
 	m_pMainHPBar->Set_Active(true);
 
 	CUIPlayerInfo::UIPLAYERINFO_DESC tPlayerInfoDesc;
 	tPlayerInfoDesc.pPlayerInfo = PLAYERINIFO;
 	m_pPlayerInfoUI = static_cast<CUIPlayerInfo*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPlayerInfo::m_szProtoTag, &tPlayerInfoDesc));
-	Add_Child(m_pPlayerInfoUI);
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pPlayerInfoUI, true)))
+		return;
 	Safe_AddRef(m_pPlayerInfoUI);
+	m_pPlayerInfoUI->Set_Active(false);
 }
 
 void CUIBundle::Update_Inven_Slot(_uint iIndex,CInvenSlot* pSlot)
@@ -160,6 +160,8 @@ void CUIBundle::Set_CastingBarVisible(_bool bVisible)
 void CUIBundle::Free()
 {
 	__super::Free();
+	Safe_Release(m_pDevice);
+	Safe_Release(m_pContext);
 	Safe_Release(m_pQuickSlotBundle1);
 	Safe_Release(m_pQuickSlotBundle2);
 	Safe_Release(m_pInventory);

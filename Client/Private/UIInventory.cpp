@@ -46,6 +46,11 @@ HRESULT CUIInventory::Initialize(void* pArg)
 
 	return S_OK;
 }
+void CUIInventory::Late_Update(_float fTimeDelta)
+{
+	__super::Late_Update(fTimeDelta);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
+}
 HRESULT CUIInventory::Ready_Slots()
 {
 	CUIPanel::PANEL_DESC tItemBackPanelDesc;

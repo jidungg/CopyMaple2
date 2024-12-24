@@ -253,6 +253,7 @@
     <ClInclude Include="..\Public\UIPlayerInfo.h" />
     <ClInclude Include="..\Public\UIPlayerInfoSlot.h" />
     <ClInclude Include="..\Public\PlayerInfoSlot.h" />
+    <ClInclude Include="..\Public\UIModelPad.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -445,6 +446,7 @@
     <ClCompile Include="..\Private\UIPlayerInfo.cpp" />
     <ClCompile Include="..\Private\UIPlayerInfoSlot.cpp" />
     <ClCompile Include="..\Private\PlayerInfoSlot.cpp" />
+    <ClCompile Include="..\Private\UIModelPad.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

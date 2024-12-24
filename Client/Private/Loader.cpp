@@ -38,6 +38,7 @@
 #include "UIVerticalFill.h"
 #include "UIPlayerInfo.h"
 #include "UIPlayerInfoSlot.h"
+#include "UIModelPad.h"
 
 #include "StateMachine.h"
 #include "SkillManager.h"
@@ -76,6 +77,7 @@
 #include "EffectManager.h"
 #include "AttachableBodyPart.h"
 #include "WorldItem.h"
+
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -484,6 +486,9 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIPlayerInfoSlot::m_szProtoTag,
 		CUIPlayerInfoSlot::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIModelPad::m_szProtoTag,
+		CUIModelPad::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,

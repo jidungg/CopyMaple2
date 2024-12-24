@@ -8,6 +8,7 @@ class CUIPanel;
 class CUIPlayerInfoSlot;
 class CPlayerEquipSlot;
 class CPlayerInfoSlot;
+class CUIModelPad;
 //아이템 장착 상황, 공격력, 방어력, 아이템 점수, 스탯
 class CUIPlayerInfo :
     public CUICommonWindow
@@ -59,6 +60,7 @@ private:
 	HRESULT Ready_Slots();
 private:
 	CPlayerInfo* m_pPlayerInfo = { nullptr };
+
 	_float2 m_fSlotSize = { 68,68 };
 	_float2 m_fCommonMargin = { 6,6};
 	_float m_fHeaderHeight = { 55 };
@@ -74,6 +76,7 @@ private:
 	CUIPanel* m_pDashBoardBack = { nullptr };
 	TAB_ID m_eCurrentTab = { TAB_ID::EQUIP };
 	CUIPlayerInfoSlot* m_arrSlot[SLOT_ID::SLOT_LAST] = { nullptr, };
+	CUIModelPad* m_pModelPad = { nullptr };
 public:
 	static CUIPlayerInfo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

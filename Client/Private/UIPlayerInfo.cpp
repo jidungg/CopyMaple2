@@ -4,7 +4,8 @@
 #include "GameInstance.h"
 #include "UIPlayerInfoSlot.h"
 #include "PlayerInfoSlot.h"
-
+#include "UIModelPad.h"
+#include "Player.h"
 
 CUIPlayerInfo::CUIPlayerInfo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUICommonWindow(pDevice, pContext)
@@ -20,6 +21,8 @@ HRESULT CUIPlayerInfo::Initialize(void* pArg)
 {
 	//239 + 422 + 
 	UIPLAYERINFO_DESC* pDesc = static_cast<UIPLAYERINFO_DESC*>(pArg);
+	m_pPlayerInfo = pDesc->pPlayerInfo;
+
 	pDesc->bDraggableX = true;
 	pDesc->bDraggableY = true;
 	pDesc->eAnchorType = CORNOR_TYPE::LEFT_TOP;
@@ -34,7 +37,6 @@ HRESULT CUIPlayerInfo::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 			return E_FAIL;
 	
-	m_pPlayerInfo = pDesc->pPlayerInfo;
 
 
 	CUIPanel::PANEL_DESC tPanelDesc;
@@ -60,7 +62,6 @@ HRESULT CUIPlayerInfo::Initialize(void* pArg)
 	m_pBackBorder = static_cast<CUIPanel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIPanel::m_szProtoTag, &tPanelDesc));
 	m_pBackPanel->Add_Child(m_pBackBorder);
 
-
 	tPanelDesc.eAnchorType = CORNOR_TYPE::RIGHT_TOP;
 	tPanelDesc.ePivotType = CORNOR_TYPE::RIGHT_TOP;
 	tPanelDesc.fXOffset = -m_fCommonMargin.x;
@@ -72,6 +73,16 @@ HRESULT CUIPlayerInfo::Initialize(void* pArg)
 	m_pDashBoardBack = static_cast<CUIPanel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIPanel::m_szProtoTag, &tPanelDesc));
 	Add_Child(m_pDashBoardBack);
 
+	CUIModelPad::UIMODELPAD_DESC tModelPadDesc;
+	tModelPadDesc.eAnchorType = CORNOR_TYPE::CENTER;
+	tModelPadDesc.ePivotType = CORNOR_TYPE::CENTER;
+	tModelPadDesc.fXOffset = 0;
+	tModelPadDesc.fYOffset = 0;
+	tModelPadDesc.fSizeX = m_fBackSize.x - m_fCommonMargin.x*2 - m_fSlotSize.x*2;
+	tModelPadDesc.fSizeY = m_fBackSize.y;
+	tModelPadDesc.pModel = m_pPlayerInfo->Get_Player();
+	m_pModelPad = static_cast<CUIModelPad*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIModelPad::m_szProtoTag, &tModelPadDesc));
+	m_pBackPanel->Add_Child(m_pModelPad);
 	if (FAILED(Ready_Slots()))
 		return E_FAIL;
 

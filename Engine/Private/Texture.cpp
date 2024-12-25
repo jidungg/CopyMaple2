@@ -92,7 +92,7 @@ HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle)
 		
 		ID3D11ShaderResourceView* pSRV = { nullptr };
 		HRESULT		hr = {};
-		if (false == strcmp(szExt, ".dds"))
+		if (false == strcmp(szExt, ".dds") || false == strcmp(szExt, ".DDS"))
 			hr = CreateDDSTextureFromFile(m_pDevice, szWideFullPath, nullptr, &pSRV);
 		else if (false == strcmp(szExt, ".tga"))
 			return E_FAIL;

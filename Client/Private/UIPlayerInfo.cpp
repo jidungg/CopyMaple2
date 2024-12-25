@@ -78,11 +78,12 @@ HRESULT CUIPlayerInfo::Initialize(void* pArg)
 	tModelPadDesc.ePivotType = CORNOR_TYPE::CENTER;
 	tModelPadDesc.fXOffset = 0;
 	tModelPadDesc.fYOffset = 0;
-	tModelPadDesc.fSizeX = m_fBackSize.x - m_fCommonMargin.x*2 - m_fSlotSize.x*2;
+	tModelPadDesc.fSizeX = m_fBackSize.x - m_fSlotSize.x*2 - m_fCommonMargin.x*2;
 	tModelPadDesc.fSizeY = m_fBackSize.y;
 	tModelPadDesc.pModel = m_pPlayerInfo->Get_Player();
 	m_pModelPad = static_cast<CUIModelPad*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIModelPad::m_szProtoTag, &tModelPadDesc));
 	m_pBackPanel->Add_Child(m_pModelPad);
+	
 	if (FAILED(Ready_Slots()))
 		return E_FAIL;
 

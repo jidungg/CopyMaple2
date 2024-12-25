@@ -62,6 +62,7 @@ HRESULT CHumanModelObject::Render()
 	//if (FAILED(Bind_ShaderResources(m_pFaceShaderCom)))
 	//	return E_FAIL;
 
+
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 
 	CShader* pShader;

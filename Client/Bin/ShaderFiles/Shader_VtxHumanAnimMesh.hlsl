@@ -6,6 +6,7 @@ float4x4 g_BoneMatrices[512];
 
 texture2D g_DiffuseTexture;
 texture2D g_FaceTexture;
+float4 g_vCustomColor;
 
 struct VS_IN
 {

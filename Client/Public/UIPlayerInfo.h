@@ -68,7 +68,7 @@ private:
 	_uint m_iVisibleColCount = { 6 };
 	_float2 m_fBackSize = { 422,451 };
 	_float2 m_fBackBorderSize = { 7,7};
-	_float2 m_fInnerBackBorderSize = { 5,5};
+	_float2 m_fInnerBackBorderSize = { 6,6};
 	_float2 m_fDashBoardSize = { 239,457 };
 
 	CUIPanel* m_pBackBorder = { nullptr };

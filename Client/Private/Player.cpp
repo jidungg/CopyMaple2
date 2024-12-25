@@ -102,6 +102,10 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 	ITEM_DATA* pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_STAFF);
 	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_HAT);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_STAFF);
+	Gain_Item(pItemDesc);
 
 	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::CONSUMABLE, (_uint)CONSUMABLE_ITEM_ID::HP_POTION);
 	Gain_Item(pItemDesc);

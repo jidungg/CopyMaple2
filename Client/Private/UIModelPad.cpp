@@ -35,7 +35,7 @@ HRESULT CUIModelPad::Initialize(void* pArg)
 		return E_FAIL;
 
 	_float fAspect = pDesc->fSizeX/ pDesc->fSizeY;
-	_float fFovY = XMConvertToRadians(40.f);
+	_float fFovY = XMConvertToRadians(50.f);
 	_float fNear = 0.1f;
 	_float fFar = 1000.f;
 	m_ModelProjMatrix = XMMatrixPerspectiveFovLH(fFovY, fAspect, fNear, fFar);
@@ -115,6 +115,12 @@ HRESULT CUIModelPad::Render()
 		m_pVIBufferCom->Render();
 	}
 
+
+	for (auto& pChild : m_pChilds)
+	{
+		if (pChild->Is_Active())
+			pChild->Render();
+	}
 	return S_OK;
 }
  

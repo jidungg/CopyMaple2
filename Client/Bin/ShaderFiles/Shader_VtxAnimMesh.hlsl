@@ -8,6 +8,8 @@ float4x4 g_BoneMatrices[512];
 texture2D g_DiffuseTexture;
 texture2D g_FaceTexture;
 
+float4 g_vCustomColor = (1, 1, 1, 1);
+texture2D g_CustomColorTexture;
 
 struct VS_IN
 {
@@ -93,7 +95,7 @@ PS_OUT PS_FACE_MAIN(PS_IN In)
     vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     if (vMtrlDiffuse.a < 0.1f)
         discard;
-
+    vMtrlDiffuse = vMtrlDiffuse * g_vCustomColor;
     vector vFaceDiffuse = g_FaceTexture.Sample(LinearSampler, In.vTexcoord);
 
     Out.vDiffuse = vFaceDiffuse.a * vFaceDiffuse + (1 - vFaceDiffuse.a) * vMtrlDiffuse;
@@ -103,7 +105,23 @@ PS_OUT PS_FACE_MAIN(PS_IN In)
 
     return Out;
 }
+PS_OUT PS_PLAYERSKIN_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
 
+    vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    if (vMtrlDiffuse.a < 0.1f)
+        discard;
+    vMtrlDiffuse = vMtrlDiffuse * g_vCustomColor;
+    
+    Out.vDiffuse = vMtrlDiffuse;
+
+	/* -1.f ~ 1.f -> 0.f ~ 1.f */
+    Out.vNormal = float4(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+    Out.vDepth = float4(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);
+
+    return Out;
+}
 technique11 DefaultTechnique
 {
 	
@@ -127,6 +145,15 @@ technique11 DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_FACE_MAIN();
     }
+    pass PlayerSkinPass
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_PLAYERSKIN_MAIN();
+    }
 
 }

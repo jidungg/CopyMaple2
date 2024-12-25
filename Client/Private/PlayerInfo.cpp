@@ -98,6 +98,8 @@ HRESULT CPlayerInfo::UnEquip(EQUIP_ITEM_TYPE eType)
 	//있으면 인벤에 넣고, 플레이어에서 장착 해제
 	//없으면 밖으로 떨구기.
 	const ITEM_DATA* pItem = m_pEquipSlots[(_uint)eType]->Pop_Item();
+	if (pItem == nullptr)
+		return E_FAIL;
 	HRESULT hr =  m_pInventory->Insert_Item(pItem);
 	if (FAILED(hr))
 	{

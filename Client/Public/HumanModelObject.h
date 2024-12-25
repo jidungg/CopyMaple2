@@ -49,6 +49,8 @@ private:
 	CFace* m_pFaceCom = { nullptr };
 	//CShader* m_pFaceShaderCom = { nullptr };
 	unordered_map<MESH_PART_ID, _uint> m_mapMeshPartIdx;
+
+	_float4 m_vSkinColor = { 1.f,1.f,1.f,1.f };
 public:
 	static CHumanModelObject* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

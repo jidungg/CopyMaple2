@@ -92,6 +92,7 @@ HRESULT CModelObject::Render()
     {
         if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", i, TEXTURE_TYPE::DIFFUSE, 0)))
             return E_FAIL;
+
 		if (CModel::TYPE::TYPE_NONANIM != m_eModelType)
             if (FAILED(m_pModelCom->Bind_BoneMatrices(m_pShaderCom, "g_BoneMatrices", i)))
                 return E_FAIL;
@@ -177,8 +178,6 @@ HRESULT CModelObject::Bind_ShaderResources(CShader* pShader)
         return E_FAIL;
     if (FAILED(pShader->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ))))
         return E_FAIL;
-
-
 
     return S_OK;
 }

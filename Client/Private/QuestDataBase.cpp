@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "QuestDataBase.h"
+#include "PlayerInfo.h"
 
 IMPLEMENT_SINGLETON(CQuestDataBase)
 
@@ -26,20 +27,72 @@ void CQuestDataBase::Insert_Data(QUEST_DATA* pData)
 
 _bool CQuestDataBase::Is_QuestCompleted(QUEST_ID eId)
 {
-	for (auto& eCompletedId : m_listCompleted)
-	{
-		if (eCompletedId == eId)
-			return true;
-	}
-	return false;
+
+	return m_setCompleted.find(eId) != m_setCompleted.end();
 }
 
-_bool CQuestDataBase::Is_QuestSatisfacted(QUEST_ID eId)
+_bool CQuestDataBase::Is_QuestSatisfiedCompleteCondition(QUEST_ID eId)
+{
+	if (false == Is_QuestAccepted(eId))
+		return false;
+	
+	return m_mapData[eId]->Is_SatisfiedCompleteCondition();
+}
+
+_bool CQuestDataBase::Is_QuestAccepted(QUEST_ID eId)
+{
+	return m_setAccepted.find(eId) != m_setAccepted.end();
+}
+
+_bool CQuestDataBase::Is_SatisfiedAcceptCondition(QUEST_ID eId)
+{
+	return m_mapData[eId]->Is_SatisfiedAcceptCondition();
+}
+
+void CQuestDataBase::Accept_Quest(QUEST_ID eId)
 {
 	if (Is_QuestCompleted(eId))
-		return false;
+		return;
+	if (Is_QuestAccepted(eId))
+		return;
+	if (false == Is_SatisfiedAcceptCondition(eId))
+		return;
+	m_mapData[eId]->eState = QUEST_STATE::ACCEPTED;
+	m_setAccepted.insert(eId);
+}
 
-	return false;
+void CQuestDataBase::Complete_Quest(QUEST_ID eId)
+{
+	if (false == Is_QuestAccepted(eId))
+		return;
+	if (false == Is_QuestSatisfiedCompleteCondition(eId))
+		return;
+	m_mapData[eId]->eState = QUEST_STATE::COMPLETED;
+	m_setAccepted.erase(eId);
+	m_setCompleted.insert(eId);
+	
+	for (auto& pairItemReward : m_mapData[eId]->tReward.m_eItemList)
+	{
+		PLAYERINIFO->Gain_Item(pairItemReward.first.eItemType, pairItemReward.first.iID, pairItemReward.second);
+	}
+	PLAYERINIFO->Gain_EXP(m_mapData[eId]->tReward.m_iExp);
+	PLAYERINIFO->Gain_Gold(m_mapData[eId]->tReward.m_iGold);
+}
+
+void CQuestDataBase::Abandon_Quest(QUEST_ID eId)
+{
+	if (false == Is_QuestAccepted(eId))
+		return;
+	m_mapData[eId]->eState = QUEST_STATE::NOT_ACCEPTED;
+	m_setAccepted.erase(eId);
+}
+
+void CQuestDataBase::Increase_MonsterKillCount(MONSTER_ID eId)
+{
+	for (auto& eQId : m_setAccepted)
+	{
+		m_mapData[eQId]->Increase_MonsterKillCount(eId);
+	}
 }
 
 void CQuestDataBase::Free()

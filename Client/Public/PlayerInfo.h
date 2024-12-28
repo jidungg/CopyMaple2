@@ -30,6 +30,9 @@ public:
 	void Toggle_UI();
 	CPlayer* Get_Player() { return m_pPlayer; }
 	HRESULT Gain_Item(const ITEM_DATA* pItem, _uint iCount = 1);
+	HRESULT Gain_Item(ITEM_TYPE eITemType, _uint iItemId, _uint iCount = 1);
+	void Gain_EXP(_int iAmount);
+	void Gain_Gold(_int iAmount);
 	_bool Is_Insertable(const ITEM_DATA* pItem, _uint iCount = 1);
 	CPlayerInfoSlot* Get_Slot(CUIPlayerInfo::SLOT_ID eSlotID);
 private:

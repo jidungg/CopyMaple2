@@ -133,6 +133,19 @@ vector<CInvenSlot*>* CInventory::Get_Slots(ITEM_TYPE eItemType)
 	return &m_vecSlot[(_uint)eItemType];
 }
 
+_uint CInventory::Get_ItemCount(ITEM_TYPE eItemType, _uint iItemId)
+{
+	_uint iCount = 0;
+	for (auto& pSlot : m_vecSlot[(_uint)eItemType])
+	{
+		const ITEM_DATA* pData = pSlot->Get_ItemData();
+		if (pData->iItemID == iItemId)
+			iCount += pSlot->Get_StackCount();
+	}
+
+	return iCount;
+}
+
 //void CInventory::Update_SlotUI(CInvenSlot* pSlot)
 //{
 //	m_pUI->Update_Slot(pSlot->Get_Type(), pSlot->Get_Index());

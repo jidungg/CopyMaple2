@@ -12,8 +12,12 @@
                 "TALK": [ 17 ],
                 "HAPPY": [ 11 ]
             },
+            "Quests": [
+                 "OPILIA_QUEST_1"
+            ],
             "ConversationNodes" : [
                 {
+                    "Index" :  0,
                     "Portraits": [
                         {
                             "Tag": "11000508.dds",
@@ -35,6 +39,7 @@
                     ]
                 },
                 {
+                    "Index": 1,
                     "Portraits": [
                         {
                             "Tag": "11000508.dds",
@@ -47,6 +52,7 @@
                     "Next": -1
                 },
                 {
+                    "Index": 2,
                     "Portraits": [
                         {
                             "Tag": "11000508.dds",
@@ -57,8 +63,47 @@
                     "Script": "나는 대장장이야. 각종 무기와 방어구들을 인챈트해주고 돈을 받는 사람이지.",
                     "Options": [],
                     "Next": -1
+                },
+                {
+                    "Index": 3,
+                    "Portraits": [
+                        {
+                            "Tag": "11000508_a.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "오필리아",
+                    "Script": "날 도와주겠다고? 정말 고마워!\n그럼 가서 파란 달팽이 10마리만 잡아와줘.",
+                    "Options": [],
+                    "Next": -1
+                },
+                {
+                    "Index": 4,
+                    "Portraits": [
+                        {
+                            "Tag": "11000508_b.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "오필리아",
+                    "Script": "흠.. 아직 덜 잡은 것 같은데..?\n기억해, 파란 달팽이 10마리 잡기야!",
+                    "Options": [],
+                    "Next": -1
+                },
+                {
+                    "Index": 5,
+                    "Portraits": [
+                        {
+                            "Tag": "11000508_c.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "오필리아",
+                    "Script": "우와! 그걸 다 잡아오다니! 정말 고마워~.\n그럼 내가 아주 좋은 걸 줄게...",
+                    "Options": [],
+                    "Next": -1
                 }
-             ]
+            ]
         },
         {
             "NPCId": "MINT",

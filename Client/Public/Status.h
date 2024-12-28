@@ -15,6 +15,7 @@ typedef struct Stat
 		iDEF = js["DEF"];
 		iEXP = js["EXP"];
 		iGold = js["Gold"];
+		iLEVEL = js["LEVEL"];
 
 		fJumpPower = js["JumpPower"];
 		fRunSpeed = js["RunSpeed"];
@@ -26,6 +27,7 @@ typedef struct Stat
 		fSPRecovery = js["SPRecovery"];
 		fEPRecovery = js["EPRecovery"];
 	}
+	void Gain_Exp(_int iAmount);
 	_int iHP { 0};
 	_int iSP { 0};
 	_int iEP { 0};
@@ -34,6 +36,7 @@ typedef struct Stat
 	_int iDEF { 0};
 	_int iEXP { 0};
 	_int iGold { 0};
+	_int iLEVEL{ 0 };
 
 	_float fJumpPower { 10.f };
 	_float fRunSpeed{ 2.5f };

@@ -50,25 +50,48 @@ void CUIChatOption::Set_Option(_uint iIdx,const  ChatOptionData& tOptionData)
 	m_iDataOptionIdx = iIdx;
 	m_tOptionData = tOptionData;
 
-	//아이콘 세팅
 	CHAT_OPT_TYPE eType = tOptionData.eOptType;
 	switch (eType)
 	{
 	case Client::CHAT_OPT_TYPE::NORMAL:
 		m_pIcon->Set_Texture(static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("npcdialog_opt_icon_normal.dds"), nullptr)));
+		m_pFont->Set_Text(tOptionData.szText);
 		break;
 	case Client::CHAT_OPT_TYPE::QUEST:
-		if (QUESTDB->Is_QuestSatisfacted(tOptionData.eQuestID))
+	{
+		//표시된 퀘스트 : 진행중 & 완료가능 & 수락 가능 중 하나
+
+		assert(false == QUESTDB->Is_QuestCompleted(tOptionData.eQuestID));
+		QuestData* pQuestData = QUESTDB->Get_Data(tOptionData.eQuestID);
+		if (QUESTDB->Is_QuestSatisfiedCompleteCondition(tOptionData.eQuestID))
+		{
 			m_pIcon->Set_Texture(static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("npcdialog_opt_icon_quest_1.dds"), nullptr)));
+			wstring wstrName = pQuestData->strName;
+			wstrName = TEXT("[완료 가능]") + wstrName;
+			m_pFont->Set_Text(wstrName.c_str());
+		}
+		else if (QUESTDB->Is_QuestAccepted(tOptionData.eQuestID))
+		{
+			m_pIcon->Set_Texture(static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("npcdialog_opt_icon_quest_2.dds"), nullptr)));
+			wstring wstrName = pQuestData->strName;
+			wstrName = TEXT("[진행 중]") + wstrName;
+			m_pFont->Set_Text(wstrName.c_str());
+		}
 		else
+		{
 			m_pIcon->Set_Texture(static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("npcdialog_opt_icon_quest_0.dds"), nullptr)));
+			wstring wstrName = pQuestData->strName;
+			wstrName = TEXT("[시작 가능]") + wstrName;
+			m_pFont->Set_Text(wstrName.c_str());
+		}
 		break;
+	}
 	case Client::CHAT_OPT_TYPE::LAST:
 	default:
 		break;
 	}
 	//폰트 세팅
-	m_pFont->Set_Text(tOptionData.szText);
+
 }
 
 

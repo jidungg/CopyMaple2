@@ -1,13 +1,15 @@
 #pragma once
 #include "Base.h"
 #include "Item.h"
-BEGIN(Client)
-enum class QUEST_TYPE
-{
+#include "Conversation.h"
 
-};
+BEGIN(Client)
+
 struct COMBIEND_ITEM_ID
 {
+	COMBIEND_ITEM_ID() = default;
+	COMBIEND_ITEM_ID(json& js);
+	json To_Json();
 	ITEM_TYPE eItemType = { ITEM_TYPE::LAST };
 	_uint iID = { UINT_MAX };
 };
@@ -15,24 +17,65 @@ typedef struct QuestReward
 {
 	QuestReward() = default;
 	QuestReward(json& js);
-	_int m_iExp = 0;
-	_int m_iGelder = 0;
+	json To_Json() ;
+	_int m_iExp = { 0 };
+	_int m_iGold = { 0 };
 	list<pair<COMBIEND_ITEM_ID, _int>> m_eItemList;
 }REWARD;
+typedef struct QuestCondition
+{
+	QuestCondition() = default;
+	QuestCondition(json& js);
+	virtual _bool Is_Satisfied() abstract;
+	virtual json To_Json();
+	QUEST_CONDITION_TYPE eType = { QUEST_CONDITION_TYPE::LAST };
+	_int iRequiredCount = { 0 };
+}QUEST_CONDITION;
+typedef struct MonsterQuestCondition : public QuestCondition
+{
+	MonsterQuestCondition() = default;
+	MonsterQuestCondition(json& js);
+	virtual _bool Is_Satisfied() override;
+	virtual json To_Json() override;
+	MONSTER_ID iMonsterID = { MONSTER_ID::SNAIL };
+	_int iCount = { 0 };
+}MONSTER_QUEST_CONDITION;
+typedef struct ItemQuestCondition : public QuestCondition
+{
+	ItemQuestCondition() = default;
+	ItemQuestCondition(json& js);
+	virtual _bool Is_Satisfied() override;
+	virtual json To_Json() override;
+	COMBIEND_ITEM_ID tItem;
+}ITEM_QUEST_CONDITION;
 typedef struct QuestData
 {
 	QuestData() = default;
 	QuestData(json& js);
+	~QuestData()
+	{
+		for (auto& pCondition : listCompleteCondition)
+		{
+			Safe_Delete(pCondition);
+		}
+	}
+	_bool Is_SatisfiedAcceptCondition();
+	_bool Is_SatisfiedCompleteCondition();
+	json To_Json();
+	_uint Get_AccurateConversationIndex();
+	void Increase_MonsterKillCount(MONSTER_ID eId);
+
+	NPC_ID eClient = { NPC_ID::NPCID_LAST };
 	QUEST_ID eQuestID = { QUEST_ID::LAST };
 	wstring strName;
-	MONSTER_ID eTargetMonster = { MONSTER_ID::LAST };
-	COMBIEND_ITEM_ID eTargetItem = {};
-	NPC_ID eClient = { NPC_ID::NPCID_LAST };
+	QUEST_STATE eState = { QUEST_STATE::NOT_ACCEPTED };
+	_uint iAcceptableLevel = 0;
+	list<QUEST_ID> listPrequisiteQuest;
+	vector<_uint> vectorAcceptConversation;
+	vector<_uint> vectorNotSatisfiedConversation;
+	list<QUEST_CONDITION*> listCompleteCondition;
+	vector<_uint> vectorCompleteConversation;
 	REWARD tReward;
-	_int iMonsterGoal = 0;
-	_int iMonsterCount= 0;
-	_int iItemGoal = 0;
-	_int iItemCount = 0;
 }QUEST_DATA;
 
 END

@@ -30,8 +30,9 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-	void Set_ConversationNode(const CONVERSATION_NODE_DATA& pNode);
 	void Set_NPC(CNPC* pNPC) { m_pNPC = pNPC; }
+	void Set_ConversationNode(const CONVERSATION_NODE_DATA& tNode);
+
 
 	void To_NextConversation();
 	void On_OptionSelected(void* pArg);

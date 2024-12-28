@@ -201,15 +201,18 @@ void CUINPCDialog::Set_ConversationNode(const CONVERSATION_NODE_DATA& tNode)
 
 	_uint iDataOptionCount = tNode.vecOption.size();
 	_uint iUIOptIndex = 0;
+
 	for (_uint iDataOptIndex = 0; iDataOptIndex < iDataOptionCount; iDataOptIndex++)
 	{
-
-		//이미 완료된 퀘스트 선택지	제외
-		if (tNode.vecOption[iDataOptIndex].eOptType == CHAT_OPT_TYPE::QUEST &&
-			QUESTDB->Is_QuestCompleted(tNode.vecOption[iDataOptIndex].eQuestID))
+		if (tNode.vecOption[iDataOptIndex].eOptType == CHAT_OPT_TYPE::QUEST)
 		{
-			iDataOptIndex--;
-			continue;
+			QUEST_ID eQuestID = tNode.vecOption[iDataOptIndex].eQuestID;
+			//표시되어야 하는 퀘스트 : 진행중 & 완료가능 & 수락 가능
+			if (false == (QUESTDB->Is_QuestAccepted(eQuestID)
+				|| QUESTDB->Is_SatisfiedAcceptCondition(eQuestID)))
+			{
+				continue;
+			}
 		}
 		_float2 fOptionOffset = Get_OptionOffset(iUIOptIndex, tNode);
 		static_cast<CRect_Transform*>(m_vecUIOption[iUIOptIndex]->Get_Transform())->Set_Offset(fOptionOffset.x, fOptionOffset.y);

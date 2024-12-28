@@ -17,6 +17,7 @@ CDeadObjEvent* CDeadObjEvent::Create(CGameObject* _pDeadObj)
 
 void CDeadObjEvent::Exec()
 {
+
 	m_pDeadObj->Set_Dead();
 }
 

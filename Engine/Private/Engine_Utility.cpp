@@ -62,3 +62,17 @@ std::wstring CEngineUtility::ConvertStringToWString(const std::string& str)
 	return wstr;
 }
 
+string CEngineUtility::ConvertWStringToString(const wstring& wstr)
+{
+	// 변환에 필요한 널 문자를 포함한 버퍼 크기 계산
+	int bufferSize = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	if (bufferSize == 0) {
+		throw std::runtime_error("Failed to calculate buffer size.");
+	}
+	// 변환 수행
+	std::string str(bufferSize, '\0');
+	WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
+	// 문자열 끝의 널 문자를 제거
+	str.resize(strlen(str.c_str()));
+	return str;
+}

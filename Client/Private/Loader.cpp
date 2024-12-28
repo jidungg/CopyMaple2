@@ -6,6 +6,7 @@
 #include "DropTable.h"
 #include "NPCDataBase.h"
 #include "NPC.h"
+#include "QuestDataBase.h"
 
 #include "Camera_Free.h"
 #include "Camera_Trace.h"
@@ -553,6 +554,8 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(EFFECT_MANAGER->Load_Data()))
 		return E_FAIL;
 	if (FAILED(DROPTABLE->Load_Data()))
+		return E_FAIL;
+	if (FAILED(QUESTDB->Load_Data()))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로드 완료."));

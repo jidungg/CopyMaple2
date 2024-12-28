@@ -1101,6 +1101,11 @@ HRESULT CPlayer::Gain_Item(const ITEM_DATA* pItem, _uint iCount)
 	return 	m_pInventory->Insert_Item(pItem, iCount);
 }
 
+void CPlayer::Gain_Exp(_int iAmount)
+{
+	m_tStat.Gain_Exp(iAmount);
+}
+
 
 
 

@@ -13,6 +13,7 @@
 #include "WayFinder.h"
 #include "CubeTerrain.h"
 #include "DropTable.h"
+#include "QuestDataBase.h"
 
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CCharacter(pDevice, pContext)
@@ -696,6 +697,7 @@ void CMonster::On_HPZero()
 	if (false == m_bHPZero)
 	{
 		DROPTABLE->Drop_Item(this);
+		QUESTDB->Increase_MonsterKillCount(m_pMonData->eMonID);
 		m_bHPZero = true;
 	}
 

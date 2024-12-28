@@ -8,6 +8,7 @@
 #include "Collider_Sphere.h"
 #include "Player.h"
 #include "UIBundle.h"
+#include "QuestDataBase.h"
 
 CNPC::CNPC(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CInteractableObject(pDevice, pContext)
@@ -78,16 +79,29 @@ HRESULT CNPC::Render()
 }
 const ConversationNodeData& CNPC::Get_ConversationData(_int iIdx)
 {
-	return m_pNPCData->vecChat[iIdx];
+	return m_pNPCData->mapChat[iIdx];
 }
 void CNPC::To_NextConversation(_uint iSelectedOptionIdx)
 {
 	//옵션이 없으면
-	if (0 == m_pNPCData->vecChat[m_iConversationIndex].vecOption.size())
-		m_iConversationIndex = m_pNPCData->vecChat[m_iConversationIndex].iNextNode;
+	if (0 == m_pNPCData->mapChat[m_iConversationIndex].vecOption.size())
+		m_iConversationIndex = m_pNPCData->mapChat[m_iConversationIndex].iNextNode;
 	//옵션이 있으면
 	else
-		m_iConversationIndex = Get_ConversationData(m_iConversationIndex).vecOption[iSelectedOptionIdx].iNextNode;
+	{
+		const ChatOptionData tOptionData = Get_ConversationData(m_iConversationIndex).vecOption[iSelectedOptionIdx];
+		//퀘스트 옵션이었으면
+		if (tOptionData.eOptType == CHAT_OPT_TYPE::QUEST)
+		{
+			//퀘스트 대화 시작
+			QuestData* pQuestData = QUESTDB->Get_Data(tOptionData.eQuestID);
+			m_iConversationIndex = pQuestData->Get_AccurateConversationIndex();
+			m_eCurrentConversationQuest = tOptionData.eQuestID;
+		}
+		//퀘스트가 아니었으면
+		else
+			m_iConversationIndex = tOptionData.iNextNode;
+	}
 
 	//마지막이면
 	if (m_iConversationIndex == -1)
@@ -101,10 +115,29 @@ void CNPC::To_NextConversation(_uint iSelectedOptionIdx)
 		UIBUNDLE->Set_NPCDialogData(Get_ConversationData(m_iConversationIndex));
 	}
 
-
 }
 void CNPC::End_Conversation()
 {
+	if (m_eCurrentConversationQuest != QUEST_ID::LAST)
+	{
+		QuestData* pQuestData = QUESTDB->Get_Data(m_eCurrentConversationQuest);
+		QUEST_STATE eState = pQuestData->eState;
+		switch (eState)
+		{
+		case Client::QUEST_STATE::NOT_ACCEPTED:
+			QUESTDB->Accept_Quest(m_eCurrentConversationQuest);
+			break;
+		case Client::QUEST_STATE::ACCEPTED:
+			if (QUESTDB->Is_SatisfiedAcceptCondition(pQuestData->eQuestID))
+				QUESTDB->Complete_Quest(m_eCurrentConversationQuest);
+			break;
+		case Client::QUEST_STATE::COMPLETED:
+		case Client::QUEST_STATE::LAST:
+		default:
+			break;
+		}
+		m_eCurrentConversationQuest = QUEST_ID::LAST;
+	}
 	m_iConversationIndex = -1;
 	UIBUNDLE->Set_NPCDialogActive(false);
 	UIBUNDLE->Set_HUDActive(true);

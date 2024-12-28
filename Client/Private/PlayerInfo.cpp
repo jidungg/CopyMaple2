@@ -9,6 +9,7 @@
 #include "PlayerDecoSlot.h"
 #include "WorldItem.h"
 #include "Client_Utility.h"
+#include "ItemDataBase.h"
 
 IMPLEMENT_SINGLETON(CPlayerInfo)
 CPlayerInfo::CPlayerInfo()
@@ -163,7 +164,22 @@ void CPlayerInfo::Toggle_UI()
 
 HRESULT CPlayerInfo::Gain_Item(const ITEM_DATA* pItem, _uint iCount)
 {
-	return m_pPlayer->Gain_Item(pItem,iCount);
+	return m_pInventory->Insert_Item(pItem,iCount);
+}
+
+HRESULT CPlayerInfo::Gain_Item(ITEM_TYPE eITemType, _uint iItemId, _uint iCount)
+{
+	return m_pInventory->Insert_Item(ITEMDB->Get_Data(eITemType, iItemId), iCount);
+}
+
+void CPlayerInfo::Gain_EXP(_int iAmount)
+{
+	return m_pPlayer->Gain_Exp(iAmount);
+}
+
+void CPlayerInfo::Gain_Gold(_int iAmount)
+{
+	return m_pInventory->Gain_Gold(iAmount);
 }
 
 _bool CPlayerInfo::Is_Insertable(const ITEM_DATA* pItem, _uint iCount)

@@ -1,14 +1,43 @@
 {
     "Quest": [
         {
+            "Client": "OPILIA",
             "QuestId": "OPILIA_QUEST_1",
             "Name": "오필리아의 첫 번째 퀘스트",
-            "Items": [
+            "State": "NOT_ACCEPTED",
+
+            "AcceptableLevel": 0,
+            "PrequisiteQuests": [],
+            "AcceptConversations": [
+               3
+            ],
+            "CompleteConditions": [
                 {
-                    "Type": "EQUIP",
-                    "Id": "BASIC_SHOES"
+                    "Type": "QUEST_COND_MONSTER",
+                    "MonsterId": "SNAIL",
+                    "Count": 0,
+                    "RequiredCount": 10
                 }
-            ]
+            ],
+            "NotSatisfiedConversations": [
+                4
+            ],
+            "CompleteConversations": [
+                5
+            ],
+            "Reward": {
+                "Exp": 100,
+                "Gold": 100,
+                "Items": [
+                    {
+                        "Item": {
+                            "Type": "CONSUMABLE",
+                            "Id": "HP_POTION"
+                        },
+                        "Count": 10
+                    }
+                ]
+            }
         }
       
     ]

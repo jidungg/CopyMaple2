@@ -20,7 +20,7 @@ typedef struct ChatPortraitData
 {
 	ChatPortraitData() = default;
 	ChatPortraitData(json& js);
-
+	json To_Json();
 	_tchar szPortraitTag[MAX_PATH] = TEXT("");
 	_bool bGray = { false };
 };
@@ -28,7 +28,8 @@ typedef struct ChatOptionData
 {
 	ChatOptionData() = default;
 	ChatOptionData(json& js);
-	
+	json To_Json();
+
 	CHAT_OPT_TYPE eOptType = CHAT_OPT_TYPE::NORMAL;
 	QUEST_ID eQuestID = QUEST_ID::LAST;
 	_tchar szText[MAX_PATH] = TEXT("");
@@ -38,7 +39,7 @@ typedef struct ConversationNodeData
 {
 	ConversationNodeData() = default;
 	ConversationNodeData(json& js);
-	
+	json To_Json();
 	vector<ChatPortraitData> vecPortrait;
 
 	_tchar szSpeakerName[MAX_PATH] = TEXT("");

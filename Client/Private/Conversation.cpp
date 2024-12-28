@@ -5,7 +5,6 @@
 ConversationNodeData::ConversationNodeData(json& js)
 {
 	string str = js["Script"];
-
 	wstring wstr = CEngineUtility::ConvertStringToWString(str);
 	std::copy(wstr.begin(), wstr.end(), szScript);
 	json& jPortraits = js["Portraits"];
@@ -32,12 +31,42 @@ ConversationNodeData::ConversationNodeData(json& js)
 	}
 }
 
+json ConversationNodeData::To_Json()
+{
+	json jResult;
+	jResult["Script"] = CEngineUtility::ConvertWStringToString(szScript);
+	jResult["Speaker"] = CEngineUtility::ConvertWStringToString(szSpeakerName);
+	jResult["Next"] = iNextNode;
+	json jPortraits;
+	for (auto& portrait : vecPortrait)
+	{
+		jPortraits.push_back(portrait.To_Json());
+	}
+	jResult["Portraits"] = jPortraits;
+	json jOptions;
+	for (auto& opt : vecOption)
+	{
+		jOptions.push_back(opt.To_Json());
+	}
+	jResult["Options"] = jOptions;
+
+	return jResult;
+}
+
 ChatPortraitData::ChatPortraitData(json& js)
 {
 	string str = js["Tag"];
 	wstring wstr = CEngineUtility::ConvertStringToWString(str);
 	std::copy(wstr.begin(), wstr.end(), szPortraitTag);
 	bGray = js["Gray"];
+}
+
+json ChatPortraitData::To_Json()
+{
+	json jResult;
+	jResult["Tag"] = CEngineUtility::ConvertWStringToString(szPortraitTag);
+	jResult["Gray"] = bGray;
+	return jResult;
 }
 
 ChatOptionData::ChatOptionData(json& js)
@@ -61,4 +90,24 @@ ChatOptionData::ChatOptionData(json& js)
 		break;
 	}
 
+}
+
+json ChatOptionData::To_Json()
+{
+	json jResult;
+	jResult["Type"] = eOptType;
+	switch (eOptType)
+	{
+	case Client::CHAT_OPT_TYPE::NORMAL:
+		jResult["Text"] = CEngineUtility::ConvertWStringToString(szText);
+		jResult["Next"] = iNextNode;
+		break;
+	case Client::CHAT_OPT_TYPE::QUEST:
+		jResult["QuestID"] = eQuestID;
+		break;
+	case Client::CHAT_OPT_TYPE::LAST:
+	default:
+		break;
+	}
+	return jResult;
 }

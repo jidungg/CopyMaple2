@@ -14,6 +14,8 @@
                 "DEF": 1,
                 "EXP": 1,
                 "Gold": 1,
+                "LEVEL": 1,
+
                 "JumpPower": 10,
                 "RunSpeed": 2.5,
                 "WalkSpeed": 1.5,

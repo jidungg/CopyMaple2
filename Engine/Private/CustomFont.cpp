@@ -38,7 +38,7 @@ HRESULT CCustomFont::Render(const _tchar* pText, const _float2& vPosition, _fvec
 	m_pFont->DrawString(m_pBatch, pText, vPosition, vColor, fRotation, vOrigin);
 
 	m_pBatch->End();
-	
+
 	return S_OK;
 }
 

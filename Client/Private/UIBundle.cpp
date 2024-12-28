@@ -13,6 +13,7 @@
 #include "PlayerInfo.h"
 #include "Player.h"
 #include "UIPlayerInfo.h"
+#include "UINPCDialog.h"
 
 IMPLEMENT_SINGLETON(CUIBundle)
 
@@ -90,6 +91,18 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	Safe_AddRef(m_pCastingBar);
 	m_pCastingBar->Set_Active(false);
 
+	CUINPCDialog::NPCDIALOG_DESC tNPCDesc;
+	tNPCDesc.eAnchorType = CORNOR_TYPE::CENTER;
+	tNPCDesc.ePivotType = CORNOR_TYPE::CENTER;
+	tNPCDesc.fSizeX = g_iWinSizeX;
+	tNPCDesc.fSizeY = g_iWinSizeY;
+	tNPCDesc.fXOffset = 0;
+	tNPCDesc.fYOffset = 0;
+	m_pNPCDialog = static_cast<CUINPCDialog*>(m_pGameInstance->Clone_Proto_Object_Stock(CUINPCDialog::m_szProtoTag, &tNPCDesc));
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pNPCDialog, true)))
+		return E_FAIL;
+	Safe_AddRef(m_pNPCDialog);
+	m_pNPCDialog->Set_Active(false);
 
 	return S_OK;
 }
@@ -108,6 +121,36 @@ void CUIBundle::Toggle_Inventory()
 void CUIBundle::Toggle_PlayerInfo()
 {
 	m_pPlayerInfoUI->Toggle_Active();
+}
+void CUIBundle::Toggle_HUD()
+{
+	m_pMainHPBar->Toggle_Active();
+	m_pQuickSlotBundle1->Toggle_Active();
+	m_pQuickSlotBundle2->Toggle_Active();
+}
+void CUIBundle::Set_HUDActive(_bool bActive)
+{
+	m_pMainHPBar->Set_Active(bActive);
+	m_pQuickSlotBundle1->Set_Active(bActive);
+	m_pQuickSlotBundle2->Set_Active(bActive);
+}
+void CUIBundle::Toggle_NPCDialog()
+{
+	m_pNPCDialog->Toggle_Active();
+}
+void CUIBundle::Set_NPCDialogActive(_bool bActive)
+{
+	m_pNPCDialog->Set_Active(bActive);
+}
+
+void CUIBundle::Set_NPCDialogNPC(CNPC* pNPC)
+{
+	m_pNPCDialog->Set_NPC(pNPC);
+}
+
+void CUIBundle::Set_NPCDialogData(const CONVERSATION_NODE_DATA& pNode)
+{
+	m_pNPCDialog->Set_ConversationNode(pNode);
 }
 void CUIBundle::Initialize_PlayerInfo(CPlayer* pPalyer)
 {
@@ -168,4 +211,5 @@ void CUIBundle::Free()
 	Safe_Release(m_pCastingBar);
 	Safe_Release(m_pMainHPBar);
 	Safe_Release(m_pPlayerInfoUI);
+	Safe_Release(m_pNPCDialog);
 }

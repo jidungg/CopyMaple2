@@ -28,7 +28,7 @@ HRESULT CMonsterSpawner::Ready_SpawnObject(CSpawner::SPAWNER_DESC* pDesc)
 	else
 		m_pSpawnObject = static_cast<CMonster*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CMonster::m_szProtoTag,&tMonDesc));
 	m_pGameInstance->Add_GameObject_ToLayer(Get_CurrentTrueLevel(), LAYER_MONSTER, m_pSpawnObject);
-	Safe_AddRef(m_pSpawnObject);
+
     return S_OK;
 }
 

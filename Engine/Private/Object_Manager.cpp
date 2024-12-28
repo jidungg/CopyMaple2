@@ -46,7 +46,7 @@ HRESULT CObject_Manager::Add_GameObject_ToLayer(_uint iLevelIndex, _uint iLayerI
 
 	pLayer->Add_GameObject(pObj);
 
-	pObj->Set_DontDestroy(bDontDestroy);
+		pObj->Set_DontDestroy(bDontDestroy);
 	pObj->Set_LayerID(iLayerId);
 	CUIObject* pUI = dynamic_cast<CUIObject*>(pObj);
 	if(pUI && pUI->Is_RegisterUIManager())

@@ -30,7 +30,7 @@ HRESULT CSpawner::Initialize(void* pArg)
 	m_iObjectId = pDesc->vecIData.front();
 	if (FAILED(Ready_SpawnObject(pDesc)))
 		return E_FAIL;
-
+	Safe_AddRef(m_pSpawnObject);
 	return S_OK;
 }
 

@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "JsonParser.h"
 #include "DropTable.h"
+#include "NPCDataBase.h"
+#include "NPC.h"
 
 #include "Camera_Free.h"
 #include "Camera_Trace.h"
@@ -39,6 +41,8 @@
 #include "UIPlayerInfo.h"
 #include "UIPlayerInfoSlot.h"
 #include "UIModelPad.h"
+#include "UINPCDialog.h"
+#include "UIChatOption.h"
 
 #include "StateMachine.h"
 #include "SkillManager.h"
@@ -77,6 +81,7 @@
 #include "EffectManager.h"
 #include "AttachableBodyPart.h"
 #include "WorldItem.h"
+#include "NPCSpanwer.h"
 
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -167,6 +172,8 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(SKILLDB->Load_Data()))
 		return E_FAIL;
 	if (FAILED(MONSTERDB->Load_Data()))
+		return E_FAIL;
+	if (FAILED(NPCDB->Load_Data()))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_GameObject_StateMachine"),
 		CStateMachine::Create(m_pDevice, m_pContext))))
@@ -261,6 +268,12 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_TabButton"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Inventory/Inventory_TabButton_%d.dds"), 3))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_NPCDialogButton"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/NPCDialog/Button/npcdialog_button_%d.dds"), 4))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_NPCDialogOptionButton"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/NPCDialog/OptionButton/npcdialog_opt_button_%d.dds"), 4))))
+		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/"), TEXT(".dds"))))
 		return E_FAIL;
@@ -270,6 +283,10 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/UI/PlayerInfo/"), TEXT(".dds"))))
 		return E_FAIL;
+	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
+		TEXT("../Bin/Resources/Textures/UI/NPCDialog/ETC/"), TEXT(".dds"))))
+		return E_FAIL;
+
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더 로드."));
 #pragma region Shader
@@ -490,6 +507,12 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIModelPad::m_szProtoTag,
 		CUIModelPad::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUINPCDialog::m_szProtoTag,
+		CUINPCDialog::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIChatOption::m_szProtoTag,
+		CUIChatOption::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,
 		CHumanModelObject::Create(m_pDevice, m_pContext))))
@@ -508,6 +531,12 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CMonsterSpawner::m_szProtoTag,
 		CMonsterSpawner::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CNPC::m_szProtoTag,
+		CNPC::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CNPCSpanwer::m_szProtoTag,
+		CNPCSpanwer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CAttachableBodyPart::m_szProtoTag,
 		CAttachableBodyPart::Create(m_pDevice, m_pContext))))
@@ -543,7 +572,11 @@ HRESULT CLoader::Loading_Level_Henesys()
 
 
 	lstrcpy(m_szLoadingText, TEXT("모델 로드"));
-
+	XMMATRIX matPretransform = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
+	matPretransform = matPretransform * XMMatrixRotationY(XMConvertToRadians(180.f)); 
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_HENESYS,
+		TEXT("../Bin/resources/FBXs/Anim/EnchantMaster"), CModel::TYPE_ANIM, matPretransform)))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("객체 로드"));
 

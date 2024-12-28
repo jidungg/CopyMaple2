@@ -32,6 +32,17 @@
             "Price": 0,
             "IconImg": "aura_mix_uo5.dds",
             "Model": "EmptyModel.model"
+        },
+        {
+            "BuildItemType": "NPC_SPAWNER",
+            "BuildItemBlockType": "NON_BLOCK",
+            "ItemId": 10003,
+            "ItemGrade": "NORMAL",
+            "Name": "NPC 스포너",
+            "Desc": "NPC 스포너",
+            "Price": 0,
+            "IconImg": "11000508_enchantmaster1_face_idle01.dds",
+            "Model": "EmptyModel.model"
         }
 
 

@@ -15,6 +15,8 @@ int g_DigitCount = 0;
 float g_fVerticalRatio = 1.0f;
 
 float g_fDarkRatio = 0.5f;
+
+bool g_bGray = false;
 struct VS_IN
 {
 	float3		vPosition : POSITION;
@@ -177,7 +179,11 @@ PS_OUT PS_MAIN(PS_IN In)
     }
     Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord);
 
-
+    if (g_bGray)
+    {
+        float fGray = dot(Out.vColor.rgb, float3(0.299, 0.587, 0.114));
+        Out.vColor.rgb = fGray;
+    }
 	return Out;
 }
 
@@ -189,6 +195,12 @@ PS_OUT PS_NOBORDER_MAIN(PS_NOBORDER_IN In)
     Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord);
     if (Out.vColor.a <= 0)
         discard;
+    
+    if (g_bGray)
+    {
+        float fGray = dot(Out.vColor.rgb, float3(0.299, 0.587, 0.114));
+        Out.vColor.rgb = fGray;
+    }
     return Out;
 }
 

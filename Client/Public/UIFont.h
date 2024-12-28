@@ -14,7 +14,7 @@ public:
 		const _tchar* pFontTag = L"";
 		_vector vColor = { 1.f,1.f,1.f };
 		_bool bShade = { false };
-	} UIFontDesc;
+	} FONT_DESC;
 
 public:
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_UIFontDesc";
@@ -33,6 +33,7 @@ public:
 
 	_float2 Get_TextSize(const _tchar* pText);
 	_float2 Calc_FontLeftTop(const _tchar* pText);
+
 private:
 	CCustomFont* m_pFont = { nullptr };
 	wstring m_pText ;

@@ -6,6 +6,7 @@
 #include "ItemDataBase.h"
 #include "Character.h"
 #include "MonsterSpawner.h"
+#include "NPCSpanwer.h"
 #include "PortalTerrainObject.h"
 #include "Collider.h"
 #include "OctoTree.h"
@@ -508,6 +509,9 @@ HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 		break;
 	case Client::BUILD_ITEM_TYPE::PORTAL:
 		pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CPortalTerrainObject::m_szProtoTag, &tDesc));
+		break;
+	case Client::BUILD_ITEM_TYPE::NPC_SPAWNER:
+		pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CNPCSpanwer::m_szProtoTag, &tDesc));
 		break;
 	case Client::BUILD_ITEM_TYPE::LAST:
 	default:

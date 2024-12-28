@@ -13,6 +13,8 @@
 #include "MonsterDataBase.h"
 #include "EffectManager.h"
 #include "DropTable.h"
+#include "NPCDataBase.h"
+#include "QuestDataBase.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance { CGameInstance::GetInstance() }
@@ -108,5 +110,7 @@ void CMainApp::Free()
 	CGameInstance::Release_Engine();
 	CEffectManager::DestroyInstance();
 	CDropTable::DestroyInstance();
+	CNPCDataBase::DestroyInstance();
+	CQuestDataBase::DestroyInstance();
 }
 

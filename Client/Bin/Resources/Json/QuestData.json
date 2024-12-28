@@ -1,0 +1,15 @@
+{
+    "Quest": [
+        {
+            "QuestId": "OPILIA_QUEST_1",
+            "Name": "오필리아의 첫 번째 퀘스트",
+            "Items": [
+                {
+                    "Type": "EQUIP",
+                    "Id": "BASIC_SHOES"
+                }
+            ]
+        }
+      
+    ]
+}

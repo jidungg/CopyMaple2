@@ -12,6 +12,7 @@ public:
 	static _float Get_RandomFloat(_float fMin, _float fMax);
     static void Scale_Matrix(_matrix& outmatSrc, _float fX =1, _float fY =1, _float fZ =1);
 	static _vector Parabolic_Interpolation(_fvector vStart, _fvector vEnd, _float fJumpHeight, _float fArrivalTime, _float fCurrentTime,  _float fGravity = 9.8f);
+    static std::wstring ConvertStringToWString(const std::string& str);
 };
 
 END

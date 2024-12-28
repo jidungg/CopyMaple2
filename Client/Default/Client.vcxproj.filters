@@ -254,6 +254,14 @@
     <ClInclude Include="..\Public\UIPlayerInfoSlot.h" />
     <ClInclude Include="..\Public\PlayerInfoSlot.h" />
     <ClInclude Include="..\Public\UIModelPad.h" />
+    <ClInclude Include="..\Public\NPC.h" />
+    <ClInclude Include="..\Public\NPCSpanwer.h" />
+    <ClInclude Include="..\Public\NPCDataBase.h" />
+    <ClInclude Include="..\Public\Quest.h" />
+    <ClInclude Include="..\Public\QuestDataBase.h" />
+    <ClInclude Include="..\Public\Conversation.h" />
+    <ClInclude Include="..\Public\UINPCDialog.h" />
+    <ClInclude Include="..\Public\UIChatOption.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -447,6 +455,14 @@
     <ClCompile Include="..\Private\UIPlayerInfoSlot.cpp" />
     <ClCompile Include="..\Private\PlayerInfoSlot.cpp" />
     <ClCompile Include="..\Private\UIModelPad.cpp" />
+    <ClCompile Include="..\Private\NPC.cpp" />
+    <ClCompile Include="..\Private\NPCSpanwer.cpp" />
+    <ClCompile Include="..\Private\NPCDataBase.cpp" />
+    <ClCompile Include="..\Private\Quest.cpp" />
+    <ClCompile Include="..\Private\QuestDataBase.cpp" />
+    <ClCompile Include="..\Private\Conversation.cpp" />
+    <ClCompile Include="..\Private\UINPCDialog.cpp" />
+    <ClCompile Include="..\Private\UIChatOption.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

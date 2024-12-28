@@ -1,6 +1,7 @@
 #pragma once
 #include "UIContainer.h"
 #include "Item.h"
+#include "Conversation.h"
 
 
 BEGIN(Engien)
@@ -8,6 +9,7 @@ class CGameInstance;
 END
 
 BEGIN(Client)
+
 class IQuickItem;
 class CUIQuickSlotBundle;
 class CUIInventory;
@@ -19,6 +21,8 @@ class CUIPlayerInfo;
 class CPlayerEquipSlot;
 class CPlayerDecoSlot;
 class CPlayerInfoSlot;
+class CUINPCDialog;
+class CNPC;
 class CUIBundle :
     public CBase
 {
@@ -50,6 +54,15 @@ public:
 	void Set_QuickItem(KEY eHotKey, IQuickItem* pItem);
 	void Toggle_Inventory();
 	void Toggle_PlayerInfo();
+	void Toggle_HUD();
+	void Set_HUDActive(_bool bActive);
+	void Toggle_NPCDialog();
+	void Set_NPCDialogActive(_bool bActive);
+	void Set_NPCDialogNPC(CNPC* pNPC);
+
+
+
+	void Set_NPCDialogData(const CONVERSATION_NODE_DATA& pNode);
 private:
 	ID3D11Device* m_pDevice = { nullptr };
 	ID3D11DeviceContext* m_pContext = { nullptr };
@@ -61,6 +74,7 @@ private:
 	CUIBar* m_pCastingBar = { nullptr };
 	CUIMainHUDGuage* m_pMainHPBar = { nullptr };
 	CUIPlayerInfo* m_pPlayerInfoUI = { nullptr };
+	CUINPCDialog* m_pNPCDialog = { nullptr };
 public:
 	void Free() override;
 };

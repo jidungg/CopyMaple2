@@ -1,0 +1,96 @@
+{
+    "NPC": [
+        {
+            "NPCId": "OPILIA",
+            "Name": "오필리아",
+            "ModelTag": "EnchantMaster.model",
+            "AnimIdx": {
+                "BORE": [ 10 ],
+                "IDLE": [ 13 ],
+                "RUN": [ 15 ],
+                "WALK": [ 19 ],
+                "TALK": [ 17 ],
+                "HAPPY": [ 11 ]
+            },
+            "ConversationNodes" : [
+                {
+                    "Portraits": [
+                        {
+                            "Tag": "11000508.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "오필리아",
+                    "Script": "읏챠! 읏챠! 하아~ 힘들다. \n응? 뭘 그렇게 뻔히 쳐다보는거야? 여자 대장장이 처음 봐?",
+                    "Options": [
+                        {
+                            "Type": "CHAT_OPT_QUEST",
+                            "QuestId": "OPILIA_QUEST_1"
+                        },
+                        {
+                            "Type": "CHAT_OPT_NORMAL",
+                            "Text": "인챈트를 부탁한다.",
+                            "Next": 1
+                        }
+                    ]
+                },
+                {
+                    "Portraits": [
+                        {
+                            "Tag": "11000508.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "오필리아",
+                    "Script": "흠~ 보아하니 장비를 인챈트하러 왔구나! 그렇지? \n어디 그럼~ 바로 본론으로 들어가볼까?",
+                    "Options": [],
+                    "Next": -1
+                },
+                {
+                    "Portraits": [
+                        {
+                            "Tag": "11000508.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "오필리아",
+                    "Script": "나는 대장장이야. 각종 무기와 방어구들을 인챈트해주고 돈을 받는 사람이지.",
+                    "Options": [],
+                    "Next": -1
+                }
+             ]
+        },
+        {
+            "NPCId": "MINT",
+            "Name": "민트",
+            "ModelTag": "BunnyGirl1.model",
+            "AnimIdx": {
+                "BORE": [ 0, 1, 2, 4, 5 ],
+                "IDLE": [ 6 ],
+                "RUN": [ 8 ],
+                "WALK": [ 10 ],
+                "TALK": [ 9 ],
+                "HAPPY": [ 3 ]
+            },
+            "ConversationNodes": {
+
+            }
+        },
+        {
+            "NPCId": "VANILA",
+            "Name": "바닐라",
+            "ModelTag": "BunnyGirl2.model",
+            "AnimIdx": {
+                "BORE": [ 0, 1, 8, 9, 10 ],
+                "IDLE": [ 11 ],
+                "RUN": [ 13 ],
+                "WALK": [ 15 ],
+                "TALK": [ 14 ],
+                "HAPPY": [ 7 ]
+            },
+            "ConversationNodes": {
+
+            }
+        }
+    ]
+}

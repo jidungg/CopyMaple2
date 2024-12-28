@@ -169,9 +169,16 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\Conversation.h" />
     <ClInclude Include="..\Public\CubeTerrain.h" />
     <ClInclude Include="..\Public\DropTable.h" />
+    <ClInclude Include="..\Public\NPC.h" />
+    <ClInclude Include="..\Public\NPCDataBase.h" />
+    <ClInclude Include="..\Public\NPCSpanwer.h" />
     <ClInclude Include="..\Public\PlayerInfoSlot.h" />
+    <ClInclude Include="..\Public\Quest.h" />
+    <ClInclude Include="..\Public\QuestDataBase.h" />
+    <ClInclude Include="..\Public\UIChatOption.h" />
     <ClInclude Include="..\Public\UIMainHUDGuage.h" />
     <ClInclude Include="..\Public\InvenBuildSlot.h" />
     <ClInclude Include="..\Public\InvenConsumableSlot.h" />
@@ -266,6 +273,7 @@
     <ClInclude Include="..\Public\UIInvenSlotEntry.h" />
     <ClInclude Include="..\Public\UIInvenTabButton.h" />
     <ClInclude Include="..\Public\UIModelPad.h" />
+    <ClInclude Include="..\Public\UINPCDialog.h" />
     <ClInclude Include="..\Public\UIPlayerInfo.h" />
     <ClInclude Include="..\Public\UIPlayerInfoSlot.h" />
     <ClInclude Include="..\Public\UIQuickSlotBundle.h" />
@@ -335,8 +343,15 @@
     <ClCompile Include="..\Private\Bullet_MagicClaw.cpp" />
     <ClCompile Include="..\Private\Bullet_WildFire.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />
+    <ClCompile Include="..\Private\Conversation.cpp" />
     <ClCompile Include="..\Private\DropTable.cpp" />
+    <ClCompile Include="..\Private\NPC.cpp" />
+    <ClCompile Include="..\Private\NPCDataBase.cpp" />
+    <ClCompile Include="..\Private\NPCSpanwer.cpp" />
     <ClCompile Include="..\Private\PlayerInfoSlot.cpp" />
+    <ClCompile Include="..\Private\Quest.cpp" />
+    <ClCompile Include="..\Private\QuestDataBase.cpp" />
+    <ClCompile Include="..\Private\UIChatOption.cpp" />
     <ClCompile Include="..\Private\UIMainHUDGuage.cpp" />
     <ClCompile Include="..\Private\InvenBuildSlot.cpp" />
     <ClCompile Include="..\Private\InvenETCSlot.cpp" />
@@ -405,6 +420,7 @@
     <ClCompile Include="..\Private\UIInvenSlotEntry.cpp" />
     <ClCompile Include="..\Private\UIInvenTabButton.cpp" />
     <ClCompile Include="..\Private\UIModelPad.cpp" />
+    <ClCompile Include="..\Private\UINPCDialog.cpp" />
     <ClCompile Include="..\Private\UIPlayerInfo.cpp" />
     <ClCompile Include="..\Private\UIPlayerInfoSlot.cpp" />
     <ClCompile Include="..\Private\UIQuickSlotBundle.cpp" />

@@ -45,3 +45,20 @@ _vector CEngineUtility::Parabolic_Interpolation(_fvector vStart, _fvector vEnd, 
 	return vResult;
 }
 
+std::wstring CEngineUtility::ConvertStringToWString(const std::string& str)
+{
+	// 변환에 필요한 널 문자를 포함한 버퍼 크기 계산
+	int bufferSize = MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, nullptr, 0);
+	if (bufferSize == 0) {
+		throw std::runtime_error("Failed to calculate buffer size.");
+	}
+
+	// 변환 수행
+	std::wstring wstr(bufferSize, L'\0');
+	MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, &wstr[0], bufferSize);
+
+	// 문자열 끝의 널 문자를 제거
+	wstr.resize(wcslen(wstr.c_str()));
+	return wstr;
+}
+

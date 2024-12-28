@@ -111,6 +111,7 @@ private:
 	_bool m_bWalk = { false };
 	_int m_iConversationIndex = { -1 };
 	QUEST_ID m_eCurrentConversationQuest = { QUEST_ID::LAST };
+	_bool m_bAbandonQuest = { false };
 public:
 	static CNPC* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

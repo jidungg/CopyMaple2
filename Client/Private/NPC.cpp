@@ -90,7 +90,7 @@ void CNPC::To_NextConversation(_uint iSelectedOptionIdx)
 	else
 	{
 		const ChatOptionData tOptionData = Get_ConversationData(m_iConversationIndex).vecOption[iSelectedOptionIdx];
-		//퀘스트 옵션이었으면
+		//퀘스트 옵션
 		if (tOptionData.eOptType == CHAT_OPT_TYPE::QUEST)
 		{
 			//퀘스트 대화 시작
@@ -98,7 +98,13 @@ void CNPC::To_NextConversation(_uint iSelectedOptionIdx)
 			m_iConversationIndex = pQuestData->Get_AccurateConversationIndex();
 			m_eCurrentConversationQuest = tOptionData.eQuestID;
 		}
-		//퀘스트가 아니었으면
+		//퀘스트 포기 옵션
+		else if (tOptionData.eOptType == CHAT_OPT_TYPE::ABANDON_QUEST)
+		{
+			m_bAbandonQuest = true;
+			m_iConversationIndex = tOptionData.iNextNode;
+		}
+		//노말 옵션
 		else
 			m_iConversationIndex = tOptionData.iNextNode;
 	}
@@ -120,23 +126,29 @@ void CNPC::End_Conversation()
 {
 	if (m_eCurrentConversationQuest != QUEST_ID::LAST)
 	{
-		QuestData* pQuestData = QUESTDB->Get_Data(m_eCurrentConversationQuest);
-		QUEST_STATE eState = pQuestData->eState;
-		switch (eState)
+		if (m_bAbandonQuest)
+			QUESTDB->Abandon_Quest(m_eCurrentConversationQuest);
+		else
 		{
-		case Client::QUEST_STATE::NOT_ACCEPTED:
-			QUESTDB->Accept_Quest(m_eCurrentConversationQuest);
-			break;
-		case Client::QUEST_STATE::ACCEPTED:
-			if (QUESTDB->Is_SatisfiedAcceptCondition(pQuestData->eQuestID))
-				QUESTDB->Complete_Quest(m_eCurrentConversationQuest);
-			break;
-		case Client::QUEST_STATE::COMPLETED:
-		case Client::QUEST_STATE::LAST:
-		default:
-			break;
+			QuestData* pQuestData = QUESTDB->Get_Data(m_eCurrentConversationQuest);
+			QUEST_STATE eState = pQuestData->eState;
+			switch (eState)
+			{
+			case Client::QUEST_STATE::NOT_ACCEPTED:
+				QUESTDB->Accept_Quest(m_eCurrentConversationQuest);
+				break;
+			case Client::QUEST_STATE::ACCEPTED:
+				if (QUESTDB->Is_SatisfiedAcceptCondition(pQuestData->eQuestID))
+					QUESTDB->Complete_Quest(m_eCurrentConversationQuest);
+				break;
+			case Client::QUEST_STATE::COMPLETED:
+			case Client::QUEST_STATE::LAST:
+			default:
+				break;
+			}
 		}
 		m_eCurrentConversationQuest = QUEST_ID::LAST;
+		m_bAbandonQuest = false;
 	}
 	m_iConversationIndex = -1;
 	UIBUNDLE->Set_NPCDialogActive(false);

@@ -182,7 +182,7 @@ PS_OUT PS_MAIN(PS_IN In)
     if (g_bGray)
     {
         float fGray = dot(Out.vColor.rgb, float3(0.299, 0.587, 0.114));
-        Out.vColor.rgb = fGray;
+        Out.vColor.rgb = (fGray, fGray, fGray);
     }
 	return Out;
 }

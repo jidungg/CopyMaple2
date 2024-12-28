@@ -54,6 +54,7 @@ void CUIChatOption::Set_Option(_uint iIdx,const  ChatOptionData& tOptionData)
 	switch (eType)
 	{
 	case Client::CHAT_OPT_TYPE::NORMAL:
+	case Client::CHAT_OPT_TYPE::ABANDON_QUEST:
 		m_pIcon->Set_Texture(static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("npcdialog_opt_icon_normal.dds"), nullptr)));
 		m_pFont->Set_Text(tOptionData.szText);
 		break;

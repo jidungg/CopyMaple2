@@ -82,6 +82,8 @@ HRESULT CUIPanel::Bind_ShaderResources()
 		_float4 vMinMax = static_cast<CRect_Transform*>(m_pTransformCom)->Get_MinMax();
 		if (FAILED(m_pShaderCom->Bind_RawValue("g_MinMax", &vMinMax, sizeof(XMUINT4))))
 			return E_FAIL;
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_bGray", &m_bGray, sizeof(_bool))))
+			return E_FAIL;
 	}
 	if (m_pTextureCom)
 			if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iSRVIndex)))

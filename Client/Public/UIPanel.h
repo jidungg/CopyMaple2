@@ -26,6 +26,7 @@ public:
 	virtual HRESULT Render()override;
 
 	void Set_Texture(CTexture* pTexture);
+	void Set_Gray(_bool bValue) { m_bGray = bValue; }
 	bool Is_TextureNullptr() { return m_pTextureCom == nullptr; }
 	void Set_SRVIndex(_uint iIndex) { m_iSRVIndex = iIndex; }
 protected:
@@ -38,6 +39,7 @@ protected:
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
 	_float4 m_vBorder = { 0,0,0,0 };//상 하 좌 우 순 픽셀 수
+	_bool m_bGray = { false };
 public:
 	static CUIPanel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

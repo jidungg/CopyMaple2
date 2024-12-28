@@ -15,9 +15,9 @@
             "Quests": [
                  "OPILIA_QUEST_1"
             ],
-            "ConversationNodes" : [
+            "ConversationNodes": [
                 {
-                    "Index" :  0,
+                    "Index": 0,
                     "Portraits": [
                         {
                             "Tag": "11000508.dds",
@@ -87,7 +87,18 @@
                     ],
                     "Speaker": "오필리아",
                     "Script": "흠.. 아직 덜 잡은 것 같은데..?\n기억해, 파란 달팽이 10마리 잡기야!",
-                    "Options": [],
+                    "Options": [
+                        {
+                            "Type": "CHAT_OPT_NORMAL",
+                            "Text": "계속 해본다.",
+                            "Next": 6
+                        },
+                        {
+                            "Type": "CHAT_OPT_ABANDON_QUEST",
+                            "Text": "포기한다.",
+                            "Next": 8
+                        }
+                    ],
                     "Next": -1
                 },
                 {
@@ -100,6 +111,74 @@
                     ],
                     "Speaker": "오필리아",
                     "Script": "우와! 그걸 다 잡아오다니! 정말 고마워~.\n그럼 내가 아주 좋은 걸 줄게...",
+                    "Options": [],
+                    "Next": -1
+                },
+                {
+                    "Index": 6,
+                    "Portraits": [
+                        {
+                            "Tag": "11000508_a.dds",
+                            "Gray": true
+                        },
+                        {
+                            "Tag": "30_f.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "김지완",
+                    "Script": "힘들지만 열심히 해 볼게",
+                    "Options": [],
+                    "Next": 7
+                },
+                {
+                    "Index": 7,
+                    "Portraits": [
+                        {
+                            "Tag": "11000508_a.dds",
+                            "Gray": false
+                        },
+                        {
+                            "Tag": "30_f.dds",
+                            "Gray": true
+                        }
+                    ],
+                    "Speaker": "오필리아",
+                    "Script": "잘 생각했어!\n다 잡아오면 좋은 걸 줄 테니까 조금만 힘내!",
+                    "Options": [],
+                    "Next": -1
+                },
+                {
+                    "Index": 8,
+                    "Portraits": [
+                        {
+                            "Tag": "11000508_a.dds",
+                            "Gray": true
+                        },
+                        {
+                            "Tag": "30_f.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "김지완",
+                    "Script": "야 미안 너무 힘들다. 그만 할래.",
+                    "Options": [],
+                    "Next": 9
+                },
+                {
+                    "Index": 9,
+                    "Portraits": [
+                        {
+                            "Tag": "11000508.dds",
+                            "Gray": false
+                        },
+                        {
+                            "Tag": "30_f.dds",
+                            "Gray": true
+                        }
+                    ],
+                    "Speaker": "오필리아",
+                    "Script": "뭐야? 그것도 못해?\n그럼 그냥 꺼져. 쓰레기같은 게...",
                     "Options": [],
                     "Next": -1
                 }

@@ -75,6 +75,7 @@ ChatOptionData::ChatOptionData(json& js)
 	switch (eOptType)
 	{
 	case Client::CHAT_OPT_TYPE::NORMAL:
+	case Client::CHAT_OPT_TYPE::ABANDON_QUEST:
 	{
 		string str = js["Text"];
 		wstring wstr = CEngineUtility::ConvertStringToWString(str);
@@ -98,6 +99,7 @@ json ChatOptionData::To_Json()
 	jResult["Type"] = eOptType;
 	switch (eOptType)
 	{
+	case Client::CHAT_OPT_TYPE::ABANDON_QUEST:
 	case Client::CHAT_OPT_TYPE::NORMAL:
 		jResult["Text"] = CEngineUtility::ConvertWStringToString(szText);
 		jResult["Next"] = iNextNode;

@@ -183,10 +183,17 @@ void CUINPCDialog::Set_ConversationNode(const CONVERSATION_NODE_DATA& tNode)
 	//PORTRAIT
 	CTexture* pTexture = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock( tNode.vecPortrait[0].szPortraitTag));
 	m_pLeftPortrait->Set_Texture(pTexture);
+	m_pLeftPortrait->Set_Gray(tNode.vecPortrait[0].bGray);
 	if (tNode.vecPortrait.size() > 1)
 	{
 		pTexture = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(tNode.vecPortrait[1].szPortraitTag));
 		m_pRightPortrait->Set_Texture(pTexture);
+		m_pRightPortrait->Set_Gray(tNode.vecPortrait[1].bGray);
+		m_pRightPortrait->Set_Active(true);
+	}
+	else
+	{
+		m_pRightPortrait->Set_Active(false);
 	}
 	//NAME
 	m_pNPCName->Set_Text(tNode.szSpeakerName);

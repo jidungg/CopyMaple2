@@ -178,7 +178,8 @@
     <ClInclude Include="..\Public\PlayerInfoSlot.h" />
     <ClInclude Include="..\Public\Quest.h" />
     <ClInclude Include="..\Public\QuestDataBase.h" />
-    <ClInclude Include="..\Public\UIMonsterHPBar.h" />
+    <ClInclude Include="..\Public\UIHPBar.h" />
+    <ClInclude Include="..\Public\UIHUDMonsterHPBar.h" />
     <ClInclude Include="..\Public\UIChatOption.h" />
     <ClInclude Include="..\Public\UIMainHUDGuage.h" />
     <ClInclude Include="..\Public\InvenBuildSlot.h" />
@@ -307,6 +308,7 @@
     <ClInclude Include="..\Public\UIScrollButton.h" />
     <ClInclude Include="..\Public\UISlot.h" />
     <ClInclude Include="..\Public\UIVerticalFill.h" />
+    <ClInclude Include="..\Public\WorldUIHPBar.h" />
     <ClInclude Include="..\Public\WayFinder.h" />
     <ClInclude Include="..\Public\Weapon.h" />
     <ClInclude Include="..\Public\WildFire.h" />
@@ -354,7 +356,8 @@
     <ClCompile Include="..\Private\PlayerInfoSlot.cpp" />
     <ClCompile Include="..\Private\Quest.cpp" />
     <ClCompile Include="..\Private\QuestDataBase.cpp" />
-    <ClCompile Include="..\Private\UIMonsterHPBar.cpp" />
+    <ClCompile Include="..\Private\UIHPBar.cpp" />
+    <ClCompile Include="..\Private\UIHUDMonsterHPBar.cpp" />
     <ClCompile Include="..\Private\UIChatOption.cpp" />
     <ClCompile Include="..\Private\UIMainHUDGuage.cpp" />
     <ClCompile Include="..\Private\InvenBuildSlot.cpp" />
@@ -456,6 +459,7 @@
     <ClCompile Include="..\Private\UIScrollButton.cpp" />
     <ClCompile Include="..\Private\UISlot.cpp" />
     <ClCompile Include="..\Private\UIVerticalFill.cpp" />
+    <ClCompile Include="..\Private\WorldUIHPBar.cpp" />
     <ClCompile Include="..\Private\WayFinder.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />
     <ClCompile Include="..\Private\WildFire.cpp" />

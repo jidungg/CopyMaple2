@@ -1,16 +1,18 @@
 #pragma once
-#include "UIBar.h"
+#include "UIHPBar.h"
 
 BEGIN(Client)
+class CUIFont;
 class CMonster;
 class CUIHUDMonsterHPBar :
-    public CUIBar
+    public CUIHPBar
 {
 public:
-	typedef struct UIMonsterHPBarDesc : public CUIBar::UIBAR_DESC
+	typedef struct HUDMonsterHPBarDesc : public CUIBar::UIBAR_DESC
 	{
-	}MONSTERHPBAR_DESC;
-	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_UIBossHPBar";
+		_bool bBoss = { false };
+	}HUDMONSTERHPBAR_DESC;
+	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_UIHUDMonsterHPBar";
 protected:
 	explicit CUIHUDMonsterHPBar(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	explicit CUIHUDMonsterHPBar(const CUIHUDMonsterHPBar& Prototype);
@@ -18,12 +20,14 @@ protected:
 
 public:
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual void Update(_float fTimeDelta) override;
-	virtual void Late_Update(_float fTimeDelta) override;
-	virtual HRESULT Render()override;
-	void Set_Monster(CMonster* pMonster);
+
+	virtual void Set_Character(CCharacter* pCharacter)override;
 private:
-	CMonster* m_pMonster = nullptr;
+	_bool m_bBoss = { false };
+	CUIFont* m_pRemainHPFont = { nullptr };
+	CUIFont* m_pNameFont = { nullptr };
+	CUIFont* m_pLevelFont = { nullptr };
+	_float2 m_f2LevelFontPos = { 20,26 };
 public:
 	static CUIHUDMonsterHPBar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

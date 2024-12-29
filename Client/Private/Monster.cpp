@@ -81,6 +81,11 @@ HRESULT CMonster::Initialize(void* pArg)
 	return S_OK;
 }
 
+string CMonster::Get_Name()
+{
+	return m_pMonData->strMonsterName;
+}
+
 HRESULT CMonster::Ready_Components(MONSTER_DESC* pDesc)
 {
 	CCollider_Sphere::SPHERE_COLLIDER_DESC tDesc;

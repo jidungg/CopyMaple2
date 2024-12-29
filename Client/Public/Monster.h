@@ -118,6 +118,7 @@ public:
 
 	MONSTER_ID Get_MonsterID() { return m_pMonData->eMonID; }
 	MONSTER_GRADE Get_MonsterGrade() { return m_pMonData->eMonGrade; }
+	string Get_Name();
 protected:
 	HRESULT Ready_Components(MONSTER_DESC* pDesc);
 	HRESULT Ready_Parts(MONSTER_DESC* pDesc);

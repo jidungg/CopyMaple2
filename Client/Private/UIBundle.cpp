@@ -15,7 +15,7 @@
 #include "UIPlayerInfo.h"
 #include "UINPCDialog.h"
 #include "UIQuestGuideBundle.h"
-#include "UIMonsterHPBar.h"
+#include "UIHUDMonsterHPBar.h"
 #include "Monster.h"
 
 IMPLEMENT_SINGLETON(CUIBundle)
@@ -114,7 +114,7 @@ HRESULT CUIBundle::Initialize(void* pArg)
 		return E_FAIL;
 	Safe_AddRef(m_pQuestGuideBundle);
 
-	CUIHUDMonsterHPBar::MONSTERHPBAR_DESC tMonHPBarDesc;
+	CUIHUDMonsterHPBar::HUDMONSTERHPBAR_DESC tMonHPBarDesc;
 	tMonHPBarDesc.eAnchorType = CORNOR_TYPE::TOP;
 	tMonHPBarDesc.ePivotType = CORNOR_TYPE::CENTER;
 	tMonHPBarDesc.fSizeX = 750;
@@ -125,6 +125,7 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	tMonHPBarDesc.pFillTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("monhpbar_fill.dds")));
 	tMonHPBarDesc.vFramePadding = { 28,28,79,14 };
 	tMonHPBarDesc.vFillBorder = { 4,4,4,4 };
+	tMonHPBarDesc.bBoss = true;
 	m_pBossHPBar = static_cast<CUIHUDMonsterHPBar*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIHUDMonsterHPBar::m_szProtoTag, &tMonHPBarDesc));
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pBossHPBar, true)))
 		return E_FAIL;
@@ -139,6 +140,7 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	tMonHPBarDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("monhpbar_normal_back.dds")));
 	tMonHPBarDesc.pFillTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("monhpbar_fill.dds")));
 	tMonHPBarDesc.vFramePadding = { 11,13,45,8 };
+	tMonHPBarDesc.bBoss = false;
 	m_pMonsterHPBar = static_cast<CUIHUDMonsterHPBar*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIHUDMonsterHPBar::m_szProtoTag, &tMonHPBarDesc));
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pMonsterHPBar, true)))
 		return E_FAIL;
@@ -232,7 +234,7 @@ void CUIBundle::Set_ShowingHPMonster(CMonster* pMonster)
 		m_pCurrentMonsterHPBar = m_pBossHPBar;
 	else
 		m_pCurrentMonsterHPBar = m_pMonsterHPBar;
-	m_pCurrentMonsterHPBar->Set_Monster(pMonster);
+	m_pCurrentMonsterHPBar->Set_Character(pMonster);
 }
 
 void CUIBundle::Initialize_PlayerInfo(CPlayer* pPalyer)

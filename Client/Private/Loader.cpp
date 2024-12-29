@@ -46,7 +46,8 @@
 #include "UIChatOption.h"
 #include "UIQuestGuide.h"
 #include "UIQuestGuideBundle.h"
-#include "UIMonsterHPBar.h"
+#include "UIHPBar.h"
+#include "UIHUDMonsterHPBar.h"
 
 #include "StateMachine.h"
 #include "SkillManager.h"
@@ -531,6 +532,9 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIQuestGuide::m_szProtoTag,
 		CUIQuestGuide::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIHPBar::m_szProtoTag,
+		CUIHPBar::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,

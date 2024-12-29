@@ -25,7 +25,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render()override;
 
-private:
+protected:
 	CUIPanel* m_pFillPanel = { nullptr };
 	_float m_fFillWidth = 0.f;
 	_float m_fFillHeight = 0.f;

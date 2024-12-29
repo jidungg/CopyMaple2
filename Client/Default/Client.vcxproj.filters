@@ -264,7 +264,9 @@
     <ClInclude Include="..\Public\UIChatOption.h" />
     <ClInclude Include="..\Public\UIQuestGuide.h" />
     <ClInclude Include="..\Public\UIQuestGuideBundle.h" />
-    <ClInclude Include="..\Public\UIMonsterHPBar.h" />
+    <ClInclude Include="..\Public\UIHUDMonsterHPBar.h" />
+    <ClInclude Include="..\Public\WorldUIHPBar.h" />
+    <ClInclude Include="..\Public\UIHPBar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -468,7 +470,9 @@
     <ClCompile Include="..\Private\UIChatOption.cpp" />
     <ClCompile Include="..\Private\UIQuestGuide.cpp" />
     <ClCompile Include="..\Private\UIQuestGuideBundle.cpp" />
-    <ClCompile Include="..\Private\UIMonsterHPBar.cpp" />
+    <ClCompile Include="..\Private\UIHUDMonsterHPBar.cpp" />
+    <ClCompile Include="..\Private\WorldUIHPBar.cpp" />
+    <ClCompile Include="..\Private\UIHPBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

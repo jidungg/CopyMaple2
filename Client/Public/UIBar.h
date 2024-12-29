@@ -9,6 +9,7 @@ public:
 	typedef struct UIBarDesc : public CUIPanel::PANEL_DESC
 	{
 		CTexture* pFillTextureCom = { nullptr };
+		_float4 vFramePadding = { 0,0,0,0 };
 		_float4 vFillBorder = { 0,0,0,0 };
 	}UIBAR_DESC;
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_UIBar";
@@ -25,12 +26,10 @@ public:
 	virtual HRESULT Render()override;
 
 private:
-	CTexture* m_pFillTextureCom = { nullptr };
-	CRect_Transform* m_pFillTransformCom = { nullptr };
-	_float m_fFrameXSize = 0.f;
-	_float m_fFrameYSize = 0.f;
+	CUIPanel* m_pFillPanel = { nullptr };
+	_float m_fFillWidth = 0.f;
+	_float m_fFillHeight = 0.f;
 	_float m_fRatio = 0.f;
-	_float4 m_vFillBorder = { 0,0,0,0 };
 public:
 	static CUIBar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

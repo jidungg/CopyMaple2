@@ -77,6 +77,7 @@ public:
 	Stat Get_Stat() { return m_tStat; }
 	Stat* Get_Stat_Ref() { return &m_tStat; }
 	Stat* Get_DefaultStat_Ref() { return &m_tStatDefault; }
+	_float Get_HPRatio() { return (_float)m_tStat.iHP / (_float)m_tStatDefault.iHP; }
 	_bool Judge_Critical();
 
 	const _float4x4* Get_BoneMatrix(const _char* szBoneName);

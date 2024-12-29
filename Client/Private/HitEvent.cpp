@@ -6,6 +6,8 @@
 #include "Client_Utility.h"
 #include "EffectManager.h"
 #include "UIDamgCount.h"
+#include "Monster.h"
+#include "UIBundle.h"
 
 CDamgEvent::CDamgEvent(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, _bool bCrit, _bool bPlayer, EFF_MODEL_ID eHitEffect)
 	: m_pAttacker(pAttacker)
@@ -35,6 +37,13 @@ void CDamgEvent::Exec()
 		pEffMgr->Play_EffectModel(m_eHitEffect, vPos);
 		vPos = static_cast<CCharacter*>(m_pVictim)->Get_OverHeadPoint();
 		pEffMgr->Play_DamgCount(m_bCrit, m_bPlayer, m_iDamage, vPos);
+
+		CMonster* pMonster = dynamic_cast<CMonster*>(m_pVictim);
+		if (pMonster)
+		{
+			UIBUNDLE->Set_ShowingHPMonster(pMonster);
+			UIBUNDLE->Set_MonsterHPBarVisible(true);
+		}
 	}
 	else
 	{

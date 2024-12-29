@@ -46,6 +46,7 @@
 #include "UIChatOption.h"
 #include "UIQuestGuide.h"
 #include "UIQuestGuideBundle.h"
+#include "UIMonsterHPBar.h"
 
 #include "StateMachine.h"
 #include "SkillManager.h"
@@ -292,6 +293,10 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/UI/QuestGuide/"), TEXT(".dds"))))
 		return E_FAIL;
+	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
+		TEXT("../Bin/Resources/Textures/UI/MonsterHPBar/"), TEXT(".dds"))))
+		return E_FAIL;
+
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더 로드."));
 #pragma region Shader
@@ -475,6 +480,9 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIBar::m_szProtoTag,
 		CUIBar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIHUDMonsterHPBar::m_szProtoTag,
+		CUIHUDMonsterHPBar::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIScroller::m_szProtoTag,
 		CUIScroller::Create(m_pDevice, m_pContext))))

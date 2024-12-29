@@ -52,6 +52,7 @@ void CMainApp::Update(_float fTimeDelta)
 	{
 		m_pEffectManager->Update(fTimeDelta);
 		m_pGameInstance->Update_Engine(fTimeDelta);
+		UIBUNDLE->Update(fTimeDelta);
 	}
 }
 

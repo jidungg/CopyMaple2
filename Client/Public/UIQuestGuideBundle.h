@@ -35,6 +35,7 @@ private:
 	map< QUEST_ID,CUIQuestGuide*> m_mapQuestGuide;
 
 	_float m_fGuideWidth = {296};
+	_float m_fGuideMargin = { 5 };
 public:
 	static CUIQuestGuideBundle* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

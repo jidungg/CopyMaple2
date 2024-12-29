@@ -26,32 +26,29 @@ HRESULT CUIBar::Initialize(void* pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-	m_fFrameXSize = static_cast<CRect_Transform*>(m_pTransformCom)->Get_ScreenSize().x;
-	m_fFrameYSize = static_cast<CRect_Transform*>(m_pTransformCom)->Get_ScreenSize().y;
 	UIBAR_DESC* pDesc = static_cast<UIBAR_DESC*>(pArg);
-	m_pFillTextureCom = pDesc->pFillTextureCom;
-	m_vFillBorder = pDesc->vFillBorder;
+	m_fFillWidth = pDesc->fSizeX - pDesc->vFramePadding.z - pDesc->vFramePadding.w;
+	m_fFillHeight = pDesc->fSizeY - pDesc->vFramePadding.x - pDesc->vFramePadding.y;
 
-	m_pFillTransformCom = CRect_Transform::Create(m_pDevice, m_pContext);
-	if (nullptr == m_pFillTransformCom)
-		return E_FAIL;
-	CRect_Transform::RECTTRANSFORM_DESC tFillDesc{};
-	tFillDesc.eAnchorType = CORNOR_TYPE::LEFT;
-	tFillDesc.ePivotType = CORNOR_TYPE::LEFT;
+	CUIPanel::PANEL_DESC tFillDesc{};
+	tFillDesc.eAnchorType = CORNOR_TYPE::LEFT_TOP;
+	tFillDesc.ePivotType = CORNOR_TYPE::LEFT_TOP;
 	tFillDesc.fSizeX = 1.f;
-	tFillDesc.fSizeY = pDesc->fSizeY - pDesc->vBorder.x *2;
-	tFillDesc.fXOffset = 3;
-	tFillDesc.fYOffset = 0;
-	m_pFillTransformCom->Set_Parent(m_pTransformCom);
-	if (FAILED(m_pFillTransformCom->Initialize(&tFillDesc)))
-		return E_FAIL;
+	tFillDesc.fSizeY = m_fFillHeight;
+	tFillDesc.fXOffset = pDesc->vFramePadding.z;
+	tFillDesc.fYOffset = pDesc->vFramePadding.x;
+	tFillDesc.pTextureCom = pDesc->pFillTextureCom;
+	tFillDesc.vBorder = pDesc->vFillBorder;
+	m_pFillPanel = static_cast<CUIPanel*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &tFillDesc));
+	Add_Child(m_pFillPanel);
+
 	return S_OK;
 }
 
 void CUIBar::Update_Ratio(_float fRatio)
 {
 	m_fRatio = fRatio;
-	m_pFillTransformCom->Set_Size(m_fRatio * (m_fFrameXSize - m_vBorder.z - m_vBorder.w), m_fFrameYSize - m_vBorder.y - m_vBorder.x);
+	static_cast<CRect_Transform*>(m_pFillPanel->Get_Transform())->Set_Size(m_fRatio * (m_fFillWidth), m_fFillHeight);
 }
 
 void CUIBar::Late_Update(_float fTimeDelta)
@@ -68,24 +65,6 @@ HRESULT CUIBar::Render()
 
 	if (FAILED(__super::Render()))
 		return E_FAIL;
-
-	if (FAILED(m_pFillTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-		return E_FAIL;
-	if (FAILED(m_pFillTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iSRVIndex)))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_BorderSize", &m_vFillBorder, sizeof(XMUINT4))))
-		return E_FAIL;
-	_float4 vMinMax = static_cast<CRect_Transform*>(m_pFillTransformCom)->Get_MinMax();
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_MinMax", &vMinMax, sizeof(XMUINT4))))
-		return E_FAIL;
-	if (m_pShaderCom)
-		m_pShaderCom->Begin(0);
-	if (m_pVIBufferCom)
-	{
-		m_pVIBufferCom->Bind_BufferDesc();
-		m_pVIBufferCom->Render();
-	}
-
 	return S_OK;
 }
 
@@ -114,6 +93,4 @@ CGameObject* CUIBar::Clone(void* pArg)
 void CUIBar::Free()
 {
 	__super::Free();
-	Safe_Release(m_pFillTextureCom);
-	Safe_Release(m_pFillTransformCom);
 }

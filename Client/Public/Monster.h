@@ -11,6 +11,7 @@ typedef struct MonsterData
 	MonsterData(json& js)
 	{
 		eMonID = js["Id"];
+		eMonGrade = js["Grade"];
 		string str = js["Name"];
 		std::copy(str.begin(), str.end(), strMonsterName);
 		str = js["Desc"];
@@ -116,6 +117,7 @@ public:
 	virtual _bool Is_Targetable() override;
 
 	MONSTER_ID Get_MonsterID() { return m_pMonData->eMonID; }
+	MONSTER_GRADE Get_MonsterGrade() { return m_pMonData->eMonGrade; }
 protected:
 	HRESULT Ready_Components(MONSTER_DESC* pDesc);
 	HRESULT Ready_Parts(MONSTER_DESC* pDesc);

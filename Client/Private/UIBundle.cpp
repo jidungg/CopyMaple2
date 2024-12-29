@@ -15,6 +15,8 @@
 #include "UIPlayerInfo.h"
 #include "UINPCDialog.h"
 #include "UIQuestGuideBundle.h"
+#include "UIMonsterHPBar.h"
+#include "Monster.h"
 
 IMPLEMENT_SINGLETON(CUIBundle)
 
@@ -111,7 +113,51 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pQuestGuideBundle, true)))
 		return E_FAIL;
 	Safe_AddRef(m_pQuestGuideBundle);
+
+	CUIHUDMonsterHPBar::MONSTERHPBAR_DESC tMonHPBarDesc;
+	tMonHPBarDesc.eAnchorType = CORNOR_TYPE::TOP;
+	tMonHPBarDesc.ePivotType = CORNOR_TYPE::CENTER;
+	tMonHPBarDesc.fSizeX = 750;
+	tMonHPBarDesc.fSizeY = 100;
+	tMonHPBarDesc.fXOffset = 0;
+	tMonHPBarDesc.fYOffset = 70;
+	tMonHPBarDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("monhpbar_boss_back.dds")));
+	tMonHPBarDesc.pFillTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("monhpbar_fill.dds")));
+	tMonHPBarDesc.vFramePadding = { 28,28,79,14 };
+	tMonHPBarDesc.vFillBorder = { 4,4,4,4 };
+	m_pBossHPBar = static_cast<CUIHUDMonsterHPBar*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIHUDMonsterHPBar::m_szProtoTag, &tMonHPBarDesc));
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pBossHPBar, true)))
+		return E_FAIL;
+	Safe_AddRef(m_pBossHPBar);
+	m_pBossHPBar->Set_Active(false);
+
+
+	tMonHPBarDesc.fSizeX = 356;
+	tMonHPBarDesc.fSizeY = 52;
+	tMonHPBarDesc.fXOffset = 0;
+	tMonHPBarDesc.fYOffset = 70;
+	tMonHPBarDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("monhpbar_normal_back.dds")));
+	tMonHPBarDesc.pFillTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("monhpbar_fill.dds")));
+	tMonHPBarDesc.vFramePadding = { 11,13,45,8 };
+	m_pMonsterHPBar = static_cast<CUIHUDMonsterHPBar*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIHUDMonsterHPBar::m_szProtoTag, &tMonHPBarDesc));
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pMonsterHPBar, true)))
+		return E_FAIL;
+	Safe_AddRef(m_pMonsterHPBar);
+	m_pMonsterHPBar->Set_Active(false);
 	return S_OK;
+}
+
+void CUIBundle::Update(_float fTimeDelta)
+{
+	if (m_pCurrentMonsterHPBar && m_pCurrentMonsterHPBar->Is_Active())
+	{
+		m_fMonsterHPBarVisibleTimeAcc += fTimeDelta;
+		if (m_fMonsterHPBarVisibleTimeAcc > m_fMonsterHPBarVisibleTime)
+		{
+			Set_MonsterHPBarVisible(false);
+		}
+	}
+
 }
 
 
@@ -174,6 +220,21 @@ void CUIBundle::Set_NPCDialogData(const CONVERSATION_NODE_DATA& pNode)
 {
 	m_pNPCDialog->Set_ConversationNode(pNode);
 }
+void CUIBundle::Set_MonsterHPBarVisible(_bool bVisible)
+{
+	m_fMonsterHPBarVisibleTimeAcc = 0.f;
+	m_pCurrentMonsterHPBar->Set_Active(bVisible);
+}
+
+void CUIBundle::Set_ShowingHPMonster(CMonster* pMonster)
+{
+	if(MONSTER_GRADE::BOSS == pMonster->Get_MonsterGrade() )
+		m_pCurrentMonsterHPBar = m_pBossHPBar;
+	else
+		m_pCurrentMonsterHPBar = m_pMonsterHPBar;
+	m_pCurrentMonsterHPBar->Set_Monster(pMonster);
+}
+
 void CUIBundle::Initialize_PlayerInfo(CPlayer* pPalyer)
 {
 	CUIMainHUDGuage::UIMAINHUDGUAGE_DESC tMainBarDesc;
@@ -235,4 +296,6 @@ void CUIBundle::Free()
 	Safe_Release(m_pPlayerInfoUI);
 	Safe_Release(m_pNPCDialog);
 	Safe_Release(m_pQuestGuideBundle);
+	Safe_Release(m_pBossHPBar);
+	Safe_Release(m_pMonsterHPBar);
 }

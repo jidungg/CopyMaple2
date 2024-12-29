@@ -96,7 +96,7 @@ void CUIQuestGuideBundle::Arrange_Guide()
 	{
 		CRect_Transform* pTransform =static_cast<CRect_Transform*>(pGuide.second->Get_Transform()); 
 		pTransform->Set_Offset(0, fBottomOffset);
-		fBottomOffset += pGuide.second->Get_Height();
+		fBottomOffset += pGuide.second->Get_Height() + m_fGuideMargin;
 	}
 }
 

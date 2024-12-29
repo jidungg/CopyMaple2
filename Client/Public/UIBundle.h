@@ -24,6 +24,8 @@ class CPlayerInfoSlot;
 class CUINPCDialog;
 class CNPC;
 class CUIQuestGuideBundle;
+class CUIHUDMonsterHPBar;
+class CMonster;
 class CUIBundle :
     public CBase
 {
@@ -42,7 +44,7 @@ protected:
 
 public:
 	virtual HRESULT Initialize(void* pArg) ;
-
+	void Update(_float fTimeDelta);
 
 	void Initialize_PlayerInfo(CPlayer* pPalyer);
 	void Update_Inven_Slot(_uint iIndex, CInvenSlot* pSlot);
@@ -66,6 +68,9 @@ public:
 	void Update_QuestGuide();
 
 	void Set_NPCDialogData(const CONVERSATION_NODE_DATA& pNode);
+
+	void Set_MonsterHPBarVisible(_bool bVisible);
+	void Set_ShowingHPMonster(CMonster* pMonster);
 private:
 	ID3D11Device* m_pDevice = { nullptr };
 	ID3D11DeviceContext* m_pContext = { nullptr };
@@ -79,6 +84,12 @@ private:
 	CUIPlayerInfo* m_pPlayerInfoUI = { nullptr };
 	CUINPCDialog* m_pNPCDialog = { nullptr };
 	CUIQuestGuideBundle* m_pQuestGuideBundle = { nullptr };
+	CUIHUDMonsterHPBar* m_pBossHPBar = { nullptr };
+	CUIHUDMonsterHPBar* m_pMonsterHPBar = { nullptr };
+	CUIHUDMonsterHPBar* m_pCurrentMonsterHPBar = { nullptr };
+
+	_float m_fMonsterHPBarVisibleTime = { 5.f };
+	_float m_fMonsterHPBarVisibleTimeAcc = { 0.f };
 public:
 	void Free() override;
 };

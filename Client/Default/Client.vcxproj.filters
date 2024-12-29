@@ -264,6 +264,7 @@
     <ClInclude Include="..\Public\UIChatOption.h" />
     <ClInclude Include="..\Public\UIQuestGuide.h" />
     <ClInclude Include="..\Public\UIQuestGuideBundle.h" />
+    <ClInclude Include="..\Public\UIMonsterHPBar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -467,6 +468,7 @@
     <ClCompile Include="..\Private\UIChatOption.cpp" />
     <ClCompile Include="..\Private\UIQuestGuide.cpp" />
     <ClCompile Include="..\Private\UIQuestGuideBundle.cpp" />
+    <ClCompile Include="..\Private\UIMonsterHPBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

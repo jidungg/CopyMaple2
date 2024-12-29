@@ -32,6 +32,7 @@ public:
 	void Set_Text(const _tchar* pText);
 
 	_float2 Get_TextSize(const _tchar* pText);
+	_float2 Get_TextSize();
 	_float2 Calc_FontLeftTop(const _tchar* pText);
 
 private:

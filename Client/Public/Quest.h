@@ -28,6 +28,8 @@ typedef struct QuestCondition
 	QuestCondition(json& js);
 	virtual _bool Is_Satisfied() abstract;
 	virtual json To_Json();
+	virtual wstring To_String() abstract;
+
 	QUEST_CONDITION_TYPE eType = { QUEST_CONDITION_TYPE::LAST };
 	_int iRequiredCount = { 0 };
 }QUEST_CONDITION;
@@ -37,6 +39,7 @@ typedef struct MonsterQuestCondition : public QuestCondition
 	MonsterQuestCondition(json& js);
 	virtual _bool Is_Satisfied() override;
 	virtual json To_Json() override;
+	virtual wstring To_String() override;
 	MONSTER_ID iMonsterID = { MONSTER_ID::SNAIL };
 	_int iCount = { 0 };
 }MONSTER_QUEST_CONDITION;
@@ -46,6 +49,7 @@ typedef struct ItemQuestCondition : public QuestCondition
 	ItemQuestCondition(json& js);
 	virtual _bool Is_Satisfied() override;
 	virtual json To_Json() override;
+	virtual wstring To_String() override;
 	COMBIEND_ITEM_ID tItem;
 }ITEM_QUEST_CONDITION;
 typedef struct QuestData
@@ -64,7 +68,7 @@ typedef struct QuestData
 	json To_Json();
 	_uint Get_AccurateConversationIndex();
 	void Increase_MonsterKillCount(MONSTER_ID eId);
-
+	
 	NPC_ID eClient = { NPC_ID::NPCID_LAST };
 	QUEST_ID eQuestID = { QUEST_ID::LAST };
 	wstring strName;

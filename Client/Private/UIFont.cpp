@@ -57,6 +57,11 @@ _float2 CUIFont::Get_TextSize(const _tchar* pText)
 	return m_pFont->Get_TextSize(pText);
 }
 
+_float2 CUIFont::Get_TextSize()
+{
+	return m_pFont->Get_TextSize(m_pText.c_str());
+}
+
 _float2 CUIFont::Calc_FontLeftTop(const _tchar* pText)
 {
 	CRect_Transform* pTransform = static_cast<CRect_Transform*>(m_pTransformCom);

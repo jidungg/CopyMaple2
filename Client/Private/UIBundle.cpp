@@ -14,6 +14,7 @@
 #include "Player.h"
 #include "UIPlayerInfo.h"
 #include "UINPCDialog.h"
+#include "UIQuestGuideBundle.h"
 
 IMPLEMENT_SINGLETON(CUIBundle)
 
@@ -104,6 +105,12 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	Safe_AddRef(m_pNPCDialog);
 	m_pNPCDialog->Set_Active(false);
 
+	CUIQuestGuideBundle::QUESTGUIDEBUNDLE_DESC tQuestGuideDesc;
+
+	m_pQuestGuideBundle = static_cast<CUIQuestGuideBundle*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIQuestGuideBundle::m_szProtoTag, &tQuestGuideDesc));
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pQuestGuideBundle, true)))
+		return E_FAIL;
+	Safe_AddRef(m_pQuestGuideBundle);
 	return S_OK;
 }
 
@@ -146,6 +153,21 @@ void CUIBundle::Set_NPCDialogActive(_bool bActive)
 void CUIBundle::Set_NPCDialogNPC(CNPC* pNPC)
 {
 	m_pNPCDialog->Set_NPC(pNPC);
+}
+
+void CUIBundle::Add_QuestGuide(QUEST_ID eQuestID)
+{
+	m_pQuestGuideBundle->Add_QuestGuide(eQuestID);
+}
+
+void CUIBundle::Remove_QuestGuide(QUEST_ID eQuestID)
+{
+	m_pQuestGuideBundle->Remove_QuestGuide(eQuestID);
+}
+
+void CUIBundle::Update_QuestGuide()
+{
+	m_pQuestGuideBundle->Update_Data();
 }
 
 void CUIBundle::Set_NPCDialogData(const CONVERSATION_NODE_DATA& pNode)
@@ -212,4 +234,5 @@ void CUIBundle::Free()
 	Safe_Release(m_pMainHPBar);
 	Safe_Release(m_pPlayerInfoUI);
 	Safe_Release(m_pNPCDialog);
+	Safe_Release(m_pQuestGuideBundle);
 }

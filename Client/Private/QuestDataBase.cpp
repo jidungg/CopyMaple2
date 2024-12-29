@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "QuestDataBase.h"
 #include "PlayerInfo.h"
+#include "UIBundle.h"
 
 IMPLEMENT_SINGLETON(CQuestDataBase)
 
@@ -59,6 +60,7 @@ void CQuestDataBase::Accept_Quest(QUEST_ID eId)
 		return;
 	m_mapData[eId]->eState = QUEST_STATE::ACCEPTED;
 	m_setAccepted.insert(eId);
+	UIBUNDLE->Add_QuestGuide(eId);
 }
 
 void CQuestDataBase::Complete_Quest(QUEST_ID eId)
@@ -77,6 +79,7 @@ void CQuestDataBase::Complete_Quest(QUEST_ID eId)
 	}
 	PLAYERINIFO->Gain_EXP(m_mapData[eId]->tReward.m_iExp);
 	PLAYERINIFO->Gain_Gold(m_mapData[eId]->tReward.m_iGold);
+	UIBUNDLE->Remove_QuestGuide(eId);
 }
 
 void CQuestDataBase::Abandon_Quest(QUEST_ID eId)
@@ -84,7 +87,16 @@ void CQuestDataBase::Abandon_Quest(QUEST_ID eId)
 	if (false == Is_QuestAccepted(eId))
 		return;
 	m_mapData[eId]->eState = QUEST_STATE::NOT_ACCEPTED;
+	for (auto& pCondition : m_mapData[eId]->listCompleteCondition)
+	{
+		if (pCondition->eType == QUEST_CONDITION_TYPE::MONSTER)
+		{
+			MONSTER_QUEST_CONDITION* pMonsterCondition = static_cast<MONSTER_QUEST_CONDITION*>(pCondition);
+			pMonsterCondition->iCount = 0;
+		}
+	} 
 	m_setAccepted.erase(eId);
+	UIBUNDLE->Remove_QuestGuide(eId);
 }
 
 void CQuestDataBase::Increase_MonsterKillCount(MONSTER_ID eId)
@@ -93,6 +105,7 @@ void CQuestDataBase::Increase_MonsterKillCount(MONSTER_ID eId)
 	{
 		m_mapData[eQId]->Increase_MonsterKillCount(eId);
 	}
+	UIBUNDLE->Update_QuestGuide();
 }
 
 void CQuestDataBase::Free()

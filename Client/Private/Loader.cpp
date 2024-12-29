@@ -44,6 +44,8 @@
 #include "UIModelPad.h"
 #include "UINPCDialog.h"
 #include "UIChatOption.h"
+#include "UIQuestGuide.h"
+#include "UIQuestGuideBundle.h"
 
 #include "StateMachine.h"
 #include "SkillManager.h"
@@ -287,7 +289,9 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/UI/NPCDialog/ETC/"), TEXT(".dds"))))
 		return E_FAIL;
-
+	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
+		TEXT("../Bin/Resources/Textures/UI/QuestGuide/"), TEXT(".dds"))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더 로드."));
 #pragma region Shader
@@ -513,6 +517,12 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIChatOption::m_szProtoTag,
 		CUIChatOption::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIQuestGuideBundle::m_szProtoTag,
+		CUIQuestGuideBundle::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIQuestGuide::m_szProtoTag,
+		CUIQuestGuide::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,

@@ -276,6 +276,8 @@
     <ClInclude Include="..\Public\UINPCDialog.h" />
     <ClInclude Include="..\Public\UIPlayerInfo.h" />
     <ClInclude Include="..\Public\UIPlayerInfoSlot.h" />
+    <ClInclude Include="..\Public\UIQuestGuide.h" />
+    <ClInclude Include="..\Public\UIQuestGuideBundle.h" />
     <ClInclude Include="..\Public\UIQuickSlotBundle.h" />
     <ClInclude Include="..\Public\SlotItem.h" />
     <ClInclude Include="..\Public\UIContainer.h" />
@@ -423,6 +425,8 @@
     <ClCompile Include="..\Private\UINPCDialog.cpp" />
     <ClCompile Include="..\Private\UIPlayerInfo.cpp" />
     <ClCompile Include="..\Private\UIPlayerInfoSlot.cpp" />
+    <ClCompile Include="..\Private\UIQuestGuide.cpp" />
+    <ClCompile Include="..\Private\UIQuestGuideBundle.cpp" />
     <ClCompile Include="..\Private\UIQuickSlotBundle.cpp" />
     <ClCompile Include="..\Private\SlotItem.cpp" />
     <ClCompile Include="..\Private\UIContainer.cpp" />

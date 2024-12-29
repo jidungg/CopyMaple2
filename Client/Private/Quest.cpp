@@ -5,6 +5,8 @@
 #include "PlayerInfo.h"
 #include "Engine_Utility.h"
 #include "Inventory.h"
+#include "ItemDataBase.h"
+#include "MonsterDataBase.h"
 
 QuestData::QuestData(json& js)
 {
@@ -262,6 +264,18 @@ json ItemQuestCondition::To_Json()
 	return jResult;
 }
 
+wstring ItemQuestCondition::To_String()
+{
+	wstring wstrResult = L"";
+	wstrResult += CEngineUtility::ConvertStringToWString( ITEMDB->Get_Data(tItem.eItemType, tItem.iID)->strItemName);
+	wstrResult += L" 수집하기 (";
+	wstrResult += to_wstring(INVENTORY->Get_ItemCount(tItem.eItemType, tItem.iID));
+	wstrResult += L" / ";
+	wstrResult += to_wstring(iRequiredCount);
+	wstrResult += L")";
+	return wstrResult;
+}
+
 MonsterQuestCondition::MonsterQuestCondition(json& js)
 	:QuestCondition(js)
 {
@@ -280,4 +294,16 @@ json MonsterQuestCondition::To_Json()
 	jResult["MonsterId"] = iMonsterID;
 	jResult["Count"] = iCount;
 	return jResult;
+}
+
+wstring MonsterQuestCondition::To_String()
+{
+	wstring wstrResult = L"";
+	wstrResult += CEngineUtility::ConvertStringToWString(MONSTERDB->Get_Data(iMonsterID)->strMonsterName);
+	wstrResult += L" 죽이기 (";
+	wstrResult += to_wstring(iCount);
+	wstrResult += L" / ";
+	wstrResult += to_wstring(iRequiredCount);
+	wstrResult += L")";
+	return wstrResult;
 }

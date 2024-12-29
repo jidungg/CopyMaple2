@@ -114,6 +114,7 @@ HRESULT CInventory::Insert_Item(const ITEM_DATA* pData, _uint iCount)
 		//m_pUI->Update_Slot(pUpdateSlot->Get_Type(), pUpdateSlot->Get_Index());
 		return S_OK;
 	}
+
 }
 
 _bool CInventory::Is_Insertable(const ITEM_DATA* pData, _uint iCount)

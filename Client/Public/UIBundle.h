@@ -23,6 +23,7 @@ class CPlayerDecoSlot;
 class CPlayerInfoSlot;
 class CUINPCDialog;
 class CNPC;
+class CUIQuestGuideBundle;
 class CUIBundle :
     public CBase
 {
@@ -60,7 +61,9 @@ public:
 	void Set_NPCDialogActive(_bool bActive);
 	void Set_NPCDialogNPC(CNPC* pNPC);
 
-
+	void Add_QuestGuide(QUEST_ID eQuestID);
+	void Remove_QuestGuide(QUEST_ID eQuestID);
+	void Update_QuestGuide();
 
 	void Set_NPCDialogData(const CONVERSATION_NODE_DATA& pNode);
 private:
@@ -75,6 +78,7 @@ private:
 	CUIMainHUDGuage* m_pMainHPBar = { nullptr };
 	CUIPlayerInfo* m_pPlayerInfoUI = { nullptr };
 	CUINPCDialog* m_pNPCDialog = { nullptr };
+	CUIQuestGuideBundle* m_pQuestGuideBundle = { nullptr };
 public:
 	void Free() override;
 };

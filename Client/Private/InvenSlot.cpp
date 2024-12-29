@@ -17,6 +17,7 @@ HRESULT CInvenSlot::Insert_Item(const ITEM_DATA* pData, _uint iCount)
     m_pItemDesc = pData;
     m_iStackCount += iCount;
 	UIBUNDLE->Update_Inven_Slot( m_iIndex, this);
+    UIBUNDLE->Update_QuestGuide();
     return S_OK;
 }
 
@@ -29,6 +30,7 @@ const ITEM_DATA* CInvenSlot::Pop_Item(_uint iCount)
     if(m_iStackCount == 0)
         m_pItemDesc = nullptr;
     UIBUNDLE->Update_Inven_Slot(m_iIndex, this);
+    UIBUNDLE->Update_QuestGuide();
     return pItem;
 }
 

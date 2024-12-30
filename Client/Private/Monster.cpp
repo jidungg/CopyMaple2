@@ -14,6 +14,7 @@
 #include "CubeTerrain.h"
 #include "DropTable.h"
 #include "QuestDataBase.h"
+#include "WorldUIHPBar.h"
 
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CCharacter(pDevice, pContext)
@@ -78,6 +79,13 @@ HRESULT CMonster::Initialize(void* pArg)
 	tDesc.pCubeTerrain = m_pCubeTerrain;
 	m_pWayFinder = CWayFinder::Create(m_pDevice, m_pContext);
 	m_pWayFinder->Initialize(&tDesc);
+
+	CWorldUIHPBar::WORLDHPBAR_DESC tHPBarDesc;
+	tHPBarDesc.pCharacter = this;
+	m_pHPBar = static_cast<CWorldUIHPBar*>( m_pGameInstance->Clone_Proto_Object_Stock(CWorldUIHPBar::m_szProtoTag, &tHPBarDesc));
+	Add_Child(m_pHPBar);
+	m_pHPBar->Set_WorldPosition(XMVectorSet(0, m_tStat.fBodyHeight * 2, 0, 1));
+	m_pHPBar->Set_Active(false);
 	return S_OK;
 }
 
@@ -582,7 +590,15 @@ void CMonster::Update(_float fTimeDelta)
 		else
 			m_fDeadIdleTimeAcc += fTimeDelta;
 	}
-
+	if (m_pHPBar->Is_Active())
+	{
+		m_fHPBarVisibleTimeAcc += fTimeDelta;
+		if (m_fHPBarVisibleTimeAcc >= m_fHPBarVisibleTime)
+		{
+			m_pHPBar->Set_Active(false);
+			m_fHPBarVisibleTimeAcc = 0.f;
+		}
+	}
 }
 
 _bool CMonster::Check_Collision(CGameObject* pOther)
@@ -640,6 +656,16 @@ void CMonster::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 	if(m_pGameInstance->Frustum_Culling_World(Get_WorldPosition()))
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+}
+
+void CMonster::Hit(CGameObject* pFoe, _int fDamage)
+{
+	__super::Hit(pFoe, fDamage);
+	if (Get_MonsterGrade() != MONSTER_GRADE::BOSS)
+	{
+		m_fHPBarVisibleTimeAcc = 0.f;
+		m_pHPBar->Set_Active(true);
+	}
 }
 
 void CMonster::On_StateChange(_uint iState)

@@ -267,6 +267,7 @@
     <ClInclude Include="..\Public\UIHUDMonsterHPBar.h" />
     <ClInclude Include="..\Public\WorldUIHPBar.h" />
     <ClInclude Include="..\Public\UIHPBar.h" />
+    <ClInclude Include="..\Public\UICastingBar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -473,6 +474,7 @@
     <ClCompile Include="..\Private\UIHUDMonsterHPBar.cpp" />
     <ClCompile Include="..\Private\WorldUIHPBar.cpp" />
     <ClCompile Include="..\Private\UIHPBar.cpp" />
+    <ClCompile Include="..\Private\UICastingBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

@@ -206,7 +206,6 @@ void CCharacter::Move_Forward(_float fDist)
 void CCharacter::Hit(CGameObject* pFoe,_int iDamage)
 {
 	m_tStat.iHP -= iDamage;
-	cout << "Hit : " << iDamage <<", Remain HP : "<< m_tStat.iHP << endl;
 	Set_Target(pFoe);
 	if (m_tStat.iHP <= 0)
 	{

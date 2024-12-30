@@ -8,7 +8,7 @@
 #include "UIQuickSlot.h"
 #include "UIInventory.h"
 #include "Inventory.h"
-#include "UIBar.h"
+#include "UICastingBar.h"
 #include "UIMainHUDGuage.h"
 #include "PlayerInfo.h"
 #include "Player.h"
@@ -82,13 +82,13 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	tBarDesc.fSizeX = 300;
 	tBarDesc.fSizeY = 30;
 	tBarDesc.fXOffset = 0;
-	tBarDesc.fYOffset = 0; 
+	tBarDesc.fYOffset = 120; 
 	tBarDesc.vBorder = { 3,3,3,3};
 	tBarDesc.vFillBorder = { 2,2,2,2 };
-
+	tBarDesc.vFramePadding = { 3,3,3,3 };
 	tBarDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock( TEXT("castingbar_mainfrm.dds")));
 	tBarDesc.pFillTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("castingbar_fill.dds")));
-	m_pCastingBar = static_cast<CUIBar*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIBar::m_szProtoTag, &tBarDesc));
+	m_pCastingBar = static_cast<CUICastingBar*>(m_pGameInstance->Clone_Proto_Object_Stock(CUICastingBar::m_szProtoTag, &tBarDesc));
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pCastingBar, true)))
 		return E_FAIL;
 	Safe_AddRef(m_pCastingBar);
@@ -146,6 +146,9 @@ HRESULT CUIBundle::Initialize(void* pArg)
 		return E_FAIL;
 	Safe_AddRef(m_pMonsterHPBar);
 	m_pMonsterHPBar->Set_Active(false);
+
+
+
 	return S_OK;
 }
 
@@ -188,6 +191,8 @@ void CUIBundle::Set_HUDActive(_bool bActive)
 	m_pMainHPBar->Set_Active(bActive);
 	m_pQuickSlotBundle1->Set_Active(bActive);
 	m_pQuickSlotBundle2->Set_Active(bActive);
+	m_pMonsterHPBar->Set_Active(bActive);
+	m_pBossHPBar->Set_Active(bActive);
 }
 void CUIBundle::Toggle_NPCDialog()
 {
@@ -225,7 +230,8 @@ void CUIBundle::Set_NPCDialogData(const CONVERSATION_NODE_DATA& pNode)
 void CUIBundle::Set_MonsterHPBarVisible(_bool bVisible)
 {
 	m_fMonsterHPBarVisibleTimeAcc = 0.f;
-	m_pCurrentMonsterHPBar->Set_Active(bVisible);
+	if (m_pCurrentMonsterHPBar)
+		m_pCurrentMonsterHPBar->Set_Active(bVisible);
 }
 
 void CUIBundle::Set_ShowingHPMonster(CMonster* pMonster)

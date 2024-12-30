@@ -54,7 +54,7 @@ void CUIBar::Update_Ratio(_float fRatio)
 void CUIBar::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
+	//m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 }
 
 

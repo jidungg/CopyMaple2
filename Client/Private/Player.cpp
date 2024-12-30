@@ -25,6 +25,7 @@
 #include "LevelChangeEvent.h"
 #include "Level_Loading.h"
 #include "Level_Home.h"
+#include "WorldUIHPBar.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -126,6 +127,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	UIBUNDLE->Set_QuickItem(KEY::S, m_mapSkill[SKILL_ID::KINDLING]);
 	UIBUNDLE->Set_QuickItem(KEY::D, m_mapSkill[SKILL_ID::FLAME_WAVE]);
 	UIBUNDLE->Set_QuickItem(KEY::F, m_mapSkill[SKILL_ID::FIRE_TORNADO]);
+
 
 	return S_OK;
 }

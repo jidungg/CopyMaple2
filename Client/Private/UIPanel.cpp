@@ -67,7 +67,6 @@ HRESULT CUIPanel::Render()
 
 HRESULT CUIPanel::Bind_ShaderResources()
 {
-
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 

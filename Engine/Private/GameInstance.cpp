@@ -388,7 +388,7 @@ void CGameInstance::Register_UIObject(CUIObject* pUIObject)
 
 void CGameInstance::Register_DontDestroy_UIObject(CUIObject* pUIObject)
 {
-	m_pUIManager->Register_DeontDestroy_UIObject(pUIObject);
+	m_pUIManager->Register_DontDestroy_UIObject(pUIObject);
 }
 
 

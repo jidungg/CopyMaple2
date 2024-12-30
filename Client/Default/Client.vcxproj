@@ -178,6 +178,7 @@
     <ClInclude Include="..\Public\PlayerInfoSlot.h" />
     <ClInclude Include="..\Public\Quest.h" />
     <ClInclude Include="..\Public\QuestDataBase.h" />
+    <ClInclude Include="..\Public\UICastingBar.h" />
     <ClInclude Include="..\Public\UIHPBar.h" />
     <ClInclude Include="..\Public\UIHUDMonsterHPBar.h" />
     <ClInclude Include="..\Public\UIChatOption.h" />
@@ -356,6 +357,7 @@
     <ClCompile Include="..\Private\PlayerInfoSlot.cpp" />
     <ClCompile Include="..\Private\Quest.cpp" />
     <ClCompile Include="..\Private\QuestDataBase.cpp" />
+    <ClCompile Include="..\Private\UICastingBar.cpp" />
     <ClCompile Include="..\Private\UIHPBar.cpp" />
     <ClCompile Include="..\Private\UIHUDMonsterHPBar.cpp" />
     <ClCompile Include="..\Private\UIChatOption.cpp" />

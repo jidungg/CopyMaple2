@@ -54,6 +54,12 @@ HRESULT CUIHUDMonsterHPBar::Initialize(void* pArg)
 	return S_OK;
 }
 
+void CUIHUDMonsterHPBar::Late_Update(_float fTimeDelta)
+{
+	__super::Late_Update(fTimeDelta);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
+}
+
 void CUIHUDMonsterHPBar::Set_Character(CCharacter* pCharacter)
 {
 	__super::Set_Character(pCharacter);

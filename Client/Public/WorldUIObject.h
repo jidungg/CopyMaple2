@@ -21,19 +21,14 @@ protected:
 
 public:
 	virtual HRESULT Initialize(void* pArg) override;
+	virtual void Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 	virtual void Compute_Matrix() override;
-protected:
-	virtual HRESULT Bind_ShaderResources(CShader* pShader);
-    HRESULT Ready_Components(void* pArg);
-
+	
+	void Set_WorldPosition(_fvector vPos) { m_vWorldPosition = vPos; }
 
 protected:
-    CShader* m_pShaderCom = { nullptr };
-	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
-
-protected:
-
+	_vector m_vWorldPosition = { 0,0,0 ,1};
 public:
 	static CWorldUIObject* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;

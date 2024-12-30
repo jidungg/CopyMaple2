@@ -1,5 +1,6 @@
 #pragma once
 #include "WorldUIObject.h"
+#include "UIHPBar.h"
 
 BEGIN(Client)
 class CCharacter;
@@ -24,6 +25,7 @@ public:
 
 private:
 	CCharacter* m_pCharacter = { nullptr };
+	CUIHPBar* m_pHPBar = { nullptr };
 public:
 	static CWorldUIHPBar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;

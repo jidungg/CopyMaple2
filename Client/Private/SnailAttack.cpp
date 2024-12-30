@@ -77,6 +77,7 @@ void CSnailAttack::On_SkillUsed()
 	m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect->Start_Animation();
 	m_pCastEffect->Set_Active(true);
+	m_setHitObject.clear();
 }
 
 void CSnailAttack::On_CastingEnd()

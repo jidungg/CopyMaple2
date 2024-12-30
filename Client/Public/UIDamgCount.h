@@ -36,7 +36,7 @@ public:
 	_bool Is_Critical() { return m_eDamgType == DAMG_TYPE::PLAYER_CRITICAL || m_eDamgType == DAMG_TYPE::MONSTER_CRITICAL; }
 	_bool Is_Player() { return m_eDamgType == DAMG_TYPE::PLAYER_CRITICAL || m_eDamgType == DAMG_TYPE::PLAYER_NORMAL; }
 protected:
-	virtual HRESULT Bind_ShaderResources(CShader* pShader) override;
+	virtual HRESULT Bind_ShaderResources(CShader* pShader);
 	HRESULT Ready_Components(void* pArg);
 
 private:
@@ -51,6 +51,8 @@ private:
 	_int m_iNumTextureHeight = { 54 };
 	_int m_iNumTextureStride= { 54 };
 
+	CShader* m_pShaderCom = { nullptr };
+	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
 	_int* m_arrNumTextureWidth;
 public:

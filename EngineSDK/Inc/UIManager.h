@@ -20,7 +20,7 @@ public:
 
 public:
 	void Register_UIObject(CUIObject* pUIObject);
-	void Register_DeontDestroy_UIObject(CUIObject* pUIObject);
+	void Register_DontDestroy_UIObject(CUIObject* pUIObject);
 	void Clear();
 
 	bool Consume_MouseLButtonDown(const POINT& tMousePoint);

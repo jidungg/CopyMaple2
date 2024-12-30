@@ -20,7 +20,7 @@ protected:
 
 public:
 	virtual HRESULT Initialize(void* pArg) override;
-
+	virtual void Late_Update(_float fTimeDelta) override;
 	virtual void Set_Character(CCharacter* pCharacter)override;
 private:
 	_bool m_bBoss = { false };

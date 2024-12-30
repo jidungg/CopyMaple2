@@ -55,17 +55,14 @@ void CUIManager::Update()
 }
 void CUIManager::Register_UIObject(CUIObject* pUIObject)
 {
-    if(pUIObject->Is_DontDestroy())
-		Register_DeontDestroy_UIObject(pUIObject);
-	else
-    {
-        m_UIObjectList.push_back(pUIObject);
-        Safe_AddRef(pUIObject);
-    }
-
+    m_UIObjectList.push_back(pUIObject);
+    Safe_AddRef(pUIObject);
 }
-void CUIManager::Register_DeontDestroy_UIObject(CUIObject* pUIObject)
+void CUIManager::Register_DontDestroy_UIObject(CUIObject* pUIObject)
 {
+	auto& iter = find(m_DontDestroyUIObjectList.begin(), m_DontDestroyUIObjectList.end(), pUIObject);
+	if (iter != m_DontDestroyUIObjectList.end())
+		return;
 	m_DontDestroyUIObjectList.push_back(pUIObject);
 	Safe_AddRef(pUIObject);
 }

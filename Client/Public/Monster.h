@@ -5,6 +5,7 @@
 BEGIN(Client)
 class CWayFinder;
 class CCubeTerrain;
+class CWorldUIHPBar;
 typedef struct MonsterData
 {
 	MonsterData() = default;
@@ -106,6 +107,7 @@ public:
 	virtual _bool Check_Collision(CGameObject* pOther) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 
+	virtual void Hit(CGameObject* pFoe, _int fDamage) override;
 	virtual void On_StateChange(_uint iState) override;
 	virtual void On_SubStateChange(_uint iSubState) override;
 	virtual void On_AnimEnd(_uint iAnimIdx) override;
@@ -166,6 +168,11 @@ protected:
 	
 	CCubeTerrain* m_pCubeTerrain = { nullptr };
 	_int m_iTargetCubeIndex = { -1 } ;
+
+	CWorldUIHPBar* m_pHPBar = { nullptr };
+
+	_float m_fHPBarVisibleTime = { 5.f };
+	_float m_fHPBarVisibleTimeAcc = { 0.f };
 public:
 	static CMonster* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

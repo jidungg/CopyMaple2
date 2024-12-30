@@ -124,8 +124,8 @@ void CEffectManager::Play_DamgCount(DAMG_TYPE eID, _int iDamg, _vector vPos, _ve
 		return;
 	CUIDamgCount* pObj = m_DmgCountPool[(_uint)eID]->Get_Object();
 	m_listPlayingDamgCount.push_back({ eID,pObj });
-	pObj->Set_Transform(vPos, vRotation, fScale);
 	pObj->Set_Damge(iDamg);
+	pObj->Set_WorldPosition(vPos);
 	pObj->Start();
 }
 

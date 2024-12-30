@@ -32,14 +32,41 @@ HRESULT CUIDamgCount::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Components(pArg)))
-		return E_FAIL;
-
 	m_fLifeTime = pDesc->fLifeTime;
 	m_fLifeTimeAcc = m_fLifeTime;
 	m_fRisingSpeed = pDesc->fSpeedPerSec;
 	m_eDamgType = pDesc->eDamgType;
 	
+	
+	if (Is_Critical())
+	{
+		m_iNumTextureStride = 54;
+		m_arrNumTextureWidth = arrDigitWidthCritical;
+	}
+	else
+	{
+		m_iNumTextureStride = 40;
+		m_arrNumTextureWidth = arrDigitWidth;
+	}
+
+	m_iNumTextureHeight = m_iNumTextureStride;
+
+	if (FAILED(Ready_Components(pArg)))
+		return E_FAIL;
+	Set_Damge(pDesc->iDamg);
+	return S_OK;
+}
+HRESULT CUIDamgCount::Ready_Components(void* pArg)
+{
+	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_UI"),
+		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+		return E_FAIL;
+
+	/* Com_VIBuffer */
+	if (FAILED(Add_Component(LEVEL_LOADING, CVIBuffer_Rect::m_szPrptotypeTag,
+		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
+		return E_FAIL;
+
 	wstring wstrTexture = L"";
 	switch (m_eDamgType)
 	{
@@ -63,26 +90,9 @@ HRESULT CUIDamgCount::Initialize(void* pArg)
 	default:
 		break;
 	}
-	if (Is_Critical())
-	{
-		m_iNumTextureStride = 54;
-		m_arrNumTextureWidth = arrDigitWidthCritical;
-	}
-	else
-	{
-		m_iNumTextureStride = 40;
-		m_arrNumTextureWidth = arrDigitWidth;
-	}
-
-	m_iNumTextureHeight = m_iNumTextureStride;
-
 	m_pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(wstrTexture));
-
-	Set_Damge(pDesc->iDamg);
-	return S_OK;
-}
-HRESULT CUIDamgCount::Ready_Components(void* pArg)
-{
+	if (nullptr == m_pTextureCom)
+		return E_FAIL;
 	return S_OK;
 }
 void CUIDamgCount::Update(_float fTimeDelta)
@@ -93,7 +103,7 @@ void CUIDamgCount::Update(_float fTimeDelta)
 		return;
 	}
 	m_fLifeTimeAcc -= fTimeDelta;
-	m_pTransformCom->Go_Direction(_vector{ 0.f, 1.f, 0.f ,0.f}, fTimeDelta );
+	m_vWorldPosition +=_vector{ 0.f, 1.f, 0.f ,0.f}* fTimeDelta * m_fRisingSpeed;
 	__super::Update(fTimeDelta);
 }
 
@@ -113,15 +123,21 @@ HRESULT CUIDamgCount::Render()
 		if (FAILED(m_pVIBufferCom->Render()))
 			return E_FAIL;
 	}
+
 	return S_OK;
 }
 
 HRESULT CUIDamgCount::Bind_ShaderResources(CShader* pShader)
 {
-	if (FAILED(__super::Bind_ShaderResources(pShader)))
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
-	m_pTextureCom->Bind_ShaderResource(pShader, "g_Texture");
-	
+	//if (FAILED(pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+	//	return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_UI_VIEW))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_UI_PROJ))))
+		return E_FAIL;
+
 	pShader->Bind_RawValue("g_DigitCount", &m_iDigitCount, sizeof(_int));
 	pShader->Bind_RawValue("g_NumberTextureStride", &m_iNumTextureStride, sizeof(_int));
 	pShader->Bind_IntArray("g_arrDigitWidth", m_arrNumTextureWidth,10);
@@ -135,6 +151,9 @@ HRESULT CUIDamgCount::Bind_ShaderResources(CShader* pShader)
 	}
 	pShader->Bind_IntArray("g_arrDigitNumber", arrDgitNumber,10);
 
+	if (m_pTextureCom)
+		if (FAILED(m_pTextureCom->Bind_ShaderResource(m_pShaderCom, "g_Texture", m_iSRVIndex)))
+			return E_FAIL;
 	return S_OK;
 }
 void CUIDamgCount::Set_Damge(_int iValue)
@@ -155,12 +174,13 @@ void CUIDamgCount::Set_Damge(_int iValue)
 	{
 		iSizeX += m_arrNumTextureWidth[i];
 	}
-	m_pTransformCom->Scaling(max(1,iSizeX), max(1,iSizeY), 1);
+	static_cast<CRect_Transform*>( m_pTransformCom)->Set_Size(max(1,iSizeX), max(1,iSizeY));
 }
 
 void CUIDamgCount::Start()
 {
 	m_fLifeTimeAcc = m_fLifeTime;
+
 	Set_Active(true);
 
 }
@@ -198,4 +218,6 @@ void CUIDamgCount::Free()
 {
 	__super::Free();
 	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pVIBufferCom);
 }

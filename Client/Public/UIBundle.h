@@ -13,7 +13,7 @@ BEGIN(Client)
 class IQuickItem;
 class CUIQuickSlotBundle;
 class CUIInventory;
-class CUIBar;
+class CUICastingBar;
 class CInvenSlot;
 class CPlayer;
 class CUIMainHUDGuage;
@@ -79,7 +79,7 @@ private:
 	CUIQuickSlotBundle* m_pQuickSlotBundle1 = { nullptr };
 	CUIQuickSlotBundle* m_pQuickSlotBundle2 = { nullptr };
 	CUIInventory* m_pInventory = { nullptr };
-	CUIBar* m_pCastingBar = { nullptr };
+	CUICastingBar* m_pCastingBar = { nullptr };
 	CUIMainHUDGuage* m_pMainHPBar = { nullptr };
 	CUIPlayerInfo* m_pPlayerInfoUI = { nullptr };
 	CUINPCDialog* m_pNPCDialog = { nullptr };

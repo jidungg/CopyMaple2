@@ -18,6 +18,7 @@
 #include "EffectManager.h"
 #include "EffModelObject.h"
 #include "WorldItem.h"
+#include "UIBundle.h"
 
 
 CLevel_Home::CLevel_Home(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -69,6 +70,9 @@ HRESULT CLevel_Home::Initialize(void* pArg)
 	pWorldItem->Set_Transform({ 0,1,0,1 }, { 0,0,0,0 }, 1);
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, LAYER_NONCOLLISION, pWorldItem)))
 		return E_FAIL;
+
+	UIBUNDLE->Set_HUDActive(false);
+	
 return S_OK;
 }
 
@@ -77,7 +81,14 @@ void CLevel_Home::Update(_float fTimeDelta)
 	__super::Update(fTimeDelta);
 	//TMP----------------------------------------------
 	if (m_pGameInstance->GetKeyState(KEY::F1) == KEY_STATE::DOWN)
-		m_pEffect->Start_Animation(0,false,-1,0.2);
+	{
+		m_pEffect->Start_Animation(0, false, -1, 0.2);
+	}
+	if (m_pGameInstance->GetKeyState(KEY::F2) == KEY_STATE::DOWN)
+	{
+		EFFECT_MANAGER->Play_DamgCount(DAMG_TYPE::PLAYER_CRITICAL, 123, { 0,1,0,1 });
+	}
+
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pEffect);
 	//----------------------------------------------
 	if (m_pGameInstance->GetKeyState(KEY::B) == KEY_STATE::DOWN)

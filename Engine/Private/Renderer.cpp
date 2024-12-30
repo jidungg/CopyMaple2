@@ -251,8 +251,13 @@ HRESULT CRenderer::Render_UI()
 	for (auto& pRenderObject : m_RenderObjects[RG_UI])
 	{
 		if (nullptr != pRenderObject)
+		{
 			if (pRenderObject->Is_Active())
 				pqUI.push(static_cast<CUIObject*>(pRenderObject));
+			else
+				Safe_Release(pRenderObject);
+		}
+		
 	}
 	m_RenderObjects[RG_UI].clear();
 	

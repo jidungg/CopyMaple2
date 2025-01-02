@@ -86,12 +86,13 @@ void CUIInvenTabButton::On_MouseLButtonDown(const POINT& tMousePoint)
 		m_iSRVIndex = m_arrSRVIndex[BS_PRESSED];
 }
 
-void CUIInvenTabButton::On_MouseLButtonUp()
+void CUIInvenTabButton::On_MouseLButtonUp(const POINT& tMousePoint)
 {
 	if (m_bDisabled)return;
 	if (m_iSRVIndex != 1)
 		m_iSRVIndex = m_arrSRVIndex[BS_NORMAL];
 }
+
 
 void CUIInvenTabButton::Set_Selected(_bool bSelected)
 {

@@ -191,8 +191,6 @@ void CUIBundle::Set_HUDActive(_bool bActive)
 	m_pMainHPBar->Set_Active(bActive);
 	m_pQuickSlotBundle1->Set_Active(bActive);
 	m_pQuickSlotBundle2->Set_Active(bActive);
-	m_pMonsterHPBar->Set_Active(bActive);
-	m_pBossHPBar->Set_Active(bActive);
 }
 void CUIBundle::Toggle_NPCDialog()
 {

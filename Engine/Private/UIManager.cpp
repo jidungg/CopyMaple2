@@ -66,6 +66,20 @@ void CUIManager::Register_DontDestroy_UIObject(CUIObject* pUIObject)
 	m_DontDestroyUIObjectList.push_back(pUIObject);
 	Safe_AddRef(pUIObject);
 }
+void CUIManager::Get_MouseOverObjects(const POINT& tMousePoint, list<CUIObject*>& listOut)
+{
+    for (auto& pUIObject : m_DontDestroyUIObjectList)
+    {
+        if (false == pUIObject->Is_Valid()) continue;
+        pUIObject->Get_MouseOverObjects(tMousePoint, listOut);
+    }
+    for (auto& pUIObject : m_UIObjectList)
+    {
+        if (false == pUIObject->Is_Valid()) continue;
+        pUIObject->Get_MouseOverObjects(tMousePoint, listOut);
+    }
+}
+
 void CUIManager::Clear()
 {
 	for (auto& pUIObject : m_UIObjectList)
@@ -89,7 +103,7 @@ bool CUIManager::Consume_MouseLButtonDown(const POINT& tMousePoint)
     }
 }
 
-bool CUIManager::Consume_MouseLButtonUp()
+bool CUIManager::Consume_MouseLButtonUp(const POINT& tMousePoint)
 {
 	bool bConsume = false;
 
@@ -99,11 +113,11 @@ bool CUIManager::Consume_MouseLButtonUp()
         bConsume = true;
     }
 	else if (m_pPressedUI != nullptr)
-		m_pPressedUI->On_MouseLButtonUp();
+		m_pPressedUI->On_MouseLButtonUp(tMousePoint);
     for (auto& pUI : m_UIObjectList)
     {
 		if (pUI == m_pPressedUI) continue;
-        pUI->On_MouseLButtonUp();
+        pUI->On_MouseLButtonUp(tMousePoint);
     }
 	m_pPressedUI = nullptr;
     return bConsume;

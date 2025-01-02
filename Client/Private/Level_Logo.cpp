@@ -48,6 +48,9 @@ HRESULT CLevel_Logo::Initialize(void* pArg)
 		return E_FAIL;
 
 	UIBUNDLE->Initialize_PlayerInfo(PLAYERINIFO->Get_Player());
+
+	m_pGameInstance->Start_BGM(LEVEL_LOGO, TEXT("BGM_Lobby"));
+	m_pGameInstance->Set_BGMVolume(100);
 	return S_OK;
 }
 

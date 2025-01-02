@@ -5,6 +5,7 @@
 #include "Character.h"
 #include "HitEvent.h"
 #include "EffModel.h"
+#include "Sound.h"
 
 CBullet_WildFire::CBullet_WildFire(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CBullet(pDevice, pContext)
@@ -93,6 +94,9 @@ void CBullet_WildFire::Launch(_float fDamage, _fvector vPosition)
 	m_bExpanding = true;
 	m_setHitObject.clear();
 	m_pCollider->Update(m_pTransformCom->Get_WorldMatrix());
+
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_LOADING, TEXT("Skill_Wizard_WildFire_Cast_02_ST.wav"));
+	pSouind->SetVolume(100);
 }
 
 

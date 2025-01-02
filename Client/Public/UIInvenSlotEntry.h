@@ -31,12 +31,16 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual HRESULT Render()override;
 
-	HRESULT On_ListItemDataSet(const ITEM_DATA* data) override;
-	HRESULT On_InvenListItemDataSet(pair<const ITEM_DATA* , _uint> Data) ;
+	HRESULT On_InvenListItemDataSet(CInvenSlot* pSlot) ;
+
+	virtual HRESULT On_ListItemDataSet(const ITEM_DATA* data) override;
 	virtual HRESULT Render_ListEntry() override;
 	virtual void On_CreateListItemEntry(CUIList* pList, _uint iIndex) override;
 	virtual void On_MouseEnter()override;
 	virtual void On_MouseRightClick()override;
+	virtual void On_Dropped(CUIObject* pFloorObject) override;
+	virtual void On_MouseDrag(const POINT& tMousePoint, const DIMOUSESTATE& tState);
+
 
 	virtual void Set_ListItemEntryActive(_bool bActive) override;
 	virtual void Set_Offset(_float iX, _float iY) override;
@@ -47,6 +51,7 @@ public:
 protected:
 
 	const ITEM_DATA* m_pItemDesc = { nullptr };
+	CInvenSlot* m_pInvenSlot = { nullptr };
 	CUIIcon* m_pIcon = { nullptr };
 	_float4 m_vIconBorder = { 3,3,3,3 };
 	CUIList* m_pList = { nullptr };

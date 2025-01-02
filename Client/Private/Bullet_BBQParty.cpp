@@ -5,6 +5,7 @@
 #include "Character.h"
 #include "HitEvent.h"
 #include "EffModel.h"
+#include "Sound.h"
 
 CBullet_BBQParty::CBullet_BBQParty(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CBullet(pDevice, pContext)
@@ -121,6 +122,8 @@ void CBullet_BBQParty::Late_Update(_float fTimeDelta)
 					m_fDamage *= bCrit ? 1.5 : 1.f;
 					m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, bCrit,true, EFF_MODEL_ID::HIT_KINDLING));
 				}
+				CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_LOADING, TEXT("Skill_Wizard_BBQParty_SplashInvoke_02.wav"));
+				pSouind->SetVolume(100);
 			}
 		}
 
@@ -152,19 +155,15 @@ void CBullet_BBQParty::Launch(_float fDamage, _fvector vPosition)
 	m_fDamgTimeAcc = m_fDamgInterval;
 	m_iSplashCount = 0;
 	Set_Active(true);
+
+
+
 }
 
 void CBullet_BBQParty::Launch(_float fDamage, CGameObject* pTarget)
 {
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pTarget->Get_TransformPosition());
-	m_fDamage = fDamage;
-	m_pKeepEffect->Start_Animation(0, true, m_fMaxDuration);
-	m_pKeepEffect->Set_Active(true);
-	m_pCollider->Update(m_pTransformCom->Get_WorldMatrix());
-	m_fDurationAcc = 0;
-	m_fDamgTimeAcc = m_fDamgInterval;
-	m_iSplashCount = 0;
-	Set_Active(true);
+	Launch(fDamage, pTarget->Get_TransformPosition());
+
 }
 
 void CBullet_BBQParty::On_KeepEffectAnimEnd(CEffModel* pModel)

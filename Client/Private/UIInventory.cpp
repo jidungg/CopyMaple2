@@ -144,10 +144,10 @@ void CUIInventory::Set_InventoryTab(ITEM_TYPE eType)
 	m_pScroller->Set_CursorRow(0);
 
 	//데이터 셋팅
-	list<pair<const ITEM_DATA*, _uint>> listData;
+	list<CInvenSlot*> listData;
 	for (auto& pSlot : *vecSlots)
 	{
-		listData.push_back({ pSlot->Get_ItemData() ,pSlot->Get_StackCount()});
+		listData.push_back(pSlot);
 	}
  	m_pItemList->Set_ItemData(&listData);
 
@@ -173,7 +173,7 @@ void CUIInventory::Update_Slot(_uint iIndex, CInvenSlot* pSlot)
 		return;
 	_uint iCount = pSlot->Get_StackCount();
 	if (iCount <= 0) pData = nullptr;
-	m_pItemList->Set_ItemData(iIndex, { pData ,iCount });
+	m_pItemList->Set_ItemData(iIndex, pSlot);
 }
 
 void CUIInventory::Clear_OnRightClickCallback()

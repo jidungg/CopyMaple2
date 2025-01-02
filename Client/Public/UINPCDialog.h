@@ -59,6 +59,7 @@ private:
 	CUIFont* m_pESCButtonFont= { nullptr };
 	CUIFont* m_pNextButtonFont = { nullptr };
 
+
 	_float m_fBoxHeight = { 275};
 	_float m_fHorizontalMargin = { 200 };
 	_float m_fOptionLeftOffset = { 50 };

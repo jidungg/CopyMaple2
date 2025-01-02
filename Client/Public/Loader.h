@@ -53,7 +53,7 @@ private:
 	HRESULT Load_Dirctory_EffModels(LEVELID eLevId, const _tchar* szDirPath, _fmatrix PreTransformMatrix);
 	HRESULT Load_Dirctory_Models(LEVELID eLevId, const _tchar* szDirPath, _fmatrix PreTransformMatrix);
 	HRESULT Load_Dirctory_Textures(LEVELID eLevId, const _tchar* szDirPath, const _tchar* szExtention);
-	HRESULT Load_Dirctory_Textures_Recursive(LEVELID eLevId, const _tchar* szDirPath, const _tchar* szExtention);
+	HRESULT Load_Dirctory_Sounds(LEVELID eLevId, const _tchar* szDirPath, const _tchar* szExtention);
 
 	
 public:

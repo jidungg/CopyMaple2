@@ -278,6 +278,8 @@
     <ClInclude Include="..\Public\CustomFont.h" />
     <ClInclude Include="..\Public\VIBuffer_Particle_Point.h" />
     <ClInclude Include="..\Public\VIBuffer_Particle_Instance.h" />
+    <ClInclude Include="..\Public\SoundManager.h" />
+    <ClInclude Include="..\Public\Sound.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -443,6 +445,8 @@
     <ClCompile Include="..\Private\CustomFont.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Particle_Point.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Particle_Instance.cpp" />
+    <ClCompile Include="..\Private\SoundManager.cpp" />
+    <ClCompile Include="..\Private\Sound.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc" />

@@ -29,6 +29,7 @@ public:
 	void Receive_Input();
 	virtual void On_MouseClick() override;
 
+
 	void Set_QuickItem(IQuickItem* pItem);
 	void Set_HotKey(KEY eKey) { m_eHotKey = eKey; }
 	void Set_StackCount(_uint iCount);

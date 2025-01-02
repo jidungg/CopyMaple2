@@ -98,7 +98,7 @@ void CBullet_Kindling::On_Collision(CGameObject* pOther)
 	{
 		_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
 		m_fDamage *= bCrit ? 1.5 : 1.f;
-		m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pOther, (_int)m_fDamage, bCrit, true,EFF_MODEL_ID::HIT_KINDLING));
+		m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pOther, (_int)m_fDamage, bCrit, true,EFF_MODEL_ID::HIT_KINDLING,TEXT("Skill_Wizard_FireBall_Ball_02.wav")));
 		Set_Active(false);
 	}
 }

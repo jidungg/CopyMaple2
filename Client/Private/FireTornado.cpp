@@ -6,6 +6,7 @@
 #include "Bullet_FireTornado.h"
 #include "HitEvent.h"
 #include "Client_Utility.h"
+#include "Sound.h"
 
 CFireTornado::CFireTornado()
 	:CSkill()
@@ -81,7 +82,9 @@ void CFireTornado::Fire()
 	_vector vLook = pShooterTransform->Get_State(CTransform::STATE_LOOK);
 	vPos += vLook * 2.5f;
 
-m_pBullet->Launch(fDmg, vPos);
+	m_pBullet->Launch(fDmg, vPos);
+	CSound* pSouind = m_pGameInstance->Start_EffectPlay(LEVEL_LOADING, L"Skill_Wizard_FireTornado_Cast_01.wav");
+	pSouind->SetVolume(100);
 }
 
 

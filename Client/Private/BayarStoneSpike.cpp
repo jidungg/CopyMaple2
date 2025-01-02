@@ -7,7 +7,7 @@
 #include "HitEvent.h"
 #include "Client_Utility.h"
 #include "CubeTerrain.h"
-
+#include "Sound.h"
 
 CBayarStoneSpike::CBayarStoneSpike()
 	:CSkill()
@@ -86,6 +86,11 @@ void CBayarStoneSpike::Late_Update(_float fTimeDelta)
 
 void CBayarStoneSpike::On_SkillUsed()
 {
+
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay_Random(LEVEL_BAYARPEAK, TEXT("en_Bajar_Voice_Skill_A_0%d.wav"),1,2);
+	pSouind->SetVolume(100);
+	pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_BAYARPEAK, TEXT("Boss_SandstoneGiant_Skill_Attack_04_G.wav"));
+	pSouind->SetVolume(100);
 }
 
 void CBayarStoneSpike::On_CastingEnd()

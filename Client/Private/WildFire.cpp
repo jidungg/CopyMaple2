@@ -5,6 +5,7 @@
 #include "Character.h"
 #include "Player.h"
 #include "HitEvent.h"
+#include "Sound.h"
 
 CWildFire::CWildFire()
 	: CSkill()
@@ -63,6 +64,8 @@ void CWildFire::On_SkillUsed()
 {
 	m_pCastEffect1->Start_Animation();
 	m_pCastEffect1->Set_Active(true);
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_LOADING, TEXT("Skill_Wizard_WildFire_Cast_01.wav"));
+	pSouind->SetVolume(100);
 }
 
 void CWildFire::On_CastingEnd()

@@ -10,6 +10,7 @@
 #include "Bullet.h"
 #include "Bullet_MagicClaw.h"
 #include "EffectManager.h"
+#include "Sound.h"
 
 CMagicClaw::CMagicClaw()
     :CSkill()
@@ -79,6 +80,8 @@ void CMagicClaw::On_SkillUsed()
 	m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect->Start_Animation();
 	m_pCastEffect->Set_Active(true);
+	CSound* pSouind = m_pGameInstance->Start_EffectPlay(LEVEL_LOADING, L"Skill_Wizard_MagicClaw_Cast_01.wav");
+	pSouind->SetVolume(100);
 }
 
 void CMagicClaw::On_CastingEnd()
@@ -100,6 +103,7 @@ void CMagicClaw::Fire()
 		m_pBullet->Launch(fDmg, pTarget);
 
 	}
+
 }
 
 

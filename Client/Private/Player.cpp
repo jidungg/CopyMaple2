@@ -26,6 +26,7 @@
 #include "Level_Loading.h"
 #include "Level_Home.h"
 #include "WorldUIHPBar.h"
+#include "Sound.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -78,6 +79,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (nullptr == pArg)
 		return E_FAIL;
 	m_pQuickSlotBundle = UIBUNDLE->Get_QuckSlotBundle();
+	m_pQuickSlotBundle2 = UIBUNDLE->Get_QuckSlotBundle2();
 	m_pInventory = INVENTORY;
 	PLAYER_DESC* desc = static_cast<PLAYER_DESC*>(pArg);
 	desc->fRotationPerSec = 5.f;
@@ -695,17 +697,17 @@ void CPlayer::Receive_KeyInput(_float fTimeDelta)
 			if (m_pGameInstance->GetKeyState(KEY::F) == KEY_STATE::DOWN)
 				m_pQuickSlotBundle->Recevie_Input(KEY::F);
 			if (m_pGameInstance->GetKeyState(KEY::NUM1) == KEY_STATE::DOWN)
-				m_pQuickSlotBundle->Recevie_Input(KEY::NUM1);
+				m_pQuickSlotBundle2->Recevie_Input(KEY::NUM1);
 			if (m_pGameInstance->GetKeyState(KEY::NUM2) == KEY_STATE::DOWN)
-				m_pQuickSlotBundle->Recevie_Input(KEY::NUM2);
+				m_pQuickSlotBundle2->Recevie_Input(KEY::NUM2);
 			if (m_pGameInstance->GetKeyState(KEY::NUM3) == KEY_STATE::DOWN)
-				m_pQuickSlotBundle->Recevie_Input(KEY::NUM3);
+				m_pQuickSlotBundle2->Recevie_Input(KEY::NUM3);
 			if (m_pGameInstance->GetKeyState(KEY::NUM4) == KEY_STATE::DOWN)
-				m_pQuickSlotBundle->Recevie_Input(KEY::NUM4);
+				m_pQuickSlotBundle2->Recevie_Input(KEY::NUM4);
 			if (m_pGameInstance->GetKeyState(KEY::NUM5) == KEY_STATE::DOWN)
-				m_pQuickSlotBundle->Recevie_Input(KEY::NUM5);
+				m_pQuickSlotBundle2->Recevie_Input(KEY::NUM5);
 			if (m_pGameInstance->GetKeyState(KEY::NUM6) == KEY_STATE::DOWN)
-				m_pQuickSlotBundle->Recevie_Input(KEY::NUM6);
+				m_pQuickSlotBundle2->Recevie_Input(KEY::NUM6);
 		}
 	}
 	else
@@ -939,15 +941,14 @@ void CPlayer::Late_Update(_float fTimeDelta)
 		m_fUpForce = 0;
 		m_vNextPos = XMVectorSetY(m_vNextPos, m_fCelingHeight - fColliderHeight);
 	}
-
+	_bool bLand = m_bOnFloor;
 	//그냥 걸어가다가 떨어지는 건 
 	if (m_bOnFloor)
 	{
-
 		if (XMVectorGetY(m_vNextPos) - m_fFloorHeight >= 0.2f)
 			m_bOnFloor = false;
 	}
-	else
+	else if(m_fUpForce < 0)
 		m_bOnFloor = XMVectorGetY(m_vNextPos) <= m_fFloorHeight;
 	if (m_bClimb)//벽 타는 중
 	{
@@ -971,6 +972,8 @@ void CPlayer::Late_Update(_float fTimeDelta)
 			m_vNextPos = XMVectorSetY(m_vNextPos, m_fFloorHeight);
 			m_bClimb = false;
 			m_pAnimStateMachine->Trigger_ConditionVariable(ANIM_CONDITION::AC_CLIMB_LAND_TRIGGER);
+
+
 		}
 		else//벽 타는 중
 		{
@@ -988,6 +991,19 @@ void CPlayer::Late_Update(_float fTimeDelta)
 				m_fUpForce = 0;
 			}
 			m_vNextPos = XMVectorSetY(m_vNextPos, m_fFloorHeight);
+
+			if (bLand == false)
+			{
+				_uint irand = rand() % 2 + 1;
+				wchar_t result[50];
+				swprintf(result, 50, L"CH_Jump_Grass_0%d.wav", irand);
+				//m_pGameInstance->Start_EffectPlay(LEVEL_LOADING, result, 0);
+				CSound* pSOund = m_pGameInstance->Get_SFX((_uint)LEVEL_LOADING, result);
+				pSOund->Play(10);
+				pSOund->SetVolume(100);
+
+			}
+
 		}
 		else//공중에 있는중
 		{
@@ -1042,6 +1058,7 @@ void CPlayer::On_AnimEnd(_uint iAnimIdx)
 	{
 		m_bClimb = false;
 		m_bOnFloor = true;
+		m_pGameInstance->Start_EffectPlay(LEVEL_LOADING, TEXT("CH_Jump_Grass_01"));
 	}
 	else if(m_bAttack)
 	{
@@ -1217,7 +1234,8 @@ HRESULT CPlayer::UnEquip(EQUIP_ITEM_TYPE eType)
 	m_pEquipModels[(_uint)eType] = nullptr;
 
 	Set_BodyMeshActive(eType, true);
-
+	if (EQUIP_ITEM_TYPE::WEAPON == eType)
+		m_bWeapon = false;
 	return S_OK;
 }
 

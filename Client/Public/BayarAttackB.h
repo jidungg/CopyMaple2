@@ -29,7 +29,7 @@ protected:
 	virtual void On_AttackEnd() override;
 
 	void Set_MoveSpeed(_float fSpeed) { m_fMoveSpeed = fSpeed; }
-private:
+protected:
 	CBullet_BayarAttackB* m_pBullet = { nullptr };
 	CEffModelObject* m_pCastEffect = { nullptr };
 	_float m_fMoveSpeed = { 0.7f };

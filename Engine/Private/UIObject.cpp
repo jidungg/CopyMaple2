@@ -1,6 +1,7 @@
 #include "UIObject.h"
 
 #include "GameInstance.h"
+#include "UIManager.h"
 
 _uint CUIObject::m_iStaticPriority = 0;
 
@@ -138,9 +139,26 @@ void CUIObject::On_MouseLButtonDown(const POINT& tMousePoint)
 }
 
 
-void CUIObject::On_MouseLButtonUp()
+void CUIObject::On_MouseLButtonUp(const POINT& tMousePoint)
 {
-	m_bGrabbed = false;
+	if (m_bGrabbed)
+	{
+		list<CUIObject*> listOverObjects;
+		m_pGameInstance->Get_MouseOverObjects(tMousePoint, listOverObjects);
+		CUIObject* pFloorObject = nullptr;
+		for (auto& pUI : listOverObjects)
+		{
+			if (pUI == this) continue;
+			if (nullptr == pFloorObject) 				
+				pFloorObject = pUI;
+			else 	if (pUI->Get_Priority() > pFloorObject->Get_Priority())
+				pFloorObject = pUI;
+		}
+
+		On_Dropped(pFloorObject);
+		m_bGrabbed = false;
+	}
+
 	return;
 }
 
@@ -184,6 +202,10 @@ void CUIObject::On_MouseDrag(const POINT& tMousePoint, const DIMOUSESTATE& tStat
 	return;
 }
 
+void CUIObject::On_Dropped(CUIObject* pFloorObject)
+{
+}
+
 bool CUIObject::Check_MouseOver(POINT fPos)
 {
 	return static_cast<CRect_Transform*>( m_pTransformCom)->Is_InRect(_float2((float)fPos.x, (float)fPos.y));
@@ -220,6 +242,18 @@ CUIObject* CUIObject::Find_FocusedUI(POINT fPos)
 	}
 
 	return pFocusedUI;
+}
+
+void CUIObject::Get_MouseOverObjects(const POINT& tMousePoint, list<CUIObject*>& listOut)
+{
+	if (false == Check_MouseOver(tMousePoint))
+		return;
+	listOut.push_back(this);
+	for (auto& child : m_pChilds)
+	{
+		if (false == child->Is_Active()) continue;
+		static_cast<CUIObject*>(child)->Get_MouseOverObjects(tMousePoint, listOut);
+	}
 }
 
 

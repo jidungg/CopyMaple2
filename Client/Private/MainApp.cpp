@@ -43,6 +43,7 @@ HRESULT CMainApp::Initialize()
 
 	m_pEffectManager = CEffectManager::GetInstance();
 
+
 	return S_OK;
 }
 

@@ -9,6 +9,7 @@ class CColliderBase;
 class CPawn;
 class CEvent;
 class IEventHandlerWrapperInterface;
+class CSound;
 class ENGINE_DLL CGameInstance final : public CBase
 {
 	DECLARE_SINGLETON(CGameInstance)
@@ -73,6 +74,7 @@ public: //For Key Manager
 public://For UI Manager
 	void Register_UIObject(class CUIObject* pUIObject);
 	void Register_DontDestroy_UIObject(class CUIObject* pUIObject);
+	void Get_MouseOverObjects(const POINT& tMousePoint, list<CUIObject*>& listOut);
 
 public: /* Light_Manager */
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
@@ -112,6 +114,25 @@ public: //FONT
 	class CCustomFont* Find_Font(const _wstring& strFontTag);
 	HRESULT Render_Font(const _wstring& strFontTag, const _tchar* pText, const _float2& vPosition, _fvector vColor, _float fRotation = 0.f, const _float2& vOrigin = _float2(0.f, 0.f));
 
+public: //Sound
+
+	HRESULT CreateSoundBuffer(LPCDSBUFFERDESC pcDSBufferDesc, _Out_ LPDIRECTSOUNDBUFFER* ppDSBuffer, _Pre_null_ LPUNKNOWN pUnkOuter);
+	class CSoundManager* Get_SoundManager() { return m_pSoundManager; }
+	HRESULT			Load_BGM(_uint iLevelID, const wstring& strKey, const wstring& strPath);
+	HRESULT			Load_SFX(_uint iLevelID, const wstring& strKey, const wstring& strPath);
+	void			Start_BGM(_uint iLevelID, const wstring& strBGM,_float fStartPos = 0,  _bool _bRepeat = true);
+	void			End_BGM();
+	void			Set_BGMVolume(float _fVolume);
+	float			Get_BGMVolume();
+	CSound* Start_EffectPlay(_uint iLevelID, const wstring& strSFX, _float fStartPos = 0, bool _bRepeat = false);
+	CSound* Start_EffectPlay_Random(_uint iLevelID, const wstring& strSFX, _uint iStart, _uint iEnd, _float fStartPos = 0, _bool _bRepeat = false);
+	void			Stop_EffectPlay(_uint iLevelID, const wstring& strSFX);
+	float			Get_SFXPosition(_uint iLevelID, const wstring& strKey);
+	bool			Is_SFXPlaying(_uint iLevelID, const wstring& strKey);
+	float			Get_BGMPosition(_uint iLevelID, const wstring& strKey);
+	bool			Is_BGMPlaying(_uint iLevelID, const wstring& strKey);
+	CSound* Get_CurBGM();
+	CSound* Get_SFX(_uint iLevelID, const wstring& strKey);
 
 #ifdef _DEBUG
 public:
@@ -139,6 +160,7 @@ private:
 	class CTarget_Manager* m_pTarget_Manager = { nullptr };
 	class CCollider_Frustum* m_pFrustum = { nullptr };
 	class CFontManager* m_pFontManager = { nullptr };
+	class CSoundManager* m_pSoundManager = { nullptr };
 public:
 	static void Release_Engine();
 

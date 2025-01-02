@@ -43,16 +43,19 @@ public:
 	virtual void On_MouseEnter();
 	virtual void On_MouseExit();
 	virtual void On_MouseLButtonDown(const POINT& tMousePoint);
-	virtual void On_MouseLButtonUp();
+	virtual void On_MouseLButtonUp(const POINT& tMousePoint);
 	virtual void On_MouseRButtonDown();
 	virtual void On_MouseRButtonUp();
 	virtual void On_MouseClick();
 	virtual void On_MouseRightClick();
 	virtual void On_MouseDrag(const POINT& tMousePoint, const DIMOUSESTATE& tState);
+	virtual void On_Dropped(CUIObject* pFloorObject);
 
 	virtual _bool Is_GrabbablePoint(const POINT& tScreenMousePoint);
 	_bool Is_RegisterUIManager() { return m_bRegisterUIManager; }
 	CUIObject* Find_FocusedUI(POINT fPos);
+	void Get_MouseOverObjects(const POINT& tMousePoint, list<CUIObject*>& listOut);
+
 protected:
 
 

@@ -28,7 +28,7 @@ void CController::Update(_float fTimeDelta)
 		 m_pUIManager->Consume_MouseLButtonDown(tPosition);
 	else if (m_pInput_Device->GetMouseKeyState(MOUSE_KEY::LB) == KEY_STATE::UP)
 	{
-		if (false == m_pUIManager->Consume_MouseLButtonUp())
+		if (false == m_pUIManager->Consume_MouseLButtonUp(tPosition))
 		{
 			int a = 0;
 		}

@@ -8,23 +8,26 @@
 #include "UIDamgCount.h"
 #include "Monster.h"
 #include "UIBundle.h"
+#include "Sound.h"
+#include "GameInstance.h"
 
-CDamgEvent::CDamgEvent(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, _bool bCrit, _bool bPlayer, EFF_MODEL_ID eHitEffect)
+CDamgEvent::CDamgEvent(CGameObject* pAttacker, CGameObject* pVictim, _int iDamage, _bool bCrit, _bool bPlayer, EFF_MODEL_ID eHitEffect, const wstring& strSFX)
 	: m_pAttacker(pAttacker)
 	, m_pVictim(pVictim)
 	, m_iDamage(iDamage)
 	, m_eHitEffect(eHitEffect)
 	,m_bCrit(bCrit)
 	,m_bPlayer(bPlayer)
+	, m_strSFX(strSFX)
 {
 	Safe_AddRef(m_pAttacker);
 	Safe_AddRef(m_pVictim);
 	m_eEventID = (_uint)EVENT_ID::HIT;
 }
 
-CDamgEvent* CDamgEvent::Create(CGameObject* pAttacker, CGameObject* pVictim, _int iDamg, _bool bCrit, _bool bPlayer, EFF_MODEL_ID eHitEffect)
+CDamgEvent* CDamgEvent::Create(CGameObject* pAttacker, CGameObject* pVictim, _int iDamg, _bool bCrit, _bool bPlayer, EFF_MODEL_ID eHitEffect, const wstring& strSFX)
 {
-	return new CDamgEvent(pAttacker, pVictim, iDamg, bCrit, bPlayer, eHitEffect);
+	return new CDamgEvent(pAttacker, pVictim, iDamg, bCrit, bPlayer, eHitEffect, strSFX);
 }
 
 void CDamgEvent::Exec()
@@ -54,6 +57,8 @@ void CDamgEvent::Exec()
 		pEffMgr->Play_RecoverCount(m_iDamage, vPos);
 		static_cast<CCharacter*>(m_pVictim)->RestoreHP(-m_iDamage);
 	}
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_LOADING, m_strSFX);
+	pSouind->SetVolume(100);
 
 }
 

@@ -22,6 +22,67 @@
 
         },
         {
+            "Id": "JUMP_BASIC_ATTACK",
+            "CastType": "INSTANT",
+            "Name": "기본 공격",
+            "Desc": "기본 공격",
+            "Level": 1,
+            "MaxLevel": 1,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10000011.png",
+            "Range": 1,
+            "Data": [ 100.0 ],
+            "LevelUpData": [ 0.0 ],
+            "Preceding": [
+                [ "BASIC_ATTACK", 0 ]
+            ],
+            "Animation": [ 53 ],
+            "EventTime": [ [ 0, 0, "FIRE" ] ]
+
+        },
+        {
+            "Id": "STAFF_BASIC_ATTACK",
+            "CastType": "INSTANT",
+            "Name": "기본 공격",
+            "Desc": "기본 공격",
+            "Level": 1,
+            "MaxLevel": 1,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10000011.png",
+            "Range": 1,
+            "Data": [ 100.0 ],
+            "LevelUpData": [ 0.0 ],
+            "Preceding": [
+                [ "BASIC_ATTACK", 0 ]
+            ],
+            "Animation": [ 106 ],
+            "EventTime": [ [ 0, 0, "FIRE" ] ]
+        },
+        {
+            "Id": "JUMP_STAFF_BASIC_ATTACK",
+            "CastType": "INSTANT",
+            "Name": "기본 공격",
+            "Desc": "기본 공격",
+            "Level": 1,
+            "MaxLevel": 1,
+            "CostType": "NONE",
+            "Cost": 0,
+            "CoolTime": 0,
+            "IconImg": "10000011.png",
+            "Range": 1,
+            "Data": [ 100.0 ],
+            "LevelUpData": [ 0.0 ],
+            "Preceding": [
+                [ "BASIC_ATTACK", 0 ]
+            ],
+            "Animation": [ 111 ],
+            "EventTime": [ [ 0, 0, "FIRE" ] ]
+        },
+        {
             "Id": "TELEPORT",
             "CastType": "INSTANT",
             "Name": "텔레포트",
@@ -223,7 +284,7 @@
             "Preceding": [
                 [ "BBQ_PARTY", 3 ]
             ],
-            "Animation": [ 126 ],
+            "Animation": [ 130 ],
             "EventTime": [ [ 0, 0, "FIRE" ] ]
         },
         {
@@ -493,13 +554,13 @@
             "Cost": 0,
             "CoolTime": 0,
             "IconImg": "10300291.png",
-            "Range" :  10,
+            "Range": 10,
             "Data": [ 397.0 ],
             "LevelUpData": [ 45.0 ],
             "Preceding": [
 
             ],
-            "Animation": [ 8, 15, 18],
+            "Animation": [ 8, 15, 18 ],
             "EventTime": [
                 [ 1, 0.1, "FIRE" ],
                 [ 1, 0.58, "FIRE" ],

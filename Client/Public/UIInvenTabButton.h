@@ -28,7 +28,7 @@ public:
 	virtual void On_MouseEnter()override;
 	virtual void On_MouseExit()override;
 	virtual void On_MouseLButtonDown(const POINT& tMousePoint) override;
-	virtual void On_MouseLButtonUp()override;
+	virtual void On_MouseLButtonUp(const POINT& tMousePoint)override;
 
 	void Set_Selected(_bool bSelected);
 	ITEM_TYPE Get_ItemType() { return m_eItemType; }

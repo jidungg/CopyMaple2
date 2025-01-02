@@ -12,7 +12,7 @@ CUIInvenItemList::CUIInvenItemList(const CUIInvenItemList& Prototype)
 {
 }
 
-HRESULT CUIInvenItemList::Set_ItemData(list<pair<const ITEM_DATA*, _uint>>* listData)
+HRESULT CUIInvenItemList::Set_ItemData(list<CInvenSlot*>* listData)
 {
 	if (listData->size() > Get_ItemCount())
 		return E_FAIL;
@@ -27,7 +27,7 @@ HRESULT CUIInvenItemList::Set_ItemData(list<pair<const ITEM_DATA*, _uint>>* list
 	return S_OK;
 }
 
-HRESULT CUIInvenItemList::Set_ItemData(_uint iIndex, pair<const ITEM_DATA*, _uint> Data)
+HRESULT CUIInvenItemList::Set_ItemData(_uint iIndex, CInvenSlot* Data)
 {
 	if (iIndex > Get_ItemCount())
 		return E_FAIL;

@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Bullet_MagicClaw.h"
 #include "HitEvent.h"
+#include "Sound.h"
 
 CFlameWave::CFlameWave()
 	:CSkill()
@@ -65,6 +66,8 @@ void CFlameWave::On_SkillUsed()
 	m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect->Start_Animation();
 	m_pCastEffect->Set_Active(true);
+	CSound* pSouind = m_pGameInstance->Start_EffectPlay(LEVEL_LOADING, L"Skill_Wizard_FlameBurst_Hit_01.wav");
+	pSouind->SetVolume(100);
 }
 
 void CFlameWave::On_CastingEnd()

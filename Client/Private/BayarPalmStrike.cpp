@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Bullet_MagicClaw.h"
 #include "HitEvent.h"
+#include "Sound.h"
 
 CBayarPalmStrike::CBayarPalmStrike()
 	: CSkill()
@@ -71,6 +72,9 @@ void CBayarPalmStrike::Late_Update(_float fTimeDelta)
 void CBayarPalmStrike::On_SkillUsed()
 {
 	m_iAttackCount = 0;
+
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_BAYARPEAK, TEXT("en_Bajar_Voice_Skill_K_02.wav"));
+	pSouind->SetVolume(100);
 }
 
 void CBayarPalmStrike::On_CastingEnd()
@@ -103,6 +107,8 @@ void CBayarPalmStrike::Fire()
 		_float fDmg = Calc_Damg(bCrit);
 		m_pGameInstance->Push_Event(CDamgEvent::Create(m_pUser, pTarget, (_int)fDmg, bCrit,false, EFF_MODEL_ID::HIT_A));
 	}
+
+
 }
 
 void CBayarPalmStrike::On_AttackEnd()

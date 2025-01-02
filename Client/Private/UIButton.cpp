@@ -70,12 +70,14 @@ void CUIButton::On_MouseLButtonDown(const POINT& tMousePoint)
 	return;
 }
 
-void CUIButton::On_MouseLButtonUp()
+void CUIButton::On_MouseLButtonUp(const POINT& tMousePoint)
 {
 	if (m_bDisabled)return;
-	__super::On_MouseLButtonUp();
+	__super::On_MouseLButtonUp(tMousePoint);
 	m_iSRVIndex = m_arrSRVIndex[BS_NORMAL];
 }
+
+
 
 void CUIButton::On_MouseClick()
 {

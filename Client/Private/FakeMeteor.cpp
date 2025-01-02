@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "HitEvent.h"
 #include "Client_Utility.h"
+#include "Sound.h"
 
 CFakeMeteor::CFakeMeteor()
 	: CSkill()
@@ -88,10 +89,13 @@ void CFakeMeteor::On_SkillUsed()
 	m_pCastEffect1->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect1->Start_Animation();
 	m_pCastEffect1->Set_Active(true);
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_LOADING, TEXT("Skill_Wizard_FakeMeteor_Cast_01.wav"));
+	pSouind->SetVolume(100);
 }
 
 void CFakeMeteor::On_CastingEnd()
 {
+
 }
 
 void CFakeMeteor::Fire()
@@ -110,7 +114,8 @@ void CFakeMeteor::Fire()
 	{
 		m_pBullet->Launch(fDmg, pTarget);
 	}
-
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_LOADING, TEXT("Skill_Wizard_FakeMeteor_Cast_02.wav"));
+	pSouind->SetVolume(100);
 }
 
 CFakeMeteor* CFakeMeteor::Create(SKILL_DATA* pSkillData, CCharacter* pUser)

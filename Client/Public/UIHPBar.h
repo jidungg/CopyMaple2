@@ -9,7 +9,7 @@ class CUIHPBar :
 public:
 	typedef struct UIHPBarDesc : public CUIBar::UIBAR_DESC
 	{
-		CCharacter* pCharacter = nullptr;
+		CCharacter* pCharacter = { nullptr };
 	}HPBAR_DESC;
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_UIHPBar";
 protected:
@@ -23,7 +23,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual void Set_Character(CCharacter* pCharacter) {m_pCharacter = pCharacter;}
 private:
-	CCharacter* m_pCharacter = nullptr;
+	CCharacter* m_pCharacter = { nullptr };
 
 public:
 	static CUIHPBar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

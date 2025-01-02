@@ -2,6 +2,7 @@
 #include "..\Public\Loader.h"
 #include "Engine_Defines.h"
 #include "GameInstance.h"
+#include "SoundManager.h"
 #include "JsonParser.h"
 #include "DropTable.h"
 #include "NPCDataBase.h"
@@ -185,6 +186,14 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_GameObject_StateMachine"),
 		CStateMachine::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	lstrcpy(m_szLoadingText, TEXT("사운드 로드."));
+	if (FAILED(m_pGameInstance->Load_BGM(LEVEL_LOGO,TEXT("BGM_Lobby"), TEXT("../Bin/Resources/Sounds/BGM/BGM_Dream.wav"))))
+		return E_FAIL;
+	if(FAILED(Load_Dirctory_Sounds(LEVEL_LOADING, TEXT("../Bin/Resources/Sounds/"),TEXT(".wav"))))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Sounds(LEVEL_LOADING, TEXT("../Bin/Resources/Sounds/Player/"), TEXT(".wav"))))
+		return E_FAIL;
+
 
 	lstrcpy(m_szLoadingText, TEXT("폰트 로드."));
 	if (FAILED(m_pGameInstance->Add_Font(TEXT("LV2Gothic_15"), TEXT("../Bin/Resources/Fonts/Lev2_15.spritefont"))))
@@ -597,6 +606,10 @@ HRESULT CLoader::Loading_Level_Logo()
 
 HRESULT CLoader::Loading_Level_Henesys()
 {
+	lstrcpy(m_szLoadingText, TEXT("사운드 로드."));
+	if (FAILED(m_pGameInstance->Load_BGM(LEVEL_HENESYS, TEXT("BGM_Henesys_01"), TEXT("../Bin/Resources/Sounds/BGM/BGM_Henesys_01.wav"))))
+		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("텍스처."));
 	/* For.Prototype_Component_Texture_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HENESYS, TEXT("bg_henesys_a.dds"),
@@ -628,6 +641,15 @@ HRESULT CLoader::Loading_Level_Henesys()
 
 HRESULT CLoader::Loading_Level_BayarPeak()
 {
+
+	lstrcpy(m_szLoadingText, TEXT("사운드 로드"));
+	if (FAILED(m_pGameInstance->Load_BGM(LEVEL_BAYARPEAK, TEXT("BGM_Boss_01_Intro"), TEXT("../Bin/Resources/Sounds/BGM/BGM_Boss_01_Intro.wav"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Load_BGM(LEVEL_BAYARPEAK, TEXT("BGM_Boss_01_Loop"), TEXT("../Bin/Resources/Sounds/BGM/BGM_Boss_01_Loop.wav"))))
+		return E_FAIL;
+
+	if (FAILED(Load_Dirctory_Sounds(LEVEL_BAYARPEAK, TEXT("../Bin/Resources/Sounds/Monster/Bajar"), TEXT(".wav"))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드"));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_BAYARPEAK, TEXT("bg_perion_c.dds"),
@@ -661,6 +683,10 @@ HRESULT CLoader::Loading_Level_BayarPeak()
 
 HRESULT CLoader::Loading_Level_MyHome()
 {
+	lstrcpy(m_szLoadingText, TEXT("사운드 로드"));
+	if (FAILED(m_pGameInstance->Load_BGM(LEVEL_HOME, TEXT("BGM_indoor_01"), TEXT("../Bin/Resources/Sounds/BGM/BGM_indoor_01.wav"))))
+		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드"));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("UI_Texture_Magnifier"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/Home/Home_Dialog_Magnifier_%d.dds"), 4))))
@@ -721,6 +747,13 @@ HRESULT CLoader::Loading_Level_MyHome()
 
 HRESULT CLoader::Loading_Level_HuntingPlace()
 {
+	lstrcpy(m_szLoadingText, TEXT("사운드 로드"));
+
+	if (FAILED(m_pGameInstance->Load_BGM(LEVEL_HUNTINGPLACE, TEXT("BGM_Henesys_field_01"), TEXT("../Bin/Resources/Sounds/BGM/BGM_Henesys_field_01.wav"))))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Sounds(LEVEL_HUNTINGPLACE, TEXT("../Bin/Resources/Sounds/Monster/"), TEXT(".wav"))))
+		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드"));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HUNTINGPLACE, TEXT("bg_henesys_b.dds"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_henesys_b.dds"), 1))))
@@ -846,6 +879,45 @@ HRESULT CLoader::Load_Dirctory_Textures(LEVELID eLevId, const _tchar* szDirPath,
 
 		if (FAILED(m_pGameInstance->Add_Prototype(eLevId, FindFileData.cFileName,
 			CTexture::Create(m_pDevice, m_pContext, wstr.c_str(), 1))))
+			return E_FAIL;
+
+	} while (FindNextFile(hFind, &FindFileData));
+
+	FindClose(hFind);
+
+	return S_OK;
+}
+
+HRESULT CLoader::Load_Dirctory_Sounds(LEVELID eLevId, const _tchar* szDirPath, const _tchar* szExtention)
+{
+
+	WIN32_FIND_DATA		FindFileData = {};
+	HANDLE				hFind = INVALID_HANDLE_VALUE;
+
+	_tchar				szFilePath[MAX_PATH] = TEXT("");
+	_tchar				szFullPath[MAX_PATH] = TEXT("");
+	_tchar				szProtoTag[MAX_PATH] = TEXT("");
+
+	lstrcpy(szFilePath, szDirPath);
+	lstrcat(szFilePath, TEXT("*"));
+	lstrcat(szFilePath, szExtention);
+
+	hFind = FindFirstFile(szFilePath, &FindFileData);
+
+	if (INVALID_HANDLE_VALUE == hFind)
+		return E_FAIL;
+
+	do
+	{
+		if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+			continue;
+
+		lstrcpy(szFullPath, szDirPath);
+		lstrcat(szFullPath, FindFileData.cFileName);
+
+		wstring wstr = szFullPath;
+
+		if (FAILED(m_pGameInstance->Load_SFX((_uint)eLevId,FindFileData.cFileName, wstr.c_str())))
 			return E_FAIL;
 
 	} while (FindNextFile(hFind, &FindFileData));

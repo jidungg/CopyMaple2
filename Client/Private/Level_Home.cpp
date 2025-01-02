@@ -179,7 +179,8 @@ void CLevel_Home::On_Start(_uint iPrevLevelID)
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_MONSTER, LAYERID::LAYER_TERRAIN, true);
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_PLAYER, LAYERID::LAYER_INTERACTION, true);
 
-	
+	m_pGameInstance->Start_BGM(LEVEL_HOME, TEXT("BGM_indoor_01"));
+
 }
 
 

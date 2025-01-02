@@ -5,7 +5,8 @@
 #include "HitEvent.h"
 #include "Collider_Sphere.h"
 #include "EffModelObject.h"
-
+#include "Bullet_BayarAttackB.h"
+#include "Sound.h"
 CBayarAttackC::CBayarAttackC()
 {
 }
@@ -44,7 +45,19 @@ void CBayarAttackC::On_CastingEnd()
 
 void CBayarAttackC::Fire()
 {
-	__super::Fire();
+	m_pCastEffect->Set_Active(true);
+	m_pCastEffect->Start_Animation();
+	//m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
+
+	m_pBullet->Set_Active(true);
+	_uint iDamgID = (_uint)SKILL_DATA_ID::DAMG;
+	_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
+	fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
+	m_pBullet->Launch(fDmg);
+
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay_Random(LEVEL_BAYARPEAK, TEXT("en_Bajar_Voice_NormalAttack_0%d.wav"), 1, 6);
+	pSouind->SetVolume(100);
+
 }
 
 void CBayarAttackC::On_AttackEnd()

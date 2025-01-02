@@ -23,6 +23,21 @@ void CLevel_BayarPeak::On_Start(_uint iPrevLevelID)
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_BULLET, LAYERID::LAYER_MONSTER, true);
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_BULLET, LAYERID::LAYER_PLAYER, true);
 
+	m_pGameInstance->Start_BGM(LEVEL_BAYARPEAK, TEXT("BGM_Boss_01_Intro"), false);
+
+}
+
+void CLevel_BayarPeak::Update(_float fTimeDelta)
+{
+	__super::Update(fTimeDelta);
+	if (m_bBGMIntroEnd == false)
+	{
+		if (false == m_pGameInstance->Is_BGMPlaying(LEVEL_BAYARPEAK, TEXT("BGM_Boss_01_Intro")))
+		{
+			m_pGameInstance->Start_BGM(LEVEL_BAYARPEAK, TEXT("BGM_Boss_01_Loop"), true);
+			m_bBGMIntroEnd = true;
+		}
+	}
 }
 
 CLevel_BayarPeak* CLevel_BayarPeak::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg)

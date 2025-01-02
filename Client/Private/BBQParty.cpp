@@ -7,6 +7,7 @@
 #include "HitEvent.h"
 #include "Bullet_BBQParty.h"
 #include "Client_Utility.h"
+#include "Sound.h"
 
 CBBQParty::CBBQParty()
 	: CSkill()
@@ -88,6 +89,9 @@ void CBBQParty::On_SkillUsed()
 	m_pCastEffect1->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect1->Start_Animation();
 	m_pCastEffect1->Set_Active(true);
+
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_LOADING, TEXT("Skill_Wizard_BBQParty_SplashCast_01.wav"));
+	pSouind->SetVolume(100);
 }
 
 void CBBQParty::On_CastingEnd()
@@ -119,7 +123,8 @@ void CBBQParty::Fire()
 
 		m_pBullet->Launch(fDmg, vPos);
 	}
-
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_LOADING, TEXT("Skill_Wizard_BBQParty_Cast_02.wav"));
+	pSouind->SetVolume(100);
 }
 
 CBBQParty* CBBQParty::Create(SKILL_DATA* pSkillData, CCharacter* pUser)

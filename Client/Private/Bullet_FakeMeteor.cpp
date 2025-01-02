@@ -5,6 +5,7 @@
 #include "Character.h"
 #include "HitEvent.h"
 #include "EffModel.h"
+#include "Sound.h"
 
 CBullet_FakeMeteor::CBullet_FakeMeteor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CBullet(pDevice, pContext)
@@ -105,6 +106,8 @@ void CBullet_FakeMeteor::Launch(_float fDamage, CGameObject* pTarget)
 	m_bInvoke = false;
 	m_fTimeAcc = 0.f;
 	Set_Active(true);
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_LOADING, TEXT("Skill_Wizard_FakeMeteor_SplashRemain_01.wav"));
+	pSouind->SetVolume(100);
 }
 
 
@@ -132,7 +135,8 @@ void CBullet_FakeMeteor::On_MeteorImpact()
 	}
 	m_pSplashInvokeEffectB->Start_Animation();
 	m_pSplashInvokeEffectB->Set_Active(true);
-
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_LOADING, TEXT("Skill_Wizard_BBQParty_SplashInvoke_02.wav"));
+	pSouind->SetVolume(100);
 }
 
 CBullet_FakeMeteor* CBullet_FakeMeteor::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

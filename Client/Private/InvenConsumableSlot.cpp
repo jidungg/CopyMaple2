@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "HitEvent.h"
 #include "GameInstance.h"
+#include "UIQuickSlot.h"
 
 CInvenConsumableSlot::CInvenConsumableSlot(_uint iIdx, CInventory* pInventory)
 	: CInvenSlot(ITEM_TYPE::CONSUMABLE, iIdx, pInventory)
@@ -38,6 +39,7 @@ void CInvenConsumableSlot::Use()
 		{
 		case CONSUMABLE_ITEM_TYPE::HP:
 		{
+			m_fCoolTimeAcc = 0.f;
 			_int iRecovery = pConsumable->iValue;
 			CPlayer* pPlayer = PLAYERINIFO->Get_Player();
 			CGameInstance::GetInstance()->Push_Event(CDamgEvent::Create(pPlayer, pPlayer, -iRecovery, false, true, EFF_MODEL_ID::RECOVER_HP));
@@ -55,10 +57,12 @@ _float CInvenConsumableSlot::Get_CoolTimeRatio()
 	return   m_fCoolTimeAcc/ static_cast<const CONSUMABLE_ITEM_DATA*>(Get_ItemData())->fCoolTime;
 }
 
-_int CInvenConsumableSlot::Get_StackCount()
+_int CInvenConsumableSlot::Get_StackCount_Quick()
 {
 	return Get_StackCount();
 }
+
+
 
 
 CInvenConsumableSlot* CInvenConsumableSlot::Create(_uint iIdx, CInventory* pInventory)

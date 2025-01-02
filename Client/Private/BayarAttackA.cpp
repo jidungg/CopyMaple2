@@ -5,6 +5,7 @@
 #include "HitEvent.h"
 #include "Collider_Sphere.h"
 #include "EffModelObject.h"
+#include "Sound.h"
 
 CBayarAttackA::CBayarAttackA()
     :CSkill()
@@ -52,20 +53,22 @@ void CBayarAttackA::Late_Update(_float fTimeDelta)
 
 void CBayarAttackA::On_SkillUsed()
 {
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay_Random(LEVEL_BAYARPEAK, TEXT("Boss_SandstoneGiant_Skill_Attack_01_A_0%d.wav"), 1, 3);
+	pSouind->SetVolume(100);
 }
 
 void CBayarAttackA::On_CastingEnd()
 {
+
 }
 
 void CBayarAttackA::Fire()
 {
-
-
 	m_pCastEffect->Set_Active(true);
 	m_pCastEffect->Start_Animation();
 	//m_pCastEffect->Set_Transform(vPos);
-	
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay_Random(LEVEL_BAYARPEAK, TEXT("en_Bajar_Voice_NormalAttack_0%d.wav"), 1, 6);
+	pSouind->SetVolume(100);
 
 }
 
@@ -82,7 +85,10 @@ void CBayarAttackA::On_AttackEnd()
 		_bool bCrit = m_pUser->Judge_Critical();
 		fDmg *= bCrit ? 1.5 : 1.f;
 		m_pGameInstance->Push_Event(CDamgEvent::Create(m_pUser, pTarget, (_int)fDmg, bCrit,false,EFF_MODEL_ID::HIT_A));
+
+	
 	}
+
 }
 
 

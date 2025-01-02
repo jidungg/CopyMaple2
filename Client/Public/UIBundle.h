@@ -54,6 +54,7 @@ public:
 
 	CUIInventory* Get_Inventory() { return m_pInventory; }
 	CUIQuickSlotBundle* Get_QuckSlotBundle() { return m_pQuickSlotBundle1; }
+	CUIQuickSlotBundle* Get_QuckSlotBundle2() { return m_pQuickSlotBundle2; }
 	void Set_QuickItem(KEY eHotKey, IQuickItem* pItem);
 	void Toggle_Inventory();
 	void Toggle_PlayerInfo();

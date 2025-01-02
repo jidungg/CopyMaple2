@@ -24,6 +24,13 @@ using namespace DirectX;
 
 #include <d3dcompiler.h>
 
+#include <Windows.h>
+#include <mmsystem.h>
+#include <dsound.h>
+#include <dinput.h>
+// 코드
+#pragma comment(lib, "winmm.lib")
+#pragma comment(lib, "dsound.lib")
 namespace Engine
 {
 	enum class PROTOTYPE { PROTO_GAMEOBJ, PROTO_COMPONENT };

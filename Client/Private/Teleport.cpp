@@ -3,6 +3,7 @@
 #include "Character.h"
 #include "EffModelObject.h"
 #include "GameInstance.h"
+#include "Sound.h"
 
 CTeleport::CTeleport()
 	:CSkill()
@@ -52,6 +53,8 @@ void CTeleport::Fire()
 	vPos += _vector{ 0,0.01,0,0 };
 	m_pCastEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos);
 
+	CSound* pSouind = m_pGameInstance->Start_EffectPlay(LEVEL_LOADING, L"Skill_Wizard_Teleport_Cast_01.wav");
+	pSouind->SetVolume(100);
 }
 
 void CTeleport::On_SkillUsed()

@@ -24,11 +24,12 @@
                 "HPRecovery": 10,
                 "SPRecovery": 10,
                 "EPRecovery": 2
-
-
             },
             "Skill": [
                 "BASIC_ATTACK",
+                "JUMP_BASIC_ATTACK",
+                "STAFF_BASIC_ATTACK",
+                "JUMP_STAFF_BASIC_ATTACK",
                 "TELEPORT",
                 "MAGIC_CLAW",
                 "FLAME_WAVE",

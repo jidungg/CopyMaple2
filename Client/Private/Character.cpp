@@ -120,12 +120,23 @@ void CCharacter::Late_Update(_float fTimeDelta)
 		m_fUpForce = 0;
 		m_vNextPos = XMVectorSetY(m_vNextPos, m_fCelingHeight - vColliderOffset.y);
 	}
+	_bool bLand = m_bOnFloor;
+
 	m_bOnFloor = m_fFloorHeight >= XMVectorGetY(m_vNextPos);
+
+
 	if (m_bOnFloor)
 	{
 		m_fUpForce = 0;
 
 		m_vNextPos = XMVectorSetY(m_vNextPos, m_fFloorHeight);
+		if (bLand == false)
+		{
+			_uint irand = rand() % 2 + 1;
+			wchar_t result[50];
+			swprintf(result, 50, L"CH_Jump_Grass_0%d.wav", irand);
+			m_pGameInstance->Start_EffectPlay(LEVEL_LOADING, result);
+		}
 	}
 	else
 	{

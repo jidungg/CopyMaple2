@@ -2,6 +2,8 @@
 #include "InvenSlot.h"
 #include "Inventory.h"
 #include "UIBundle.h"
+#include "UIQuickSlot.h"
+
 CInvenSlot::CInvenSlot(ITEM_TYPE eItemType, _uint iIdx, CInventory* pInventory)
     :m_eItemType(eItemType)
 	, m_iIndex(iIdx)
@@ -47,6 +49,8 @@ bool CInvenSlot::Is_Insertable(const ITEM_DATA* pData, _uint iCount)
         return false;
     return true;
 }
+
+
 
 void CInvenSlot::Free()
 {

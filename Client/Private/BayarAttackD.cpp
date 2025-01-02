@@ -8,6 +8,7 @@
 #include "Bullet_BayarAttackD.h"
 #include "Client_Utility.h"
 #include "CubeTerrain.h"
+#include "Sound.h"
 
 CBayarAttackD::CBayarAttackD()
 	: CSkill()
@@ -96,6 +97,10 @@ void CBayarAttackD::Fire()
 	_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
 	fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
 	m_pBullet->Launch(fDmg);
+
+
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay_Random(LEVEL_BAYARPEAK, TEXT("en_Bajar_Voice_NormalAttack_0%d.wav"), 1, 6);
+	pSouind->SetVolume(100);
 }
 
 void CBayarAttackD::On_AttackEnd()

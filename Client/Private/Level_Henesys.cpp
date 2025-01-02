@@ -22,6 +22,8 @@ void CLevel_Henesys::On_Start(_uint iPrevLevelID)
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_BULLET, LAYERID::LAYER_MONSTER, true);
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_BULLET, LAYERID::LAYER_PLAYER, true);
 
+	m_pGameInstance->Start_BGM(LEVEL_HENESYS,TEXT("BGM_Henesys_01"));
+	m_pGameInstance->Set_BGMVolume(100);
 }
 
 CLevel_Henesys* CLevel_Henesys::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg)

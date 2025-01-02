@@ -6,6 +6,7 @@
 #include "Collider_Sphere.h"
 #include "EffModelObject.h"
 #include "Bayar.h"
+#include "Sound.h"
 
 CBayarSkyJump::CBayarSkyJump()
 	: CSkill()
@@ -67,11 +68,19 @@ void CBayarSkyJump::On_SkillUsed()
 	m_pGatheringEffect->Set_Active(true);
 	m_pGatheringEffect->Start_Animation(0,true);
 	m_pGatheringEffect->Set_AnimSpeed(3.15f);
+
+
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay_Random(LEVEL_BAYARPEAK, TEXT("en_Bajar_Voice_Skill_G_0%d.wav"),1,2);
+	pSouind->SetVolume(100);
+
+
 }
 
 void CBayarSkyJump::On_CastingEnd()
 {
 	m_pGatheringEffect->Set_Active(false);
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay_Random(LEVEL_BAYARPEAK, TEXT("en_Bajar_Voice_NormalAttack_0%d.wav"), 1, 6);
+	pSouind->SetVolume(100);
 }
 
 void CBayarSkyJump::Fire()
@@ -93,6 +102,9 @@ void CBayarSkyJump::Fire()
 		fDmg *= bCrit ? 1.5 : 1.f;
 		m_pGameInstance->Push_Event(CDamgEvent::Create(m_pUser, pTarget, (_int)fDmg, bCrit, false,EFF_MODEL_ID::HIT_A));
 	}
+	CSound* pSound = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_BAYARPEAK, TEXT("Boss_SandstoneGiant_Skill_Jump_Land_A.wav"));
+	pSound->SetVolume(100);
+
 }
 
 void CBayarSkyJump::On_AttackEnd()

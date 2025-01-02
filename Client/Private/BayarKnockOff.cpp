@@ -6,6 +6,7 @@
 #include "Collider_Sphere.h"
 #include "EffModelObject.h"
 #include "Bayar.h"
+#include "Sound.h"
 
 CBayarKnockOff::CBayarKnockOff()
 	:CSkill()
@@ -87,17 +88,24 @@ void CBayarKnockOff::On_SkillUsed()
 	m_pGatheringEffect->Set_Active(true);
 	m_pGatheringEffect->Start_Animation(0, true);
 	m_pGatheringEffect->Set_AnimSpeed(3.15f);
+
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay_Random(LEVEL_BAYARPEAK, TEXT("en_Bajar_Voice_Skill_G_0%d.wav"), 1, 2);
+	pSouind->SetVolume(100);
 }
 
 void CBayarKnockOff::On_CastingEnd()
 {
 	m_pGatheringEffect->Set_Active(false);
+
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_BAYARPEAK, TEXT("en_Bajar_Voice_Skill_H_02.wav"));
+	pSouind->SetVolume(100);
 }
 
 void CBayarKnockOff::Fire()
 {
 	m_pTargetSearcher->Update(m_pUser->Get_Transform()->Get_WorldMatrix());
 	m_pTargetSearcher->Set_Active(true);
+
 }
 
 void CBayarKnockOff::On_AttackEnd()

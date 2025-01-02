@@ -21,13 +21,15 @@ public:
 public:
 	void Register_UIObject(CUIObject* pUIObject);
 	void Register_DontDestroy_UIObject(CUIObject* pUIObject);
+	void Get_MouseOverObjects(const POINT& tMousePoint, list<CUIObject*>& listOut);
 	void Clear();
 
 	bool Consume_MouseLButtonDown(const POINT& tMousePoint);
-	bool Consume_MouseLButtonUp();
+	bool Consume_MouseLButtonUp(const POINT& tMousePoint);
 	bool Consume_MouseRButtonDown();
 	bool Consume_MouseRButtonUp();
 	bool Consume_MouseMove(const POINT& tMousePoint,const DIMOUSESTATE& tState);
+
 private:
 	list<CUIObject*> m_UIObjectList;
 	list<CUIObject*> m_DontDestroyUIObjectList;
@@ -35,6 +37,7 @@ private:
 	CUIObject* m_pFocusedUI = nullptr;
 	CUIObject* m_pPressedUI = nullptr;
 	CUIObject* m_pRightPressedUI = nullptr;
+	CUIObject* m_pDraggedUI = nullptr;
 public:
 	static CUIManager* Create();
 	virtual void Free(void) override;

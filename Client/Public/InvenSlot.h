@@ -32,6 +32,7 @@ public:
 
 
 private:
+
 	CInventory* m_pInventory = { nullptr };
 	ITEM_TYPE m_eItemType = { ITEM_TYPE::LAST };
 	const ITEM_DATA* m_pItemDesc = { nullptr };

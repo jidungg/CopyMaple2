@@ -17,6 +17,7 @@
 #include "RenderTarget_Manager.h"
 #include "Collider_Frustum.h"
 #include "FontManager.h"
+#include "SoundManager.h"
 
 IMPLEMENT_SINGLETON(CGameInstance)
 
@@ -24,7 +25,7 @@ CGameInstance::CGameInstance()
 {
 }
 
-HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext, _uint iLayerCouint)
+HRESULT CGameInstance::Initialize_Engine( const ENGINE_DESC& EngineDesc, ID3D11Device** ppDevice, ID3D11DeviceContext** ppContext, _uint iLayerCouint)
 {
 	m_pGraphic_Device = CGraphic_Device::Create(EngineDesc.hWnd, EngineDesc.isWindowed, EngineDesc.iViewportWidth, EngineDesc.iViewportHeight, ppDevice, ppContext);
 	if (nullptr == m_pGraphic_Device)
@@ -91,6 +92,8 @@ HRESULT CGameInstance::Initialize_Engine(const ENGINE_DESC& EngineDesc, ID3D11De
 	m_pFrustum = CCollider_Frustum::Create(*ppDevice, *ppContext);
 	m_pFrustum->Initialize(XMMatrixPerspectiveFovLH(XMConvertToRadians(60.f), (_float)1280 / 720, 0.1f, 1000.f));
 
+	m_pSoundManager = CSoundManager::Create();
+	m_pSoundManager->Ready_SoundMgr(EngineDesc.hWnd, EngineDesc.iNumLevels);
 	return S_OK;
 }
 
@@ -141,6 +144,7 @@ void CGameInstance::Clear(_int iLevelID)
 
 	m_pPrototype_Manager->Clear(iLevelID);
 	m_pUIManager->Clear();
+	m_pSoundManager->Clear(iLevelID);
 	//m_pLight_Manager->Clear();
 }
 
@@ -391,6 +395,13 @@ void CGameInstance::Register_DontDestroy_UIObject(CUIObject* pUIObject)
 	m_pUIManager->Register_DontDestroy_UIObject(pUIObject);
 }
 
+void CGameInstance::Get_MouseOverObjects(const POINT& tMousePoint, list<CUIObject*>& listOut)
+{
+	m_pUIManager->Get_MouseOverObjects(tMousePoint, listOut);
+}
+
+
+
 
 HRESULT CGameInstance::Add_Light(const LIGHT_DESC& LightDesc)
 {
@@ -545,6 +556,88 @@ HRESULT CGameInstance::Render_Font(const _wstring& strFontTag, const _tchar* pTe
 	return m_pFontManager->Render_Font(strFontTag, pText, vPosition, vColor, fRotation, vOrigin);
 }
 #ifdef _DEBUG
+
+HRESULT CGameInstance::CreateSoundBuffer(LPCDSBUFFERDESC pcDSBufferDesc, LPDIRECTSOUNDBUFFER* ppDSBuffer, LPUNKNOWN pUnkOuter)
+{
+	return m_pSoundManager->CreateSoundBuffer(pcDSBufferDesc, ppDSBuffer, pUnkOuter);
+}
+
+HRESULT CGameInstance::Load_BGM(_uint iLevelID, const wstring& strKey, const wstring& strPath)
+{
+	return m_pSoundManager->Load_BGM(iLevelID,strKey, strPath);
+}
+
+HRESULT CGameInstance::Load_SFX(_uint iLevelID, const wstring& strKey, const wstring& strPath)
+{
+	return m_pSoundManager->Load_SFX(iLevelID,strKey, strPath);
+}
+
+void CGameInstance::Start_BGM(_uint iLevelID, const wstring& strBGM, _float fStartPos, _bool _bRepeat)
+{
+	m_pSoundManager->Start_BGM(iLevelID, strBGM,fStartPos, _bRepeat);
+}
+
+void CGameInstance::End_BGM()
+{
+	m_pSoundManager->End_BGM();
+}
+
+void CGameInstance::Set_BGMVolume(float _fVolume)
+{
+	m_pSoundManager->Set_BGMVolume(_fVolume);
+}
+
+float CGameInstance::Get_BGMVolume()
+{
+	return m_pSoundManager->Get_BGMVolume();
+}
+
+CSound* CGameInstance::Start_EffectPlay(_uint iLevelID, const wstring& strSFX, _float fStartPos, bool _bRepeat)
+{
+	return m_pSoundManager->Start_EffectPlay(iLevelID, strSFX, fStartPos,_bRepeat);
+}
+
+CSound* CGameInstance::Start_EffectPlay_Random(_uint iLevelID, const wstring& strSFX, _uint iStart, _uint iEnd, _float fStartPos, _bool _bRepeat)
+{
+	return m_pSoundManager->Start_EffectPlay_Random(iLevelID, strSFX, iStart, iEnd, fStartPos, _bRepeat);
+}
+
+
+void CGameInstance::Stop_EffectPlay(_uint iLevelID, const wstring& strSFX)
+{
+	m_pSoundManager->Stop_EffectPlay(iLevelID, strSFX);
+}
+
+float CGameInstance::Get_SFXPosition(_uint iLevelID, const wstring& strKey)
+{
+	return m_pSoundManager->Get_SFXPosition(iLevelID, strKey);
+}
+
+bool CGameInstance::Is_SFXPlaying(_uint iLevelID, const wstring& strKey)
+{
+	return m_pSoundManager->Is_SFXPlaying(iLevelID, strKey);	
+}
+
+float CGameInstance::Get_BGMPosition(_uint iLevelID, const wstring& strKey)
+{
+	return m_pSoundManager->Get_BGMPosition(iLevelID, strKey);
+}
+
+bool CGameInstance::Is_BGMPlaying(_uint iLevelID, const wstring& strKey)
+{
+	return m_pSoundManager->Is_BGMPlaying(iLevelID, strKey);
+}
+
+CSound* CGameInstance::Get_CurBGM()
+{
+	return m_pSoundManager->GetCurBGM();
+}
+
+CSound* CGameInstance::Get_SFX(_uint iLevelID, const wstring& strKey)
+{
+	return m_pSoundManager->Get_SFX(iLevelID, strKey);
+}
+
 HRESULT CGameInstance::Ready_RT_Debug(const _wstring& strTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
 {
 	return m_pTarget_Manager->Ready_Debug(strTargetTag, fX, fY, fSizeX, fSizeY);
@@ -584,4 +677,5 @@ void CGameInstance::Free()
 	Safe_Release(m_pEventManager);
 	Safe_Release(m_pFrustum);
 	Safe_Release(m_pFontManager);
+	Safe_Release(m_pSoundManager);
 }

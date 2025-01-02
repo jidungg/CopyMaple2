@@ -3,7 +3,7 @@
 
 BEGIN(Client)
 class CInvenConsumableSlot :
-	public CInvenSlot, IQuickItem
+	public CInvenSlot,public IQuickItem
 {
 private:
 	CInvenConsumableSlot(_uint iIdx, CInventory* pInventory);
@@ -16,7 +16,8 @@ public:
 	virtual const _char* Get_IconTag() override;
 	virtual void Use() override;
 	virtual _float Get_CoolTimeRatio() override;
-	virtual _int Get_StackCount() override;
+	virtual _int Get_StackCount_Quick() override;
+
 
 private:
 	CONSUMABLE_ITEM_TYPE m_eConsumableType = { CONSUMABLE_ITEM_TYPE::LAST };

@@ -126,13 +126,31 @@ HRESULT CUIQuickSlot::Render()
 void CUIQuickSlot::Receive_Input()
 {
 	if (m_pQuickItem)
+	{
+		if (1 > m_pQuickItem->Get_CoolTimeRatio() )
+			return;
 		m_pQuickItem->Use();
+		_uint iStackCount = m_pQuickItem->Get_StackCount_Quick();
+		if (0 >= iStackCount)
+			Set_QuickItem(nullptr);
+		else
+			Set_StackCount(iStackCount);
+	}
 }
 
 void CUIQuickSlot::On_MouseClick()
 {
 	if (m_pQuickItem)
+	{
+		if (1 > m_pQuickItem->Get_CoolTimeRatio())
+			return;
 		m_pQuickItem->Use();
+		_uint iStackCount = m_pQuickItem->Get_StackCount_Quick();
+		if (0 >= iStackCount)
+			Set_QuickItem(nullptr);
+		else
+			Set_StackCount(iStackCount);
+	}
 }
 
 void CUIQuickSlot::Set_QuickItem(IQuickItem* pItem)
@@ -150,7 +168,7 @@ void CUIQuickSlot::Set_QuickItem(IQuickItem* pItem)
 		CTexture* pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, wstrIconTag));
 
 		Set_IconTexture(pTextureCom);
-		_int iCount = m_pQuickItem->Get_StackCount();
+		_int iCount = m_pQuickItem->Get_StackCount_Quick();
 		if(iCount >= 0)
 		{
 			m_pStackCountFont->Set_Active(true);

@@ -308,6 +308,9 @@ CSkill* CSkill::Create(SKILL_DATA* pSkillData, CCharacter* pUser)
 	case Client::SKILL_ID::BASIC_ATTACK:
 		pInstance = CBasicAttack::Create(pSkillData, pUser);
 		break;
+	case Client::SKILL_ID::JUMP_BASIC_ATTACK:
+		pInstance = CBasicAttack::Create(pSkillData, pUser);
+		break;
 	case Client::SKILL_ID::TELEPORT:
 		pInstance = CTeleport::Create(pSkillData, pUser);
 		break;
@@ -396,7 +399,7 @@ void CSkill::Free()
 	Safe_Release(m_pTargetSearcher);
 }
 
-_int CSkill::Get_StackCount()
+_int CSkill::Get_StackCount_Quick()
 {
 	return -1;
 }

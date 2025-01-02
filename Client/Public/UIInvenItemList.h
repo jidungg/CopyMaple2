@@ -1,6 +1,7 @@
 #pragma once
 #include "UIListSelector.h"
 BEGIN(Client)
+class CInvenSlot;
 class CUIInvenItemList :
     public CUIListSelector
 {
@@ -10,8 +11,8 @@ protected:
 	virtual ~CUIInvenItemList() = default;
 
 public:
-	HRESULT Set_ItemData(list<pair<const ITEM_DATA*, _uint>>* listData);
-	HRESULT Set_ItemData(_uint iIndex, pair<const ITEM_DATA*, _uint> Data);
+	HRESULT Set_ItemData(list<CInvenSlot*>* listData);
+	HRESULT Set_ItemData(_uint iIndex, CInvenSlot* Data);
 public:
 	static CUIInvenItemList* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	{

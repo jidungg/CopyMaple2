@@ -11,8 +11,9 @@ private:
 
 public:
 	virtual void On_Start(_uint iPrevLevelID)override;
-
-	
+	virtual void Update(_float fTimeDelta);
+private:
+	_bool m_bBGMIntroEnd = { false };
 public:
 	static CLevel_BayarPeak* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg);
 

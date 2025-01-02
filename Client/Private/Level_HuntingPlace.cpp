@@ -22,6 +22,7 @@ void CLevel_HuntingPlace::On_Start(_uint iPrevLevelID)
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_BULLET, LAYERID::LAYER_MONSTER, true);
 	m_pGameInstance->Set_CollisionMatrix(LAYERID::LAYER_BULLET, LAYERID::LAYER_PLAYER, true);
 
+	m_pGameInstance->Start_BGM(LEVEL_HUNTINGPLACE, TEXT("BGM_Henesys_field_01"));
 }
 
 CLevel_HuntingPlace* CLevel_HuntingPlace::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg)

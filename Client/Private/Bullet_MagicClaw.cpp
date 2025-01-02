@@ -55,7 +55,8 @@ void CBullet_MagicClaw::Update(_float fTimeDelta)
 		{
 			_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
 			m_fDamage *= bCrit ? 1.5 : 1.f;
-			m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, bCrit, true, EFF_MODEL_ID::HIT_A));
+
+			m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, bCrit, true, EFF_MODEL_ID::HIT_A, L"Hit_DefaultDefault_02.wav"));
 		}
 	}
 

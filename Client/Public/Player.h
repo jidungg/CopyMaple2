@@ -254,6 +254,7 @@ public:
 
 protected:
 	CUIQuickSlotBundle* m_pQuickSlotBundle = { nullptr };
+	CUIQuickSlotBundle* m_pQuickSlotBundle2 = { nullptr };
 	CInteractableObject* m_pInteractable = { nullptr };
 
 	CModelObject* m_pEquipModels[(_uint)EQUIP_ITEM_TYPE::LAST] = { nullptr, };

@@ -7,6 +7,7 @@
 #include "Bullet_Kindling.h"
 #include "HitEvent.h"
 #include "Client_Utility.h"
+#include "Sound.h"
 
 CKindling::CKindling()
 	:CSkill()
@@ -73,7 +74,11 @@ void CKindling::On_SkillUsed()
 {
 	//m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect->Start_Animation();
+
 	m_pCastEffect->Set_Active(true);
+
+	CSound* pSouind = m_pGameInstance->Start_EffectPlay(LEVEL_LOADING, L"Skill_Wizard_Kindling_Cast_01.wav");
+	pSouind->SetVolume(100);
 }
 
 void CKindling::On_CastingEnd()
@@ -93,6 +98,9 @@ void CKindling::Fire()
 	_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
 	fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
 	m_pBullet->Launch(fDmg, pTarget);
+
+	CSound* pSouind = m_pGameInstance->Start_EffectPlay(LEVEL_LOADING, L"Skill_Wizard_Kindling_Cast_02.wav");
+	pSouind->SetVolume(100);
 }
 
 

@@ -5,6 +5,7 @@
 #include "Character.h"
 #include "HitEvent.h"
 #include "EffModel.h"
+#include "Sound.h"
 
 
 _float dX[5] = { 0,1,0,-1,0 };
@@ -84,6 +85,9 @@ void CBullet_BayarStoneSpike::Late_Update(_float fTimeDelta)
 				m_fDamage *= bCrit ? 1.5 : 1.f;
 				m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, m_fDamage,bCrit,false, m_eHitEffect));
 			}
+
+			CSound* pSound = CGameInstance::GetInstance()->Start_EffectPlay_Random(LEVEL_BAYARPEAK, TEXT("Boss_SandstoneGiant_Skill_Attack_02_G_Stone_0%d.wav"),1,8);
+			pSound->SetVolume(100);
 		}
 		else
 		{

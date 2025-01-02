@@ -43,7 +43,7 @@ void CAttachableBodyPart::Late_Update(_float fTimeDelta)
 HRESULT CAttachableBodyPart::Render()
 {
 
-	m_vecCollider[0]->Render();
+	//m_vecCollider[0]->Render();
 	return __super::Render();
 }
 void CAttachableBodyPart::Interact(CPlayer* pActor)

@@ -21,7 +21,7 @@ HRESULT CBayarKnockOff::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	//TargetSearcher
 	CCollider_Sphere::SPHERE_COLLIDER_DESC tTargetSearcherDesc;
 	tTargetSearcherDesc.fRadius = 0.7f;
-	tTargetSearcherDesc.vCenter = { 0.f, 0.4f, 0.f };
+	tTargetSearcherDesc.vCenter = { 0.f, 1.f, 0.f };
 	m_pTargetSearcher = static_cast<CCollider_Sphere*>(m_pGameInstance->Clone_Proto_Component_Stock(CCollider_Sphere::m_szProtoTag, &tTargetSearcherDesc));
 	m_pTargetSearcher->Set_Active(false);
 
@@ -62,6 +62,7 @@ void CBayarKnockOff::Late_Update(_float fTimeDelta)
 
 			list<CGameObject*> listTarget;
 			SearchTarget(&listTarget, LAYER_PLAYER);
+			m_pTargetSearcher->Render();
 			for (auto& pTarget : listTarget)
 			{
 				CPlayer* pTargetPlayer = static_cast<CPlayer*>(pTarget);

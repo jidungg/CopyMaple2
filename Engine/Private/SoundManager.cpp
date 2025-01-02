@@ -77,8 +77,8 @@ CSound* CSoundManager::Start_EffectPlay(_uint iLevelID, const wstring& strSFX, _
 CSound* CSoundManager::Start_EffectPlay_Random(_uint iLevelID, const wstring& strSFX, _uint iStart, _uint iEnd, _float fStartPos, _bool _bRepeat)
 {
 	_uint irand = rand() % (iEnd - iStart +1)+iStart;
-	wchar_t result[50];
-	swprintf(result, 50, strSFX.c_str(), irand);
+	wchar_t result[MAX_PATH];
+	swprintf(result, MAX_PATH, strSFX.c_str(), irand);
 	CSound* pSound =Start_EffectPlay(iLevelID, result, fStartPos,_bRepeat);
 	return pSound;
 }

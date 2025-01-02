@@ -86,8 +86,7 @@ void CBullet_BayarStoneSpike::Late_Update(_float fTimeDelta)
 				m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, m_fDamage,bCrit,false, m_eHitEffect));
 			}
 
-			CSound* pSound = CGameInstance::GetInstance()->Start_EffectPlay_Random(LEVEL_BAYARPEAK, TEXT("Boss_SandstoneGiant_Skill_Attack_02_G_Stone_0%d.wav"),1,8);
-			pSound->SetVolume(100);
+
 		}
 		else
 		{
@@ -95,6 +94,8 @@ void CBullet_BayarStoneSpike::Late_Update(_float fTimeDelta)
 			m_pRockCubeEffect->Set_Active(true);
 			m_pRockCubeEffect->Start_Animation();
 			m_bSpiked = true;
+			CSound* pSound = CGameInstance::GetInstance()->Start_EffectPlay_Random(LEVEL_BAYARPEAK, TEXT("Boss_SandstoneGiant_Skill_Attack_02_G_Stone_0%d.wav"), 1, 8);
+			pSound->SetVolume(100);
 		}
 	}
 	m_fTimeAcc += fTimeDelta;

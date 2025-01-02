@@ -648,7 +648,7 @@ HRESULT CLoader::Loading_Level_BayarPeak()
 	if (FAILED(m_pGameInstance->Load_BGM(LEVEL_BAYARPEAK, TEXT("BGM_Boss_01_Loop"), TEXT("../Bin/Resources/Sounds/BGM/BGM_Boss_01_Loop.wav"))))
 		return E_FAIL;
 
-	if (FAILED(Load_Dirctory_Sounds(LEVEL_BAYARPEAK, TEXT("../Bin/Resources/Sounds/Monster/Bajar"), TEXT(".wav"))))
+	if (FAILED(Load_Dirctory_Sounds(LEVEL_BAYARPEAK, TEXT("../Bin/Resources/Sounds/Monster/Bajar/"), TEXT(".wav"))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드"));

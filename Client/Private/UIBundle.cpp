@@ -17,6 +17,8 @@
 #include "UIQuestGuideBundle.h"
 #include "UIHUDMonsterHPBar.h"
 #include "Monster.h"
+#include "UIVerticalFill.h"
+#include "UIEXPBar.h"
 
 IMPLEMENT_SINGLETON(CUIBundle)
 
@@ -147,23 +149,7 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	Safe_AddRef(m_pMonsterHPBar);
 	m_pMonsterHPBar->Set_Active(false);
 
-		CUIVerticalFill<_int>::UIVERTICALFILL_DESC tFillDesc;
-	tFillDesc.eAnchorType = CORNOR_TYPE::BOT;
-	tFillDesc.ePivotType = CORNOR_TYPE::BOT;
-	tFillDesc.fSizeX =g_iWinSizeX;
-	tFillDesc.fSizeY = 21;
-	tFillDesc.fXOffset = 0;
-	tFillDesc.fYOffset = -25;
-	tFillDesc.vBorder = { 0,0,0,0 };
-	tFillDesc.pValue = &(m_pStat->iHP);
-	tFillDesc.pDefaultValue = &(m_pDefaultStat->iHP);
-	tFillDesc.fVerticalEnd = { 1};
-	tFillDesc.fVerticalStart = { 0};
-	tFillDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("mainhpbar_red.dds")));
-	m_pEXPBar = static_cast<CUIVerticalFill<_int>*>(m_pGameInstance->Clone_Proto_Object_Stock(TEXT("Prototype_UI_IntVerticalFill"), &tFillDesc));
-	if (nullptr == m_pEXPBar)
-		return E_FAIL;
-	Add_Child(m_pEXPBar);
+
 	return S_OK;
 }
 
@@ -280,6 +266,24 @@ void CUIBundle::Initialize_PlayerInfo(CPlayer* pPalyer)
 		return;
 	Safe_AddRef(m_pPlayerInfoUI);
 	m_pPlayerInfoUI->Set_Active(false);
+
+	CUIEXPBar::UIEXPBAR_DESC tEXPBarDesc;
+	tEXPBarDesc.eAnchorType = CORNOR_TYPE::BOT;
+	tEXPBarDesc.ePivotType = CORNOR_TYPE::BOT;
+	tEXPBarDesc.fSizeX = g_iWinSizeX;
+	tEXPBarDesc.fSizeY = 21;
+	tEXPBarDesc.fXOffset = 0;
+	tEXPBarDesc.fYOffset = 0;
+	tEXPBarDesc.vBorder = { 5,5,5,5 };
+	tEXPBarDesc.pStat = pPalyer->Get_Stat_Ref();
+	tEXPBarDesc.pDefaultStat = pPalyer->Get_DefaultStat_Ref();
+	tEXPBarDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("uiexpbar_ia.dds")));
+	m_pEXPBar = static_cast<CUIEXPBar*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIEXPBar::m_szProtoTag, &tEXPBarDesc));
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pEXPBar, true)))
+		return ;
+	Safe_AddRef(m_pEXPBar);
+	m_pEXPBar->Set_Active(true);
+
 }
 
 void CUIBundle::Update_Inven_Slot(_uint iIndex,CInvenSlot* pSlot)
@@ -319,4 +323,5 @@ void CUIBundle::Free()
 	Safe_Release(m_pQuestGuideBundle);
 	Safe_Release(m_pBossHPBar);
 	Safe_Release(m_pMonsterHPBar);
+	Safe_Release(m_pEXPBar);
 }

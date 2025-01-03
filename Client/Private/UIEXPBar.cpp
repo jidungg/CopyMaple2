@@ -26,11 +26,11 @@ HRESULT CUIEXPBar::Initialize(void* pArg)
 	CUIVerticalFill<_int>::UIVERTICALFILL_DESC tFillDesc;
 	tFillDesc.eAnchorType = CORNOR_TYPE::CENTER;
 	tFillDesc.ePivotType = CORNOR_TYPE::CENTER;
-	tFillDesc.fSizeX = pDesc->fSizeX;
-	tFillDesc.fSizeY = pDesc->fSizeY;
+	tFillDesc.fSizeX = pDesc->fSizeX - 4*2;
+	tFillDesc.fSizeY = pDesc->fSizeY -4*2;
 	tFillDesc.fXOffset = 0;
 	tFillDesc.fYOffset = 0;
-	tFillDesc.vBorder = { 0,0,0,0 };
+	tFillDesc.vBorder = { 4,4,0,0 };
 	tFillDesc.pValue = &(m_pStat->iEXP);
 	tFillDesc.pDefaultValue = &(m_pDefaultStat->iEXP);
 	tFillDesc.fVerticalEnd = { 1.f };

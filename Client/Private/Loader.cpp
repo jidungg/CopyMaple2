@@ -309,7 +309,9 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/UI/MonsterHPBar/"), TEXT(".dds"))))
 		return E_FAIL;
-
+	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
+		TEXT("../Bin/Resources/Textures/UI/EXPBar/"), TEXT(".dds"))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("셰이더 로드."));
 #pragma region Shader

@@ -27,7 +27,6 @@ typedef struct Stat
 		fSPRecovery = js["SPRecovery"];
 		fEPRecovery = js["EPRecovery"];
 	}
-	void Gain_Exp(_int iAmount);
 	_int iHP { 0};
 	_int iSP { 0};
 	_int iEP { 0};

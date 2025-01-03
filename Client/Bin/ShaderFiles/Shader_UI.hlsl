@@ -220,7 +220,7 @@ PS_OUT PS_HORIZONTALFILL_MAIN(PS_NOBORDER_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
 
-    if (In.vTexcoord.x < g_fVerticalRatio)
+    if (In.vTexcoord.x > g_fVerticalRatio)
     {
         discard;
     }

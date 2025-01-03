@@ -567,6 +567,8 @@ HRESULT CPlayer::Ready_Stat(const json& jStatData)
 {
 	m_tStatDefault = Stat(jStatData);
 	m_tStat = m_tStatDefault;
+
+	m_tStatDefault.iEXP = m_tStat.iLEVEL * m_tStat.iLEVEL*10;
 	return S_OK;
 }
 
@@ -1122,7 +1124,15 @@ HRESULT CPlayer::Gain_Item(const ITEM_DATA* pItem, _uint iCount)
 
 void CPlayer::Gain_Exp(_int iAmount)
 {
-	m_tStat.Gain_Exp(iAmount);
+	m_tStat.iEXP += iAmount;
+	m_tStatDefault.iEXP = m_tStat.iLEVEL * m_tStat.iLEVEL *10;
+	while (m_tStatDefault.iEXP <= m_tStat.iEXP)
+	{
+		m_tStat.iLEVEL++;
+		m_tStat.iEXP -= m_tStatDefault.iEXP;
+		m_tStatDefault.iEXP = m_tStat.iLEVEL * m_tStat.iLEVEL * 10;
+	}
+
 }
 
 

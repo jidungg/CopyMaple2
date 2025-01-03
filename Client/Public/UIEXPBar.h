@@ -3,6 +3,8 @@
 #include "Status.h"
 
 BEGIN(Client)
+template<typename T>
+class CUIVerticalFill;
 class CUIEXPBar :
     public CUIPanel
 {

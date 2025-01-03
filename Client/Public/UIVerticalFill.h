@@ -58,6 +58,7 @@ inline HRESULT CUIVerticalFill<T>::Initialize(void* pArg)
 	m_pDefaultValue = pDesc->pDefaultValue;
 	m_fVerticalStart = pDesc->fVerticalStart;
 	m_fVerticalEnd = pDesc->fVerticalEnd;
+	m_bVertical = pDesc->bVertical;
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
@@ -68,7 +69,7 @@ template<typename T>
 inline HRESULT CUIVerticalFill<T>::Render()
 {
 	_float fRatio = *m_pValue / (_float)*m_pDefaultValue;
-	_float fBaseLine = m_fVerticalStart + (m_fVerticalEnd - m_fVerticalStart) * (1- fRatio);
+	_float fBaseLine = m_fVerticalStart + (m_fVerticalEnd - m_fVerticalStart) * (m_bVertical? 1- fRatio : fRatio);
 	if (FAILED(Bind_ShaderResources()))
 		return E_FAIL;
 	if (m_pShaderCom)

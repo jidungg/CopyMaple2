@@ -751,7 +751,7 @@ HRESULT CLoader::Loading_Level_HuntingPlace()
 
 	if (FAILED(m_pGameInstance->Load_BGM(LEVEL_HUNTINGPLACE, TEXT("BGM_Henesys_field_01"), TEXT("../Bin/Resources/Sounds/BGM/BGM_Henesys_field_01.wav"))))
 		return E_FAIL;
-	if (FAILED(Load_Dirctory_Sounds(LEVEL_HUNTINGPLACE, TEXT("../Bin/Resources/Sounds/Monster/"), TEXT(".wav"))))
+	if (FAILED(Load_Dirctory_Sounds(LEVEL_HUNTINGPLACE, TEXT("../Bin/Resources/Sounds/Monster/Snail/"), TEXT(".wav"))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드"));

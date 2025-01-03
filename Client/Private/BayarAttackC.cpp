@@ -36,11 +36,14 @@ void CBayarAttackC::On_SkillUsed()
 	__super::On_SkillUsed();
 	m_pChargeEffect->Set_Active(true);
 	m_pChargeEffect->Start_Animation(0, true);
+
 }
 
 void CBayarAttackC::On_CastingEnd()
 {
 	__super::On_CastingEnd();
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_BAYARPEAK, TEXT("Boss_SandstoneGiant_Skill_Attack_01_C.wav"));
+	pSouind->SetVolume(100);
 }
 
 void CBayarAttackC::Fire()

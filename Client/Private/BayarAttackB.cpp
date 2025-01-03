@@ -53,6 +53,8 @@ void CBayarAttackB::Late_Update(_float fTimeDelta)
 
 void CBayarAttackB::On_SkillUsed()
 {
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_BAYARPEAK, TEXT("Boss_SandstoneGiant_Skill_Attack_01_B.wav"));
+	pSouind->SetVolume(100);
 }
 
 void CBayarAttackB::On_CastingEnd()

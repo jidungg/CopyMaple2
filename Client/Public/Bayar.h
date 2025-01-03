@@ -111,7 +111,7 @@ public:
 	virtual HRESULT Ready_AnimStateMachine() override;
 	virtual void On_AnimEnd(_uint iAnimIdx) override;
 	_bool Is_Attached(CPlayer* pPlayer);
-
+	virtual void On_HPZero() override;
 protected:
 		virtual void To_NextSkill() override;
 		virtual _bool FindWay(_vector& vStart, _vector& vGoal, _uint iSearchRange) override;

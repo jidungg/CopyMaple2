@@ -37,6 +37,7 @@ HRESULT CBayar::Initialize(void* pArg)
 	pDesc->iColliderCount = PART_LAST;
 	pDesc->eMonID = MONSTER_ID::BAYAR;
 	m_fHomeRange = 1000.f;
+	m_fDeadIdleTime = 10.f;
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 	if (FAILED(Ready_AttacableParts(pDesc)))
@@ -117,7 +118,11 @@ HRESULT CBayar::Ready_AnimStateMachine()
 
 
 
-	return __super::Ready_AnimStateMachine();
+	//CTransition* pTransition = m_pAnimStateMachine->Add_SubTransition(AS_DEAD_A, m_mapAnimIdx[M_AS_DEAD].at(i));
+	//m_pAnimStateMachine->Bind_Condition(pTransition, MON_ANIM_CONDITION::AC_RANDOM, CONDITION_TYPE::EQUAL_GREATER, iStart);
+	//m_pAnimStateMachine->Bind_Condition(pTransition, MON_ANIM_CONDITION::AC_RANDOM, CONDITION_TYPE::LESS, iEnd);
+
+	return 	__super::Ready_AnimStateMachine();
 }
 void CBayar::On_AnimEnd(_uint iAnimIdx)
 {
@@ -141,6 +146,11 @@ _bool CBayar::Is_Attached(CPlayer* pPlayer)
 		if(pAttachable->Is_Attached(pPlayer)) return true;
 	}
 	return false;
+}
+
+void CBayar::On_HPZero()
+{
+	__super::On_HPZero();
 }
 
 void CBayar::To_NextSkill()
@@ -192,9 +202,6 @@ void CBayar::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 }
-
-
-
 
 HRESULT CBayar::Render()
 {

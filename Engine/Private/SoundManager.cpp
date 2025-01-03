@@ -69,6 +69,10 @@ CSound* CSoundManager::Start_EffectPlay(_uint iLevelID, const wstring& strSFX, _
 {
 	CSound* pSound = Find_SFX(iLevelID, strSFX);
 	if (pSound == nullptr)return nullptr ;
+	if (fStartPos <= 0)
+	{
+		m_listDelaySound.push_back(pSound);
+	}
 	pSound->Stop();
 	pSound->Play(fStartPos, _bRepeat);
 	return pSound;

@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "HitEvent.h"
 #include "Collider_Sphere.h"
+#include "Sound.h"
+#include "Client_Utility.h"
 
 CSnailAttack::CSnailAttack()
 	: CSkill()
@@ -78,6 +80,11 @@ void CSnailAttack::On_SkillUsed()
 	m_pCastEffect->Start_Animation();
 	m_pCastEffect->Set_Active(true);
 	m_setHitObject.clear();
+
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay_Random(Get_CurrentTrueLevel(), TEXT("Normal_Snail_Attack_Voice_0%d.wav"), 1,3);
+	pSouind->SetVolume(100);
+	pSouind = CGameInstance::GetInstance()->Start_EffectPlay(Get_CurrentTrueLevel(), TEXT("Normal_Snail_Attack_A_01.wav"));
+	pSouind->SetVolume(100);
 }
 
 void CSnailAttack::On_CastingEnd()

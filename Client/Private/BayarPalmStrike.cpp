@@ -107,7 +107,8 @@ void CBayarPalmStrike::Fire()
 		_float fDmg = Calc_Damg(bCrit);
 		m_pGameInstance->Push_Event(CDamgEvent::Create(m_pUser, pTarget, (_int)fDmg, bCrit,false, EFF_MODEL_ID::HIT_A));
 	}
-
+	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_BAYARPEAK, TEXT("Boss_SandstoneGiant_Skill_Jump_Land_A.wav"));
+	pSouind->SetVolume(100);
 
 }
 

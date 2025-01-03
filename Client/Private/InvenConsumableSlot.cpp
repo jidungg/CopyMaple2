@@ -42,7 +42,7 @@ void CInvenConsumableSlot::Use()
 			m_fCoolTimeAcc = 0.f;
 			_int iRecovery = pConsumable->iValue;
 			CPlayer* pPlayer = PLAYERINIFO->Get_Player();
-			CGameInstance::GetInstance()->Push_Event(CDamgEvent::Create(pPlayer, pPlayer, -iRecovery, false, true, EFF_MODEL_ID::RECOVER_HP));
+			CGameInstance::GetInstance()->Push_Event(CDamgEvent::Create(pPlayer, pPlayer, -iRecovery, false, true, EFF_MODEL_ID::RECOVER_HP,TEXT("Skill_Common_HpRecovery_Cast_01.wav")));
 			break;
 		}
 		default:

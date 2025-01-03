@@ -15,6 +15,7 @@
 #include "DropTable.h"
 #include "QuestDataBase.h"
 #include "WorldUIHPBar.h"
+#include "Sound.h"
 
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CCharacter(pDevice, pContext)
@@ -730,6 +731,38 @@ void CMonster::On_HPZero()
 		DROPTABLE->Drop_Item(this);
 		QUESTDB->Increase_MonsterKillCount(m_pMonData->eMonID);
 		m_bHPZero = true;
+
+		switch (m_pMonData->eMonID)
+		{
+		case MONSTER_ID::CRAB:
+		{
+			CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay_Random(Get_CurrentTrueLevel(), TEXT("Spider_Dead_0%d.wav"), 1, 3);
+			pSouind->SetVolume(100);
+			break;
+		}
+		case MONSTER_ID::STUMP:
+		{
+			CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(Get_CurrentTrueLevel(), TEXT("Wood_Dead_01.wav"));
+			pSouind->SetVolume(100);
+			break;
+		}
+		case MONSTER_ID::SNAIL:
+		{
+			CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(Get_CurrentTrueLevel(), TEXT("Normal_Snail_Dead_A_01.wav"));
+			pSouind->SetVolume(100);
+			 pSouind = CGameInstance::GetInstance()->Start_EffectPlay_Random(Get_CurrentTrueLevel(), TEXT("Normal_Snail_Dead_A_Voice_0%d.wav"), 1, 2);
+			pSouind->SetVolume(100);
+			break;
+		} 
+		case MONSTER_ID::BAYAR:
+		{
+			CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(Get_CurrentTrueLevel(), TEXT("Boss_SandstoneGiant_Dead_01.wav"));
+			pSouind->SetVolume(100);
+			break;
+		}
+		default:
+			break;
+		}
 	}
 
 	Set_Target(nullptr);

@@ -456,7 +456,7 @@
         },
         {
             "Id": "BAYAR_ATTACK_D",
-            "CastType": "CHARGING",
+            "CastType": "CASTING",
             "Name": "",
             "Desc": "",
             "Level": 1,

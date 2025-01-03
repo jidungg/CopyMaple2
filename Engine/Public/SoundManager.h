@@ -29,6 +29,9 @@ private:
 	virtual ~CSoundManager();
 
 public:
+
+	void Update(_float fTimeDelta);
+
 	HRESULT CreateSoundBuffer(LPCDSBUFFERDESC pcDSBufferDesc, _Out_ LPDIRECTSOUNDBUFFER* ppDSBuffer, _Pre_null_ LPUNKNOWN pUnkOuter);
 	HRESULT			Ready_SoundMgr(HWND hWnd, _uint iLevelCount);
 	LPDIRECTSOUND8	Get_SoundDevice() { return m_pSound; }
@@ -37,7 +40,7 @@ public:
 	HRESULT			Load_SFX(_uint iLevelID, const wstring& strKey, const wstring& strPath);
 	void					Clear(_uint iLevelIndex);
 
-	void  Start_BGM(_uint iLevelID, const wstring& strBGM, _float fStartPos = 0, _bool _bRepeat = true);
+	void			Start_BGM(_uint iLevelID, const wstring& strBGM, _float fStartPos = 0, _bool _bRepeat = true);
 	void			End_BGM();
 	void			Set_BGMVolume(float _fVolume);
 	float			Get_BGMVolume();
@@ -63,7 +66,7 @@ private:
 	_uint m_iLevelCount = { 0 };
 	CSound* m_CurBGM;
 
-
+	list<CSound*> m_listDelaySound;
 public:
 	static CSoundManager* Create();
 

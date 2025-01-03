@@ -25,7 +25,9 @@ class CUINPCDialog;
 class CNPC;
 class CUIQuestGuideBundle;
 class CUIHUDMonsterHPBar;
+class CUIEXPBar;
 class CMonster;
+
 class CUIBundle :
     public CBase
 {
@@ -88,6 +90,7 @@ private:
 	CUIHUDMonsterHPBar* m_pBossHPBar = { nullptr };
 	CUIHUDMonsterHPBar* m_pMonsterHPBar = { nullptr };
 	CUIHUDMonsterHPBar* m_pCurrentMonsterHPBar = { nullptr };
+	CUIEXPBar* m_pEXPBar = { nullptr };
 
 	_float m_fMonsterHPBarVisibleTime = { 5.f };
 	_float m_fMonsterHPBarVisibleTimeAcc = { 0.f };

@@ -147,8 +147,23 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	Safe_AddRef(m_pMonsterHPBar);
 	m_pMonsterHPBar->Set_Active(false);
 
-
-
+		CUIVerticalFill<_int>::UIVERTICALFILL_DESC tFillDesc;
+	tFillDesc.eAnchorType = CORNOR_TYPE::BOT;
+	tFillDesc.ePivotType = CORNOR_TYPE::BOT;
+	tFillDesc.fSizeX =g_iWinSizeX;
+	tFillDesc.fSizeY = 21;
+	tFillDesc.fXOffset = 0;
+	tFillDesc.fYOffset = -25;
+	tFillDesc.vBorder = { 0,0,0,0 };
+	tFillDesc.pValue = &(m_pStat->iHP);
+	tFillDesc.pDefaultValue = &(m_pDefaultStat->iHP);
+	tFillDesc.fVerticalEnd = { 1};
+	tFillDesc.fVerticalStart = { 0};
+	tFillDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("mainhpbar_red.dds")));
+	m_pEXPBar = static_cast<CUIVerticalFill<_int>*>(m_pGameInstance->Clone_Proto_Object_Stock(TEXT("Prototype_UI_IntVerticalFill"), &tFillDesc));
+	if (nullptr == m_pEXPBar)
+		return E_FAIL;
+	Add_Child(m_pEXPBar);
 	return S_OK;
 }
 

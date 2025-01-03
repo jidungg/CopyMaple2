@@ -51,6 +51,7 @@
 #include "UIHUDMonsterHPBar.h"
 #include "WorldUIHPBar.h"
 #include "UICastingBar.h"
+#include "UIEXPBar.h"
 
 #include "StateMachine.h"
 #include "SkillManager.h"
@@ -552,6 +553,9 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUICastingBar::m_szProtoTag,
 		CUICastingBar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIEXPBar::m_szProtoTag,
+		CUIEXPBar::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,

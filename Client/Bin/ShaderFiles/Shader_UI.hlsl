@@ -216,6 +216,18 @@ PS_OUT PS_VERTICALFILL_MAIN(PS_NOBORDER_IN In)
 
     return Out;
 }
+PS_OUT PS_HORIZONTALFILL_MAIN(PS_NOBORDER_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+
+    if (In.vTexcoord.x < g_fVerticalRatio)
+    {
+        discard;
+    }
+    Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord);
+
+    return Out;
+}
 
 PS_OUT PS_VERTICALDARK_MAIN(PS_IN In)
 {
@@ -337,5 +349,17 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_NOBORDER_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_NOBORDER_MAIN();
+    }
+
+    pass HorizontalFillPass
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+
+        VertexShader = compile vs_5_0 VS_NOBORDER_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_HORIZONTALFILL_MAIN();
     }
 }

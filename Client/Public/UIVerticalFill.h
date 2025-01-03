@@ -12,6 +12,7 @@ public:
 		T* pDefaultValue= { nullptr };
 		_float fVerticalStart = { 0.054f };
 		_float fVerticalEnd = { 0.85f };
+		_bool bVertical = { true };
 	}UIVERTICALFILL_DESC;
 protected:
 	explicit CUIVerticalFill(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -26,9 +27,9 @@ private:
 	T* m_pValue = { nullptr };
 	T* m_pDefaultValue = { nullptr };
 
-	_float m_fVerticalStart = 0.f;
-	_float m_fVerticalEnd = 0.f;
-
+	_float m_fVerticalStart = { 0.f };
+	_float m_fVerticalEnd = { 0.f };
+	_bool m_bVertical = { true };
 public:
 	static CUIVerticalFill* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
@@ -75,7 +76,7 @@ inline HRESULT CUIVerticalFill<T>::Render()
 		if (FAILED(m_pShaderCom->Bind_RawValue("g_fVerticalRatio", &fBaseLine, sizeof(_float))))
 			return E_FAIL;
 
-		if (FAILED(m_pShaderCom->Begin(3)))
+		if (FAILED(m_pShaderCom->Begin(m_bVertical? 3 :6)))
 			return E_FAIL;
 	}
 	if (m_pVIBufferCom)

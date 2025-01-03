@@ -31,19 +31,19 @@ HRESULT CWorldItem::Initialize(void* pArg)
 
 	switch (eItemGrade)
 	{
-	case Client::ITEM_GRADE::NORMAL:
-		strcpy_s(pDesc->strModelProtoName, "eff_drop_rare.effmodel");
+	case Client::ITEM_GRADE::NORMAL://흰
+		strcpy_s(pDesc->strModelProtoName, "item_box_a01.effmodel");
 		break;
-	case Client::ITEM_GRADE::ELITE:
-		strcpy_s(pDesc->strModelProtoName, "eff_drop_excellent.effmodel");
-		break;
-	case Client::ITEM_GRADE::EXCELENT:
+	case Client::ITEM_GRADE::ELITE://파
 		strcpy_s(pDesc->strModelProtoName, "eff_drop_elite.effmodel");
 		break;
-	case Client::ITEM_GRADE::LEGENDARY:
+	case Client::ITEM_GRADE::EXCELENT://보
+		strcpy_s(pDesc->strModelProtoName, "eff_drop_excellent.effmodel");
+		break;
+	case Client::ITEM_GRADE::LEGENDARY://노
 		strcpy_s(pDesc->strModelProtoName, "eff_drop_legendary.effmodel");
 		break;
-	case Client::ITEM_GRADE::MYTHIC:
+	case Client::ITEM_GRADE::MYTHIC://빨
 		strcpy_s(pDesc->strModelProtoName, "eff_drop_artifact.effmodel");
 		break;
 	case Client::ITEM_GRADE::LAST:

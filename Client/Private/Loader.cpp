@@ -383,7 +383,7 @@ HRESULT CLoader::Loading_Level_Logo()
 
 	XMMATRIX matPretransform2 = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
 	matPretransform2 = matPretransform2 * XMMatrixRotationX(XMConvertToRadians(-90));
-	matPretransform2 = matPretransform2 * XMMatrixRotationY(XMConvertToRadians(180));
+	//matPretransform2 = matPretransform2 * XMMatrixRotationY(XMConvertToRadians(180));
 	matPretransform2 = matPretransform2 * XMMatrixScaling(-1,1,1);
 	if (FAILED(Load_Dirctory_EffModels(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Effect"), matPretransform2)))
@@ -753,7 +753,10 @@ HRESULT CLoader::Loading_Level_HuntingPlace()
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Sounds(LEVEL_HUNTINGPLACE, TEXT("../Bin/Resources/Sounds/Monster/Snail/"), TEXT(".wav"))))
 		return E_FAIL;
-
+	if (FAILED(Load_Dirctory_Sounds(LEVEL_HUNTINGPLACE, TEXT("../Bin/Resources/Sounds/Monster/Stump/"), TEXT(".wav"))))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Sounds(LEVEL_HUNTINGPLACE, TEXT("../Bin/Resources/Sounds/Monster/Crab/"), TEXT(".wav"))))
+		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드"));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HUNTINGPLACE, TEXT("bg_henesys_b.dds"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_henesys_b.dds"), 1))))

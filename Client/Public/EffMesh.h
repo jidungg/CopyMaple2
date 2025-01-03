@@ -20,8 +20,8 @@ public:
 	//셰이더에 본 행렬을 바인딩
 	HRESULT Bind_BoneMatrices(CShader* pShader, const _char* pConstantName, const vector<CEffBone*>& Bones);
 	void ReSet_OffsetMarix();
-	HRESULT Set_AlphaState();
-	HRESULT Unset_AlphaState();
+	HRESULT Set_RenderState();
+	HRESULT Unset_RenderState();
 public:
 	HRESULT Ready_VertexBuffer(ifstream& inFile, class CEffModel* pModel);
 	HRESULT Ready_IndexBuffer(ifstream& inFile, class CEffModel* pModel, _uint iNumFaces);

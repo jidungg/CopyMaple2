@@ -39,10 +39,11 @@ HRESULT CBullet_BBQParty::Initialize(void* pArg)
 	m_pKeepEffect->Register_OnAnimEndCallBack(bind(&CBullet_BBQParty::On_KeepEffectAnimEnd, this, placeholders::_1));
 	m_pKeepEffect->Set_Active(false);
 	m_pKeepEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0,0.01,0,1 });
+	m_pKeepEffect->Get_Transform()->Scaling(1.5, 1.5, 1.5);
 
 	//SplashInvokeEffect
 	tEffectDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tEffectDesc.strModelProtoName, "eff_wizard_firetornado_remain_01_a.effmodel");
+	strcpy_s(tEffectDesc.strModelProtoName, "eff_wizard_bbqparty_splashinvoke_01.effmodel");
 	m_pSplashInvokeEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tEffectDesc));
 	m_pSplashInvokeEffect->Register_OnAnimEndCallBack(bind(&CBullet_BBQParty::On_SplashCastEffectAnimEnd, this, placeholders::_1));
 	Add_Child(m_pSplashInvokeEffect);
@@ -51,7 +52,7 @@ HRESULT CBullet_BBQParty::Initialize(void* pArg)
 
 	//SplashCastEffect
 	tEffectDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tEffectDesc.strModelProtoName, "eff_wizard_firetornadosplash_cast_01.effmodel");
+	strcpy_s(tEffectDesc.strModelProtoName, "eff_wizard_bbqparty_splashcast_02.effmodel");
 	m_pSplashCastEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tEffectDesc));
 	Add_Child(m_pSplashCastEffect);
 	m_pSplashCastEffect->Set_Active(false);
@@ -60,7 +61,7 @@ HRESULT CBullet_BBQParty::Initialize(void* pArg)
 
 	//SplashEndEffect
 	tEffectDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tEffectDesc.strModelProtoName, "eff_wizard_firetornadosplash_end_01.effmodel");
+	strcpy_s(tEffectDesc.strModelProtoName, "eff_wizard_bbqparty_splashend_02.effmodel");
 	m_pSplashEndEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tEffectDesc));
 	Add_Child(m_pSplashEndEffect);
 	m_pSplashEndEffect->Register_OnAnimEndCallBack(bind(&CBullet_BBQParty::On_SplashEndEffectAnimEnd, this, placeholders::_1));
@@ -168,6 +169,7 @@ void CBullet_BBQParty::Launch(_float fDamage, CGameObject* pTarget)
 
 void CBullet_BBQParty::On_KeepEffectAnimEnd(CEffModel* pModel)
 {
+
 }
 
 void CBullet_BBQParty::On_SplashCastEffectAnimEnd(CEffModel* pModel)

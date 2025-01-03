@@ -105,12 +105,11 @@ HRESULT CBullet_BayarStoneSpike::Render()
 	
 	for (_uint i = 0; i < 5; i++)
 	{
-		_vector vPos = _vector{ dX[i], 0, dZ[i], 1 };
+		_vector vPos = _vector{ dX[i], 0.1f, dZ[i], 1 };
 		m_pPrecursorEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos);
 		m_pRockCubeEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos);
 		m_pRockCubeEffect->Compute_Matrix();
 		m_pPrecursorEffect->Compute_Matrix();
-		m_pCollider->Render();
 		__super::Render();
 
 	}

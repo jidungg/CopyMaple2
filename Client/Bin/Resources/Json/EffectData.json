@@ -20,18 +20,6 @@
         },
         {
             "Type": "MODEL",
-            "Id": "HIT_MANADRIFT_C",
-            "LevelProto": 0,
-            "Model": "eff_wizard_manadrift_hit_01_c.effmodel"
-        },
-        {
-            "Type": "MODEL",
-            "Id": "HIT_MANADRIFT_B",
-            "LevelProto": 0,
-            "Model": "eff_wizard_manadrift_hit_01_b.effmodel"
-        },
-        {
-            "Type": "MODEL",
             "Id": "HIT_FLAME_BURST_A",
             "LevelProto": 0,
             "Model": "eff_wizard_flameburst_hit_01_a.effmodel"
@@ -48,23 +36,12 @@
             "LevelProto": 0,
             "Model": "eff_wizard_kindling_hit_01.effmodel"
         },
-        {
-            "Type": "MODEL",
-            "Id": "HIT_FIRETORNADO_A",
-            "LevelProto": 0,
-            "Model": "eff_wizard_firetornado_hit_01_a.effmodel"
-        },
+
         {
             "Type": "MODEL",
             "Id": "HIT_FIREBALL_1",
             "LevelProto": 0,
             "Model": "eff_wizard_fireball_hit_01_a.effmodel"
-        },
-        {
-            "Type": "MODEL",
-            "Id": "HIT_FIREBALL_2",
-            "LevelProto": 0,
-            "Model": "eff_wizard_fireball_hit_02_a.effmodel"
         },
         {
           "Type": "MODEL",

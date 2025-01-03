@@ -22,7 +22,7 @@ HRESULT CFireTornado::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	//Bullet
 	CBullet::BULLET_DESC tBulletDesc;
 	tBulletDesc.pShooter = m_pUser;
-	tBulletDesc.eHitEffect = EFF_MODEL_ID::HIT_FIRETORNADO_A;
+	tBulletDesc.eHitEffect = EFF_MODEL_ID::HIT_FIREBALL_1;
 	m_pBullet = static_cast<CBullet_FireTornado*>(m_pGameInstance->Clone_Proto_Object_Stock(CBullet_FireTornado::m_szProtoTag, &tBulletDesc));
 	m_pBullet->Set_Active(false);
 	m_pGameInstance->Add_GameObject_ToLayer((_uint)Get_CurrentTrueLevel(), (_uint)LAYERID::LAYER_BULLET, m_pBullet,true);

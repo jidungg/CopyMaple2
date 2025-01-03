@@ -132,13 +132,13 @@ HRESULT CEffModel::Render(CShader* pShader)
 
         if (FAILED(m_vecMesh[i]->Bind_BufferDesc()))
             return E_FAIL;
-        if (FAILED(m_vecMesh[i]->Set_AlphaState()))
+        if (FAILED(m_vecMesh[i]->Set_RenderState()))
             return E_FAIL;
         if (FAILED(pShader->Begin(0)))
             return E_FAIL;
         if (FAILED((m_vecMesh[i]->Render())))
             return E_FAIL;
-        if (FAILED(m_vecMesh[i]->Unset_AlphaState()))
+        if (FAILED(m_vecMesh[i]->Unset_RenderState()))
             return E_FAIL;
     }
 
@@ -364,7 +364,7 @@ HRESULT CEffModel::Ready_Controls(ifstream& inFile)
 		inFile.read(reinterpret_cast<char*>(&eCtrlType), sizeof(_uint));
         CEffController* pController = nullptr;
         switch (eCtrlType)
-        {//2번째에서 이상함
+        {
         case Client::CT_TRANSFORM:
 			pController = CEffTransformController::Create(inFile, this);
             break;

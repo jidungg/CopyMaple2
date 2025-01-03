@@ -10,6 +10,18 @@ TRANSFORM_KEYFRAME CEngineUtility::Lerp_Frame(const TRANSFORM_KEYFRAME& Frame1, 
 	return KeyFrame;
 }
 
+TRANSFORM_KEYFRAME CEngineUtility::Lerp_NonQuaternionFrame(const TRANSFORM_KEYFRAME& Frame1, const TRANSFORM_KEYFRAME& Frame2, _float fRatio)
+{
+	TRANSFORM_KEYFRAME KeyFrame = {};
+
+	XMStoreFloat3(&KeyFrame.vScale, XMVectorLerp(XMLoadFloat3(&Frame1.vScale), XMLoadFloat3(&Frame2.vScale), fRatio));
+	_vector vRot1 = XMVectorLerp(XMLoadFloat4(&Frame1.vRotation), XMLoadFloat4(&Frame2.vRotation), fRatio);
+	XMStoreFloat4(&KeyFrame.vRotation, vRot1);
+	XMStoreFloat3(&KeyFrame.vPosition, XMVectorLerp(XMLoadFloat3(&Frame1.vPosition), XMLoadFloat3(&Frame2.vPosition), fRatio));
+
+	return KeyFrame;
+}
+
 _float CEngineUtility::Hermit_Interpolation(_float fV1, _float fV2, _float fT1, _float fT2 , _float fX)
 {
 	_float fX2 = fX * fX;

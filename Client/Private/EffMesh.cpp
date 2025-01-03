@@ -112,7 +112,7 @@ void CEffMesh::ReSet_OffsetMarix()
 	}
 }
 
-HRESULT CEffMesh::Set_AlphaState()
+HRESULT CEffMesh::Set_RenderState()
 {
 	//m_pContext->OMGetBlendState(&m_pOriginalBlendState, m_arrOriginalBlendFactor, m_pOriginalBlendMask);
 
@@ -121,7 +121,7 @@ HRESULT CEffMesh::Set_AlphaState()
 	return S_OK;
 }
 
-HRESULT CEffMesh::Unset_AlphaState()
+HRESULT CEffMesh::Unset_RenderState()
 {
 	//m_pContext->OMSetBlendState(m_pOriginalBlendState, m_arrOriginalBlendFactor, *m_pOriginalBlendMask);
 

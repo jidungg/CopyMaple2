@@ -54,26 +54,18 @@ HRESULT CLevel_Home::Initialize(void* pArg)
 
 	CEffModelObject::EFFECTOBJ_DESC tEffDesc;
 	tEffDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tEffDesc.strModelProtoName, "eff_wizard_magicclaw_remain_01_a.effmodel");
+	strcpy_s(tEffDesc.strModelProtoName, "eff_sandstonebiggiant_attack_02_c_b.effmodel");
 	 m_pEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tEffDesc));
 	m_pEffect->Set_Active(false);
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, LAYER_NONCOLLISION, m_pEffect)))
 		return E_FAIL;
 	//m_pEffect->Set_Transform(_vector{0,1,0}, _vector{0,0,0}, 1 / 150);
 
-	CWorldItem::WORLDITEM_DESC tWorldItemDesc;
-	tWorldItemDesc.pItemData = static_cast<const ITEM_DATA*>(ITEMDB->Get_Data(ITEM_TYPE::EQUIP, 0));
-	tWorldItemDesc.iStackCount = 1;
-	tWorldItemDesc.pTerrain = m_pCubeTerrain;
 
-	CWorldItem* pWorldItem = static_cast<CWorldItem*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CWorldItem::m_szProtoTag, &tWorldItemDesc));
-	pWorldItem->Set_Transform({ 0,1,0,1 }, { 0,0,0,0 }, 1);
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, LAYER_NONCOLLISION, pWorldItem)))
-		return E_FAIL;
 
 	UIBUNDLE->Set_HUDActive(false);
 	
-return S_OK;
+	return S_OK;
 }
 
 void CLevel_Home::Update(_float fTimeDelta)
@@ -83,10 +75,6 @@ void CLevel_Home::Update(_float fTimeDelta)
 	if (m_pGameInstance->GetKeyState(KEY::F1) == KEY_STATE::DOWN)
 	{
 		m_pEffect->Start_Animation(0, false, -1, 0.2);
-	}
-	if (m_pGameInstance->GetKeyState(KEY::F2) == KEY_STATE::DOWN)
-	{
-		EFFECT_MANAGER->Play_DamgCount(DAMG_TYPE::PLAYER_CRITICAL, 123, { 0,1,0,1 });
 	}
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pEffect);

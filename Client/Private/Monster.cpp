@@ -16,6 +16,7 @@
 #include "QuestDataBase.h"
 #include "WorldUIHPBar.h"
 #include "Sound.h"
+#include "PlayerInfo.h"
 
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CCharacter(pDevice, pContext)
@@ -731,6 +732,7 @@ void CMonster::On_HPZero()
 		DROPTABLE->Drop_Item(this);
 		QUESTDB->Increase_MonsterKillCount(m_pMonData->eMonID);
 		m_bHPZero = true;
+		PLAYERINIFO->Gain_EXP(m_tStat.iEXP);
 
 		switch (m_pMonData->eMonID)
 		{

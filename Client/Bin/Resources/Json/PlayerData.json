@@ -6,12 +6,16 @@
                 "HairTag": "00200028_m_shortpigtailhair_p_a.model"
             },
             "Status": {
-                "HP": 1000,
                 "SP": 100,
                 "EP": 3,
-                "ATK": 100,
-                 "CRIT" :  0.1,
-                "DEF": 1,
+
+                "STR": 10,
+                "DEX": 10,
+                "INT": 10,
+                "LUK": 10,
+                "HP":  300,
+                 "CRIT" :  0.0,
+
                 "EXP": 1,
                 "Gold": 1,
                 "LEVEL": 1,

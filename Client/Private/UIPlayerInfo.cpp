@@ -6,6 +6,7 @@
 #include "PlayerInfoSlot.h"
 #include "UIModelPad.h"
 #include "Player.h"
+#include "UIPlayerInfoDashBoard.h"
 
 CUIPlayerInfo::CUIPlayerInfo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUICommonWindow(pDevice, pContext)
@@ -62,16 +63,18 @@ HRESULT CUIPlayerInfo::Initialize(void* pArg)
 	m_pBackBorder = static_cast<CUIPanel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIPanel::m_szProtoTag, &tPanelDesc));
 	m_pBackPanel->Add_Child(m_pBackBorder);
 
-	tPanelDesc.eAnchorType = CORNOR_TYPE::RIGHT_TOP;
-	tPanelDesc.ePivotType = CORNOR_TYPE::RIGHT_TOP;
-	tPanelDesc.fXOffset = -m_fCommonMargin.x;
-	tPanelDesc.fYOffset = m_fHeaderHeight + m_fCommonMargin.y;
-	tPanelDesc.fSizeX = m_fDashBoardSize.x;
-	tPanelDesc.fSizeY = m_fDashBoardSize.y;
-	tPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("playerinfo_dashboard.dds"), nullptr));
-	tPanelDesc.vBorder = { m_fCommonMargin.y,m_fCommonMargin.y,m_fCommonMargin.x,m_fCommonMargin.x };
-	m_pDashBoardBack = static_cast<CUIPanel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIPanel::m_szProtoTag, &tPanelDesc));
-	Add_Child(m_pDashBoardBack);
+	CUIPlayerInfoDashBoard::PLAYERINFODASHBOARD_DESC tDashBoardDesc;
+	tDashBoardDesc.eAnchorType = CORNOR_TYPE::RIGHT_TOP;
+	tDashBoardDesc.ePivotType = CORNOR_TYPE::RIGHT_TOP;
+	tDashBoardDesc.fXOffset = -m_fCommonMargin.x;
+	tDashBoardDesc.fYOffset = m_fHeaderHeight + m_fCommonMargin.y;
+	tDashBoardDesc.fSizeX = m_fDashBoardSize.x;
+	tDashBoardDesc.fSizeY = m_fDashBoardSize.y;
+	tDashBoardDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("playerinfo_dashboard.dds"), nullptr));
+	tDashBoardDesc.vBorder = { m_fCommonMargin.y,m_fCommonMargin.y,m_fCommonMargin.x,m_fCommonMargin.x };
+	tDashBoardDesc.pPlayerInfo = m_pPlayerInfo;
+	m_pDashBoard = static_cast<CUIPlayerInfoDashBoard*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIPlayerInfoDashBoard::m_szProtoTag, &tDashBoardDesc));
+	Add_Child(m_pDashBoard);
 
 	CUIModelPad::UIMODELPAD_DESC tModelPadDesc;
 	tModelPadDesc.eAnchorType = CORNOR_TYPE::CENTER;

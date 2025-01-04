@@ -52,6 +52,8 @@
 #include "WorldUIHPBar.h"
 #include "UICastingBar.h"
 #include "UIEXPBar.h"
+#include "UIPlayerInfoDashBoard.h"
+#include "UIStatUpButton.h"
 
 #include "StateMachine.h"
 #include "SkillManager.h"
@@ -290,6 +292,9 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_NPCDialogOptionButton"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/NPCDialog/OptionButton/npcdialog_opt_button_%d.dds"), 4))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("UI_Texture_PlayerStatIncButton"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/playerinfo_statincbutton_%d.dds"), 4))))
 		return E_FAIL;
 	if (FAILED(Load_Dirctory_Textures(LEVEL_LOADING,
 		TEXT("../Bin/Resources/Textures/"), TEXT(".dds"))))
@@ -558,6 +563,12 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIEXPBar::m_szProtoTag,
 		CUIEXPBar::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIPlayerInfoDashBoard::m_szProtoTag,
+		CUIPlayerInfoDashBoard::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIStatUpButton::m_szProtoTag,
+		CUIStatUpButton::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CHumanModelObject::m_szProtoTag,

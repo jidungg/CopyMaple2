@@ -200,9 +200,10 @@ _float CCharacter::Get_AnimationProgress(_uint iAnimIdx)
 	return m_pBody->Get_AnimationProgress(iAnimIdx);
 }
 
+
 _bool CCharacter::Judge_Critical()
 {
-	return CEngineUtility::Get_RandomFloat(0, 1) <= m_tStat.fCrit;
+	return CEngineUtility::Get_RandomFloat(0, 1) <= Get_CritPefrcent();
 }
 
 const _float4x4* CCharacter::Get_BoneMatrix(const _char* szBoneName)
@@ -227,15 +228,16 @@ void CCharacter::Hit(CGameObject* pFoe,_int iDamage)
 }
 void CCharacter::FullRecovery()
 {
-	m_tStat.iHP = m_tStatDefault.iHP;
+	m_tStat.iHP = Get_TotalHP();
 	m_tStat.iSP = m_tStatDefault.iSP;
 	m_tStat.iEP = m_tStatDefault.iEP;
 }
 void CCharacter::RestoreHP(_int iAmount)
 {
 	m_tStat.iHP += iAmount;
-	if (m_tStat.iHP > m_tStatDefault.iHP)
-		m_tStat.iHP = m_tStatDefault.iHP;
+	_int iTotal = Get_TotalHP();
+	if (m_tStat.iHP > iTotal)
+		m_tStat.iHP = iTotal;
 }
 void CCharacter::RestoreSP(_int iAmount)
 {

@@ -82,9 +82,9 @@ void CBullet_FireTornado::Late_Update(_float fTimeDelta)
 		SearchTarget(&listTarget, LAYER_MONSTER);
 		for (auto& pTarget : listTarget)
 		{
-			_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
-			m_fDamage *= bCrit ? 1.5 : 1.f;
-			m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, bCrit, true,m_eHitEffect));
+			_bool bCrit;
+			_float fDmg = m_pSkill->Calc_Damg(bCrit);
+			m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)fDmg, bCrit, true,m_eHitEffect));
 		}
 	}
 }
@@ -95,10 +95,10 @@ HRESULT CBullet_FireTornado::Render()
 }
 
 
-void CBullet_FireTornado::Launch(_float fDamage, _vector vPosition)
+void CBullet_FireTornado::Launch(CSkill* pSkill, _vector vPosition)
 {
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	m_fDamage = fDamage;
+	m_pSkill = pSkill;
 	m_pSplashCastEffect->Start_Animation();
 	m_pSplashCastEffect->Set_Active(true);
 	m_pCollider->Update(m_pTransformCom->Get_WorldMatrix());

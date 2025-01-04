@@ -67,16 +67,12 @@ void CBayarStoneSpike::Late_Update(_float fTimeDelta)
 
 		for (auto& pTarget : listTarget)
 		{
-			_uint iDamgID = (_uint)SKILL_DATA_ID::DAMG;
-			_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
-			fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
-
 			CBullet* pBullet = m_pBulletPool->Get_Object();
 			_vector vTargetPos = pTarget->Get_WorldPosition();
 
 			vTargetPos = m_pTerrain->Get_ContainedCellPosition(vTargetPos);
 			vTargetPos = XMVectorSetY(vTargetPos, m_pTerrain->Get_FloorHeight(vTargetPos));
-			pBullet->Launch(fDmg, vTargetPos);
+			pBullet->Launch(this, vTargetPos);
 		}
 
 	}

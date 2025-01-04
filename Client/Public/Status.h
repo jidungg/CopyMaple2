@@ -7,12 +7,16 @@ typedef struct Stat
 	Stat() = default;
 	Stat(const json& js)
 	{
-		iHP = js["HP"];
 		iSP = js["SP"];
 		iEP = js["EP"];
-		iATK = js["ATK"];
+
+		iSTR = js["STR"];
+		iDEX = js["DEX"];
+		iINT = js["INT"];
+		iLUK = js["LUK"];
+		iHP = js["HP"];
 		fCrit = js["CRIT"];
-		iDEF = js["DEF"];
+
 		iEXP = js["EXP"];
 		iGold = js["Gold"];
 		iLEVEL = js["LEVEL"];
@@ -27,12 +31,20 @@ typedef struct Stat
 		fSPRecovery = js["SPRecovery"];
 		fEPRecovery = js["EPRecovery"];
 	}
-	_int iHP { 0};
+	_int Get_AllStat()
+	{
+		return iSTR + iDEX + iINT + iLUK;
+	}
 	_int iSP { 0};
 	_int iEP { 0};
-	_int iATK { 0}; 
+
+	_int iSTR{ 0 };
+	_int iDEX{ 0 };
+	_int iINT{ 0 };
+	_int iLUK{ 0 };
+	_int iHP { 0};
 	_float fCrit{ 0 };
-	_int iDEF { 0};
+
 	_int iEXP { 0};
 	_int iGold { 0};
 	_int iLEVEL{ 0 };

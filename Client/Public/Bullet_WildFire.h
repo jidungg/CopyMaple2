@@ -25,7 +25,7 @@ public:
 	virtual HRESULT Render() override;
 
 	virtual _bool Check_Collision(CGameObject* pOther)override;
-	virtual void Launch(_float fDamage, _fvector vPosition = { 0,0,0,1 });
+	virtual void Launch(CSkill* pSkill, _fvector vPosition = { 0,0,0,1 });
 private:
 	CEffModelObject* m_pCastEffect2 = { nullptr };
 	_bool m_bExpanding = { false };

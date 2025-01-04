@@ -20,7 +20,7 @@ public:
 
 	virtual void Compute_Matrix() override;
 
-	virtual void Launch(_float fDamage) override;
+	virtual void Launch(CSkill* pSkill) override;
 
 	void On_EffectAnimEnd(CEffModel* pModel) { Set_Active(false); }
 private:

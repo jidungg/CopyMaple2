@@ -119,9 +119,9 @@ void CBullet_BBQParty::Late_Update(_float fTimeDelta)
 				m_pSplashInvokeEffect->Start_Animation(0,false, 1);
 				for (auto& pTarget : listTarget)
 				{
-					_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
-					m_fDamage *= bCrit ? 1.5 : 1.f;
-					m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, bCrit,true, EFF_MODEL_ID::HIT_KINDLING));
+					_bool bCrit;
+					_float fDamage = m_pSkill->Calc_Damg(bCrit);
+					m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)fDamage, bCrit,true, EFF_MODEL_ID::HIT_KINDLING));
 				}
 				CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_LOADING, TEXT("Skill_Wizard_BBQParty_SplashInvoke_02.wav"));
 				pSouind->SetVolume(100);
@@ -145,10 +145,10 @@ _bool CBullet_BBQParty::Check_Collision(CGameObject* pOther)
 	return static_cast<CCollider_Cylinder*>( m_pCollider)->Contains(pOther->Get_TransformPosition());
 }
 
-void CBullet_BBQParty::Launch(_float fDamage, _fvector vPosition)
+void CBullet_BBQParty::Launch(CSkill* pSkill, _fvector vPosition)
 {
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	m_fDamage = fDamage;
+	m_pSkill = pSkill;
 	m_pKeepEffect->Start_Animation(0, true, m_fMaxDuration);
 	m_pKeepEffect->Set_Active(true);
 	m_pCollider->Update(m_pTransformCom->Get_WorldMatrix());
@@ -161,9 +161,9 @@ void CBullet_BBQParty::Launch(_float fDamage, _fvector vPosition)
 
 }
 
-void CBullet_BBQParty::Launch(_float fDamage, CGameObject* pTarget)
+void CBullet_BBQParty::Launch(CSkill* pSkill, CGameObject* pTarget)
 {
-	Launch(fDamage, pTarget->Get_TransformPosition());
+	Launch(pSkill, pTarget->Get_TransformPosition());
 
 }
 

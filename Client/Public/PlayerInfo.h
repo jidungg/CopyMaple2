@@ -35,6 +35,31 @@ public:
 	void Gain_Gold(_int iAmount);
 	_bool Is_Insertable(const ITEM_DATA* pItem, _uint iCount = 1);
 	CPlayerInfoSlot* Get_Slot(CUIPlayerInfo::SLOT_ID eSlotID);
+
+
+	_int Get_HP();
+	_int Get_SP();
+	_int Get_EP();
+
+	_int Get_TotalSTR();
+	_int Get_TotalDEX();
+	_int Get_TotalINT();
+	_int Get_TotalLUK();
+	_int Get_TotalAttack();
+	_int Get_TotalHP();
+	_float Get_TotalCRIT();
+	_int Get_TotalDefense();
+
+	_int Get_AttackPoint();
+	_int Get_DefensePoint();
+	_int Get_BattlePoint();
+
+	_int Get_LeftStatPoint() { return m_iLeftStatPoint; }
+
+	void Increase_Stat(_uint iStatType);
+
+
+
 private:
 	CPlayerEquipSlot* m_pEquipSlots[(_uint)EQUIP_ITEM_TYPE::LAST] = { nullptr, };
 	CPlayerDecoSlot* m_pDecoSlots[(_uint)DECO_ITEM_TYPE::LAST] = { nullptr, };
@@ -42,6 +67,7 @@ private:
 	CPlayer* m_pPlayer = { nullptr };
 	CInventory* m_pInventory = { nullptr };
 	class CGameInstance* m_pGameInstance = { nullptr };
+	_uint m_iLeftStatPoint = { 0 };
 public:
 	void Free();
 };

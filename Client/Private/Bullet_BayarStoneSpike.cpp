@@ -81,9 +81,9 @@ void CBullet_BayarStoneSpike::Late_Update(_float fTimeDelta)
 				if (m_setHitObject.find(pTarget) != m_setHitObject.end())
 					continue;
 				m_setHitObject.insert(pTarget);
-				_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
-				m_fDamage *= bCrit ? 1.5 : 1.f;
-				m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, m_fDamage,bCrit,false, m_eHitEffect));
+				_bool bCrit;
+				_float fDamage = m_pSkill->Calc_Damg(bCrit);
+				m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, fDamage,bCrit,false, m_eHitEffect));
 			}
 
 
@@ -115,9 +115,9 @@ HRESULT CBullet_BayarStoneSpike::Render()
 	}
 	return S_OK;
 }
-void CBullet_BayarStoneSpike::Launch(_float fDamage, _vector vPosition)
+void CBullet_BayarStoneSpike::Launch(CSkill* pSkill, _vector vPosition)
 {
-	__super::Launch(fDamage, vPosition);
+	__super::Launch(pSkill, vPosition);
 	m_pPrecursorEffect->Set_Active(true);
 	m_pPrecursorEffect->Start_Animation();
 	m_pRockCubeEffect->Set_Active(false);

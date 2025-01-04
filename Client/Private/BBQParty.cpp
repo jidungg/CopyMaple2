@@ -109,13 +109,10 @@ void CBBQParty::Fire()
 
 	m_pTargetSearcher->Update(XMMatrixTranslation(0, m_pUser->Get_BodyCollisionOffset().y, -1) * m_pUser->Get_Transform()->Get_WorldMatrix());
 	CCharacter* pTarget = SearchTarget(LAYER_MONSTER);
-	_uint iDamgID = (_uint)SKILL_DATA_ID::DAMG;
-	_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
-	fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
 
 	if (pTarget)
 	{
-		m_pBullet->Launch(fDmg, pTarget);
+		m_pBullet->Launch(this, pTarget);
 	}
 	else
 	{
@@ -124,7 +121,7 @@ void CBBQParty::Fire()
 		_vector vLook = pShooterTransform->Get_State(CTransform::STATE_LOOK);
 		vPos += vLook * 3.5f;
 
-		m_pBullet->Launch(fDmg, vPos);
+		m_pBullet->Launch(this, vPos);
 	}
 	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_LOADING, TEXT("Skill_Wizard_BBQParty_Cast_02.wav"));
 	pSouind->SetVolume(100);

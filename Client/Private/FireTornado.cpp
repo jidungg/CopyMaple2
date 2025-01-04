@@ -72,17 +72,12 @@ void CFireTornado::On_CastingEnd()
 
 void CFireTornado::Fire()
 {
-	_uint iDamgID = (_uint)SKILL_DATA_ID::DAMG;
-
-	_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
-	fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
-
 	CTransform* pShooterTransform = m_pUser->Get_Transform();
 	_vector vPos = pShooterTransform->Get_State(CTransform::STATE_POSITION);
 	_vector vLook = pShooterTransform->Get_State(CTransform::STATE_LOOK);
 	vPos += vLook * 2.5f;
 
-	m_pBullet->Launch(fDmg, vPos);
+	m_pBullet->Launch(this, vPos);
 	CSound* pSouind = m_pGameInstance->Start_EffectPlay(LEVEL_LOADING, L"Skill_Wizard_FireTornado_Cast_01.wav");
 	pSouind->SetVolume(100);
 }

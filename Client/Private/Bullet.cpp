@@ -62,9 +62,9 @@ _bool CBullet::Check_Collision(CGameObject* pOther)
 }
 
 
-void CBullet::Launch(_float fDamage, CGameObject* pTarget)
+void CBullet::Launch(CSkill* pSkill, CGameObject* pTarget)
 {
-	m_fDamage = fDamage;
+	m_pSkill = pSkill;
 	Set_Active(true);
 	if (pTarget)
 	{
@@ -73,16 +73,17 @@ void CBullet::Launch(_float fDamage, CGameObject* pTarget)
 	}
 }
 
-void CBullet::Launch(_float fDamage, _fvector vPosition)
+void CBullet::Launch(CSkill* pSkill, _fvector vPosition)
 {
+	m_pSkill = pSkill;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	m_fDamage = fDamage;
+
 	Set_Active(true);
 }
 
-void CBullet::Launch(_float fDamage)
+void CBullet::Launch(CSkill* pSkill)
 {
-	m_fDamage = fDamage;
+	m_pSkill = pSkill;
 	Set_Active(true);
 }
 

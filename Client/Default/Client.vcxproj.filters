@@ -269,6 +269,8 @@
     <ClInclude Include="..\Public\UIHPBar.h" />
     <ClInclude Include="..\Public\UICastingBar.h" />
     <ClInclude Include="..\Public\UIEXPBar.h" />
+    <ClInclude Include="..\Public\UIPlayerInfoDashBoard.h" />
+    <ClInclude Include="..\Public\UIStatUpButton.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -477,6 +479,8 @@
     <ClCompile Include="..\Private\UIHPBar.cpp" />
     <ClCompile Include="..\Private\UICastingBar.cpp" />
     <ClCompile Include="..\Private\UIEXPBar.cpp" />
+    <ClCompile Include="..\Private\UIPlayerInfoDashBoard.cpp" />
+    <ClCompile Include="..\Private\UIStatUpButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

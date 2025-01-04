@@ -19,7 +19,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta)override;
 	virtual HRESULT Render() override;
 
-	virtual void Launch(_float fDamage, _vector vPosition) override;
+	virtual void Launch(CSkill* pSkill, _vector vPosition) override;
 
 	void On_RemainEffectAnimEnd(CEffModel* pModel);
 

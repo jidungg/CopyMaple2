@@ -292,7 +292,7 @@ _bool CSkill::Check_Collision(CGameObject* pOther)
 _float CSkill::Calc_Damg(_bool& bOutCritical)
 {
 	_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[(_uint)SKILL_DATA_ID::DAMG] + m_pSkillDesc->vecData[(_uint)SKILL_DATA_ID::DAMG];
-	fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
+	fDmg = m_pUser->Get_AttackDamg() * fDmg * 0.01;
 	bOutCritical = m_pUser->Judge_Critical();
 	fDmg *= bOutCritical ? 1.5 : 1.f;
 	return fDmg;

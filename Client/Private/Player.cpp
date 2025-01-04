@@ -27,6 +27,7 @@
 #include "Level_Home.h"
 #include "WorldUIHPBar.h"
 #include "Sound.h"
+#include "PlayerInfo.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -1122,18 +1123,7 @@ HRESULT CPlayer::Gain_Item(const ITEM_DATA* pItem, _uint iCount)
 	return 	m_pInventory->Insert_Item(pItem, iCount);
 }
 
-void CPlayer::Gain_Exp(_int iAmount)
-{
-	m_tStat.iEXP += iAmount;
-	m_tStatDefault.iEXP = m_tStat.iLEVEL * m_tStat.iLEVEL *10;
-	while (m_tStatDefault.iEXP <= m_tStat.iEXP)
-	{
-		m_tStat.iLEVEL++;
-		m_tStat.iEXP -= m_tStatDefault.iEXP;
-		m_tStatDefault.iEXP = m_tStat.iLEVEL * m_tStat.iLEVEL * 10;
-	}
 
-}
 
 
 
@@ -1324,6 +1314,26 @@ void CPlayer::Set_BodyMeshActive(EQUIP_ITEM_TYPE eType, bool bActive)
 	default:
 		break;
 	}
+}
+
+_int CPlayer::Get_AttackDamg()
+{
+	return PLAYERINIFO->Get_TotalAttack();
+}
+
+_float CPlayer::Get_CritPefrcent()
+{
+	return PLAYERINIFO->Get_TotalCRIT();
+}
+
+_float CPlayer::Get_HPRatio()
+{
+	return (_float)m_tStat.iHP / (_float) PLAYERINIFO->Get_TotalHP();
+}
+
+_int CPlayer::Get_TotalHP()
+{
+	return PLAYERINIFO->Get_TotalHP();
 }
 
 

@@ -4,6 +4,7 @@
 
 BEGIN(Client)
 class CUIPanel;
+class CPlayerInfo;
 template<typename T>
 class CUIVerticalFill;
 class CUIFont;
@@ -13,8 +14,7 @@ class CUIMainHUDGuage :
 public:
 	typedef struct UIMainHUDGuageDesc : public CUIContainer::UIOBJECT_DESC
 	{
-		Stat* pStat = { nullptr };
-		Stat* pDefaultStat = { nullptr };
+
 	}UIMAINHUDGUAGE_DESC;
 
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_UIMainHPBarDesc";
@@ -28,9 +28,19 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 
 	virtual HRESULT Render() override;
+
+	void Set_HP(_int iHP);
+	void Set_SP(_int iSP);
+	void Set_DefaultHP(_int iHP);
+	void Set_DefaultSP(_int iSP);
+	void Set_EP(_int iEP);
 private:
-	Stat* m_pStat = { nullptr };
-	Stat* m_pDefaultStat = { nullptr };
+	_int m_iHP = { 0 };
+	_int m_iDefaultHP = { 0 };
+	_int m_iSP = { 0 };
+	_int m_iDefaultSP = { 0 };
+	_int m_iEP = { 0 };
+
 	CUIPanel* m_pBack = { nullptr };
 	CUIPanel* m_pFront = { nullptr };
 	CUIVerticalFill<_int>* m_pRedFill = { nullptr };
@@ -44,6 +54,7 @@ private:
 	CUIFont* m_pDefaultHPCountFont = { nullptr };
 	CUIFont* m_pDefaultSPCountFont = { nullptr };
 
+	CPlayerInfo* m_pPlayerInfo = { nullptr };
 public:
 	static CUIMainHUDGuage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

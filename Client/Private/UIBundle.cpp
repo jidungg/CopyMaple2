@@ -251,8 +251,7 @@ void CUIBundle::Initialize_PlayerInfo(CPlayer* pPalyer)
 	tMainBarDesc.fSizeY = 186;
 	tMainBarDesc.fXOffset = -10;
 	tMainBarDesc.fYOffset = 0;
-	tMainBarDesc.pStat = pPalyer->Get_Stat_Ref();
-	tMainBarDesc.pDefaultStat = pPalyer->Get_DefaultStat_Ref();
+
 	m_pMainHPBar = static_cast<CUIMainHUDGuage*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIMainHUDGuage::m_szProtoTag, &tMainBarDesc));
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pMainHPBar, true)))
 		return ;

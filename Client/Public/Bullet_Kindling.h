@@ -20,7 +20,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta)override;
 	virtual HRESULT Render() override;
 
-	virtual void Launch(_float fDamage, CGameObject* pTarget = nullptr) override;
+	virtual void Launch(CSkill* pSkill, CGameObject* pTarget = nullptr) override;
 
 	virtual void On_Collision(CGameObject* pOther);
 	void On_EffectAnimEnd(CEffModel* pModel) { Set_Active(false); }

@@ -134,6 +134,10 @@ protected:
 	virtual _bool FindWay(_vector& vStart, _vector& vGoal, _uint iSearchRange);
 
 public:
+	virtual _int Get_AttackDamg() override;
+	virtual _float Get_CritPefrcent() override;
+	virtual  _float Get_HPRatio() override;
+	virtual _int Get_TotalHP() override;
 	_bool Is_AttackCoolReady() { return m_fAttackTimeAcc >= m_pMonData->tStat.fAttackInterval; }
 protected:
 	MONSTER_DATA* m_pMonData = { nullptr };

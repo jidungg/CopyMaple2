@@ -65,9 +65,9 @@ void CBullet_Kindling::Late_Update(_float fTimeDelta)
 	CGameObject* pTarget = Get_Target();
 	if (Check_Collision(pTarget))
 	{
-		_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
-		m_fDamage *= bCrit ? 1.f : 1.5f;
-		m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, bCrit, true, m_eHitEffect));
+		_bool bCrit;
+		_float fDamage = m_pSkill->Calc_Damg(bCrit);
+		m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)fDamage, bCrit, true, m_eHitEffect));
 		Set_Active(false);
 	}
 }
@@ -77,7 +77,7 @@ HRESULT CBullet_Kindling::Render()
 	return __super::Render();
 }
 
-void CBullet_Kindling::Launch(_float fDamage, CGameObject* pTarget)
+void CBullet_Kindling::Launch(CSkill* pSkill, CGameObject* pTarget)
 {
 	CTransform* pShooterTransform = m_pShooter->Get_Transform();
 	_vector vPos = pShooterTransform->Get_State(CTransform::STATE_POSITION);
@@ -87,7 +87,7 @@ void CBullet_Kindling::Launch(_float fDamage, CGameObject* pTarget)
 	m_pTransformCom->LookToward(vLook);
 	Set_Target(pTarget);
 
-	m_fDamage = fDamage;
+	m_pSkill = pSkill;
 	m_pEffect->Start_Animation();
 	Set_Active(true);
 }
@@ -96,9 +96,9 @@ void CBullet_Kindling::On_Collision(CGameObject* pOther)
 {
 	if (pOther == Get_Target())
 	{
-		_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
-		m_fDamage *= bCrit ? 1.5 : 1.f;
-		m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pOther, (_int)m_fDamage, bCrit, true,EFF_MODEL_ID::HIT_KINDLING,TEXT("Skill_Wizard_FireBall_Ball_02.wav")));
+		_bool bCrit;
+		_float fDamage = m_pSkill->Calc_Damg(bCrit);
+		m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pOther, (_int)fDamage, bCrit, true,EFF_MODEL_ID::HIT_KINDLING,TEXT("Skill_Wizard_FireBall_Ball_02.wav")));
 		Set_Active(false);
 	}
 }

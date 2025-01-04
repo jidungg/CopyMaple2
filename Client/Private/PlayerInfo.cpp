@@ -10,6 +10,7 @@
 #include "WorldItem.h"
 #include "Client_Utility.h"
 #include "ItemDataBase.h"
+#include "Status.h"
 
 IMPLEMENT_SINGLETON(CPlayerInfo)
 CPlayerInfo::CPlayerInfo()
@@ -174,7 +175,18 @@ HRESULT CPlayerInfo::Gain_Item(ITEM_TYPE eITemType, _uint iItemId, _uint iCount)
 
 void CPlayerInfo::Gain_EXP(_int iAmount)
 {
-	return m_pPlayer->Gain_Exp(iAmount);
+	Stat* pStat =  m_pPlayer->Get_Stat_Ref();
+	Stat* pDefaultStat =  m_pPlayer->Get_DefaultStat_Ref();
+
+	pStat->iEXP += iAmount;
+	pDefaultStat->iEXP = pStat->iLEVEL * pStat->iLEVEL * 10;
+	while (pDefaultStat->iEXP <= pStat->iEXP)
+	{
+		pStat->iLEVEL++;
+		pStat->iEXP -= pDefaultStat->iEXP;
+		pDefaultStat->iEXP = pStat->iLEVEL * pStat->iLEVEL * 10;
+		m_iLeftStatPoint += 5;
+	}
 }
 
 void CPlayerInfo::Gain_Gold(_int iAmount)
@@ -191,6 +203,164 @@ CPlayerInfoSlot* CPlayerInfo::Get_Slot(CUIPlayerInfo::SLOT_ID eSlotID)
 {
 	return nullptr;
 }
+
+_int CPlayerInfo::Get_HP()
+{
+	return m_pPlayer->Get_Stat().iHP;
+}
+
+_int CPlayerInfo::Get_SP()
+{
+	return m_pPlayer->Get_Stat().iSP;
+}
+
+_int CPlayerInfo::Get_EP()
+{
+	return m_pPlayer->Get_Stat().iEP;
+}
+
+_int CPlayerInfo::Get_TotalSTR()
+{
+	_int iSTR = m_pPlayer->Get_Stat().iSTR;
+	for (auto& pEquipSlot : m_pEquipSlots)
+	{
+		const EquipItemData* pData = static_cast<const EquipItemData*>(pEquipSlot->Get_ItemData());
+		if (pData)
+			iSTR += pData->iSTR ;
+	}
+	return iSTR;
+}
+
+_int CPlayerInfo::Get_TotalDEX()
+{
+	_int iDEX = m_pPlayer->Get_Stat().iDEX;
+	for (auto& pEquipSlot : m_pEquipSlots)
+	{
+		const EquipItemData* pData = static_cast<const EquipItemData*>(pEquipSlot->Get_ItemData());
+		if (pData)
+			iDEX += pData->iDEX;
+	}
+	return iDEX;
+}
+
+_int CPlayerInfo::Get_TotalINT()
+{
+	_int iINT = m_pPlayer->Get_Stat().iINT;
+	for (auto& pEquipSlot : m_pEquipSlots)
+	{
+		const EquipItemData* pData =  static_cast<const EquipItemData*>(pEquipSlot->Get_ItemData());
+		if(pData)
+			iINT += pData->iINT;
+	}
+	return iINT;
+}
+
+_int CPlayerInfo::Get_TotalLUK()
+{
+	_int iLUK = m_pPlayer->Get_Stat().iLUK;
+	for (auto& pEquipSlot : m_pEquipSlots)
+	{
+		const EquipItemData* pData = static_cast<const EquipItemData*>(pEquipSlot->Get_ItemData());
+		if (pData)
+			iLUK += pData->iLUK;
+	}
+	return iLUK;
+}
+
+_int CPlayerInfo::Get_TotalAttack()
+{
+	_int iATK = Get_TotalINT() * 2 + Get_TotalLUK();
+	for (auto& pEquipSlot : m_pEquipSlots)
+	{
+		const EquipItemData* pData = static_cast<const EquipItemData*>(pEquipSlot->Get_ItemData());
+		if (pData)
+			iATK += pData->iATK;
+	}
+	return iATK;
+}
+
+_int CPlayerInfo::Get_AttackPoint()
+{
+	return Get_TotalAttack() * (Get_TotalCRIT() +1);
+}
+
+_int CPlayerInfo::Get_TotalDefense()
+{
+	Stat tStat = m_pPlayer->Get_Stat();
+	_int iDefense = tStat.iSTR * 2;
+	for (auto& pEquipSlot : m_pEquipSlots)
+	{
+		const EquipItemData* pData = static_cast<const EquipItemData*>(pEquipSlot->Get_ItemData());
+		if(pData)
+			iDefense += pData->iDEF + pData->iSTR * 2;
+	}
+	return iDefense;
+} 
+
+_int CPlayerInfo::Get_TotalHP()
+{
+	_int iHP = Get_TotalSTR() * 10 + m_pPlayer->Get_DefaultStat_Ref()->iHP;
+	for (auto& pEquipSlot : m_pEquipSlots)
+	{
+		const EquipItemData* pData = static_cast<const EquipItemData*>(pEquipSlot->Get_ItemData());
+		if (pData)
+			iHP += pData->iHP;
+	}
+	return iHP;
+}
+
+_float CPlayerInfo::Get_TotalCRIT()
+{
+	_float fCRIT = m_pPlayer->Get_Stat().fCrit ;
+	for (auto& pEquipSlot : m_pEquipSlots)
+	{
+		const EquipItemData* pData = static_cast<const EquipItemData*>(pEquipSlot->Get_ItemData());
+		if (pData)
+			fCRIT += pData->fCRIT ;
+	}
+	return fCRIT;
+}
+
+_int CPlayerInfo::Get_DefensePoint()
+{
+	return  Get_TotalDefense() + Get_TotalHP();
+}
+
+_int CPlayerInfo::Get_BattlePoint()
+{
+	return Get_TotalAttack() + Get_DefensePoint();
+}
+
+void CPlayerInfo::Increase_Stat(_uint iStatType)
+{
+	if (m_iLeftStatPoint <= 0)
+		return;
+	switch (iStatType)
+	{
+	case 0:
+		m_pPlayer->Get_Stat_Ref()->iSTR++;
+		break;
+	case 1:
+		m_pPlayer->Get_Stat_Ref()->iDEX++;
+		break;
+	case 2:
+		m_pPlayer->Get_Stat_Ref()->iINT++;
+		break;
+	case 3:
+		m_pPlayer->Get_Stat_Ref()->iLUK++;
+		break;
+	case 4:
+		m_pPlayer->Get_Stat_Ref()->iHP += 50;
+		break;
+	case 5:
+		m_pPlayer->Get_Stat_Ref()->fCrit += 0.5f;
+		break;
+	default:
+		break;
+	}
+	m_iLeftStatPoint--;
+}
+
 
 
 

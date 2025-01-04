@@ -21,8 +21,8 @@ public:
 	virtual HRESULT Render() override;
 
 	virtual _bool Check_Collision(CGameObject* pOther)override;
-	virtual void Launch(_float fDamage, _fvector vPosition = { 0,0,0,1 }) override;
-	virtual void Launch(_float fDamage, CGameObject* pTarget = nullptr) override;
+	virtual void Launch(CSkill* pSkill, _fvector vPosition = { 0,0,0,1 }) override;
+	virtual void Launch(CSkill* pSkill, CGameObject* pTarget = nullptr) override;
 
 	void On_KeepEffectAnimEnd(CEffModel* pModel);
 	void On_SplashCastEffectAnimEnd(CEffModel* pModel);

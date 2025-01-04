@@ -60,10 +60,9 @@ void CBullet_WildFire::Update(_float fTimeDelta)
 			if (m_setHitObject.find(pTarget) != m_setHitObject.end())
 				continue;
 			m_setHitObject.insert(pTarget);
-			_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
-			m_fDamage *= bCrit ? 1.5 : 1.f;
-			m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, bCrit, true,m_eHitEffect));
-		}
+			_bool bCrit;
+			_float fDamg = m_pSkill->Calc_Damg(bCrit);
+			m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)fDamg, bCrit, true,m_eHitEffect));		}
 		m_fCurrentRange += m_fExpandSpeed * fTimeDelta;
 	}
 }
@@ -84,9 +83,9 @@ _bool CBullet_WildFire::Check_Collision(CGameObject* pOther)
 	return static_cast<CCollider_Cylinder*>(m_pCollider)->Contains(pOther->Get_WorldPosition());
 }
 
-void CBullet_WildFire::Launch(_float fDamage, _fvector vPosition)
+void CBullet_WildFire::Launch(CSkill* pSkill, _fvector vPosition)
 {
-	__super::Launch(fDamage, vPosition);
+	__super::Launch(pSkill, vPosition);
 
 	m_pCastEffect2->Start_Animation();
 	m_pCastEffect2->Set_Active(true);

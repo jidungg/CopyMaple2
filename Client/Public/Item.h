@@ -31,6 +31,8 @@ typedef struct ItemData
 	_char strModelTag[MAX_PATH] = ("");
 	_uint iPrice = 0;
 	_uint m_iMaxStack = { 0 };
+
+
 }ITEM_DATA;
 typedef struct BuildItemData : public ItemData
 {
@@ -61,8 +63,28 @@ typedef struct EquipItemData : public ItemData
 		EQUIP_ITEM_ID eId = js["ItemId"];
 		iItemID = (_uint)eId;
 		m_iMaxStack = 1;
+
+		json& jStat = js["Status"];
+		iATK = jStat["ATK"];
+		iDEF = jStat["DEF"];
+		iSTR = jStat["STR"];
+		iDEX = jStat["DEX"];
+		iINT = jStat["INT"];
+		iLUK = jStat["LUK"];
+		iHP = jStat["HP"];
+		fCRIT= jStat["CRIT"];
 	}
 	EQUIP_ITEM_TYPE eEquipType;
+
+	_int iATK = { 0 };
+	_int iDEF = { 0 };
+	_int iSTR = { 0 };
+	_int iDEX = { 0 };
+	_int iINT = { 0 };
+	_int iLUK = { 0 };
+	_int iHP = { 0 };
+	_float fCRIT = { 0 };
+
 }EQUIP_ITEM_DATA;
 
 typedef struct ConsumableItemData : public ItemData

@@ -4,6 +4,7 @@
 #include "UIPanel.h"
 #include "UIVerticalFill.h"
 #include "UIFont.h"
+#include "PlayerInfo.h"
 
 CUIMainHUDGuage::CUIMainHUDGuage(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIContainer(pDevice, pContext)
@@ -19,8 +20,7 @@ CUIMainHUDGuage::CUIMainHUDGuage(const CUIMainHUDGuage& Prototype)
 HRESULT CUIMainHUDGuage::Initialize(void* pArg)
 {
 	UIMAINHUDGUAGE_DESC* pDesc = static_cast<UIMAINHUDGUAGE_DESC*>(pArg);
-	m_pStat = pDesc->pStat;
-	m_pDefaultStat = pDesc->pDefaultStat;
+	m_pPlayerInfo = PLAYERINIFO;
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -46,8 +46,8 @@ HRESULT CUIMainHUDGuage::Initialize(void* pArg)
 	tFillDesc.fXOffset = 0;
 	tFillDesc.fYOffset = -25;
 	tFillDesc.vBorder = { 0,0,0,0 };
-	tFillDesc.pValue = &(m_pStat->iHP);
-	tFillDesc.pDefaultValue = &(m_pDefaultStat->iHP);
+	tFillDesc.pValue = &(m_iHP);
+	tFillDesc.pDefaultValue = &(m_iDefaultHP);
 	tFillDesc.fVerticalEnd = { 0.85f };
 	tFillDesc.fVerticalStart = { 0.054f };
 	tFillDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("mainhpbar_red.dds")));
@@ -56,8 +56,8 @@ HRESULT CUIMainHUDGuage::Initialize(void* pArg)
 		return E_FAIL;
 	Add_Child(m_pRedFill);
 
-	tFillDesc.pValue = &(m_pStat->iSP);
-	tFillDesc.pDefaultValue = &(m_pDefaultStat->iSP);
+	tFillDesc.pValue = &(m_iSP);
+	tFillDesc.pDefaultValue = &(m_iDefaultSP);
 	tFillDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("mainhpbar_blue.dds")));
 	m_pBlueFill = static_cast<CUIVerticalFill<_int>*>(m_pGameInstance->Clone_Proto_Object_Stock(TEXT("Prototype_UI_IntVerticalFill"), &tFillDesc));
 	if (nullptr == m_pBlueFill)
@@ -119,7 +119,7 @@ HRESULT CUIMainHUDGuage::Initialize(void* pArg)
 	tFontDesc.ePivotType = CORNOR_TYPE::RIGHT;
 	tFontDesc.fXOffset = -5;
 	tFontDesc.fYOffset = -2.5;
-	wstring str = to_wstring(m_pStat->iHP);
+	wstring str = to_wstring(m_iHP);
 	tFontDesc.pText = str.c_str();
 	tFontDesc.pFontTag = L"LV2Gothic_Bold_13";
 	tFontDesc.vColor = _vector{ 1.f, 1.f, 1.f, 1.f };
@@ -133,7 +133,7 @@ HRESULT CUIMainHUDGuage::Initialize(void* pArg)
 	tFontDesc.ePivotType = CORNOR_TYPE::LEFT;
 	tFontDesc.fXOffset = 5;
 	tFontDesc.fYOffset = -2.5;
-	str = to_wstring(m_pStat->iSP);
+	str = to_wstring(m_iSP);
 	tFontDesc.pText = str.c_str();
 	tFontDesc.pFontTag = L"LV2Gothic_Bold_13";
 	tFontDesc.vColor = _vector{ 1.f, 1.f, 1.f, 1.f };
@@ -147,7 +147,7 @@ HRESULT CUIMainHUDGuage::Initialize(void* pArg)
 	tFontDesc.ePivotType = CORNOR_TYPE::RIGHT;
 	tFontDesc.fXOffset = -5;
 	tFontDesc.fYOffset = 10;
-	str = to_wstring(m_pDefaultStat->iHP);
+	str = to_wstring(m_iHP);
 	tFontDesc.pText = str.c_str();
 	tFontDesc.pFontTag = L"LV2Gothic_Bold_10";
 	tFontDesc.vColor = _vector{ 0.7f, 0.7, 0.7, 1.f };
@@ -161,7 +161,7 @@ HRESULT CUIMainHUDGuage::Initialize(void* pArg)
 	tFontDesc.ePivotType = CORNOR_TYPE::LEFT;
 	tFontDesc.fXOffset = 5;
 	tFontDesc.fYOffset = 10;
-	str = to_wstring(m_pDefaultStat->iSP);
+	str = to_wstring(m_iSP);
 	tFontDesc.pText = str.c_str();
 	tFontDesc.pFontTag = L"LV2Gothic_Bold_10";
 	tFontDesc.vColor = _vector{ 0.7f, 0.7, 0.7, 1.f };
@@ -176,27 +176,59 @@ HRESULT CUIMainHUDGuage::Initialize(void* pArg)
 void CUIMainHUDGuage::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
+
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 }
 
 HRESULT CUIMainHUDGuage::Render()
 {
-	m_pHPCountFont->Set_Text(to_wstring(m_pStat->iHP).c_str());
-	m_pSPCountFont->Set_Text(to_wstring(m_pStat->iSP).c_str());
-	m_pDefaultHPCountFont->Set_Text(to_wstring(m_pDefaultStat->iHP).c_str());
-	m_pDefaultSPCountFont->Set_Text(to_wstring(m_pDefaultStat->iSP).c_str());
-	for (_uint i = 0; i < 3; i++)
-	{
-		if(i < m_pStat->iEP )
-			m_pWhiteFill[i]->Set_Active(true);
-		else
-			m_pWhiteFill[i]->Set_Active(false);
-	} 
+	Set_DefaultHP(m_pPlayerInfo->Get_TotalHP());
+	Set_HP(m_pPlayerInfo->Get_HP());
+	Set_DefaultSP(100);
+	Set_SP(m_pPlayerInfo->Get_SP());
+	Set_EP(m_pPlayerInfo->Get_EP());
+
+
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 	return S_OK;
 }
 
+void CUIMainHUDGuage::Set_HP(_int iHP)
+{
+	m_iHP = iHP;	
+	m_pHPCountFont->Set_Text(to_wstring(m_iHP).c_str());
+}
+
+void CUIMainHUDGuage::Set_SP(_int iSP)
+{
+	m_iSP = iSP;
+	m_pSPCountFont->Set_Text(to_wstring(m_iSP).c_str());
+}
+
+void CUIMainHUDGuage::Set_DefaultHP(_int iHP)
+{
+	m_iDefaultHP = iHP;
+	m_pDefaultHPCountFont->Set_Text(to_wstring(m_iDefaultHP).c_str());
+}
+
+void CUIMainHUDGuage::Set_DefaultSP(_int iSP)
+{
+	m_iDefaultSP = iSP;
+	m_pDefaultSPCountFont->Set_Text(to_wstring(m_iDefaultSP).c_str());
+}
+
+void CUIMainHUDGuage::Set_EP(_int iEP)
+{
+	m_iEP = iEP;
+	for (_uint i = 0; i < 3; i++)
+	{
+		if (i < m_iEP)
+			m_pWhiteFill[i]->Set_Active(true);
+		else
+			m_pWhiteFill[i]->Set_Active(false);
+	}
+}
 
 CUIMainHUDGuage* CUIMainHUDGuage::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

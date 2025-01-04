@@ -21,7 +21,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta)override;
 	virtual HRESULT Render() override;
 
-	virtual void Launch(_float fDamage, _vector vPosition) override;
+	virtual void Launch(CSkill* pSkill, _vector vPosition) override;
 
 private:
 	_vector m_vCenterPos = { 0.f,0.f,0.f,1.f };

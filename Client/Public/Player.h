@@ -241,7 +241,7 @@ public:
 	virtual _bool Use_Skill(CSkill* pSkill) override;
 
 	HRESULT Gain_Item(const ITEM_DATA* pItem, _uint iCount = 1);
-	void Gain_Exp(_int iAmount);
+
 
 	void Set_Battle(bool bBattle); 
 	HRESULT Equip(const EQUIP_ITEM_DATA* pItem);
@@ -252,6 +252,10 @@ public:
 	void Set_BodyMeshActive(EQUIP_ITEM_TYPE eType, bool bActive);
 	_bool Is_Weapon() { return m_bWeapon; }
 
+	virtual _int Get_AttackDamg() override;
+	virtual _float Get_CritPefrcent() override;
+	virtual  _float Get_HPRatio() override;
+	virtual _int Get_TotalHP() override;
 protected:
 	CUIQuickSlotBundle* m_pQuickSlotBundle = { nullptr };
 	CUIQuickSlotBundle* m_pQuickSlotBundle2 = { nullptr };

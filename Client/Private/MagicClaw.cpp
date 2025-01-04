@@ -97,10 +97,7 @@ void CMagicClaw::Fire()
 	_uint iDamgID = (_uint)SKILL_DATA_ID::DAMG;
 	if (pTarget)
 	{
-		_float fDmg = m_pSkillDesc->iLevel * m_pSkillDesc->vecLevelUpData[iDamgID] + m_pSkillDesc->vecData[iDamgID];
-		fDmg = m_pUser->Get_Stat().iATK * fDmg * 0.01;
-
-		m_pBullet->Launch(fDmg, pTarget);
+		m_pBullet->Launch(this, pTarget);
 
 	}
 

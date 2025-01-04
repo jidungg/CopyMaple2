@@ -575,6 +575,26 @@ _bool CMonster::FindWay(_vector& vStart, _vector& vGoal, _uint iSearchRange)
 	return m_pWayFinder->FindWay(vStart, vGoal, m_iSearchRange);
 }
 
+_int CMonster::Get_AttackDamg()
+{
+	return m_tStat.Get_AllStat()*2;
+}
+
+_float CMonster::Get_CritPefrcent()
+{
+	return m_tStat.fCrit;
+}
+
+_float CMonster::Get_HPRatio()
+{
+	return (_float)m_tStat.iHP / (_float)m_tStatDefault.iHP;
+}
+
+_int CMonster::Get_TotalHP()
+{
+	return m_tStatDefault.iHP;
+}
+
 void CMonster::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);

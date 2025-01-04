@@ -8,7 +8,17 @@
             "Desc": "따듯한 솜 신발.",
             "Price": 100,
             "IconImg": "11700009.png",
-            "Model": "11700009_f_quiltshoes.model"
+            "Model": "11700009_f_quiltshoes.model",
+            "Status": {
+                "ATK": 0,
+                "DEF": 10,
+                "STR": 0,
+                "DEX": 0,
+                "INT": 5,
+                "LUK": 0,
+                "HP": 100,
+                "CRIT": 0.0
+            }
         },
         {
             "EquipItemType": "SUIT",
@@ -18,7 +28,17 @@
             "Desc": "따듯한 솜 로브.",
             "Price": 200,
             "IconImg": "12200007.png",
-            "Model": "12200007_f_clpasuperiorcoat.model"
+            "Model": "12200007_f_clpasuperiorcoat.model",
+            "Status": {
+                "ATK": 0,
+                "DEF": 20,
+                "STR": 0,
+                "DEX": 0,
+                "INT": 10,
+                "LUK": 0,
+                "HP": 200,
+                "CRIT": 0.0
+            }
         },
         {
             "EquipItemType": "HAT",
@@ -28,7 +48,17 @@
             "Desc": "따듯한 솜 모자.",
             "Price": 100,
             "IconImg": "11300024.png",
-            "Model": "11300024_c_cpsuperiorhat_c.model"
+            "Model": "11300024_c_cpsuperiorhat_c.model",
+            "Status": {
+                "ATK": 0,
+                "DEF": 10,
+                "STR": 0,
+                "DEX": 0,
+                "INT": 5,
+                "LUK": 0,
+                "HP": 100,
+                "CRIT": 0.0
+            }
         },
         {
             "EquipItemType": "WEAPON",
@@ -38,7 +68,18 @@
             "Desc": "마법을 쓰기 좋은 막대기.",
             "Price": 100,
             "IconImg": "15200053.png",
-            "Model": "15400005_bentstaff.model"
+            "Model": "15400005_bentstaff.model",
+
+            "Status": {
+                "ATK": 100,
+                "DEF": 0,
+                "STR": 0,
+                "DEX": 0,
+                "INT": 5,
+                "LUK": 0,
+                "HP": 0,
+                "CRIT": 5.0
+            }
         },
         {
             "EquipItemType": "WEAPON",
@@ -48,7 +89,17 @@
             "Desc": "악마의 날개가 달린 지팡이.",
             "Price": 300,
             "IconImg": "15200025.png",
-            "Model": "15200025_evilwings.model"
+            "Model": "15200025_evilwings.model",
+            "Status": {
+                "ATK": 300,
+                "DEF": 0,
+                "STR": 0,
+                "DEX": 0,
+                "INT": 15,
+                "LUK": 0,
+                "HP": 0,
+                "CRIT": 0.1
+            }
         },
         {
             "EquipItemType": "CAPE",
@@ -58,7 +109,17 @@
             "Desc": "준내게 쎈 망토.",
             "Price": 1000,
             "IconImg": "11800149.png",
-            "Model": "11800149_c_mtfireprism_idle_a.model"
+            "Model": "11800149_c_mtfireprism_idle_a.model",
+            "Status": {
+                "ATK": 300,
+                "DEF": 300,
+                "STR": 0,
+                "DEX": 0,
+                "INT": 30,
+                "LUK": 10,
+                "HP": 300,
+                "CRIT": 0.1
+            }
         },
         {
             "EquipItemType": "EAR",
@@ -68,7 +129,17 @@
             "Desc": "준내게 쎈 귀고리.",
             "Price": 1000,
             "IconImg": "11200105.png",
-            "Model": "11200105_f_eafireprism.model"
+            "Model": "11200105_f_eafireprism.model",
+            "Status": {
+                "ATK": 0,
+                "DEF": 0,
+                "STR": 0,
+                "DEX": 0,
+                "INT": 30,
+                "LUK": 10,
+                "HP": 100,
+                "CRIT": 0.3
+            }
         },
         {
             "EquipItemType": "SHOES",
@@ -78,7 +149,17 @@
             "Desc": "준내게 쎈 신발.",
             "Price": 1000,
             "IconImg": "11701261.png",
-            "Model": "11701261_f_shfireprism.model"
+            "Model": "11701261_f_shfireprism.model",
+            "Status": {
+                "ATK": 0,
+                "DEF": 200,
+                "STR": 0,
+                "DEX": 0,
+                "INT": 20,
+                "LUK": 10,
+                "HP": 300,
+                "CRIT": 0.0
+            }
         },
         {
             "EquipItemType": "GLOVES",
@@ -88,7 +169,17 @@
             "Desc": "준내게 쎈 장갑.",
             "Price": 1000,
             "IconImg": "11601166.png",
-            "Model": "11601166_f_glfireprism.model"
+            "Model": "11601166_f_glfireprism.model",
+            "Status": {
+                "ATK": 0,
+                "DEF": 200,
+                "STR": 0,
+                "DEX": 0,
+                "INT": 20,
+                "LUK": 10,
+                "HP": 300,
+                "CRIT": 0.0
+            }
         },
         {
             "EquipItemType": "TOP",
@@ -98,7 +189,17 @@
             "Desc": "준내게 쎈 상의.",
             "Price": 1000,
             "IconImg": "11401084.png",
-            "Model": "11401084_f_clfireprism.model"
+            "Model": "11401084_f_clfireprism.model",
+            "Status": {
+                "ATK": 0,
+                "DEF": 200,
+                "STR": 0,
+                "DEX": 0,
+                "INT": 20,
+                "LUK": 10,
+                "HP": 300,
+                "CRIT": 0.0
+            }
         },
         {
             "EquipItemType": "BOTTOM",
@@ -108,7 +209,17 @@
             "Desc": "준내게 쎈 하의.",
             "Price": 1000,
             "IconImg": "11500977.png",
-            "Model": "11500977_f_pafireprism.model"
+            "Model": "11500977_f_pafireprism.model",
+            "Status": {
+                "ATK": 0,
+                "DEF": 200,
+                "STR": 0,
+                "DEX": 0,
+                "INT": 20,
+                "LUK": 10,
+                "HP": 300,
+                "CRIT": 0.0
+            }
         },
         {
             "EquipItemType": "HAT",
@@ -118,7 +229,17 @@
             "Desc": "준내게 쎈 모자.",
             "Price": 1000,
             "IconImg": "11301280.png",
-            "Model": "11301280_c_cpfireprism_f.model"
+            "Model": "11301280_c_cpfireprism_f.model",
+            "Status": {
+                "ATK": 0,
+                "DEF": 200,
+                "STR": 0,
+                "DEX": 0,
+                "INT": 20,
+                "LUK": 10,
+                "HP": 300,
+                "CRIT": 0.0
+            }
         },
         {
             "EquipItemType": "WEAPON",
@@ -128,7 +249,17 @@
             "Desc": "준내게 쎈 지팡이.",
             "Price": 1000,
             "IconImg": "15200268.png",
-            "Model": "15200268_fireprismstaff.model"
+            "Model": "15200268_fireprismstaff.model",
+            "Status": {
+                "ATK": 1000,
+                "DEF": 0,
+                "STR": 0,
+                "DEX": 0,
+                "INT": 50,
+                "LUK": 10,
+                "HP": 0,
+                "CRIT": 0.3
+            }
         }
     ]
 }

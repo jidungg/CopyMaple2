@@ -53,10 +53,9 @@ void CBullet_MagicClaw::Update(_float fTimeDelta)
 		CGameObject* pTarget = Get_Target();
 		if (nullptr != pTarget && pTarget->Is_Valid())
 		{
-			_bool bCrit = static_cast<CCharacter*>(m_pShooter)->Judge_Critical();
-			m_fDamage *= bCrit ? 1.5 : 1.f;
-
-			m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)m_fDamage, bCrit, true, EFF_MODEL_ID::HIT_A, L"Hit_DefaultDefault_02.wav"));
+			_bool bCrit;
+			_float fDamage = m_pSkill->Calc_Damg(bCrit);
+			m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)fDamage, bCrit, true, EFF_MODEL_ID::HIT_A, L"Hit_DefaultDefault_02.wav"));
 		}
 	}
 
@@ -75,10 +74,9 @@ HRESULT CBullet_MagicClaw::Render()
 
 }
 
-void CBullet_MagicClaw::Launch(_float fDamage, CGameObject* pTarget)
+void CBullet_MagicClaw::Launch(CSkill* pSkill, CGameObject* pTarget)
 {
-	
-	m_fDamage = fDamage;
+	m_pSkill = pSkill;
 	Set_Target(pTarget);
 
 	Set_Transform(pTarget->Get_WorldPosition(),{0,0,0,0}, pTarget->Get_Transform()->Compute_Scaled().x);

@@ -92,6 +92,7 @@ HRESULT CUINPCDialog::Initialize(void* pArg)
 	tOptionDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("UI_Texture_NPCDialogOptionButton"), nullptr));
 	for (_uint i = 0; i < 3; i++)
 	{
+		tOptionDesc.iUIIndex = i;
 		tOptionDesc.fYOffset = m_fOptionHeight * i;
 		m_vecUIOption[i] = static_cast<CUIChatOption*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIChatOption::m_szProtoTag, &tOptionDesc));
 		m_vecUIOption[i]->Register_OnClickCallback(bind(&CUINPCDialog::On_OptionSelected, this, placeholders::_1));
@@ -200,7 +201,7 @@ void CUINPCDialog::Set_ConversationNode(const CONVERSATION_NODE_DATA& tNode)
 	//SCRIPT
 	m_pScript->Set_Text(tNode.szScript);
 	//OPTIONS
-	m_iSelectedOptionDataIndex = 0;
+
 
 	for (auto& pUIOption : m_vecUIOption)
 		pUIOption->Set_Active(false);
@@ -208,28 +209,28 @@ void CUINPCDialog::Set_ConversationNode(const CONVERSATION_NODE_DATA& tNode)
 
 	_uint iDataOptionCount = tNode.vecOption.size();
 	_uint iUIOptIndex = 0;
-
+	m_iSelectedOptionDataIndex = UINT_MAX;
 	for (_uint iDataOptIndex = 0; iDataOptIndex < iDataOptionCount; iDataOptIndex++)
 	{
 		if (tNode.vecOption[iDataOptIndex].eOptType == CHAT_OPT_TYPE::QUEST)
 		{
 			QUEST_ID eQuestID = tNode.vecOption[iDataOptIndex].eQuestID;
 			//표시되어야 하는 퀘스트 : 진행중 & 완료가능 & 수락 가능
-			if (false == (QUESTDB->Is_QuestAccepted(eQuestID)
-				|| QUESTDB->Is_SatisfiedAcceptCondition(eQuestID)))
-			{
+			if (false == QUESTDB->Is_SatisfiedAcceptCondition(eQuestID))
 				continue;
-			}
+			if (QUESTDB->Is_QuestCompleted(eQuestID))
+				continue;
 		}
-		_float2 fOptionOffset = Get_OptionOffset(iUIOptIndex, tNode);
+		_float2 fOptionOffset = Get_OptionOffset(iUIOptIndex);
 		static_cast<CRect_Transform*>(m_vecUIOption[iUIOptIndex]->Get_Transform())->Set_Offset(fOptionOffset.x, fOptionOffset.y);
-		m_vecUIOption[iUIOptIndex]->Set_Option(iDataOptIndex, tNode.vecOption[iDataOptIndex]);
+		m_vecUIOption[iUIOptIndex]->Set_OptionData(iDataOptIndex, tNode.vecOption[iDataOptIndex]);
+		if(m_iSelectedOptionDataIndex == UINT_MAX)m_iSelectedOptionDataIndex = iDataOptIndex;
 		m_vecUIOption[iUIOptIndex]->Set_Active(true);
 		iUIOptIndex++;
 	}
 	if (iUIOptIndex > 0)
 	{
-		_float2 fOptionOffset0 = Get_OptionOffset(0, tNode);
+		_float2 fOptionOffset0 = Get_OptionOffset(0);
 		static_cast<CRect_Transform*>(m_pHighlighter->Get_Transform())->Set_Offset(fOptionOffset0.x, fOptionOffset0.y);
 		m_pHighlighter->Set_Active(true);
 	}
@@ -245,7 +246,7 @@ void CUINPCDialog::On_OptionSelected(void* pArg)
 {
 	CUIChatOption* pOptionButton = reinterpret_cast<CUIChatOption*>(pArg);
 	m_iSelectedOptionDataIndex = pOptionButton->Get_DataOptionIdx();
-	_float2 fOptionOffset = Get_OptionOffset(m_iSelectedOptionDataIndex, m_pNPC->Get_ConversationData(m_iSelectedOptionDataIndex));
+	_float2 fOptionOffset = Get_OptionOffset(pOptionButton->Get_UIOptionIdx());
 	static_cast<CRect_Transform*>(m_pHighlighter->Get_Transform())->Set_Offset(fOptionOffset.x, fOptionOffset.y);
 }
 
@@ -255,11 +256,11 @@ void CUINPCDialog::Escape()
 
 }
 
-_float2 CUINPCDialog::Get_OptionOffset(_uint iOptionIndex, const CONVERSATION_NODE_DATA& tNode)
+_float2 CUINPCDialog::Get_OptionOffset(_uint iOptionUIIndex)
 {
 	_float2 fOffset = { 0,0 };
 	fOffset.x = m_fHorizontalMargin + m_fOptionLeftOffset;
-	fOffset.y = 10 + 40 + m_pScript->Get_TextSize(tNode.szScript).y + m_fOptionHeight * iOptionIndex;
+	fOffset.y = 10 + 40 + m_fOptionHeight*iOptionUIIndex + m_pScript->Get_TextSize().y;
 	return fOffset;
 }
 

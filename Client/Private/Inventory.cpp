@@ -46,7 +46,7 @@ HRESULT CInventory::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pCont
 				m_vecSlot[i][j] = CInvenBuildSlot::Create(j, this);
 				break;
 			case ITEM_TYPE::ETC:
-				m_vecSlot[i][j] = CInvenBuildSlot::Create(j, this);
+				m_vecSlot[i][j] = CInvenETCSlot::Create(j, this);
 				break;
 			case ITEM_TYPE::LAST:
 			default:
@@ -140,7 +140,7 @@ _uint CInventory::Get_ItemCount(ITEM_TYPE eItemType, _uint iItemId)
 	for (auto& pSlot : m_vecSlot[(_uint)eItemType])
 	{
 		const ITEM_DATA* pData = pSlot->Get_ItemData();
-		if (pData->iItemID == iItemId)
+		if (pData && pData->iItemID == iItemId)
 			iCount += pSlot->Get_StackCount();
 	}
 

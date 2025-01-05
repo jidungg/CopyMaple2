@@ -63,7 +63,7 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pQuickSlotBundle1, true)))
 		return E_FAIL;
 	Safe_AddRef(m_pQuickSlotBundle1);
-
+	m_pQuickSlotBundle1->Set_Active(false);
 
 	tQuickDesc.vecHotKey = { KEY::NUM1, KEY::NUM2, KEY::NUM3, KEY::NUM4, KEY::NUM5, KEY::NUM6, KEY::NUM7, KEY::NUM8 };
 	tQuickDesc.eAnchorType = CORNOR_TYPE::BOT;
@@ -77,6 +77,7 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pQuickSlotBundle2, true)))
 		return E_FAIL;
 	Safe_AddRef(m_pQuickSlotBundle2);
+	m_pQuickSlotBundle2->Set_Active(false);
 
 	CUIBar::UIBarDesc tBarDesc;
 	tBarDesc.eAnchorType = CORNOR_TYPE::CENTER;
@@ -192,6 +193,7 @@ void CUIBundle::Set_HUDActive(_bool bActive)
 	m_pMainHPBar->Set_Active(bActive);
 	m_pQuickSlotBundle1->Set_Active(bActive);
 	m_pQuickSlotBundle2->Set_Active(bActive);
+	m_pEXPBar->Set_Active(bActive);
 }
 void CUIBundle::Toggle_NPCDialog()
 {
@@ -256,7 +258,7 @@ void CUIBundle::Initialize_PlayerInfo(CPlayer* pPalyer)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pMainHPBar, true)))
 		return ;
 	Safe_AddRef(m_pMainHPBar);
-	m_pMainHPBar->Set_Active(true);
+	m_pMainHPBar->Set_Active(false);
 
 	CUIPlayerInfo::UIPLAYERINFO_DESC tPlayerInfoDesc;
 	tPlayerInfoDesc.pPlayerInfo = PLAYERINIFO;
@@ -281,7 +283,7 @@ void CUIBundle::Initialize_PlayerInfo(CPlayer* pPalyer)
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pEXPBar, true)))
 		return ;
 	Safe_AddRef(m_pEXPBar);
-	m_pEXPBar->Set_Active(true);
+	m_pEXPBar->Set_Active(false);
 
 }
 

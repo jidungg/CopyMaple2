@@ -39,7 +39,7 @@ public:
 	void Escape();
 
 private:
-	_float2 Get_OptionOffset(_uint iOptionIndex, const CONVERSATION_NODE_DATA& tNode);
+	_float2 Get_OptionOffset(_uint iOptionUIIndex);
 private:
 	CNPC* m_pNPC = { nullptr };
 

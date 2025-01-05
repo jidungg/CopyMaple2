@@ -68,66 +68,87 @@
       {
         "MonsterId": "CRAB",
         "Items": [
-          {
-            "Item": {
-              "Type": "EQUIP",
-              "Id": "BASIC_SHOES"
+            {
+                "Item": {
+                    "Type": "EQUIP",
+                    "Id": "FIREPRISM_CAPE"
+                },
+                "Weight": 60
             },
-            "Weight": 60
-          },
-          {
-            "Item": {
-              "Type": "EQUIP",
-              "Id": "BASIC_SUIT"
+            {
+                "Item": {
+                    "Type": "EQUIP",
+                    "Id": "FIREPRISM_EAR"
+                },
+                "Weight": 60
             },
-            "Weight": 60
-          },
-          {
-            "Item": {
-              "Type": "EQUIP",
-              "Id": "BASIC_HAT"
+            {
+                "Item": {
+                    "Type": "EQUIP",
+                    "Id": "FIREPRISM_SHOES"
+                },
+                "Weight": 60
             },
-            "Weight": 60
-          },
-          {
-            "Item": {
-              "Type": "EQUIP",
-              "Id": "BASIC_STAFF"
-            },
-            "Weight": 60
-          },
-          {
-            "Item": {
-              "Type": "ETC",
-              "Id": "CHICKEN"
+            {
+                "Item": {
+                    "Type": "EQUIP",
+                    "Id": "FIREPRISM_GLOVE"
+                },
+                "Weight": 60
             },
 
-            "Weight": 500
-          },
-          {
-            "Item": {
-              "Type": "ETC",
-              "Id": "MEAT"
+            {
+                "Item": {
+                    "Type": "EQUIP",
+                    "Id": "FIREPRISM_TOP"
+                },
+                "Weight": 60
             },
-
-            "Weight": 500
-          },
-          {
-            "Item": {
-              "Type": "ETC",
-              "Id": "BOTTLE"
+            {
+                "Item": {
+                    "Type": "EQUIP",
+                    "Id": "FIREPRISM_BOTTOM"
+                },
+                "Weight": 60
             },
-
-            "Weight": 500
-          },
-          {
-            "Item": {
-              "Type": "EQUIP",
-              "Id": "EVILWINGS"
+            {
+                "Item": {
+                    "Type": "EQUIP",
+                    "Id": "FIREPRISM_HAT"
+                },
+                "Weight": 60
             },
+            {
+                "Item": {
+                    "Type": "EQUIP",
+                    "Id": "FIREPRISM_STAFF"
+                },
+                "Weight": 60
+            },
+            {
+                "Item": {
+                    "Type": "ETC",
+                    "Id": "CHICKEN"
+                },
 
-            "Weight": 60
-          }
+                "Weight": 500
+            },
+            {
+                "Item": {
+                    "Type": "ETC",
+                    "Id": "MEAT"
+                },
+
+                "Weight": 500
+            },
+            {
+                "Item": {
+                    "Type": "ETC",
+                    "Id": "BOTTLE"
+                },
+
+                "Weight": 500
+            }
         ]
       },
       {
@@ -135,31 +156,10 @@
         "Items": [
           {
             "Item": {
-              "Type": "EQUIP",
-              "Id": "BASIC_SHOES"
+                "Type": "EQUIP",
+                "Id": "EVILWINGS"
             },
-            "Weight": 60
-          },
-          {
-            "Item": {
-              "Type": "EQUIP",
-              "Id": "BASIC_SUIT"
-            },
-            "Weight": 60
-          },
-          {
-            "Item": {
-              "Type": "EQUIP",
-              "Id": "BASIC_HAT"
-            },
-            "Weight": 60
-          },
-          {
-            "Item": {
-              "Type": "EQUIP",
-              "Id": "BASIC_STAFF"
-            },
-            "Weight": 60
+            "Weight": 100
           },
           {
             "Item": {
@@ -184,14 +184,6 @@
             },
 
             "Weight": 500
-          },
-          {
-            "Item": {
-              "Type": "EQUIP",
-              "Id": "EVILWINGS"
-            },
-
-            "Weight": 60
           }
         ]
       },

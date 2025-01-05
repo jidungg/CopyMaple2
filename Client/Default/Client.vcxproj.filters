@@ -271,6 +271,7 @@
     <ClInclude Include="..\Public\UIEXPBar.h" />
     <ClInclude Include="..\Public\UIPlayerInfoDashBoard.h" />
     <ClInclude Include="..\Public\UIStatUpButton.h" />
+    <ClInclude Include="..\Public\Level_HuntingPlace2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -481,6 +482,7 @@
     <ClCompile Include="..\Private\UIEXPBar.cpp" />
     <ClCompile Include="..\Private\UIPlayerInfoDashBoard.cpp" />
     <ClCompile Include="..\Private\UIStatUpButton.cpp" />
+    <ClCompile Include="..\Private\Level_HuntingPlace2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

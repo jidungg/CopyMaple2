@@ -4,7 +4,7 @@
 #include "Level.h"
 
 BEGIN(Client)
-
+class CUIPanel;
 class CLevel_Loading final : public CLevel
 {
 private:
@@ -20,7 +20,7 @@ private:
 	LEVELID			m_eNextLevelID = { LAST };
 	LEVELID			m_ePrevLevelID = { LAST };
 	class CLoader*	m_pLoader = { nullptr };
-
+	CUIPanel* m_pBackGround = { nullptr };
 public:
 	static CLevel_Loading* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eNextLevelID);
 	virtual void Free() override;

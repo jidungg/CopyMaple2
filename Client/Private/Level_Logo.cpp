@@ -78,11 +78,11 @@ HRESULT CLevel_Logo::Ready_Camera(LAYERID eLayerID)
 }
 void CLevel_Logo::Update(_float fTimeDelta)
 {
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, m_pBackGround);
 	if (GetKeyState(VK_RETURN) & 0x8000)
 	{
 		m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HENESYS));
 	}
-
 }
 
 HRESULT CLevel_Logo::Render()
@@ -96,16 +96,17 @@ HRESULT CLevel_Logo::Render()
 
 HRESULT CLevel_Logo::Ready_Layer_BackGround(LAYERID eID)
 {
-	CBackGround::BACKGROUND_DESC		Desc{};
+	CUIPanel::PanelDesc		Desc{};
+	Desc.eAnchorType = CORNOR_TYPE::CENTER;
+	Desc.ePivotType = CORNOR_TYPE::CENTER;
 	Desc.fXOffset = 0;
 	Desc.fYOffset = 0;
 	Desc.fSizeX = g_iWinSizeX;
 	Desc.fSizeY = g_iWinSizeY;
-	Desc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT,LEVEL_LOGO, TEXT("Prototype_Component_Texture_Logo"), nullptr));
+	Desc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("LOADING_IMAGE"), nullptr));
+	m_pBackGround = static_cast<CUIPanel*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &Desc));
 
-
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOADING, CUIPanel::m_szProtoTag,
-		LEVEL_LOGO, eID, &Desc,false)))
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOADING, LAYER_UI, m_pBackGround)))
 		return E_FAIL;
 
 	return S_OK;

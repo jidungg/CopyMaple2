@@ -84,7 +84,7 @@ ChatOptionData::ChatOptionData(json& js)
 		break;
 	}
 	case Client::CHAT_OPT_TYPE::QUEST:
-		eQuestID = js["QuestID"];
+		eQuestID = js["QuestId"];
 		break;
 	case Client::CHAT_OPT_TYPE::LAST:
 	default:

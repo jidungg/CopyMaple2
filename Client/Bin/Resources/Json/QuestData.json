@@ -7,9 +7,9 @@
             "State": "NOT_ACCEPTED",
 
             "AcceptableLevel": 0,
-            "PrequisiteQuests": [],
+            "PrequisiteQuestsPrequisiteQuests": [],
             "AcceptConversations": [
-               3
+                3
             ],
             "CompleteConditions": [
                 {
@@ -38,7 +38,408 @@
                     }
                 ]
             }
+        },
+        {
+            "Client": "OPILIA",
+            "QuestId": "OPILIA_QUEST_2",
+            "Name": "오필리아의 두 번째 퀘스트",
+            "State": "NOT_ACCEPTED",
+
+            "AcceptableLevel": 3,
+            "PrequisiteQuests": [ "OPILIA_QUEST_1" ],
+            "AcceptConversations": [
+                10
+            ],
+            "CompleteConditions": [
+                {
+                    "Type": "QUEST_COND_MONSTER",
+                    "MonsterId": "STUMP",
+                    "Count": 0,
+                    "RequiredCount": 10
+                }
+            ],
+            "NotSatisfiedConversations": [
+                4
+            ],
+            "CompleteConversations": [
+                5
+            ],
+            "Reward": {
+                "Exp": 1000,
+                "Gold": 10000,
+                "Items": [
+                    {
+                        "Item": {
+                            "Type": "CONSUMABLE",
+                            "Id": "HP_POTION"
+                        },
+                        "Count": 25
+                    }
+                ]
+            }
+        },
+        {
+            "Client": "OPILIA",
+            "QuestId": "OPILIA_QUEST_3",
+            "Name": "오필리아의 세 번째 퀘스트",
+            "State": "NOT_ACCEPTED",
+
+            "AcceptableLevel": 5,
+            "PrequisiteQuests": [ "OPILIA_QUEST_2" ],
+            "AcceptConversations": [
+                11
+            ],
+            "CompleteConditions": [
+                {
+                    "Type": "QUEST_COND_MONSTER",
+                    "MonsterId": "CRAB",
+                    "Count": 0,
+                    "RequiredCount": 10
+                }
+            ],
+            "NotSatisfiedConversations": [
+                4
+            ],
+            "CompleteConversations": [
+                5
+            ],
+            "Reward": {
+                "Exp": 3000,
+                "Gold": 30000,
+                "Items": [
+                    {
+                        "Item": {
+                            "Type": "CONSUMABLE",
+                            "Id": "HP_POTION"
+                        },
+                        "Count": 40
+                    }
+                ]
+            }
+        },
+        {
+            "Client": "MINT",
+            "QuestId": "MINT_QUEST_1",
+            "Name": "민트의 요리 재료 구하기1",
+            "State": "NOT_ACCEPTED",
+
+            "AcceptableLevel": 0,
+            "PrequisiteQuests": [  ],
+            "AcceptConversations": [
+                1
+            ],
+            "CompleteConditions": [
+                {
+                    "Type": "QUEST_COND_ITEM",
+                    "Item": {
+                        "Type": "ETC",
+                        "Id": "PEPPER"
+                    },
+                    "Count": 0,
+                    "RequiredCount": 5
+                },
+                {
+                    "Type": "QUEST_COND_ITEM",
+                    "Item": {
+                        "Type": "ETC",
+                        "Id": "SALT"
+                    },
+                    "Count": 0,
+                    "RequiredCount": 5
+                }
+            ],
+            "NotSatisfiedConversations": [
+                2
+            ],
+            "CompleteConversations": [
+                8
+            ],
+            "Reward": {
+                "Exp": 100,
+                "Gold": 100,
+                "Items": [
+                    {
+                        "Item": {
+                            "Type": "EQUIP",
+                            "Id": "BASIC_SHOES"
+                        },
+                        "Count": 1
+                    },
+                    {
+                        "Item": {
+                            "Type": "EQUIP",
+                            "Id": "BASIC_SUIT"
+                        },
+                        "Count": 1
+                    },
+                    {
+                        "Item": {
+                            "Type": "EQUIP",
+                            "Id": "BASIC_HAT"
+                        },
+                        "Count": 1
+                    },
+                    {
+                        "Item": {
+                            "Type": "EQUIP",
+                            "Id": "BASIC_STAFF"
+                        },
+                        "Count": 1
+                    }
+                ]
+            }
+        },
+
+        {
+            "Client": "MINT",
+            "QuestId": "MINT_QUEST_2",
+            "Name": "민트의 요리 재료 구하기2",
+            "State": "NOT_ACCEPTED",
+
+            "AcceptableLevel": 0,
+            "PrequisiteQuests": [ "MINT_QUEST_1" ],
+            "AcceptConversations": [
+                7
+            ],
+            "CompleteConditions": [
+                {
+                    "Type": "QUEST_COND_ITEM",
+                    "Item": {
+                        "Type": "ETC",
+                        "Id": "CHERRY"
+                    },
+                    "Count": 0,
+                    "RequiredCount": 5
+                },
+                {
+                    "Type": "QUEST_COND_ITEM",
+                    "Item": {
+                        "Type": "ETC",
+                        "Id": "SHROOM"
+                    },
+                    "Count": 0,
+                    "RequiredCount": 5
+                }
+            ],
+            "NotSatisfiedConversations": [
+                2
+            ],
+            "CompleteConversations": [
+                8
+            ],
+            "Reward": {
+                "Exp": 500,
+                "Gold": 1000,
+                "Items": [
+                    {
+                        "Item": {
+                            "Type": "EQUIP",
+                            "Id": "EVILWINGS"
+                        },
+                        "Count": 1
+                    }
+                ]
+            }
+        },
+        {
+            "Client": "MINT",
+            "QuestId": "MINT_QUEST_3",
+            "Name": "민트의 요리 재료 구하기3",
+            "State": "NOT_ACCEPTED",
+
+            "AcceptableLevel": 0,
+            "PrequisiteQuests": [ "MINT_QUEST_2" ],
+            "AcceptConversations": [
+                9
+            ],
+            "CompleteConditions": [
+                {
+                    "Type": "QUEST_COND_ITEM",
+                    "Item": {
+                        "Type": "ETC",
+                        "Id": "MEAT"
+                    },
+                    "Count": 0,
+                    "RequiredCount": 5
+                },
+                {
+                    "Type": "QUEST_COND_ITEM",
+                    "Item": {
+                        "Type": "ETC",
+                        "Id": "CHICKEN"
+                    },
+                    "Count": 0,
+                    "RequiredCount": 5
+                }
+            ],
+            "NotSatisfiedConversations": [
+                2
+            ],
+            "CompleteConversations": [
+                8
+            ],
+            "Reward": {
+                "Exp": 5000,
+                "Gold": 1000,
+                "Items": [
+                    {
+                        "Item": {
+                            "Type": "EQUIP",
+                            "Id": "FIREPRISM_CAPE"
+                        },
+                        "Count": 1
+                    },
+                    {
+                        "Item": {
+                            "Type": "EQUIP",
+                            "Id": "FIREPRISM_EAR"
+                        },
+                        "Count": 1
+                    },
+                    {
+                        "Item": {
+                            "Type": "EQUIP",
+                            "Id": "FIREPRISM_SHOES"
+                        },
+                        "Count": 1
+                    },
+                    {
+                        "Item": {
+                            "Type": "EQUIP",
+                            "Id": "FIREPRISM_GLOVE"
+                        },
+                        "Count": 1
+                    },
+                    {
+                        "Item": {
+                            "Type": "EQUIP",
+                            "Id": "FIREPRISM_TOP"
+                        },
+                        "Count": 1
+                    },
+                    {
+                        "Item": {
+                            "Type": "EQUIP",
+                            "Id": "FIREPRISM_BOTTOM"
+                        },
+                        "Count": 1
+                    },
+                    {
+                        "Item": {
+                            "Type": "EQUIP",
+                            "Id": "FIREPRISM_HAT"
+                        },
+                        "Count": 1
+                    },
+                    {
+                        "Item": {
+                            "Type": "EQUIP",
+                            "Id": "FIREPRISM_STAFF"
+                        },
+                        "Count": 1
+                    }
+                ]
+            }
+        },
+        {
+            "Client": "VANILA",
+            "QuestId": "VANILA_QUEST_1",
+            "Name": "바닐라의 환경미화1",
+            "State": "NOT_ACCEPTED",
+
+            "AcceptableLevel": 0,
+            "PrequisiteQuests": [],
+            "AcceptConversations": [
+                1
+            ],
+            "CompleteConditions": [
+                {
+                    "Type": "QUEST_COND_ITEM",
+                    "Item": {
+                        "Type": "ETC",
+                        "Id": "BOTTLE"
+                    },
+                    "Count": 0,
+                    "RequiredCount": 5
+                }
+            ],
+            "NotSatisfiedConversations": [
+                2
+            ],
+            "CompleteConversations": [
+                8
+            ],
+            "Reward": {
+                "Exp": 500,
+                "Gold": 1000,
+                "Items": [
+                    {
+                        "Item": {
+                            "Type": "DECO",
+                            "Id": "LOLIPOP"
+                        },
+                        "Count": 1
+                    },
+                    {
+                        "Item": {
+                            "Type": "DECO",
+                            "Id": "MUSTACH"
+                        },
+                        "Count": 1
+                    }
+                ]
+            }
+        },
+        {
+            "Client": "VANILA",
+            "QuestId": "VANILA_QUEST_2",
+            "Name": "바닐라의 환경미화2",
+            "State": "NOT_ACCEPTED",
+
+            "AcceptableLevel": 0,
+            "PrequisiteQuests": [ "VANILA_QUEST_1" ],
+            "AcceptConversations": [
+                7
+            ],
+            "CompleteConditions": [
+                {
+                    "Type": "QUEST_COND_ITEM",
+                    "Item": {
+                        "Type": "ETC",
+                        "Id": "ROOT"
+                    },
+                    "Count": 0,
+                    "RequiredCount": 5
+                }
+            ],
+            "NotSatisfiedConversations": [
+                2
+            ],
+            "CompleteConversations": [
+                8
+            ],
+            "Reward": {
+                "Exp": 500,
+                "Gold": 1000,
+                "Items": [
+                    {
+                        "Item": {
+                            "Type": "DECO",
+                            "Id": "GLASSES"
+                        },
+                        "Count": 1
+                    },
+                    {
+                        "Item": {
+                            "Type": "DECO",
+                            "Id": "EGGTOAST"
+                        },
+                        "Count": 1
+                    }
+                ]
+            }
         }
-      
+
+
     ]
 }

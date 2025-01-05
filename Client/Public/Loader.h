@@ -48,6 +48,7 @@ private:
 	HRESULT Loading_Level_BayarPeak();
 	HRESULT Loading_Level_MyHome();
 	HRESULT Loading_Level_HuntingPlace();
+	HRESULT Loading_Level_HuntingPlace2();
 
 	HRESULT Load_Dirctory_Models_Recursive(LEVELID eLevId, const _tchar* szDirPath, CModel::TYPE eType, _fmatrix PreTransformMatrix);
 	HRESULT Load_Dirctory_EffModels(LEVELID eLevId, const _tchar* szDirPath, _fmatrix PreTransformMatrix);

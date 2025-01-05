@@ -2560,6 +2560,18 @@
         },
         {
             "Direction": 0,
+            "FloatData": [
+                0.0
+            ],
+            "Index": 1398,
+            "IntData": [
+                0
+            ],
+            "ItemId": 10003,
+            "Iteration": 1
+        },
+        {
+            "Direction": 0,
             "FloatData": [],
             "Index": 1400,
             "IntData": [],
@@ -5054,21 +5066,27 @@
         },
         {
             "Direction": 0,
-            "FloatData": [],
-            "Index": 3954,
-            "IntData": [],
-            "ItemId": 341,
-            "Iteration": 1,
-            "ParentIndex": 3954
+            "FloatData": [
+                5.0
+            ],
+            "Index": 3926,
+            "IntData": [
+                2
+            ],
+            "ItemId": 10003,
+            "Iteration": 1
         },
         {
-            "Direction": 2,
-            "FloatData": [],
-            "Index": 3984,
-            "IntData": [],
-            "ItemId": 488,
-            "Iteration": 1,
-            "ParentIndex": 3984
+            "Direction": 0,
+            "FloatData": [
+                5.0
+            ],
+            "Index": 3986,
+            "IntData": [
+                1
+            ],
+            "ItemId": 10003,
+            "Iteration": 1
         },
         {
             "Direction": 0,
@@ -5204,15 +5222,6 @@
             "ItemId": 356,
             "Iteration": 5,
             "ParentIndex": 5365
-        },
-        {
-            "Direction": 0,
-            "FloatData": [ 0 ],
-            "Index": 1398,
-            "IntData": [ 0 ],
-            "ItemId": 10003,
-            "Iteration": 1,
-            "ParentIndex": 1398
         }
     ],
     "size": [

@@ -13,7 +13,8 @@
                 "HAPPY": [ 11 ]
             },
             "Quests": [
-                 "OPILIA_QUEST_1"
+                 "OPILIA_QUEST_1",
+                 "OPILIA_QUEST_2"
             ],
             "ConversationNodes": [
                 {
@@ -30,6 +31,10 @@
                         {
                             "Type": "CHAT_OPT_QUEST",
                             "QuestId": "OPILIA_QUEST_1"
+                        },
+                        {
+                            "Type": "CHAT_OPT_QUEST",
+                            "QuestId": "OPILIA_QUEST_2"
                         },
                         {
                             "Type": "CHAT_OPT_NORMAL",
@@ -181,6 +186,80 @@
                     "Script": "뭐야? 그것도 못해?\n그럼 그냥 꺼져. 쓰레기같은 게...",
                     "Options": [],
                     "Next": -1
+                },
+                {
+                    "Index": 10,
+                    "Portraits": [
+                        {
+                            "Tag": "11000508_a.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "오필리아",
+                    "Script": "또 도와주는거야?\n이번엔 스텀프 10마리만 잡아와줘.",
+                    "Options": [],
+                    "Next": -1
+                },
+                {
+                    "Index": 11,
+                    "Portraits": [
+                        {
+                            "Tag": "11000508_b.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "오필리아",
+                    "Script": "흠.. 아직 덜 잡은 것 같은데..?\n기억해, 스텀프 10마리 잡기야!",
+                    "Options": [
+                        {
+                            "Type": "CHAT_OPT_NORMAL",
+                            "Text": "계속 해본다.",
+                            "Next": 6
+                        },
+                        {
+                            "Type": "CHAT_OPT_ABANDON_QUEST",
+                            "Text": "포기한다.",
+                            "Next": 8
+                        }
+                    ],
+                    "Next": -1
+                },
+                {
+                    "Index": 12,
+                    "Portraits": [
+                        {
+                            "Tag": "11000508_a.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "오필리아",
+                    "Script": "또 도와주는거야?\n이번엔 돌 게 10마리만 잡아와줘.",
+                    "Options": [],
+                    "Next": -1
+                },
+                {
+                    "Index": 11,
+                    "Portraits": [
+                        {
+                            "Tag": "11000508_b.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "오필리아",
+                    "Script": "흠.. 아직 덜 잡은 것 같은데..?\n기억해, 돌 게 10마리 잡기야!",
+                    "Options": [
+                        {
+                            "Type": "CHAT_OPT_NORMAL",
+                            "Text": "계속 해본다.",
+                            "Next": 6
+                        },
+                        {
+                            "Type": "CHAT_OPT_ABANDON_QUEST",
+                            "Text": "포기한다.",
+                            "Next": 8
+                        }
+                    ],
+                    "Next": -1
                 }
             ]
         },
@@ -190,31 +269,369 @@
             "ModelTag": "BunnyGirl1.model",
             "AnimIdx": {
                 "BORE": [ 0, 1, 2, 4, 5 ],
-                "IDLE": [ 6 ],
-                "RUN": [ 8 ],
-                "WALK": [ 10 ],
-                "TALK": [ 9 ],
-                "HAPPY": [ 3 ]
-            },
-            "ConversationNodes": {
-
-            }
-        },
-        {
-            "NPCId": "VANILA",
-            "Name": "바닐라",
-            "ModelTag": "BunnyGirl2.model",
-            "AnimIdx": {
-                "BORE": [ 0, 1, 8, 9, 10 ],
                 "IDLE": [ 11 ],
                 "RUN": [ 13 ],
                 "WALK": [ 15 ],
                 "TALK": [ 14 ],
                 "HAPPY": [ 7 ]
             },
-            "ConversationNodes": {
+            "Quests": [
+                "MINT_QUEST_1",
+                "MINT_QUEST_2",
+                "MINT_QUEST_3"
+            ],
+            "ConversationNodes": [
+                {
+                    "Index": 0,
+                    "Portraits": [
+                        {
+                            "Tag": "11000103.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "민트",
+                    "Script": "안녕하세요? 민트입니다.",
+                    "Options": [
+                        {
+                            "Type": "CHAT_OPT_QUEST",
+                            "QuestId": "MINT_QUEST_1"
+                        },
+                        {
+                            "Type": "CHAT_OPT_QUEST",
+                            "QuestId": "MINT_QUEST_2"
+                        },
+                        {
+                            "Type": "CHAT_OPT_QUEST",
+                            "QuestId": "MINT_QUEST_3"
+                        }
+                    ]
+                },
+                {
+                    "Index": 1,
+                    "Portraits": [
+                        {
+                            "Tag": "11000103.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "민트",
+                    "Script": "와 도와주신다니 감사해요.\n물병 5개, 소금 5개를 구해주세요. ",
+                    "Options": [
+                    ],
+                    "Next": -1
+                },
+                {
+                    "Index": 2,
+                    "Portraits": [
+                        {
+                            "Tag": "11000103.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "민트",
+                    "Script": "흠.. 갯수가 좀 모자라는데요?",
+                    "Options": [
+                        {
+                            "Type": "CHAT_OPT_NORMAL",
+                            "Text": "더 모아온다.",
+                            "Next": 3
+                        },
+                        {
+                            "Type": "CHAT_OPT_ABANDON_QUEST",
+                            "Text": "포기한다.",
+                            "Next": 5
+                        }
+                    ]
+                },
+                {
+                    "Index": 3,
+                    "Portraits": [
+                        {
+                            "Tag": "11000103.dds",
+                            "Gray": true
+                        },
+                        {
+                            "Tag": "30_f.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "김지완",
+                    "Script": "힘들지만 열심히 해 볼게",
+                    "Options": [],
+                    "Next": 4
+                },
+                {
+                    "Index": 4,
+                    "Portraits": [
+                        {
+                            "Tag": "11000103.dds",
+                            "Gray": false
+                        },
+                        {
+                            "Tag": "30_f.dds",
+                            "Gray": true
+                        }
+                    ],
+                    "Speaker": "민트",
+                    "Script": "감사요. 좀만 힘내세요.",
+                    "Options": [],
+                    "Next": -1
+                },
+                {
+                    "Index": 5,
+                    "Portraits": [
+                        {
+                            "Tag": "11000103.dds",
+                            "Gray": true
+                        },
+                        {
+                            "Tag": "30_f.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "김지완",
+                    "Script": "야 미안 너무 힘들다. 그만 할래.",
+                    "Options": [],
+                    "Next": 6
+                },
+                {
+                    "Index": 6,
+                    "Portraits": [
+                        {
+                            "Tag": "11000103.dds",
+                            "Gray": false
+                        },
+                        {
+                            "Tag": "30_f.dds",
+                            "Gray": true
+                        }
+                    ],
+                    "Speaker": "민트",
+                    "Script": "엥 포기하지 말지",
+                    "Options": [],
+                    "Next": -1
+                },
+                {
+                    "Index": 7,
+                    "Portraits": [
+                        {
+                            "Tag": "11000103.dds",
+                            "Gray": false
+                        },
+                        {
+                            "Tag": "30_f.dds",
+                            "Gray": true
+                        }
+                    ],
+                    "Speaker": "민트",
+                    "Script": "와 감사해요\n이번엔 버섯 5개, 체리 5개를 구해주세요. \n스텀프를 죽이면 나올 거에요.",
+                    "Options": [],
+                    "Next": -1
+                },
+                {
+                    "Index": 8,
+                    "Portraits": [
+                        {
+                            "Tag": "11000103.dds",
+                            "Gray": false
+                        },
+                        {
+                            "Tag": "30_f.dds",
+                            "Gray": true
+                        }
+                    ],
+                    "Speaker": "민트",
+                    "Script": "짱.",
+                    "Options": [],
+                    "Next": -1
+                },
+                {
+                    "Index": 9,
+                    "Portraits": [
+                        {
+                            "Tag": "11000103.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "민트",
+                    "Script": "와 감사해요\n이번엔 닭고기 5개, 돼지고기 5개를 구해주세요. \n돌 게를 죽이면 나올 거에요.",
+                    "Options": [],
+                    "Next": -1
+                }
+            ]
+        },
+        {
+            "NPCId": "VANILA",
+            "Name": "바닐라",
+            "ModelTag": "BunnyGirl2.model",
+            "AnimIdx": {
+                "BORE": [ 0, 1, 3,4 ],
+                "IDLE": [ 6 ],
+                "RUN": [ 8 ],
+                "WALK": [10 ],
+                "TALK": [ 9 ],
+                "HAPPY": [ 5 ]
+            },
+            "ConversationNodes": [
+                {
+                    "Index": 0,
+                    "Portraits": [
+                        {
+                            "Tag": "11001356.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "바닐라",
+                    "Script": "흥.",
+                    "Options": [
+                        {
+                            "Type": "CHAT_OPT_QUEST",
+                            "QuestId": "VANILA_QUEST_1"
+                        },
+                        {
+                            "Type": "CHAT_OPT_QUEST",
+                            "QuestId": "VANILA_QUEST_2"
+                        }
+                    ]
+                },
+                {
+                    "Index": 1,
+                    "Portraits": [
+                        {
+                            "Tag": "11001356.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "바닐라",
+                    "Script": "주변에 쓰레기들이 너무 많아. 생수병 5개만 주워와 줘.",
+                    "Options": [
+                    ],
+                    "Next": -1
+                },
+                {
+                    "Index": 2,
+                    "Portraits": [
+                        {
+                            "Tag": "11001356.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "바닐라",
+                    "Script": "흠.. 갯수가 좀 모자라는데?",
+                    "Options": [
+                        {
+                            "Type": "CHAT_OPT_NORMAL",
+                            "Text": "더 모아온다.",
+                            "Next": 3
+                        },
+                        {
+                            "Type": "CHAT_OPT_ABANDON_QUEST",
+                            "Text": "포기한다.",
+                            "Next": 5
+                        }
+                    ]
+                },
 
-            }
+                {
+                    "Index": 3,
+                    "Portraits": [
+                        {
+                            "Tag": "11001356.dds",
+                            "Gray": true
+                        },
+                        {
+                            "Tag": "30_f.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "김지완",
+                    "Script": "힘들지만 열심히 해 볼게",
+                    "Options": [],
+                    "Next": 4
+                },
+                {
+                    "Index": 4,
+                    "Portraits": [
+                        {
+                            "Tag": "11001356.dds",
+                            "Gray": false
+                        },
+                        {
+                            "Tag": "30_f.dds",
+                            "Gray": true
+                        }
+                    ],
+                    "Speaker": "바닐라",
+                    "Script": "감사요. 좀만 힘내세요.",
+                    "Options": [],
+                    "Next": -1
+                },
+                {
+                    "Index": 5,
+                    "Portraits": [
+                        {
+                            "Tag": "11001356.dds",
+                            "Gray": true
+                        },
+                        {
+                            "Tag": "30_f.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "김지완",
+                    "Script": "야 미안 너무 힘들다. 그만 할래.",
+                    "Options": [],
+                    "Next": 6
+                },
+                {
+                    "Index": 6,
+                    "Portraits": [
+                        {
+                            "Tag": "11001356.dds",
+                            "Gray": false
+                        },
+                        {
+                            "Tag": "30_f.dds",
+                            "Gray": true
+                        }
+                    ],
+                    "Speaker": "바닐라",
+                    "Script": "근성 없는 남자 정말 싫어.",
+                    "Options": [],
+                    "Next": -1
+                },
+                {
+                    "Index": 7,
+                    "Portraits": [
+                        {
+                            "Tag": "11001356.dds",
+                            "Gray": false
+                        },
+                        {
+                            "Tag": "30_f.dds",
+                            "Gray": true
+                        }
+                    ],
+                    "Speaker": "바닐라",
+                    "Script": "이번엔 뿌리 5개를 주워 와. \n스텀프를 죽이면 나올 거야.",
+                    "Options": [],
+                    "Next": -1
+                },
+                {
+                    "Index": 8,
+                    "Portraits": [
+                        {
+                            "Tag": "11001356.dds",
+                            "Gray": false
+                        }
+                    ],
+                    "Speaker": "바닐라",
+                    "Script": "고마워. 보상을 줄게.",
+                    "Options": [],
+                    "Next": -1
+                }
+            ]
+               
         }
     ]
 }

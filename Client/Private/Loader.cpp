@@ -155,6 +155,9 @@ HRESULT CLoader::Loading()
 	case LEVEL_HUNTINGPLACE:
 		hr = Loading_Level_HuntingPlace();
 		break;
+	case LEVEL_HUNTINGPLACE2:
+		hr = Loading_Level_HuntingPlace2();
+		break;
 	}
 
 	if (FAILED(hr))
@@ -222,7 +225,7 @@ HRESULT CLoader::Loading_Level_Logo()
 	lstrcpy(m_szLoadingText, TEXT("텍스처 로드."));
 	/* For.Prototype_Component_Texture_Logo */
 	//히ㅏ다보니까 다 STatic 됨
-   
+
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Texture_QuickSlot_Normal"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/QuickSlot_Normal.dds"), 1))))
 		return E_FAIL;
@@ -342,10 +345,7 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxHumanAnimMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_VtxHumanAnimMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
 		return E_FAIL;
-	/* For.Prototype_Component_Shader_UI*/
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_UI"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_UI.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
-		return E_FAIL;
+
 	/* For.Prototype_Component_Shader_EffectLMesh*/
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxEffectMesh"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_VtxEffectMesh.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
@@ -356,10 +356,7 @@ HRESULT CLoader::Loading_Level_Logo()
 
 	lstrcpy(m_szLoadingText, TEXT("모델 로드."));
 #pragma region Model
-	/* For.Prototype_Component_VIBuffer_Rect */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CVIBuffer_Rect::m_szPrptotypeTag,
-		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+
 
 	///* For.Prototype_Component_CModel*/
 	XMMATRIX matPretransform = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
@@ -474,9 +471,6 @@ HRESULT CLoader::Loading_Level_Logo()
 		return E_FAIL;
 	/* For.Prototype_GameObject_BackGround */
 
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIPanel::m_szProtoTag,
-		CUIPanel::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CBackGround::m_szProtoTag,
 		CBackGround::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -640,7 +634,12 @@ HRESULT CLoader::Loading_Level_Henesys()
 	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_HENESYS,
 		TEXT("../Bin/resources/FBXs/Anim/EnchantMaster"), CModel::TYPE_ANIM, matPretransform)))
 		return E_FAIL;
-
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_HENESYS,
+		TEXT("../Bin/resources/FBXs/Anim/BunnyGirl1"), CModel::TYPE_ANIM, matPretransform)))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_HENESYS,
+		TEXT("../Bin/resources/FBXs/Anim/BunnyGirl2"), CModel::TYPE_ANIM, matPretransform)))
+		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("객체 로드"));
 
 	/* For.Prototype_GameObject_Terrain */
@@ -731,7 +730,15 @@ HRESULT CLoader::Loading_Level_MyHome()
 	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_HOME,
 		TEXT("../Bin/resources/FBXs/Anim/DuckyBall"), CModel::TYPE_ANIM, matPretransform)))
 		return E_FAIL;
-
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_HOME,
+		TEXT("../Bin/resources/FBXs/Anim/EnchantMaster"), CModel::TYPE_ANIM, matPretransform)))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_HOME,
+		TEXT("../Bin/resources/FBXs/Anim/BunnyGirl1"), CModel::TYPE_ANIM, matPretransform)))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_HOME,
+		TEXT("../Bin/resources/FBXs/Anim/BunnyGirl2"), CModel::TYPE_ANIM, matPretransform)))
+		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("객체 로드."));
 	/* For.Prototype_GameObject_HomeDialog */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, CUIHomeDialog::m_szProtoTag,
@@ -785,6 +792,39 @@ HRESULT CLoader::Loading_Level_HuntingPlace()
 	lstrcpy(m_szLoadingText, TEXT("객체 로드."));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HUNTINGPLACE, TEXT("Prototype_GameObject_HuntingPlace"),
 		CCubeTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/HuntingPlace.json")))))
+		return E_FAIL;
+
+
+	lstrcpy(m_szLoadingText, TEXT("로드 완료."));
+
+	m_isFinished = true;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_Level_HuntingPlace2()
+{
+	lstrcpy(m_szLoadingText, TEXT("사운드 로드"));
+
+	if (FAILED(m_pGameInstance->Load_BGM(LEVEL_HUNTINGPLACE2, TEXT("BGM_Henesys_field_01"), TEXT("../Bin/Resources/Sounds/BGM/BGM_Henesys_field_01.wav"))))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Sounds(LEVEL_HUNTINGPLACE2, TEXT("../Bin/Resources/Sounds/Monster/Snail/"), TEXT(".wav"))))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Sounds(LEVEL_HUNTINGPLACE2, TEXT("../Bin/Resources/Sounds/Monster/Stump/"), TEXT(".wav"))))
+		return E_FAIL;
+	if (FAILED(Load_Dirctory_Sounds(LEVEL_HUNTINGPLACE2, TEXT("../Bin/Resources/Sounds/Monster/Crab/"), TEXT(".wav"))))
+		return E_FAIL;
+	lstrcpy(m_szLoadingText, TEXT("텍스처 로드"));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HUNTINGPLACE2, TEXT("bg_henesys_b.dds"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/BackGround/bg_henesys_b.dds"), 1))))
+		return E_FAIL;
+
+
+	lstrcpy(m_szLoadingText, TEXT("모델 로드."));
+
+	lstrcpy(m_szLoadingText, TEXT("객체 로드."));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HUNTINGPLACE2, TEXT("Prototype_GameObject_HuntingPlace2"),
+		CCubeTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/HuntingPlace2.json")))))
 		return E_FAIL;
 
 

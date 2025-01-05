@@ -11,7 +11,7 @@ class CUIChatOption :
 public:
 	typedef struct ChatOptionDesc : public CUIButton::BUTTON_DESC
 	{
-
+		_uint iUIIndex = 0;
 	}CHATOPTION_DESC;
 public:
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_CUIChatOption";
@@ -23,14 +23,16 @@ protected:
 public:
 	virtual HRESULT Initialize(void* pArg) override;
 
-	void Set_Option(_uint iDataOptIndex, const ChatOptionData& tOptionData);
+	void Set_OptionData(_uint iDataOptIndex, const ChatOptionData& tOptionData);
 	_uint Get_DataOptionIdx() { return m_iDataOptionIdx; }
+	_uint Get_UIOptionIdx() { return m_iUIIndex; }
 	const ChatOptionData& Get_OptionData() { return m_tOptionData; }
 private:
 	_uint m_iDataOptionIdx = 0;
 	CUIIcon* m_pIcon = { nullptr };
 	CUIFont* m_pFont = { nullptr };
 	ChatOptionData m_tOptionData;
+	_uint m_iUIIndex = { 0 };
 public:
 	static CUIChatOption* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

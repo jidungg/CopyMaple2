@@ -1317,18 +1317,6 @@
         },
         {
             "Direction": 0,
-            "FloatData": [
-                5.0
-            ],
-            "Index": 421,
-            "IntData": [
-                0
-            ],
-            "ItemId": 10000,
-            "Iteration": 1
-        },
-        {
-            "Direction": 0,
             "FloatData": [],
             "Index": 427,
             "IntData": [],
@@ -1341,43 +1329,7 @@
             "FloatData": [
                 5.0
             ],
-            "Index": 435,
-            "IntData": [
-                2
-            ],
-            "ItemId": 10000,
-            "Iteration": 1
-        },
-        {
-            "Direction": 0,
-            "FloatData": [
-                5.0
-            ],
-            "Index": 443,
-            "IntData": [
-                0
-            ],
-            "ItemId": 10000,
-            "Iteration": 1
-        },
-        {
-            "Direction": 0,
-            "FloatData": [
-                5.0
-            ],
-            "Index": 457,
-            "IntData": [
-                0
-            ],
-            "ItemId": 10000,
-            "Iteration": 1
-        },
-        {
-            "Direction": 0,
-            "FloatData": [
-                5.0
-            ],
-            "Index": 461,
+            "Index": 464,
             "IntData": [
                 0
             ],
@@ -1391,7 +1343,19 @@
             ],
             "Index": 475,
             "IntData": [
-                1
+                0
+            ],
+            "ItemId": 10000,
+            "Iteration": 1
+        },
+        {
+            "Direction": 0,
+            "FloatData": [
+                5.0
+            ],
+            "Index": 482,
+            "IntData": [
+                0
             ],
             "ItemId": 10000,
             "Iteration": 1
@@ -1410,7 +1374,19 @@
             "FloatData": [
                 5.0
             ],
-            "Index": 507,
+            "Index": 497,
+            "IntData": [
+                0
+            ],
+            "ItemId": 10000,
+            "Iteration": 1
+        },
+        {
+            "Direction": 0,
+            "FloatData": [
+                5.0
+            ],
+            "Index": 515,
             "IntData": [
                 0
             ],
@@ -1431,9 +1407,9 @@
             "FloatData": [
                 5.0
             ],
-            "Index": 529,
+            "Index": 528,
             "IntData": [
-                1
+                0
             ],
             "ItemId": 10000,
             "Iteration": 1
@@ -1443,9 +1419,21 @@
             "FloatData": [
                 5.0
             ],
-            "Index": 547,
+            "Index": 546,
             "IntData": [
-                1
+                0
+            ],
+            "ItemId": 10000,
+            "Iteration": 1
+        },
+        {
+            "Direction": 0,
+            "FloatData": [
+                5.0
+            ],
+            "Index": 568,
+            "IntData": [
+                0
             ],
             "ItemId": 10000,
             "Iteration": 1
@@ -1473,31 +1461,7 @@
             "FloatData": [
                 5.0
             ],
-            "Index": 661,
-            "IntData": [
-                2
-            ],
-            "ItemId": 10000,
-            "Iteration": 1
-        },
-        {
-            "Direction": 0,
-            "FloatData": [
-                5.0
-            ],
-            "Index": 683,
-            "IntData": [
-                1
-            ],
-            "ItemId": 10000,
-            "Iteration": 1
-        },
-        {
-            "Direction": 0,
-            "FloatData": [
-                5.0
-            ],
-            "Index": 692,
+            "Index": 663,
             "IntData": [
                 0
             ],
@@ -1509,9 +1473,9 @@
             "FloatData": [
                 5.0
             ],
-            "Index": 701,
+            "Index": 674,
             "IntData": [
-                1
+                0
             ],
             "ItemId": 10000,
             "Iteration": 1
@@ -1521,9 +1485,9 @@
             "FloatData": [
                 5.0
             ],
-            "Index": 731,
+            "Index": 702,
             "IntData": [
-                2
+                0
             ],
             "ItemId": 10000,
             "Iteration": 1
@@ -1533,11 +1497,45 @@
             "FloatData": [
                 5.0
             ],
-            "Index": 733,
+            "Index": 704,
             "IntData": [
-                1
+                0
             ],
             "ItemId": 10000,
+            "Iteration": 1
+        },
+        {
+            "Direction": 0,
+            "FloatData": [
+                5.0
+            ],
+            "Index": 713,
+            "IntData": [
+                0
+            ],
+            "ItemId": 10000,
+            "Iteration": 1
+        },
+        {
+            "Direction": 0,
+            "FloatData": [
+                5.0
+            ],
+            "Index": 715,
+            "IntData": [
+                0
+            ],
+            "ItemId": 10000,
+            "Iteration": 1
+        },
+        {
+            "Direction": 0,
+            "FloatData": [],
+            "Index": 788,
+            "IntData": [
+                6
+            ],
+            "ItemId": 10002,
             "Iteration": 1
         },
         {

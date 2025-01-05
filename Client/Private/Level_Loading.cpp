@@ -9,6 +9,8 @@
 #include "Level_Home.h"
 #include "Level_BayarPeak.h"
 #include "Level_HuntingPlace.h"
+#include "Level_HuntingPlace2.h"
+#include "UIPanel.h"
 
 CLevel_Loading::CLevel_Loading(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CLevel { pDevice, pContext }
@@ -24,12 +26,36 @@ HRESULT CLevel_Loading::Initialize(LEVELID eNextLevelID)
 	m_pLoader = CLoader::Create(m_pDevice, m_pContext, m_eNextLevelID);
 	if (nullptr == m_pLoader)
 		return E_FAIL;
-	
+
+	m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("LOADING_IMAGE"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/UI/bg_mushroom_login_i3.dds"), 1));
+	/* For.Prototype_Component_Shader_UI*/
+	m_pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Shader_UI"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/shaderFiles/Shader_UI.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements));
+	/* For.Prototype_Component_VIBuffer_Rect */
+	m_pGameInstance->Add_Prototype(LEVEL_LOADING, CVIBuffer_Rect::m_szPrptotypeTag,
+		CVIBuffer_Rect::Create(m_pDevice, m_pContext));
+	m_pGameInstance->Add_Prototype(LEVEL_LOADING, CUIPanel::m_szProtoTag,
+		CUIPanel::Create(m_pDevice, m_pContext));
+	CUIPanel::PanelDesc		Desc{};
+	Desc.eAnchorType = CORNOR_TYPE::CENTER;
+	Desc.ePivotType = CORNOR_TYPE::CENTER;
+	Desc.fXOffset = 0;
+	Desc.fYOffset = 0;
+	Desc.fSizeX = g_iWinSizeX;
+	Desc.fSizeY = g_iWinSizeY;
+	Desc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("LOADING_IMAGE"), nullptr));
+	m_pBackGround = static_cast<CUIPanel*>( m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &Desc));
+
+	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOADING,LAYER_UI, m_pBackGround)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 void CLevel_Loading::Update(_float fTimeDelta)
 {
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, m_pBackGround);
 	if (true == m_pLoader->isFinished())
 	{
 		
@@ -66,6 +92,11 @@ void CLevel_Loading::Update(_float fTimeDelta)
 			tDesc.szCubeTerrainTag = TEXT("Prototype_GameObject_HuntingPlace");
 			tDesc.szBackGroundImgTag = TEXT("bg_henesys_b.dds");
 			pNewLevel = CLevel_HuntingPlace::Create(m_pDevice, m_pContext, &tDesc);
+			break;
+		case LEVEL_HUNTINGPLACE2:
+			tDesc.szCubeTerrainTag = TEXT("Prototype_GameObject_HuntingPlace2");
+			tDesc.szBackGroundImgTag = TEXT("bg_henesys_b.dds");
+			pNewLevel = CLevel_HuntingPlace2::Create(m_pDevice, m_pContext, &tDesc);
 			break;
 		}
 

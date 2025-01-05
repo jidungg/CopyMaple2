@@ -18,6 +18,7 @@ CUIChatOption::CUIChatOption(const CUIChatOption& Prototype)
 HRESULT CUIChatOption::Initialize(void* pArg)
 {
 	CHATOPTION_DESC* pDesc = static_cast<CHATOPTION_DESC*>(pArg);
+	m_iUIIndex = pDesc->iUIIndex;
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
@@ -45,7 +46,7 @@ HRESULT CUIChatOption::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CUIChatOption::Set_Option(_uint iIdx,const  ChatOptionData& tOptionData)
+void CUIChatOption::Set_OptionData(_uint iIdx,const  ChatOptionData& tOptionData)
 {
 	m_iDataOptionIdx = iIdx;
 	m_tOptionData = tOptionData;

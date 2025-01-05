@@ -172,6 +172,7 @@
     <ClInclude Include="..\Public\Conversation.h" />
     <ClInclude Include="..\Public\CubeTerrain.h" />
     <ClInclude Include="..\Public\DropTable.h" />
+    <ClInclude Include="..\Public\Level_HuntingPlace2.h" />
     <ClInclude Include="..\Public\NPC.h" />
     <ClInclude Include="..\Public\NPCDataBase.h" />
     <ClInclude Include="..\Public\NPCSpanwer.h" />
@@ -354,6 +355,7 @@
     <ClCompile Include="..\Private\Character.cpp" />
     <ClCompile Include="..\Private\Conversation.cpp" />
     <ClCompile Include="..\Private\DropTable.cpp" />
+    <ClCompile Include="..\Private\Level_HuntingPlace2.cpp" />
     <ClCompile Include="..\Private\NPC.cpp" />
     <ClCompile Include="..\Private\NPCDataBase.cpp" />
     <ClCompile Include="..\Private\NPCSpanwer.cpp" />

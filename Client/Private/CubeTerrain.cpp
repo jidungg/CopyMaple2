@@ -527,7 +527,7 @@ HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 
 HRESULT CCubeTerrain::Remove_TerrainObject(_uint Index)
 {
-	if (Index >= m_vecCells.size())
+	if (Index >= (_uint)m_vecCells.size())
 		return E_FAIL;
 	if (m_vecCells[Index] == nullptr)
 		return E_FAIL;
@@ -539,7 +539,7 @@ HRESULT CCubeTerrain::Remove_TerrainObject(_uint Index)
 
 CTerrainObject* CCubeTerrain::Get_TerrainObject(_uint Index)
 {
-	if (Index < m_vecCells.size())
+	if (Index < (_uint)m_vecCells.size())
 		return m_vecCells[Index];
 	return nullptr;
 }
@@ -609,7 +609,7 @@ _float CCubeTerrain::Get_CelingHeight(_vector Pos, _uint iCheckRange)
 
 void CCubeTerrain::Get_AdjWayFinderCells(_uint Index, vector<_uint>& vecAdjCells)
 {
-	_uint iCellCount = m_vecCells.size();
+	_uint iCellCount = (_uint)m_vecCells.size();
 	assert(Index < iCellCount);
 	XMUINT3 vSplitIdx = SplitIndex(Index);
 
@@ -648,7 +648,7 @@ void CCubeTerrain::Get_AdjWayFinderCells(_uint Index, vector<_uint>& vecAdjCells
 
 void CCubeTerrain::Get_XZAdjWayFinderCells(_uint Index, vector<_uint>& vecAdjCells)
 {
-	_uint iCellCount = m_vecCells.size();
+	_uint iCellCount = (_uint)m_vecCells.size();
 	assert(Index < iCellCount);
 	XMUINT3 vSplitIdx = SplitIndex(Index);
 
@@ -771,7 +771,7 @@ _vector CCubeTerrain::Get_ContainedCellPosition(const _fvector& Pos)
 
 void CCubeTerrain::Get_ContainingCells(CColliderBase* pCollider, list<_uint>& vecCells)
 {
-	_uint iCellCount = m_vecCells.size();
+	_uint iCellCount =(_uint) m_vecCells.size();
 	for (_uint i = 0; i < iCellCount; i++)
 	{
 		_vector vPos = IndexToPos(i);

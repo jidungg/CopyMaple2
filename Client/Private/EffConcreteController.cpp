@@ -59,7 +59,7 @@ _bool CEffAlphaController::Update_InTime(_float fTrackPos)
 	CEffMaterialProperty* pTarget = static_cast<CEffMaterialProperty*>(m_pTarget);
 	//GetCurrentKeyFrame : fTrackPos를 넘지 않는 가장 가까운 KeyFrame
 	_uint iCurrentKeyFrameIndex = 0;
-	_uint iNumFrame = m_vecKeyFrame.size();
+	_uint iNumFrame = (_uint)m_vecKeyFrame.size();
 	if (iNumFrame == 1)
 	{
 		pTarget->Set_Alpha(m_vecKeyFrame[0].fValue);
@@ -148,7 +148,7 @@ _bool CEffTextureTransfromController::Update_InTime(_float fTrackPos)
 	CEffTexturingProperty* pTarget = static_cast<CEffTexturingProperty*>(m_pTarget);
 	//GetCurrentKeyFrame : fTrackPos를 넘지 않는 가장 가까운 KeyFrame
 	_uint iCurrentKeyFrameIndex = 0;
-	_uint iNumFrame = m_vecKeyFrame.size();
+	_uint iNumFrame = (_uint)m_vecKeyFrame.size();
 	if (iNumFrame == 1)
 	{
 		pTarget->Set_TextureTransformData(m_eTexSlot,m_eTexOperation, m_vecKeyFrame[0].fValue);
@@ -210,7 +210,7 @@ HRESULT CEffTransformController::Initialize_Prototype(ifstream& inFile, const CE
 		inFile.read(reinterpret_cast<char*>(&tNewFrame.vRotation), sizeof(_float3));
 		tNewFrame.vRotation.x = tNewFrame.vRotation.x ;
 		tNewFrame.vRotation.y = tNewFrame.vRotation.y;
-		tNewFrame.vRotation.z =-tNewFrame.vRotation.z;
+		tNewFrame.vRotation.z = -tNewFrame.vRotation.z;
 		//XMStoreFloat4( &tNewFrame.vRotation , XMQuaternionRotationRollPitchYaw(vRotation.x, vRotation.z, vRotation.y));
 		inFile.read(reinterpret_cast<char*>(&tNewFrame.vPosition), sizeof(_float3));
 		inFile.read(reinterpret_cast<char*>(&tNewFrame.fTrackPosition), sizeof(_float));
@@ -229,15 +229,13 @@ _bool CEffTransformController::Update_InTime(_float fTrackPos)
 	CEffBone* pTarget = static_cast<CEffBone*>(m_pTarget);
 	//GetCurrentKeyFrame : fTrackPos를 넘지 않는 가장 가까운 KeyFrame
 	_uint iCurrentKeyFrameIndex = 0;
-	_uint iNumFrame = m_vecKeyFrame.size();
+	_uint iNumFrame = (_uint)m_vecKeyFrame.size();
 	if (iNumFrame == 0)
 		return true;
 	if (iNumFrame == 1)
 	{
 		TRANSFORM_KEYFRAME tKeyFrame = m_vecKeyFrame[0];
 		_vector vQuaternion = XMQuaternionRotationRollPitchYaw(tKeyFrame.vRotation.x, tKeyFrame.vRotation.y, tKeyFrame.vRotation.z);
-		vQuaternion.m128_f32[2] = -vQuaternion.m128_f32[2];
-		vQuaternion.m128_f32[3] = -vQuaternion.m128_f32[3];
 		(pTarget)->Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&tKeyFrame.vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), vQuaternion, XMVectorSetW(XMLoadFloat3(&tKeyFrame.vPosition), 1.f)));
 		return true;
 	}
@@ -245,8 +243,6 @@ _bool CEffTransformController::Update_InTime(_float fTrackPos)
 	{
 		TRANSFORM_KEYFRAME tKeyFrame = m_vecKeyFrame[iNumFrame - 1];
 		_vector vQuaternion = XMQuaternionRotationRollPitchYaw(tKeyFrame.vRotation.x, tKeyFrame.vRotation.y, tKeyFrame.vRotation.z);
-		vQuaternion.m128_f32[2] = -vQuaternion.m128_f32[2];
-		vQuaternion.m128_f32[3] = -vQuaternion.m128_f32[3];
 		pTarget->Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&tKeyFrame.vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), vQuaternion, XMVectorSetW(XMLoadFloat3(&tKeyFrame.vPosition), 1.f)));
 		return true;
 	}

@@ -24,9 +24,9 @@ void CInvenConsumableSlot::On_LeftClick(void*)
 		return;
 }
 
-const _char* CInvenConsumableSlot::Get_IconTag()
+const _tchar* CInvenConsumableSlot::Get_IconTag()
 {
-	return static_cast<const CONSUMABLE_ITEM_DATA*>(Get_ItemData())->strIconImageTag;
+	return static_cast<const CONSUMABLE_ITEM_DATA*>(Get_ItemData())->szIconImageTag;
 }
 
 void CInvenConsumableSlot::Use()

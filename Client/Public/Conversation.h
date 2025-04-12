@@ -25,7 +25,7 @@ typedef struct ChatPortraitData
 	json To_Json();
 	_tchar szPortraitTag[MAX_PATH] = TEXT("");
 	_bool bGray = { false };
-};
+}CHAT_PORTRAIT_DATA;
 typedef struct ChatOptionData
 {
 	ChatOptionData() = default;

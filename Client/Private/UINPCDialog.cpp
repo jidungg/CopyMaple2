@@ -234,7 +234,7 @@ void CUINPCDialog::Set_ConversationNode(const CONVERSATION_NODE_DATA& tNode)
 		static_cast<CRect_Transform*>(m_pHighlighter->Get_Transform())->Set_Offset(fOptionOffset0.x, fOptionOffset0.y);
 		m_pHighlighter->Set_Active(true);
 	}
-
+	if (m_iSelectedOptionDataIndex == UINT_MAX) m_iSelectedOptionDataIndex = 0;
 }
 
 void CUINPCDialog::To_NextConversation()

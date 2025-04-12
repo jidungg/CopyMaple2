@@ -5,6 +5,7 @@
 
 
 BEGIN(Client)
+class CModelObject;
 class CBuilder;
 class CCubeTerrain;
 class CCamera_Trace;
@@ -44,6 +45,7 @@ private:
 
 	//TM<P
 	CEffModelObject* m_pEffect;
+	_uint iTmpAnimIdx = 0;
 public:
 	static CLevel_Home* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg);
 	virtual void Free() override;

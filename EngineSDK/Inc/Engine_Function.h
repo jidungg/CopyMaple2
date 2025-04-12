@@ -1,4 +1,4 @@
-#ifndef Engine_Function_h__
+﻿#ifndef Engine_Function_h__
 #define Engine_Function_h__
 
 namespace Engine
@@ -52,7 +52,6 @@ namespace Engine
 
 		return iRefCnt;
 	}
-
 
 }
 

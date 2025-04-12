@@ -55,9 +55,8 @@ HRESULT CWorldItem::Initialize(void* pArg)
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-	string strProtoItemIconTag = m_pItemData->strIconImageTag;
-	wstring wstrItemIconTag(strProtoItemIconTag.begin(), strProtoItemIconTag.end());
-	CTexture* pTexture = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(wstrItemIconTag));
+	
+	CTexture* pTexture = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(m_pItemData->szIconImageTag));
 	m_pModelCom->Set_Texture(0, pTexture);
 	Compute_Matrix();
 	Start_Animation(0, true);

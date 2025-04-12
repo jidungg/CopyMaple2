@@ -5,7 +5,7 @@ BEGIN(Client)
 class ISlotItem
 {
 public:
-	virtual const _char* Get_IconTag() abstract;
+	virtual const _tchar* Get_IconTag() abstract;
 protected:
 };
 

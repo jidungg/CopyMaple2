@@ -88,7 +88,14 @@ void CUIQuickSlot::Update(_float fTimeDelta)
 
 	__super::Update(fTimeDelta);
 	if(m_pQuickItem)
+	{
 		m_pQuickItem->Update_Cool(fTimeDelta);
+		_uint iStackCount = m_pQuickItem->Get_StackCount_Quick();
+		if (0 >= iStackCount)
+			Set_QuickItem(nullptr);
+		else
+			Set_StackCount(iStackCount);
+	}
 }
 
 HRESULT CUIQuickSlot::Render()
@@ -130,11 +137,7 @@ void CUIQuickSlot::Receive_Input()
 		if (1 > m_pQuickItem->Get_CoolTimeRatio() )
 			return;
 		m_pQuickItem->Use();
-		_uint iStackCount = m_pQuickItem->Get_StackCount_Quick();
-		if (0 >= iStackCount)
-			Set_QuickItem(nullptr);
-		else
-			Set_StackCount(iStackCount);
+
 	}
 }
 
@@ -163,9 +166,7 @@ void CUIQuickSlot::Set_QuickItem(IQuickItem* pItem)
 	}
 	else
 	{
-		string str = m_pQuickItem->Get_IconTag();
-		wstring wstrIconTag(str.begin(), str.end());
-		CTexture* pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, wstrIconTag));
+		CTexture* pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, m_pQuickItem->Get_IconTag()));
 
 		Set_IconTexture(pTextureCom);
 		_int iCount = m_pQuickItem->Get_StackCount_Quick();

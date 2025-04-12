@@ -91,7 +91,7 @@ HRESULT CMonster::Initialize(void* pArg)
 	return S_OK;
 }
 
-string CMonster::Get_Name()
+wstring CMonster::Get_Name()
 {
 	return m_pMonData->strMonsterName;
 }
@@ -120,7 +120,7 @@ HRESULT CMonster::Ready_Parts(MONSTER_DESC* pDesc)
 	else
 		tModelDesc.eModelProtoLevelID = LEVEL_LOADING;
 
-	strcpy_s(tModelDesc.strModelProtoName, m_pMonData->strModelTag);
+	lstrcpyW(tModelDesc.szModelProtoName, m_pMonData->strModelTag);
 	m_pBody = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
 	Add_Child(m_pBody);
 
@@ -252,7 +252,7 @@ HRESULT CMonster::Ready_AnimStateMachine()
 		pTransition = m_pAnimStateMachine->Add_SubTransition(M_BS_ATTACK, vAnimIndcies.front());
 		m_pAnimStateMachine->Bind_Condition(pTransition, MON_ANIM_CONDITION::AC_SKILL_ID, CONDITION_TYPE::EQUAL,(_int) pSkill.first);
 
-		_uint iCount = vAnimIndcies.size();
+		_uint iCount = (_uint)vAnimIndcies.size();
 		for (_uint idx = 0; idx < iCount - 1; idx++)
 		{
 			pTransition = m_pAnimStateMachine->Add_SubTransition(vAnimIndcies[idx], vAnimIndcies[idx + 1]);
@@ -262,7 +262,7 @@ HRESULT CMonster::Ready_AnimStateMachine()
 	}
 
 	//DAMG_SUB
-	_int iAnimCount = m_mapAnimIdx[M_AS_DAMG].size();
+	_int iAnimCount = (_uint)m_mapAnimIdx[M_AS_DAMG].size();
 	_int iInterval = 100 / iAnimCount;
 	_int iStart = 0, iEnd = iInterval;
 	for (_int i = 0; i < iAnimCount; i++)
@@ -274,7 +274,7 @@ HRESULT CMonster::Ready_AnimStateMachine()
 		iEnd += iInterval;
 	}
 	//DEAD_SUB
-	iAnimCount = m_mapAnimIdx[M_AS_DEAD].size();
+	iAnimCount = (_uint)m_mapAnimIdx[M_AS_DEAD].size();
 	iInterval = 100 / iAnimCount;
 	iStart = 0, iEnd = iInterval;
 	for (_int i = 0; i < iAnimCount; i++)

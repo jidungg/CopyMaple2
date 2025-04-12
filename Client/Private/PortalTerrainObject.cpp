@@ -25,7 +25,7 @@ HRESULT CPortalTerrainObject::Initialize(void* pArg)
 {
 	CTerrainObject::TERRAINOBJ_DESC* pDesc = (CTerrainObject::TERRAINOBJ_DESC*)pArg;
 	pDesc->eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(pDesc->strModelProtoName, "EmptyModel.model");
+	lstrcpyW(pDesc->szModelProtoName, TEXT("EmptyModel.model"));
 	m_eLevelID = (LEVELID)pDesc->vecIData.front();
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;

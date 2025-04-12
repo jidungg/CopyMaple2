@@ -19,14 +19,14 @@ typedef struct SkillData
 	SKILL_TARGET_TYPE eTargetType;
 	SKILL_RANGE_TYPE eRangeType;
 	//.콜라이더 크기, 오픠ㅏ셋 정보 추가
-	_char szName[MAX_PATH] = ("");
-	_char szDesc[MAX_PATH] = ("");
+	_tchar szName[MAX_PATH] = TEXT("");
+	_tchar szDesc[MAX_PATH] = TEXT("");
 	_uint iLevel = { 0 };
 	_uint iMaxLevel = { 0 };
 	SKILL_COST_TYPE eCostType;
 	_uint iCost = { 0 };
 	_float fCoolTime = { 0.f };
-	_char strIconImageTag[MAX_PATH] = ("");
+	_tchar strIconImageTag[MAX_PATH] = TEXT("");
 	_float fRange = { 1.f };
 	vector<float> vecData;
 	vector<float> vecLevelUpData;
@@ -67,7 +67,7 @@ public:
 	void Register_AnimEvent(CModelObject* pObj);
 
 
-	virtual const _char* Get_IconTag() override;
+	virtual const _tchar* Get_IconTag() override;
 	//virtual _float Get_CoolTimeRatio() override;
 
 	SKILL_DATA* Get_SkillDesc() { return m_pSkillDesc; }

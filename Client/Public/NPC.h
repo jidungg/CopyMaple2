@@ -1,6 +1,7 @@
 #pragma once
 #include "Interactable.h"
 #include "Conversation.h"
+#include "Engine_Utility.h"
 
 BEGIN(Engine)
 class CStateMachine;
@@ -13,9 +14,11 @@ typedef struct NPCData
 	{
 		eNPCId = js["NPCId"];
 		string str = js["Name"];
-		std::copy(str.begin(), str.end(), szNPCName);
+		wstring wstr = CEngineUtility::ConvertStringToWString(str);
+		std::copy(wstr.begin(), wstr.end(), szNPCName);
 		str = js["ModelTag"];
-		std::copy(str.begin(), str.end(), strModelTag);
+		wstr = CEngineUtility::ConvertStringToWString(str);
+		std::copy(wstr.begin(), wstr.end(), szModelTag);
 		json& jmapAnimIdx = js["AnimIdx"];
 		mapAnimIdx[N_AS_BORE] = jmapAnimIdx["BORE"].get<vector<_uint>>();
 		mapAnimIdx[N_AS_IDLE] = jmapAnimIdx["IDLE"].get<vector<_uint>>();
@@ -37,8 +40,8 @@ typedef struct NPCData
 		}
 	}
 	NPC_ID eNPCId;
-	_char szNPCName[MAX_PATH] = ("");
-	_char strModelTag[MAX_PATH] = ("");
+	_tchar szNPCName[MAX_PATH] = TEXT("");
+	_tchar szModelTag[MAX_PATH] = TEXT("");
 	unordered_map<NPC_ANIM_STATE, vector<_uint>> mapAnimIdx;
 	map<_uint,ConversationNodeData> mapChat;
 	vector<QUEST_ID> vecQuest;

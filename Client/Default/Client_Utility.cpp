@@ -2,6 +2,8 @@
 #include "Client_Utility.h"
 #include "GameInstance.h"
 #include "Level_Loading.h"
+#include "string"
+#include <Windows.h> // 추가된 헤더
 
 DirectX::XMVECTOR Client::Get_Direction_Vector(DIRECTION eDirection)
 {
@@ -56,3 +58,6 @@ LEVELID Client::Get_CurrentTrueLevel()
 	}
 	return eLevelID;
 }
+
+
+

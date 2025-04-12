@@ -138,4 +138,5 @@ CLevel_Logo * CLevel_Logo::Create(ID3D11Device * pDevice, ID3D11DeviceContext * 
 void CLevel_Logo::Free()
 {
 	__super::Free();
+	Safe_Release(m_pBackGround);
 }

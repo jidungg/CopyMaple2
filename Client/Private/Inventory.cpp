@@ -121,7 +121,7 @@ _bool CInventory::Is_Insertable(const ITEM_DATA* pData, _uint iCount)
 {
 	for (auto& pSlot : m_vecSlot[(_uint)pData->eITemType])
 	{
-		if (S_OK == pSlot->Is_Insertable(pData))
+		if (pSlot->Is_Insertable(pData))
 		{
 			return true;
 		}

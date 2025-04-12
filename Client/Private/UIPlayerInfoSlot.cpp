@@ -163,9 +163,7 @@ void CUIPlayerInfoSlot::Set_Item(const ITEM_DATA* pItem)
 	{
 		ITEM_GRADE eGrade = pItem->eItemGrade;
 		m_pBackPanel->Set_SRVIndex((_uint)eGrade);
-		string str = pItem->strIconImageTag;
-		wstring wstr(str.begin(), str.end());
-		CTexture* pTexure =static_cast<CTexture*>( m_pGameInstance->Clone_Proto_Component_Stock(wstr));
+		CTexture* pTexure =static_cast<CTexture*>( m_pGameInstance->Clone_Proto_Component_Stock(pItem->szIconImageTag));
 		m_pIcon->Set_Texture(pTexure);
 		m_pBackPanel->Set_Active(true);
 		m_pIcon->Set_Active(true);

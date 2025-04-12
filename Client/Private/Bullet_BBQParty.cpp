@@ -38,8 +38,8 @@ HRESULT CBullet_BBQParty::Initialize(void* pArg)
 	Add_Child(m_pKeepEffect);
 	m_pKeepEffect->Register_OnAnimEndCallBack(bind(&CBullet_BBQParty::On_KeepEffectAnimEnd, this, placeholders::_1));
 	m_pKeepEffect->Set_Active(false);
-	m_pKeepEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0,0.01,0,1 });
-	m_pKeepEffect->Get_Transform()->Scaling(1.5, 1.5, 1.5);
+	m_pKeepEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0.f,0.01f,0.f,1.f });
+	m_pKeepEffect->Get_Transform()->Scaling(1.5f, 1.5f, 1.5f);
 
 	//SplashInvokeEffect
 	tEffectDesc.eModelProtoLevelID = LEVEL_LOADING;
@@ -56,7 +56,7 @@ HRESULT CBullet_BBQParty::Initialize(void* pArg)
 	m_pSplashCastEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tEffectDesc));
 	Add_Child(m_pSplashCastEffect);
 	m_pSplashCastEffect->Set_Active(false);
-	m_pSplashCastEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0,0.01,0,1 });
+	m_pSplashCastEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0.f,0.01f,0,1.f });
 
 
 	//SplashEndEffect
@@ -66,7 +66,7 @@ HRESULT CBullet_BBQParty::Initialize(void* pArg)
 	Add_Child(m_pSplashEndEffect);
 	m_pSplashEndEffect->Register_OnAnimEndCallBack(bind(&CBullet_BBQParty::On_SplashEndEffectAnimEnd, this, placeholders::_1));
 	m_pSplashEndEffect->Set_Active(false);
-	m_pSplashEndEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0,0.01,0,1 });
+	m_pSplashEndEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0.f,0.01f,0,1.f });
 
 	return S_OK;
 }

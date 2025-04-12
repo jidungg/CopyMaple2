@@ -447,6 +447,7 @@
     <ClCompile Include="..\Private\VIBuffer_Particle_Instance.cpp" />
     <ClCompile Include="..\Private\SoundManager.cpp" />
     <ClCompile Include="..\Private\Sound.cpp" />
+    <ClCompile Include="..\Public\Engine_Function.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc" />

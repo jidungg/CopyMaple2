@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 #include "Base.h"
@@ -15,23 +15,23 @@ public:
 	HRESULT		Load(const wstring& _strPath);
 
 	// 일반 재생
-	void		Play(_float fStartPos = 0, bool _bLoop = false);
+	void		Play(_float fStartPos = 0, _bool _bLoop = false);
 
 	// BGM 으로 재생
-	void		PlayToBGM(float _StartPosition, bool _bLoop = false);
+	void		PlayToBGM(_float _StartPosition, _bool _bLoop = false);
 	void		PlayToSampleBGM();
 
-	void		Stop(bool _bReset = false);
+	void		Stop(_bool _bReset = false);
 
 	// 볼륨 범위 (0 ~ 100)
-	void		SetVolume(float _fVolume);
+	void		SetVolume(_float _fVolume);
 	int			GetVolume() { return m_iVolume; };
 
 	// 음악파일 위치 조정
-	void		SetPosition(float _fPosition); // 0 ~ 100 사이
+	void		SetPosition(_float _fPosition); // 0 ~ 100 사이
 
-	float GetPosition();
-	bool				Is_Playing();
+	_float GetPosition();
+	_bool				Is_Playing();
 
 
 	wstring		GetKey() { return m_strKey; }
@@ -43,13 +43,13 @@ public:
 
 private:
 	HRESULT		LoadWaveSound(const wstring& _strPath);
-	int			GetDecibel(float _fVolume);
+	int			GetDecibel(_float _fVolume);
 
 
 private:
 	LPDIRECTSOUNDBUFFER		m_pSoundBuffer;
 	DSBUFFERDESC			m_tBuffInfo;
-	int						m_iVolume;
+	int					m_iVolume;
 
 	wstring					m_strKey; // 리소스 키
 	wstring					m_strRelativePath; // 리소스 상대경로

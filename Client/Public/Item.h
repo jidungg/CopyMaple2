@@ -14,7 +14,7 @@ typedef struct ItemData
 		str = js["Desc"];
 		std::copy(str.begin(), str.end(), strItemDesc);
 		str = js["IconImg"];
-		std::copy(str.begin(), str.end(), strIconImageTag);
+		std::copy(str.begin(), str.end(), szIconImageTag);
 		str = js["Model"];
 		std::copy(str.begin(), str.end(), strModelTag);
 		iPrice = js["Price"];
@@ -25,10 +25,10 @@ typedef struct ItemData
 	ITEM_TYPE eITemType = ITEM_TYPE::LAST;
 	ITEM_GRADE eItemGrade = ITEM_GRADE::LAST;
 	_uint iItemID = { UINT_MAX };
-	_char strItemName[MAX_PATH] = ("");
-	_char strItemDesc[MAX_PATH] = ("");
-	_char strIconImageTag[MAX_PATH] = ("");
-	_char strModelTag[MAX_PATH] = ("");
+	_tchar strItemName[MAX_PATH] = TEXT("");
+	_tchar strItemDesc[MAX_PATH] = TEXT("");
+	_tchar szIconImageTag[MAX_PATH] = TEXT("");
+	_tchar strModelTag[MAX_PATH] = TEXT("");
 	_uint iPrice = 0;
 	_uint m_iMaxStack = { 0 };
 
@@ -46,7 +46,7 @@ typedef struct BuildItemData : public ItemData
 		iItemID = js["ItemId"];
 
 		string str = js["IconImg"];
-		std::copy(str.begin(), str.end(), strIconImageTag);
+		std::copy(str.begin(), str.end(), szIconImageTag);
 		str = js["Model"];
 		std::copy(str.begin(), str.end(), strModelTag);
 	}

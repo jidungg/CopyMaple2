@@ -74,7 +74,7 @@ void CUIHUDMonsterHPBar::Set_Character(CCharacter* pCharacter)
 	}
 	wstr = to_wstring(tStat.iHP);
 	m_pRemainHPFont->Set_Text(wstr.c_str());
-	m_pNameFont->Set_Text(CEngineUtility::ConvertStringToWString(pMonster->Get_Name()).c_str());
+	m_pNameFont->Set_Text(pMonster->Get_Name().c_str());
 }
 
 CUIHUDMonsterHPBar* CUIHUDMonsterHPBar::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

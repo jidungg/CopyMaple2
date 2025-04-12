@@ -60,14 +60,14 @@ _vector CEngineUtility::Parabolic_Interpolation(_fvector vStart, _fvector vEnd, 
 std::wstring CEngineUtility::ConvertStringToWString(const std::string& str)
 {
 	// 변환에 필요한 널 문자를 포함한 버퍼 크기 계산
-	int bufferSize = MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, nullptr, 0);
+	int bufferSize = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0);
 	if (bufferSize == 0) {
 		throw std::runtime_error("Failed to calculate buffer size.");
 	}
 
 	// 변환 수행
 	std::wstring wstr(bufferSize, L'\0');
-	MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, &wstr[0], bufferSize);
+	MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, &wstr[0], bufferSize);
 
 	// 문자열 끝의 널 문자를 제거
 	wstr.resize(wcslen(wstr.c_str()));
@@ -77,13 +77,13 @@ std::wstring CEngineUtility::ConvertStringToWString(const std::string& str)
 string CEngineUtility::ConvertWStringToString(const wstring& wstr)
 {
 	// 변환에 필요한 널 문자를 포함한 버퍼 크기 계산
-	int bufferSize = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
 	if (bufferSize == 0) {
 		throw std::runtime_error("Failed to calculate buffer size.");
 	}
 	// 변환 수행
 	std::string str(bufferSize, '\0');
-	WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
+	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
 	// 문자열 끝의 널 문자를 제거
 	str.resize(strlen(str.c_str()));
 	return str;

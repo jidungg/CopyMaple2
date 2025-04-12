@@ -1,6 +1,6 @@
-#include "Sound.h"
+﻿#include "Sound.h"
 #include "GameInstance.h"
-
+#include <cmath>
 
 CSound::CSound()
 	: m_pSoundBuffer(nullptr)
@@ -127,7 +127,7 @@ HRESULT CSound::LoadWaveSound(const wstring& _strPath)
 }
 
 
-void CSound::Play(_float fStartPos, bool _bLoop)
+void CSound::Play(float fStartPos, bool _bLoop)
 {
 	// Play 함수의 1번째 2번째 인자는 0 으로 이미 예약되어있다.
 	// 3번째 변수는 사운드를 반복재생 할 것인지 아닌지를 결정한다.
@@ -214,7 +214,7 @@ int CSound::GetDecibel(float _fVolume)
 		_fVolume = 0.00001f;
 
 	// 1 ~ 100 사이값을 데시벨 단위로 변경
-	int iVolume = (LONG)(-2000.0 * log10(100.f / _fVolume));
+	int iVolume = (int)(-2000.f * std::log10(100.f / _fVolume));
 
 	if (iVolume < -10000)
 		iVolume = -10000;

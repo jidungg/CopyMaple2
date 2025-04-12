@@ -53,7 +53,7 @@ HRESULT CBuilder::Ready_Builder()
 	tModelDesc.fRotationPerSec = 5.f;
 	tModelDesc.fSpeedPerSec = 1.f;
 	tModelDesc.eModelProtoLevelID = LEVEL_HOME;
-	strcpy_s(tModelDesc.strModelProtoName, "60100001_chocoduckyball.model");
+	lstrcpyW(tModelDesc.szModelProtoName, TEXT("60100001_chocoduckyball.model"));
 	m_pBird = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
 	Add_Child(m_pBird);
 	m_pBird->Set_AnimationLoop(0, true);
@@ -68,7 +68,7 @@ HRESULT CBuilder::Ready_Preview(BUILD_ITEM_DATA* pDesc)
 	tTerrObjDesc.fSpeedPerSec = 1.f;
 	tTerrObjDesc.iID =pDesc->iItemID;
 	tTerrObjDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tTerrObjDesc.strModelProtoName, pDesc->strModelTag);
+	lstrcpyW(tTerrObjDesc.szModelProtoName, pDesc->strModelTag);
 	XMStoreFloat4(&tTerrObjDesc.pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_vPreviewOffset);
 
 	m_pPreview = static_cast<CBuildPreview*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ,LEVEL_HOME, CBuildPreview::m_szProtoTag, &tTerrObjDesc));
@@ -153,7 +153,7 @@ void CBuilder::Receive_KeyInput(_float fTimeDelta)
 		desc.fSpeedPerSec = 1.f;
 		desc.iID = m_pPreview->Get_BuildItemID();
 		desc.eModelProtoLevelID = LEVEL_LOADING;
-		strcpy_s(desc.strModelProtoName, itemdesc->strModelTag);
+		lstrcpyW(desc.szModelProtoName, itemdesc->strModelTag);
 		desc.direction = m_pPreview->Get_Direction();
 		desc.vecIData.push_back(m_iBuildData);
 		desc.vecFData.push_back(m_fBuildData);

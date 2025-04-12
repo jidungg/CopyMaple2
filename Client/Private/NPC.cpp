@@ -43,7 +43,7 @@ HRESULT CNPC::Initialize(void* pArg)
 	//Body
 	CModelObject::MODELOBJ_DESC tModelDesc = {};
 	tModelDesc.eModelProtoLevelID = Get_CurrentTrueLevel();
-	strcpy_s(tModelDesc.strModelProtoName, m_pNPCData->strModelTag);
+	lstrcpyW(tModelDesc.szModelProtoName, m_pNPCData->szModelTag);
 	m_pBody = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
 	Add_Child(m_pBody);
 	m_pBody->Get_Transform()->Scaling(1.2f, 1.2f, 1.2f);

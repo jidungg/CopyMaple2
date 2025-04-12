@@ -40,6 +40,7 @@ HRESULT CPlayerInfo::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pCon
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_PLAYER, m_pPlayer, true)))
 		return E_FAIL;
 	Safe_AddRef(m_pPlayer);
+	m_iLeftStatPoint = m_pPlayer->Get_Stat().iLEVEL * 5;
 
 	return S_OK;
 }
@@ -185,6 +186,7 @@ void CPlayerInfo::Gain_EXP(_int iAmount)
 		pStat->iLEVEL++;
 		pStat->iEXP -= pDefaultStat->iEXP;
 		pDefaultStat->iEXP = pStat->iLEVEL * pStat->iLEVEL * 10;
+		m_pPlayer->FullRecovery();
 		m_iLeftStatPoint += 5;
 	}
 }
@@ -350,10 +352,10 @@ void CPlayerInfo::Increase_Stat(_uint iStatType)
 		m_pPlayer->Get_Stat_Ref()->iLUK++;
 		break;
 	case 4:
-		m_pPlayer->Get_Stat_Ref()->iHP += 50;
+		m_pPlayer->Get_DefaultStat_Ref()->iHP += 50;
 		break;
 	case 5:
-		m_pPlayer->Get_Stat_Ref()->fCrit += 0.5f;
+		m_pPlayer->Get_Stat_Ref()->fCrit += 0.05f;
 		break;
 	default:
 		break;

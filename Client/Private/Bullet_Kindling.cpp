@@ -82,7 +82,7 @@ void CBullet_Kindling::Launch(CSkill* pSkill, CGameObject* pTarget)
 	CTransform* pShooterTransform = m_pShooter->Get_Transform();
 	_vector vPos = pShooterTransform->Get_State(CTransform::STATE_POSITION);
 	_vector vLook = pShooterTransform->Get_State(CTransform::STATE_LOOK);
-	vPos += vLook * 1.2;
+	vPos += vLook * 1.2f;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 	m_pTransformCom->LookToward(vLook);
 	Set_Target(pTarget);

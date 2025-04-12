@@ -42,9 +42,9 @@ typedef struct MonsterData
 	}
 	MONSTER_ID eMonID = { MONSTER_ID::LAST };
 	MONSTER_GRADE  eMonGrade = { MONSTER_GRADE::LAST };
-	_char strMonsterName[MAX_PATH] = ("");
-	_char strMonsterDesc[MAX_PATH] = ("");
-	_char strModelTag[MAX_PATH] = ("");
+	_tchar strMonsterName[MAX_PATH] = TEXT("");
+	_tchar strMonsterDesc[MAX_PATH] = TEXT("");
+	_tchar strModelTag[MAX_PATH] = TEXT("");
 	_float fDetectionRange{ 3.f };
 	_float fChaseRange{ 4.f };
 	_float fBodyCollisionRadius;
@@ -120,7 +120,7 @@ public:
 
 	MONSTER_ID Get_MonsterID() { return m_pMonData->eMonID; }
 	MONSTER_GRADE Get_MonsterGrade() { return m_pMonData->eMonGrade; }
-	string Get_Name();
+	wstring Get_Name();
 protected:
 	HRESULT Ready_Components(MONSTER_DESC* pDesc);
 	HRESULT Ready_Parts(MONSTER_DESC* pDesc);

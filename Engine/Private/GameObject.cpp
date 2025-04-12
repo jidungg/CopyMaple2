@@ -109,6 +109,7 @@ void CGameObject::Late_Update(_float fTimeDelta)
 
 void CGameObject::Final_Update()
 {
+	if (m_pChilds.empty())return;
 	for (auto& m_pChilds_iter = m_pChilds.begin(); m_pChilds_iter != m_pChilds.end();)
 	{
 		if ((*m_pChilds_iter)->Is_Dead())

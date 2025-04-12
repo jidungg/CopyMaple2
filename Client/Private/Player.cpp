@@ -110,17 +110,30 @@ HRESULT CPlayer::Initialize(void* pArg)
 	Gain_Item(pItemDesc);
 	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_STAFF);
 	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_CAPE);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_EAR);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_GLOVE);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_SHOES);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_TOP);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_BOTTOM);
+	Gain_Item(pItemDesc);
 
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::CONSUMABLE, (_uint)CONSUMABLE_ITEM_ID::HP_POTION);
-	Gain_Item(pItemDesc);
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::CONSUMABLE, (_uint)CONSUMABLE_ITEM_ID::HP_POTION);
-	Gain_Item(pItemDesc);
+	for (int i = 0; i < 50; i++)
+	{
+		pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::CONSUMABLE, (_uint)CONSUMABLE_ITEM_ID::HP_POTION);
+		Gain_Item(pItemDesc);
+	}
 
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::DECO, (_uint)DECO_ITEM_ID::EGGTOAST);
-	Gain_Item(pItemDesc);
+	//pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::DECO, (_uint)DECO_ITEM_ID::EGGTOAST);
+	//Gain_Item(pItemDesc);
 
-	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::ETC, (_uint)ETC_ITEM_ID::CHICKEN);
-	Gain_Item(pItemDesc);
+	//pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::ETC, (_uint)ETC_ITEM_ID::CHICKEN);
+	//Gain_Item(pItemDesc);
 
 	UIBUNDLE->Set_QuickItem(KEY::Q, m_mapSkill[SKILL_ID::TELEPORT]);
 	UIBUNDLE->Set_QuickItem(KEY::W, m_mapSkill[SKILL_ID::BBQ_PARTY]);
@@ -142,9 +155,9 @@ HRESULT CPlayer::Ready_Parts(const json& jCustomData)
 
 	tHumanModelDesc.eModelProtoLevelID = LEVEL_LOADING;
 	string strTag = jCustomData["BodyTag"];
-	strcpy_s(tHumanModelDesc.strModelProtoName, strTag.c_str());
+	lstrcpyW(tHumanModelDesc.szModelProtoName, CEngineUtility::ConvertStringToWString( strTag).c_str());
 	strTag = jCustomData["FaceTag"];
-	tHumanModelDesc.wstrFaceProtoTag = wstring(strTag.begin(), strTag.end());
+	tHumanModelDesc.wstrFaceProtoTag = CEngineUtility::ConvertStringToWString(strTag);
 
 	m_pBody = static_cast<CHumanModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CHumanModelObject::m_szProtoTag, &tHumanModelDesc));
 	Add_Child(m_pBody);
@@ -154,7 +167,7 @@ HRESULT CPlayer::Ready_Parts(const json& jCustomData)
 	CBoneModelObject::BONEMODELOBJ_DESC tBoneModelDesc = {};
 	tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
 	strTag = jCustomData["HairTag"];
-	strcpy_s(tBoneModelDesc.strModelProtoName, strTag.c_str());
+	lstrcpyW(tBoneModelDesc.szModelProtoName, CEngineUtility::ConvertStringToWString(strTag.c_str()).c_str());
 	tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("HR");//Bip01 HeadNub_end
 	m_pCustomizes[(_uint)CUSTOMIZE_PART::HAIR] = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
 	if (nullptr == m_pCustomizes[(_uint)CUSTOMIZE_PART::HAIR]) return E_FAIL;
@@ -570,6 +583,7 @@ HRESULT CPlayer::Ready_Stat(const json& jStatData)
 	m_tStat = m_tStatDefault;
 
 	m_tStatDefault.iEXP = m_tStat.iLEVEL * m_tStat.iLEVEL*10;
+
 	return S_OK;
 }
 
@@ -579,6 +593,11 @@ void CPlayer::Receive_KeyInput(_float fTimeDelta)
 {
 	if (m_bHPZero)
 	{
+		if (m_pGameInstance->GetKeyState(KEY::ENTER) == KEY_STATE::DOWN)
+		{
+			FullRecovery();
+			m_vecCollider[0]->Set_Active(true);
+		}
 		return;
 	}
 	if (m_bAttached)
@@ -1158,7 +1177,7 @@ HRESULT CPlayer::Equip(const EQUIP_ITEM_DATA* pItem)
 	{
 		CBoneModelObject::BONEMODELOBJ_DESC tBoneModelDesc = {};
 		tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-		strcpy_s(tBoneModelDesc.strModelProtoName, pItem->strModelTag);
+		lstrcpyW(tBoneModelDesc.szModelProtoName, pItem->strModelTag);
 		tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Head");//Bip01 HeadNub_end
 		pModel = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
 		if (nullptr == pModel) return E_FAIL;
@@ -1171,7 +1190,7 @@ HRESULT CPlayer::Equip(const EQUIP_ITEM_DATA* pItem)
 	{
 		CBoneModelObject::BONEMODELOBJ_DESC tBoneModelDesc = {};
 		tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-		strcpy_s(tBoneModelDesc.strModelProtoName, pItem->strModelTag);
+		lstrcpyW(tBoneModelDesc.szModelProtoName, pItem->strModelTag);
 		tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Spine1");
 		pModel = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
 		if (nullptr == pModel) return E_FAIL;
@@ -1187,7 +1206,7 @@ HRESULT CPlayer::Equip(const EQUIP_ITEM_DATA* pItem)
 	{
 		CWeapon::WEAPON_DESC WeaponDesc{};
 		WeaponDesc.eModelProtoLevelID = LEVEL_LOADING;
-		strcpy_s(WeaponDesc.strModelProtoName, pItem->strModelTag);
+		lstrcpyW(WeaponDesc.szModelProtoName, pItem->strModelTag);
 		WeaponDesc.pSocketMatrix = m_pBody->Get_BoneMatrix("Weapon_Hand_R_Point");
 		WeaponDesc.pBackSocketMatrix = m_pBody->Get_BoneMatrix("Weapon_Back_B_Point");
 		pModel = static_cast<CWeapon*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CWeapon::m_szProtoTag, &WeaponDesc));
@@ -1207,7 +1226,7 @@ HRESULT CPlayer::Equip(const EQUIP_ITEM_DATA* pItem)
 		
 		CModelObject::MODELOBJ_DESC tModelDesc = {};
 		tModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-		strcpy_s(tModelDesc.strModelProtoName, pItem->strModelTag);
+		lstrcpyW(tModelDesc.szModelProtoName, pItem->strModelTag);
 		tModelDesc.pMimicTarget = m_pBody->Get_ModelCom();
 		pModel = static_cast<CModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CModelObject::m_szProtoTag, &tModelDesc));
 		if (nullptr == pModel) return E_FAIL;
@@ -1251,7 +1270,7 @@ HRESULT CPlayer::Equip(const DECO_ITEM_DATA* pItem)
 	//FaceDeco
 	CBoneModelObject::BONEMODELOBJ_DESC tBoneModelDesc = {};
 	tBoneModelDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tBoneModelDesc.strModelProtoName, pItem->strModelTag);
+	lstrcpyW(tBoneModelDesc.szModelProtoName, pItem->strModelTag);
 	tBoneModelDesc.pSocketMatrix = (m_pBody)->Get_BoneMatrix("Bip01 Head");//Bip01 HeadNub_end
 	m_pDecoModels[(_uint)eType] = static_cast<CBoneModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CBoneModelObject::m_szProtoTag, &tBoneModelDesc));
 	if (nullptr == m_pDecoModels[(_uint)eType]) return E_FAIL;

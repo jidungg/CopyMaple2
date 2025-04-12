@@ -357,7 +357,6 @@ HRESULT CLoader::Loading_Level_Logo()
 	lstrcpy(m_szLoadingText, TEXT("모델 로드."));
 #pragma region Model
 
-
 	///* For.Prototype_Component_CModel*/
 	XMMATRIX matPretransform = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
 	if (FAILED(Load_Dirctory_Models_Recursive(LEVEL_LOADING,
@@ -385,6 +384,7 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(Load_Dirctory_Models(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/MAP/Cube/"), matPretransform)))
 		return E_FAIL;
+
 
 	XMMATRIX matPretransform2 = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
 	matPretransform2 = matPretransform2 * XMMatrixRotationX(XMConvertToRadians(-90));
@@ -596,6 +596,7 @@ HRESULT CLoader::Loading_Level_Logo()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOADING, CWorldItem::m_szProtoTag,
 		CWorldItem::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	
 #pragma endregion
 
 

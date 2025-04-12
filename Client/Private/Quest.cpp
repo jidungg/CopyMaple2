@@ -267,7 +267,7 @@ json ItemQuestCondition::To_Json()
 wstring ItemQuestCondition::To_String()
 {
 	wstring wstrResult = L"";
-	wstrResult += CEngineUtility::ConvertStringToWString( ITEMDB->Get_Data(tItem.eItemType, tItem.iID)->strItemName);
+	wstrResult += ITEMDB->Get_Data(tItem.eItemType, tItem.iID)->strItemName;
 	wstrResult += L" 수집하기 (";
 	wstrResult += to_wstring(INVENTORY->Get_ItemCount(tItem.eItemType, tItem.iID));
 	wstrResult += L" / ";
@@ -299,7 +299,7 @@ json MonsterQuestCondition::To_Json()
 wstring MonsterQuestCondition::To_String()
 {
 	wstring wstrResult = L"";
-	wstrResult += CEngineUtility::ConvertStringToWString(MONSTERDB->Get_Data(iMonsterID)->strMonsterName);
+	wstrResult += MONSTERDB->Get_Data(iMonsterID)->strMonsterName;
 	wstrResult += L" 죽이기 (";
 	wstrResult += to_wstring(iCount);
 	wstrResult += L" / ";

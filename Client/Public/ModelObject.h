@@ -20,7 +20,7 @@ public:
 	typedef struct ModelObjDesc : public CGameObject::GAMEOBJECT_DESC
 	{
 		LEVELID eModelProtoLevelID = { LEVELID::LAST };
-		_char  strModelProtoName[MAX_PATH];
+		_tchar  szModelProtoName[MAX_PATH];
 		DIRECTION direction = { DIRECTION::XM };
 		const CModel* pMimicTarget = { nullptr };
 	}MODELOBJ_DESC;

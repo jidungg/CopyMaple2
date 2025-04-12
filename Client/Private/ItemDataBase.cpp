@@ -72,9 +72,7 @@ HRESULT CItemDataBase::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pC
 
 
 		//Render Target에 오브젝트 그리기
-		string strFileName = pairBuildItemData.second->strModelTag;
-		wstring wstrFileName = wstring(strFileName.begin(), strFileName.end());
-		CModel* pModel = static_cast<CModel*>(pGameInstance->Clone_Proto_Component_Stock(wstrFileName));
+		CModel* pModel = static_cast<CModel*>(pGameInstance->Clone_Proto_Component_Stock(pairBuildItemData.second->strModelTag));
 		_uint		iNumMeshes = pModel->Get_NumMeshes();
 
 		for (_uint i = 0; i < iNumMeshes; i++)
@@ -111,7 +109,8 @@ HRESULT CItemDataBase::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pC
 		CTexture* pTexCom = CTexture::Create(m_pDevice, m_pContext, pNewSRV);
 		if(nullptr == pTexCom)
 			return E_FAIL;
-		wstring wstrIconTag = wstrFileName.substr(0, wstrFileName.find_first_of(L"."));
+		wstring wstrFIleName = pairBuildItemData.second->strModelTag;
+		wstring wstrIconTag = wstrFIleName.substr(0, wstrFIleName.find_first_of(L"."));
 		wstrIconTag += L"_icon";
 		if(FAILED(pGameInstance->Add_Prototype(LEVEL_LOADING, wstrIconTag, pTexCom)))
 			Safe_Release(pTexCom);

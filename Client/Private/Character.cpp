@@ -158,9 +158,6 @@ HRESULT CCharacter::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
-	for (auto& pCollider : m_vecCollider)
-		if (pCollider->Is_Active())
-			pCollider->Render();
 	return S_OK;
 }
 
@@ -231,6 +228,7 @@ void CCharacter::FullRecovery()
 	m_tStat.iHP = Get_TotalHP();
 	m_tStat.iSP = m_tStatDefault.iSP;
 	m_tStat.iEP = m_tStatDefault.iEP;
+	m_bHPZero = false;
 }
 void CCharacter::RestoreHP(_int iAmount)
 {

@@ -14,7 +14,8 @@
             },
             "Quests": [
                  "OPILIA_QUEST_1",
-                 "OPILIA_QUEST_2"
+                 "OPILIA_QUEST_2",
+                 "OPILIA_QUEST_3"
             ],
             "ConversationNodes": [
                 {
@@ -35,6 +36,10 @@
                         {
                             "Type": "CHAT_OPT_QUEST",
                             "QuestId": "OPILIA_QUEST_2"
+                        },
+                        {
+                            "Type": "CHAT_OPT_QUEST",
+                            "QuestId": "OPILIA_QUEST_3"
                         },
                         {
                             "Type": "CHAT_OPT_NORMAL",
@@ -238,7 +243,7 @@
                     "Next": -1
                 },
                 {
-                    "Index": 11,
+                    "Index": 13,
                     "Portraits": [
                         {
                             "Tag": "11000508_b.dds",

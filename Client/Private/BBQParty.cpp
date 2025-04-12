@@ -45,14 +45,14 @@ HRESULT CBBQParty::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_wizard_bbqparty_cast_01_a.effmodel");
 	m_pCastEffect1 = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pCastEffect1->Set_Active(false);
-	m_pCastEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0,0.01,0,1 });
+	m_pCastEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0.f,0.01f,0.f,1.f });
 
 	//CastENdEffect
 	tCastEffDesc.eModelProtoLevelID = LEVEL_LOADING;
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_wizard_bbqparty_cast_02_a.effmodel");
 	m_pCastEffect2 = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pCastEffect2->Set_Active(false);
-	m_pCastEffect2->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0,0.01,0,1 });
+	m_pCastEffect2->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0.f,0.01f,0.f,1.f });
 
 	return S_OK;
 }
@@ -89,7 +89,7 @@ void CBBQParty::Late_Update(_float fTimeDelta)
 
 void CBBQParty::On_SkillUsed()
 {
-	m_pCastEffect1->Set_Transform(m_pUser->Get_WorldPosition() + _vector{ 0,0.1,0,0 });
+	m_pCastEffect1->Set_Transform(m_pUser->Get_WorldPosition() + _vector{ 0.f,0.1f,0.f,0.f });
 	m_pCastEffect1->Start_Animation();
 	m_pCastEffect1->Set_Active(true);
 
@@ -103,7 +103,7 @@ void CBBQParty::On_CastingEnd()
 
 void CBBQParty::Fire()
 {
-	m_pCastEffect2->Set_Transform(m_pUser->Get_WorldPosition() + _vector{ 0,0.1,0,0} );
+	m_pCastEffect2->Set_Transform(m_pUser->Get_WorldPosition() + _vector{ 0.f,0.1f,0.f,0.f} );
 	m_pCastEffect2->Start_Animation();
 	m_pCastEffect2->Set_Active(true);
 

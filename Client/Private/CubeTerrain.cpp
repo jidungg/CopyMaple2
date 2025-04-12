@@ -83,7 +83,7 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 		CTerrainObject::TERRAINOBJ_DESC desc;
 		desc.fRotationPerSec = 5.f;
 		desc.fSpeedPerSec = 1.f;
-		strcpy_s(desc.strModelProtoName, pBuildItemDesc->strModelTag);
+		lstrcpyW(desc.szModelProtoName, pBuildItemDesc->strModelTag);
 		desc.eModelProtoLevelID = LEVEL_LOADING;
 		desc.iID = eId;
 		desc.direction = item["Direction"];

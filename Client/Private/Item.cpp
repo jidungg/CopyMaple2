@@ -62,5 +62,5 @@ BuildItemData::BuildItemData(string strFileName, ID3D11Device* pDevice, ID3D11De
 
 	string strIconTag = strFileName.substr(0, strFileName.find_first_of("."));
 	strIconTag += "_icon";
-	std::copy(strIconTag.begin(), strIconTag.end(), strIconImageTag);
+	std::copy(strIconTag.begin(), strIconTag.end(), szIconImageTag);
 }

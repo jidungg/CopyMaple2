@@ -59,7 +59,7 @@
                 }
             ],
             "NotSatisfiedConversations": [
-                4
+                11
             ],
             "CompleteConversations": [
                 5
@@ -87,7 +87,7 @@
             "AcceptableLevel": 5,
             "PrequisiteQuests": [ "OPILIA_QUEST_2" ],
             "AcceptConversations": [
-                11
+                12
             ],
             "CompleteConditions": [
                 {
@@ -98,7 +98,7 @@
                 }
             ],
             "NotSatisfiedConversations": [
-                4
+                13
             ],
             "CompleteConversations": [
                 5

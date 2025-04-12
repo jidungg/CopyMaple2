@@ -409,7 +409,7 @@ _float CSkill::Get_CoolTimeRatio()
 	return m_fCoolTimeAcc/ m_pSkillDesc->fCoolTime;
 }
 
-const _char* CSkill::Get_IconTag()
+const _tchar* CSkill::Get_IconTag()
 {
 	return m_pSkillDesc->strIconImageTag;
 }

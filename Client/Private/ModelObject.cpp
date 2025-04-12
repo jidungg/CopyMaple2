@@ -60,8 +60,7 @@ HRESULT CModelObject::Ready_Components(void* pArg)
 {
     MODELOBJ_DESC* pDesc = (MODELOBJ_DESC*)pArg;
     /* Com_VIBuffer */
-    string tmp = pDesc->strModelProtoName;
-    wstring wtmp = wstring(tmp.begin(), tmp.end());
+    wstring wtmp = pDesc->szModelProtoName;
 	CModel::ModelDesc modelDesc;
     modelDesc.pMimicTarget =  pDesc->pMimicTarget;
     m_pModelCom = static_cast<CModel*>( m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, pDesc->eModelProtoLevelID,wtmp,&modelDesc));
@@ -155,8 +154,7 @@ HRESULT CModelObject::Replace_Model(MODELOBJ_DESC* pDesc)
 {
     Remove_Component(m_pModelCom);
     /* Com_VIBuffer */
-    string tmp = pDesc->strModelProtoName;
-    wstring wtmp = wstring(tmp.begin(), tmp.end());
+    wstring wtmp = pDesc->szModelProtoName;
     CModel::ModelDesc modelDesc;
     modelDesc.pMimicTarget = pDesc->pMimicTarget;
     m_pModelCom = static_cast<CModel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, pDesc->eModelProtoLevelID, wtmp, &modelDesc));

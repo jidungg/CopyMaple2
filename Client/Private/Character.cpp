@@ -261,13 +261,13 @@ void CCharacter::NatureRecover(_float fTimeDelta)
 	if (m_fHPRecoverAcc >= 1)
 	{
 		RestoreHP((_int)m_fHPRecoverAcc);
-		m_fHPRecoverAcc = fmod(m_fHPRecoverAcc, 1);
+		m_fHPRecoverAcc = fmod((double)m_fHPRecoverAcc, 1);
 	}
 	m_fSPRecoverAcc += m_tStat.fSPRecovery * fTimeDelta;
 	if (m_fSPRecoverAcc >= 1)
 	{
 		RestoreSP((_int)m_fSPRecoverAcc);
-		m_fSPRecoverAcc = fmod(m_fSPRecoverAcc, 1);
+		m_fSPRecoverAcc = fmod((double)m_fSPRecoverAcc, 1);
 	}
 }
 void CCharacter::Respawn()

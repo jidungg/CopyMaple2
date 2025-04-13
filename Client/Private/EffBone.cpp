@@ -37,7 +37,6 @@ HRESULT CEffBone::Initialize(ifstream& inFile, _int iParentBoneIndex)
 	inFile.read(reinterpret_cast<char*>(&m_DefaultTransformationMatrix), sizeof(_float4x4));
 	m_TransformationMatrix = m_DefaultTransformationMatrix;
 
-
 	XMStoreFloat4x4(&m_CombindTransformationMatrix, XMMatrixIdentity());
 
 	m_iParentBoneIndex = iParentBoneIndex;

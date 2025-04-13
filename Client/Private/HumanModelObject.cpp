@@ -65,7 +65,6 @@ HRESULT CHumanModelObject::Render()
 
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-	CShader* pShader;
 	//m_pFaceCom->Bind_FaceShaderResource(m_pFaceShaderCom, "g_FaceTexture");
 	m_pFaceCom->Bind_FaceShaderResource(m_pShaderCom, "g_FaceTexture");
 	for (_uint i = 0; i < iNumMeshes; i++)

@@ -387,9 +387,16 @@ HRESULT CLoader::Loading_Level_Logo()
 
 
 	XMMATRIX matPretransform2 = XMMatrixScaling(1 / 150.0f, 1 / 150.0f, 1 / 150.0f);
-	matPretransform2 = matPretransform2 * XMMatrixRotationX(XMConvertToRadians(-90));
-	//matPretransform2 = matPretransform2 * XMMatrixRotationY(XMConvertToRadians(180));
-	matPretransform2 = matPretransform2 * XMMatrixScaling(-1,1,1);
+	XMMATRIX matNegative = XMMatrixScaling(-1.f, -1.f, 1.f);
+	matPretransform2 *= matNegative;
+	XMMATRIX matYZSwap = XMMatrixSet(
+		1.f, 0.f, 0.f, 0.f,
+		0.f, 0.f, 1.f, 0.f,
+		0.f, 1.f, 0.f, 0.f,
+		0.f, 0.f, 0.f, 1.f
+	);
+	matPretransform2 *= matYZSwap;
+
 	if (FAILED(Load_Dirctory_EffModels(LEVEL_LOADING,
 		TEXT("../Bin/resources/FBXs/Effect"), matPretransform2)))
 		return E_FAIL;

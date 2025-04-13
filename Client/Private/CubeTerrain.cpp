@@ -332,10 +332,10 @@ void CCubeTerrain::Culling(COctoTree* pOctoTree)
 
 	_uint* pIndices = pOctoTree->Get_Corners();
 	_float		fRange = XMVectorGetX( XMVector3Length( IndexToPos( pOctoTree->Get_Center()) - IndexToPos(pIndices[COctoTree::RTF])));
-	_float fRange2 = pOctoTree->Get_Radius(1);
+	_float fRange2 = pOctoTree->Get_Radius(1.f);
 
 	_vector vCenterPos = IndexToPos(pOctoTree->Get_Center());
-	if (true == m_pGameInstance->Frustum_Culling_World(vCenterPos, fRange + 1.7))
+	if (true == m_pGameInstance->Frustum_Culling_World(vCenterPos, fRange + 1.7f))
 	{
 		if (pOctoTree->Is_Leaf())
 		{
@@ -347,7 +347,7 @@ void CCubeTerrain::Culling(COctoTree* pOctoTree)
 				{
 					if (UINT_MAX != pIndices[i] &&nullptr != m_vecCells[pIndices[i]])
 					{
-						m_vecCells[pIndices[i]]->Culling(1.7);
+						m_vecCells[pIndices[i]]->Culling(1.7f);
 						XMUINT3 i2Pos = SplitIndex(pIndices[i]);
 						// << "POS : " << i2Pos.x << "," << i2Pos.z << "," << i2Pos.y << endl;
 
@@ -359,7 +359,7 @@ void CCubeTerrain::Culling(COctoTree* pOctoTree)
 			{
 				if (UINT_MAX != pIndices[0]  &&nullptr != m_vecCells[pIndices[0]])
 				{
-					m_vecCells[pIndices[0]]->Culling(1.7);
+					m_vecCells[pIndices[0]]->Culling(1.7f);
 					XMUINT3 i2Pos = SplitIndex(pIndices[0]);
 					//cout << "POS : " << i2Pos.x << "," << i2Pos.z << "," << i2Pos.y << endl;
 				}

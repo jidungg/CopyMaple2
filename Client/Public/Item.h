@@ -1,6 +1,7 @@
 #pragma once
 #include "Base.h"
 #include "Model.h"
+#include "Engine_Utility.h"
 
 BEGIN(Client)
 typedef struct ItemData 
@@ -10,12 +11,16 @@ typedef struct ItemData
 	{
 
 		string str = js["Name"];
+		wstring wstr = CEngineUtility::ConvertStringToWString(str);
 		std::copy(str.begin(), str.end(), strItemName);
 		str = js["Desc"];
+		wstr = CEngineUtility::ConvertStringToWString(str);
 		std::copy(str.begin(), str.end(), strItemDesc);
 		str = js["IconImg"];
+		wstr = CEngineUtility::ConvertStringToWString(str);
 		std::copy(str.begin(), str.end(), szIconImageTag);
 		str = js["Model"];
+		wstr = CEngineUtility::ConvertStringToWString(str);
 		std::copy(str.begin(), str.end(), strModelTag);
 		iPrice = js["Price"];
 		eItemGrade = js["ItemGrade"];

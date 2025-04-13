@@ -60,7 +60,7 @@ QuestData::QuestData(json& js)
 _bool QuestData::Is_SatisfiedAcceptCondition()
 {
 	CPlayer* pPlayer = PLAYERINIFO->Get_Player();
-	if (pPlayer->Get_Stat().iLEVEL < iAcceptableLevel)
+	if (pPlayer->Get_Stat().iLEVEL < (_int)iAcceptableLevel)
 		return false;
 	for (auto& eQuestId : listPrequisiteQuest)
 	{

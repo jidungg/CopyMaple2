@@ -117,16 +117,27 @@ HRESULT CEffModel::Initialize(void* pArg)
 HRESULT CEffModel::Render(CShader* pShader)
 {
 
-    for (_int i = m_iNumMeshes -1; i >= 0 ; i--)
+    for (_int i = m_iNumMeshes-1; i >=0 ; i--)
     {
-        _uint iMaterialIdx = m_vecMesh[i]->Get_MaterialIndex();
+        _int iMaterialIdx = m_vecMesh[i]->Get_MaterialIndex();
+        _int iTexturingIdx = m_vecMesh[i]->Get_TexturingIndex();
+
         if(iMaterialIdx != -1)
+        {
             if (FAILED(m_vecMaterial[iMaterialIdx]->Bind_Material(pShader)))
                 return E_FAIL;
-        _uint iTexturingIdx = m_vecMesh[i]->Get_TexturingIndex();
+		}
+		else
+			continue;
         if(iTexturingIdx != -1)
-            if (FAILED(m_vecTexturing[iTexturingIdx]->Bind_Texture(pShader,m_vecTexture)))
+        {
+            if (FAILED(m_vecTexturing[iTexturingIdx]->Bind_Texture(pShader, m_vecTexture)))
                 return E_FAIL;
+        }
+        else
+           continue;
+
+
         if (FAILED(m_vecMesh[i]->Bind_BoneMatrices(pShader, "g_BoneMatrices", m_vecBone)))
             return E_FAIL;
 

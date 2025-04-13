@@ -1,6 +1,7 @@
 #pragma once
 #include "Character.h"
 #include "Status.h"
+#include "Engine_Utility.h"
 
 BEGIN(Client)
 class CWayFinder;
@@ -14,11 +15,14 @@ typedef struct MonsterData
 		eMonID = js["Id"];
 		eMonGrade = js["Grade"];
 		string str = js["Name"];
-		std::copy(str.begin(), str.end(), strMonsterName);
+		wstring wstr = CEngineUtility::ConvertStringToWString(str);
+		std::copy(wstr.begin(), wstr.end(), strMonsterName);
 		str = js["Desc"];
-		std::copy(str.begin(), str.end(), strMonsterDesc);
+		wstr = CEngineUtility::ConvertStringToWString(str);
+		std::copy(wstr.begin(), wstr.end(), strMonsterDesc);
 		str = js["Model"];
-		std::copy(str.begin(), str.end(), strModelTag);
+		wstr = CEngineUtility::ConvertStringToWString(str);
+		std::copy(wstr.begin(), wstr.end(), strModelTag);
 		tStat = STATUS(js["Status"]);
 		vecSkillID = js["Skill"].get<vector<SKILL_ID>>();
 		fBodyCollisionRadius = js["BodyCollisionRadius"];

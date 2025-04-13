@@ -10,15 +10,28 @@
 int main(int argc, char* argv[])
 {
 	CFbxToBinary modelConverter;
-	fs::path path;
-	path = fs::current_path();
-	cin >> path;
+	fs::path srcPath;
+	srcPath = fs::current_path();
+	cin >> srcPath;
+	//fs::path lookUpPath;
+	//cin >> lookUpPath;
 
-    for (const auto& entry : recursive_directory_iterator(path)) {
+    for (const auto& entry : recursive_directory_iterator(srcPath)) {
+		//FBXConvert 코드
         if (entry.path().extension() == ".fbx") {
             cout << entry.path().string() << "=========================================="<< endl;
 			modelConverter.FbxToBinary( entry.path().string());
         }
+    
+		//Nif복사 코드
+		//if (entry.path().extension() == ".nif") {
+		//	for (const auto& lookupENtry : recursive_directory_iterator(lookUpPath)) {
+		//		if (entry.path().filename() == lookupENtry.path().filename()) {
+		//			fs::copy_file(lookupENtry.path(), entry.path(), fs::copy_options::overwrite_existing);
+		//			cout << "COpy " << lookupENtry.path() << "\nto" << entry.path() << endl;
+		//		}
+		//	}
+		//}
     }
 		
 

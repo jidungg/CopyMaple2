@@ -205,14 +205,12 @@ HRESULT CEffTransformController::Initialize_Prototype(ifstream& inFile, const CE
 	{
 		TRANSFORM_KEYFRAME tNewFrame;
 		inFile.read(reinterpret_cast<char*>(&tNewFrame.vScale), sizeof(_float3));
-		tNewFrame.vScale.x = -tNewFrame.vScale.x;
-		//_float3 vRotation;
+
+
 		inFile.read(reinterpret_cast<char*>(&tNewFrame.vRotation), sizeof(_float3));
-		tNewFrame.vRotation.x = tNewFrame.vRotation.x ;
-		tNewFrame.vRotation.y = tNewFrame.vRotation.y;
-		tNewFrame.vRotation.z = -tNewFrame.vRotation.z;
-		//XMStoreFloat4( &tNewFrame.vRotation , XMQuaternionRotationRollPitchYaw(vRotation.x, vRotation.z, vRotation.y));
+
 		inFile.read(reinterpret_cast<char*>(&tNewFrame.vPosition), sizeof(_float3));
+
 		inFile.read(reinterpret_cast<char*>(&tNewFrame.fTrackPosition), sizeof(_float));
 		m_vecKeyFrame.push_back(tNewFrame);
 	}
@@ -232,37 +230,45 @@ _bool CEffTransformController::Update_InTime(_float fTrackPos)
 	_uint iNumFrame = (_uint)m_vecKeyFrame.size();
 	if (iNumFrame == 0)
 		return true;
+
+	TRANSFORM_KEYFRAME tKeyFrame;
+	_bool bRet = false;
 	if (iNumFrame == 1)
 	{
-		TRANSFORM_KEYFRAME tKeyFrame = m_vecKeyFrame[0];
-		_vector vQuaternion = XMQuaternionRotationRollPitchYaw(tKeyFrame.vRotation.x, tKeyFrame.vRotation.y, tKeyFrame.vRotation.z);
-		(pTarget)->Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&tKeyFrame.vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), vQuaternion, XMVectorSetW(XMLoadFloat3(&tKeyFrame.vPosition), 1.f)));
-		return true;
+		tKeyFrame = m_vecKeyFrame[0];
+		bRet =  true;
 	}
-	if (m_vecKeyFrame[iNumFrame - 1].fTrackPosition < fTrackPos)
+	else if (m_vecKeyFrame[iNumFrame - 1].fTrackPosition < fTrackPos)
 	{
-		TRANSFORM_KEYFRAME tKeyFrame = m_vecKeyFrame[iNumFrame - 1];
-		_vector vQuaternion = XMQuaternionRotationRollPitchYaw(tKeyFrame.vRotation.x, tKeyFrame.vRotation.y, tKeyFrame.vRotation.z);
-		pTarget->Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&tKeyFrame.vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), vQuaternion, XMVectorSetW(XMLoadFloat3(&tKeyFrame.vPosition), 1.f)));
-		return true;
+		tKeyFrame = m_vecKeyFrame[iNumFrame - 1];
+		bRet =  true;
 	}
-	while (m_vecKeyFrame[iCurrentKeyFrameIndex + 1].fTrackPosition < fTrackPos)
+	else
 	{
-		iCurrentKeyFrameIndex++;
+		while (m_vecKeyFrame[iCurrentKeyFrameIndex + 1].fTrackPosition < fTrackPos)
+			iCurrentKeyFrameIndex++;
+
+		TRANSFORM_KEYFRAME tLeftKeyFrame = m_vecKeyFrame[iCurrentKeyFrameIndex];
+		TRANSFORM_KEYFRAME tRightKeyFrame = m_vecKeyFrame[iCurrentKeyFrameIndex + 1];
+
+		_float fRatio = (fTrackPos - tLeftKeyFrame.fTrackPosition)
+			/ (tRightKeyFrame.fTrackPosition - tLeftKeyFrame.fTrackPosition);
+		tKeyFrame = CEngineUtility::Lerp_NonQuaternionFrame(tLeftKeyFrame, tRightKeyFrame, fRatio);
+		bRet = false;
 	}
 
-	TRANSFORM_KEYFRAME tLeftKeyFrame = m_vecKeyFrame[iCurrentKeyFrameIndex];
-	TRANSFORM_KEYFRAME tRightKeyFrame = m_vecKeyFrame[iCurrentKeyFrameIndex + 1];
+	_matrix mat = XMMatrixIdentity();
+	mat *= XMMatrixScalingFromVector(XMLoadFloat3( &tKeyFrame.vScale));
+	mat *= XMMatrixRotationAxis({ 1.f,0.f,0.f }, tKeyFrame.vRotation.x);
+	mat *= XMMatrixRotationAxis({ 0.f,1.f,0.f }, tKeyFrame.vRotation.y);
+	mat *= XMMatrixRotationAxis({ 0.f,0.f,1.f }, tKeyFrame.vRotation.z);
+	mat *= XMMatrixTranslationFromVector(XMLoadFloat3(&tKeyFrame.vPosition));
+	//_vector vQuaternion = XMQuaternionRotationRollPitchYaw(tKeyFrame.vRotation.x, tKeyFrame.vRotation.y, tKeyFrame.vRotation.z);
+	//_vector vQuaternion = XMQuaternionRotationRollPitchYaw(XMConvertToRadians(90.f), XMConvertToRadians(90.f), XMConvertToRadians(90.f));
+	//mat = XMMatrixAffineTransformation(XMLoadFloat3(&tKeyFrame.vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), vQuaternion, XMVectorSetW(XMLoadFloat3(&tKeyFrame.vPosition), 1.f));
 
-
-	_float fRatio = (fTrackPos - tLeftKeyFrame.fTrackPosition)
-		/ (tRightKeyFrame.fTrackPosition - tLeftKeyFrame.fTrackPosition);
-	TRANSFORM_KEYFRAME tKeyFrame = CEngineUtility::Lerp_NonQuaternionFrame(tLeftKeyFrame, tRightKeyFrame, fRatio);
-
-	_vector vQuaternion = XMQuaternionRotationRollPitchYaw(tKeyFrame.vRotation.x, tKeyFrame.vRotation.y, tKeyFrame.vRotation.z);
-
-	pTarget->Set_TransformationMatrix(XMMatrixAffineTransformation(XMLoadFloat3(&tKeyFrame.vScale), XMVectorSet(0.f, 0.f, 0.f, 1.f), vQuaternion, XMVectorSetW(XMLoadFloat3(&tKeyFrame.vPosition), 1.f)));
-	return false;
+	pTarget->Set_TransformationMatrix(mat);
+	return bRet;
 }
 
 void CEffTransformController::Set_Target(vector<CEffBone*>& vecBone)

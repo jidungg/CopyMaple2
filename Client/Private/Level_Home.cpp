@@ -72,6 +72,10 @@ HRESULT CLevel_Home::Initialize(void* pArg)
 void CLevel_Home::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
+	if (m_pGameInstance->GetKeyState(KEY::F1) == KEY_STATE::DOWN)
+		m_pEffect->Start_Animation(0, false, -1, 0.2);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pEffect);
+
 	//----------------------------------------------
 	if (m_pGameInstance->GetKeyState(KEY::B) == KEY_STATE::DOWN)
 	{

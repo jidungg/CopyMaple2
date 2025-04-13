@@ -283,7 +283,7 @@ _int CPlayerInfo::Get_TotalAttack()
 
 _int CPlayerInfo::Get_AttackPoint()
 {
-	return Get_TotalAttack() * (Get_TotalCRIT() +1);
+	return Get_TotalAttack() * ((_int)Get_TotalCRIT() +1);
 }
 
 _int CPlayerInfo::Get_TotalDefense()

@@ -32,7 +32,7 @@ HRESULT CWildFire::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	m_pCastEffect1 = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pCastEffect1->Set_Active(false);
 	m_pUser->Add_Child(m_pCastEffect1);
-	m_pCastEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, { 0,0.01,0 ,1});
+	m_pCastEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, { 0.f,0.01f,0.f ,1.f});
 
 	return S_OK;
 }

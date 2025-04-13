@@ -212,7 +212,7 @@ HRESULT CNPC::Ready_AnimStateMachine()
 	//SUBTRANSITION
 	pTransition = m_pAnimStateMachine->Add_SubTransition(N_BS_BORE, m_pNPCData->mapAnimIdx[N_AS_BORE].front());
 	vector<_uint>& vecAnimIndex = m_pNPCData->mapAnimIdx[N_AS_BORE];
-	_uint iCount = vecAnimIndex.size();
+	_uint iCount = (_uint)vecAnimIndex.size();
 	_float fRandomStride = 1.f / (_float)iCount;
 	_float fRandomStart = 0.f;
 	_float fRandomEnd = fRandomStride;

@@ -31,7 +31,7 @@ HRESULT CUIMainHUDGuage::Initialize(void* pArg)
 	tPanelDesc.fSizeY = pDesc->fSizeY;
 	tPanelDesc.fXOffset = 0;
 	tPanelDesc.fYOffset = -25;
-	tPanelDesc.vBorder = { 0,0,0,0 };
+	tPanelDesc.vBorder = { 0.f,0.f,0.f,0.f };
 	tPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVELID::LEVEL_LOADING, TEXT("mainhpbar_back.dds")));
 	m_pBack = static_cast<CUIPanel*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &tPanelDesc));
 	if (nullptr == m_pBack)
@@ -45,7 +45,7 @@ HRESULT CUIMainHUDGuage::Initialize(void* pArg)
 	tFillDesc.fSizeY = pDesc->fSizeY;
 	tFillDesc.fXOffset = 0;
 	tFillDesc.fYOffset = -25;
-	tFillDesc.vBorder = { 0,0,0,0 };
+	tFillDesc.vBorder = { 0.f,0.f,0.f,0.f };
 	tFillDesc.pValue = &(m_iHP);
 	tFillDesc.pDefaultValue = &(m_iDefaultHP);
 	tFillDesc.fVerticalEnd = { 0.85f };
@@ -150,7 +150,7 @@ HRESULT CUIMainHUDGuage::Initialize(void* pArg)
 	str = to_wstring(m_iHP);
 	tFontDesc.pText = str.c_str();
 	tFontDesc.pFontTag = L"LV2Gothic_Bold_10";
-	tFontDesc.vColor = _vector{ 0.7f, 0.7, 0.7, 1.f };
+	tFontDesc.vColor = _vector{ 0.7f, 0.7f, 0.7f, 1.f };
 	tFontDesc.bShade = true;
 	m_pDefaultHPCountFont = static_cast<CUIFont*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIFont::m_szProtoTag, &tFontDesc));
 	if (nullptr == m_pDefaultHPCountFont)
@@ -164,7 +164,7 @@ HRESULT CUIMainHUDGuage::Initialize(void* pArg)
 	str = to_wstring(m_iSP);
 	tFontDesc.pText = str.c_str();
 	tFontDesc.pFontTag = L"LV2Gothic_Bold_10";
-	tFontDesc.vColor = _vector{ 0.7f, 0.7, 0.7, 1.f };
+	tFontDesc.vColor = _vector{ 0.7f, 0.7f, 0.7f, 1.f };
 	tFontDesc.bShade = true;
 	m_pDefaultSPCountFont = static_cast<CUIFont*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIFont::m_szProtoTag, &tFontDesc));
 	if (nullptr == m_pDefaultSPCountFont)

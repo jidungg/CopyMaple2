@@ -90,9 +90,9 @@ HRESULT CUIQuestGuide::Ready_Components()
 	tPanelDesc.ePivotType = CORNOR_TYPE::BOT;
 	tPanelDesc.fSizeX = f2Size.x;
 	tPanelDesc.fSizeY = f2Size.y;
-	tPanelDesc.fXOffset = 0;
-	tPanelDesc.fYOffset = 0;
-	tPanelDesc.vBorder = { 4,4,4,4 };
+	tPanelDesc.fXOffset = 0.f;
+	tPanelDesc.fYOffset = 0.f;
+	tPanelDesc.vBorder = { 4.f,4.f,4.f,4.f };
 	tPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("questguide_back.dds")));
 	m_pBackPanel = static_cast<CUIPanel*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &tPanelDesc));
 	Add_Child(m_pBackPanel);
@@ -101,10 +101,10 @@ HRESULT CUIQuestGuide::Ready_Components()
 	tPanelDesc.ePivotType = CORNOR_TYPE::TOP;
 	tPanelDesc.fSizeX = f2Size.x;
 	tPanelDesc.fSizeY = m_f2TitleSize.y;
-	tPanelDesc.fXOffset = 0;
-	tPanelDesc.fYOffset = 0;
+	tPanelDesc.fXOffset = 0.f;
+	tPanelDesc.fYOffset = 0.f;
 	tPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("questguide_title.dds")));
-	tPanelDesc.vBorder = { 3,1,3,3 };
+	tPanelDesc.vBorder = { 3.f,1.f,3.f,3.f };
 	m_pTitlePanel = static_cast<CUIPanel*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &tPanelDesc));
 	Add_Child(m_pTitlePanel);
 
@@ -117,7 +117,7 @@ HRESULT CUIQuestGuide::Ready_Components()
 	tFontDesc.fYOffset = -m_fCommonPadding;
 	tFontDesc.pFontTag = TEXT("LV2Gothic_Bold_13");
 	tFontDesc.pText = m_pQuestData->strName.c_str();
-	tFontDesc.vColor = { 0.9,0.69,0.255,1 };
+	tFontDesc.vColor = { 0.9f,0.69f,0.255f,1.f };
 	tFontDesc.bShade = true;
 	m_pTitleFont = static_cast<CUIFont*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIFont::m_szProtoTag, &tFontDesc));
 	m_pTitlePanel->Add_Child(m_pTitleFont);
@@ -126,9 +126,9 @@ HRESULT CUIQuestGuide::Ready_Components()
 	tPanelDesc.ePivotType = CORNOR_TYPE::CENTER;
 	tPanelDesc.fSizeX = f2Size.x;
 	tPanelDesc.fSizeY = f2Size.y;
-	tPanelDesc.fXOffset = 0;
-	tPanelDesc.fYOffset = 0;
-	tPanelDesc.vBorder = { 10,10,10,10 };
+	tPanelDesc.fXOffset = 0.f;
+	tPanelDesc.fYOffset = 0.f;
+	tPanelDesc.vBorder = { 10.f,10.f,10.f,10.f };
 	tPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(TEXT("questguide_highlighter.dds")));
 	m_pHighlightPanel = static_cast<CUIPanel*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &tPanelDesc));
 	Add_Child(m_pHighlightPanel);

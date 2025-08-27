@@ -26,7 +26,7 @@ HRESULT CCamera_Trace::Initialize(void* pArg)
 		return E_FAIL;
 
 	TRACECAMERA_DESC* pDesc = static_cast<TRACECAMERA_DESC*>(pArg);
-	m_vFarArm = pDesc->vFarArm;
+	m_vFarArm = pDesc->vFarArm * 10.f;
 	m_vCloseArm = pDesc->vCloseArm;
 	m_fCurrentRatio = 0;
 	return S_OK;

@@ -364,14 +364,6 @@ void CCubeTerrain::Culling(COctoTree* pOctoTree)
 					//cout << "POS : " << i2Pos.x << "," << i2Pos.z << "," << i2Pos.y << endl;
 				}
 			}
-			else if(iSIze <= 0)
-			{
-				int a = 0;
-			}
-			else
-			{
-				int a = 0;
-			}
 			return;
 		}
 		else

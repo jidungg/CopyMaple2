@@ -5,7 +5,6 @@
 BEGIN(Client)
 class CPlayerEquipSlot;
 class CPlayerDecoSlot;
-class ISlotItem;
 class CPlayerInfoSlot;
 class CUIPlayerInfoSlot :
     public CUISlot

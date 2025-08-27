@@ -86,7 +86,7 @@ VS_OUT VS_MAIN(VS_IN In)
     matrix BoneMatrix = mul(g_BoneMatrices[In.vBlendIndices.x], In.vBlendWeights.x) +
 		mul(g_BoneMatrices[In.vBlendIndices.y], In.vBlendWeights.y) +
 		mul(g_BoneMatrices[In.vBlendIndices.z], In.vBlendWeights.z) +
-		mul(g_BoneMatrices[In.vBlendIndices.w], fWeightW);
+		mul(g_BoneMatrices[In.vBlendIndices.w], In.vBlendWeights.w);
 
     vector vPosition = mul(float4(In.vPosition, 1.f), BoneMatrix);
     vector vNormal = mul(float4(In.vNormal, 0.f), BoneMatrix);
@@ -173,64 +173,45 @@ PS_OUT PS_MAIN(PS_IN In)
     // Sample textures
 
      //Combine Base and Dark Texture
-    float4 vCombinedBaseColor = (1, 1, 1, 1);
+    float4 vShade = saturate(max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f));
+    float4 vMaterialColor;
+    vMaterialColor.rgb = g_vMaterialDiffuse * vShade.rgb;
+    vMaterialColor.rgb += g_vMaterialAmbient * g_vLightAmbient.rgb;
+    vMaterialColor.rgb += g_vMaterialEmissive;
+    vMaterialColor.a = g_fMaterialAlpha;
+    vMaterialColor = saturate(vMaterialColor);
+    
+    float4 vFinalColor;
+    vFinalColor = vMaterialColor;
+    
     if (g_TexFlags & BASE_TEX)
     {
         In.vTexcoord[0] = saturate(In.vTexcoord[0]);
         float4 vBaseColor = g_BaseTexture.Sample(LinearSampler, In.vTexcoord[0]);
-        vCombinedBaseColor *= vBaseColor;
+        vFinalColor *= vBaseColor;
     }
-
-    if (g_TexFlags & DARK_TEX)
-    {
-        In.vTexcoord[1] = saturate(In.vTexcoord[1]);
-        float4 vDarkColor = g_DarkTexture.Sample(LinearSampler, In.vTexcoord[1]);
-        vCombinedBaseColor.rgb *= (vDarkColor);
-    }
-
-    // Add Detail Texture
-    if (g_TexFlags & DETAIL_TEX)
-    {
-        In.vTexcoord[2] = saturate(In.vTexcoord[2]);
-        float4 vDetailColor = g_DetailTexture.Sample(LinearSampler, In.vTexcoord[2]);
-        vCombinedBaseColor  *= vDetailColor ; // 조정 가능
-    }
-
-
-    //// Emissive 
-    float3 vEmissiveColor = g_vMaterialEmissive;
+    //if (g_TexFlags & DARK_TEX)
+    //{
+    //    In.vTexcoord[1] = saturate(In.vTexcoord[1]);
+    //    float4 vDarkColor = g_DarkTexture.Sample(LinearSampler, In.vTexcoord[1]);
+    //    vFinalColor *= vDarkColor;
+    //}
+        
     if (g_TexFlags & GLOW_TEX)
     {
-        In.vTexcoord[3] = saturate(In.vTexcoord[3]);
-        float4 vGlowColor = g_GlowTexture.Sample(LinearSampler, In.vTexcoord[3]);
-        vEmissiveColor += vGlowColor.rgb;
+        In.vTexcoord[4] = saturate(In.vTexcoord[4]);
+        float4 vGlowColor = g_GlowTexture.Sample(LinearSampler, In.vTexcoord[4]);
+        vFinalColor.rgb += vGlowColor.rgb;
     }
-
-    // Ambient component
-    float3 vAmbient = (g_vMaterialAmbient / 5) * g_vLightAmbient.rgb;
-
-    // Diffuse component
-    float fShade = max(dot(normalize(g_vLightDir) * -1.f, In.vNormal), 0.f);
-    float3 vDiffuse = (g_vMaterialDiffuse) * fShade * g_vLightDiffuse.rgb;
-
-    // Combine lighting with textures
-    float4 vFinalColor = float4((vAmbient + vDiffuse), 1) *  vCombinedBaseColor;
-
-    //// Add emissive and decal contributions
-    vFinalColor.rgb += vEmissiveColor;
+    
     if (g_TexFlags & DECAL0_TEX)
     {
         In.vTexcoord[8] = saturate(In.vTexcoord[8]);
-        float4 vDecal0Color = g_Decal0Texture.Sample(LinearSampler, In.vTexcoord[8]);
-        vFinalColor.rgb = vFinalColor.rgb * (1 - vDecal0Color.a) + vDecal0Color.rgb * vDecal0Color.a;
+        float4 vDecalColor = g_Decal0Texture.Sample(LinearSampler, In.vTexcoord[8]);
+        
+        vFinalColor.rgb = vFinalColor.rgb * (1 - vDecalColor.a) + vDecalColor.rgb * vDecalColor.a;
     }
-
-    // Apply Material Alpha
-    vFinalColor.a *= g_fMaterialAlpha;
-
     Out.vColor = vFinalColor;
-    if (Out.vColor.a <= 0.01)
-        discard;
     return Out;
  }
 
@@ -241,7 +222,8 @@ technique11 DefaultTechnique
     pass DefaultPass
     {
         SetRasterizerState(RS_Cull_None);
-
+        SetDepthStencilState(DSS_None, 0);
+        //SetBlendState(BS_AlphaBlend, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN();

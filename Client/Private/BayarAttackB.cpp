@@ -32,7 +32,7 @@ HRESULT CBayarAttackB::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_sandstonebiggiant_attack_02_b.effmodel");
 	m_pCastEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pCastEffect->Set_Active(false);
-	m_pUser->Add_Child(m_pCastEffect);
+	//m_pUser->Add_Child(m_pCastEffect);
 	
 	return S_OK;
 }
@@ -43,12 +43,19 @@ void CBayarAttackB::Update(_float fTimeDelta)
 	if (m_pCastEffect->Is_Active())
 	{
 		m_pUser->Move_Forward(m_fMoveSpeed*fTimeDelta);
+		m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
+		m_pCastEffect->Update(fTimeDelta);
 	}
 }
 
 void CBayarAttackB::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
+	if (m_pCastEffect->Is_Active())
+	{
+		m_pCastEffect->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect);
+	}
 }
 
 void CBayarAttackB::On_SkillUsed()
@@ -63,14 +70,12 @@ void CBayarAttackB::On_CastingEnd()
 
 void CBayarAttackB::Fire()
 {
+	m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect->Set_Active(true);
 	m_pCastEffect->Start_Animation();
-	//m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
 
 	m_pBullet->Set_Active(true);
-
 	m_pBullet->Launch(this);
-
 
 	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay_Random(LEVEL_BAYARPEAK, TEXT("en_Bajar_Voice_NormalAttack_0%d.wav"), 1, 6);
 	pSouind->SetVolume(100);
@@ -96,4 +101,6 @@ CBayarAttackB* CBayarAttackB::Create(SKILL_DATA* pSkillData, CCharacter* pUser)
 void CBayarAttackB::Free()
 {
 	__super::Free();
+	//Safe_Release(m_pBullet);
+	Safe_Release(m_pCastEffect);
 }

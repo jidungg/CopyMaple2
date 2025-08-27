@@ -24,7 +24,7 @@ HRESULT CObject_Manager::Initialize(_uint iNumLevels)
 	return S_OK;
 }
 
-HRESULT CObject_Manager::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, const _wstring & strPrototypeTag, _uint iLevelIndex, _uint iLayerId, void * pArg, bool bDontDestroy)
+HRESULT CObject_Manager::Add_GameObject_ToLayer(LEVEL_ID iPrototypeLevelIndex, const _wstring & strPrototypeTag, LEVEL_ID iLevelIndex, LAYER_ID iLayerId, void * pArg, bool bDontDestroy)
 {
 	CGameObject* pGameObject = dynamic_cast<CGameObject*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, iPrototypeLevelIndex, strPrototypeTag, pArg));
 	if (nullptr == pGameObject)
@@ -33,7 +33,7 @@ HRESULT CObject_Manager::Add_GameObject_ToLayer(_uint iPrototypeLevelIndex, cons
 	return Add_GameObject_ToLayer(iLevelIndex, iLayerId, pGameObject, bDontDestroy);
 }
 
-HRESULT CObject_Manager::Add_GameObject_ToLayer(_uint iLevelIndex, _uint iLayerId, CGameObject* pObj, bool bDontDestroy)
+HRESULT CObject_Manager::Add_GameObject_ToLayer(LEVEL_ID iLevelIndex, LAYER_ID iLayerId, CGameObject* pObj, bool bDontDestroy)
 {
 	CLayer* pLayer = Find_Layer(iLevelIndex, iLayerId);
 
@@ -75,11 +75,8 @@ void CObject_Manager::Priority_Update(_float fTimeDelta)
 void CObject_Manager::Update(_float fTimeDelta)
 {
 	for (size_t i = 0; i < m_iNumLevels; i++)
-	{
 		for (auto& Pair : m_pLayers[i])
 			Pair.second->Update(fTimeDelta);
-	}
-
 }
 
 void CObject_Manager::Late_Update(_float fTimeDelta)
@@ -101,7 +98,7 @@ void CObject_Manager::Final_Update()
 	}
 }
 
-void CObject_Manager::Clear(_uint iLevelIndex)
+void CObject_Manager::Clear(LEVEL_ID iLevelIndex)
 {
 	if (iLevelIndex >= m_iNumLevels)
 		return;
@@ -115,7 +112,7 @@ void CObject_Manager::Clear(_uint iLevelIndex)
 	m_pLayers[iLevelIndex].clear();
 }
 
-void CObject_Manager::Move_DontDestroyObjects(_uint iOldLevel, _uint iNewLevel)
+void CObject_Manager::Move_DontDestroyObjects(LEVEL_ID iOldLevel, LEVEL_ID iNewLevel)
 {
 	for (auto& pLayer : m_pLayers[iOldLevel])
 	{
@@ -133,7 +130,7 @@ void CObject_Manager::Move_DontDestroyObjects(_uint iOldLevel, _uint iNewLevel)
 	m_DontDestroyLevel.clear();
 }
 
-bool CObject_Manager::RayCast(_uint iLayerId, const Ray& tRay, RaycastHit* pOut)
+bool CObject_Manager::RayCast(LAYER_ID iLayerId, const Ray& tRay, RaycastHit* pOut)
 {
 	return m_pLayers[m_pGameInstance->Get_CurrentLevelID()][iLayerId]->Check_Collision(tRay, pOut);
 }
@@ -157,7 +154,7 @@ bool CObject_Manager::RayCast(const Ray& tRay, RaycastHit* pOut)
 	return bIsHit;
 }
 
-void CObject_Manager::Check_Collision(_uint iLayerId, CGameObject* pObject, list<CGameObject*>* pOutList)
+void CObject_Manager::Check_Collision(LAYER_ID iLayerId, CGameObject* pObject, list<CGameObject*>* pOutList)
 {
 	list<CGameObject*>* pList = Get_GameObjectList(iLayerId);
 	for (auto& pObj : *pList)
@@ -169,14 +166,14 @@ void CObject_Manager::Check_Collision(_uint iLayerId, CGameObject* pObject, list
 	}
 }
 
-CGameObject* CObject_Manager::Get_FirstGameObject(_uint iLevIdx, _uint iLayerId)
+CGameObject* CObject_Manager::Get_FirstGameObject(LEVEL_ID iLevIdx, LAYER_ID iLayerId)
 {
 	CLayer* pLayer= Find_Layer(iLevIdx, iLayerId);
 	
 	return pLayer->Get_FirstGameObject();
 }
 
-list<CGameObject*>* CObject_Manager::Get_GameObjectList(_uint iLayerId)
+list<CGameObject*>* CObject_Manager::Get_GameObjectList(LAYER_ID iLayerId)
 {
 	auto pLayer = Find_Layer(m_pGameInstance->Get_CurrentLevelID(), iLayerId);
 	if (pLayer == nullptr)
@@ -185,7 +182,7 @@ list<CGameObject*>* CObject_Manager::Get_GameObjectList(_uint iLayerId)
 	return pList;
 }
 
-CLayer * CObject_Manager::Find_Layer(_uint iLevelIndex, _uint iLayerId)
+CLayer * CObject_Manager::Find_Layer(LEVEL_ID iLevelIndex, LAYER_ID iLayerId)
 {
 	if (iLevelIndex >= m_iNumLevels)
 		return nullptr;

@@ -186,8 +186,8 @@ void CUIInvenSlotEntry::On_MouseDrag(const POINT& tMousePoint, const DIMOUSESTAT
 		return;
 	CRect_Transform* pTransform = static_cast<CRect_Transform*>(m_pIcon->Get_Transform());
 	_float2 vMovedPosition = pTransform->Get_Offset();
-	vMovedPosition.x = m_tGrabbedOffset.x + tMousePoint.x - m_tGrabbedMousePos.x;
-	vMovedPosition.y = m_tGrabbedOffset.y + tMousePoint.y - m_tGrabbedMousePos.y;
+	vMovedPosition.x = (_float)m_tGrabbedOffset.x + (_float)tMousePoint.x - (_float)m_tGrabbedMousePos.x;
+	vMovedPosition.y = (_float)m_tGrabbedOffset.y + (_float)tMousePoint.y - (_float)m_tGrabbedMousePos.y;
 
 	pTransform->Set_Offset(vMovedPosition.x, vMovedPosition.y);
 

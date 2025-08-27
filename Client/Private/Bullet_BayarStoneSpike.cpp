@@ -83,7 +83,7 @@ void CBullet_BayarStoneSpike::Late_Update(_float fTimeDelta)
 				m_setHitObject.insert(pTarget);
 				_bool bCrit;
 				_float fDamage = m_pSkill->Calc_Damg(bCrit);
-				m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, fDamage,bCrit,false, m_eHitEffect));
+				m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)fDamage,bCrit,false, m_eHitEffect));
 			}
 
 

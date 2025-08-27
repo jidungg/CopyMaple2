@@ -39,6 +39,9 @@ namespace Engine
 	typedef		XMMATRIX					_matrix;
 	typedef		FXMMATRIX					_fmatrix;
 
+	typedef		_uint						LEVEL_ID;
+	typedef		_uint						LAYER_ID;
+
 }
 
 #endif // Engine_Typedef_h__

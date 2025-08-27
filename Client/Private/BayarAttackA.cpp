@@ -31,8 +31,8 @@ HRESULT CBayarAttackA::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_sandstonegiant_attack_01_a.effmodel");
 	m_pCastEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pCastEffect->Set_Active(false);
-	m_pUser->Add_Child(m_pCastEffect);
-	m_pCastEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, 0.1f, 0.f,1.f });
+	//m_pUser->Add_Child(m_pCastEffect);
+	m_vCassEffectOffset = _vector{ 0.f, 0.1f, 0.f,0.f };
 	m_pCastEffect->Get_Transform()->Scaling(1, 1, 1);
 
 	return S_OK;
@@ -42,13 +42,20 @@ void CBayarAttackA::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
 
-	
+	if (m_pCastEffect->Is_Active())
+	{
+		m_pCastEffect->Update(fTimeDelta);
+	}
 }
 
 void CBayarAttackA::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
-
+	if (m_pCastEffect->Is_Active())
+	{
+		m_pCastEffect->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect);
+	}
 }
 
 void CBayarAttackA::On_SkillUsed()
@@ -64,9 +71,13 @@ void CBayarAttackA::On_CastingEnd()
 
 void CBayarAttackA::Fire()
 {
+	_matrix matUserWorld= m_pUser->Get_Transform()->Get_WorldMatrix();
+	matUserWorld.r[3] += m_vCassEffectOffset;
+	m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
+	//m_pCastEffect->Get_Transform()->Set_WorldMatrix(matUserWorld);
+	//m_pCastEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, matUserWorld.r[3]);
 	m_pCastEffect->Set_Active(true);
 	m_pCastEffect->Start_Animation();
-	//m_pCastEffect->Set_Transform(vPos);
 	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay_Random(LEVEL_BAYARPEAK, TEXT("en_Bajar_Voice_NormalAttack_0%d.wav"), 1, 6);
 	pSouind->SetVolume(100);
 
@@ -103,5 +114,5 @@ CBayarAttackA* CBayarAttackA::Create(SKILL_DATA* pSkillData, CCharacter* pUser)
 void CBayarAttackA::Free()
 {
 	__super::Free();
-	//Safe_Release(m_pCastEffect);
+	Safe_Release(m_pCastEffect);
 }

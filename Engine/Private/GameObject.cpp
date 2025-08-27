@@ -82,14 +82,12 @@ void CGameObject::Update(_float fTimeDelta)
 }
 void CGameObject::Compute_Matrix()
 {
-
 	if (m_pParentMatrix != nullptr)
 	{
 		XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix()* XMLoadFloat4x4(m_pParentMatrix));
 	}
 	else
 		XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix());
-
 }
 
 

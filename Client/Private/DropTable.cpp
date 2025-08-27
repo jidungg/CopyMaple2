@@ -62,7 +62,7 @@ ITEM_ID_PAIR CDropTable::Get_Drop_Item(MONSTER_ID _eMonID)
 	int iCurWeight = 0;
 	for (auto& i : *pData)
 	{
-		if (iRand < iCurWeight + i.second)
+		if (iRand < iCurWeight + (_int)i.second)
 		{
 			return i.first;
 		}

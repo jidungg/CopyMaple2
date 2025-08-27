@@ -27,8 +27,9 @@ private:
 	CEffModelObject* m_pWindEffect = { nullptr };
 	CEffModelObject* m_pGroundEffect = { nullptr };
 
-	_vector m_vRGroundEffectOffset = { 0.4f,0.f,1.f,1.f };
-	_vector m_vLGroundEffectOffset = { -0.6f,0.f,1.f,1.f };
+	_vector m_vWindEffectOffset = { 0.f, 0.1f, 0.f,0.f };
+	_vector m_vRGroundEffectOffset = { 0.4f,0.1f,1.f,0.f };
+	_vector m_vLGroundEffectOffset = { -0.6f,0.1f,1.f,0.f };
 	_uint m_iAttackCount = 0;
 public:
 	static CBayarPalmStrike* Create(SKILL_DATA* pSkillData, CCharacter* pUser);

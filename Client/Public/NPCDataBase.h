@@ -17,7 +17,7 @@ public:
 	void Insert_Data(NPC_DATA* pData);
 	NPC_DATA* Get_Data(NPC_ID eID) { return m_mapData[eID]; }
 private:
-	map<NPC_ID, NPC_DATA*> m_mapData;
+	unordered_map<NPC_ID, NPC_DATA*> m_mapData;
 public:
 	void Free();
 };

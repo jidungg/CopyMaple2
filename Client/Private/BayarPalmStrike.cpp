@@ -33,7 +33,6 @@ HRESULT CBayarPalmStrike::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	m_pWindEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pWindEffect->Set_Active(false);
 	//m_pWindEffect->Get_Transform()->Scaling(0.5f, 0.5f, 0.5f);
-	m_pWindEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, 0.1f, 0.f,1.f });
 
 	//GroundEffect
 	tCastEffDesc.eModelProtoLevelID = LEVEL_LOADING;
@@ -86,17 +85,20 @@ void CBayarPalmStrike::Fire()
 	_matrix matUserWorld = m_pUser->Get_Transform()->Get_WorldMatrix();
 	m_pTargetSearcher->Update(matUserWorld);
 
-	matUserWorld.r[3].m128_f32[1] += 0.1f;
+	_matrix matWindEffect = matUserWorld;
+	matWindEffect.r[3] += m_vWindEffectOffset;
 	m_pWindEffect->Start_Animation();
-	m_pWindEffect->Get_Transform()->Set_WorldMatrix(matUserWorld);
+	m_pWindEffect->Get_Transform()->Set_WorldMatrix(matWindEffect);
 	m_pWindEffect->Get_Transform() ->Scaling(1, 1, 1);
 
-	m_pGroundEffect->Start_Animation();
+	_matrix matGroundEffect = matUserWorld;
 	_vector vGroundEffectOffset = (m_iAttackCount % 2 == 0 ? m_vRGroundEffectOffset : m_vLGroundEffectOffset);
-	m_iAttackCount++;
-	m_pGroundEffect->Get_Transform()->Set_WorldMatrix(XMMatrixTranslationFromVector(vGroundEffectOffset) * matUserWorld);
+	matGroundEffect.r[3] += vGroundEffectOffset;
+	m_pGroundEffect->Start_Animation();
+	m_pGroundEffect->Get_Transform()->Set_WorldMatrix(matGroundEffect);
 	m_pGroundEffect->Get_Transform()->Scaling(1, 1, 1);
 
+	m_iAttackCount++;
 
 	list<CGameObject*> listTarget;
 	SearchTarget(&listTarget, LAYERID::LAYER_PLAYER);

@@ -174,7 +174,7 @@ void CUIDamgCount::Set_Damge(_int iValue)
 	{
 		iSizeX += m_arrNumTextureWidth[i];
 	}
-	static_cast<CRect_Transform*>( m_pTransformCom)->Set_Size(max(1,iSizeX), max(1,iSizeY));
+	static_cast<CRect_Transform*>( m_pTransformCom)->Set_Size((_float)max(1,iSizeX), (_float)max(1,iSizeY));
 }
 
 void CUIDamgCount::Start()

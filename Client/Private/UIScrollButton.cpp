@@ -53,11 +53,11 @@ void CUIScrollButton::On_MouseDrag(const POINT& tMousePoint, const DIMOUSESTATE&
 	_float2 vMovedOffset = pTransform->Get_Offset();
 	if (m_bDraggableX)
 	{
-		vMovedOffset.x = m_tGrabbedOffset.x + tMousePoint.x - m_tGrabbedMousePos.x;
+		vMovedOffset.x = m_tGrabbedOffset.x + (_float)tMousePoint.x - m_tGrabbedMousePos.x;
 	}
 	if (m_bDraggableY)
 	{
-		vMovedOffset.y = m_tGrabbedOffset.y + tMousePoint.y - m_tGrabbedMousePos.y;
+		vMovedOffset.y = m_tGrabbedOffset.y + (_float)tMousePoint.y - m_tGrabbedMousePos.y;
 	}
 	_float3 fSize = m_pTransformCom->Compute_Scaled();
 	vMovedOffset.y = std::clamp(vMovedOffset.y, m_fMinOffsetY, m_fMaxOffsetY - fSize.y);

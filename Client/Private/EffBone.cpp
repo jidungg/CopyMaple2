@@ -49,13 +49,16 @@ void CEffBone::Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bone
 	//루트 본 인 경우 -> PreTransformMatrix 만 곱하기
 	if (-1 == m_iParentBoneIndex)
 	{
-		XMStoreFloat4x4(&m_CombindTransformationMatrix, XMLoadFloat4x4(&m_TransformationMatrix) * matPreTransformMatrix/* * matWroldMatrix*/);
+		XMStoreFloat4x4(&m_CombindTransformationMatrix, XMLoadFloat4x4(&m_TransformationMatrix) * matPreTransformMatrix /** matWroldMatrix*/);
 	}
 	//루트가 아닌 경우 -> 부모 본의 CombindTransformationMatrix 와 현재 본의 TransformationMatrix 를 곱하기
 	else
 	{
-		XMStoreFloat4x4(&m_CombindTransformationMatrix, XMLoadFloat4x4(&m_TransformationMatrix) *
-		XMLoadFloat4x4(&Bones[m_iParentBoneIndex]->m_CombindTransformationMatrix));
+		_matrix matTransform = XMLoadFloat4x4(&m_TransformationMatrix);
+		_matrix matParentCombined = XMLoadFloat4x4(&Bones[m_iParentBoneIndex]->m_CombindTransformationMatrix);
+		
+		XMStoreFloat4x4(&m_CombindTransformationMatrix,  
+			matTransform  * matParentCombined);
 	}
 	if (m_bBillboard)
 	{
@@ -69,25 +72,25 @@ void CEffBone::Update_CombinedTransformationMatrix(const vector<CEffBone*>& Bone
 		vUp.m128_f32[3] = 0;
 
 		_matrix matCombined = XMLoadFloat4x4(&m_CombindTransformationMatrix);
-		_float3 vScale =  _float3(DirectX::XMVectorGetX(DirectX::XMVector3Length(matCombined.r[0])),
+		_float3 vScale = _float3(DirectX::XMVectorGetX(DirectX::XMVector3Length(matCombined.r[0])),
 			DirectX::XMVectorGetX(DirectX::XMVector3Length(matCombined.r[1])),
 			DirectX::XMVectorGetX(DirectX::XMVector3Length(matCombined.r[2])));
 		vRight = vRight * vScale.x;
 		vUp = vUp * vScale.y;
 		vLook = vLook * vScale.z;
 
-		memcpy( m_CombindTransformationMatrix.m[0] ,&vRight, sizeof(_float4));
-		memcpy( m_CombindTransformationMatrix.m[1] ,&vUp, sizeof(_float4));
-		memcpy( m_CombindTransformationMatrix.m[2] ,&vLook, sizeof(_float4));
+		matCombined.r[0] = vRight;
+		matCombined.r[1] = vUp;
+		matCombined.r[2] = vLook;
 
-		_matrix matWorldInverse = XMMatrixInverse(nullptr, matWroldMatrix);
+		/*_matrix matWorldInverse = XMMatrixInverse(nullptr, matWroldMatrix);
 		matWorldInverse.r[0] = XMVector3Normalize(matWorldInverse.r[0]);
 		matWorldInverse.r[1] = XMVector3Normalize(matWorldInverse.r[1]);
 		matWorldInverse.r[2] = XMVector3Normalize(matWorldInverse.r[2]);
 		matWorldInverse.r[3] = _vector{ 0,0,0,1 };
-		matCombined =XMLoadFloat4x4(&m_CombindTransformationMatrix) * matWorldInverse;
-		XMStoreFloat4x4(&m_CombindTransformationMatrix, matCombined);
 
+		matCombined = matCombined * matWorldInverse;*/
+		XMStoreFloat4x4(&m_CombindTransformationMatrix, matCombined);
 	}
 }
 

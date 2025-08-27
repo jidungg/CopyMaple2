@@ -4,10 +4,10 @@
 #include "EffBone.h"
 #include "Shader.h"
 
-#define ALPHA_ENABLE_MASK			0b0000000000000001
+#define ALPHA_ENABLE_MASK				0b0000000000000001
 #define SRC_BLEND_MASK					0b0000000000011110
 #define DST_BLEND_MASK					0b0000000111100000
-#define ALPHA_TEST_ENABLE_MASK	0b0000001000000000
+#define ALPHA_TEST_ENABLE_MASK			0b0000001000000000
 #define ALPHA_TEST_MASK					0b0001110000000000
 
 #define BLEND_ONE								0b0000
@@ -116,7 +116,7 @@ HRESULT CEffMesh::Set_RenderState()
 {
 	//m_pContext->OMGetBlendState(&m_pOriginalBlendState, m_arrOriginalBlendFactor, m_pOriginalBlendMask);
 
-	m_pContext->OMSetDepthStencilState(m_pDepthStencilState, 0x00);
+	//m_pContext->OMSetDepthStencilState(m_pDepthStencilState, 0x00);
 	m_pContext->OMSetBlendState(m_pBlendState, m_arrBlendFactor, m_iSampleMask);
 	return S_OK;
 }

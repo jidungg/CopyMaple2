@@ -32,14 +32,14 @@ HRESULT CBayarKnockOff::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_sandstonebiggiant_jump_ready_a.effmodel");
 	m_pJumpReadyEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pJumpReadyEffect->Set_Active(false);
-	m_pUser->Add_Child(m_pJumpReadyEffect);
+	//m_pUser->Add_Child(m_pJumpReadyEffect);
 
 	//Gathering Effect
 	tCastEffDesc.eModelProtoLevelID = LEVEL_LOADING;
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_sandstonebiggiant_attack_01_d_b.effmodel");
 	m_pGatheringEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pGatheringEffect->Set_Active(false);
-	m_pUser->Add_Child(m_pGatheringEffect);
+	//m_pUser->Add_Child(m_pGatheringEffect);
 
 	return S_OK;
 }
@@ -48,6 +48,11 @@ void CBayarKnockOff::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
 	m_fTimeAcc += fTimeDelta;
+	if (m_pJumpReadyEffect->Is_Active())
+	{
+		m_pJumpReadyEffect->Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pJumpReadyEffect);
+	}
 }
 
 void CBayarKnockOff::Late_Update(_float fTimeDelta)
@@ -75,6 +80,11 @@ void CBayarKnockOff::Late_Update(_float fTimeDelta)
 			}
 		}
 	}
+	if (m_pJumpReadyEffect->Is_Active())
+	{
+		m_pJumpReadyEffect->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pJumpReadyEffect);
+	}
 
 }
 
@@ -82,8 +92,11 @@ void CBayarKnockOff::Late_Update(_float fTimeDelta)
 
 void CBayarKnockOff::On_SkillUsed()
 {
+	m_pJumpReadyEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pJumpReadyEffect->Set_Active(true);
 	m_pJumpReadyEffect->Start_Animation();
+
+	m_pGatheringEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pGatheringEffect->Set_Active(true);
 	m_pGatheringEffect->Start_Animation(0, true);
 	m_pGatheringEffect->Set_AnimSpeed(3.15f);
@@ -126,4 +139,7 @@ CBayarKnockOff* CBayarKnockOff::Create(SKILL_DATA* pSkillData, CCharacter* pUser
 void CBayarKnockOff::Free()
 {
 	__super::Free();
+	Safe_Release(m_pTargetSearcher);
+	Safe_Release(m_pJumpReadyEffect);
+	Safe_Release(m_pGatheringEffect);
 }

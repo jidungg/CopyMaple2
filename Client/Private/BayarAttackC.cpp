@@ -25,15 +25,35 @@ HRESULT CBayarAttackC::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	tCastEffDesc.szBoneName = "Bip01 R Hand";
 	m_pChargeEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pChargeEffect->Set_Active(false);
-	m_pUser->Add_Child(m_pChargeEffect);
+	//m_pUser->Add_Child(m_pChargeEffect);
 
 	Set_MoveSpeed(1.7f);
     return S_OK;
 }
 
+void CBayarAttackC::Update(_float fTimeDelta)
+{
+	__super::Update(fTimeDelta);
+	if (m_pCastEffect->Is_Active())
+	{
+		m_pCastEffect->Update(fTimeDelta);
+	}
+}
+
+void CBayarAttackC::Late_Update(_float fTimeDelta)
+{
+	__super::Late_Update(fTimeDelta);
+	if (m_pCastEffect->Is_Active())
+	{
+		m_pCastEffect->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect);
+	}
+}
+
 void CBayarAttackC::On_SkillUsed()
 {
 	__super::On_SkillUsed();
+	m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pChargeEffect->Set_Active(true);
 	m_pChargeEffect->Start_Animation(0, true);
 
@@ -48,9 +68,9 @@ void CBayarAttackC::On_CastingEnd()
 
 void CBayarAttackC::Fire()
 {
+	m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pCastEffect->Set_Active(true);
 	m_pCastEffect->Start_Animation();
-	//m_pCastEffect->Set_Transform(m_pUser->Get_Transform());
 
 	m_pBullet->Set_Active(true);
 
@@ -76,4 +96,10 @@ CBayarAttackC* CBayarAttackC::Create(SKILL_DATA* pSkillData, CCharacter* pUser)
 		Safe_Release(pInstance);
 	}
 	return pInstance;
+}
+
+void CBayarAttackC::Free()
+{
+	__super::Free();
+	Safe_Release(m_pCastEffect);
 }

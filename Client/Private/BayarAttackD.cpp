@@ -35,7 +35,7 @@ HRESULT CBayarAttackD::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_sandstonebiggiant_attack_02_c_b.effmodel");
 	m_pAttackEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pAttackEffect->Set_Active(false);
-	m_pUser->Add_Child(m_pAttackEffect);
+	//m_pUser->Add_Child(m_pAttackEffect);
 
 	//ChargeEffect
 	tCastEffDesc.eModelProtoLevelID = LEVEL_LOADING;
@@ -45,7 +45,7 @@ HRESULT CBayarAttackD::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	tCastEffDesc.szBoneName = "Bip01 R Hand";
 	m_pChargeEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pChargeEffect->Set_Active(false);
-	m_pUser->Add_Child(m_pChargeEffect);
+	//m_pUser->Add_Child(m_pChargeEffect);
 
 
 	return S_OK;
@@ -62,21 +62,39 @@ void CBayarAttackD::Update(_float fTimeDelta)
 		_float fNextFloor = m_pTerrain->Get_FloorHeight(vDir + vUserPos);
 		if(fNextFloor == m_fFloorHeight)
 			m_pUser->Move_Forward(m_fMoveSpeed * fTimeDelta);
+
+		m_pAttackEffect->Set_Transform(m_pUser->Get_Transform());
+		m_pAttackEffect->Update(fTimeDelta);
+	}
+	if (m_pChargeEffect->Is_Active())
+	{
+		//m_pChargeEffect->Set_Transform(m_pUser->Get_Transform());
+		m_pChargeEffect->Update(fTimeDelta);
 	}
 }
 
 void CBayarAttackD::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
+	if (m_pAttackEffect->Is_Active())
+	{
+		m_pAttackEffect->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pAttackEffect);
+	}
+	if (m_pChargeEffect->Is_Active())
+	{
+		m_pChargeEffect->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pChargeEffect);
+	}
 }
 
 void CBayarAttackD::On_SkillUsed()
 {
+	//m_pChargeEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pChargeEffect->Set_Active(true);
 	m_pChargeEffect->Start_Animation(0,true);
 	CSound* pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_BAYARPEAK, TEXT("Boss_SandstoneGiant_Skill_Attack_01_D.wav"));
 	pSouind->SetVolume(100);
-	//m_pChargeEffect->Set_Transform(m_pUser->Get_Transform());
 	pSouind = CGameInstance::GetInstance()->Start_EffectPlay(LEVEL_BAYARPEAK, TEXT("Boss_SandstoneGiant_Skill_Attack_01_C.wav"));
 	pSouind->SetVolume(100);
 }
@@ -91,9 +109,9 @@ void CBayarAttackD::Fire()
 	m_pTerrain = static_cast<CCubeTerrain*> (m_pGameInstance->Get_FirstGameObject(Get_CurrentTrueLevel(), LAYERID::LAYER_TERRAIN));
 	m_fFloorHeight = m_pTerrain->Get_FloorHeight(m_pUser->Get_WorldPosition());
 
+	m_pAttackEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pAttackEffect->Set_Active(true);
 	m_pAttackEffect->Start_Animation();
-	//m_pAttackEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pBullet->Set_Active(true);
 
 	m_pBullet->Launch(this);
@@ -124,4 +142,7 @@ CBayarAttackD* CBayarAttackD::Create(SKILL_DATA* pSkillData, CCharacter* pUser)
 void CBayarAttackD::Free()
 {
 	__super::Free();
+	//Safe_Release(m_pBullet);
+	Safe_Release(m_pAttackEffect);
+	Safe_Release(m_pChargeEffect);
 }

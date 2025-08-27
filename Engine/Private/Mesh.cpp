@@ -221,7 +221,7 @@ HRESULT CMesh::Ready_VertexBuffer_For_Anim(ifstream& inFile, CModel* pModel)
 				pVertices[iVertexIdx].vBlendIndices.z = curMeshBoneIdx;
 				pVertices[iVertexIdx].vBlendWeights.z = fWeight;
 			}
-			else if (0 == pVertices[iVertexIdx].vBlendWeights.z)
+			else if (0 == pVertices[iVertexIdx].vBlendWeights.w)
 			{
 				pVertices[iVertexIdx].vBlendIndices.w = curMeshBoneIdx;
 				pVertices[iVertexIdx].vBlendWeights.w = fWeight;

@@ -160,7 +160,7 @@ HRESULT CModelObject::Replace_Model(MODELOBJ_DESC* pDesc)
     m_pModelCom = static_cast<CModel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, pDesc->eModelProtoLevelID, wtmp, &modelDesc));
     if (FAILED(Add_Component(m_pModelCom, TEXT("Com_Model"))))
         return E_FAIL;
-
+    return S_OK;
 }
 
 

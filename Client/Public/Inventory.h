@@ -23,7 +23,7 @@ public:
 	vector<CInvenSlot*>* Get_Slots(ITEM_TYPE eItemType);
 	_uint Get_ItemCount(ITEM_TYPE eItemType, _uint iItemId);
 private:
-	_uint m_iMaxSlot[(_uint)ITEM_TYPE::LAST] = { 48,48,96,96,96 };
+	_uint m_iMaxSlotCount[(_uint)ITEM_TYPE::LAST] = { 48,48,96,96,96 };
 	vector<CInvenSlot*> m_vecSlot[(_uint)ITEM_TYPE::LAST];
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext* m_pContext;

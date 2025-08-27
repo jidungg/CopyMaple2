@@ -59,7 +59,7 @@ void CBullet_BayarAttackD::Late_Update(_float fTimeDelta)
 
 HRESULT CBullet_BayarAttackD::Render()
 {
-	m_pCollider->Render();
+	//m_pCollider->Render();
 	return __super::Render();
 }
 

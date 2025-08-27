@@ -54,7 +54,7 @@ HRESULT CLevel_Home::Initialize(void* pArg)
 
 	CEffModelObject::EFFECTOBJ_DESC tEffDesc;
 	tEffDesc.eModelProtoLevelID = LEVEL_LOADING;
-	strcpy_s(tEffDesc.strModelProtoName, "eff_sandstonebiggiant_attack_02_c_b.effmodel");
+	strcpy_s(tEffDesc.strModelProtoName, "eff_sandstonegiant_attack_01_a.effmodel");
 	 m_pEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tEffDesc));
 	m_pEffect->Set_Active(false);
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, LAYER_NONCOLLISION, m_pEffect)))

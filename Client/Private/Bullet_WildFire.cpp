@@ -34,7 +34,7 @@ HRESULT CBullet_WildFire::Initialize(void* pArg)
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_wizard_wildfire_cast_02.effmodel");
 	m_pCastEffect2 = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pCastEffect2->Set_Active(false);
-	Add_Child(m_pCastEffect2);
+	//Add_Child(m_pCastEffect2);
 
 
 	return S_OK;
@@ -65,11 +65,21 @@ void CBullet_WildFire::Update(_float fTimeDelta)
 			m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)fDamg, bCrit, true,m_eHitEffect));		}
 		m_fCurrentRange += m_fExpandSpeed * fTimeDelta;
 	}
+	if (m_pCastEffect2->Is_Active())
+	{
+		m_pCastEffect2->Update(fTimeDelta);
+	}
 }
 
 void CBullet_WildFire::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
+	if (m_pCastEffect2->Is_Active())
+	{
+		m_pCastEffect2->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pCastEffect2);
+	}
+
 }
 
 HRESULT CBullet_WildFire::Render()
@@ -86,7 +96,7 @@ _bool CBullet_WildFire::Check_Collision(CGameObject* pOther)
 void CBullet_WildFire::Launch(CSkill* pSkill, _fvector vPosition)
 {
 	__super::Launch(pSkill, vPosition);
-
+	m_pCastEffect2->Set_Transform(m_pShooter->Get_Transform());
 	m_pCastEffect2->Start_Animation();
 	m_pCastEffect2->Set_Active(true);
 	m_fCurrentRange = m_fMinRange;

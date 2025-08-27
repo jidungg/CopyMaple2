@@ -73,8 +73,6 @@ HRESULT CRenderer::Initialize()
 	m_pGameInstance->Ready_RT_Debug(TEXT("Target_Normal"), 100.f, 300.f, 200.f, 200.f);
 	m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade"), 300.f, 100.f, 200.f, 200.f);
 	m_pGameInstance->Ready_RT_Debug(TEXT("Target_Specular"), 300.f, 300.f, 200.f, 200.f);
-
-
 #endif
 
 	return S_OK;
@@ -82,10 +80,8 @@ HRESULT CRenderer::Initialize()
 
 HRESULT CRenderer::Add_RenderObject(RENDERGROUP eRenderGroup, CGameObject * pRenderObject)
 {
-	if (eRenderGroup >= RG_END || 
-		nullptr == pRenderObject)
+	if (eRenderGroup >= RG_END || nullptr == pRenderObject)
 		return E_FAIL;
-
 	m_RenderObjects[eRenderGroup].push_back(pRenderObject);
 
 	Safe_AddRef(pRenderObject);

@@ -28,8 +28,8 @@ HRESULT CInventory::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pCont
 
 	for (_uint i = 0; i < (_uint)ITEM_TYPE::LAST; ++i)
 	{
-		m_vecSlot[i].resize(m_iMaxSlot[i]);
-		for (_uint j = 0; j < m_iMaxSlot[i]; j++)
+		m_vecSlot[i].resize(m_iMaxSlotCount[i]);
+		for (_uint j = 0; j < m_iMaxSlotCount[i]; j++)
 		{
 			switch ((ITEM_TYPE)i)
 			{

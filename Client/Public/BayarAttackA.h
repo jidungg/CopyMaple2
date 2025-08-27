@@ -32,6 +32,7 @@ protected:
 private:
 
 	CEffModelObject* m_pCastEffect = { nullptr };
+	_vector m_vCassEffectOffset = { 0.f, 0.1f, 0.f,0.f };
 public:
 	static CBayarAttackA* Create(SKILL_DATA* pSkillData, CCharacter* pUser);
 	virtual void Free() override;

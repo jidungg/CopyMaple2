@@ -18,6 +18,7 @@ typedef struct MaterialColorKeyframe : public KEYFRAME
 	_float3		vEmissive = { 0,0,0 };
 }MATCOLOR_KEYFRAME;
 
+//=====================================================ALPHA ================================================================
 class CEffAlphaController :
     public CEffController
 {
@@ -37,6 +38,8 @@ public:
 	virtual CEffAlphaController* Clone();
 
 };
+
+//=====================================================TEXTURE TRANSFORM=======================================================
 class CEffTextureTransfromController :
 	public CEffController
 {
@@ -64,6 +67,9 @@ public:
 	static CEffTextureTransfromController* Create(ifstream& inFile, const class CEffModel* pModel);
 	virtual CEffTextureTransfromController* Clone();
 };
+
+
+//=====================================================TRANSFORM=======================================================
 class CEffTransformController :
 	public CEffController
 {
@@ -85,6 +91,9 @@ public:
 	static CEffTransformController* Create(ifstream& inFile, const class CEffModel* pModel);
 	virtual CEffTransformController* Clone();
 };
+
+
+//=====================================================MATERIAL COLOR =======================================================
 class CEffMaterialColorController :
 	public CEffController
 {

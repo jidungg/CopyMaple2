@@ -84,7 +84,7 @@ PS_OUT PS_MAIN(PS_IN In)
 
 	/* -1.f ~ 1.f -> 0.f ~ 1.f */
     Out.vNormal = float4(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-    Out.vDepth = float4(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);
+    //Out.vDepth = float4(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);
 
     return Out;
 }

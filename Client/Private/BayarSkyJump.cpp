@@ -32,21 +32,21 @@ HRESULT CBayarSkyJump::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_sandstonebiggiant_jump_ready_a.effmodel");
 	m_pJumpReadyEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pJumpReadyEffect->Set_Active(false);
-	m_pUser->Add_Child(m_pJumpReadyEffect);
+	//m_pUser->Add_Child(m_pJumpReadyEffect);
 
 	//Gathering Effect
 	tCastEffDesc.eModelProtoLevelID = LEVEL_LOADING;
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_sandstonebiggiant_attack_01_d_b.effmodel");
 	m_pGatheringEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pGatheringEffect->Set_Active(false);
-	m_pUser->Add_Child(m_pGatheringEffect);
+	//m_pUser->Add_Child(m_pGatheringEffect);
 
 	//Jump Land Effect
 	tCastEffDesc.eModelProtoLevelID = LEVEL_LOADING;
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_sandstonebiggiant_jump_land_a.effmodel");
 	m_pLandEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pLandEffect->Set_Active(false);
-	m_pUser->Add_Child(m_pLandEffect);
+	//m_pUser->Add_Child(m_pLandEffect);
 
 	return S_OK;
 }
@@ -54,17 +54,50 @@ HRESULT CBayarSkyJump::Initialize(SKILL_DATA* pSkillData, CCharacter* pUser)
 void CBayarSkyJump::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
+	if (m_pJumpReadyEffect->Is_Active())
+	{
+		m_pJumpReadyEffect->Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pJumpReadyEffect);
+	}
+	if (m_pLandEffect->Is_Active())
+	{
+		m_pLandEffect->Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pLandEffect);
+	}
+	if (m_pGatheringEffect->Is_Active())
+	{
+		m_pGatheringEffect->Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pGatheringEffect);
+	}
 }
 
 void CBayarSkyJump::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
+	if (m_pJumpReadyEffect->Is_Active())
+	{
+		m_pJumpReadyEffect->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pJumpReadyEffect);
+	}
+	if (m_pLandEffect->Is_Active())
+	{
+		m_pLandEffect->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pLandEffect);
+	}
+	if (m_pGatheringEffect->Is_Active())
+	{
+		m_pGatheringEffect->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pGatheringEffect);
+	}
 }
 
 void CBayarSkyJump::On_SkillUsed()
 {
+	m_pJumpReadyEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pJumpReadyEffect->Set_Active(true);
 	m_pJumpReadyEffect->Start_Animation();
+
+	m_pGatheringEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pGatheringEffect->Set_Active(true);
 	m_pGatheringEffect->Start_Animation(0,true);
 	m_pGatheringEffect->Set_AnimSpeed(3.15f);
@@ -85,6 +118,7 @@ void CBayarSkyJump::On_CastingEnd()
 
 void CBayarSkyJump::Fire()
 {
+	m_pLandEffect->Set_Transform(m_pUser->Get_Transform());
 	m_pLandEffect->Set_Active(true);
 	m_pLandEffect->Start_Animation();
 
@@ -122,4 +156,7 @@ CBayarSkyJump* CBayarSkyJump::Create(SKILL_DATA* pSkillData, CCharacter* pUser)
 void CBayarSkyJump::Free()
 {
 	__super::Free();
+	Safe_Release(m_pJumpReadyEffect);
+	Safe_Release(m_pGatheringEffect);
+	Safe_Release(m_pLandEffect);
 }

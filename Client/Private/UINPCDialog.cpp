@@ -207,7 +207,7 @@ void CUINPCDialog::Set_ConversationNode(const CONVERSATION_NODE_DATA& tNode)
 		pUIOption->Set_Active(false);
 	m_pHighlighter->Set_Active(false);
 
-	_uint iDataOptionCount = tNode.vecOption.size();
+	_uint iDataOptionCount = (_uint) tNode.vecOption.size();
 	_uint iUIOptIndex = 0;
 	m_iSelectedOptionDataIndex = UINT_MAX;
 	for (_uint iDataOptIndex = 0; iDataOptIndex < iDataOptionCount; iDataOptIndex++)

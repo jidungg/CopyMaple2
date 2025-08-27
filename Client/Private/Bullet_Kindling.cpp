@@ -38,7 +38,6 @@ HRESULT CBullet_Kindling::Initialize(void* pArg)
 	strcpy_s(tCastEffDesc.strModelProtoName, "eff_wizard_kindling_ball_01.effmodel");
 	m_pEffect = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tCastEffDesc));
 	m_pEffect->Register_OnAnimEndCallBack(bind(&CBullet_Kindling::On_EffectAnimEnd, this, placeholders::_1));
-	Add_Child(m_pEffect);
 	m_pEffect->Set_Active(false);
 	return S_OK;
 }
@@ -54,6 +53,11 @@ void CBullet_Kindling::Update(_float fTimeDelta)
 	m_pTransformCom->Go_Straight(fTimeDelta);
 
 	__super::Update(fTimeDelta);
+	if (m_pEffect->Is_Active())
+	{
+		m_pEffect->Update(fTimeDelta);
+		m_pEffect->Set_Transform(Get_Transform());
+	}
 }
 
 void CBullet_Kindling::Late_Update(_float fTimeDelta)
@@ -69,6 +73,11 @@ void CBullet_Kindling::Late_Update(_float fTimeDelta)
 		_float fDamage = m_pSkill->Calc_Damg(bCrit);
 		m_pGameInstance->Push_Event(CDamgEvent::Create(m_pShooter, pTarget, (_int)fDamage, bCrit, true, m_eHitEffect));
 		Set_Active(false);
+	}
+	if (m_pEffect->Is_Active())
+	{
+		m_pEffect->Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, m_pEffect);
 	}
 }
 
@@ -88,6 +97,7 @@ void CBullet_Kindling::Launch(CSkill* pSkill, CGameObject* pTarget)
 	Set_Target(pTarget);
 
 	m_pSkill = pSkill;
+	m_pEffect->Set_Transform(Get_Transform());
 	m_pEffect->Start_Animation();
 	Set_Active(true);
 }

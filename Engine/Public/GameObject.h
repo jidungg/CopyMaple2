@@ -83,7 +83,7 @@ protected:
 protected:
 	_uint						m_iObjID = {};
 	static _uint				m_iObjCount;
-	_uint						m_iLayerID = {};
+	LAYER_ID						m_iLayerID = {};
 private:
 	CGameObject*				m_pTarget = { nullptr };
 public:

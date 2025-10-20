@@ -154,9 +154,9 @@ bool CObject_Manager::RayCast(const Ray& tRay, RaycastHit* pOut)
 	return bIsHit;
 }
 
-void CObject_Manager::Check_Collision(LAYER_ID iLayerId, CGameObject* pObject, list<CGameObject*>* pOutList)
+void CObject_Manager::Check_Collision(LAYER_ID iLayerId, CGameObject* pObject, vector<CGameObject*>* pOutList)
 {
-	list<CGameObject*>* pList = Get_GameObjectList(iLayerId);
+	vector<CGameObject*>* pList = Get_GameObjectList(iLayerId);
 	for (auto& pObj : *pList)
 	{
 		if (pObj->Is_Dead())
@@ -173,7 +173,7 @@ CGameObject* CObject_Manager::Get_FirstGameObject(LEVEL_ID iLevIdx, LAYER_ID iLa
 	return pLayer->Get_FirstGameObject();
 }
 
-list<CGameObject*>* CObject_Manager::Get_GameObjectList(LAYER_ID iLayerId)
+vector<CGameObject*>* CObject_Manager::Get_GameObjectList(LAYER_ID iLayerId)
 {
 	auto pLayer = Find_Layer(m_pGameInstance->Get_CurrentLevelID(), iLayerId);
 	if (pLayer == nullptr)

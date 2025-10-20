@@ -69,6 +69,7 @@ public:
 	_float3 Get_BodyCollisionOffset();
 	_float Get_MoveDistance() { return m_fMoveDistanceXZ; }
 	_uint Get_CurrentAnimIdx();
+	_uint Get_BlockingRange();
 
 	CSkill* Get_Skill(SKILL_ID eID) { return m_mapSkill[eID]; }
 	CSkill* Get_CurrentSkill() { return m_mapSkill[(SKILL_ID)m_iCurrentSkillID]; }

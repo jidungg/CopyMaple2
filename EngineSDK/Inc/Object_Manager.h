@@ -26,10 +26,10 @@ public:
 	void Move_DontDestroyObjects(LEVEL_ID iOldLevel, LEVEL_ID iNewLevel);
 	bool RayCast(LAYER_ID iLayerId, const Ray& tRay, RaycastHit* pOut);
 	bool RayCast(const Ray& tRay, RaycastHit* pOut);
-	void Check_Collision(LAYER_ID iLayerId, CGameObject* pObject, list<CGameObject*>* pOutList);
+	void Check_Collision(LAYER_ID iLayerId, CGameObject* pObject, vector<CGameObject*>* pOutList);
 
 	CGameObject* Get_FirstGameObject(LEVEL_ID iLevIdx, LAYER_ID iLayerId);
-	list<CGameObject*>* Get_GameObjectList(LAYER_ID iLayerId);
+	vector<CGameObject*>* Get_GameObjectList(LAYER_ID iLayerId);
 private:
 	_uint										m_iNumLevels = { 0 };
 	typedef map<LAYER_ID, class CLayer*>	LAYERS;

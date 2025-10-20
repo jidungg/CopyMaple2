@@ -9,14 +9,16 @@ IMPLEMENT_SINGLETON(CItemDataBase)
 CItemDataBase::CItemDataBase()
 {
 }
-
+constexpr int DEFAULT_PASS = 1;
 
 HRESULT CItemDataBase::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	m_pDevice = pDevice;
-	m_pContext = pContext;
-	Safe_AddRef(m_pDevice);
-	Safe_AddRef(m_pContext);
+	{
+		m_pDevice = pDevice;
+		m_pContext = pContext;
+		Safe_AddRef(m_pDevice);
+		Safe_AddRef(m_pContext);
+	}
 
 	m_vClearColor = _float4(0.f, 0.f, 0.f, 0.f);
 	m_pRenderTarget = CRenderTarget::Create(m_pDevice, m_pContext, 300, 300, DXGI_FORMAT_R8G8B8A8_UNORM, m_vClearColor);
@@ -58,18 +60,19 @@ HRESULT CItemDataBase::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pC
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 	pContext->RSSetViewports(1,&viewport);
-	//	//Make Icon Img
+
+	//Make Icon Img
 	for (auto& pairBuildItemData : m_mapItem[(_uint)ITEM_TYPE::BUILD])
 	{
 		pGameInstance->Render_Begin();
-		//Render Target Clear & Set
-		m_pRenderTarget->Clear();
-		m_pContext->OMGetRenderTargets(1, &m_pBackRTV, &m_pOriginalDSV);
-
-		ID3D11RenderTargetView* pRenderTargets[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
-		pRenderTargets[0] = m_pRenderTarget->Get_RTV();
-		m_pContext->OMSetRenderTargets(1, pRenderTargets, m_pOriginalDSV);
-
+		//Render Target 초기화
+		{
+			m_pRenderTarget->Clear();
+			m_pContext->OMGetRenderTargets(1, &m_pBackRTV, &m_pOriginalDSV);
+			ID3D11RenderTargetView* pRenderTargets[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+			pRenderTargets[0] = m_pRenderTarget->Get_RTV();
+			m_pContext->OMSetRenderTargets(1, pRenderTargets, m_pOriginalDSV);
+		}
 
 		//Render Target에 오브젝트 그리기
 		CModel* pModel = static_cast<CModel*>(pGameInstance->Clone_Proto_Component_Stock(pairBuildItemData.second->strModelTag));
@@ -79,7 +82,7 @@ HRESULT CItemDataBase::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pC
 		{
 			if (FAILED(pModel->Bind_Material(m_pShader, "g_DiffuseTexture", i, TEXTURE_TYPE::DIFFUSE, 0)))
 				return E_FAIL;
-			if(FAILED(m_pShader->Begin(1)))
+			if(FAILED(m_pShader->Begin(DEFAULT_PASS)))
 				return E_FAIL;
 			if (FAILED(pModel->Render(i)))
 				return E_FAIL;
@@ -92,15 +95,12 @@ HRESULT CItemDataBase::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pC
 		m_pRenderTarget->Get_SRV()->GetResource(&pSourceResource);
 		D3D11_TEXTURE2D_DESC desc = {};
 		((ID3D11Texture2D*)pSourceResource)->GetDesc(&desc);
-
 		ID3D11Texture2D* pDestTexture = nullptr;
 		HRESULT hr = m_pDevice->CreateTexture2D(&desc, nullptr,&pDestTexture);
 		if (FAILED(hr))
 			return E_FAIL;
 		pDestResource = pDestTexture;
-
 		m_pContext->CopyResource(pDestResource, pSourceResource);
-
 		ID3D11ShaderResourceView* pNewSRV = nullptr;
 		m_pDevice->CreateShaderResourceView(pDestResource, nullptr, &pNewSRV);
 
@@ -115,11 +115,13 @@ HRESULT CItemDataBase::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pC
 		if(FAILED(pGameInstance->Add_Prototype(LEVEL_LOADING, wstrIconTag, pTexCom)))
 			Safe_Release(pTexCom);
 
-		Safe_Release(pDestResource);
-		Safe_Release(pSourceResource);
-		m_pContext->OMSetRenderTargets(1, &m_pBackRTV, m_pOriginalDSV);
-		Safe_Release(m_pOriginalDSV);
-		Safe_Release(m_pBackRTV);
+		{
+			Safe_Release(pDestResource);
+			Safe_Release(pSourceResource);
+			m_pContext->OMSetRenderTargets(1, &m_pBackRTV, m_pOriginalDSV);
+			Safe_Release(m_pOriginalDSV);
+			Safe_Release(m_pBackRTV);
+		}
 
 		pGameInstance->Render_End();
 	}
@@ -128,7 +130,7 @@ HRESULT CItemDataBase::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pC
 
 	pContext->RSSetViewports(1, &tOriginalViewport);
 
-
+	Safe_Release(m_pRenderTarget);
 	return S_OK;
 }
 

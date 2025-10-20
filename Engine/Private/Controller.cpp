@@ -24,25 +24,18 @@ void CController::Update(_float fTimeDelta)
 	POINT tPosition = m_pInput_Device->Get_MousePos();
 	DIMOUSESTATE tMouseState = m_pInput_Device->Get_MouseState();
 
-	if (m_pInput_Device->GetMouseKeyState(MOUSE_KEY::LB) == KEY_STATE::DOWN)
-		 m_pUIManager->Consume_MouseLButtonDown(tPosition);
-	else if (m_pInput_Device->GetMouseKeyState(MOUSE_KEY::LB) == KEY_STATE::UP)
-	{
-		if (false == m_pUIManager->Consume_MouseLButtonUp(tPosition))
-		{
-			int a = 0;
-		}
-		else
-		{
-			//TODO : 마우스 입력 막기
-			int a = 0;
-		}
-	}
+	KEY_STATE LButtonState = m_pInput_Device->GetMouseKeyState(MOUSE_KEY::LB);
+	if (LButtonState == KEY_STATE::DOWN)
+		m_pUIManager->Consume_MouseLButtonDown(tPosition);
+	else if (LButtonState == KEY_STATE::UP)
+		m_pUIManager->Consume_MouseLButtonUp(tPosition);
 
-	if (m_pInput_Device->GetMouseKeyState(MOUSE_KEY::RB) == KEY_STATE::DOWN)
+	KEY_STATE RButtonState = m_pInput_Device->GetMouseKeyState(MOUSE_KEY::RB);
+	if (RButtonState == KEY_STATE::DOWN)
 		m_pUIManager->Consume_MouseRButtonDown();
-	else if (m_pInput_Device->GetMouseKeyState(MOUSE_KEY::RB) == KEY_STATE::UP)
+	else if (RButtonState == KEY_STATE::UP)
 		m_pUIManager->Consume_MouseRButtonUp();
+
 	m_pUIManager->Consume_MouseMove(tPosition,tMouseState);
 	if (m_pCurrentPawn)
 	{

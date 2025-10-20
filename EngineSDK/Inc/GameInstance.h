@@ -55,7 +55,7 @@ public: /* For.Object_Manager */
 	void Move_DontDestroyObjects(_uint iOldLevel, _uint iNewLevel);
 	bool RayCast(_uint iLayerId, const Ray& tRay, RaycastHit* pOut);
 	bool RayCast(const Ray& tRay, RaycastHit* pOut);
-	list<CGameObject*>* Get_GameObjectList(_uint iLayerId);
+	vector<CGameObject*>* Get_GameObjectList(_uint iLayerId);
 
 public: /* For.PipeLine */
 	void Set_Transform(CPipeLine::D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix);

@@ -47,17 +47,17 @@ HRESULT CUIBundle::Initialize(void* pArg)
 	Safe_AddRef(m_pInventory);
 
 	CUIQuickSlotBundle::QUICKSLOTBUNDLE_DESC tQuickDesc;
+	tQuickDesc.eAnchorType = CORNOR_TYPE::BOT;
+	tQuickDesc.ePivotType = CORNOR_TYPE::RIGHT_BOT;
+	tQuickDesc.fXOffset= -100;
+	tQuickDesc.fYOffset = -30;
 	tQuickDesc.fSlotSize = 50.f;
 	tQuickDesc.fSlotMargin = 10.f;
 	tQuickDesc.iSlotColCount = 4;
 	tQuickDesc.iSlotRowCount = 2;
 	tQuickDesc.vecHotKey = { KEY::Q, KEY::W, KEY::E, KEY::R, KEY::A, KEY::S, KEY::D, KEY::F };
-	tQuickDesc.eAnchorType = CORNOR_TYPE::BOT;
-	tQuickDesc.ePivotType = CORNOR_TYPE::RIGHT_BOT;
 	tQuickDesc.fSizeX= 240;
 	tQuickDesc.fSizeY = 120;
-	tQuickDesc.fXOffset= -100;
-	tQuickDesc.fYOffset = -30;
 
 	m_pQuickSlotBundle1 = static_cast<CUIQuickSlotBundle*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIQuickSlotBundle::m_szProtoTag, &tQuickDesc));
 	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOGO, LAYER_UI, m_pQuickSlotBundle1, true)))

@@ -25,15 +25,16 @@ HRESULT CUIInventory::Initialize(void* pArg)
 {
 
 	UIINVENTORY_DESC* pInvenDesc = static_cast<UIINVENTORY_DESC*>(pArg);
+	pInvenDesc->vBorder = { m_fHeaderHeight, m_fCommonMargin.y, m_fCommonMargin.x, m_fCommonMargin.x };
+	pInvenDesc->fSizeX = m_iVisibleColCount * (m_fSlotSize.x + m_fCommonMargin.x) + m_fCommonMargin.x*4 + m_fTabButtonSize.x + m_fCommonButtonSize;
+	pInvenDesc->fSizeY = m_fHeaderHeight + m_iVisibleRowCount* (m_fSlotSize.y + m_fCommonMargin.y) + m_fCommonMargin.y*3;
 	pInvenDesc->bDraggableX = true;
 	pInvenDesc->bDraggableY = true;
 	pInvenDesc->eAnchorType = CORNOR_TYPE::CENTER;
 	pInvenDesc->ePivotType = CORNOR_TYPE::CENTER;
-	pInvenDesc->fSizeX = m_iVisibleColCount * (m_fSlotSize.x + m_fCommonMargin.x) + m_fCommonMargin.x*4 + m_fTabButtonSize.x + m_fCommonButtonSize;
-	pInvenDesc->fSizeY = m_fHeaderHeight + m_iVisibleRowCount* (m_fSlotSize.y + m_fCommonMargin.y) + m_fCommonMargin.y*3;
 	pInvenDesc->fXOffset = 0;
 	pInvenDesc->fYOffset = 0;
-	pInvenDesc->vBorder = { m_fHeaderHeight,m_fCommonMargin.y,m_fCommonMargin.x,m_fCommonMargin.x };
+	//pInvenDesc->vBorder = { 0,0,0,0 };
 	pInvenDesc->szIconProtoTag = TEXT("Inventory_Icon.dds");
 	pInvenDesc->szTitleText = TEXT("소지품");
 	if (FAILED(CUICommonWindow::Initialize(pArg)))
@@ -86,7 +87,6 @@ HRESULT CUIInventory::Ready_Slots()
 	tListDesc.szItemEntryProtoTag =CUIInvenSlotEntry::m_szProtoTag;
 	m_pItemList = static_cast<CUIInvenItemList*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, TEXT("Prototype_GameObject_CUIInvenItemList"), &tListDesc));
 	m_pItemBackPanel->Add_Child(m_pItemList);
-
 	
 	CUIScroller::SCROLLBAR_DESC tScrollDesc{};
 	tScrollDesc.eAnchorType = CORNOR_TYPE::RIGHT_BOT;

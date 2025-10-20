@@ -891,7 +891,7 @@ _bool CPlayer::Check_Collision(CGameObject* pOther)
 		m_vNextPos = vPos;
 		if (m_bMove)
 		{
-			m_vNextPos = pTerrain->BlockXZ(this, 3);
+			m_vNextPos = pTerrain->Blocking(this, 3);
 			m_vMoveDirectionXZ = XMVector3Normalize(m_vNextPos - vPos);
 			m_fMoveDistanceXZ = XMVector3Length(m_vNextPos - vPos).m128_f32[0];
 		}

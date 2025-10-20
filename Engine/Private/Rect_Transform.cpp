@@ -73,7 +73,10 @@ void CRect_Transform::Compute_Matrix()
 	m_fYPosition = fParentAnchor.y + m_fYOffset - fPivotOffset.y;
 
 	Scaling(m_fSizeX, m_fSizeY, 1.f);
-	Set_State(CTransform::STATE_POSITION, XMVectorSet(m_fXPosition - (_float)(m_iViewportWidth * 0.5), -m_fYPosition + (_float)(m_iViewportHeight * 0.5), 0.f, 1.f));
+	Set_State(CTransform::STATE_POSITION, 
+		XMVectorSet(m_fXPosition - (_float)(m_iViewportWidth * 0.5), 
+			-m_fYPosition + (_float)(m_iViewportHeight * 0.5),
+			0.f, 1.f));
 }
 
 void CRect_Transform::Go_Straight(_float fTimeDelta)
@@ -161,12 +164,12 @@ _float2 CRect_Transform::Get_PivotPosition(CORNOR_TYPE ePivotType)
 _float2 CRect_Transform::Get_AnchorPosition(CORNOR_TYPE eAnchorType)
 {
 	_float2		fAnchorPoint;
-	CRect_Transform* pParent = dynamic_cast<CRect_Transform*>(m_pParentTransform);
+	CRect_Transform* pParent = static_cast<CRect_Transform*>(m_pParentTransform);
 
 	if (pParent == nullptr)
 	{
 		_float2 fRatio = Get_CornorRatio(eAnchorType);
-		fAnchorPoint = _float2(float(m_iViewportWidth * 0.5 + m_iViewportWidth * fRatio.x), float(m_iViewportHeight * 0.5 + m_iViewportHeight * fRatio.y));
+		fAnchorPoint = _float2(m_iViewportWidth * (0.5f + fRatio.x), m_iViewportHeight * (0.5f + fRatio.y));
 	}
 	else
 	{

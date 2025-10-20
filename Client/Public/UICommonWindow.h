@@ -29,8 +29,8 @@ public:
 
 	void Close_Window();
 protected:
-	_float m_fCommonMargin = { 5 };
-	_float m_fCommonButtonSize = { 24 };
+	_float m_fCommonMargin = { 5.f };
+	_float m_fCommonButtonSize = { 24.f };
 public:
 	virtual void Free() override;
 

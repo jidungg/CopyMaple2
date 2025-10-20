@@ -22,11 +22,11 @@ public:
 	//죽은 오브젝트 처리
 	void Final_Update();
 	bool Check_Collision(const Ray& tRay, RaycastHit* pOut);
-	list<class CGameObject*>* Get_GameObjectList() { return &m_GameObjects; }
+	vector<class CGameObject*>* Get_GameObjectList() { return &m_GameObjects; }
 	void HandOver_DontDestroyObjects(list<class CGameObject*>* pOutDontDestroyLayer);
 	CGameObject* Get_FirstGameObject();
 private:
-	list<class CGameObject*>			m_GameObjects;
+	vector<class CGameObject*>			m_GameObjects;
 
 public:
 	static CLayer* Create();

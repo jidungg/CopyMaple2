@@ -49,7 +49,8 @@ public:
 	_uint CombineIndex(XMUINT3 i3Idx);
 	HRESULT Save_To_Json(string strNewFilepath);
 	HRESULT Load_From_Json(string strJsonFilePath);
-	_vector BlockXZ(CCharacter* pCharacter, _uint iCheckRange = 1);
+	_vector Blocking(CCharacter* pCharacter);
+	_vector Blocking(CCharacter* pCharacter, _uint iCheckRange);
 	_bool RayCastXZ(const Ray& tRay, RaycastHit* pOut);
 	_bool RayCast(const Ray& tRay, RaycastHit* pOut);
 	void Culling(COctoTree* pOctoTree);

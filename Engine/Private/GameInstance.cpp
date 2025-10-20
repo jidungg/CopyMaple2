@@ -311,7 +311,7 @@ bool CGameInstance::RayCast(const Ray& tRay, RaycastHit* pOut)
 	return m_pObject_Manager->RayCast(tRay, pOut);
 }
 
-list<CGameObject*>* CGameInstance::Get_GameObjectList(_uint iLayerId)
+vector<CGameObject*>* CGameInstance::Get_GameObjectList(_uint iLayerId)
 {
 	if (nullptr == m_pObject_Manager)
 		return nullptr;

@@ -102,8 +102,12 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 	return S_OK;
 }
 
-//MoveDir 는 Normalized 된 상태로 들어와야 함.
-_vector CCubeTerrain::BlockXZ(CCharacter* pCharacter, _uint iCheckRange)
+_vector CCubeTerrain::Blocking(CCharacter* pCharacter)
+{
+	return Blocking(pCharacter, pCharacter->Get_BlockingRange());
+}
+
+_vector CCubeTerrain::Blocking(CCharacter* pCharacter, _uint iCheckRange)
 {
 	_vector vPos = pCharacter->Get_TransformPosition();
 	_vector vMoveDir = pCharacter->Get_MoveDirection();
@@ -113,7 +117,9 @@ _vector CCubeTerrain::BlockXZ(CCharacter* pCharacter, _uint iCheckRange)
 	_float fXForce = XMVectorGetX(vMoveDir);
 	_float fZForce = XMVectorGetZ(vMoveDir);
 	_float fYForce = XMVectorGetY(vMoveDir);
-	_int iIdx =  PosToIndex(vPos);
+
+	//검사할 셀의 인덱스 범위 계산
+	_int iIdx = PosToIndex(vPos);
 	if (iIdx < 0)
 		return  vPos + vMoveDir * fMoveDistance;
 	_int iYIdx = iIdx / (m_vSize.x * m_vSize.z);
@@ -138,30 +144,34 @@ _vector CCubeTerrain::BlockXZ(CCharacter* pCharacter, _uint iCheckRange)
 	iMinZ = max(iMinZ, 0);
 	iMaxY = min(iMaxY, m_vSize.y - 1);
 	iMinY = max(iMinY, 0);
-
 	_vector vNextPos = vPos;
+	//검사 범위 내의 셀들에 대해서만 선택적으로 충돌 검사
 	for (_uint iY = iMinY; iY < iMaxY; iY++)
 	{
 		for (_uint iZ = iMinZ; iZ <= iMaxZ; iZ++)
 		{
 			for (_uint iX = iMinX; iX <= iMaxX; iX++)
 			{
-				_uint iTmpIdx = iX + m_vSize.x * iZ + m_vSize.x * m_vSize.z * iY;
+				_uint iTmpIdx = CombineIndex({ iX,iY,iZ });
+				
+
 				if (nullptr == m_vecCells[iTmpIdx])
 					continue;
 				if (false == m_vecCells[iTmpIdx]->Is_BlockingType())
 					continue;
 				if (iTmpIdx == iIdx)
 					continue;
+				
 				vNextPos = m_vecCells[iTmpIdx]->BolckXZ(vPos, vMoveDir, fMoveDistance, fBodyCollisionRadius, fBodyCollisionOffset.y);
+				
 				_vector vTmp = vNextPos - vPos;
 				vMoveDir = XMVector4Normalize(vTmp);
 				fMoveDistance = XMVectorGetX(XMVector3Length(vTmp));
+
+				
 			}
 		}
 	}
-
-
 	vNextPos = vPos + fMoveDistance * vMoveDir;
 	return vNextPos;
 }
@@ -176,37 +186,37 @@ _bool CCubeTerrain::RayCastXZ(const Ray& tRay, RaycastHit* pOut)
 	//가장 가까운 정수값이 되기 위해 필요한 값 찾기
 	_float fX = XMVectorGetX(vCurrentPos);
 	_float fZ = XMVectorGetZ(vCurrentPos);
-	_float fXRequire = 0;
-	_float fZRequire = 0;
-	_float fCurrentDistance = 0;
+	_float fXRequire = 0.f;
+	_float fZRequire = 0.f;
+	_float fCurrentDistance = 0.f;
 
 	while (fCurrentDistance <= tRay.fDist)
 	{
-		if (fXDir > 0)
+		if (fXDir > 0.f)
 		{
 			fXRequire = ceilf(fX) - fX;
-			if (fXRequire == 0)
-				fXRequire += 1;
+			if (fXRequire == 0.f)
+				fXRequire += 1.f;
 		}
-		else if (fXDir < 0)
+		else if (fXDir < 0.f)
 		{
 			fXRequire = floorf(fX) - fX;
-			if (fXRequire == 0)
-				fXRequire -= 1;
+			if (fXRequire == 0.f)
+				fXRequire -= 1.f;
 		}
 		else
 			fXRequire = FLT_MAX;
-		if (fZDir > 0)
+		if (fZDir > 0.f)
 		{
 			fZRequire = ceilf(fZ) - fZ;
-			if (fZRequire == 0)
-				fZRequire += 1;
+			if (fZRequire == 0.f)
+				fZRequire += 1.f;
 		}
-		else if (fZDir < 0)
+		else if (fZDir < 0.f)
 		{
 			fZRequire = floorf(fZ) - fZ;
-			if (fZRequire == 0)
-				fZRequire -= 1;
+			if (fZRequire == 0.f)
+				fZRequire -= 1.f;
 		}
 		else
 			fZRequire = FLT_MAX;
@@ -220,14 +230,15 @@ _bool CCubeTerrain::RayCastXZ(const Ray& tRay, RaycastHit* pOut)
 		//X축이 더 빨리 도달
 		else
 			vCurrentPos += tRay.vDirection * fXReqTime;
+
 		_vector vRealPos = vCurrentPos;
-		vRealPos -= XMVectorSet(0.5, 0, 0.5, 0);
+		vRealPos -= XMVectorSet(0.5f, 0.f, 0.5f, 0.f);
 		_int iIdx = PosToIndex(vRealPos);
 		if (iIdx < 0)
 			return false;
 		fCurrentDistance = XMVectorGetX(XMVector3Length(vRealPos - tRay.vOrigin));
-		if (fCurrentDistance == 0)
-			fCurrentDistance += 0.01;
+		if (fCurrentDistance == 0.f)
+			fCurrentDistance += 0.01f;
 		if (nullptr != m_vecCells[iIdx] && m_vecCells[iIdx]->RayCast(tRay, pOut))
 			return true;
 
@@ -240,7 +251,7 @@ _bool CCubeTerrain::RayCastXZ(const Ray& tRay, RaycastHit* pOut)
 _bool CCubeTerrain::RayCast(const Ray& tRay, RaycastHit* pOut)
 {
 	_vector vCurrentPos = tRay.vOrigin;
-	vCurrentPos += XMVectorSet(0.5, 0, 0.5, 0);
+	vCurrentPos += XMVectorSet(0.5f, 0.f, 0.5f, 0.f);
 	_float fXDir = XMVectorGetX(tRay.vDirection);
 	_float fYDir = XMVectorGetY(tRay.vDirection);
 	_float fZDir = XMVectorGetZ(tRay.vDirection);
@@ -248,52 +259,52 @@ _bool CCubeTerrain::RayCast(const Ray& tRay, RaycastHit* pOut)
 	_float fX = XMVectorGetX(vCurrentPos);
 	_float fY = XMVectorGetY(vCurrentPos);
 	_float fZ = XMVectorGetZ(vCurrentPos);
-	_float fXRequire = 0;
-	_float fYRequire = 0;
-	_float fZRequire = 0;
-	_float fCurrentDistance = 0;
+	_float fXRequire = 0.f;
+	_float fYRequire = 0.f;
+	_float fZRequire = 0.f;
+	_float fCurrentDistance = 0.f;
 
 	while (fCurrentDistance < tRay.fDist)
 	{
-		if (fXDir > 0)
+		if (fXDir > 0.f)
 		{
 			fXRequire = ceilf(fX) - fX;
-			if (fXRequire == 0)
-				fXRequire += 1;
+			if (fXRequire == 0.f)
+				fXRequire += 1.f;
 		}
-		else if (fXDir < 0)
+		else if (fXDir < 0.f)
 		{
 			fXRequire = floorf(fX) - fX;
-			if (fXRequire == 0)
-				fXRequire -= 1;
+			if (fXRequire == 0.f)
+				fXRequire -= 1.f;
 		}
 		else
 			fXRequire = FLT_MAX;
-		if (fYDir > 0)
+		if (fYDir > 0.f)
 		{
 			fYRequire = ceilf(fY) - fY;
-			if (fYRequire == 0)
-				fYRequire += 1;
+			if (fYRequire == 0.f)
+				fYRequire += 1.f;
 		}
-		else if (fYDir < 0)
+		else if (fYDir < 0.f)
 		{
-			fYRequire = floorf(fY )- fY;
-			if (fYRequire == 0)
-				fYRequire -= 1;
+			fYRequire = floorf(fY) - fY;
+			if (fYRequire == 0.f)
+				fYRequire -= 1.f;
 		}
 		else
 			fZRequire = FLT_MAX;
-		if (fZDir > 0)
+		if (fZDir > 0.f)
 		{
 			fZRequire = ceilf(fZ) - fZ;
-			if (fZRequire == 0)
-				fZRequire += 1;
+			if (fZRequire == 0.f)
+				fZRequire += 1.f;
 		}
-		else if (fZDir < 0)
+		else if (fZDir < 0.f)
 		{
 			fZRequire = floorf(fZ) - fZ;
-			if (fZRequire == 0)
-				fZRequire -= 1;
+			if (fZRequire == 0.f)
+				fZRequire -= 1.f;
 		}
 		else
 			fZRequire = FLT_MAX;
@@ -311,7 +322,7 @@ _bool CCubeTerrain::RayCast(const Ray& tRay, RaycastHit* pOut)
 			vCurrentPos += tRay.vDirection * fYReqTime;
 
 		_vector vRealPos = vCurrentPos;
-		vRealPos -= XMVectorSet(0.5, 0, 0.5, 0);
+		vRealPos -= XMVectorSet(0.5f, 0.f, 0.5f, 0.f);
 		_int iIdx = PosToIndex(vRealPos);
 		if (iIdx < 0)
 			return false;
@@ -344,27 +355,12 @@ void CCubeTerrain::Culling(COctoTree* pOctoTree)
 			if (2 == iSIze)
 			{
 				for (_uint i = 0; i < COctoTree::CORNER_END; i++)
-				{
 					if (UINT_MAX != pIndices[i] &&nullptr != m_vecCells[pIndices[i]])
-					{
 						m_vecCells[pIndices[i]]->Culling(1.7f);
-						XMUINT3 i2Pos = SplitIndex(pIndices[i]);
-						// << "POS : " << i2Pos.x << "," << i2Pos.z << "," << i2Pos.y << endl;
-
-					}
-
-				}
 			}
 			else if (1 >= iSIze)
-			{
 				if (UINT_MAX != pIndices[0]  &&nullptr != m_vecCells[pIndices[0]])
-				{
 					m_vecCells[pIndices[0]]->Culling(1.7f);
-					XMUINT3 i2Pos = SplitIndex(pIndices[0]);
-					//cout << "POS : " << i2Pos.x << "," << i2Pos.z << "," << i2Pos.y << endl;
-				}
-			}
-			return;
 		}
 		else
 		{

@@ -7,9 +7,9 @@
 #include "EffModel.h"
 #include "Sound.h"
 
-
-_float dX[5] = { 0,1,0,-1,0 };
-_float dZ[5] = { 0,0,1,0,-1 };
+constexpr _int SPIKE_COUNT = 5;
+_float spikeOffsetsX[SPIKE_COUNT] = { 0.f,  1.f,  0.f, -1.f  ,  0.f };
+_float spikeOffsetsY[SPIKE_COUNT] = { 0.f,  0.f,  1.f,  0.f  , -1.f };
 
 CBullet_BayarStoneSpike::CBullet_BayarStoneSpike(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CBullet(pDevice, pContext)
@@ -68,9 +68,9 @@ void CBullet_BayarStoneSpike::Late_Update(_float fTimeDelta)
 			}
 			list<CGameObject*> listTarget;
 			XMMATRIX matWorld = XMLoadFloat4x4( &m_WorldMatrix);
-			for (_uint i = 0; i < 5; i++)
+			for (_uint i = 0; i < SPIKE_COUNT; i++)
 			{
-				_vector vPos = m_vCenterPos+ _vector{ dX[i], 0, dZ[i], 1 };
+				_vector vPos = m_vCenterPos+ _vector{ spikeOffsetsX[i], 0, spikeOffsetsY[i], 1 };
 				matWorld.r[3] = XMVectorSetW(vPos,1);
 				m_pCollider->Update(matWorld);
 				m_pCollider->Render();
@@ -102,19 +102,18 @@ void CBullet_BayarStoneSpike::Late_Update(_float fTimeDelta)
 }
 HRESULT CBullet_BayarStoneSpike::Render()
 {
-	
-	for (_uint i = 0; i < 5; i++)
+	for (_uint i = 0; i < SPIKE_COUNT; i++)
 	{
-		_vector vPos = _vector{ dX[i], 0.1f, dZ[i], 1 };
+		_vector vPos = _vector{ spikeOffsetsX[i], 0.1f, spikeOffsetsY[i], 1.f };
 		m_pPrecursorEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos);
 		m_pRockCubeEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos);
 		m_pRockCubeEffect->Compute_Matrix();
 		m_pPrecursorEffect->Compute_Matrix();
 		__super::Render();
-
 	}
 	return S_OK;
 }
+
 void CBullet_BayarStoneSpike::Launch(CSkill* pSkill, _vector vPosition)
 {
 	__super::Launch(pSkill, vPosition);

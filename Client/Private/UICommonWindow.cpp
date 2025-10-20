@@ -35,7 +35,7 @@ HRESULT CUICommonWindow::Initialize(void* pArg)
 		tPanelDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Proto_Component_Stock(pDesc->szIconProtoTag));
 		CUIIcon* pIcon = static_cast<CUIIcon*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIIcon::m_szProtoTag,&tPanelDesc));
 		Add_Child(pIcon);
-
+		pIcon->Set_Active(false);
 	}
 
 	CUIFont::UIFontDesc FontDesc{};
@@ -48,6 +48,7 @@ HRESULT CUICommonWindow::Initialize(void* pArg)
 	FontDesc.bShade = true;
 	CUIFont* pFont = static_cast<CUIFont*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIFont::m_szProtoTag, &FontDesc));
 	Add_Child(pFont);
+	pFont->Set_Active(false);
 
 	CUIButton::BUTTON_DESC ButtonDesc{};
 	ButtonDesc.eAnchorType = CORNOR_TYPE::RIGHT_TOP;

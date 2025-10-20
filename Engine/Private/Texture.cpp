@@ -68,11 +68,11 @@ HRESULT CTexture::Initialize_Prototype(const _char* szDirPath, ifstream& inFIle)
 	{
 		_uint strLen;
 		inFIle.read(reinterpret_cast<char*>(&strLen), sizeof(_uint));
-		//cout << strLen << endl;
+		cout << strLen << endl;
 		_char* strTexturePath = new _char[strLen + 1];
 		inFIle.read(strTexturePath, sizeof(_char) * strLen);
 		strTexturePath[strLen] = '\0';
-		//cout << strTexturePath << endl;z
+		cout << strTexturePath << endl;
 		string strTexturePathStr = strTexturePath;
 		m_wstrTextureName = wstring( strTexturePathStr.begin(), strTexturePathStr.end());
 		

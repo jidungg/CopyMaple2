@@ -160,7 +160,7 @@ PS_OUT PS_MAIN(PS_IN In)
         float fCenterCoordLen = 1 - fLeftBorderCoordLen - fRightBorderCoordLen;
         In.vTexcoord.x = In.vTexcoord.x *fCenterCoordLen + fLeftBorderCoordLen;
     }
- //   //상 테두리
+    //상 테두리
     if (g_MinMax[1] + g_BorderSize[0] >= In.vPosition.y)
     {
         In.vTexcoord.y *= In.vRatio.y;
@@ -235,6 +235,7 @@ PS_OUT PS_VERTICALDARK_MAIN(PS_IN In)
 	
     float fXSize = g_MinMax[2] - g_MinMax[0];
     float fYSize = g_MinMax[3] - g_MinMax[1];
+    
 	//좌 테두리
     if (g_MinMax[0] + g_BorderSize[2] >= In.vPosition.x)
     {
@@ -253,7 +254,8 @@ PS_OUT PS_VERTICALDARK_MAIN(PS_IN In)
         float fCenterCoordLen = 1 - fLeftBorderCoordLen - fRightBorderCoordLen;
         In.vTexcoord.x = In.vTexcoord.x * fCenterCoordLen + fLeftBorderCoordLen;
     }
- //   //상 테두리
+    
+    //상 테두리
     if (g_MinMax[1] + g_BorderSize[0] >= In.vPosition.y)
     {
         In.vTexcoord.y *= In.vRatio.y;
@@ -263,6 +265,7 @@ PS_OUT PS_VERTICALDARK_MAIN(PS_IN In)
     {
         In.vTexcoord.y = 1 - (1 - In.vTexcoord.y) * In.vRatio.y;
     }
+    //가운데
     else
     {
         float fTopBorderCoordLen = g_BorderSize[0] / fYSize * In.vRatio.y;
@@ -270,9 +273,8 @@ PS_OUT PS_VERTICALDARK_MAIN(PS_IN In)
         float fCenterCoordLen = 1 - fTopBorderCoordLen - fBotBorderCoordLen;
         In.vTexcoord.y = In.vTexcoord.y * fCenterCoordLen + fTopBorderCoordLen;
     }
+    
     Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord);
-
-
     if (In.vTexcoord.y > g_fVerticalRatio)
     {
         Out.vColor.rgb = Out.vColor.rgb * g_fDarkRatio;

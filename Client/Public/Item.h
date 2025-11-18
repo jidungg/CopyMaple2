@@ -12,16 +12,16 @@ typedef struct ItemData
 
 		string str = js["Name"];
 		wstring wstr = CEngineUtility::ConvertStringToWString(str);
-		std::copy(str.begin(), str.end(), strItemName);
+		std::copy(wstr.begin(), wstr.end(), strItemName);
 		str = js["Desc"];
 		wstr = CEngineUtility::ConvertStringToWString(str);
-		std::copy(str.begin(), str.end(), strItemDesc);
+		std::copy(wstr.begin(), wstr.end(), strItemDesc);
 		str = js["IconImg"];
 		wstr = CEngineUtility::ConvertStringToWString(str);
-		std::copy(str.begin(), str.end(), szIconImageTag);
+		std::copy(wstr.begin(), wstr.end(), szIconImageTag);
 		str = js["Model"];
 		wstr = CEngineUtility::ConvertStringToWString(str);
-		std::copy(str.begin(), str.end(), strModelTag);
+		std::copy(wstr.begin(), wstr.end(), strModelTag);
 		iPrice = js["Price"];
 		eItemGrade = js["ItemGrade"];
 

@@ -123,17 +123,33 @@ HRESULT CPlayer::Initialize(void* pArg)
 	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::FIREPRISM_BOTTOM);
 	Gain_Item(pItemDesc);
 
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_SHOES);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_SUIT);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_HAT);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::BASIC_STAFF);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::EQUIP, (_uint)EQUIP_ITEM_ID::EVILWINGS);
+	Gain_Item(pItemDesc);
+
 	for (int i = 0; i < 50; i++)
 	{
 		pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::CONSUMABLE, (_uint)CONSUMABLE_ITEM_ID::HP_POTION);
 		Gain_Item(pItemDesc);
 	}
 
-	//pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::DECO, (_uint)DECO_ITEM_ID::EGGTOAST);
-	//Gain_Item(pItemDesc);
-
-	//pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::ETC, (_uint)ETC_ITEM_ID::CHICKEN);
-	//Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::DECO, (_uint)DECO_ITEM_ID::LOLIPOP);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::DECO, (_uint)DECO_ITEM_ID::EGGTOAST);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::DECO, (_uint)DECO_ITEM_ID::MUSTACH);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::DECO, (_uint)DECO_ITEM_ID::GLASSES);
+	Gain_Item(pItemDesc);
+	pItemDesc = ITEMDB->Get_Data(ITEM_TYPE::ETC, (_uint)ETC_ITEM_ID::CHICKEN);
+	Gain_Item(pItemDesc);
 
 	UIBUNDLE->Set_QuickItem(KEY::Q, m_mapSkill[SKILL_ID::TELEPORT]);
 	UIBUNDLE->Set_QuickItem(KEY::W, m_mapSkill[SKILL_ID::BBQ_PARTY]);

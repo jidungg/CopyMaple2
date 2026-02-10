@@ -55,7 +55,7 @@ void CTerrain::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	iTmpCellCount = 0;
-	//Culling(m_pOctoTree);
+	Culling(m_pOctoTree);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	int a = 0;
 }
@@ -254,40 +254,52 @@ _bool CTerrain::RayCast(const Ray& tRay, RaycastHit* pOut)
 
 void CTerrain::Culling(COctoTree* pOctoTree)
 {
-	if (nullptr == pOctoTree)
-		return;
-
-	_uint* pIndices = pOctoTree->Get_Corners();
-	_float		fRange = XMVectorGetX( XMVector3Length( IndexToPos( pOctoTree->Get_Center()) - IndexToPos(pIndices[COctoTree::RTF])));
-	_float fRange2 = pOctoTree->Get_Radius(1.f);
-
-	_vector vCenterPos = IndexToPos(pOctoTree->Get_Center());
-	if (true == m_pGameInstance->Frustum_Culling_World(vCenterPos, fRange + fCullDistance))
+	if (bOctreeCulling)
 	{
-		if (pOctoTree->Is_Leaf())
+		if (nullptr == pOctoTree)
+			return;
+
+		_uint* pIndices = pOctoTree->Get_Corners();
+		_float		fRange = XMVectorGetX(XMVector3Length(IndexToPos(pOctoTree->Get_Center()) - IndexToPos(pIndices[COctoTree::RTF])));
+		_float fRange2 = pOctoTree->Get_Radius(1.f);
+
+		_vector vCenterPos = IndexToPos(pOctoTree->Get_Center());
+		if (true == m_pGameInstance->Frustum_Culling_World(vCenterPos, fRange + fCullDistance))
 		{
-			_uint iSIze = pOctoTree->Get_MaxSize();
-			iTmpCellCount += pOctoTree->Get_CellCount();
-			if (2 == iSIze)
+			if (pOctoTree->Is_Leaf())
+			{
+				_uint iSIze = pOctoTree->Get_MaxSize();
+				iTmpCellCount += pOctoTree->Get_CellCount();
+				if (2 == iSIze)
+				{
+					for (_uint i = 0; i < COctoTree::CORNER_END; i++)
+						if (UINT_MAX != pIndices[i] && nullptr != m_vecCubes[pIndices[i]])
+							m_vecCubes[pIndices[i]]->Culling(fCullDistance);
+				}
+				else if (1 >= iSIze)
+					if (UINT_MAX != pIndices[0] && nullptr != m_vecCubes[pIndices[0]])
+						m_vecCubes[pIndices[0]]->Culling(fCullDistance);
+			}
+			else
 			{
 				for (_uint i = 0; i < COctoTree::CORNER_END; i++)
-					if (UINT_MAX != pIndices[i] && nullptr != m_vecCubes[pIndices[i]])
-						m_vecCubes[pIndices[i]]->Culling(fCullDistance);
+				{
+					COctoTree* pChild = pOctoTree->Get_Child((COctoTree::CORNER)i);
+					if (nullptr != pChild)
+						Culling(pChild);
+				}
 			}
-			else if (1 >= iSIze)
-				if (UINT_MAX != pIndices[0] && nullptr != m_vecCubes[pIndices[0]])
-					m_vecCubes[pIndices[0]]->Culling(fCullDistance);
-		}
-		else
-		{
-			for (_uint i = 0; i < COctoTree::CORNER_END; i++)
-			{
-				COctoTree* pChild = pOctoTree->Get_Child((COctoTree::CORNER)i);
-				if (nullptr != pChild)
-					Culling(pChild);
-			}
-		}
 
+		}
+	}
+	else
+	{
+		for (auto& cell : m_vecCubes)
+		{
+			if (nullptr == cell)
+				continue;
+			cell->Culling(fCullDistance);
+		}
 	}
 }
 
@@ -392,36 +404,7 @@ HRESULT CTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 	tDesc.pCubeTerrain = this;
 	BUILD_ITEM_TYPE eType = static_cast<BUILD_ITEM_DATA*>(ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)tDesc.iID))->eBuildType;
 
-	CTerrainObject* pGameObject = nullptr;
-	switch (eType)
-	{
-	case Client::BUILD_ITEM_TYPE::GROUND:
-	case Client::BUILD_ITEM_TYPE::CUBRIC:
-	case Client::BUILD_ITEM_TYPE::FUNCT:
-	case Client::BUILD_ITEM_TYPE::DEFORM:
-	case Client::BUILD_ITEM_TYPE::FLOOR:
-	case Client::BUILD_ITEM_TYPE::WALL:
-	case Client::BUILD_ITEM_TYPE::NATURE:
-	case Client::BUILD_ITEM_TYPE::PROP:
-	case Client::BUILD_ITEM_TYPE::STRUC:
-		pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CTerrainObject::m_szProtoTag, &tDesc));
-		break;
-	case Client::BUILD_ITEM_TYPE::MONSTER_SPAWNER:
-		pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CMonsterSpawner::m_szProtoTag, &tDesc));
-		break;
-	case Client::BUILD_ITEM_TYPE::PLAYER_SPAWNER:
-		break;
-	case Client::BUILD_ITEM_TYPE::PORTAL:
-		pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CPortalTerrainObject::m_szProtoTag, &tDesc));
-		break;
-	case Client::BUILD_ITEM_TYPE::NPC_SPAWNER:
-		pGameObject = static_cast<CTerrainObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CNPCSpanwer::m_szProtoTag, &tDesc));
-		break;
-	case Client::BUILD_ITEM_TYPE::LAST:
-	default:
-		break;
-	}
-	
+	CTerrainObject* pGameObject = TerrainObjectFactory::Create(eType, m_pGameInstance, tDesc);
 	if(nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
@@ -762,4 +745,39 @@ void CTerrain::Free()
 {
 	__super::Free();
 	Safe_Release(m_pOctoTree);
+}
+
+CTerrainObject* TerrainObjectFactory::Create(BUILD_ITEM_TYPE eType, CGameInstance* pGI, CTerrainObject::TERRAINOBJ_DESC& tDesc)
+{
+	CTerrainObject* pGameObject = nullptr;
+	switch (eType)
+	{
+	case Client::BUILD_ITEM_TYPE::GROUND:
+	case Client::BUILD_ITEM_TYPE::CUBRIC:
+	case Client::BUILD_ITEM_TYPE::FUNCT:
+	case Client::BUILD_ITEM_TYPE::DEFORM:
+	case Client::BUILD_ITEM_TYPE::FLOOR:
+	case Client::BUILD_ITEM_TYPE::WALL:
+	case Client::BUILD_ITEM_TYPE::NATURE:
+	case Client::BUILD_ITEM_TYPE::PROP:
+	case Client::BUILD_ITEM_TYPE::STRUC:
+		pGameObject = static_cast<CTerrainObject*>(pGI->Clone_Proto_Object_Stock(CTerrainObject::m_szProtoTag, &tDesc));
+		break;
+	case Client::BUILD_ITEM_TYPE::MONSTER_SPAWNER:
+		pGameObject = static_cast<CTerrainObject*>(pGI->Clone_Proto_Object_Stock(CMonsterSpawner::m_szProtoTag, &tDesc));
+		break;
+	case Client::BUILD_ITEM_TYPE::PLAYER_SPAWNER:
+		break;
+	case Client::BUILD_ITEM_TYPE::PORTAL:
+		pGameObject = static_cast<CTerrainObject*>(pGI->Clone_Proto_Object_Stock(CPortalTerrainObject::m_szProtoTag, &tDesc));
+		break;
+	case Client::BUILD_ITEM_TYPE::NPC_SPAWNER:
+		pGameObject = static_cast<CTerrainObject*>(pGI->Clone_Proto_Object_Stock(CNPCSpanwer::m_szProtoTag, &tDesc));
+		break;
+	case Client::BUILD_ITEM_TYPE::LAST:
+	default:
+		break;
+	}
+
+	return pGameObject;
 }

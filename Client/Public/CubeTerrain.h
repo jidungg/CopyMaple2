@@ -18,6 +18,14 @@ BEGIN(Client)
 #define TRIAG_DIST 1.732f
 class COctoTree;
 class CTerrainObject;
+class TerrainObjectFactory
+{
+public:
+	static CTerrainObject* Create(
+		BUILD_ITEM_TYPE type,
+		CGameInstance* pGI,
+		CTerrainObject::TERRAINOBJ_DESC& desc);
+};
 class CTerrain final : public CGameObject
 {
 	enum class CELL_RELATION

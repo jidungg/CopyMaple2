@@ -12,7 +12,7 @@
 #include "Inventory.h"
 #include "ItemDataBase.h"
 #include "UIBundle.h"
-#include "CubeTerrain.h"
+#include "Terrain.h"
 #include "Collider_Sphere.h"
 #include "DeadObjEvent.h"
 #include "Interactable.h"

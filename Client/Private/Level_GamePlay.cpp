@@ -11,7 +11,7 @@
 #include "Bayar.h"
 #include "Player.h"
 #include "ModelObject.h"
-#include "CubeTerrain.h"
+#include "Terrain.h"
 #include "Client_Utility.h"
 #include "BackGround.h"
 

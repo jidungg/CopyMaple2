@@ -230,7 +230,7 @@
     <ClInclude Include="..\Public\UIScrollButton.h" />
     <ClInclude Include="..\Public\Level_BayarPeak.h" />
     <ClInclude Include="..\Public\Level_HuntingPlace.h" />
-    <ClInclude Include="..\Public\CubeTerrain.h" />
+    <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\OctoTree.h" />
     <ClInclude Include="..\Public\UIDamgCount.h" />
     <ClInclude Include="..\Public\WorldUIObject.h" />
@@ -443,7 +443,7 @@
     <ClCompile Include="..\private\Level_BayarPeak.cpp" />
     <ClCompile Include="..\Private\Level_HuntingPlace.cpp" />
     <ClCompile Include="..\Private\OctoTree.cpp" />
-    <ClCompile Include="..\Private\CubeTerrain.cpp" />
+    <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\UIDamgCount.cpp" />
     <ClCompile Include="..\Private\WorldUIObject.cpp" />
     <ClCompile Include="EffFlipController.cpp" />

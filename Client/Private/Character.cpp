@@ -3,7 +3,7 @@
 #include "StateMachine.h"
 #include "GameInstance.h"
 #include "DeadObjEvent.h"
-#include "CubeTerrain.h"
+#include "Terrain.h"
 #include "Collider_Sphere.h"
 #include "Skill.h"
 #include "Engine_Utility.h"

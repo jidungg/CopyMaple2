@@ -11,7 +11,7 @@
 #include "DeadObjEvent.h"
 #include "Client_Utility.h"
 #include "WayFinder.h"
-#include "CubeTerrain.h"
+#include "Terrain.h"
 #include "DropTable.h"
 #include "QuestDataBase.h"
 #include "WorldUIHPBar.h"

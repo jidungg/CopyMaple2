@@ -6,7 +6,7 @@
 #include "Player.h"
 #include "HitEvent.h"
 #include "Client_Utility.h"
-#include "CubeTerrain.h"
+#include "Terrain.h"
 #include "Sound.h"
 
 CBayarStoneSpike::CBayarStoneSpike()

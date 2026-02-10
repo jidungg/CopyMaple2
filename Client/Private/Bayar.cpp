@@ -6,7 +6,7 @@
 #include "Collider_Sphere.h"
 #include "StateMachine.h"
 #include "SkillManager.h"
-#include "CubeTerrain.h"
+#include "Terrain.h"
 #include "Client_Utility.h"
 #include "WayFinder.h"
 

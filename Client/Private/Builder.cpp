@@ -7,7 +7,7 @@
 #include "MeshCollider.h"
 #include "ModelObject.h"
 #include "Client_Utility.h"
-#include "CubeTerrain.h"
+#include "Terrain.h"
 #include "TerrainObject.h"
 #include "ItemDataBase.h"
 #include "BuildPreview.h"

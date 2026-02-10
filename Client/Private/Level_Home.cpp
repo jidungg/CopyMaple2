@@ -8,7 +8,7 @@
 #include "UIHomeDialog.h"
 #include "Physics.h"
 #include "Builder.h"
-#include "CubeTerrain.h"
+#include "Terrain.h"
 #include "Camera_Trace.h"
 #include "Player.h"
 #include "Collider.h"

@@ -7,7 +7,7 @@
 #include "EffModelObject.h"
 #include "Bullet_BayarAttackD.h"
 #include "Client_Utility.h"
-#include "CubeTerrain.h"
+#include "Terrain.h"
 #include "Sound.h"
 
 CBayarAttackD::CBayarAttackD()

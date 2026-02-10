@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\Public\CubeTerrain.h"
+#include "..\Public\Terrain.h"
 
 #include "GameInstance.h"
 #include "JsonParser.h"

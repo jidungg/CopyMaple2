@@ -173,7 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Conversation.h" />
-    <ClInclude Include="..\Public\CubeTerrain.h" />
+    <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\DropTable.h" />
     <ClInclude Include="..\Public\Level_HuntingPlace2.h" />
     <ClInclude Include="..\Public\NPC.h" />
@@ -376,7 +376,7 @@
     <ClCompile Include="..\Private\InvenETCSlot.cpp" />
     <ClCompile Include="..\Private\CrabAttack.cpp" />
     <ClCompile Include="..\Private\CreateObjEvent.cpp" />
-    <ClCompile Include="..\Private\CubeTerrain.cpp" />
+    <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\DeadObjEvent.cpp" />
     <ClCompile Include="..\Private\BasicAttack.cpp" />
     <ClCompile Include="..\private\EffConcreteController.cpp" />

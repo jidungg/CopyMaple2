@@ -2,7 +2,7 @@
 #include "WorldItem.h"
 #include "GameInstance.h"
 #include "Client_Utility.h"
-#include "CubeTerrain.h"
+#include "Terrain.h"
 #include "Engine_Utility.h"
 #include "EffModel.h"
 #include "Player.h"

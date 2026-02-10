@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "WayFinder.h"
 #include "GameInstance.h"
-#include "CubeTerrain.h"
+#include "Terrain.h"
 #include "Client_Utility.h"
 #include "TerrainObject.h"
 

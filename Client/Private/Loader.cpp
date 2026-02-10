@@ -11,7 +11,7 @@
 
 #include "Camera_Free.h"
 #include "Camera_Trace.h"
-#include "CubeTerrain.h"
+#include "Terrain.h"
 #include "TerrainObject.h"
 #include "Player.h"
 #include "RenderObject.h"

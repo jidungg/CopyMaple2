@@ -66,12 +66,12 @@ void CEventManager::UnRegisterPostEventCallback(_uint _eventType, const void* _h
 void CEventManager::TriggerEvent(CEvent* _event)
 {
 	for (auto handler : m_umapPreEventCallback[_event->GetEventID()])
-		handler->Exec(_event);//�ڵ鷯
+		handler->Exec(_event);
 
-	_event->Exec();			  //�̺�Ʈ �Լ�
+	_event->Exec();
 
 	for (auto handler : m_umapPostEventCallback[_event->GetEventID()])
-		handler->Exec(_event);//�ڵ鷯
+		handler->Exec(_event);
 	Safe_Release(_event);
 }
 

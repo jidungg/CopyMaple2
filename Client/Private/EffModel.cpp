@@ -221,6 +221,8 @@ void CEffModel::Reset()
 		pTexturing->Reset();
     for (auto& pController : m_vecControl)
         pController->Reset_CurrentTrackPosition();
+    for (auto& tEvnt : m_listAnimEvent)
+        tEvnt.bIsTriggered = false;
     m_fCurrentTrackPosition = 0;
 }
 

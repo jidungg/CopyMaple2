@@ -20,6 +20,9 @@
 #include "WorldItem.h"
 #include "UIBundle.h"
 
+#include "Monster.h"
+
+
 
 CLevel_Home::CLevel_Home(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel_GamePlay(pDevice, pContext)
@@ -62,8 +65,15 @@ HRESULT CLevel_Home::Initialize(void* pArg)
 	//m_pEffect->Set_Transform(_vector{0,1,0}, _vector{0,0,0}, 1 / 150);
 
 
+	//허수아비 세우기
+	CMonster::MONSTER_DESC tMonDesc;
+	tMonDesc.eMonID = MONSTER_ID::CRAB;
+	tMonDesc.vHomePos = { 4,0,4,1 };
+	tMonDesc.pCubeTerrain = m_pCubeTerrain;
+	CGameObject* m_pSpawnObject = static_cast<CMonster*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CMonster::m_szProtoTag, &tMonDesc));
+	m_pGameInstance->Add_GameObject_ToLayer(LEVEL_HOME, LAYER_MONSTER, m_pSpawnObject);
 
-	UIBUNDLE->Set_HUDActive(false);
+	//UIBUNDLE->Set_HUDActive(false);
 	
 
 	return S_OK;

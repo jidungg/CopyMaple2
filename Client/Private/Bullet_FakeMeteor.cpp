@@ -35,7 +35,7 @@ HRESULT CBullet_FakeMeteor::Initialize(void* pArg)
 	m_pSplashInvokeEffectA = static_cast<CEffModelObject*>(m_pGameInstance->Clone_Proto_Object_Stock(CEffModelObject::m_szProtoTag, &tEffectDesc));
 	Add_Child(m_pSplashInvokeEffectA);
 	ANIM_EVENT tAnimEvent;
-	tAnimEvent.fTime = 0.5;
+	tAnimEvent.fTime = 0.5f;
 	tAnimEvent.pFunc = bind(&CBullet_FakeMeteor::On_MeteorImpact, this);
 	m_pSplashInvokeEffectA->Register_AnimEvent(tAnimEvent);
 	m_pSplashInvokeEffectA->Set_Active(false);

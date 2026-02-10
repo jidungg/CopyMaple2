@@ -652,7 +652,7 @@ HRESULT CLoader::Loading_Level_Henesys()
 
 	/* For.Prototype_GameObject_Terrain */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HENESYS, TEXT("Prototype_GameObject_Henesys"),
-		CCubeTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/Henesys.json")))))
+		CTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/Henesys.json")))))
 		return E_FAIL;
 
 
@@ -691,7 +691,7 @@ HRESULT CLoader::Loading_Level_BayarPeak()
 
 	lstrcpy(m_szLoadingText, TEXT("객체 로드."));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_BAYARPEAK, TEXT("Prototype_GameObject_BayarPeak"),
-		CCubeTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/BayarPeak.json")))))
+		CTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/BayarPeak.json")))))
 		return E_FAIL;
 	/* BAYAR */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_BAYARPEAK, TEXT("Prototype_GameObject_Bayar"),
@@ -754,7 +754,7 @@ HRESULT CLoader::Loading_Level_MyHome()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, TEXT("Prototype_GameObject_MyHome"),
-		CCubeTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/MyHome.json")))))
+		CTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/MyHome.json")))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HOME, CBuilder::m_szProtoTag,
 		CBuilder::Create(m_pDevice, m_pContext))))
@@ -799,7 +799,7 @@ HRESULT CLoader::Loading_Level_HuntingPlace()
 
 	lstrcpy(m_szLoadingText, TEXT("객체 로드."));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HUNTINGPLACE, TEXT("Prototype_GameObject_HuntingPlace"),
-		CCubeTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/HuntingPlace.json")))))
+		CTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/HuntingPlace.json")))))
 		return E_FAIL;
 
 
@@ -832,7 +832,7 @@ HRESULT CLoader::Loading_Level_HuntingPlace2()
 
 	lstrcpy(m_szLoadingText, TEXT("객체 로드."));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_HUNTINGPLACE2, TEXT("Prototype_GameObject_HuntingPlace2"),
-		CCubeTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/HuntingPlace2.json")))))
+		CTerrain::Create(m_pDevice, m_pContext, ("../Bin/Resources/Json/HuntingPlace2.json")))))
 		return E_FAIL;
 
 

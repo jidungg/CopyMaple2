@@ -903,7 +903,7 @@ _bool CPlayer::Check_Collision(CGameObject* pOther)
 	case Client::LAYER_TERRAIN:
 	{
 		_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		CCubeTerrain* pTerrain = static_cast<CCubeTerrain*>(pOther);
+		CTerrain* pTerrain = static_cast<CTerrain*>(pOther);
 		m_vNextPos = vPos;
 		if (m_bMove)
 		{
@@ -920,12 +920,13 @@ _bool CPlayer::Check_Collision(CGameObject* pOther)
 		_vector vFootPos = Get_TransformPosition();
 		_vector vBodyPos = XMVectorSetY(vFootPos, vFootPos.m128_f32[1] + Get_BodyCollisionOffset().y);
 		_float fCollisionRadius = Get_BodyCollisionRadius();
-		Ray tBodyRay(vBodyPos, m_vLookDirectionXZ, fCollisionRadius);
+		_vector vLook =  Get_Transform()->Get_State(CTransform::STATE_LOOK);
+		Ray tBodyRay(vBodyPos, vLook, fCollisionRadius);
 		RaycastHit tBodyhit;
-		m_bBodyWall = pTerrain->RayCastXZ(tBodyRay, &tBodyhit);
-		Ray tFootRay(vFootPos, m_vLookDirectionXZ, fCollisionRadius);
+		m_bBodyWall = pTerrain->RayCast(tBodyRay, &tBodyhit);
+		Ray tFootRay(vFootPos, vLook, fCollisionRadius);
 		RaycastHit tFoothit;
-		m_bFootWall = pTerrain->RayCastXZ(tFootRay, &tFoothit);
+		m_bFootWall = pTerrain->RayCast(tFootRay, &tFoothit);
 		if(m_bBodyWall)
 		{
 			m_vBodyWallNormal = XMVector3Normalize(tBodyhit.vNormal);

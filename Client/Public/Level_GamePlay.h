@@ -4,7 +4,7 @@
 
 BEGIN(Client)
 class CPlayer;
-class CCubeTerrain;
+class CTerrain;
 class CBackGround;
 class CLevel_GamePlay : public CLevel
 {
@@ -24,7 +24,7 @@ public:
 
 	virtual void On_Start(_uint iPrevLevelID) override;
 protected:
-	CCubeTerrain* m_pCubeTerrain = { nullptr };
+	CTerrain* m_pCubeTerrain = { nullptr };
 	CPlayer* m_pPlayer = { nullptr };
 	CBackGround* m_pBackGround = { nullptr };
 };

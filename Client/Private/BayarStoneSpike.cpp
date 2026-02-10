@@ -95,7 +95,7 @@ void CBayarStoneSpike::On_CastingEnd()
 
 void CBayarStoneSpike::Fire()
 {
-	m_pTerrain = static_cast<CCubeTerrain*>(m_pGameInstance->Get_FirstGameObject(Get_CurrentTrueLevel(), LAYERID::LAYER_TERRAIN));
+	m_pTerrain = static_cast<CTerrain*>(m_pGameInstance->Get_FirstGameObject(Get_CurrentTrueLevel(), LAYERID::LAYER_TERRAIN));
 	m_bAttack = true;
 }
 

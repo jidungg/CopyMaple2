@@ -7,14 +7,14 @@
 
 BEGIN(Client)
 class CPlayer;
-class CCubeTerrain;
+class CTerrain;
 class CBackGround final : public CUIPanel
 {
 public:
 	typedef struct BackgroundDesc: public CUIPanel::PANEL_DESC
 	{
 		CPlayer* pPlayer = { nullptr };
-		CCubeTerrain* pTerrain = { nullptr };
+		CTerrain* pTerrain = { nullptr };
 		const _tchar* szBackGroundImgTag = { nullptr };
 		LEVELID eBackGroundImgProtoLevel = { LEVELID::LAST };
 	}BACKGROUND_DESC;

@@ -9,7 +9,7 @@ END
 
 BEGIN(Client)
 class CCharacter;
-class CCubeTerrain;
+class CTerrain;
 class CTerrainObject :
 	public CModelObject
 {
@@ -22,7 +22,7 @@ public:
 		_uint iParentIndex = { UINT_MAX };
 		vector<_int> vecIData ;
 		vector<_float> vecFData ;
-		CCubeTerrain* pCubeTerrain = { nullptr };
+		CTerrain* pCubeTerrain = { nullptr };
 	}TERRAINOBJ_DESC;
 public:
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_TerrainObject";
@@ -47,7 +47,7 @@ public:
 	_float Get_TopHeight(_vector Pos);
 	_float Get_BottomHeight(_vector Pos);
 	BUILD_ITEM_TYPE Get_BuildItemType() { return m_eBuildItemType; }
-	_bool Is_BlockingType() { return m_eBlockType != BUILD_ITEM_BLOCK_TYPE::NON_BLOCK; }
+	_bool Is_BlockingType() { return m_eBlockType != TERRAINOBJ_BLOCK_TYPE::NON_BLOCK; }
 	_bool RayCast(const Ray& tRay, RaycastHit* pOut);
 	void Culling(_float fRange = 0);
 
@@ -57,7 +57,7 @@ private:
 
 protected:
 	_uint m_iBuildItemID = { UINT_MAX };
-	BUILD_ITEM_BLOCK_TYPE m_eBlockType = { BUILD_ITEM_BLOCK_TYPE::LAST };
+	TERRAINOBJ_BLOCK_TYPE m_eBlockType = { TERRAINOBJ_BLOCK_TYPE::LAST };
 	BUILD_ITEM_TYPE m_eBuildItemType = { BUILD_ITEM_TYPE::LAST };
 	_uint m_iIndex = { UINT_MAX };
 	_uint m_iParentIndex = { UINT_MAX };

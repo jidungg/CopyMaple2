@@ -4,7 +4,7 @@
 
 BEGIN(Client)
 class CBullet_BayarStoneSpike;
-class CCubeTerrain;
+class CTerrain;
 class CBayarStoneSpike :
     public CSkill
 {
@@ -30,7 +30,7 @@ private:
 	_float m_fAttackInterval = { 0.75f };
 	_float m_fTimeAcc = { 0.f };
 
-	CCubeTerrain* m_pTerrain = { nullptr };
+	CTerrain* m_pTerrain = { nullptr };
 public:
 	static CBayarStoneSpike* Create(SKILL_DATA* pSkillData, CCharacter* pUser);
 	virtual void Free() override;

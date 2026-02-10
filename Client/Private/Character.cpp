@@ -83,7 +83,7 @@ _bool CCharacter::Check_Collision(CGameObject* pOther)
 	case Client::LAYER_TERRAIN:
 	{
 		_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		CCubeTerrain* pTerrain = static_cast<CCubeTerrain*>(pOther);
+		CTerrain* pTerrain = static_cast<CTerrain*>(pOther);
 		m_vNextPos = vPos;
 		if(m_bMove)
 		{

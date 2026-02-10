@@ -2,7 +2,7 @@
 #include "Component.h"
 BEGIN(Client)
 
-class CCubeTerrain;
+class CTerrain;
 class CTerrainObject;
 struct ASTARCELL
 {
@@ -18,7 +18,7 @@ class CWayFinder :
 public:
 	typedef struct WayFinderDesc
 	{
-		CCubeTerrain* pCubeTerrain = { nullptr };
+		CTerrain* pCubeTerrain = { nullptr };
 	}WAYFINDER_DESC;
 protected:
 	explicit CWayFinder(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -41,7 +41,7 @@ private:
 
 private:
 
-	CCubeTerrain* m_pCubeTerrain = { nullptr };
+	CTerrain* m_pCubeTerrain = { nullptr };
 	unordered_map<_int, ASTARCELL> m_mapAStarCell;
 	list<_int> m_listOpenList;
 	list<_int> m_listCloseList;

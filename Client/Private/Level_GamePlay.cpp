@@ -25,7 +25,7 @@ HRESULT CLevel_GamePlay::Initialize(void* pArg)
 {
 	LevelDesc* pDesc = static_cast<LevelDesc*>( pArg);
 	//TERRAIN
-	m_pCubeTerrain = static_cast<CCubeTerrain*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, m_iLevelID,
+	m_pCubeTerrain = static_cast<CTerrain*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, m_iLevelID,
 		pDesc->szCubeTerrainTag, nullptr));
 	if (nullptr == m_pCubeTerrain)
 		return E_FAIL;

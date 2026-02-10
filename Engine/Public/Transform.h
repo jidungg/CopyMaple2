@@ -49,6 +49,9 @@ public:
 	void Set_WorldMatrix(_matrix& matWorld) {
 		XMStoreFloat4x4(&m_WorldMatrix, matWorld);
 	}
+
+	void Set_SpeedPerSec(_float fSpeed) { m_fSpeedPerSec = fSpeed; }
+	void Set_RotationPerSec(_float fRotaion) { m_fRotationPerSec = fRotaion; }
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);

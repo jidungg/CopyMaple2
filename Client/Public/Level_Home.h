@@ -7,7 +7,7 @@
 BEGIN(Client)
 class CModelObject;
 class CBuilder;
-class CCubeTerrain;
+class CTerrain;
 class CCamera_Trace;
 class CPlayer;
 class CUIHomeDialog;

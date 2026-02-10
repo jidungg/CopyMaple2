@@ -158,7 +158,7 @@ _bool CWorldItem::Check_Collision(CGameObject* pOther)
 void CWorldItem::PopUp()
 {
 	m_bPopUp = true;
-	m_pTerrain = static_cast<CCubeTerrain*>(m_pGameInstance->Get_FirstGameObject(Get_CurrentTrueLevel(), LAYERID::LAYER_TERRAIN));
+	m_pTerrain = static_cast<CTerrain*>(m_pGameInstance->Get_FirstGameObject(Get_CurrentTrueLevel(), LAYERID::LAYER_TERRAIN));
 	m_fUpForce = m_fJumpForce;
 	m_vPopMoveDirection.m128_f32[0] = CEngineUtility::Get_RandomFloat(-1, 1);
 	m_vPopMoveDirection.m128_f32[2] = CEngineUtility::Get_RandomFloat(-1, 1);

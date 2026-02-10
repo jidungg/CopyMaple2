@@ -18,7 +18,7 @@ BEGIN(Client)
 #define TRIAG_DIST 1.732f
 class COctoTree;
 class CTerrainObject;
-class CCubeTerrain final : public CGameObject
+class CTerrain final : public CGameObject
 {
 	enum class CELL_RELATION
 	{
@@ -29,9 +29,9 @@ class CCubeTerrain final : public CGameObject
 		LAST
 	};
 private:
-	CCubeTerrain(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const char* szMapFileName);
-	CCubeTerrain(const CCubeTerrain& Prototype);
-	virtual ~CCubeTerrain() = default;
+	CTerrain(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const char* szMapFileName);
+	CTerrain(const CTerrain& Prototype);
+	virtual ~CTerrain() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -51,8 +51,8 @@ public:
 	HRESULT Load_From_Json(string strJsonFilePath);
 	_vector Blocking(CCharacter* pCharacter);
 	_vector Blocking(CCharacter* pCharacter, _uint iCheckRange);
-	_bool RayCastXZ(const Ray& tRay, RaycastHit* pOut);
 	_bool RayCast(const Ray& tRay, RaycastHit* pOut);
+	_bool RayCastXZ(const Ray& tRay, RaycastHit* pOut);
 	void Culling(COctoTree* pOctoTree);
 
 	_bool Is_Buildable(_vector Pos);
@@ -77,11 +77,14 @@ private:
 	string m_strJsonFilePath;
 	XMUINT3 m_vSize = { 1, 1, 1 };
 	
-	vector<CTerrainObject*> m_vecCells;
+	vector<CTerrainObject*> m_vecCubes;
+	vector<CTerrainObject*> m_vecNonCubes;
 	COctoTree* m_pOctoTree = { nullptr };
 	_uint iTmpCellCount = 0;
+	_float fCullDistance = 1.7f;
+	_bool bOctreeCulling = false;
 public:
-	static CCubeTerrain* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const char* szMapFileName);
+	static CTerrain* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const char* szMapFileName);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 

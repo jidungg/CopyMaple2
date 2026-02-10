@@ -106,7 +106,7 @@ void CBayarAttackD::On_CastingEnd()
 
 void CBayarAttackD::Fire()
 {
-	m_pTerrain = static_cast<CCubeTerrain*> (m_pGameInstance->Get_FirstGameObject(Get_CurrentTrueLevel(), LAYERID::LAYER_TERRAIN));
+	m_pTerrain = static_cast<CTerrain*> (m_pGameInstance->Get_FirstGameObject(Get_CurrentTrueLevel(), LAYERID::LAYER_TERRAIN));
 	m_fFloorHeight = m_pTerrain->Get_FloorHeight(m_pUser->Get_WorldPosition());
 
 	m_pAttackEffect->Set_Transform(m_pUser->Get_Transform());

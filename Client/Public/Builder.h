@@ -16,7 +16,7 @@ END
 BEGIN(Client)
 class CModelObject;
 class CEffModelObject;
-class CCubeTerrain;
+class CTerrain;
 class CTerrainObject;
 class CBuildPreview;
 class CUIBar;
@@ -31,7 +31,7 @@ class CBuilder :
 public:
 	typedef struct tagBuilderDesc : public CPawn::GAMEOBJECT_DESC
 	{
-		CCubeTerrain* pCubeTerrain = nullptr;
+		CTerrain* pCubeTerrain = nullptr;
 
 	}BUILDER_DESC;
 
@@ -58,7 +58,7 @@ private:
 	HRESULT Ready_Preview(BUILD_ITEM_DATA* pDesc);
 	HRESULT Ready_Marker();
 private:
-	CCubeTerrain* m_pCubeTerrain = { nullptr };
+	CTerrain* m_pCubeTerrain = { nullptr };
 
 	CModelObject* m_pBird = { nullptr };
 	XMVECTOR m_vBirdOffset = XMVectorSet(0, 1, 0, 1);

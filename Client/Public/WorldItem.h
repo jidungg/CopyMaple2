@@ -3,7 +3,7 @@
 #include "Item.h"
 
 BEGIN(Client)
-class CCubeTerrain;
+class CTerrain;
 class CWorldItem :
     public CEffModelObject
 {
@@ -12,7 +12,7 @@ public:
 	{
 		const ITEM_DATA* pItemData = { nullptr };
 		_uint iStackCount = { 1 };
-		CCubeTerrain* pTerrain = { nullptr };
+		CTerrain* pTerrain = { nullptr };
 	}WORLDITEM_DESC;
 public:
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_CWorldItem";
@@ -36,7 +36,7 @@ private:
 	_uint m_iStackCount = { 1 };
 
 	_bool m_bPopUp = { false };
-	CCubeTerrain* m_pTerrain = { nullptr };
+	CTerrain* m_pTerrain = { nullptr };
 	_float m_fMagnetRange = { 1.f };
 	_float m_fAcquireRange = { 0.1f };
 	_float m_fUpForce = { 0.0f };

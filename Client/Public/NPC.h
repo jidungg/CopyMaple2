@@ -46,7 +46,7 @@ typedef struct NPCData
 	map<_uint,ConversationNodeData> mapChat;
 	vector<QUEST_ID> vecQuest;
 }NPC_DATA;
-class CCubeTerrain;
+class CTerrain;
 class CModelObject;
 
 class CNPC :
@@ -71,7 +71,7 @@ public:
 	{
 		NPC_ID eNPCId;
 		_vector vHomePos = { 10.f,1.f,10.f };
-		CCubeTerrain* pCubeTerrain = { nullptr };
+		CTerrain* pCubeTerrain = { nullptr };
 	}NPC_DESC;
 public:
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_NPC";
@@ -99,7 +99,7 @@ private:
 private:
 	NPCData* m_pNPCData = { nullptr };
 
-	CCubeTerrain* m_pCubeTerrain = { nullptr };
+	CTerrain* m_pCubeTerrain = { nullptr };
 
 	CModelObject* m_pBody = { nullptr };
 	CStateMachine* m_pAnimStateMachine = { nullptr };

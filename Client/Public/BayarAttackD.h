@@ -8,7 +8,7 @@ END
 BEGIN(Client)
 class CBullet_BayarAttackD;
 class CEffModelObject;
-class CCubeTerrain;
+class CTerrain;
 class CBayarAttackD :
     public CSkill
 {
@@ -34,7 +34,7 @@ private:
 	CEffModelObject* m_pAttackEffect = { nullptr };
 	CEffModelObject* m_pChargeEffect = { nullptr };
 	_float m_fMoveSpeed = { 8.f };
-	CCubeTerrain* m_pTerrain = { nullptr };
+	CTerrain* m_pTerrain = { nullptr };
 	_float m_fFloorHeight = { 0 };
 public:
 	static CBayarAttackD* Create(SKILL_DATA* pSkillData, CCharacter* pUser);

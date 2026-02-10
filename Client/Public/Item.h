@@ -55,7 +55,7 @@ typedef struct BuildItemData : public ItemData
 		str = js["Model"];
 		std::copy(str.begin(), str.end(), strModelTag);
 	}
-	BUILD_ITEM_BLOCK_TYPE eBlockType ={ BUILD_ITEM_BLOCK_TYPE::LAST};
+	TERRAINOBJ_BLOCK_TYPE eBlockType ={ TERRAINOBJ_BLOCK_TYPE::LAST};
 	BUILD_ITEM_TYPE eBuildType = { BUILD_ITEM_TYPE::LAST };
 }BUILD_ITEM_DATA;
 typedef struct EquipItemData : public ItemData

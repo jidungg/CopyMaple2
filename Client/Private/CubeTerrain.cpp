@@ -12,19 +12,19 @@
 #include "OctoTree.h"
 
 
-CCubeTerrain::CCubeTerrain(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const char* szMapFileName)
+CTerrain::CTerrain(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const char* szMapFileName)
 	: CGameObject { pDevice, pContext }
 {
 	m_strJsonFilePath = szMapFileName;
 }
 
-CCubeTerrain::CCubeTerrain(const CCubeTerrain & Prototype)
+CTerrain::CTerrain(const CTerrain & Prototype)
 	: CGameObject { Prototype },
 	m_strJsonFilePath{ Prototype.m_strJsonFilePath }
 {
 }
 
-HRESULT CCubeTerrain::Initialize_Prototype()
+HRESULT CTerrain::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -33,7 +33,7 @@ HRESULT CCubeTerrain::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CCubeTerrain::Initialize(void * pArg)
+HRESULT CTerrain::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -44,20 +44,18 @@ HRESULT CCubeTerrain::Initialize(void * pArg)
 	_uint iRTF = m_vSize.x * m_vSize.y * m_vSize.z -1;
 
 	m_pOctoTree = COctoTree::Create(m_vSize, iLBN, iRTF);
-	string strOctoTree;
-	m_pOctoTree->To_String(strOctoTree, 0);
+	//string strOctoTree;
+	//m_pOctoTree->To_String(strOctoTree, 0);
 	//cout << strOctoTree << endl;
 	return S_OK;
 }
 
 
-void CCubeTerrain::Late_Update(_float fTimeDelta)
+void CTerrain::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	iTmpCellCount = 0;
-	//cout << "==================" << endl;
 	//Culling(m_pOctoTree);
-	//cout <<"TotalCellCount: " << m_vecCells.size()<<"iTmpCellCount : " << iTmpCellCount << endl;
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	int a = 0;
 }
@@ -65,7 +63,7 @@ void CCubeTerrain::Late_Update(_float fTimeDelta)
 
 
 
-HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
+HRESULT CTerrain::Load_From_Json(string strJsonFilePath)
 {
 	CItemDataBase* pDB = ITEMDB;
 	json j;
@@ -73,7 +71,7 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 		return E_FAIL;
 
 	m_vSize = { j["size"][0],j["size"][1],j["size"][2] };
-	m_vecCells.resize(m_vSize.x * m_vSize.y * m_vSize.z, nullptr);
+	m_vecCubes.resize(m_vSize.x * m_vSize.y * m_vSize.z, nullptr);
 	for (const auto& item : j["cells"]) {
 		_int eId =  item["ItemId"];
 		size_t iteration = item["Iteration"];
@@ -102,12 +100,12 @@ HRESULT CCubeTerrain::Load_From_Json(string strJsonFilePath)
 	return S_OK;
 }
 
-_vector CCubeTerrain::Blocking(CCharacter* pCharacter)
+_vector CTerrain::Blocking(CCharacter* pCharacter)
 {
 	return Blocking(pCharacter, pCharacter->Get_BlockingRange());
 }
 
-_vector CCubeTerrain::Blocking(CCharacter* pCharacter, _uint iCheckRange)
+_vector CTerrain::Blocking(CCharacter* pCharacter, _uint iCheckRange)
 {
 	_vector vPos = pCharacter->Get_TransformPosition();
 	_vector vMoveDir = pCharacter->Get_MoveDirection();
@@ -155,14 +153,14 @@ _vector CCubeTerrain::Blocking(CCharacter* pCharacter, _uint iCheckRange)
 				_uint iTmpIdx = CombineIndex({ iX,iY,iZ });
 				
 
-				if (nullptr == m_vecCells[iTmpIdx])
+				if (nullptr == m_vecCubes[iTmpIdx])
 					continue;
-				if (false == m_vecCells[iTmpIdx]->Is_BlockingType())
+				if (false == m_vecCubes[iTmpIdx]->Is_BlockingType())
 					continue;
 				if (iTmpIdx == iIdx)
 					continue;
 				
-				vNextPos = m_vecCells[iTmpIdx]->BolckXZ(vPos, vMoveDir, fMoveDistance, fBodyCollisionRadius, fBodyCollisionOffset.y);
+				vNextPos = m_vecCubes[iTmpIdx]->BolckXZ(vPos, vMoveDir, fMoveDistance, fBodyCollisionRadius, fBodyCollisionOffset.y);
 				
 				_vector vTmp = vNextPos - vPos;
 				vMoveDir = XMVector4Normalize(vTmp);
@@ -177,166 +175,84 @@ _vector CCubeTerrain::Blocking(CCharacter* pCharacter, _uint iCheckRange)
 }
 
 
-_bool CCubeTerrain::RayCastXZ(const Ray& tRay, RaycastHit* pOut)
+_bool CTerrain::RayCast(const Ray& tRay, RaycastHit* pOut)
 {
-	_vector vCurrentPos = tRay.vOrigin;
-	vCurrentPos += XMVectorSet(0.5, 0, 0.5, 0);
-	_float fXDir = XMVectorGetX(tRay.vDirection);
-	_float fZDir = XMVectorGetZ(tRay.vDirection);
-	//가장 가까운 정수값이 되기 위해 필요한 값 찾기
-	_float fX = XMVectorGetX(vCurrentPos);
-	_float fZ = XMVectorGetZ(vCurrentPos);
-	_float fXRequire = 0.f;
-	_float fZRequire = 0.f;
-	_float fCurrentDistance = 0.f;
+	_vector vOrigin = tRay.vOrigin;
+	_vector vDir = XMVector3Normalize(tRay.vDirection);
+	//dir 벡터가 0인 경우 예외 처리
+	if (XMVector3Equal(vDir, XMVectorZero()))
+		return false;
 
-	while (fCurrentDistance <= tRay.fDist)
+	// X/Z 중심 보정
+	_vector vPos = vOrigin + XMVectorSet(0.5f, 0.f, 0.5f, 0.f);
+
+	// 현재 셀 좌표
+	_int iX = (_int)(XMVectorGetX(vPos));
+	_int iY = (_int)(XMVectorGetY(vPos));
+	_int iZ = (_int)(XMVectorGetZ(vPos));
+
+	_float fDirX = XMVectorGetX(vDir);
+	_float fDirY = XMVectorGetY(vDir);
+	_float fDirZ = XMVectorGetZ(vDir);
+
+	//셀 인덱스 증가 방향
+	_int iStepX = (fDirX > 0) ? 1 : (fDirX < 0 ? -1 : 0);
+	_int iStepY = (fDirY > 0) ? 1 : (fDirY < 0 ? -1 : 0);
+	_int fStepZ = (fDirZ > 0) ? 1 : (fDirZ < 0 ? -1 : 0);
+
+	//셀 1칸 이동하는데 걸리는 t값
+	_float fTDeltaX = (fDirX != 0) ? fabsf(1.f / fDirX) : FLT_MAX;
+	_float fTDeltaY = (fDirY != 0) ? fabsf(1.f / fDirY) : FLT_MAX;
+	_float fTDeltaZ = (fDirZ != 0) ? fabsf(1.f / fDirZ) : FLT_MAX;
+
+	//
+	_float fNextBoundaryX = iX + (iStepX > 0 ? 0.5f : -0.5f);
+	_float fNextBoundaryY = iY + (iStepY > 0 ? 1.f  : 0.f);
+	_float fNextBoundaryZ = iZ + (fStepZ > 0 ? 0.5f : -0.5f);
+
+	//다음 경계면에서의 t값
+	_float fTMaxX = (fDirX != 0) ? (fNextBoundaryX - XMVectorGetX(vPos)) / fDirX : FLT_MAX;
+	_float fTMaxY = (fDirY != 0) ? (fNextBoundaryY - XMVectorGetY(vPos)) / fDirY : FLT_MAX;
+	_float fTMaxZ = (fDirZ != 0) ? (fNextBoundaryZ - XMVectorGetZ(vPos)) / fDirZ : FLT_MAX;
+
+	//현재 Ray 파라미터
+	_float fT = 0.f;
+
+	while (fT <= tRay.fDist)
 	{
-		if (fXDir > 0.f)
-		{
-			fXRequire = ceilf(fX) - fX;
-			if (fXRequire == 0.f)
-				fXRequire += 1.f;
-		}
-		else if (fXDir < 0.f)
-		{
-			fXRequire = floorf(fX) - fX;
-			if (fXRequire == 0.f)
-				fXRequire -= 1.f;
-		}
-		else
-			fXRequire = FLT_MAX;
-		if (fZDir > 0.f)
-		{
-			fZRequire = ceilf(fZ) - fZ;
-			if (fZRequire == 0.f)
-				fZRequire += 1.f;
-		}
-		else if (fZDir < 0.f)
-		{
-			fZRequire = floorf(fZ) - fZ;
-			if (fZRequire == 0.f)
-				fZRequire -= 1.f;
-		}
-		else
-			fZRequire = FLT_MAX;
+		_vector vRealPos = XMVectorSet(iX, iY, iZ, 0.f)
+			- XMVectorSet(0.5f, 0.f, 0.5f, 0.f);
 
-
-		_float fXReqTime = (fXRequire + 1e-6f) / (fXDir + 1e-6f);
-		_float fZReqTime = (fZRequire + 1e-6f) / (fZDir + 1e-6f);
-		//Z축 이 더 빨리 도달
-		if (fXReqTime > fZReqTime)
-			vCurrentPos += tRay.vDirection * fZReqTime;
-		//X축이 더 빨리 도달
-		else
-			vCurrentPos += tRay.vDirection * fXReqTime;
-
-		_vector vRealPos = vCurrentPos;
-		vRealPos -= XMVectorSet(0.5f, 0.f, 0.5f, 0.f);
 		_int iIdx = PosToIndex(vRealPos);
 		if (iIdx < 0)
 			return false;
-		fCurrentDistance = XMVectorGetX(XMVector3Length(vRealPos - tRay.vOrigin));
-		if (fCurrentDistance == 0.f)
-			fCurrentDistance += 0.01f;
-		if (nullptr != m_vecCells[iIdx] && m_vecCells[iIdx]->RayCast(tRay, pOut))
+		if (m_vecCubes[iIdx] && m_vecCubes[iIdx]->RayCast(tRay, pOut))
 			return true;
 
+		// DDA step
+		if (fTMaxX < fTMaxY && fTMaxX < fTMaxZ)
+		{
+			iX += iStepX;
+			fT = fTMaxX;
+			fTMaxX += fTDeltaX;
+		}
+		else if (fTMaxZ < fTMaxY)
+		{
+			iZ += fStepZ;
+			fT = fTMaxZ;
+			fTMaxZ += fTDeltaZ;
+		}
+		else
+		{
+			iY += iStepY;
+			fT = fTMaxY;
+			fTMaxY += fTDeltaY;
+		}
 	}
-
-
 	return false;
 }
 
-_bool CCubeTerrain::RayCast(const Ray& tRay, RaycastHit* pOut)
-{
-	_vector vCurrentPos = tRay.vOrigin;
-	vCurrentPos += XMVectorSet(0.5f, 0.f, 0.5f, 0.f);
-	_float fXDir = XMVectorGetX(tRay.vDirection);
-	_float fYDir = XMVectorGetY(tRay.vDirection);
-	_float fZDir = XMVectorGetZ(tRay.vDirection);
-	//가장 가까운 정수값이 되기 위해 필요한 값 찾기
-	_float fX = XMVectorGetX(vCurrentPos);
-	_float fY = XMVectorGetY(vCurrentPos);
-	_float fZ = XMVectorGetZ(vCurrentPos);
-	_float fXRequire = 0.f;
-	_float fYRequire = 0.f;
-	_float fZRequire = 0.f;
-	_float fCurrentDistance = 0.f;
-
-	while (fCurrentDistance < tRay.fDist)
-	{
-		if (fXDir > 0.f)
-		{
-			fXRequire = ceilf(fX) - fX;
-			if (fXRequire == 0.f)
-				fXRequire += 1.f;
-		}
-		else if (fXDir < 0.f)
-		{
-			fXRequire = floorf(fX) - fX;
-			if (fXRequire == 0.f)
-				fXRequire -= 1.f;
-		}
-		else
-			fXRequire = FLT_MAX;
-		if (fYDir > 0.f)
-		{
-			fYRequire = ceilf(fY) - fY;
-			if (fYRequire == 0.f)
-				fYRequire += 1.f;
-		}
-		else if (fYDir < 0.f)
-		{
-			fYRequire = floorf(fY) - fY;
-			if (fYRequire == 0.f)
-				fYRequire -= 1.f;
-		}
-		else
-			fZRequire = FLT_MAX;
-		if (fZDir > 0.f)
-		{
-			fZRequire = ceilf(fZ) - fZ;
-			if (fZRequire == 0.f)
-				fZRequire += 1.f;
-		}
-		else if (fZDir < 0.f)
-		{
-			fZRequire = floorf(fZ) - fZ;
-			if (fZRequire == 0.f)
-				fZRequire -= 1.f;
-		}
-		else
-			fZRequire = FLT_MAX;
-
-
-		_float fXReqTime = (fXRequire + 1e-6f) / (fXDir + 1e-6f);
-		_float fYReqTime = (fYRequire + 1e-6f) / (fYDir + 1e-6f);
-		_float fZReqTime = (fZRequire + 1e-6f) / (fZDir + 1e-6f);
-		//가장 빨리 도달하는 축 찾기
-		if (fXReqTime > fZReqTime && fYReqTime > fZReqTime)
-			vCurrentPos += tRay.vDirection * fZReqTime;
-		else if (fZReqTime > fXReqTime && fYReqTime > fXReqTime)
-			vCurrentPos += tRay.vDirection * fXReqTime;
-		else
-			vCurrentPos += tRay.vDirection * fYReqTime;
-
-		_vector vRealPos = vCurrentPos;
-		vRealPos -= XMVectorSet(0.5f, 0.f, 0.5f, 0.f);
-		_int iIdx = PosToIndex(vRealPos);
-		if (iIdx < 0)
-			return false;
-		fCurrentDistance = XMVectorGetX(XMVector3Length(vRealPos - tRay.vOrigin));
-		if (nullptr != m_vecCells[iIdx] && m_vecCells[iIdx]->RayCast(tRay, pOut))
-			return true;
-
-	}
-
-
-	return false;
-}
-
-void CCubeTerrain::Culling(COctoTree* pOctoTree)
+void CTerrain::Culling(COctoTree* pOctoTree)
 {
 	if (nullptr == pOctoTree)
 		return;
@@ -346,21 +262,21 @@ void CCubeTerrain::Culling(COctoTree* pOctoTree)
 	_float fRange2 = pOctoTree->Get_Radius(1.f);
 
 	_vector vCenterPos = IndexToPos(pOctoTree->Get_Center());
-	if (true == m_pGameInstance->Frustum_Culling_World(vCenterPos, fRange + 1.7f))
+	if (true == m_pGameInstance->Frustum_Culling_World(vCenterPos, fRange + fCullDistance))
 	{
 		if (pOctoTree->Is_Leaf())
 		{
 			_uint iSIze = pOctoTree->Get_MaxSize();
-			iTmpCellCount += pOctoTree ->Get_CellCount();
+			iTmpCellCount += pOctoTree->Get_CellCount();
 			if (2 == iSIze)
 			{
 				for (_uint i = 0; i < COctoTree::CORNER_END; i++)
-					if (UINT_MAX != pIndices[i] &&nullptr != m_vecCells[pIndices[i]])
-						m_vecCells[pIndices[i]]->Culling(1.7f);
+					if (UINT_MAX != pIndices[i] && nullptr != m_vecCubes[pIndices[i]])
+						m_vecCubes[pIndices[i]]->Culling(fCullDistance);
 			}
 			else if (1 >= iSIze)
-				if (UINT_MAX != pIndices[0]  &&nullptr != m_vecCells[pIndices[0]])
-					m_vecCells[pIndices[0]]->Culling(1.7f);
+				if (UINT_MAX != pIndices[0] && nullptr != m_vecCubes[pIndices[0]])
+					m_vecCubes[pIndices[0]]->Culling(fCullDistance);
 		}
 		else
 		{
@@ -375,14 +291,14 @@ void CCubeTerrain::Culling(COctoTree* pOctoTree)
 	}
 }
 
-HRESULT CCubeTerrain::Save_To_Json(string strNewFilepath)
+HRESULT CTerrain::Save_To_Json(string strNewFilepath)
 {
 	json j;
 	j["cells"] = json::array();
 	json& jCells = j["cells"];
 	json jCurObj;
 	bool bFirst = true;
-	for (auto& cell : m_vecCells)
+	for (auto& cell : m_vecCubes)
 	{
 		if (cell == nullptr) continue;
 		CTerrainObject* pTerrainObj = static_cast<CTerrainObject*>(cell);
@@ -418,7 +334,7 @@ HRESULT CCubeTerrain::Save_To_Json(string strNewFilepath)
 	return S_OK;
 }
 
-_vector CCubeTerrain::IndexToPos(_uint Index)
+_vector CTerrain::IndexToPos(_uint Index)
 {
 	return XMVectorSet(Index % m_vSize.x, 
 		Index / (m_vSize.x * m_vSize.z),
@@ -426,7 +342,7 @@ _vector CCubeTerrain::IndexToPos(_uint Index)
 		1);
 }
 
-_uint CCubeTerrain::PosToIndex(const _float4& Pos)
+_uint CTerrain::PosToIndex(const _float4& Pos)
 {
 	_uint x = static_cast<_uint>(roundf( Pos.x));
 	_uint y = static_cast<_uint>(floorf(Pos.y)); // 0~1 = 0
@@ -435,7 +351,7 @@ _uint CCubeTerrain::PosToIndex(const _float4& Pos)
 	return x + m_vSize.x * z + m_vSize.x * m_vSize.z * y;
 }
 
-_int CCubeTerrain::PosToIndex(const _fvector& Pos)
+_int CTerrain::PosToIndex(const _fvector& Pos)
 {
 	_int x = static_cast<_int>(roundf(XMVectorGetX( Pos)));
 	_int y = static_cast<_int>(floorf(XMVectorGetY(Pos))); // 0~1 = 0
@@ -449,7 +365,7 @@ _int CCubeTerrain::PosToIndex(const _fvector& Pos)
 	return x + m_vSize.x * z + m_vSize.x * m_vSize.z * y;
 }
 
-_vector CCubeTerrain::SnapPosition(_vector Pos)
+_vector CTerrain::SnapPosition(_vector Pos)
 {
 	Pos.m128_f32[0] = roundf(Pos.m128_f32[0]);
 	Pos.m128_f32[1] = floorf(Pos.m128_f32[1]);
@@ -457,21 +373,21 @@ _vector CCubeTerrain::SnapPosition(_vector Pos)
 	return Pos;
 }
 
-XMUINT3 CCubeTerrain::SplitIndex(_uint iIdx)
+XMUINT3 CTerrain::SplitIndex(_uint iIdx)
 {
 	return XMUINT3{ iIdx % m_vSize.x ,iIdx / (m_vSize.x * m_vSize.z),iIdx / m_vSize.x % m_vSize.z, };
 }
 
-_uint CCubeTerrain::CombineIndex(XMUINT3 i3Idx)
+_uint CTerrain::CombineIndex(XMUINT3 i3Idx)
 {
 	return i3Idx.x + m_vSize.x * i3Idx.z + m_vSize.x * m_vSize.z * i3Idx.y;
 }
 
-HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
+HRESULT CTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 {
 	if (false == Is_ValidIndex(SplitIndex( tDesc.index)))
 		return E_FAIL;
-	if (m_vecCells[tDesc.index] != nullptr)
+	if (m_vecCubes[tDesc.index] != nullptr)
 		return E_FAIL;
 	tDesc.pCubeTerrain = this;
 	BUILD_ITEM_TYPE eType = static_cast<BUILD_ITEM_DATA*>(ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)tDesc.iID))->eBuildType;
@@ -509,30 +425,30 @@ HRESULT CCubeTerrain::Add_TerrainObject( CTerrainObject::TERRAINOBJ_DESC& tDesc)
 	if(nullptr == pGameObject)
 		return E_FAIL;
 	Add_Child(pGameObject);
-	m_vecCells[tDesc.index] = pGameObject;
+	m_vecCubes[tDesc.index] = pGameObject;
 	return S_OK;
 }
 
-HRESULT CCubeTerrain::Remove_TerrainObject(_uint Index)
+HRESULT CTerrain::Remove_TerrainObject(_uint Index)
 {
-	if (Index >= (_uint)m_vecCells.size())
+	if (Index >= (_uint)m_vecCubes.size())
 		return E_FAIL;
-	if (m_vecCells[Index] == nullptr)
+	if (m_vecCubes[Index] == nullptr)
 		return E_FAIL;
-	m_vecCells[Index]->Set_Dead();
-	m_vecCells[Index] = nullptr;
+	m_vecCubes[Index]->Set_Dead();
+	m_vecCubes[Index] = nullptr;
 
 	return S_OK;
 }
 
-CTerrainObject* CCubeTerrain::Get_TerrainObject(_uint Index)
+CTerrainObject* CTerrain::Get_TerrainObject(_uint Index)
 {
-	if (Index < (_uint)m_vecCells.size())
-		return m_vecCells[Index];
+	if (Index < (_uint)m_vecCubes.size())
+		return m_vecCubes[Index];
 	return nullptr;
 }
 
-_float CCubeTerrain::Get_FloorHeight(_vector Pos, _uint iCheckRange)
+_float CTerrain::Get_FloorHeight(_vector Pos, _uint iCheckRange)
 {
 	_int index = PosToIndex(Pos);
 	if (index < 0)
@@ -557,11 +473,11 @@ _float CCubeTerrain::Get_FloorHeight(_vector Pos, _uint iCheckRange)
 			for (_int xIdx = iMinXIdx; xIdx <= iMaxXIdx; xIdx++)
 			{
 				_uint iTmpIndex = xIdx + m_vSize.x * zIdx + m_vSize.x * m_vSize.z * yIdx;
-				if (m_vecCells[iTmpIndex] != nullptr)
+				if (m_vecCubes[iTmpIndex] != nullptr)
 				{
-					if (false == m_vecCells[iTmpIndex]->Is_BlockingType()) continue;
+					if (false == m_vecCubes[iTmpIndex]->Is_BlockingType()) continue;
 
-					_float fHeight = m_vecCells[iTmpIndex]->Get_TopHeight(Pos);
+					_float fHeight = m_vecCubes[iTmpIndex]->Get_TopHeight(Pos);
 					if (fHeight < 0) continue;
 					return fHeight;
 				}
@@ -574,7 +490,7 @@ _float CCubeTerrain::Get_FloorHeight(_vector Pos, _uint iCheckRange)
 	return -1;
 }
 
-_float CCubeTerrain::Get_CelingHeight(_vector Pos, _uint iCheckRange)
+_float CTerrain::Get_CelingHeight(_vector Pos, _uint iCheckRange)
 {
 	_int index = PosToIndex(Pos);
 	if (index < 0)
@@ -586,18 +502,18 @@ _float CCubeTerrain::Get_CelingHeight(_vector Pos, _uint iCheckRange)
 	for (_int yIdx = (_int)iYIdx+1; yIdx < (_int)m_vSize.y; yIdx++)
 	{
 		_uint iTmpIndex = iXIdx + m_vSize.x * iZIdx + m_vSize.x * m_vSize.z * yIdx;
-		if (m_vecCells[iTmpIndex] != nullptr)
+		if (m_vecCubes[iTmpIndex] != nullptr)
 		{
-			return m_vecCells[iTmpIndex]->Get_BottomHeight(Pos);
+			return m_vecCubes[iTmpIndex]->Get_BottomHeight(Pos);
 		}
 
 	}
 	return FLT_MAX;
 }
 
-void CCubeTerrain::Get_AdjWayFinderCells(_uint Index, vector<_uint>& vecAdjCells)
+void CTerrain::Get_AdjWayFinderCells(_uint Index, vector<_uint>& vecAdjCells)
 {
-	_uint iCellCount = (_uint)m_vecCells.size();
+	_uint iCellCount = (_uint)m_vecCubes.size();
 	assert(Index < iCellCount);
 	XMUINT3 vSplitIdx = SplitIndex(Index);
 
@@ -622,21 +538,21 @@ void CCubeTerrain::Get_AdjWayFinderCells(_uint Index, vector<_uint>& vecAdjCells
 				iAdjIdx = iXAdjIdx + m_vSize.x * iZAdjIdx + m_vSize.x * m_vSize.z * iYAdjIdx;
 				if (iAdjIdx >= iCellCount) continue;
 				//비어있다로 확인하면 안됨. if (m_vecCells[iAdjIdx] != nullptr) continue;
-				if (m_vecCells[iAdjIdx] != nullptr) 
-					if (m_vecCells[iAdjIdx]->Is_BlockingType())
+				if (m_vecCubes[iAdjIdx] != nullptr) 
+					if (m_vecCubes[iAdjIdx]->Is_BlockingType())
 						continue;
 				_uint iFloorIdx = iXAdjIdx + m_vSize.x * iZAdjIdx + m_vSize.x * m_vSize.z * (iYAdjIdx - 1);
-				if (m_vecCells[iFloorIdx] == nullptr) continue;
-				if (false == m_vecCells[iFloorIdx]->Is_BlockingType()) continue;
+				if (m_vecCubes[iFloorIdx] == nullptr) continue;
+				if (false == m_vecCubes[iFloorIdx]->Is_BlockingType()) continue;
 				vecAdjCells.push_back(iAdjIdx);
 			}
 		}
 	}
 }
 
-void CCubeTerrain::Get_XZAdjWayFinderCells(_uint Index, vector<_uint>& vecAdjCells)
+void CTerrain::Get_XZAdjWayFinderCells(_uint Index, vector<_uint>& vecAdjCells)
 {
-	_uint iCellCount = (_uint)m_vecCells.size();
+	_uint iCellCount = (_uint)m_vecCubes.size();
 	assert(Index < iCellCount);
 	XMUINT3 vSplitIdx = SplitIndex(Index);
 
@@ -656,24 +572,24 @@ void CCubeTerrain::Get_XZAdjWayFinderCells(_uint Index, vector<_uint>& vecAdjCel
 			iAdjIdx = iXAdjIdx + m_vSize.x * iZAdjIdx + m_vSize.x * m_vSize.z * vSplitIdx.y;
 			if (iAdjIdx >= iCellCount) continue;
 			//비어있다로 확인하면 안됨. if (m_vecCells[iAdjIdx] != nullptr) continue;
-			if (m_vecCells[iAdjIdx] != nullptr)
-				if (m_vecCells[iAdjIdx]->Is_BlockingType())
+			if (m_vecCubes[iAdjIdx] != nullptr)
+				if (m_vecCubes[iAdjIdx]->Is_BlockingType())
 					continue;
 			_uint iFloorIdx = iXAdjIdx + m_vSize.x * iZAdjIdx + m_vSize.x * m_vSize.z * (vSplitIdx.y - 1);
-			if (m_vecCells[iFloorIdx] == nullptr) continue;
-			if (false == m_vecCells[iFloorIdx]->Is_BlockingType()) continue;
+			if (m_vecCubes[iFloorIdx] == nullptr) continue;
+			if (false == m_vecCubes[iFloorIdx]->Is_BlockingType()) continue;
 			vecAdjCells.push_back(iAdjIdx);
 		}
 	}
 	
 }
 
-_float CCubeTerrain::Get_Distance(_uint StartIndex, _uint DestIndex)
+_float CTerrain::Get_Distance(_uint StartIndex, _uint DestIndex)
 {
 	return XMVector4Length(IndexToPos(DestIndex) - IndexToPos(StartIndex)).m128_f32[0] ;
 }
 
-_float CCubeTerrain::Get_AdjDistance(_uint StartIndex, _uint DestIndex)
+_float CTerrain::Get_AdjDistance(_uint StartIndex, _uint DestIndex)
 {
 	CELL_RELATION eRelation = Get_AdjCell_Relation(StartIndex, DestIndex);
 	switch (eRelation)
@@ -689,7 +605,7 @@ _float CCubeTerrain::Get_AdjDistance(_uint StartIndex, _uint DestIndex)
 	}
 }
 
-CCubeTerrain::CELL_RELATION CCubeTerrain::Get_AdjCell_Relation(_uint StartIndex, _uint DestIndex)
+CTerrain::CELL_RELATION CTerrain::Get_AdjCell_Relation(_uint StartIndex, _uint DestIndex)
 {
 	_uint iXStart = StartIndex % m_vSize.x;
 	_uint iZStart = StartIndex / m_vSize.x % m_vSize.z;
@@ -723,7 +639,7 @@ CCubeTerrain::CELL_RELATION CCubeTerrain::Get_AdjCell_Relation(_uint StartIndex,
 	
 }
 
-CTerrainObject* CCubeTerrain::Get_Portal(LEVELID eLinkedLevel)
+CTerrainObject* CTerrain::Get_Portal(LEVELID eLinkedLevel)
 {
 	for (auto& pCell : m_pChilds)
 	{
@@ -736,7 +652,7 @@ CTerrainObject* CCubeTerrain::Get_Portal(LEVELID eLinkedLevel)
 	return nullptr;
 }
 
-CTerrainObject* CCubeTerrain::Get_PlayerSpawn()
+CTerrainObject* CTerrain::Get_PlayerSpawn()
 {
 	for (auto& pCell : m_pChilds)
 	{
@@ -748,7 +664,7 @@ CTerrainObject* CCubeTerrain::Get_PlayerSpawn()
 	return nullptr;
 }
 
-_vector CCubeTerrain::Get_ContainedCellPosition(const _fvector& Pos)
+_vector CTerrain::Get_ContainedCellPosition(const _fvector& Pos)
 {
 	if (false == Is_InSide(Pos))
 		return {-1,-1,-1,-1};
@@ -757,9 +673,9 @@ _vector CCubeTerrain::Get_ContainedCellPosition(const _fvector& Pos)
 	return IndexToPos(iIdx);
 }
 
-void CCubeTerrain::Get_ContainingCells(CColliderBase* pCollider, list<_uint>& vecCells)
+void CTerrain::Get_ContainingCells(CColliderBase* pCollider, list<_uint>& vecCells)
 {
-	_uint iCellCount =(_uint) m_vecCells.size();
+	_uint iCellCount =(_uint) m_vecCubes.size();
 	for (_uint i = 0; i < iCellCount; i++)
 	{
 		_vector vPos = IndexToPos(i);
@@ -773,20 +689,20 @@ void CCubeTerrain::Get_ContainingCells(CColliderBase* pCollider, list<_uint>& ve
 
 
 
-_bool CCubeTerrain::Is_Buildable(_vector Pos)
+_bool CTerrain::Is_Buildable(_vector Pos)
 {
 	if (false == Is_InSide(Pos))
 		return false;
 	_int iIdx = PosToIndex(Pos);
 	if (false  == Is_ValidIndex(iIdx))
 		return false;
-	if (m_vecCells[iIdx] != nullptr)
+	if (m_vecCubes[iIdx] != nullptr)
 		return false;
 
 	return true;
 }
 
-_bool CCubeTerrain::Is_InSide(_vector vPos)
+_bool CTerrain::Is_InSide(_vector vPos)
 {
 	_float4 fPos;
 	XMStoreFloat4(&fPos, vPos);
@@ -799,12 +715,12 @@ _bool CCubeTerrain::Is_InSide(_vector vPos)
 	return true;
 }
 
-_bool CCubeTerrain::Is_ValidIndex(_uint iIndex)
+_bool CTerrain::Is_ValidIndex(_uint iIndex)
 {
-	return iIndex >= 0 && iIndex < m_vecCells.size();
+	return iIndex >= 0 && iIndex < m_vecCubes.size();
 }
 
-_bool CCubeTerrain::Is_ValidIndex(XMUINT3 i3Index)
+_bool CTerrain::Is_ValidIndex(XMUINT3 i3Index)
 {
 	if (i3Index.x < 0 || i3Index.x >= m_vSize.x)
 		return false;
@@ -816,9 +732,9 @@ _bool CCubeTerrain::Is_ValidIndex(XMUINT3 i3Index)
 }
 
 
-CCubeTerrain * CCubeTerrain::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const char* szMapFileName)
+CTerrain * CTerrain::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const char* szMapFileName)
 {
-	CCubeTerrain*	pInstance = new CCubeTerrain(pDevice, pContext, szMapFileName);
+	CTerrain*	pInstance = new CTerrain(pDevice, pContext, szMapFileName);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
@@ -829,9 +745,9 @@ CCubeTerrain * CCubeTerrain::Create(ID3D11Device * pDevice, ID3D11DeviceContext 
 	return pInstance;
 }
 
-CGameObject * CCubeTerrain::Clone(void * pArg)
+CGameObject * CTerrain::Clone(void * pArg)
 {
-	CCubeTerrain* pInstance = new CCubeTerrain(*this);
+	CTerrain* pInstance = new CTerrain(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
@@ -842,7 +758,7 @@ CGameObject * CCubeTerrain::Clone(void * pArg)
 	return pInstance;
 }
 
-void CCubeTerrain::Free()
+void CTerrain::Free()
 {
 	__super::Free();
 	Safe_Release(m_pOctoTree);

@@ -41,17 +41,15 @@ BuildItemData::BuildItemData(string strFileName, ID3D11Device* pDevice, ID3D11De
 	case Client::BUILD_ITEM_TYPE::GROUND:
 	case Client::BUILD_ITEM_TYPE::FLOOR:
 	case Client::BUILD_ITEM_TYPE::WALL:
-		eBlockType = BUILD_ITEM_BLOCK_TYPE::CUBECUBE;
+		eBlockType = TERRAINOBJ_BLOCK_TYPE::CUBE;
 		break;
 	case Client::BUILD_ITEM_TYPE::CUBRIC:
-		eBlockType = BUILD_ITEM_BLOCK_TYPE::CUBEMESH;
-		break;
 	case Client::BUILD_ITEM_TYPE::DEFORM:
 	case Client::BUILD_ITEM_TYPE::STRUC:
-		eBlockType = BUILD_ITEM_BLOCK_TYPE::MESHMESH;
+		eBlockType = TERRAINOBJ_BLOCK_TYPE::MESH;
 		break;
 	default:
-		eBlockType = BUILD_ITEM_BLOCK_TYPE::NON_BLOCK;
+		eBlockType = TERRAINOBJ_BLOCK_TYPE::NON_BLOCK;
 		break;
 	}
 	iPrice = 0;

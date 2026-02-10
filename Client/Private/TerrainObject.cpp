@@ -17,15 +17,12 @@ CTerrainObject::CTerrainObject(ID3D11Device* pDevice, ID3D11DeviceContext* pCont
 }
 
 CTerrainObject::CTerrainObject(const CTerrainObject& Prototype)
-	: CModelObject(Prototype),
-	m_pCubeColliderCom{ Prototype.m_pCubeColliderCom }
+	: CModelObject(Prototype)
 	, m_eTerrainDir{ Prototype.m_eTerrainDir }
 	, m_iIndex{ Prototype.m_iIndex }
 	, m_iBuildItemID{ Prototype.m_iBuildItemID }
 {
 
-	Safe_AddRef(m_pCubeColliderCom);
-	Safe_AddRef(m_pMeshColliderCom);
 }
 
 HRESULT CTerrainObject::Initialize_Prototype()
@@ -35,34 +32,21 @@ HRESULT CTerrainObject::Initialize_Prototype()
 
 HRESULT CTerrainObject::Initialize(void* pArg)
 {
-
-
-
 	TERRAINOBJ_DESC* pDesc = (TERRAINOBJ_DESC*)pArg;
 
-	pDesc->fRotationPerSec = 5.f;
-	pDesc->fSpeedPerSec = 1.f;
 	m_iBuildItemID = pDesc->iID;
 	m_eBlockType = static_cast<BUILD_ITEM_DATA*>(ITEMDB->Get_Data(ITEM_TYPE::BUILD, (_uint)m_iBuildItemID))->eBlockType;
 	m_eBuildItemType= static_cast<BUILD_ITEM_DATA*>( ITEMDB->Get_Data(ITEM_TYPE::BUILD,(_uint)m_iBuildItemID))->eBuildType;
 	m_eTerrainDir = pDesc->direction;
 	m_iIndex = pDesc->index;
-	m_iParentIndex = pDesc->iParentIndex;
-	if (m_iParentIndex == m_iIndex)
-	{
-		if (FAILED(__super::Initialize(pArg)))
-			return E_FAIL;
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(pDesc->pos.x, pDesc->pos.y, pDesc->pos.z, 1));
-		m_pTransformCom->LookToward(Get_Direction_Vector(m_eTerrainDir));
-		if (FAILED(Ready_Components(pDesc)))
-			return E_FAIL;
-	}
-	else
-	{
-		if (FAILED(CGameObject::Initialize(pArg)))
-			return E_FAIL;
-	}
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(pDesc->pos.x, pDesc->pos.y, pDesc->pos.z, 1.f));
+	m_pTransformCom->LookToward(Get_Direction_Vector(m_eTerrainDir));
+	if (FAILED(Ready_Components(pDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -146,17 +130,12 @@ void CTerrainObject::Rotate()
 
 _vector CTerrainObject::BolckXZ(_vector vCharacterPosition, _vector vMoveDirection, _float fMoveDistance, _float fCollisionRadius, _float fCollisionHeight)
 {
-	//if (nullptr == m_pCubeColliderCom)
-	//	return vCharacterPosition + vMoveDirection * fMoveDistance;
-	if(false == Is_BlockingType())
+	if(m_eBlockType == TERRAINOBJ_BLOCK_TYPE::NON_BLOCK)
 		return vCharacterPosition + vMoveDirection * fMoveDistance;
 
 	_vector vNextPosition = vCharacterPosition + vMoveDirection * fMoveDistance;
 	if (false == DirectX::Internal::XMVector3IsUnit(vMoveDirection))
 		return vNextPosition;
-
-
-
 
 	//충돌한 평면을 찾는다
 	//평면의 방정식에  CharPosition과 NextPosition을 대입해서 평면까지의 거리를 구한다.
@@ -164,7 +143,7 @@ _vector CTerrainObject::BolckXZ(_vector vCharacterPosition, _vector vMoveDirecti
 
 	CColliderBase* pCollider;
 
-	if (m_eBlockType == BUILD_ITEM_BLOCK_TYPE::CUBECUBE || m_eBlockType == BUILD_ITEM_BLOCK_TYPE::CUBEMESH)
+	if (m_eBlockType == TERRAINOBJ_BLOCK_TYPE::CUBE)
 		pCollider = m_pCubeColliderCom;
 	else
 		pCollider = m_pMeshColliderCom;
@@ -180,7 +159,7 @@ _vector CTerrainObject::BolckXZ(_vector vCharacterPosition, _vector vMoveDirecti
 		vNextPosition += hitInfo.vNormal * (fCollisionRadius + fabsf(fPlaneDistance));	
 		return vNextPosition;
 	}
-	else if (m_eBlockType == BUILD_ITEM_BLOCK_TYPE::CUBECUBE || m_eBlockType == BUILD_ITEM_BLOCK_TYPE::CUBEMESH)
+	else if (m_eBlockType == TERRAINOBJ_BLOCK_TYPE::CUBE)
 	{
 		BoundingBox* tBox = m_pCubeColliderCom->Get_Desc();
 		_float3* pCorners = new _float3[8];
@@ -254,15 +233,13 @@ _float CTerrainObject::Get_TopHeight(_vector Pos)
 {
 	switch (m_eBlockType)
 	{
-	case Client::BUILD_ITEM_BLOCK_TYPE::CUBECUBE:
-	case Client::BUILD_ITEM_BLOCK_TYPE::MESHCUBE:
+	case Client::TERRAINOBJ_BLOCK_TYPE::CUBE:
 		if (Pos.m128_f32[0] < m_WorldMatrix.m[3][0] - 0.5f || Pos.m128_f32[0] > m_WorldMatrix.m[3][0] + 0.5f)
 			return -1;
 		if (Pos.m128_f32[2] < m_WorldMatrix.m[3][2] - 0.5f || Pos.m128_f32[2] > m_WorldMatrix.m[3][2] + 0.5f)
 			return -1;
 		return m_WorldMatrix.m[3][1] + 1.0f;
-	case Client::BUILD_ITEM_BLOCK_TYPE::CUBEMESH:
-	case Client::BUILD_ITEM_BLOCK_TYPE::MESHMESH:
+	case Client::TERRAINOBJ_BLOCK_TYPE::MESH:
 	{
 		m_pMeshColliderCom->Update(XMLoadFloat4x4(&m_WorldMatrix));
 		RaycastHit hitInfo;
@@ -276,8 +253,8 @@ _float CTerrainObject::Get_TopHeight(_vector Pos)
 		}
 		return -1;
 	}
-	case Client::BUILD_ITEM_BLOCK_TYPE::NON_BLOCK:
-	case Client::BUILD_ITEM_BLOCK_TYPE::LAST:
+	case Client::TERRAINOBJ_BLOCK_TYPE::NON_BLOCK:
+	case Client::TERRAINOBJ_BLOCK_TYPE::LAST:
 	default:
 		return -1;
 	}
@@ -289,15 +266,13 @@ _float CTerrainObject::Get_BottomHeight(_vector Pos)
 {
 	switch (m_eBlockType)
 	{
-	case Client::BUILD_ITEM_BLOCK_TYPE::CUBECUBE:
-	case Client::BUILD_ITEM_BLOCK_TYPE::MESHCUBE:
+	case Client::TERRAINOBJ_BLOCK_TYPE::CUBE:
 		if (Pos.m128_f32[0] < m_WorldMatrix.m[3][0] - 0.5f || Pos.m128_f32[0] > m_WorldMatrix.m[3][0] + 0.5f)
 			return -1;
 		if (Pos.m128_f32[2] < m_WorldMatrix.m[3][2] - 0.5f || Pos.m128_f32[2] > m_WorldMatrix.m[3][2] + 0.5f)
 			return -1;
 		return m_WorldMatrix.m[3][1];
-	case Client::BUILD_ITEM_BLOCK_TYPE::CUBEMESH:
-	case Client::BUILD_ITEM_BLOCK_TYPE::MESHMESH:
+	case Client::TERRAINOBJ_BLOCK_TYPE::MESH:
 	{
 		CColliderBase* pCollider = Get_Collider(0);
 		pCollider->Update(XMLoadFloat4x4(&m_WorldMatrix));
@@ -311,8 +286,8 @@ _float CTerrainObject::Get_BottomHeight(_vector Pos)
 		}
 		return FLT_MAX;
 	}
-	case Client::BUILD_ITEM_BLOCK_TYPE::NON_BLOCK:
-	case Client::BUILD_ITEM_BLOCK_TYPE::LAST:
+	case Client::TERRAINOBJ_BLOCK_TYPE::NON_BLOCK:
+	case Client::TERRAINOBJ_BLOCK_TYPE::LAST:
 	default:
 		return FLT_MAX;
 	}
@@ -377,5 +352,5 @@ void CTerrainObject::Free()
 {
  	__super::Free();
 	Safe_Release(m_pCubeColliderCom);
-	Safe_Release(m_pMeshColliderCom);
+	//Safe_Release(m_pMeshColliderCom);
 }

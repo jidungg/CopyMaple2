@@ -5,7 +5,7 @@
 
 BEGIN(Client)
 class CWayFinder;
-class CCubeTerrain;
+class CTerrain;
 class CWorldUIHPBar;
 typedef struct MonsterData
 {
@@ -93,7 +93,7 @@ public:
 	{
 		MONSTER_ID eMonID;
 		_vector vHomePos = { 10.f,1.f,10.f };
-		CCubeTerrain* pCubeTerrain = { nullptr };
+		CTerrain* pCubeTerrain = { nullptr };
 	}MONSTER_DESC;
 	static constexpr _tchar m_szProtoTag[] = L"Prototype_GameObject_Monster";
 
@@ -174,7 +174,7 @@ protected:
 	_uint m_iSearchRange = { 10 };
 	_vector m_vNextStation = { 0.f,0.f,0.f,1.f };
 	
-	CCubeTerrain* m_pCubeTerrain = { nullptr };
+	CTerrain* m_pCubeTerrain = { nullptr };
 	_int m_iTargetCubeIndex = { -1 } ;
 
 	CWorldUIHPBar* m_pHPBar = { nullptr };

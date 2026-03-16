@@ -57,7 +57,24 @@ void CTerrain::Late_Update(_float fTimeDelta)
 	iTmpCellCount = 0;
 	Culling(m_pOctoTree);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-	int a = 0;
+
+	//if (m_pGameInstance->GetKeyState(KEY::NUM0) == KEY_STATE::DOWN)
+	//{
+	//	Ray tBodyRay({ 1,1,1 }, XMVector3Normalize({ 1,1,1 }), 1.0f);
+	//	RaycastHit tBodyhit;
+	//	auto start = std::chrono::high_resolution_clock::now();
+
+	//	for (int i = 0; i < 100000; i++)
+	//	{
+	//		RayCast(tBodyRay, &tBodyhit); // 테스트할 코드
+	//	}
+
+	//	auto end = std::chrono::high_resolution_clock::now();
+
+	//	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+	//	std::cout << duration.count() / 100000.0 << " us\n";
+	//}
 }
 
 
@@ -249,6 +266,13 @@ _bool CTerrain::RayCast(const Ray& tRay, RaycastHit* pOut)
 			fTMaxY += fTDeltaY;
 		}
 	}
+	//for (auto& c : m_vecCubes)
+	//{
+	//	if (c)
+	//		if (c->RayCast(tRay, pOut))
+	//			return true;
+
+	//}
 	return false;
 }
 

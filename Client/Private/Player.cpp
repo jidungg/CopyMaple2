@@ -28,6 +28,7 @@
 #include "WorldUIHPBar.h"
 #include "Sound.h"
 #include "PlayerInfo.h"
+#include "chrono"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -817,6 +818,7 @@ void CPlayer::Update(_float fTimeDelta)
 {
 
  	__super::Update(fTimeDelta);
+
 }
 
 void CPlayer::Compute_Matrix()

@@ -171,8 +171,8 @@
                 "LEVEL": 20,
 
                 "JumpPower": 0,
-                "RunSpeed": 0,
-                "WalkSpeed": 0,
+                "RunSpeed": 1.5,
+                "WalkSpeed": 1,
                 "AttackInterval": 1,
                 "AttackRange": 2,
                 "HPRecovery": 0,

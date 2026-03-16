@@ -8,8 +8,8 @@
 #include "Sound.h"
 
 constexpr _int SPIKE_COUNT = 5;
-_float spikeOffsetsX[SPIKE_COUNT] = { 0.f,  1.f,  0.f, -1.f  ,  0.f };
-_float spikeOffsetsY[SPIKE_COUNT] = { 0.f,  0.f,  1.f,  0.f  , -1.f };
+constexpr _float spikeOffsetsX[SPIKE_COUNT] = { 0.f,  1.f,  0.f, -1.f  ,  0.f };
+constexpr _float spikeOffsetsY[SPIKE_COUNT] = { 0.f,  0.f,  1.f,  0.f  , -1.f };
 
 CBullet_BayarStoneSpike::CBullet_BayarStoneSpike(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CBullet(pDevice, pContext)

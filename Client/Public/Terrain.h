@@ -60,7 +60,6 @@ public:
 	_vector Blocking(CCharacter* pCharacter);
 	_vector Blocking(CCharacter* pCharacter, _uint iCheckRange);
 	_bool RayCast(const Ray& tRay, RaycastHit* pOut);
-	_bool RayCastXZ(const Ray& tRay, RaycastHit* pOut);
 	void Culling(COctoTree* pOctoTree);
 
 	_bool Is_Buildable(_vector Pos);

@@ -84,6 +84,13 @@ namespace Engine
 		static const D3D11_INPUT_ELEMENT_DESC		Elements[iNumElements];
 	}VTXANIMMESH;
 
+	// VTXMESH(슬롯 0) + INSTANCE_DATA(슬롯 1) 합성 입력 레이아웃. CInstancedStaticModel 셰이더용.
+	typedef struct ENGINE_DLL VertexInstancedMesh
+	{
+		static const unsigned int				iNumElements = { 9 };
+		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
+	}VTXINSTANCEDMESH;
+
 	// 정적 메시 GPU 인스턴싱 전용. 파티클용 VTXINSTANCE와 다름.
 	typedef struct ENGINE_DLL InstanceData
 	{

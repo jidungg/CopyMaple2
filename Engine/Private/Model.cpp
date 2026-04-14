@@ -112,9 +112,7 @@ HRESULT CModel::Ready_Bones(ifstream& inFile, _uint iParentBoneIndex)
 }
 HRESULT CModel::Ready_Meshes(ifstream& inFile)
 {
-	//inFile.read(reinterpret_cast<char*>(&m_iNumMeshes), sizeof(_uint));
 	inFile.read(reinterpret_cast<char*>(&m_iNumMeshes), sizeof(_uint));
-	//cout  << m_iNumMeshes << endl;
 	for (_uint i = 0; i < m_iNumMeshes; i++)
 	{
 		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_eModelType,this, inFile, XMLoadFloat4x4(&m_PreTransformMatrix));

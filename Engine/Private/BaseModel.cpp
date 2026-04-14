@@ -66,8 +66,7 @@ HRESULT CBaseModel::Initialize(void* pArg)
     return S_OK;
 }
 
-HRESULT CBaseModel::Bind_Material(CShader* pShader, const _char* pConstantName,
-                                   _uint iMeshIndex, TEXTURE_TYPE eType, _uint iTextureIndex)
+HRESULT CBaseModel::Bind_Material(CShader* pShader, const _char* pConstantName, _uint iMeshIndex, TEXTURE_TYPE eType, _uint iTextureIndex)
 {
     if (iMeshIndex >= (_uint)m_Meshes.size()) return E_FAIL;
     auto pMesh = m_Meshes[iMeshIndex];

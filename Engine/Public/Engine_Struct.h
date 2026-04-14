@@ -84,6 +84,7 @@ namespace Engine
 		static const D3D11_INPUT_ELEMENT_DESC		Elements[iNumElements];
 	}VTXANIMMESH;
 
+	// 정적 메시 GPU 인스턴싱 전용. 파티클용 VTXINSTANCE와 다름.
 	typedef struct ENGINE_DLL InstanceData
 	{
 		XMFLOAT4X4	WorldMatrix;		// 인스턴스 월드 변환 행렬 (64 bytes)

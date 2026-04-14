@@ -7,19 +7,14 @@
 #include "Animation.h"
 
 CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CComponent{ pDevice, pContext }
+	: CBaseModel{ pDevice, pContext }
 {
 }
 
 
 CModel::CModel(const CModel& Prototype)
-	: CComponent{ Prototype }
-	, m_eModelType{Prototype.m_eModelType }
-	, m_iNumMeshes{ Prototype.m_iNumMeshes }
-	, m_Meshes{ Prototype.m_Meshes }
-	, m_iNumMaterials{ Prototype.m_iNumMaterials }
-	, m_Materials{ Prototype.m_Materials }
-	, m_PreTransformMatrix{ Prototype.m_PreTransformMatrix }
+	: CBaseModel{ Prototype }          // CBaseModel이 Meshes/Materials/PreTransform 처리
+	, m_eModelType{ Prototype.m_eModelType }
 	, m_iNumAnimations{ Prototype.m_iNumAnimations }
 {
 	for (auto& pPrototypeBone : Prototype.m_Bones)
@@ -27,12 +22,6 @@ CModel::CModel(const CModel& Prototype)
 
 	for (auto& pPrototypeAnimation : Prototype.m_vecAnimation)
 		m_vecAnimation.push_back(pPrototypeAnimation->Clone());
-
-	for (auto& pMesh : m_Meshes)
-		Safe_AddRef(pMesh);
-	for (auto& mat : m_Materials)
-		Safe_AddRef(mat);
-
 }
 
 HRESULT CModel::Initialize_Prototype(const _char* pModelFilePath, _fmatrix PreTransformMatrix)
@@ -123,9 +112,7 @@ HRESULT CModel::Ready_Bones(ifstream& inFile, _uint iParentBoneIndex)
 }
 HRESULT CModel::Ready_Meshes(ifstream& inFile)
 {
-	//inFile.read(reinterpret_cast<char*>(&m_iNumMeshes), sizeof(_uint));
 	inFile.read(reinterpret_cast<char*>(&m_iNumMeshes), sizeof(_uint));
-	//cout  << m_iNumMeshes << endl;
 	for (_uint i = 0; i < m_iNumMeshes; i++)
 	{
 		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, m_eModelType,this, inFile, XMLoadFloat4x4(&m_PreTransformMatrix));
@@ -133,24 +120,6 @@ HRESULT CModel::Ready_Meshes(ifstream& inFile)
 			return E_FAIL;
 
 		m_Meshes.push_back(pMesh);
-	}
-
-	return S_OK;
-}
-HRESULT CModel::Ready_Materials(ifstream& inFile, const _char* pModelFilePath)
-{
-
-	inFile.read(reinterpret_cast<char*>(&m_iNumMaterials), sizeof(_uint));
-	//cout << m_iNumMaterials << endl;
-	m_Materials.resize(m_iNumMaterials);
-	_char		szDrive[MAX_PATH] = "";
-	_char		szDirectory[MAX_PATH] = "";
-	_splitpath_s(pModelFilePath, szDrive, MAX_PATH, szDirectory, MAX_PATH, nullptr, 0, nullptr, 0);
-	strcat_s(szDrive, szDirectory);
-	for (_uint i = 0; i < m_iNumMaterials; i++)
-	{
-		CMaterial* pMaterial = CMaterial::Create(m_pDevice, m_pContext, szDrive, inFile);
-		m_Materials[i] = pMaterial;
 	}
 
 	return S_OK;
@@ -197,18 +166,6 @@ HRESULT CModel::Render(_uint iMeshIndex)
 	return S_OK;
 }
 
-
-HRESULT CModel::Bind_Material(CShader* pShader, const _char* pConstantName, _uint iMeshIndex, TEXTURE_TYPE eType, _uint iTextureIndex)
-{
-	auto pMesh = m_Meshes[iMeshIndex];
-	if (!pMesh) return E_FAIL; 
-	_uint matIndex = pMesh->Get_MaterialIndex(); 
-	if (matIndex >= m_Materials.size()) return E_FAIL; 
-	auto pMat = m_Materials[matIndex]; 
-	if (!pMat) return E_FAIL; 
-	return pMat->Bind_Texture(pShader, pConstantName, eType, iTextureIndex);
-	//return m_Materials[m_Meshes[iMeshIndex]->Get_MaterialIndex()]->Bind_Texture(pShader, pConstantName, eType, iTextureIndex);
-}
 
 HRESULT CModel::Bind_BoneMatrices(CShader* pShader, const _char* pConstantName, _uint iMeshIndex)
 {
@@ -338,11 +295,6 @@ bool CModel::Is_AnimChangeable()
 	return m_vecAnimation[m_iCurrentAnimIndex]->Is_AnimChangeable();
 }
 
-bool CModel::Is_MeshActive(_uint iIdx)
-{
-	return m_Meshes[iIdx]->Is_Active();
-}
-
 void CModel::Set_AnimationLoop(_uint iIdx, _bool bIsLoop)
 {
 	m_vecAnimation[iIdx]->Set_Loop(bIsLoop); 
@@ -359,12 +311,6 @@ void CModel::Set_AnimPostDelayPercent(_uint iIdx, _float fPercent)
 {
 	m_vecAnimation[iIdx]->Set_PostDealyPercent(fPercent);
 }
-
-void CModel::Set_MeshActive(_uint iIdx, _bool bIsOn)
-{
-	m_Meshes[iIdx]->Set_Active(bIsOn);
-}
-
 
 void CModel::Switch_Animation(_uint iIdx)
 {
@@ -419,19 +365,11 @@ CComponent* CModel::Clone(void* pArg)
 
 void CModel::Free()
 {
-	__super::Free();
-
-	for (auto& mat : m_Materials)
-		Safe_Release(mat);
-	m_Materials.clear();
-	for (auto& pMesh : m_Meshes)
-		Safe_Release(pMesh);
-	m_Meshes.clear();
+	__super::Free(); // CBaseModel::Free()가 Meshes/Materials 해제
 	for (auto& pBone : m_Bones)
 		Safe_Release(pBone);
 	m_Bones.clear();
 	for (auto& pAnim : m_vecAnimation)
 		Safe_Release(pAnim);
 	m_vecAnimation.clear();
-
 }

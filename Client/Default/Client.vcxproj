@@ -327,7 +327,6 @@
     <ClInclude Include="Client_Utility.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="EffFlipController.h" />
-    <ClInclude Include="InstancedStaticModel.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -485,7 +484,6 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Client_Utility.cpp" />
     <ClCompile Include="EffFlipController.cpp" />
-    <ClCompile Include="InstancedStaticModel.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -40,6 +40,7 @@ HRESULT CBaseModel::Initialize_Prototype(const _char* pModelFilePath, _fmatrix P
 
     bool bAnim;
     inFile.read(reinterpret_cast<char*>(&bAnim), sizeof(bool));
+    (void)bAnim; // CBaseModel은 비애니메이션 전용이므로 플래그 사용 안 함
 
     // 본 데이터 스킵 (비애니메이션 모델에도 루트 본이 포함됨)
     if (FAILED(Ready_Bones_Skip(inFile, -1)))
@@ -68,6 +69,7 @@ HRESULT CBaseModel::Initialize(void* pArg)
 HRESULT CBaseModel::Bind_Material(CShader* pShader, const _char* pConstantName,
                                    _uint iMeshIndex, TEXTURE_TYPE eType, _uint iTextureIndex)
 {
+    if (iMeshIndex >= (_uint)m_Meshes.size()) return E_FAIL;
     auto pMesh = m_Meshes[iMeshIndex];
     if (!pMesh) return E_FAIL;
     _uint matIndex = pMesh->Get_MaterialIndex();
@@ -79,11 +81,13 @@ HRESULT CBaseModel::Bind_Material(CShader* pShader, const _char* pConstantName,
 
 bool CBaseModel::Is_MeshActive(_uint iIdx)
 {
+    if (iIdx >= (_uint)m_Meshes.size()) return false;
     return m_Meshes[iIdx]->Is_Active();
 }
 
 void CBaseModel::Set_MeshActive(_uint iIdx, _bool bIsOn)
 {
+    if (iIdx >= (_uint)m_Meshes.size()) return;
     m_Meshes[iIdx]->Set_Active(bIsOn);
 }
 
@@ -116,6 +120,8 @@ HRESULT CBaseModel::Ready_Materials(ifstream& inFile, const _char* pModelFilePat
     for (_uint i = 0; i < m_iNumMaterials; i++)
     {
         CMaterial* pMaterial = CMaterial::Create(m_pDevice, m_pContext, szDrive, inFile);
+        if (nullptr == pMaterial)
+            return E_FAIL;
         m_Materials[i] = pMaterial;
     }
     return S_OK;
@@ -133,7 +139,7 @@ HRESULT CBaseModel::Ready_Bones_Skip(ifstream& inFile, _int iParentBoneIndex)
     inFile.read(reinterpret_cast<char*>(&iNumChildren), sizeof(_uint));
     for (_uint i = 0; i < iNumChildren; ++i)
     {
-        if (FAILED(Ready_Bones_Skip(inFile, 0)))
+        if (FAILED(Ready_Bones_Skip(inFile, -1)))  // 버리므로 -1로 통일
             return E_FAIL;
     }
     return S_OK;

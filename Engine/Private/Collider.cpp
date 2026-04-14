@@ -14,12 +14,16 @@ CColliderBase::CColliderBase(ID3D11Device* pDevice, ID3D11DeviceContext* pContex
 CColliderBase::CColliderBase(const CColliderBase& Prototype)
 	:CComponent(Prototype)
 	, m_eType{ Prototype.m_eType }
+#ifdef _DEBUG
 	, m_pEffect{ Prototype.m_pEffect }
 	, m_pBatch{ Prototype.m_pBatch }
 	, m_pInputLayout{ Prototype.m_pInputLayout }
+#endif
 {
 	m_iID = m_iGlobalID++;
+#ifdef _DEBUG
 	Safe_AddRef(m_pInputLayout);
+#endif
 }
 
 HRESULT CColliderBase::Initialize_Prototype()
@@ -55,10 +59,12 @@ HRESULT CColliderBase::Initialize(void* pArg)
 void CColliderBase::Free()
 {
 	__super::Free();
+#ifdef _DEBUG
 	if (false == m_isCloned)
 	{
 		Safe_Delete(m_pBatch);
 		Safe_Delete(m_pEffect);
 	}
 	Safe_Release(m_pInputLayout);
+#endif
 }

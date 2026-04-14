@@ -138,7 +138,7 @@ namespace Engine
 	{
 		XMVECTOR		vPoint;
 		XMVECTOR		vNormal;
-		_float fDist;
+		_float fDist = FLT_MAX;
 		class CColliderBase* pCollider = nullptr;
 
 	}RAYCASTHIT;

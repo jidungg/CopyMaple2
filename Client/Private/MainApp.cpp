@@ -108,11 +108,11 @@ void CMainApp::Free()
 	CInventory::DestroyInstance();
 	CPlayerInfo::DestroyInstance();
 	CUIBundle::DestroyInstance();
-	Safe_Release(m_pGameInstance);
-	CGameInstance::Release_Engine();
 	CEffectManager::DestroyInstance();
 	CDropTable::DestroyInstance();
 	CNPCDataBase::DestroyInstance();
 	CQuestDataBase::DestroyInstance();
+	Safe_Release(m_pGameInstance);
+	CGameInstance::Release_Engine();
 }
 

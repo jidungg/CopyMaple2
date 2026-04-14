@@ -164,8 +164,4 @@ CGameObject* CBullet_FakeMeteor::Clone(void* pArg)
 void CBullet_FakeMeteor::Free()
 {
 	__super::Free();
-	Safe_Release(m_pSplashCastEffect);
-	Safe_Release(m_pSplashInvokeEffectA);
-	Safe_Release(m_pSplashInvokeEffectB);
-	Safe_Release(m_pSplashEndEffect);
 }

@@ -297,7 +297,6 @@ CGameObject* CNPC::Clone(void* pArg)
 void CNPC::Free()
 {
 	__super::Free();
-	Safe_Release(m_pBody);
 	Safe_Release(m_pAnimStateMachine);
 }
 

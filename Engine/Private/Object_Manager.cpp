@@ -46,7 +46,7 @@ HRESULT CObject_Manager::Add_GameObject_ToLayer(LEVEL_ID iLevelIndex, LAYER_ID i
 
 	pLayer->Add_GameObject(pObj);
 
-		pObj->Set_DontDestroy(bDontDestroy);
+	pObj->Set_DontDestroy(bDontDestroy);
 	pObj->Set_LayerID(iLayerId);
 	CUIObject* pUI = dynamic_cast<CUIObject*>(pObj);
 	if(pUI && pUI->Is_RegisterUIManager())
@@ -123,7 +123,6 @@ void CObject_Manager::Move_DontDestroyObjects(LEVEL_ID iOldLevel, LEVEL_ID iNewL
 		for (auto& pObj : LayerPair.second)
 		{
 			Add_GameObject_ToLayer(iNewLevel, LayerPair.first, pObj, true);
-			pObj = nullptr;
 		}
 		LayerPair.second.clear();
 	}

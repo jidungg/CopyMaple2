@@ -56,20 +56,20 @@ HRESULT CTerrainObject::Ready_Components(TERRAINOBJ_DESC* pDesc)
 	if (false == Is_BlockingType())
 		return S_OK;
 
-	CCollider_AABB::AABB_COLLIDER_DESC tDesc{};
-	tDesc.vCenter = { 0,0.5f,0 };
-	tDesc.vExtentes = { 0.5f,0.5f,0.5f };
-
-	if (FAILED(Add_Component(LEVEL_LOADING, CCollider_AABB::m_szProtoTag,
-		TEXT("Cube_Collider_Com"), reinterpret_cast<CComponent**>(&m_pCubeColliderCom), &tDesc)))
-		return E_FAIL;
-	m_vecCollider.push_back(m_pCubeColliderCom);
 	switch (m_eBuildItemType)
 	{
 	case Client::BUILD_ITEM_TYPE::FLOOR:
 	case Client::BUILD_ITEM_TYPE::WALL:
 	case Client::BUILD_ITEM_TYPE::GROUND:
 	{
+		CCollider_AABB::AABB_COLLIDER_DESC tDesc{};
+		tDesc.vCenter = { 0,0.5f,0 };
+		tDesc.vExtentes = { 0.5f,0.5f,0.5f };
+
+		if (FAILED(Add_Component(LEVEL_LOADING, CCollider_AABB::m_szProtoTag,
+			TEXT("Cube_Collider_Com"), reinterpret_cast<CComponent**>(&m_pCubeColliderCom), &tDesc)))
+			return E_FAIL;
+		m_vecCollider.push_back(m_pCubeColliderCom);
 
 		break;
 	}
@@ -134,7 +134,7 @@ _vector CTerrainObject::BolckXZ(_vector vCharacterPosition, _vector vMoveDirecti
 		return vCharacterPosition + vMoveDirection * fMoveDistance;
 
 	_vector vNextPosition = vCharacterPosition + vMoveDirection * fMoveDistance;
-	if (false == DirectX::Internal::XMVector3IsUnit(vMoveDirection))
+	if (!XMVector3NearEqual(XMVector3Length(vMoveDirection), XMVectorReplicate(1.0f), XMVectorReplicate(1e-4f)))
 		return vNextPosition;
 
 	//충돌한 평면을 찾는다
@@ -351,6 +351,8 @@ CGameObject* CTerrainObject::Clone(void* pArg)
 void CTerrainObject::Free()
 {
  	__super::Free();
-	Safe_Release(m_pCubeColliderCom);
+	//Safe_Release(m_pCubeColliderCom);
 	//Safe_Release(m_pMeshColliderCom);
 }
+
+

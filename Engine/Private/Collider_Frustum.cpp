@@ -63,8 +63,8 @@ HRESULT CCollider_Frustum::Render()
 
 	m_pBatch->End();
 
-	return S_OK;
 #endif
+	return S_OK;
 }
 
 _bool CCollider_Frustum::Intersects(CColliderBase* pOther)

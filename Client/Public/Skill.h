@@ -18,7 +18,6 @@ typedef struct SkillData
 
 	SKILL_TARGET_TYPE eTargetType;
 	SKILL_RANGE_TYPE eRangeType;
-	//.콜라이더 크기, 오픠ㅏ셋 정보 추가
 	_tchar szName[MAX_PATH] = TEXT("");
 	_tchar szDesc[MAX_PATH] = TEXT("");
 	_uint iLevel = { 0 };
@@ -34,12 +33,7 @@ typedef struct SkillData
 	vector <_uint> vecAnimation;
 	map<_uint, list<pair<_float, SKILL_MOTION_EVENT>>> mapAnimEventTime;
 }SKILL_DATA;
-//use가 호출되면 vecAnimation 에 담긴 첫 번째 애니메이션을 Player에게 전달한다.
-// Player는 이 애니메이션을 실행하고 애니메이션 종료 시 마다 Skill에게 알림을 줌.
-// Skill은 알림받은 애니메이션의 다음 애니메이션을 반환한다.
-// 다음 애니메이션이 없으면 -1을 반환한다.
-// Player는 -1을 받으면 스킬 종료
-//아니면 다음 애니메이션 실행.
+
 class CCharacter;
 class CModelObject;
 

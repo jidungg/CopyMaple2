@@ -555,7 +555,7 @@ HRESULT CGameInstance::Render_Font(const _wstring& strFontTag, const _tchar* pTe
 		return E_FAIL;
 	return m_pFontManager->Render_Font(strFontTag, pText, vPosition, vColor, fRotation, vOrigin);
 }
-#ifdef _DEBUG
+
 
 HRESULT CGameInstance::CreateSoundBuffer(LPCDSBUFFERDESC pcDSBufferDesc, LPDIRECTSOUNDBUFFER* ppDSBuffer, LPUNKNOWN pUnkOuter)
 {
@@ -637,7 +637,7 @@ CSound* CGameInstance::Get_SFX(_uint iLevelID, const wstring& strKey)
 {
 	return m_pSoundManager->Get_SFX(iLevelID, strKey);
 }
-
+#ifdef _DEBUG
 HRESULT CGameInstance::Ready_RT_Debug(const _wstring& strTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
 {
 	return m_pTarget_Manager->Ready_Debug(strTargetTag, fX, fY, fSizeX, fSizeY);

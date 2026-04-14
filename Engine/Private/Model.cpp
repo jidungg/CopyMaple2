@@ -200,7 +200,14 @@ HRESULT CModel::Render(_uint iMeshIndex)
 
 HRESULT CModel::Bind_Material(CShader* pShader, const _char* pConstantName, _uint iMeshIndex, TEXTURE_TYPE eType, _uint iTextureIndex)
 {
-	return m_Materials[m_Meshes[iMeshIndex]->Get_MaterialIndex()]->Bind_Texture(pShader, pConstantName, eType, iTextureIndex);
+	auto pMesh = m_Meshes[iMeshIndex];
+	if (!pMesh) return E_FAIL; 
+	_uint matIndex = pMesh->Get_MaterialIndex(); 
+	if (matIndex >= m_Materials.size()) return E_FAIL; 
+	auto pMat = m_Materials[matIndex]; 
+	if (!pMat) return E_FAIL; 
+	return pMat->Bind_Texture(pShader, pConstantName, eType, iTextureIndex);
+	//return m_Materials[m_Meshes[iMeshIndex]->Get_MaterialIndex()]->Bind_Texture(pShader, pConstantName, eType, iTextureIndex);
 }
 
 HRESULT CModel::Bind_BoneMatrices(CShader* pShader, const _char* pConstantName, _uint iMeshIndex)

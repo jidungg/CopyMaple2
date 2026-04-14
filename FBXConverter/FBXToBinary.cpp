@@ -241,7 +241,7 @@ HRESULT CFbxToBinary::Write_Animation(const aiAnimation* pAIAnim, ofstream& outF
 			if (i < pAIChannel->mNumScalingKeys)
 			{
 				memcpy(&vScale, &pAIChannel->mScalingKeys[i].mValue, sizeof(_float3));
-				KeyFrame.fTrackPosition = pAIChannel->mScalingKeys[i].mTime;
+				KeyFrame.fTrackPosition = (_float)pAIChannel->mScalingKeys[i].mTime;
 			}
 			if (i < pAIChannel->mNumRotationKeys)
 			{

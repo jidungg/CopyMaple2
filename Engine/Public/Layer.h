@@ -15,11 +15,8 @@ private:
 public:
 	HRESULT Add_GameObject(class CGameObject* pGameObject);
 	void Priority_Update(_float fTimeDelta);
-	//게임 로직
 	void Update(_float fTimeDelta);
-	//충돌처리
 	void Late_Update(_float fTimeDelta);
-	//죽은 오브젝트 처리
 	void Final_Update();
 	bool Check_Collision(const Ray& tRay, RaycastHit* pOut);
 	vector<class CGameObject*>* Get_GameObjectList() { return &m_GameObjects; }

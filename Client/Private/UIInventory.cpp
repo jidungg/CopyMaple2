@@ -36,7 +36,7 @@ HRESULT CUIInventory::Initialize(void* pArg)
 	pInvenDesc->fYOffset = 0;
 	//pInvenDesc->vBorder = { 0,0,0,0 };
 	pInvenDesc->szIconProtoTag = TEXT("Inventory_Icon.dds");
-	pInvenDesc->szTitleText = TEXT("소지품");
+	pInvenDesc->szTitleText = TEXT("Inventory");
 	if (FAILED(CUICommonWindow::Initialize(pArg)))
 		return E_FAIL;
 
@@ -111,6 +111,7 @@ HRESULT CUIInventory::Ready_Slots()
 	tTabButtonDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("UI_Texture_TabButton"), nullptr));
 	for (_uint i = 0; i < (_uint)ITEM_TYPE::LAST; i++)
 	{
+		Safe_AddRef(tTabButtonDesc.pTextureCom);
 		tTabButtonDesc.fYOffset = m_fCommonMargin.y +m_fHeaderHeight + m_fTabButtonSize.y*i;
 		tTabButtonDesc.pUIInventory = this;
 		tTabButtonDesc.eItemType = (ITEM_TYPE)i;

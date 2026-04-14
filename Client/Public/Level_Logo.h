@@ -21,7 +21,7 @@ private:
 	HRESULT Ready_Layer_BackGround(LAYERID eID);
 	HRESULT Ready_UI();
 
-	CUIPanel* m_pBackGround = { nullptr };
+	//CUIPanel* m_pBackGround = { nullptr };
 public:
 	static CLevel_Logo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void Free() override;

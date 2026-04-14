@@ -56,7 +56,6 @@ void CTerrain::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 	iTmpCellCount = 0;
 	Culling(m_pOctoTree);
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 	//if (m_pGameInstance->GetKeyState(KEY::NUM0) == KEY_STATE::DOWN)
 	//{
@@ -124,6 +123,8 @@ _vector CTerrain::Blocking(CCharacter* pCharacter)
 
 _vector CTerrain::Blocking(CCharacter* pCharacter, _uint iCheckRange)
 {
+	iCheckRange = 10000;
+
 	_vector vPos = pCharacter->Get_TransformPosition();
 	_vector vMoveDir = pCharacter->Get_MoveDirection();
 	_float fBodyCollisionRadius = pCharacter->Get_BodyCollisionRadius();
@@ -148,10 +149,6 @@ _vector CTerrain::Blocking(CCharacter* pCharacter, _uint iCheckRange)
 	iMaxZ += iCheckRange;
 	iMinZ -= iCheckRange;
 	iMaxY += iCheckRange;
-	//if (fXForce > 0)
-	//else if (fXForce < 0)
-	//if (fZForce > 0)
-	//else if (fZForce < 0)
 
 	iMaxX = min(iMaxX, m_vSize.x - 1);
 	iMinX = max(iMinX, 0);
@@ -443,7 +440,7 @@ HRESULT CTerrain::Remove_TerrainObject(_uint Index)
 	if (m_vecCubes[Index] == nullptr)
 		return E_FAIL;
 	m_vecCubes[Index]->Set_Dead();
-	m_vecCubes[Index] = nullptr;
+	Safe_Release(m_vecCubes[Index]);
 
 	return S_OK;
 }
@@ -767,8 +764,14 @@ CGameObject * CTerrain::Clone(void * pArg)
 
 void CTerrain::Free()
 {
-	__super::Free();
+	for (auto& pCube : m_vecCubes)
+	{
+		Safe_Release(pCube);
+	}
+	m_vecCubes.clear();
+
 	Safe_Release(m_pOctoTree);
+	__super::Free();
 }
 
 CTerrainObject* TerrainObjectFactory::Create(BUILD_ITEM_TYPE eType, CGameInstance* pGI, CTerrainObject::TERRAINOBJ_DESC& tDesc)

@@ -6,6 +6,8 @@
 
 #include "MainApp.h"
 #include "GameInstance.h"
+#include "../../src/fps_counter.h"
+#include <cwchar>
 
 #define MAX_LOADSTRING 100
 
@@ -70,6 +72,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	_float		fTimeAcc = { 0.f };
 
+    // FPS counter: call frame() once per rendered frame and update window title periodically.
+    FpsCounter fpsCounter(60);
+    double titleAcc = 0.0;
+    const double titleUpdateInterval = 0.5; // seconds
+    WCHAR titleBuf[256];
+
 	while (true)
 	{
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -87,16 +95,29 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		pGameInstance->Update_TimeDelta(TEXT("Timer_Default"));
 
 		fTimeAcc += pGameInstance->Get_TimeDelta(TEXT("Timer_Default"));
+        
 
-		if (fTimeAcc > 1.f / 60.0f)
+		//if (fTimeAcc > 1.f / 60.0f)
 		{
 
 			pGameInstance->Update_TimeDelta(TEXT("Timer_60"));
 
 			//pMainApp->Update(pGameInstance->Get_TimeDelta(TEXT("Timer_60")));
-			pMainApp->Update(1.f / 60.0f);
+			//pMainApp->Update(1.f / 60.0f);
+         pMainApp->Update(fTimeAcc);
 			fTimeAcc = 0;
 			pMainApp->Render();
+
+            // Update FPS counter and occasionally update window title with FPS
+            double frameSec = fpsCounter.frame();
+            titleAcc += frameSec;
+            if (titleAcc >= titleUpdateInterval)
+            {
+                double fps = fpsCounter.getFPS();
+                swprintf_s(titleBuf, L"%ls - FPS: %.1f", szTitle, fps);
+                SetWindowTextW(g_hWnd, titleBuf);
+                titleAcc = 0.0;
+            }
 		}
 	}
 

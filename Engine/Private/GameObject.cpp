@@ -68,6 +68,8 @@ void CGameObject::Priority_Update(_float fTimeDelta)
 
 void CGameObject::Update(_float fTimeDelta)
 {
+	if (false == Is_Active())
+		return;
 	for (auto& c : m_Components)
 	{
 		if (c.second->Is_Active())
@@ -107,19 +109,41 @@ void CGameObject::Late_Update(_float fTimeDelta)
 
 void CGameObject::Final_Update()
 {
-	if (m_pChilds.empty())return;
-	for (auto& m_pChilds_iter = m_pChilds.begin(); m_pChilds_iter != m_pChilds.end();)
+	if (m_pChilds.empty())
+		return;
+
+	// Move alive children into a temporary list using splice (constant time, no node allocation).
+	// After this loop, m_pChilds will contain only the dead nodes.
+	list<CGameObject*> survivors;
+	auto it = m_pChilds.begin();
+	while (it != m_pChilds.end())
 	{
-		if ((*m_pChilds_iter)->Is_Dead())
+		auto cur = it++;
+		if ((*cur)->Is_Dead())
 		{
-			Safe_Release(*m_pChilds_iter);
-			m_pChilds_iter = m_pChilds.erase(m_pChilds_iter);
+			// leave dead nodes in m_pChilds for batch release
+			continue;
 		}
 		else
 		{
-			(*m_pChilds_iter)->Final_Update();
-			++m_pChilds_iter;
+			// move the alive node to survivors (O(1))
+			survivors.splice(survivors.end(), m_pChilds, cur);
 		}
+	}
+
+	// Release all dead nodes that remain in m_pChilds in one pass
+	for (auto dead : m_pChilds)
+	{
+		Safe_Release(dead);
+	}
+
+	// Swap survivors back into m_pChilds; survivors now becomes the container that will be destroyed/cleared
+	m_pChilds.swap(survivors);
+
+	// Call Final_Update on survivors (previously alive children)
+	for (auto& child : m_pChilds)
+	{
+		child->Final_Update();
 	}
 }
 
@@ -140,6 +164,7 @@ void CGameObject::Add_Child(CGameObject* pChild)
 	if (pChild == nullptr)
 		return;
 	m_pChilds.push_back(pChild);
+	Safe_AddRef(pChild);
 	pChild->m_pParentMatrix =Get_WorldMatrix();
 	//pChild->m_pParentMatrix = m_pTransformCom->Get_WorldFloat4x4_Ptr();
 	pChild->Get_Transform()->Set_Parent(m_pTransformCom);

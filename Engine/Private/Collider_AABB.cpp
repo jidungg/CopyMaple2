@@ -105,8 +105,8 @@ HRESULT CCollider_AABB::Render()
 
 	m_pBatch->End();
 
-	return S_OK;
 #endif
+	return S_OK;
 }
 
 

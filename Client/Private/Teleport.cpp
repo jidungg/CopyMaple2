@@ -50,7 +50,7 @@ void CTeleport::Fire()
 	m_pCastEffect->Start_Animation();
 	m_pCastEffect->Set_Active(true);
 	_vector vPos = m_pUser->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-	vPos += _vector{ 0,0.01,0,0 };
+	vPos += _vector{ 0.f,0.01f,0.f,0.f };
 	m_pCastEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos);
 
 	CSound* pSouind = m_pGameInstance->Start_EffectPlay(LEVEL_LOADING, L"Skill_Wizard_Teleport_Cast_01.wav");

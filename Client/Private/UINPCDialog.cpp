@@ -92,13 +92,13 @@ HRESULT CUINPCDialog::Initialize(void* pArg)
 	tOptionDesc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("UI_Texture_NPCDialogOptionButton"), nullptr));
 	for (_uint i = 0; i < 3; i++)
 	{
+		Safe_AddRef(tOptionDesc.pTextureCom);
 		tOptionDesc.iUIIndex = i;
 		tOptionDesc.fYOffset = m_fOptionHeight * i;
 		m_vecUIOption[i] = static_cast<CUIChatOption*>(m_pGameInstance->Clone_Proto_Object_Stock(CUIChatOption::m_szProtoTag, &tOptionDesc));
 		m_vecUIOption[i]->Register_OnClickCallback(bind(&CUINPCDialog::On_OptionSelected, this, placeholders::_1));
 		m_pChatBox->Add_Child(m_vecUIOption[i]);
 	}
-
 
 	CUIButton::BUTTON_DESC tButtonDesc{};
 	tButtonDesc.eAnchorType = CORNOR_TYPE::RIGHT_BOT;

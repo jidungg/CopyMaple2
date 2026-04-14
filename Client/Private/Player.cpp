@@ -71,6 +71,14 @@ CPlayer::CPlayer(const CPlayer& Prototype)
 	m_bPostDelayEnd = Prototype.m_bPostDelayEnd;
 }
 
+_uint CPlayer::AddRef()
+{
+	return __super::AddRef();
+}
+_uint CPlayer::Release()
+{
+	return __super::Release();
+}
 HRESULT CPlayer::Initialize_Prototype()
 {
 	return S_OK;
@@ -954,11 +962,8 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	m_vMoveDirectionXZ = XMVectorSet(0, 0, 0, 0);
 	Get_CurrentSkill()->Late_Update(fTimeDelta);
 
-	//매달려있는 경우 오로지 매달린 물체에 의해 움직임.
 	if(m_bAttached)
 		return;
-
-
 	m_iRandomCondition = rand() % 100;
 	if (m_pAnimStateMachine->Get_CurrentState() == ANIM_STATE::AS_IDLE)
 		m_fIdleTime += fTimeDelta;

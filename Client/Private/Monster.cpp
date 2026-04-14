@@ -667,8 +667,6 @@ _bool CMonster::Check_Collision(CGameObject* pOther)
 
 void CMonster::Late_Update(_float fTimeDelta)
 {
-
-
 	if (Is_AttackCoolReady())
 		m_fAttackTimeAcc = m_tStat.fAttackInterval;
 	else

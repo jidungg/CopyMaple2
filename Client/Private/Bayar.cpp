@@ -148,20 +148,12 @@ _bool CBayar::Is_Attached(CPlayer* pPlayer)
 	return false;
 }
 
-void CBayar::On_HPZero()
-{
-	__super::On_HPZero();
-}
-
 void CBayar::To_NextSkill()
 {
 	//m_iCurrentSkillID = (_int)SKILL_ID::BAYAR_SKY_JUMP;
 	__super::To_NextSkill();
 }
-_bool CBayar::FindWay(_vector& vStart, _vector& vGoal, _uint iSearchRange)
-{
-	return m_pWayFinder->FindWay(vStart, vGoal, m_iSearchRange,true);
-}
+
 void CBayar::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
@@ -169,47 +161,13 @@ void CBayar::Priority_Update(_float fTimeDelta)
 	m_fUpForce = 0;
 }
 
-void CBayar::Update(_float fTimeDelta)
-{
-	__super::Update(fTimeDelta);
-}
-
-
-void CBayar::Update_Collider()
-{
-	//_matrix		SocketMatrix;
-	//for (_uint i = 0; i < PART_LAST; i++)
-	//{
-
-	//	if (i == DETECTION)
-	//		m_vecCollider[i]->Update(m_pTransformCom->Get_WorldMatrix());
-	//	else
-	//	{
-	//		SocketMatrix = XMLoadFloat4x4(m_vecPartsMatrix[i]);
-	//		for (size_t i = 0; i < 3; i++)
-	//			SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
-	//		m_vecCollider[i]->Update(SocketMatrix * m_pTransformCom->Get_WorldMatrix());
-	//	}
-	//}
-	__super::Update_Collider();
-}
-
-_bool CBayar::Check_Collision(CGameObject* pOther)
-{
-	return __super::Check_Collision(pOther);
-}
-void CBayar::Late_Update(_float fTimeDelta)
-{
-	__super::Late_Update(fTimeDelta);
-}
-
 HRESULT CBayar::Render()
 {
-	for (auto& child : m_pChilds)
-	{
-		if (child->Is_Active() && child->Is_Dead() == false)
-			child->Render();
-	}
+	//for (auto& child : m_pChilds)
+	//{
+	//	if (child->Is_Active() && child->Is_Dead() == false)
+	//		child->Render();
+	//}
 	//for (auto& pCollider : m_vecCollider)
 	//{
 	//	if (pCollider->Is_Active())
@@ -217,10 +175,6 @@ HRESULT CBayar::Render()
 	//}
 	return S_OK;
 }
-
-
-
-
 
 
 CBayar* CBayar::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

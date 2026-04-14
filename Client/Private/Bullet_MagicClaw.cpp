@@ -62,17 +62,8 @@ void CBullet_MagicClaw::Update(_float fTimeDelta)
 	m_fTimeAcc += fTimeDelta;
 }
 
-void CBullet_MagicClaw::Late_Update(_float fTimeDelta)
-{
-	__super::Late_Update(fTimeDelta);
-}
 
-HRESULT CBullet_MagicClaw::Render()
-{
-	__super::Render();
-	return S_OK;
 
-}
 
 void CBullet_MagicClaw::Launch(CSkill* pSkill, CGameObject* pTarget)
 {
@@ -113,5 +104,4 @@ CGameObject* CBullet_MagicClaw::Clone(void* pArg)
 void CBullet_MagicClaw::Free()
 {
 	__super::Free();
-	Safe_Release(m_pEffect);
 }

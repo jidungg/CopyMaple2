@@ -91,10 +91,9 @@ HRESULT CCollider_Sphere::Render()
 
 	m_pBatch->End();
 
-	return S_OK;
 #endif
+	return S_OK;
 }
-
 
 
 CCollider_Sphere* CCollider_Sphere::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

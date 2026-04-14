@@ -30,7 +30,7 @@ HRESULT CUIPlayerInfoDashBoard::Initialize(void* pArg)
 	tFontDesc.fSizeX = 0;
 	tFontDesc.fSizeY = 0;
 	tFontDesc.pFontTag = L"LV2Gothic_Bold_15";
-	tFontDesc.pText = L"전투력";
+	tFontDesc.pText = L"Combat";
 	m_pBattleTextFont = static_cast<CUIFont*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIFont::m_szProtoTag, &tFontDesc));
 	Add_Child(m_pBattleTextFont);
 	tFontDesc.eAnchorType = CORNOR_TYPE::RIGHT_TOP;
@@ -44,7 +44,7 @@ HRESULT CUIPlayerInfoDashBoard::Initialize(void* pArg)
 	tFontDesc.fXOffset = m_fPadding + m_fMargin;
 	tFontDesc.fYOffset = m_fPadding*2 + m_fBigCellSize.y * 1.5f ;
 	tFontDesc.pFontTag = L"LV2Gothic_Bold_15";
-	tFontDesc.pText = L"공격력";
+	tFontDesc.pText = L"ATK";
 	m_pAttackTextFont = static_cast<CUIFont*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIFont::m_szProtoTag, &tFontDesc));
 	Add_Child(m_pAttackTextFont);
 	tFontDesc.eAnchorType = CORNOR_TYPE::RIGHT_TOP;
@@ -58,7 +58,7 @@ HRESULT CUIPlayerInfoDashBoard::Initialize(void* pArg)
 	tFontDesc.fXOffset = m_fPadding + m_fMargin;
 	tFontDesc.fYOffset = m_fPadding * 3 + m_fBigCellSize.y * 2.5f;
 	tFontDesc.pFontTag = L"LV2Gothic_Bold_15";
-	tFontDesc.pText = L"방어력";
+	tFontDesc.pText = L"DEF";
 	m_pDefenseTextFont = static_cast<CUIFont*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIFont::m_szProtoTag, &tFontDesc));
 	Add_Child(m_pDefenseTextFont);
 	tFontDesc.eAnchorType = CORNOR_TYPE::RIGHT_TOP;
@@ -196,7 +196,7 @@ HRESULT CUIPlayerInfoDashBoard::Initialize(void* pArg)
 	tFontDesc.fXOffset = m_fPadding + m_fMargin;
 	tFontDesc.fYOffset = -m_fPadding - m_fMediumCellSize.y * 0.5f;
 	tFontDesc.pFontTag = L"LV2Gothic_Bold_13";
-	tFontDesc.pText = L"남은 포인트";
+	tFontDesc.pText = L"Stat Point";
 	m_pLeftStatTextFont = static_cast<CUIFont*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_GAMEOBJ, LEVEL_LOADING, CUIFont::m_szProtoTag, &tFontDesc));
 	Add_Child(m_pLeftStatTextFont);
 	tFontDesc.eAnchorType = CORNOR_TYPE::RIGHT_BOT;

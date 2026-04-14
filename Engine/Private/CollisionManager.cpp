@@ -21,7 +21,6 @@ void CCollisionManager::Set_CollisionMatrix(_uint eObjectLayer, _uint eSubjectLa
 	_uint iRow = (_uint)eObjectLayer;
 	_uint iCol = (_uint)eSubjectLayer;
 
-	//양방향 체크
 	//if (iCol < iRow)
 	//{
 	//	iRow = (_uint)eSubjectLayer;

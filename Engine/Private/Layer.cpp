@@ -10,8 +10,8 @@ HRESULT CLayer::Add_GameObject(CGameObject * pGameObject)
 {
 	if (nullptr == pGameObject)
 		return E_FAIL;
-
 	m_GameObjects.push_back(pGameObject);
+	Safe_AddRef(pGameObject);
 
 	return S_OK;
 }
@@ -86,6 +86,7 @@ void CLayer::HandOver_DontDestroyObjects(list<class CGameObject*>* pDontDestroyL
 	{
 		if ((*iterator)->Is_DontDestroy())
 		{
+			Safe_Release(*iterator);
 			pDontDestroyLayer->push_back(*iterator);
 			iterator = m_GameObjects.erase(iterator);
 		}

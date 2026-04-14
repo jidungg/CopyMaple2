@@ -16,7 +16,7 @@ protected:
 
 public:
 	virtual _uint AddRef();
-	_uint Release();
+	virtual _uint Release();
 
 private:
 	_uint			m_iRefCnt = { 0 };

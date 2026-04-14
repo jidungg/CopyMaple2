@@ -5,8 +5,6 @@
 
 
 BEGIN(Client)
-//UIList에 등록돼서 사용됨.
-//우클릭 하면 아이템 장착 등
 class CUIIcon;
 class CInvenSlot;
 class CUIFont;

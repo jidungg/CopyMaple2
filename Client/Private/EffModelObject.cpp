@@ -45,8 +45,26 @@ HRESULT CEffModelObject::Initialize(void* pArg)
 	return S_OK;
 }
 
+HRESULT CEffModelObject::Ready_Components(void* pArg)
+{
+	EFFECTOBJ_DESC* pDesc = (EFFECTOBJ_DESC*)pArg;
+	/* Com_VIBuffer */
+	string tmp = pDesc->strModelProtoName;
+	wstring wtmp = wstring(tmp.begin(), tmp.end());
+	m_pModelCom = static_cast<CEffModel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, pDesc->eModelProtoLevelID, wtmp, nullptr));
+	if (FAILED(Add_Component(m_pModelCom, TEXT("Com_Model"))))
+		return E_FAIL;
+	m_pModelCom->Register_OnAnimEndCallBack(bind(&CEffModelObject::On_EffectAnimEnd, this, placeholders::_1));
+	/* Com_Shader */
+	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxEffectMesh"),
+		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+		return E_FAIL;
+	return S_OK;
+}
 void CEffModelObject::Update(_float fTimeDelta)
 {
+	if (false == Is_Active())
+		return;
 	if (m_fDuration > 0 && m_fTimeAcc >= m_fDuration)
 	{
 		m_pModelCom->Stop_Animation();
@@ -121,22 +139,11 @@ void CEffModelObject::Set_AnimSpeed(_float fSpd)
 	m_pModelCom->Set_AnimSpeed(fSpd);
 }
 
-HRESULT CEffModelObject::Ready_Components(void* pArg)
+void CEffModelObject::Set_Loop(_bool bLoop)
 {
-	EFFECTOBJ_DESC* pDesc = (EFFECTOBJ_DESC*)pArg;
-	/* Com_VIBuffer */
-	string tmp = pDesc->strModelProtoName;
-	wstring wtmp = wstring(tmp.begin(), tmp.end());
-	m_pModelCom = static_cast<CEffModel*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, pDesc->eModelProtoLevelID, wtmp, nullptr));
-	if (FAILED(Add_Component(m_pModelCom, TEXT("Com_Model"))))
-		return E_FAIL;
-	m_pModelCom->Register_OnAnimEndCallBack(bind(&CEffModelObject::On_EffectAnimEnd, this, placeholders::_1));
-	/* Com_Shader */
-	if (FAILED(Add_Component(LEVEL_LOADING, TEXT("Prototype_Component_Shader_VtxEffectMesh"),
-		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-		return E_FAIL;
-	return S_OK;
+	m_pModelCom->Set_Loop(bLoop);
 }
+
 
 HRESULT CEffModelObject::Bind_ShaderResources(CShader* pShader)
 {

@@ -241,4 +241,11 @@ CGameObject* CUIPlayerInfo::Clone(void* pArg)
 void CUIPlayerInfo::Free()
 {
 	__super::Free();
+	Safe_Release(m_pBackPanel);
+	Safe_Release(m_pBackBorder);
+	Safe_Release(m_pDashBoard);
+	Safe_Release(m_pModelPad);
+	for (auto& slot : m_arrSlot)
+		Safe_Release(slot);
+
 }

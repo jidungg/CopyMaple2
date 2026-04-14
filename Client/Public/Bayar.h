@@ -100,10 +100,6 @@ public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
 	virtual void Priority_Update(_float fTimeDelta) override;
-	virtual void Update(_float fTimeDelta) override;
-	virtual void Update_Collider()override;
-	virtual _bool Check_Collision(CGameObject* pOther) override;
-	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
 public:
@@ -111,10 +107,8 @@ public:
 	virtual HRESULT Ready_AnimStateMachine() override;
 	virtual void On_AnimEnd(_uint iAnimIdx) override;
 	_bool Is_Attached(CPlayer* pPlayer);
-	virtual void On_HPZero() override;
 protected:
 		virtual void To_NextSkill() override;
-		virtual _bool FindWay(_vector& vStart, _vector& vGoal, _uint iSearchRange) override;
 private:
 	vector< CAttachableBodyPart*> m_vecAttachablePart;
 	_uint m_iGatheringCount = { 0 };

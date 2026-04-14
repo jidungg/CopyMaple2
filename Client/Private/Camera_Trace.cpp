@@ -40,7 +40,7 @@ void CCamera_Trace::Priority_Update(_float fTimeDelta)
 void CCamera_Trace::Update(_float fTimeDelta)
 {
 	_float iMove = m_pGameInstance->Get_DIMouseMove(MOUSE_MOVE::Z);
-	m_fCurrentRatio += (iMove) * fTimeDelta * 0.05;
+	m_fCurrentRatio += (iMove) * fTimeDelta * 0.05f;
 	m_fCurrentRatio = clamp(m_fCurrentRatio,0.f, 1.f);
 
 	__super::Update(fTimeDelta);

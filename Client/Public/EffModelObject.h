@@ -45,6 +45,7 @@ public:
 	void Register_AnimEvent(ANIM_EVENT tAnimEvent);
 
 	void Set_AnimSpeed(_float fSpd);
+	void Set_Loop(_bool bLoop);
 protected:
 	virtual void On_EffectAnimEnd(CEffModel* pModel) { Set_Active(false); }
 	virtual void On_EffectAnimStart(CEffModel* pModel) { Set_Active(true); }

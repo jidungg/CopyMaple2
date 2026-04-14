@@ -11,3 +11,8 @@ CInteractableObject::CInteractableObject(const CInteractableObject& Prototype)
 	: CGameObject(Prototype)
 {
 }
+
+_float CInteractableObject::Get_Distance(CPlayer* pActor)
+{
+	return Get_Distance(pActor);
+}

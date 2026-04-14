@@ -45,17 +45,17 @@ HRESULT CLevel_Loading::Initialize(LEVELID eNextLevelID)
 	Desc.fSizeX = g_iWinSizeX;
 	Desc.fSizeY = g_iWinSizeY;
 	Desc.pTextureCom = static_cast<CTexture*>(m_pGameInstance->Clone_Prototype(PROTOTYPE::PROTO_COMPONENT, LEVEL_LOADING, TEXT("LOADING_IMAGE"), nullptr));
-	m_pBackGround = static_cast<CUIPanel*>( m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &Desc));
+	//m_pBackGround = static_cast<CUIPanel*>( m_pGameInstance->Clone_Proto_Object_Stock(CUIPanel::m_szProtoTag, &Desc));
 
-	if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOADING,LAYER_UI, m_pBackGround)))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_GameObject_ToLayer(LEVEL_LOADING,LAYER_UI, m_pBackGround)))
+	//	return E_FAIL;
 
 	return S_OK;
 }
 
 void CLevel_Loading::Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, m_pBackGround);
+	//m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, m_pBackGround);
 	if (true == m_pLoader->isFinished())
 	{
 		
@@ -136,5 +136,5 @@ void CLevel_Loading::Free()
 	__super::Free();
 
 	Safe_Release(m_pLoader);
-	Safe_Release(m_pBackGround);
+	//Safe_Release(m_pBackGround);
 }

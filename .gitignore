@@ -37,6 +37,7 @@ Female_Wizard.fbx
 female_normal.fbx
 
 .vs/
+.worktrees/
 
 *.fbx
 *.pdb

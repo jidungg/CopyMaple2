@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(xargs grep:*)",
-      "Bash(sed 's/ : .*//')"
+      "Bash(sed 's/ : .*//')",
+      "Bash(powershell:*)",
+      "Bash(powershell.exe:*)"
     ]
   }
 }

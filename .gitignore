@@ -51,3 +51,7 @@ female_normal.fbx
 *.recipe
 
 *.png
+
+# Notion export / 외부 문서 자료
+*_ExportBlock-*.zip
+최적화사례/

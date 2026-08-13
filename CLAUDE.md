@@ -1,69 +1,32 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+이 저장소에서 작업할 때 참고할 지침입니다.
 
-## Project Overview
+## 프로젝트 개요
 
-CopyMaple2 is a MapleStory-inspired 3D RPG built on a custom DirectX 11 game engine. The codebase is split into an Engine DLL and a Client executable, with an SDK layer bridging them. Comments and commits are primarily in Korean.
+MapleStory2를 모방한 DirectX 11 기반 3D MMORPG 클라이언트. 자체 제작 게임 엔진(`Engine` → `Engine.dll`) 위에서 게임 로직(`Client` → `Client.exe`)이 동작합니다. C++17 / Visual Studio 2022 / Windows x64.
 
-## Build
+## 프로젝트 문서 (`Docs/`)
 
-- **IDE:** Visual Studio 2022 (v143 toolset, C++17, Unicode)
-- **Solution:** `CopyMaple2.sln` — contains Engine, Client, FBXConverter, NIFToBinary projects
-- **Build from CLI:** `msbuild CopyMaple2.sln /p:Configuration=Release /p:Platform=x64`
-- **Build order:** Engine (DLL) → Client (EXE). Client depends on Engine.
-- **Post-build:** `UpdateLib.bat` copies Engine DLL/LIB/headers/shaders into `EngineSDK/` so Client can link against them. Run this manually if Engine public headers change and the post-build step doesn't trigger.
-- **Output:** Engine DLL → `Engine/Bin/`, Client EXE → `Client/Bin/`
-- **No test framework** — no unit tests exist.
+구조 파악이나 특정 시스템을 다룰 때 아래 문서를 **먼저 찾아 읽으세요**. 코드를 수정하면 관련 문서도 갱신합니다.
 
-## Architecture
+| 문서 | 언제 읽나 |
+|------|-----------|
+| [Docs/README.md](Docs/README.md) | 전체 개요와 문서 인덱스 |
+| [Docs/01-아키텍처.md](Docs/01-아키텍처.md) | 솔루션 구성·빌드 파이프라인·실행 흐름·디자인 패턴·객체 모델 |
+| [Docs/02-엔진.md](Docs/02-엔진.md) | `Engine` DLL — 매니저(CGameInstance)·렌더링·컴포넌트·상태머신·이벤트 |
+| [Docs/03-클라이언트.md](Docs/03-클라이언트.md) | `Client` 게임 로직 — 레벨·캐릭터·스킬·이펙트·건축·UI·데이터베이스 |
+| [Docs/04-리소스와데이터.md](Docs/04-리소스와데이터.md) | 리소스 디렉토리·JSON 데이터·에셋 변환 툴(FBX/NIF)·빌드 배치 |
 
-### Three-Layer Structure
+## 코드베이스 탐색 팁
 
-```
-Engine (DLL)  →  EngineSDK (headers + libs)  →  Client (EXE)
-```
+- 소스만 빠르게 보려면 `Client/Bin/` 경로(대용량 리소스 수천 개)를 제외하세요:
+  `git ls-files "*.cpp" "*.h" | grep -v "Bin/"`
+- 게임의 핵심 enum/전역 상수는 `Client/Public/Client_Defines.h`(레벨·레이어·아이템·스킬·몬스터·퀘스트 ID)와 `Engine/Public/Engine_Defines.h`에 집중되어 있습니다.
+- 정적 게임 데이터는 거의 전부 `Client/Bin/Resources/Json/`의 JSON으로 주도되며, enum↔문자열 매핑은 `Client_Defines.h`의 `NLOHMANN_JSON_SERIALIZE_ENUM`에 있습니다.
 
-- **Engine/Public/** — headers exposed to SDK. Changes here require running `UpdateLib.bat`.
-- **Engine/Private/** — engine implementation.
-- **EngineSDK/Inc/** — mirror of Engine/Public/ headers, consumed by Client.
-- **Client/Public/** — game-specific headers (characters, UI, levels, skills).
-- **Client/Private/** — game logic implementation (~100+ source files).
+## 빌드 / 작업 주의사항
 
-### Core Patterns
-
-**Reference-counted base class (`CBase`):** All engine objects inherit from `CBase` which provides `AddRef()`/`Release()`. Use `Safe_AddRef()` and `Safe_Release()` macros.
-
-**Component-based GameObjects:** `CGameObject` holds a `map<wstring, CComponent*>` of components (`CTransform`, `CRenderer`, `CCollider*`, `CStateMachine`, etc.). Components and GameObjects both follow a `Clone()` prototype pattern.
-
-**Singleton managers via `CGameInstance`:** Central facade providing access to all subsystems — rendering, input, timing, level management, object management, collision, UI, physics, audio, events, lighting, fonts.
-
-**Prototype pattern:** Objects/components are registered as prototypes in `CPrototype_Manager`, then cloned when instantiated.
-
-**Level/Layer system:** Levels (`CLevel`) contain Layers (`CLayer`), which hold GameObjects. Layer IDs: `LAYER_TERRAIN`, `LAYER_PLAYER`, `LAYER_BULLET`, `LAYER_MONSTER`, `LAYER_INTERACTION`, `LAYER_UI`, `LAYER_CAMERA`, `LAYER_NONCOLLISION`, `LAYER_WORLD_ITEM`.
-
-### Update Lifecycle (per frame, 60 FPS locked)
-
-```
-Priority_Update → Update → Compute_Matrix → Late_Update → Final_Update → Render
-```
-
-### Entry Point
-
-`Client/Default/Client.cpp` → `wWinMain()` → creates `CMainApp` → initializes `CGameInstance` → loads `LEVEL_LOGO` → enters main loop.
-
-## Key Dependencies
-
-- DirectX 11, DirectXTK, Effects11 (in `Engine/ThirdPartyLib/`)
-- DirectInput (keyboard/mouse), DirectSound (audio)
-- Assimp (FBX model loading)
-- nlohmann/json (`json.hpp` — item/skill/quest data serialization)
-- Niflib (NIF model loading, used by NIFToBinary converter)
-
-## Conventions
-
-- Wide strings (`wstring`, `_wstring`) used throughout for Unicode/Korean text support.
-- Custom typedefs: `_float`, `_uint`, `_int`, `_bool`, `_float3`, `_float4x4` etc. wrapping DirectXMath types.
-- HRESULT return values for initialization/setup functions; check with `FAILED()` macro.
-- Shader files (HLSL 5.0) live in `EngineSDK/hlsl/`, compiled at runtime.
-- Window size: 1280×720 (defined in `Client_Defines.h`).
+- **엔진(`Engine`)을 수정한 뒤에는 루트의 `UpdateLib.bat`을 실행**해야 산출물(DLL·lib·헤더·셰이더)이 `EngineSDK/`와 `Client/Bin/`으로 복사되어 클라이언트가 최신 엔진을 사용합니다.
+- `EngineSDK/`(헤더/lib)와 `Engine/Bin/`은 빌드 산출물 복사본입니다. 엔진 헤더 원본은 `Engine/Public/`에서 편집하세요.
+- 실행 작업 디렉토리는 `Client/Bin/`이며, 리소스·셰이더·데이터는 이 위치 기준 상대 경로로 로드됩니다.

@@ -12,10 +12,10 @@ END
 
 BEGIN(Client)
 
-#define CELL_SIZE 1
-#define STRAIGHT_DIST CELL_SIZE
-#define DIAG_DIST 1.414f
-#define TRIAG_DIST 1.732f
+constexpr _float CELL_SIZE = 1.f;
+constexpr _float STRAIGHT_DIST = CELL_SIZE;
+constexpr _float DIAG_DIST = 1.414f;
+constexpr _float TRIAG_DIST = 1.732f;
 class COctoTree;
 class CTerrainObject;
 class TerrainObjectFactory
@@ -28,6 +28,14 @@ public:
 };
 class CTerrain final : public CGameObject
 {
+public:
+	enum class CULLING_MODE
+	{
+		NONE,		// 컬링 없이 전체 렌더
+		PER_CELL,	// 셀 단위 프러스텀 검사
+		OCTREE,		// 옥트리 순회 후 셀 단위 프러스텀 검사
+	};
+private:
 	enum class CELL_RELATION
 	{
 		STRAIGHT,
@@ -61,6 +69,8 @@ public:
 	_vector Blocking(CCharacter* pCharacter, _uint iCheckRange);
 	_bool RayCast(const Ray& tRay, RaycastHit* pOut);
 	void Culling(COctoTree* pOctoTree);
+	void Set_CullingMode(CULLING_MODE eMode) { m_eCullingMode = eMode; }
+	CULLING_MODE Get_CullingMode() const { return m_eCullingMode; }
 
 	_bool Is_Buildable(_vector Pos);
 	_bool Is_InSide(_vector Pos);
@@ -81,6 +91,9 @@ public:
 	void Get_ContainingCells(CColliderBase* pCollider, list<_uint>& vecCells);
 
 private:
+	void Cull_Cell(CTerrainObject* pCell);
+
+private:
 	string m_strJsonFilePath;
 	XMUINT3 m_vSize = { 1, 1, 1 };
 	
@@ -89,7 +102,13 @@ private:
 	COctoTree* m_pOctoTree = { nullptr };
 	_uint iTmpCellCount = 0;
 	_float fCullDistance = 1.7f;
-	_bool bOctreeCulling = false;
+	CULLING_MODE m_eCullingMode = { CULLING_MODE::PER_CELL };
+
+	// 컬링 성능 계측용 (60프레임 단위 평균 출력)
+	_uint	m_iDrawCallCount = 0;
+	_uint	m_iAccumDrawCalls = 0;
+	_double	m_dAccumCullingTimeMs = 0.0;
+	_uint	m_iAccumFrames = 0;
 public:
 	static CTerrain* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const char* szMapFileName);
 	virtual CGameObject* Clone(void* pArg);

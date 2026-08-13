@@ -55,7 +55,58 @@ void CTerrain::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	iTmpCellCount = 0;
-	Culling(m_pOctoTree);
+	m_iDrawCallCount = 0;
+
+	LARGE_INTEGER tFreq, tStart, tEnd;
+	QueryPerformanceFrequency(&tFreq);
+	QueryPerformanceCounter(&tStart);
+
+	switch (m_eCullingMode)
+	{
+	case CULLING_MODE::NONE:
+		for (auto& pCell : m_vecCubes)
+		{
+			if (nullptr == pCell)
+				continue;
+			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, pCell);
+			++m_iDrawCallCount;
+		}
+		break;
+
+	case CULLING_MODE::PER_CELL:
+		for (auto& pCell : m_vecCubes)
+		{
+			if (nullptr == pCell)
+				continue;
+			Cull_Cell(pCell);
+		}
+		break;
+
+	case CULLING_MODE::OCTREE:
+		Culling(m_pOctoTree);
+		break;
+	}
+
+	QueryPerformanceCounter(&tEnd);
+	m_dAccumCullingTimeMs += (_double)(tEnd.QuadPart - tStart.QuadPart) * 1000.0 / (_double)tFreq.QuadPart;
+	m_iAccumDrawCalls += m_iDrawCallCount;
+	++m_iAccumFrames;
+
+	if (m_iAccumFrames >= 60)
+	{
+		const char* szMode = "None";
+		if (CULLING_MODE::PER_CELL == m_eCullingMode)		szMode = "PerCell";
+		else if (CULLING_MODE::OCTREE == m_eCullingMode)	szMode = "Octree";
+
+		cout << "[Culling] Mode=" << szMode
+			<< " AvgDrawCalls=" << (m_iAccumDrawCalls / m_iAccumFrames)
+			<< " AvgCullingTime=" << (m_dAccumCullingTimeMs / m_iAccumFrames) << "ms"
+			<< " TotalCells=" << m_vecCubes.size() << endl;
+
+		m_dAccumCullingTimeMs = 0.0;
+		m_iAccumDrawCalls = 0;
+		m_iAccumFrames = 0;
+	}
 
 	//if (m_pGameInstance->GetKeyState(KEY::NUM0) == KEY_STATE::DOWN)
 	//{
@@ -273,54 +324,50 @@ _bool CTerrain::RayCast(const Ray& tRay, RaycastHit* pOut)
 	return false;
 }
 
+void CTerrain::Cull_Cell(CTerrainObject* pCell)
+{
+	if (false == m_pGameInstance->Frustum_Culling_World(pCell->Get_WorldPosition(), fCullDistance))
+		return;
+
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, pCell);
+	++m_iDrawCallCount;
+}
+
 void CTerrain::Culling(COctoTree* pOctoTree)
 {
-	if (bOctreeCulling)
+	if (nullptr == pOctoTree)
+		return;
+
+	_uint* pIndices = pOctoTree->Get_Corners();
+	_float		fRange = XMVectorGetX(XMVector3Length(IndexToPos(pOctoTree->Get_Center()) - IndexToPos(pIndices[COctoTree::RTF])));
+
+	_vector vCenterPos = IndexToPos(pOctoTree->Get_Center());
+	if (true == m_pGameInstance->Frustum_Culling_World(vCenterPos, fRange + fCullDistance))
 	{
-		if (nullptr == pOctoTree)
-			return;
-
-		_uint* pIndices = pOctoTree->Get_Corners();
-		_float		fRange = XMVectorGetX(XMVector3Length(IndexToPos(pOctoTree->Get_Center()) - IndexToPos(pIndices[COctoTree::RTF])));
-		_float fRange2 = pOctoTree->Get_Radius(1.f);
-
-		_vector vCenterPos = IndexToPos(pOctoTree->Get_Center());
-		if (true == m_pGameInstance->Frustum_Culling_World(vCenterPos, fRange + fCullDistance))
+		if (pOctoTree->Is_Leaf())
 		{
-			if (pOctoTree->Is_Leaf())
-			{
-				_uint iSIze = pOctoTree->Get_MaxSize();
-				iTmpCellCount += pOctoTree->Get_CellCount();
-				if (2 == iSIze)
-				{
-					for (_uint i = 0; i < COctoTree::CORNER_END; i++)
-						if (UINT_MAX != pIndices[i] && nullptr != m_vecCubes[pIndices[i]])
-							m_vecCubes[pIndices[i]]->Culling(fCullDistance);
-				}
-				else if (1 >= iSIze)
-					if (UINT_MAX != pIndices[0] && nullptr != m_vecCubes[pIndices[0]])
-						m_vecCubes[pIndices[0]]->Culling(fCullDistance);
-			}
-			else
+			_uint iSIze = pOctoTree->Get_MaxSize();
+			iTmpCellCount += pOctoTree->Get_CellCount();
+			if (2 == iSIze)
 			{
 				for (_uint i = 0; i < COctoTree::CORNER_END; i++)
-				{
-					COctoTree* pChild = pOctoTree->Get_Child((COctoTree::CORNER)i);
-					if (nullptr != pChild)
-						Culling(pChild);
-				}
+					if (UINT_MAX != pIndices[i] && nullptr != m_vecCubes[pIndices[i]])
+						Cull_Cell(m_vecCubes[pIndices[i]]);
 			}
-
+			else if (1 >= iSIze)
+				if (UINT_MAX != pIndices[0] && nullptr != m_vecCubes[pIndices[0]])
+					Cull_Cell(m_vecCubes[pIndices[0]]);
 		}
-	}
-	else
-	{
-		for (auto& cell : m_vecCubes)
+		else
 		{
-			if (nullptr == cell)
-				continue;
-			cell->Culling(fCullDistance);
+			for (_uint i = 0; i < COctoTree::CORNER_END; i++)
+			{
+				COctoTree* pChild = pOctoTree->Get_Child((COctoTree::CORNER)i);
+				if (nullptr != pChild)
+					Culling(pChild);
+			}
 		}
+
 	}
 }
 

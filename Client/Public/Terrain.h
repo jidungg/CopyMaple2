@@ -111,6 +111,8 @@ private:
 	_double	m_dAccumCullingTimeMs = 0.0;
 	_uint	m_iAccumFrames = 0;
 	_bool	m_bCullBench = false;	// NUM9로 토글: 컬링 모드 자동 순환 벤치
+	_double	m_dAccumFrameTimeMs = 0.0;	// [프레임타임] 60프레임 누적 전체 프레임 시간(ms)
+	LARGE_INTEGER m_tPrevFrame = {};	// 직전 Late_Update 시점(프레임 간격 측정용)
 public:
 	static CTerrain* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const char* szMapFileName);
 	virtual CGameObject* Clone(void* pArg);

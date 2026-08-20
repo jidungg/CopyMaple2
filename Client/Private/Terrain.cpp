@@ -55,6 +55,16 @@ void CTerrain::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
+	// [프레임타임] 직전 Late_Update 호출과의 간격 = 전체 프레임 시간(ms)
+	{
+		LARGE_INTEGER tNow, tFrameFreq;
+		QueryPerformanceCounter(&tNow);
+		QueryPerformanceFrequency(&tFrameFreq);
+		if (0 != m_tPrevFrame.QuadPart)
+			m_dAccumFrameTimeMs += (_double)(tNow.QuadPart - m_tPrevFrame.QuadPart) * 1000.0 / (_double)tFrameFreq.QuadPart;
+		m_tPrevFrame = tNow;
+	}
+
 	if (m_pGameInstance->GetKeyState(KEY::NUM0) == KEY_STATE::DOWN)
 	{
 		Ray tBodyRay({ 1,1,1 }, XMVector3Normalize({ 1,1,1 }), 1.0f);
@@ -78,8 +88,12 @@ void CTerrain::Late_Update(_float fTimeDelta)
 	// [벤치] NUM9: 컬링 모드 자동 순환(NONE→PER_CELL→OCTREE) on/off
 	if (KEY_STATE::DOWN == m_pGameInstance->GetKeyState(KEY::NUM9))
 	{
-		m_bCullBench = !m_bCullBench;
-		cout << "[Culling] AutoCycleBench = " << (m_bCullBench ? "ON" : "OFF") << endl;
+		switch (m_eCullingMode)
+		{
+		case CULLING_MODE::NONE:		m_eCullingMode = CULLING_MODE::PER_CELL;	break;
+		case CULLING_MODE::PER_CELL:	m_eCullingMode = CULLING_MODE::OCTREE;		break;
+		case CULLING_MODE::OCTREE:		m_eCullingMode = CULLING_MODE::NONE;			break;
+		}
 	}
 
 	iTmpCellCount = 0;
@@ -126,25 +140,21 @@ void CTerrain::Late_Update(_float fTimeDelta)
 		if (CULLING_MODE::PER_CELL == m_eCullingMode)		szMode = "PerCell";
 		else if (CULLING_MODE::OCTREE == m_eCullingMode)	szMode = "Octree";
 
+		_double dAvgFrameMs = m_dAccumFrameTimeMs / m_iAccumFrames;
+		_double dFPS = (dAvgFrameMs > 0.0) ? (1000.0 / dAvgFrameMs) : 0.0;
+
 		cout << "[Culling] Mode=" << szMode
 			<< " AvgDrawCalls=" << (m_iAccumDrawCalls / m_iAccumFrames)
 			<< " AvgCullingTime=" << (m_dAccumCullingTimeMs / m_iAccumFrames) << "ms"
+			<< " AvgFrameTime=" << dAvgFrameMs << "ms"
+			<< " FPS=" << dFPS
 			<< " TotalCells=" << m_vecCubes.size() << endl;
 
 		m_dAccumCullingTimeMs = 0.0;
+		m_dAccumFrameTimeMs = 0.0;
 		m_iAccumDrawCalls = 0;
 		m_iAccumFrames = 0;
 
-		if (m_bCullBench)
-		{
-			// NONE → PER_CELL → OCTREE → NONE ... 자동 순환
-			switch (m_eCullingMode)
-			{
-			case CULLING_MODE::NONE:		m_eCullingMode = CULLING_MODE::PER_CELL;	break;
-			case CULLING_MODE::PER_CELL:	m_eCullingMode = CULLING_MODE::OCTREE;		break;
-			case CULLING_MODE::OCTREE:		m_eCullingMode = CULLING_MODE::NONE;			break;
-			}
-		}
 	}
 
 

@@ -28,14 +28,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 {
 #ifdef _DEBUG
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
+    // 벤치마크 콘솔 (Release 포함) — NUM8/NUM9 등 cout 출력을 보기 위함
     AllocConsole();
     FILE* file;
     freopen_s(&file, "CONOUT$", "w", stdout);  // stdout을 콘솔에 연결
     freopen_s(&file, "CONOUT$", "w", stderr);  // stderr을 콘솔에 연결
     freopen_s(&file, "CONIN$", "r", stdin);    // stdin을 콘솔에 연결
-
-
-#endif
 
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);

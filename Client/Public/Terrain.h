@@ -92,6 +92,7 @@ public:
 
 private:
 	void Cull_Cell(CTerrainObject* pCell);
+	void Benchmark_ColliderRayCast();	// NUM8: Mesh vs Box 콜라이더 RayCast 마이크로벤치
 
 private:
 	string m_strJsonFilePath;
@@ -109,6 +110,7 @@ private:
 	_uint	m_iAccumDrawCalls = 0;
 	_double	m_dAccumCullingTimeMs = 0.0;
 	_uint	m_iAccumFrames = 0;
+	_bool	m_bCullBench = false;	// NUM9로 토글: 컬링 모드 자동 순환 벤치
 public:
 	static CTerrain* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const char* szMapFileName);
 	virtual CGameObject* Clone(void* pArg);

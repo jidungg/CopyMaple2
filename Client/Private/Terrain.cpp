@@ -54,6 +54,34 @@ HRESULT CTerrain::Initialize(void * pArg)
 void CTerrain::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
+
+	if (m_pGameInstance->GetKeyState(KEY::NUM0) == KEY_STATE::DOWN)
+	{
+		Ray tBodyRay({ 1,1,1 }, XMVector3Normalize({ 1,1,1 }), 1.0f);
+		RaycastHit tBodyhit;
+		auto start = std::chrono::high_resolution_clock::now();
+
+		for (int i = 0; i < 100000; i++)
+		{
+			RayCast(tBodyRay, &tBodyhit); // 테스트할 코드
+		}
+
+		auto end = std::chrono::high_resolution_clock::now();
+
+		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+		std::cout << duration.count() / 100000.0 << " us\n";
+	}
+	// [벤치] NUM8: Mesh vs Box 콜라이더 RayCast 마이크로벤치 (1회성)
+	if (KEY_STATE::DOWN == m_pGameInstance->GetKeyState(KEY::NUM8))
+		Benchmark_ColliderRayCast();
+	// [벤치] NUM9: 컬링 모드 자동 순환(NONE→PER_CELL→OCTREE) on/off
+	if (KEY_STATE::DOWN == m_pGameInstance->GetKeyState(KEY::NUM9))
+	{
+		m_bCullBench = !m_bCullBench;
+		cout << "[Culling] AutoCycleBench = " << (m_bCullBench ? "ON" : "OFF") << endl;
+	}
+
 	iTmpCellCount = 0;
 	m_iDrawCallCount = 0;
 
@@ -106,25 +134,20 @@ void CTerrain::Late_Update(_float fTimeDelta)
 		m_dAccumCullingTimeMs = 0.0;
 		m_iAccumDrawCalls = 0;
 		m_iAccumFrames = 0;
+
+		if (m_bCullBench)
+		{
+			// NONE → PER_CELL → OCTREE → NONE ... 자동 순환
+			switch (m_eCullingMode)
+			{
+			case CULLING_MODE::NONE:		m_eCullingMode = CULLING_MODE::PER_CELL;	break;
+			case CULLING_MODE::PER_CELL:	m_eCullingMode = CULLING_MODE::OCTREE;		break;
+			case CULLING_MODE::OCTREE:		m_eCullingMode = CULLING_MODE::NONE;			break;
+			}
+		}
 	}
 
-	//if (m_pGameInstance->GetKeyState(KEY::NUM0) == KEY_STATE::DOWN)
-	//{
-	//	Ray tBodyRay({ 1,1,1 }, XMVector3Normalize({ 1,1,1 }), 1.0f);
-	//	RaycastHit tBodyhit;
-	//	auto start = std::chrono::high_resolution_clock::now();
 
-	//	for (int i = 0; i < 100000; i++)
-	//	{
-	//		RayCast(tBodyRay, &tBodyhit); // 테스트할 코드
-	//	}
-
-	//	auto end = std::chrono::high_resolution_clock::now();
-
-	//	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-
-	//	std::cout << duration.count() / 100000.0 << " us\n";
-	//}
 }
 
 
@@ -331,6 +354,64 @@ void CTerrain::Cull_Cell(CTerrainObject* pCell)
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, pCell);
 	++m_iDrawCallCount;
+}
+
+void CTerrain::Benchmark_ColliderRayCast()
+{
+	// 맵에서 Box 타입(FLOOR/WALL/GROUND)과 Mesh 타입 오브젝트를 하나씩 자동 선정
+	CTerrainObject* pBox = nullptr;
+	CTerrainObject* pMesh = nullptr;
+
+	for (auto& pCell : m_vecCubes)
+	{
+		if (nullptr == pCell || false == pCell->Is_BlockingType())
+			continue;
+
+		BUILD_ITEM_TYPE eType = pCell->Get_BuildItemType();
+		_bool bBoxType = (Client::BUILD_ITEM_TYPE::FLOOR == eType
+			|| Client::BUILD_ITEM_TYPE::WALL == eType
+			|| Client::BUILD_ITEM_TYPE::GROUND == eType);
+
+		if (bBoxType && nullptr == pBox)		pBox = pCell;
+		else if (!bBoxType && nullptr == pMesh)	pMesh = pCell;
+
+		if (nullptr != pBox && nullptr != pMesh)
+			break;
+	}
+
+	const _int iIter = 100000;
+	LARGE_INTEGER tFreq;
+	QueryPerformanceFrequency(&tFreq);
+
+	// 대상 오브젝트 위에서 아래로 쏘는 Ray로 RayCast를 iIter회 반복 → 평균 μs
+	auto benchOne = [&](CTerrainObject* pTarget) -> _double
+	{
+		if (nullptr == pTarget)
+			return -1.0;
+
+		_vector vPos = pTarget->Get_WorldPosition();
+		Ray ray(vPos + XMVectorSet(0.f, 2.f, 0.f, 0.f), XMVectorSet(0.f, -1.f, 0.f, 0.f), 5.f);
+		RaycastHit hit;
+
+		LARGE_INTEGER tStart, tEnd;
+		QueryPerformanceCounter(&tStart);
+		for (_int i = 0; i < iIter; ++i)
+			pTarget->RayCast(ray, &hit);
+		QueryPerformanceCounter(&tEnd);
+
+		return (_double)(tEnd.QuadPart - tStart.QuadPart) * 1e6 / (_double)tFreq.QuadPart / (_double)iIter;
+	};
+
+	_double dBoxUs = benchOne(pBox);
+	_double dMeshUs = benchOne(pMesh);
+
+	cout << "[ColliderBench] N=" << iIter << " per target" << endl;
+	if (nullptr != pBox)	cout << "  Box  (idx=" << pBox->Get_Index() << ") avg = " << dBoxUs << " us" << endl;
+	else					cout << "  Box  : no target found" << endl;
+	if (nullptr != pMesh)	cout << "  Mesh (idx=" << pMesh->Get_Index() << ") avg = " << dMeshUs << " us" << endl;
+	else					cout << "  Mesh : no target found" << endl;
+	if (nullptr != pBox && nullptr != pMesh && dBoxUs > 0.0)
+		cout << "  Mesh/Box ratio = " << (dMeshUs / dBoxUs) << " x" << endl;
 }
 
 void CTerrain::Culling(COctoTree* pOctoTree)

@@ -42,6 +42,9 @@ female_normal.fbx
 *.fbx
 *.pdb
 *.idb
+*.iobj
+*.ipdb
+*.exp
 
 *.tlog
 *.enc
@@ -51,6 +54,12 @@ female_normal.fbx
 *.recipe
 
 *.png
+
+# MSBuild 중간 산출물
+*.vcxproj.FileListAbsolute.txt
+*.obj.dt.d.json
+*.obj.dt.module.json
+*.obj.dt.module.json.command
 
 # Notion export / 외부 문서 자료
 *_ExportBlock-*.zip

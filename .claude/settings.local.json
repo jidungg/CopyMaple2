@@ -4,7 +4,11 @@
       "Bash(xargs grep:*)",
       "Bash(sed 's/ : .*//')",
       "Bash(powershell:*)",
-      "Bash(powershell.exe:*)"
+      "Bash(powershell.exe:*)",
+      "mcp__claude_ai_Notion__notion-fetch",
+      "Read(//c/Users/JiWan/.claude/plugins/cache/im-not-ai/humanize-korean/2.1.0/scripts/**)",
+      "Read(//c/Users/JiWan/.claude/plugins/cache/im-not-ai/humanize-korean/2.1.0/agents/**)",
+      "Bash(grep -iE \"\\(BaseModel|Model\\)\\\\.h$\")"
     ]
   }
 }

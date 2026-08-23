@@ -8,7 +8,13 @@
       "mcp__claude_ai_Notion__notion-fetch",
       "Read(//c/Users/JiWan/.claude/plugins/cache/im-not-ai/humanize-korean/2.1.0/scripts/**)",
       "Read(//c/Users/JiWan/.claude/plugins/cache/im-not-ai/humanize-korean/2.1.0/agents/**)",
-      "Bash(grep -iE \"\\(BaseModel|Model\\)\\\\.h$\")"
+      "Bash(grep -iE \"\\(BaseModel|Model\\)\\\\.h$\")",
+      "Bash(git checkout *)",
+      "Bash(git symbolic-ref *)",
+      "Bash(echo \"HEAD=$\\(git symbolic-ref --short HEAD\\) $\\(git rev-parse --short HEAD\\)\")",
+      "Bash(\"/c/Program Files \\(x86\\)/Microsoft Visual Studio/Installer/vswhere.exe\" -latest -requires Microsoft.Component.MSBuild -find \"MSBuild/**/Bin/MSBuild.exe\")",
+      "PowerShell(git pull *)",
+      "Bash(git *)"
     ]
   }
 }
